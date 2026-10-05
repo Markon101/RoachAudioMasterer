@@ -17,6 +17,11 @@ same-song adapter, complete metrics and native listening paths are documented
 in [SCENE_V2_RESULTS.md](docs/SCENE_V2_RESULTS.md). Its current architecture and
 unimplemented extensions are explained in [CURRENT_MODEL.md](docs/CURRENT_MODEL.md).
 
+The subsequent [native longer-training result](docs/NATIVE_LONGER_RESULTS.md)
+preserves Adam state, exact prefix/resume parity and the owner's preferred
+3000-step strength-1 candidate, alongside mixed 48-scene and matched-energy
+results. Each older report remains frozen.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

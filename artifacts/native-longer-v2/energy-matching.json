@@ -1,0 +1,104 @@
+{
+  "scope": "minimum input-only added residual RMS across predeclared checkpoints; candidate order600/1500/3000; no total normalization",
+  "records": [
+    {
+      "candidates": [
+        {
+          "gain": 0.8035516142845154,
+          "listening_file": "candidate-1.wav",
+          "peak": 0.5166676044464111,
+          "residual_rms_after": 0.007645753270918069,
+          "residual_rms_before": 0.009514949801989017,
+          "source": "runs/native-longer/listening-source/step-600/start-160/reconstructed.wav"
+        },
+        {
+          "gain": 1.0,
+          "listening_file": "candidate-2.wav",
+          "peak": 0.5141321420669556,
+          "residual_rms_after": 0.0076457534054948486,
+          "residual_rms_before": 0.0076457534054948486,
+          "source": "runs/native-longer/listening-source/step-1500/start-160/reconstructed.wav"
+        },
+        {
+          "gain": 0.8651944398880005,
+          "listening_file": "candidate-3.wav",
+          "peak": 0.5112468004226685,
+          "residual_rms_after": 0.007645753396003458,
+          "residual_rms_before": 0.008837034828310624,
+          "source": "runs/native-longer/listening-source/step-3000/start-160/reconstructed.wav"
+        }
+      ],
+      "input": "runs/native-longer/listening-source/step-600/start-160/input.wav",
+      "method": "minimum waveform output-minus-input RMS across candidates; gains <= 1; no reference; no total normalization",
+      "order": "declared candidate order; no score or target selection",
+      "seconds": 10.0,
+      "target_residual_rms": 0.0076457534054948486
+    },
+    {
+      "candidates": [
+        {
+          "gain": 0.7984187602996826,
+          "listening_file": "candidate-1.wav",
+          "peak": 0.4825447201728821,
+          "residual_rms_after": 0.010738224330151393,
+          "residual_rms_before": 0.01344936374968311,
+          "source": "runs/native-longer/listening-source/step-600/start-30/reconstructed.wav"
+        },
+        {
+          "gain": 1.0,
+          "listening_file": "candidate-2.wav",
+          "peak": 0.4790290892124176,
+          "residual_rms_after": 0.010738224724178076,
+          "residual_rms_before": 0.010738224724178076,
+          "source": "runs/native-longer/listening-source/step-1500/start-30/reconstructed.wav"
+        },
+        {
+          "gain": 0.8762399554252625,
+          "listening_file": "candidate-3.wav",
+          "peak": 0.4809504449367523,
+          "residual_rms_after": 0.01073822440611282,
+          "residual_rms_before": 0.01225489016214348,
+          "source": "runs/native-longer/listening-source/step-3000/start-30/reconstructed.wav"
+        }
+      ],
+      "input": "runs/native-longer/listening-source/step-600/start-30/input.wav",
+      "method": "minimum waveform output-minus-input RMS across candidates; gains <= 1; no reference; no total normalization",
+      "order": "declared candidate order; no score or target selection",
+      "seconds": 10.0,
+      "target_residual_rms": 0.010738224724178076
+    },
+    {
+      "candidates": [
+        {
+          "gain": 0.7529954314231873,
+          "listening_file": "candidate-1.wav",
+          "peak": 0.490790456533432,
+          "residual_rms_after": 0.0066717413761678175,
+          "residual_rms_before": 0.008860268061084026,
+          "source": "runs/native-longer/listening-source/step-600/start-90/reconstructed.wav"
+        },
+        {
+          "gain": 1.0,
+          "listening_file": "candidate-2.wav",
+          "peak": 0.49435392022132874,
+          "residual_rms_after": 0.006671741397591186,
+          "residual_rms_before": 0.006671741397591186,
+          "source": "runs/native-longer/listening-source/step-1500/start-90/reconstructed.wav"
+        },
+        {
+          "gain": 0.8808851838111877,
+          "listening_file": "candidate-3.wav",
+          "peak": 0.4939834475517273,
+          "residual_rms_after": 0.006671741204241857,
+          "residual_rms_before": 0.007573905576362607,
+          "source": "runs/native-longer/listening-source/step-3000/start-90/reconstructed.wav"
+        }
+      ],
+      "input": "runs/native-longer/listening-source/step-600/start-90/input.wav",
+      "method": "minimum waveform output-minus-input RMS across candidates; gains <= 1; no reference; no total normalization",
+      "order": "declared candidate order; no score or target selection",
+      "seconds": 10.0,
+      "target_residual_rms": 0.006671741397591186
+    }
+  ]
+}

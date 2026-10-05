@@ -1,0 +1,906 @@
+{
+  "source_sha256": "2ffc515bdb05993f647ff309ed7cb2b7697959f5fa2b2c2d53291e1332f1e3c6",
+  "scope": "same previously inspected song, declared 30/90/160s manufactured 6k damage; full strength, seed11; audio remains local",
+  "records": [
+    {
+      "step": 600,
+      "start": 30.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 12.44544669321147,
+        "full_error": 262170.8420900266,
+        "full_nmse": 0.019571112093235577,
+        "full_target_energy": 13395807.087561544,
+        "high_error": 248915.70647119352,
+        "high_nmse": 0.8761218844889314,
+        "high_target_energy": 284110.8193712039,
+        "known_error": 1.2458274333919322E-7,
+        "log1p_db": 1.0385788963824272,
+        "lsd_db": 19.609298361378467,
+        "peak": 0.4860483705997467,
+        "stereo_correlation": 0.7146984465147204,
+        "target_crest_db": 12.509922019166664,
+        "target_stereo_correlation": 0.7147669098436038
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  197764 kB",
+          "VmRSS:\t  169668 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791196789
+      }
+    },
+    {
+      "step": 1500,
+      "start": 30.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 12.340298377336595,
+        "full_error": 247711.97154157265,
+        "full_nmse": 0.018491754167733687,
+        "full_target_energy": 13395807.087561544,
+        "high_error": 234842.28845045355,
+        "high_nmse": 0.8265869246732954,
+        "high_target_energy": 284110.8193712039,
+        "known_error": 1.2490835811431932E-7,
+        "log1p_db": 1.0136243819628123,
+        "lsd_db": 18.71279368224911,
+        "peak": 0.4790290892124176,
+        "stereo_correlation": 0.7145716168400889,
+        "target_crest_db": 12.509922019166664,
+        "target_stereo_correlation": 0.7147669098436038
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  198900 kB",
+          "VmRSS:\t  172660 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791196935
+      }
+    },
+    {
+      "step": 3000,
+      "start": 30.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 12.39505894852555,
+        "full_error": 262894.71945048234,
+        "full_nmse": 0.019625149700355785,
+        "full_target_energy": 13395807.087561544,
+        "high_error": 249163.04131487856,
+        "high_nmse": 0.8769924421263787,
+        "high_target_energy": 284110.8193712039,
+        "known_error": 1.2533300508925336E-7,
+        "log1p_db": 1.034198295257357,
+        "lsd_db": 18.025447120172885,
+        "peak": 0.48268526792526245,
+        "stereo_correlation": 0.71431738697837,
+        "target_crest_db": 12.509922019166664,
+        "target_stereo_correlation": 0.7147669098436038
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  201740 kB",
+          "VmRSS:\t  175500 kB",
+          "Cpus_allowed_list:\t0-7"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197048
+      }
+    },
+    {
+      "step": 600,
+      "start": 90.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 10.54339681349328,
+        "full_error": 376858.6870164683,
+        "full_nmse": 0.017338723136841296,
+        "full_target_energy": 21735088.797612756,
+        "high_error": 357313.70955924154,
+        "high_nmse": 0.7528447142513182,
+        "high_target_energy": 474618.07567391836,
+        "known_error": 1.2605139587401544E-7,
+        "log1p_db": 1.0291047254456005,
+        "lsd_db": 17.421235249569605,
+        "peak": 0.4917108416557312,
+        "stereo_correlation": 0.920379962963307,
+        "target_crest_db": 11.209904658795091,
+        "target_stereo_correlation": 0.920062763409426
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  202876 kB",
+          "VmRSS:\t  176568 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791196839
+      }
+    },
+    {
+      "step": 1500,
+      "start": 90.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 10.596889182121211,
+        "full_error": 400953.23187143955,
+        "full_nmse": 0.018447278297546117,
+        "full_target_energy": 21735088.797612756,
+        "high_error": 380765.74900032417,
+        "high_nmse": 0.8022571590002516,
+        "high_target_energy": 474618.07567391836,
+        "known_error": 1.2580738187676128E-7,
+        "log1p_db": 1.0654081885345636,
+        "lsd_db": 17.46824233383452,
+        "peak": 0.49435392022132874,
+        "stereo_correlation": 0.9204139574500665,
+        "target_crest_db": 11.209904658795091,
+        "target_stereo_correlation": 0.920062763409426
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  205848 kB",
+          "VmRSS:\t  179724 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791196978
+      }
+    },
+    {
+      "step": 3000,
+      "start": 90.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 10.602008436878851,
+        "full_error": 399258.8875984563,
+        "full_nmse": 0.018369323968085573,
+        "full_target_energy": 21735088.797612756,
+        "high_error": 379025.1806427901,
+        "high_nmse": 0.7985898558638032,
+        "high_target_energy": 474618.07567391836,
+        "known_error": 1.2604583968276516E-7,
+        "log1p_db": 1.054237546820868,
+        "lsd_db": 16.411361634972625,
+        "peak": 0.494794636964798,
+        "stereo_correlation": 0.9203304069245025,
+        "target_crest_db": 11.209904658795091,
+        "target_stereo_correlation": 0.920062763409426
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  201980 kB",
+          "VmRSS:\t  175716 kB",
+          "Cpus_allowed_list:\t0-7"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197076
+      }
+    },
+    {
+      "step": 600,
+      "start": 160.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 12.16553805276966,
+        "full_error": 298440.0406389535,
+        "full_nmse": 0.01798524185237243,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 282166.7335591831,
+        "high_nmse": 0.6759227703231581,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.239162788396365E-7,
+        "log1p_db": 1.1127955634989652,
+        "lsd_db": 17.399858763903335,
+        "peak": 0.515687882900238,
+        "stereo_correlation": 0.8168306991497924,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  195324 kB",
+          "VmRSS:\t  157684 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791196889
+      }
+    },
+    {
+      "step": 1500,
+      "start": 160.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 12.147938472028486,
+        "full_error": 319445.3351603636,
+        "full_nmse": 0.019251108528100806,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 302032.1730149176,
+        "high_nmse": 0.7235098926647459,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.2494343744345034E-7,
+        "log1p_db": 1.1540700489136315,
+        "lsd_db": 17.5613689879117,
+        "peak": 0.5141321420669556,
+        "stereo_correlation": 0.8171648942274714,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  202060 kB",
+          "VmRSS:\t  175820 kB",
+          "Cpus_allowed_list:\t0-7"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197016
+      }
+    },
+    {
+      "step": 3000,
+      "start": 160.0,
+      "seconds": 10.0,
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "strength": 1.0,
+      "scores": {
+        "crest_db": 12.068780025938018,
+        "full_error": 313327.2715890561,
+        "full_nmse": 0.018882408494544412,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 296527.41187482385,
+        "high_nmse": 0.7103233864000057,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.2468456741920592E-7,
+        "log1p_db": 1.1355636703146388,
+        "lsd_db": 16.37931612179155,
+        "peak": 0.5097777843475342,
+        "stereo_correlation": 0.8167318380101006,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "fcec1eae386a9e53cb3a78d8dc82bdfcf51d608a",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  201796 kB",
+          "VmRSS:\t  175556 kB",
+          "Cpus_allowed_list:\t0-7"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197105
+      }
+    }
+  ]
+}

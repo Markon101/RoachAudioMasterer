@@ -34,6 +34,16 @@ per-step damage values are correct. `native-v2/RUN_CONTEXT.json` records the
 actual native distribution and the historical source commit without rewriting
 those receipts. Current source emits the corrected native summary.
 
+`native-longer-v2/` contains the 600/1500/3000 model-plus-Adam snapshots, new
+1500/3000 inference models, full training/evaluation/paired receipts, song score
+and energy-control summaries, and 36 procedural comparison WAVs. The 600
+inference model remains `native-v2/flow.json`, verified byte-for-byte by replay.
+Owner preference is 3000 strength 1, especially the 160-second song passage;
+no song audio is published. See `docs/NATIVE_LONGER_RESULTS.md` for nonmonotonic
+metrics, exact continuation checks and the weaker magnitude result after matching
+added energy. Historical moments at600 were regenerated, not recovered from an
+original optimizer archive. Published snapshots support direct continuation.
+
 JSON provenance records the source commit when a run was executed, not the later
 commit packaging its results. Hashes in `SHA256SUMS` cover data artifacts, not
 this explanation or the manifest itself. Verify with:

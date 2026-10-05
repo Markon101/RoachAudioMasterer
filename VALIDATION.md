@@ -68,3 +68,31 @@ The metadata-summary correction is described in
 incidental training elapsed observations. Whole-song streaming, dedicated
 contrast expansion, trained diffusion/SDE, fluid/PDE evolution and a combined
 flow+song-adapter quality test have not been completed.
+
+## Native Flow2 continuation
+
+- Native Adam m/v/counter disk round-trip and whole-vs-split training at an
+  inside-scene split pass bit-for-bit; invalid moments, counters, shapes and
+  changed resume schedule are rejected. Atomic periodic and endpoint snapshots
+  include both optimizers and the model.
+- Historical 600 replay model is byte-identical to `artifacts/native-v2/flow.json`.
+  Resume initial models match the 600 and 1500 parents; both newest Adam counters
+  and model progress are 3000. Original 30-second listener file is byte-identical.
+- CPU tests: 21 passed; real GPU tests: 3 passed; energy helper: 2 passed. Current
+  OpenCL feature/all-target suite includes 21 CPU tests, 3 opt-in GPU tests and
+  the 2 example tests. Format, strict Clippy, CPU compilation and release builds
+  pass with at most 2 build jobs. Numerical kernels/training behavior are unchanged.
+- Paired 48-scene 200000–200047 evaluation completes for all three endpoints;
+  fixed baselines/source energies agree exactly and silent/mono/known-band gates
+  pass. All predeclared stochastic samples and failures are retained.
+- Aligned-WAV scorer self-reference high/full/log/LSD errors are exactly zero;
+  degraded identity known-band error is zero. Gain-one matched floats equal the
+  1500 raw candidate in all passages.
+- 24 native 48k PCM16 stereo listening WAVs decode and copied Downloads files
+  match. 36 new published procedural WAVs decode. Owner prefers 3000 strength 1,
+  especially 160 s; no matched-energy listening or blind/general quality claim.
+- Expanded data manifest verifies parent and new artifact hashes. All source
+  run receipts are clean at execution; raw training/evaluation/render source is
+  `fcec1ea`, and the subsequent aligned scoring command is `f4c4e82`.
+- No speed experiment. Affinity changes from four to eight allowed cores are
+  logged as uncontrolled endpoint observations; training timing is not a benchmark.

@@ -6,6 +6,12 @@ and have different architectures. Exact run evidence is in
 [SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md); citations and adaptation scope are in
 [REFERENCES.md](REFERENCES.md). Nothing below implies recovered original content.
 
+The original native pilot below trained 600 updates per stage. The subsequent
+[longer-flow comparison](NATIVE_LONGER_RESULTS.md) continues the same architecture
+to 1500/3000 updates with persisted Adam. The owner now prefers 3000/strength1,
+especially the 160-second passage; objective scores are mixed. Those results
+update training/preference status, not the signal-path description below.
+
 ## Signal path
 
 ```mermaid

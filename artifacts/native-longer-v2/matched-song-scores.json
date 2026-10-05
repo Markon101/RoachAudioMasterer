@@ -1,0 +1,923 @@
+{
+  "scope": "post-render native waveform scoring of predeclared energy-matched controls; host scoring command added after frozen training; audio remains local",
+  "records": [
+    {
+      "step": 600,
+      "start": 30,
+      "reference": "runs/native-longer/listening-source/step-600/start-30/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-30/input.wav",
+      "candidate": "runs/native-longer/matched/start-30/candidate-1-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 12.40382071289649,
+        "full_error": 241561.16939655802,
+        "full_nmse": 0.018032595409712616,
+        "full_target_energy": 13395807.087561544,
+        "high_error": 228998.4136735647,
+        "high_nmse": 0.8060179270201171,
+        "high_target_energy": 284110.8193712039,
+        "known_error": 1.2255514734756544E-7,
+        "log1p_db": 1.0044845927696238,
+        "lsd_db": 18.79450747342398,
+        "peak": 0.4825447201728821,
+        "stereo_correlation": 0.7147512764183376,
+        "target_crest_db": 12.509922019166664,
+        "target_stereo_correlation": 0.7147669098436038
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42180 kB",
+          "VmRSS:\t   15856 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197487
+      }
+    },
+    {
+      "step": 1500,
+      "start": 30,
+      "reference": "runs/native-longer/listening-source/step-600/start-30/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-30/input.wav",
+      "candidate": "runs/native-longer/matched/start-30/candidate-2-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 12.340298377336595,
+        "full_error": 247711.97154157265,
+        "full_nmse": 0.018491754167733687,
+        "full_target_energy": 13395807.087561544,
+        "high_error": 234842.28845045355,
+        "high_nmse": 0.8265869246732954,
+        "high_target_energy": 284110.8193712039,
+        "known_error": 1.2490835811431932E-7,
+        "log1p_db": 1.0136243819628123,
+        "lsd_db": 18.71279368224911,
+        "peak": 0.4790290892124176,
+        "stereo_correlation": 0.7145716168400889,
+        "target_crest_db": 12.509922019166664,
+        "target_stereo_correlation": 0.7147669098436038
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42052 kB",
+          "VmRSS:\t   15724 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197488
+      }
+    },
+    {
+      "step": 3000,
+      "start": 30,
+      "reference": "runs/native-longer/listening-source/step-600/start-30/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-30/input.wav",
+      "candidate": "runs/native-longer/matched/start-30/candidate-3-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 12.375077760416337,
+        "full_error": 251711.88481111333,
+        "full_nmse": 0.01879034858936094,
+        "full_target_energy": 13395807.087561544,
+        "high_error": 238542.56188249635,
+        "high_nmse": 0.839610974374156,
+        "high_target_energy": 284110.8193712039,
+        "known_error": 1.2483514736085755E-7,
+        "log1p_db": 1.0190913396929642,
+        "lsd_db": 17.651469667475606,
+        "peak": 0.4809504449367523,
+        "stereo_correlation": 0.7144387312264703,
+        "target_crest_db": 12.509922019166664,
+        "target_stereo_correlation": 0.7147669098436038
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42060 kB",
+          "VmRSS:\t   15816 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197488
+      }
+    },
+    {
+      "step": 600,
+      "start": 90,
+      "reference": "runs/native-longer/listening-source/step-600/start-90/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-90/input.wav",
+      "candidate": "runs/native-longer/matched/start-90/candidate-1-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 10.534048365925411,
+        "full_error": 392533.284138098,
+        "full_nmse": 0.01805988868015167,
+        "full_target_energy": 21735088.797612756,
+        "high_error": 372694.5891151533,
+        "high_nmse": 0.7852515700881343,
+        "high_target_energy": 474618.07567391836,
+        "known_error": 1.2154969256427325E-7,
+        "log1p_db": 1.057045679372334,
+        "lsd_db": 16.96887595525009,
+        "peak": 0.490790456533432,
+        "stereo_correlation": 0.9204545075364415,
+        "target_crest_db": 11.209904658795091,
+        "target_stereo_correlation": 0.920062763409426
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42268 kB",
+          "VmRSS:\t   16092 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197488
+      }
+    },
+    {
+      "step": 1500,
+      "start": 90,
+      "reference": "runs/native-longer/listening-source/step-600/start-90/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-90/input.wav",
+      "candidate": "runs/native-longer/matched/start-90/candidate-2-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 10.596889182121211,
+        "full_error": 400953.23187143955,
+        "full_nmse": 0.018447278297546117,
+        "full_target_energy": 21735088.797612756,
+        "high_error": 380765.74900032417,
+        "high_nmse": 0.8022571590002516,
+        "high_target_energy": 474618.07567391836,
+        "known_error": 1.2580738187676128E-7,
+        "log1p_db": 1.0654081885345636,
+        "lsd_db": 17.46824233383452,
+        "peak": 0.49435392022132874,
+        "stereo_correlation": 0.9204139574500665,
+        "target_crest_db": 11.209904658795091,
+        "target_stereo_correlation": 0.920062763409426
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42056 kB",
+          "VmRSS:\t   15720 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197489
+      }
+    },
+    {
+      "step": 3000,
+      "start": 90,
+      "reference": "runs/native-longer/listening-source/step-600/start-90/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-90/input.wav",
+      "candidate": "runs/native-longer/matched/start-90/candidate-3-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 10.590375991268193,
+        "full_error": 405146.3387093366,
+        "full_nmse": 0.01864019707864434,
+        "full_target_energy": 21735088.797612756,
+        "high_error": 384883.9434647627,
+        "high_nmse": 0.8109340187228634,
+        "high_target_energy": 474618.07567391836,
+        "known_error": 1.251040881105391E-7,
+        "log1p_db": 1.0657686539008704,
+        "lsd_db": 16.310719542876964,
+        "peak": 0.4939834475517273,
+        "stereo_correlation": 0.9203800582490221,
+        "target_crest_db": 11.209904658795091,
+        "target_stereo_correlation": 0.920062763409426
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42008 kB",
+          "VmRSS:\t   15824 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197490
+      }
+    },
+    {
+      "step": 600,
+      "start": 160,
+      "reference": "runs/native-longer/listening-source/step-600/start-160/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-160/input.wav",
+      "candidate": "runs/native-longer/matched/start-160/candidate-1-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 12.190656829853488,
+        "full_error": 312651.1790890741,
+        "full_nmse": 0.0188416643400378,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 295403.4617406681,
+        "high_nmse": 0.7076309942855955,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.2260247482771456E-7,
+        "log1p_db": 1.1443083850767586,
+        "lsd_db": 17.019405799521046,
+        "peak": 0.5166676044464111,
+        "stereo_correlation": 0.8173147807609661,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42176 kB",
+          "VmRSS:\t   16036 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197490
+      }
+    },
+    {
+      "step": 1500,
+      "start": 160,
+      "reference": "runs/native-longer/listening-source/step-600/start-160/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-160/input.wav",
+      "candidate": "runs/native-longer/matched/start-160/candidate-2-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 12.147938472028486,
+        "full_error": 319445.3351603636,
+        "full_nmse": 0.019251108528100806,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 302032.1730149176,
+        "high_nmse": 0.7235098926647459,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.2494343744345034E-7,
+        "log1p_db": 1.1540700489136315,
+        "lsd_db": 17.5613689879117,
+        "peak": 0.5141321420669556,
+        "stereo_correlation": 0.8171648942274714,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42152 kB",
+          "VmRSS:\t   15980 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197491
+      }
+    },
+    {
+      "step": 3000,
+      "start": 160,
+      "reference": "runs/native-longer/listening-source/step-600/start-160/reference.wav",
+      "input": "runs/native-longer/listening-source/step-600/start-160/input.wav",
+      "candidate": "runs/native-longer/matched/start-160/candidate-3-float.wav",
+      "seconds": 10.0,
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "scores": {
+        "crest_db": 12.099058290764981,
+        "full_error": 321767.8297513469,
+        "full_nmse": 0.019391071740913108,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 304385.3887526388,
+        "high_nmse": 0.7291469572490263,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.227430964621864E-7,
+        "log1p_db": 1.1553206510975433,
+        "lsd_db": 16.24727212319722,
+        "peak": 0.5112468004226685,
+        "stereo_correlation": 0.8171000338074689,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "f4c4e82bc06ce7c94d199af1f0ca925caf5106a6",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42184 kB",
+          "VmRSS:\t   15936 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791197491
+      }
+    }
+  ]
+}

@@ -297,3 +297,12 @@ aligned native clips with the same Rust waveform metrics used in restoration.
 It runs no model/training and cannot detect an incorrect temporal alignment.
 `examples/energy_match.rs` creates an input-only residual-energy audition control;
 its gains and candidate ordering are logged, with no total normalization.
+
+The [completed 600/1500/3000 comparison](docs/NATIVE_LONGER_RESULTS.md) includes
+saved Adam states, exact original-prefix parity, 48 fresh paired scenes and three
+native song passages with energy controls. The owner prefers **3000 strength 1,
+especially passage 160**. Synthetic magnitude error favors 1500 among full-flow
+checkpoints, while 3000 has lower LSD; matched song controls do not establish a
+general magnitude-error gain over the original. All candidates are preserved.
+The preferred checkpoint is `artifacts/native-longer-v2/flow3000.json`; its
+resumable model-plus-Adam bundle is `artifacts/native-longer-v2/state3000.json`.
