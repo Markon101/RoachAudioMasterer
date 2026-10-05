@@ -66,3 +66,13 @@ scores are published as `artifacts/native-undegraded-v1.json`. User audio stays
 local. No build/test rerun was needed: executable/model code did not change,
 and input parity, decoding, source hash, geometry and actual known-band metrics
 were checked for these renders. No speed measurement was performed.
+
+Subsequent owner feedback: the undegraded strength 1 version has a slight edge
+over 0.25, refines cymbals and opens the sonics, but a persistent 7–8 kHz streak is
+mainly audible in processed clips across runs. This positive informal preference
+does not erase the reported defect. Diagnosis and explicit residual-only previews
+are in [STREAK_RESULTS.md](STREAK_RESULTS.md); the original versions remain intact.
+
+The owner then selected the half-strength generated 7–8 kHz band preview for
+this undegraded passage. This is an explicit local DSP adjustment on top of the
+unchanged strength-1 model, not a new trained checkpoint or a source-band notch.

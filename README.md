@@ -308,7 +308,13 @@ The preferred checkpoint is `artifacts/native-longer-v2/flow3000.json`; its
 resumable model-plus-Adam bundle is `artifacts/native-longer-v2/state3000.json`.
 
 Native `scene-restore --sample-seed 29` changes only the reproducible excitation
-seed; default11 preserves previous samples. `--baseline harmonic`, `noise`,
+seed; default 11 preserves previous samples. `--baseline harmonic`, `noise`,
 `prior` or `zero` isolates existing DSP estimates and cannot combine with flow
 or the adapter. These controls support the [persistent-streak audit](docs/STREAK_PLAN.md);
 they do not retrain or change checkpoint semantics.
+
+The [streak diagnosis and preview](docs/STREAK_RESULTS.md) found a reinforced
+7.46 kHz region plus separate ultrasonic frame-grid lines. The owner prefers a
+manual half-strength **generated** 7–8 kHz band on the undegraded passage. The
+`residual_band_guard` example preserves source content and all other residual
+frequencies; it is an opt-in DSP counterfactual, not a general learned correction.

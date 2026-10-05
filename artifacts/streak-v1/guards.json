@@ -1,0 +1,61 @@
+{
+  "scope": "manual7-8k suppression only on generated addition; no model change or source notch; predeclared gains0.5/0.25",
+  "records": [
+    {
+      "band_hz": [
+        7000.0,
+        8000.0
+      ],
+      "candidate": "runs/native-longer/listening-source/step-3000/start-160/reconstructed.wav",
+      "input": "runs/native-longer/listening-source/step-3000/start-160/input.wav",
+      "method": "input + inverseFFT(gain(f)*FFT(candidate-input)); only added residual changed; symmetric cosine band transitions; finite-clip circular Fourier operator",
+      "peak": 0.510543704032898,
+      "residual_gain": 0.5,
+      "scope": "explicit DSP counterfactual, not learned repair or source filtering; no total normalization or reference selection",
+      "seconds": 10.0,
+      "transition_hz": 125.0
+    },
+    {
+      "band_hz": [
+        7000.0,
+        8000.0
+      ],
+      "candidate": "runs/native-longer/listening-source/step-3000/start-160/reconstructed.wav",
+      "input": "runs/native-longer/listening-source/step-3000/start-160/input.wav",
+      "method": "input + inverseFFT(gain(f)*FFT(candidate-input)); only added residual changed; symmetric cosine band transitions; finite-clip circular Fourier operator",
+      "peak": 0.5109267234802246,
+      "residual_gain": 0.25,
+      "scope": "explicit DSP counterfactual, not learned repair or source filtering; no total normalization or reference selection",
+      "seconds": 10.0,
+      "transition_hz": 125.0
+    },
+    {
+      "band_hz": [
+        7000.0,
+        8000.0
+      ],
+      "candidate": "runs/native-undegraded/strength1/reconstructed.wav",
+      "input": "runs/native-undegraded/strength1/input.wav",
+      "method": "input + inverseFFT(gain(f)*FFT(candidate-input)); only added residual changed; symmetric cosine band transitions; finite-clip circular Fourier operator",
+      "peak": 0.5656899213790894,
+      "residual_gain": 0.5,
+      "scope": "explicit DSP counterfactual, not learned repair or source filtering; no total normalization or reference selection",
+      "seconds": 10.0,
+      "transition_hz": 125.0
+    },
+    {
+      "band_hz": [
+        7000.0,
+        8000.0
+      ],
+      "candidate": "runs/native-undegraded/strength1/reconstructed.wav",
+      "input": "runs/native-undegraded/strength1/input.wav",
+      "method": "input + inverseFFT(gain(f)*FFT(candidate-input)); only added residual changed; symmetric cosine band transitions; finite-clip circular Fourier operator",
+      "peak": 0.5658454895019531,
+      "residual_gain": 0.25,
+      "scope": "explicit DSP counterfactual, not learned repair or source filtering; no total normalization or reference selection",
+      "seconds": 10.0,
+      "transition_hz": 125.0
+    }
+  ]
+}

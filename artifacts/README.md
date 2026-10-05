@@ -53,6 +53,11 @@ this explanation or the manifest itself. Verify with:
 Self-reference scores measure change and do not establish enhancement quality.
 Only metadata is published; the three listening WAVs remain local/Downloads.
 
+`streak-v1/` records the7–8 kHz complaint, frozen prior/seed diagnostics and
+explicit residual-band previews. The owner prefers the half-band undegraded
+preview. Raw checkpoints remain unchanged; controlled magnitude error worsens
+under suppression. Public files omit song waveforms and full private PSD arrays.
+
 ```sh
 sha256sum -c artifacts/SHA256SUMS
 ```

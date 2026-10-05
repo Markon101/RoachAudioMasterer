@@ -1,0 +1,23 @@
+{
+  "initial_audit_source": "f2de148",
+  "native_prior_seed_controls_and_band_guard_source": "baf813877918850b73fb16323f054f770f31d1ce",
+  "weights_changed": false,
+  "training_updates": 0,
+  "default_seed11_float_and_pcm16_wav_cmp_exact": true,
+  "input": "same provided song and previously published procedural seed200002",
+  "owner_feedback": {
+    "undegraded_preference": "strength1 has a slight edge over0.25; cymbals/sonics improved informally",
+    "defect": "persistent mid/high pitched streak mainly in processed samples",
+    "heard_band_hz": [7000, 8000],
+    "band_guard_preference": "owner selected half-strength generated7-8k band in undegraded160 preview as reducing streak while preserving improvement; informal, not a blind/general result"
+  },
+  "native_models": "frozen native600 prior and native600/1500/3000 flows",
+  "song_sample_seeds": [11, 29, 47],
+  "probe_band_hz": [7000, 8000],
+  "guard_transition_hz": 125,
+  "guard_generated_component_gains": [0.5, 0.25],
+  "downloads": "/sdcard/Download/highband-streak-test-20261005/",
+  "interpretation": "7.46k peak is present in harmonic prior and stronger in flow; seeds do not move it. Separate >19k phase-coherent hop-grid lines exist. This supports but does not prove a particular audible cause. Guard acts only on candidate-input, preserving source; no claim of learned repair.",
+  "audio_privacy": "no song waveforms or full PSD arrays published; only summary/score/control receipts",
+  "benchmark_status": "No speed experiment or throughput measurement; sequential correctness/listening controls only"
+}

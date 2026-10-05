@@ -27,6 +27,13 @@ same flow3000 residual to the original 160-second passage at strengths 1/0.25,
 without manufactured bandwidth loss. Its self-reference errors measure change,
 not enhancement quality; the test does not train new correction heads.
 
+The owner then reported a mainly processed7–8 kHz streak and selected a
+[half-strength generated-band preview](docs/STREAK_RESULTS.md) on the undegraded
+passage. Prior/seed controls support systematic7.46 kHz emphasis; separate
+ultrasonic frame-grid tones remain. The preview changes only the added residual
+and worsens controlled-reference magnitude matching, so it is an explicit local
+listening adjustment with mixed evidence, not a trained/general repair.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

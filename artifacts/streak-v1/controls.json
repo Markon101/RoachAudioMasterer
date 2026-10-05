@@ -1,0 +1,663 @@
+{
+  "scope": "healthy160s source, DSP/learned prior and predefined flow11/29/47 controls; default11 float+PCM16 parity cmp passed",
+  "records": [
+    {
+      "adapter": null,
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=1024",
+      "baseline": null,
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": null,
+      "manufactured_test": false,
+      "output_peak": 0.5655609965324402,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  180216 kB",
+          "VmRSS:\t  162432 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791229943
+      },
+      "sample_seed": 11,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=1024",
+      "baseline": null,
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": "artifacts/native-longer-v2/flow3000.json",
+      "manufactured_test": false,
+      "output_peak": 0.5653786659240723,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  199296 kB",
+          "VmRSS:\t  163228 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791229985
+      },
+      "sample_seed": 11,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=1024",
+      "baseline": null,
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": "artifacts/native-longer-v2/flow3000.json",
+      "manufactured_test": false,
+      "output_peak": 0.5605915784835815,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  198912 kB",
+          "VmRSS:\t  163260 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791230026
+      },
+      "sample_seed": 29,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=1024",
+      "baseline": null,
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": "artifacts/native-longer-v2/flow3000.json",
+      "manufactured_test": false,
+      "output_peak": 0.5612765550613403,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  199024 kB",
+          "VmRSS:\t  163012 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791230069
+      },
+      "sample_seed": 47,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "cpu-dsp",
+      "baseline": "harmonic",
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": null,
+      "manufactured_test": false,
+      "output_peak": 0.5637602210044861,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  154344 kB",
+          "VmRSS:\t  129984 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791229933
+      },
+      "sample_seed": 11,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "cpu-dsp",
+      "baseline": "noise",
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": null,
+      "manufactured_test": false,
+      "output_peak": 0.5619434118270874,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  154372 kB",
+          "VmRSS:\t  129876 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791229934
+      },
+      "sample_seed": 11,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "cpu-dsp",
+      "baseline": "prior",
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": null,
+      "manufactured_test": false,
+      "output_peak": 0.562013566493988,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "baf813877918850b73fb16323f054f770f31d1ce",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  154192 kB",
+          "VmRSS:\t  129824 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791229936
+      },
+      "sample_seed": 11,
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    }
+  ]
+}
