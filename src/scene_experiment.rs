@@ -565,6 +565,8 @@ pub struct RestoreOptions<'a> {
     pub backend: &'a str,
     pub out: &'a Path,
     pub manufacture: bool,
+    pub sample_seed: u64,
+    pub baseline: Option<&'a str>,
 }
 pub fn restore(o: RestoreOptions<'_>) -> Result<()> {
     new_run(o.out)?;
@@ -579,20 +581,34 @@ pub fn restore(o: RestoreOptions<'_>) -> Result<()> {
         m.stage == "deterministic",
         "native restoration needs a deterministic prior checkpoint"
     );
-    let adapter = o.adapter.map(|p| Adapter::load(p, &m)).transpose()?;
-    let mut det = Engine::new(&m, o.backend)?;
-    let p = scene_features::prepare(&input, o.damage, 11);
-    let base = det.deterministic(&p, o.damage, adapter.as_ref())?;
-    let state = if let Some(path) = o.flow {
-        let fm = Model::load(path)?;
+    let p = scene_features::prepare(&input, o.damage, o.sample_seed);
+    let (state, used_backend) = if let Some(method) = o.baseline {
         ensure!(
-            fm.stage == "flow" && fm.prior_fingerprint.as_ref() == Some(&m.fingerprint()),
-            "flow/deterministic prior identity mismatch"
+            o.flow.is_none()
+                && o.adapter.is_none()
+                && ["zero", "harmonic", "noise", "prior"].contains(&method),
+            "DSP baseline must be isolated from learned refinement/adapter"
         );
-        let mut f = Engine::new(&fm, o.backend)?;
-        f.refine(&p, o.damage, &base, 8, false)?
+        (
+            scene_features::prior_state(&p, method),
+            "cpu-dsp".to_string(),
+        )
     } else {
-        base
+        let adapter = o.adapter.map(|p| Adapter::load(p, &m)).transpose()?;
+        let mut det = Engine::new(&m, o.backend)?;
+        let base = det.deterministic(&p, o.damage, adapter.as_ref())?;
+        let state = if let Some(path) = o.flow {
+            let fm = Model::load(path)?;
+            ensure!(
+                fm.stage == "flow" && fm.prior_fingerprint.as_ref() == Some(&m.fingerprint()),
+                "flow/deterministic prior identity mismatch"
+            );
+            let mut f = Engine::new(&fm, o.backend)?;
+            f.refine(&p, o.damage, &base, 8, false)?
+        } else {
+            base
+        };
+        (state, det.name().to_owned())
     };
     let y = scene_features::waveform(&p, o.damage, &state, o.strength);
     native_audio::write(&o.out.join("reconstructed.wav"), &y, false)?;
@@ -608,7 +624,7 @@ pub fn restore(o: RestoreOptions<'_>) -> Result<()> {
     };
     write_json(
         &o.out.join("restoration.json"),
-        &json!({"provenance":provenance(),"source":o.source,"start":o.start,"seconds":o.seconds,"damage_assumption":o.damage,"manufactured_test":o.manufacture,"deterministic":o.det,"flow":o.flow,"adapter":o.adapter,"strength":o.strength,"backend":det.name(),"scores":score,"output_peak":y.channels.iter().flatten().fold(0.0f32,|p,x|p.max(x.abs())),"claim":"native-rate stereo conditional residual completion; original unknown information is not recovered"}),
+        &json!({"provenance":provenance(),"source":o.source,"start":o.start,"seconds":o.seconds,"damage_assumption":o.damage,"manufactured_test":o.manufacture,"deterministic":o.det,"flow":o.flow,"adapter":o.adapter,"strength":o.strength,"sample_seed":o.sample_seed,"baseline":o.baseline,"backend":used_backend,"scores":score,"output_peak":y.channels.iter().flatten().fold(0.0f32,|p,x|p.max(x.abs())),"claim":"native-rate stereo conditional residual completion; original unknown information is not recovered"}),
     )?;
     println!(
         "native restoration {} (48 kHz, {} channels)",

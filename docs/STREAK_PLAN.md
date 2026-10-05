@@ -39,3 +39,21 @@ This diagnostic is project Fourier analysis, not a new paper-derived model or
 scattering/entropy reward. Existing flow/synthesis references remain in
 [REFERENCES.md](REFERENCES.md). Different-noise, phase/coupling or consistency
 training should be a separate controlled architecture experiment after diagnosis.
+
+## Follow-up declared after initial audit
+
+The owner localized the audible streak to7–8 kHz. The first audit found weak
+phase-coherent grid lines mainly above19 kHz and stronger added peaks near7.46
+kHz; these are not assumed to be the same defect. Run undegraded160-second
+native harmonic/noise/combined-prior and deterministic controls, plus flow3000
+seeds11/29/47. Expose `--baseline` and `--sample-seed` with old default11 intact,
+verify the seed11/default WAV against the archived original. Do not pick a seed
+using the reference target.
+
+Provide optional residual-only smooth-band previews at gains0.5 and0.25 in
+7–8 kHz, with125 Hz cosine transitions outside the band, on the existing preferred
+undegraded160 and controlled160 outputs. Subtract no original source content;
+attenuate only `processed-input` and preserve all other frequencies to FFT
+roundoff. These explicit band-control counterfactuals do not diagnose which
+component caused the defect or count as a newly trained architecture. Keep both
+previews and their raw originals, no target-score tuning or automatic winner.

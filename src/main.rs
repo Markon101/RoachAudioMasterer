@@ -125,6 +125,12 @@ enum Commands {
         transition: f32,
         #[arg(long, default_value_t = 1.0)]
         strength: f32,
+        /// Seeded excitation; default preserves all previous native auditions.
+        #[arg(long, default_value_t = 11)]
+        sample_seed: u64,
+        /// Isolate an existing DSP prior without neural inference.
+        #[arg(long,value_parser=["zero","harmonic","noise","prior"],conflicts_with_all=["flow","adapter"])]
+        baseline: Option<String>,
         /// Manufacture low-pass damage from the provided reference region.
         #[arg(long)]
         controlled: bool,
@@ -360,6 +366,8 @@ fn run() -> Result<()> {
             transition,
             strength,
             controlled,
+            sample_seed,
+            baseline,
             backend,
             out,
         } => {
@@ -385,6 +393,8 @@ fn run() -> Result<()> {
                     power: 2.0,
                 },
                 strength,
+                sample_seed,
+                baseline: baseline.as_deref(),
                 backend: &backend,
                 out: &out,
                 manufacture: controlled,

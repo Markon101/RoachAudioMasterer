@@ -306,3 +306,9 @@ checkpoints, while 3000 has lower LSD; matched song controls do not establish a
 general magnitude-error gain over the original. All candidates are preserved.
 The preferred checkpoint is `artifacts/native-longer-v2/flow3000.json`; its
 resumable model-plus-Adam bundle is `artifacts/native-longer-v2/state3000.json`.
+
+Native `scene-restore --sample-seed 29` changes only the reproducible excitation
+seed; default11 preserves previous samples. `--baseline harmonic`, `noise`,
+`prior` or `zero` isolates existing DSP estimates and cannot combine with flow
+or the adapter. These controls support the [persistent-streak audit](docs/STREAK_PLAN.md);
+they do not retrain or change checkpoint semantics.
