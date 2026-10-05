@@ -1,0 +1,89 @@
+{
+  "posthoc": true,
+  "n": 48,
+  "paired_flow_controls": {
+    "zero": {
+      "flow_11_minus_control_mean_db": 0.04954859304155984,
+      "standard_error": 0.11609197737846967,
+      "flow_lower_count": 30
+    },
+    "learned": {
+      "flow_11_minus_control_mean_db": 0.15763755580026537,
+      "standard_error": 0.062461351826706625,
+      "flow_lower_count": 23
+    },
+    "flow_noise_only": {
+      "flow_11_minus_control_mean_db": -0.0015523844896844989,
+      "standard_error": 0.015963584884299616,
+      "flow_lower_count": 31
+    },
+    "flow_shuffled_features": {
+      "flow_11_minus_control_mean_db": -0.00019503261297149944,
+      "standard_error": 0.0015769068961872627,
+      "flow_lower_count": 28
+    }
+  },
+  "texture_means": [
+    {
+      "method": "envelope",
+      "envelope": 57.83550963843168,
+      "onset": 11.390264938139508,
+      "flatness": 0.6450045009487143
+    },
+    {
+      "method": "flow_11",
+      "envelope": 57.83960165458023,
+      "onset": 11.380128093366627,
+      "flatness": 0.39943758552998426
+    },
+    {
+      "method": "flow_29",
+      "envelope": 57.837490863049574,
+      "onset": 11.37886879358315,
+      "flatness": 0.3988407929911214
+    },
+    {
+      "method": "flow_47",
+      "envelope": 57.83896209451033,
+      "onset": 11.380767614423533,
+      "flatness": 0.3963346694752451
+    },
+    {
+      "method": "flow_noise_only",
+      "envelope": 57.847125467192996,
+      "onset": 11.379839549018735,
+      "flatness": 0.43681714511212555
+    },
+    {
+      "method": "flow_shuffled_features",
+      "envelope": 57.83938845415003,
+      "onset": 11.380097191425497,
+      "flatness": 0.39841785165079063
+    },
+    {
+      "method": "harmonic",
+      "envelope": 57.87910616908555,
+      "onset": 11.381011946604586,
+      "flatness": 0.07959780854009502
+    },
+    {
+      "method": "learned",
+      "envelope": 57.82578256613863,
+      "onset": 11.374844460371385,
+      "flatness": 0.3585270474539098
+    },
+    {
+      "method": "zero",
+      "envelope": 57.96718215532959,
+      "onset": 11.369652417416903,
+      "flatness": 0.8088865307423849
+    }
+  ],
+  "source_report": "artifacts/flow-v1/test-opencl.json",
+  "cpu_gpu_subset": {
+    "examples": 2,
+    "max_log1p_db_difference": 1.626945600463614e-8,
+    "max_full_nmse_difference": 4.1171349662860734e-10,
+    "excluded": "shuffled features: next-example pairing changes with subset size"
+  }
+}

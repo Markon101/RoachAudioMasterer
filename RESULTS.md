@@ -7,6 +7,11 @@ device owner, but it invents energy on nearly bandlimited examples and does not
 consistently beat simple DSP. No original lost information or perceptual fidelity
 to an unknown original has been demonstrated.
 
+Subsequent user direction establishes unified acoustic-scene restoration and
+contrast/dynamic expansion as core goals (`docs/ARCHITECTURE.md`). A separate
+complex flow-matching pilot was implemented and tested; its negative conditional
+refinement result is in `docs/FLOW_RESULTS.md`. The v0 figures below remain frozen.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

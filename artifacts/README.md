@@ -8,6 +8,12 @@ steps and optimizer. Its evaluation reuses development examples.
 test reports, post-hoc diagnostics, aggregate local song metrics and procedural
 audio examples. `v0/model.json` works with current source.
 
+`flow-v1/` contains the bounded opt-in complex-flow checkpoint, zero-velocity
+checkpoint, training log, fresh 48-seed GPU test, two-example CPU parity subset,
+post-hoc control diagnostics, one local-song score summary and procedural WAVs.
+See `docs/FLOW_RESULTS.md`: the flow pilot did not beat its shaped-noise control
+convincingly. Samples are predefined; no best-of-target selection occurred.
+
 Only procedural WAVs are published. User-supplied song audio is in ignored local
 run directories and requested Downloads listening copies. See `RESULTS.md` for
 run parameters, limitations, commands, interpretation and output paths.

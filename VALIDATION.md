@@ -20,6 +20,13 @@ Android/Termux; dependencies pinned by `Cargo.lock`. Builds/tests used
 - Float audition clips have peaks below 0 dBFS; no per-clip normalization.
 - Hash manifest excludes itself; verify `sha256sum -c artifacts/SHA256SUMS`.
 
+The subsequent flow extension has 8 CPU tests and 10 with real-GPU tests enabled.
+It adds finite-difference velocity gradients, input-only conditioning checks,
+deterministic stochastic seeds, eight-step known-band preservation and dynamic
+dense GPU/trajectory parity. The arbitrary-band projection is checked with a
+separate upper-tone oracle. Flow's fixed 2,000-step run and 48-seed test are
+described in `docs/FLOW_RESULTS.md`; the deterministic v0 is unchanged.
+
 Player-friendly PCM16 24/48 kHz copies exist; 48 kHz versions are upsampled,
 mono, and do not reconstruct above 12 kHz. FFmpeg needed per-command C++ preload
 as documented in `docs/OPENCL.md`. API playback did not return, but the owner

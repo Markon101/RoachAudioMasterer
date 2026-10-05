@@ -1,0 +1,65 @@
+{
+  "scope": "one predefined song excerpt, exploration only, no training/adaptation",
+  "source_sha256": "2ffc515bdb05993f647ff309ed7cb2b7697959f5fa2b2c2d53291e1332f1e3c6",
+  "sample_seed": 11,
+  "flow_full": {
+    "metrics": {
+      "copied_known_max": 0.0,
+      "full_magnitude_nmse": 0.014357303330328216,
+      "known_fourier_relative_error": 1.573264662885105E-7,
+      "known_stft_relative_error": 0.0005598345186593567,
+      "missing_log1p_db_rmse": 1.2300421440429095,
+      "missing_lsd_db": 10.394752738436852,
+      "missing_magnitude_nmse": 0.7371776691290653,
+      "target_high_energy_fraction": 0.018084226782458527,
+      "waveform_rmse": 0.02760553515480245
+    },
+    "texture": {
+      "flatness_active_target_frames": 1863,
+      "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+      "high_envelope_normalized_rmse": 0.3111554892454939,
+      "high_flatness_absolute_error": 0.12840872206780204,
+      "high_onset_normalized_rmse": 0.09911059552870131
+    }
+  },
+  "flow_strength025": {
+    "metrics": {
+      "copied_known_max": 0.0,
+      "full_magnitude_nmse": 0.015550503677710523,
+      "known_fourier_relative_error": 1.5727014169515998E-7,
+      "known_stft_relative_error": 0.00013995877574265442,
+      "missing_log1p_db_rmse": 1.3734271926713697,
+      "missing_lsd_db": 15.5972414789716,
+      "missing_magnitude_nmse": 0.8070820256599128,
+      "target_high_energy_fraction": 0.018084226782458527,
+      "waveform_rmse": 0.021618692725744265
+    },
+    "texture": {
+      "flatness_active_target_frames": 1863,
+      "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+      "high_envelope_normalized_rmse": 0.34579667658170143,
+      "high_flatness_absolute_error": 0.1309817543837433,
+      "high_onset_normalized_rmse": 0.10127744330108385
+    }
+  },
+  "noise_only": {
+    "metrics": {
+      "copied_known_max": 0.0,
+      "full_magnitude_nmse": 0.014335897476838786,
+      "known_fourier_relative_error": 1.565976006566349E-7,
+      "known_stft_relative_error": 0.0003510199600396349,
+      "missing_log1p_db_rmse": 1.2374615490872949,
+      "missing_lsd_db": 10.605738335658558,
+      "missing_magnitude_nmse": 0.7433318302336647,
+      "target_high_energy_fraction": 0.018084226782458527,
+      "waveform_rmse": 0.027159299437071772
+    },
+    "texture": {
+      "flatness_active_target_frames": 1863,
+      "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+      "high_envelope_normalized_rmse": 0.31151405948181665,
+      "high_flatness_absolute_error": 0.15710883997489483,
+      "high_onset_normalized_rmse": 0.09881275581522383
+    }
+  }
+}

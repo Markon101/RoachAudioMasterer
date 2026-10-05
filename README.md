@@ -161,11 +161,33 @@ Checkpoints from the first schema-1 experiment require source commit `3c0781a`;
 current code rejects them explicitly to avoid changing the prior underneath a
 trained residual. Schema-2 checkpoints use the bounded envelope prior.
 
-Song-specific self-supervision, learned phase and perceptual claims remain future
+Song-specific self-supervision and validated phase/texture repair remain future
 work. The best initial continuation is a fixed family-held-out test plus an
 input-shuffling/null-prior control, then internal known-band adaptation on an
 unseen synthetic song; don't confuse in-distribution seed gains with real-audio
 or truly missing-band transfer.
+
+## Experimental complex flow matching
+
+Explicit opt-in commands add a 36,802-parameter complex-residual velocity model:
+
+```sh
+./target/release/highband flow-train --seed 20000 --steps 2000 --out runs/flow-train
+OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband flow-evaluate \
+  --model runs/flow-train/flow.json --deterministic artifacts/v0/model.json \
+  --seed 140000 --count 48 --backend opencl --out runs/flow-test
+./target/release/highband flow-restore --input excerpt-degraded.wav \
+  --model artifacts/flow-v1/flow.json --cutoff 6000 --transition 500 \
+  --strength 0.25 --out runs/flow-restored.wav
+```
+
+It conditions on input-only low magnitude/phase summaries and integrates eight
+Euler steps. Synthetic training, known-band preservation and optional CPU/OpenCL
+execution remain intact. The first frozen pilot **does not show useful learned
+conditional improvement over shaped noise**. All predefined samples and null
+controls are recorded. See [flow plan](docs/FLOW_PLAN.md),
+[actual results](docs/FLOW_RESULTS.md), and [Titan reuse notes](docs/TITAN_TRANSFER.md).
+This is a flow-matching experiment, not an implemented diffusion sampler.
 
 Engineering references: [RustFFT](https://docs.rs/rustfft/6.4.1/rustfft/)
 and [opencl3](https://docs.rs/opencl3/0.12.3/opencl3/).

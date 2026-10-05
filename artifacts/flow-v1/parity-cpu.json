@@ -1,0 +1,726 @@
+{
+  "aggregation": "one score per independently generated seed per method; flow samples are not independent procedural examples",
+  "backend": "cpu-f32-complex-flow",
+  "deterministic_checkpoint": "artifacts/v0/model.json",
+  "examples": 2,
+  "flow_checkpoint": "runs/flow-v1/train/flow.json",
+  "noise_control": "same shaped Gaussian initialization, zero Euler updates",
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "conditioning": "40 input-only magnitude/context features plus 64 peak-bin real/imag summaries, current state, path time",
+      "coordinate_limit": 16.0,
+      "hidden": 32,
+      "inputs": 619,
+      "noise_floor": 0.019999999552965164,
+      "outputs": 514,
+      "parameters": 36802,
+      "path": "independent shaped-Gaussian to clipped target, straight linear interpolation",
+      "predeclared_test_sample_seeds": [
+        11,
+        29,
+        47
+      ],
+      "prediction": "normalized complex missing-band residual velocity",
+      "schema": "highband-flow-complex-v1",
+      "solver": "Euler",
+      "test_steps": 8
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "a25cf7bb3eeec2272aae19cf3a99ec49e5c46d63",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t    6672 kB",
+      "VmRSS:\t    5572 kB",
+      "Cpus_allowed_list:\t0-1,4-5"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791176582
+  },
+  "rows": [
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "zero",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.49305821626606383,
+        "known_fourier_relative_error": 0.0,
+        "known_stft_relative_error": 0.0,
+        "missing_log1p_db_rmse": 3.610251638376234,
+        "missing_lsd_db": 32.77150572526031,
+        "missing_magnitude_nmse": 0.999741920199062,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.1403709441012376
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 1.174031998534604,
+        "high_flatness_absolute_error": 0.9807652597684998,
+        "high_onset_normalized_rmse": 0.049589247040416645
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "envelope",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.54267777555571,
+        "known_fourier_relative_error": 1.5275853655219108e-7,
+        "known_stft_relative_error": 0.0018622994795970463,
+        "missing_log1p_db_rmse": 4.900063944917721,
+        "missing_lsd_db": 30.775965879665637,
+        "missing_magnitude_nmse": 1.0833902717211865,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.16821213348848704
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.41724795063936226,
+        "high_flatness_absolute_error": 0.793356374789077,
+        "high_onset_normalized_rmse": 0.07689914150651145
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "harmonic",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.4581923703013786,
+        "known_fourier_relative_error": 1.393874304837808e-7,
+        "known_stft_relative_error": 0.00022789820886910737,
+        "missing_log1p_db_rmse": 3.272778328355427,
+        "missing_lsd_db": 16.70454441467877,
+        "missing_magnitude_nmse": 0.9289979777911116,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.14381222891443876
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.9177220287617732,
+        "high_flatness_absolute_error": 0.003460350337754118,
+        "high_onset_normalized_rmse": 0.05590520246306373
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "learned",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.4712685290200393,
+        "known_fourier_relative_error": 1.2667172763876822e-7,
+        "known_stft_relative_error": 0.0008698542318586943,
+        "missing_log1p_db_rmse": 3.566922491947941,
+        "missing_lsd_db": 23.489471320875154,
+        "missing_magnitude_nmse": 0.9524061485226224,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.14447691366994875
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.8900331716452923,
+        "high_flatness_absolute_error": 0.6735650765152331,
+        "high_onset_normalized_rmse": 0.05327800751493198
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "flow_11",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.4747443395516962,
+        "known_fourier_relative_error": 1.4508171460996303e-7,
+        "known_stft_relative_error": 0.0021419149407091,
+        "missing_log1p_db_rmse": 3.7718663178992675,
+        "missing_lsd_db": 25.208447277938063,
+        "missing_magnitude_nmse": 0.9576421409776085,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.14865698802813676
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.7649143776167835,
+        "high_flatness_absolute_error": 0.5359620746354953,
+        "high_onset_normalized_rmse": 0.05925219910583939
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "flow_29",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.4637541066273414,
+        "known_fourier_relative_error": 1.4703357626355434e-7,
+        "known_stft_relative_error": 0.0013186206596609816,
+        "missing_log1p_db_rmse": 3.734672671833811,
+        "missing_lsd_db": 25.11257675961101,
+        "missing_magnitude_nmse": 0.9335547191742515,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.14836980595741184
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.7534546982580801,
+        "high_flatness_absolute_error": 0.5296263792247125,
+        "high_onset_normalized_rmse": 0.05792066537769137
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "flow_47",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.4679682764685864,
+        "known_fourier_relative_error": 1.391843276313271e-7,
+        "known_stft_relative_error": 0.0015526709095023807,
+        "missing_log1p_db_rmse": 3.778665754343898,
+        "missing_lsd_db": 25.257278322668547,
+        "missing_magnitude_nmse": 0.9441311299163339,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.1481413323634542
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.7565919823456666,
+        "high_flatness_absolute_error": 0.5425471235587644,
+        "high_onset_normalized_rmse": 0.06034341566036314
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "flow_shuffled_features",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.47477674807944265,
+        "known_fourier_relative_error": 1.4453685541216191e-7,
+        "known_stft_relative_error": 0.0021738702792261652,
+        "missing_log1p_db_rmse": 3.7711528160662438,
+        "missing_lsd_db": 25.199022452968595,
+        "missing_magnitude_nmse": 0.9577157036690396,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.1486604547088688
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.7649420246743006,
+        "high_flatness_absolute_error": 0.5350485370074685,
+        "high_onset_normalized_rmse": 0.05918112493789777
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6866.01953125,
+        "slope": 1.9127449989318848,
+        "transition_hz": 358.993408203125
+      },
+      "family": "wavefold",
+      "method": "flow_noise_only",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.4775853399865276,
+        "known_fourier_relative_error": 1.4709044434693508e-7,
+        "known_stft_relative_error": 0.001915667977177222,
+        "missing_log1p_db_rmse": 3.820251933450443,
+        "missing_lsd_db": 25.658795002819673,
+        "missing_magnitude_nmse": 0.963657201327896,
+        "target_high_energy_fraction": 0.4931820634046343,
+        "waveform_rmse": 0.1488942076158871
+      },
+      "seed": 140000,
+      "texture": {
+        "flatness_active_target_frames": 66,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.757754882646529,
+        "high_flatness_absolute_error": 0.5610728112746786,
+        "high_onset_normalized_rmse": 0.0629912453427498
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "zero",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 1.201787973051019e-7,
+        "known_fourier_relative_error": 0.0,
+        "known_stft_relative_error": 0.0,
+        "missing_log1p_db_rmse": 0.0023617471003633222,
+        "missing_lsd_db": 0.43819559228970584,
+        "missing_magnitude_nmse": 0.6251052488944422,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.00012499405156629566
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.0002281632332875187,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.00006810510062110245
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "envelope",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.0008684439207377254,
+        "known_fourier_relative_error": 1.2209670203284973e-7,
+        "known_stft_relative_error": 0.00006480334729596215,
+        "missing_log1p_db_rmse": 0.4843815780572418,
+        "missing_lsd_db": 21.699954109508116,
+        "missing_magnitude_nmse": 9809.580188105014,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.009574436992416136
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.0594927142818313,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.010460162407911146
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "harmonic",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.0003692643494306383,
+        "known_fourier_relative_error": 1.3286457492125911e-7,
+        "known_stft_relative_error": 0.00006535643275409955,
+        "missing_log1p_db_rmse": 0.18461488051866956,
+        "missing_lsd_db": 15.057374980404022,
+        "missing_magnitude_nmse": 3080.4686543993334,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.006274980835283174
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.022068767065169363,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.0025311976762932417
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "learned",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.009007079515763381,
+        "known_fourier_relative_error": 1.1475795323545133e-7,
+        "known_stft_relative_error": 0.00024063904634310542,
+        "missing_log1p_db_rmse": 0.8036410838955497,
+        "missing_lsd_db": 33.48999911036032,
+        "missing_magnitude_nmse": 99394.98815347998,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.030805399647760842
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.09902786454845193,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.002031451144677243
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "flow_11",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.0003413274786691352,
+        "known_fourier_relative_error": 1.21360003178341e-7,
+        "known_stft_relative_error": 0.000041668475244974926,
+        "missing_log1p_db_rmse": 0.27880204518395535,
+        "missing_lsd_db": 24.04843879668428,
+        "missing_magnitude_nmse": 3779.015549305866,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.006049523980422991
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.03324580686537895,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.005376710611110915
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "flow_29",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.0003634225258116716,
+        "known_fourier_relative_error": 1.3817246805825022e-7,
+        "known_stft_relative_error": 0.00005555055172496409,
+        "missing_log1p_db_rmse": 0.2889653901282474,
+        "missing_lsd_db": 24.234862717762653,
+        "missing_magnitude_nmse": 3962.1551491740433,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.006241943406594527
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.03458123738989147,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.007008761789352445
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "flow_47",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.0003826662531221131,
+        "known_fourier_relative_error": 1.4012761118604037e-7,
+        "known_stft_relative_error": 0.00005451066866290822,
+        "missing_log1p_db_rmse": 0.3080092779196812,
+        "missing_lsd_db": 24.30650507460194,
+        "missing_magnitude_nmse": 4269.5156060213085,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.006397311332440251
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.03709645954211263,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.007675457778409583
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "flow_shuffled_features",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.00042076499323886015,
+        "known_fourier_relative_error": 1.1517457435086376e-7,
+        "known_stft_relative_error": 0.0000956657980973632,
+        "missing_log1p_db_rmse": 0.29262078420496673,
+        "missing_lsd_db": 25.34302855423489,
+        "missing_magnitude_nmse": 4589.951281556703,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.006709297894865494
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.0348751334427799,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.0051130799905082045
+      }
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6688.2333984375,
+        "slope": 3.7119853496551514,
+        "transition_hz": 691.4984130859375
+      },
+      "family": "saturation",
+      "method": "flow_noise_only",
+      "metrics": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.00031647961839894657,
+        "known_fourier_relative_error": 1.2174081046828182e-7,
+        "known_stft_relative_error": 0.00003704110474647803,
+        "missing_log1p_db_rmse": 0.2792979131417589,
+        "missing_lsd_db": 23.590153968969187,
+        "missing_magnitude_nmse": 3547.4071137995593,
+        "target_high_energy_fraction": 8.03476697317248e-8,
+        "waveform_rmse": 0.00581694646160356
+      },
+      "seed": 140001,
+      "texture": {
+        "flatness_active_target_frames": 0,
+        "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+        "high_envelope_normalized_rmse": 0.03331599668952675,
+        "high_flatness_absolute_error": null,
+        "high_onset_normalized_rmse": 0.005303790622290822
+      }
+    }
+  ],
+  "sampling": "all predefined seeds scored separately; no best-of-target selection",
+  "seed_start": 140000,
+  "shuffled_control": "32 spectral magnitude features and 64 real/imag summaries from next example; own cutoff, scale/context metadata, prior and noise retained; partial conditioning ablation",
+  "summary": {
+    "envelope": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.27177310973822383,
+        "known_fourier_relative_error": 1.3742761929252042e-7,
+        "known_stft_relative_error": 0.0009635514134465042,
+        "missing_log1p_db_rmse": 2.6922227614874816,
+        "missing_lsd_db": 26.237959994586877,
+        "missing_magnitude_nmse": 4905.331789188367,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.08889328524045159
+      },
+      "missing_nmse_standard_error": 4904.248398916646
+    },
+    "flow_11": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.23754283351518268,
+        "known_fourier_relative_error": 1.3322085889415203e-7,
+        "known_stft_relative_error": 0.0010917917079770374,
+        "missing_log1p_db_rmse": 2.0253341815416115,
+        "missing_lsd_db": 24.628443037311172,
+        "missing_magnitude_nmse": 1889.9865957234217,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07735325600427988
+      },
+      "missing_nmse_standard_error": 1889.0289535824443
+    },
+    "flow_29": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.23205876457657654,
+        "known_fourier_relative_error": 1.426030221609023e-7,
+        "known_stft_relative_error": 0.0006870856056929728,
+        "missing_log1p_db_rmse": 2.0118190309810293,
+        "missing_lsd_db": 24.67371973868683,
+        "missing_magnitude_nmse": 1981.5443519466087,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07730587468200319
+      },
+      "missing_nmse_standard_error": 1980.6107972274347
+    },
+    "flow_47": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.23417547136085426,
+        "known_fourier_relative_error": 1.3965596940868372e-7,
+        "known_stft_relative_error": 0.0008035907890826445,
+        "missing_log1p_db_rmse": 2.0433375161317895,
+        "missing_lsd_db": 24.781891698635242,
+        "missing_magnitude_nmse": 2135.2298685756123,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07726932184794723
+      },
+      "missing_nmse_standard_error": 2134.2857374456958
+    },
+    "flow_noise_only": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.23895090980246325,
+        "known_fourier_relative_error": 1.3441562740760845e-7,
+        "known_stft_relative_error": 0.00097635454096185,
+        "missing_log1p_db_rmse": 2.049774923296101,
+        "missing_lsd_db": 24.62447448589443,
+        "missing_magnitude_nmse": 1774.1853855004435,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07735557703874532
+      },
+      "missing_nmse_standard_error": 1773.2217282991157
+    },
+    "flow_shuffled_features": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.23759875653634074,
+        "known_fourier_relative_error": 1.2985571488151284e-7,
+        "known_stft_relative_error": 0.0011347680386617643,
+        "missing_log1p_db_rmse": 2.0318868001356054,
+        "missing_lsd_db": 25.27102550360174,
+        "missing_magnitude_nmse": 2295.454498630186,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07768487630186714
+      },
+      "missing_nmse_standard_error": 2294.496782926517
+    },
+    "harmonic": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.22928081732540462,
+        "known_fourier_relative_error": 1.3612600270251996e-7,
+        "known_stft_relative_error": 0.00014662732081160347,
+        "missing_log1p_db_rmse": 1.7286966044370482,
+        "missing_lsd_db": 15.880959697541396,
+        "missing_magnitude_nmse": 1540.6988261885622,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07504360487486096
+      },
+      "missing_nmse_standard_error": 1539.7698282107713
+    },
+    "learned": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.24013780426790135,
+        "known_fourier_relative_error": 1.2071484043710977e-7,
+        "known_stft_relative_error": 0.0005552466391008999,
+        "missing_log1p_db_rmse": 2.1852817879217454,
+        "missing_lsd_db": 28.48973521561774,
+        "missing_magnitude_nmse": 49697.97027981425,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.0876411566588548
+      },
+      "missing_nmse_standard_error": 49697.01787366573
+    },
+    "zero": {
+      "examples": 2,
+      "mean": {
+        "copied_known_max": 0.0,
+        "full_magnitude_nmse": 0.24652916822243057,
+        "known_fourier_relative_error": 0.0,
+        "known_stft_relative_error": 0.0,
+        "missing_log1p_db_rmse": 1.8063066927382987,
+        "missing_lsd_db": 16.60485065877501,
+        "missing_magnitude_nmse": 0.8124235845467521,
+        "target_high_energy_fraction": 0.246591071876152,
+        "waveform_rmse": 0.07024796907640195
+      },
+      "missing_nmse_standard_error": 0.18731833565230993
+    }
+  },
+  "texture": "high-band envelope/onset/flatness diagnostics adapted from Titan Audio measurement ideas; not a perceptual fidelity claim"
+}
