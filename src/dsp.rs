@@ -109,6 +109,24 @@ pub fn lowpass(x: &[f32], rate: u32, cutoff: f32, transition: f32, slope: f32) -
     z.iter().map(|v| v.re / n as f32).collect()
 }
 pub fn lock_known(input: &[f32], proposal: &[f32], cutoff: f32) -> Vec<f32> {
+    lock_known_bands(
+        input,
+        proposal,
+        RATE,
+        &[crate::scene::TrustedBand {
+            min_hz: 0.0,
+            max_hz: cutoff,
+        }],
+    )
+}
+// Task-specific protected bands: future contrast/phase/spatial repairs need not
+// inherit bandwidth extension's blanket low-frequency immutability policy.
+pub fn lock_known_bands(
+    input: &[f32],
+    proposal: &[f32],
+    rate: u32,
+    bands: &[crate::scene::TrustedBand],
+) -> Vec<f32> {
     let n = input.len();
     let mut p = FftPlanner::new();
     let mut delta: Vec<C> = proposal
@@ -118,7 +136,11 @@ pub fn lock_known(input: &[f32], proposal: &[f32], cutoff: f32) -> Vec<f32> {
         .collect();
     p.plan_fft_forward(n).process(&mut delta);
     for (k, v) in delta.iter_mut().enumerate() {
-        if k.min(n - k) as f32 * RATE as f32 / n as f32 <= cutoff {
+        let frequency = k.min(n - k) as f32 * rate as f32 / n as f32;
+        if bands
+            .iter()
+            .any(|b| frequency >= b.min_hz && frequency <= b.max_hz)
+        {
             *v = C::default();
         }
     }

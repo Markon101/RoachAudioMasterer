@@ -260,7 +260,7 @@ pub fn restore(
     audio::write(out, &y)?;
     write_json(
         &out.with_extension("json"),
-        &json!({"provenance":provenance(),"input":input_path,"output":out,"model":model_path,"method":method,"backend":backend_name,"strength":strength,"degradation_assumption":d,"known_fourier_relative_error":known,"copied_known_max":copied,"output_peak":y.iter().fold(0.0f32,|p,x|p.max(x.abs())),"claim":"conditional spectral completion; original missing information is not recovered"}),
+        &json!({"provenance":provenance(),"input":input_path,"output":out,"model":model_path,"method":method,"backend":backend_name,"strength":strength,"scene_plan":crate::scene::bandwidth_plan(d.cutoff_hz,strength,false),"degradation_assumption":d,"known_fourier_relative_error":known,"copied_known_max":copied,"output_peak":y.iter().fold(0.0f32,|p,x|p.max(x.abs())),"claim":"conditional spectral completion; original missing information is not recovered"}),
     )?;
     println!(
         "wrote {} known low Fourier rel. error {:.3e}",

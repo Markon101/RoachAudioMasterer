@@ -246,7 +246,7 @@ pub fn restore(
     audio::write(out, &y)?;
     write_json(
         &out.with_extension("json"),
-        &json!({"provenance":provenance(),"checkpoint":flow_path,"input":input_path,"output":out,"degradation_assumption":d,"backend":velocity.name(),"strength":strength,"sample_seed":SAMPLE_SEEDS[0],"known_fourier_relative_error":known,"claim":"experimental stochastic spectral completion; no recovery of lost information"}),
+        &json!({"provenance":provenance(),"checkpoint":flow_path,"input":input_path,"output":out,"scene_plan":crate::scene::bandwidth_plan(d.cutoff_hz,strength,true),"degradation_assumption":d,"backend":velocity.name(),"strength":strength,"sample_seed":SAMPLE_SEEDS[0],"known_fourier_relative_error":known,"claim":"experimental stochastic spectral completion; no recovery of lost information"}),
     )?;
     println!(
         "flow wrote {} low Fourier error {:.3e}",

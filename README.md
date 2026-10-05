@@ -4,6 +4,12 @@ A small Rust experiment in synthetic-supervised conditional audio high-frequency
 reconstruction, developed on a Samsung Galaxy S25 Ultra in Android/Termux.
 Generated highs are plausible spectral completion, not recovery of lost information.
 
+The core direction is a unified acoustic-scene restoration/correction engine.
+Bandwidth extension is the first task. Spectral, transient, microdynamic/dynamic
+expansion, phase/coherence, stereo/spatial, ambience/depth and texture residuals
+are first-class design targets, with conservative-to-creative policies. Most are
+not implemented yet. See [architecture](docs/ARCHITECTURE.md).
+
 The v0 plan: deterministic procedural signals, randomized bandwidth removal,
 STFT magnitude prediction, untouched known spectral coefficients, CPU numerical
 reference and an optional OpenCL model backend. No natural-audio corpus required.

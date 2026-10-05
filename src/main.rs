@@ -9,6 +9,7 @@ mod model;
 #[cfg(feature = "opencl")]
 mod opencl;
 mod reconstruction;
+mod scene;
 mod synth;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
