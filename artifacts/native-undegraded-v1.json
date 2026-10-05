@@ -1,0 +1,398 @@
+{
+  "scope": "additive enhancement experiment on the undegraded provided 160-170s recording; no low-pass manufacture; model trained on removed bands, not healthy-input correction",
+  "source_sha256": "2ffc515bdb05993f647ff309ed7cb2b7697959f5fa2b2c2d53291e1332f1e3c6",
+  "input_matches_prior_original_reference_cmp": true,
+  "source_clean_at_runs": true,
+  "downloads": "/sdcard/Download/highband-flow2-undegraded-20261005/",
+  "rendering": [
+    {
+      "adapter": null,
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=1024",
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": "artifacts/native-longer-v2/flow3000.json",
+      "manufactured_test": false,
+      "output_peak": 0.5653786659240723,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "d1f8d1eaee0584a852e5733a3f9f7bf359f3b3c8",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  197996 kB",
+          "VmRSS:\t  179960 kB",
+          "Cpus_allowed_list:\t0-7"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791227843
+      },
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 1.0
+    },
+    {
+      "adapter": null,
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=1024",
+      "claim": "native-rate stereo conditional residual completion; original unknown information is not recovered",
+      "damage_assumption": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "deterministic": "artifacts/native-v2/deterministic.json",
+      "flow": "artifacts/native-longer-v2/flow3000.json",
+      "manufactured_test": false,
+      "output_peak": 0.5641122460365295,
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "d1f8d1eaee0584a852e5733a3f9f7bf359f3b3c8",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t  198636 kB",
+          "VmRSS:\t  180276 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791227882
+      },
+      "scores": null,
+      "seconds": 10.0,
+      "source": "/sdcard/Download/Verse 1 v 77.wav",
+      "start": 160.0,
+      "strength": 0.25
+    }
+  ],
+  "changes_from_original": [
+    {
+      "candidate": "runs/native-undegraded/strength1/reconstructed.wav",
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "input": "runs/native-undegraded/strength1/input.wav",
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "d1f8d1eaee0584a852e5733a3f9f7bf359f3b3c8",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42216 kB",
+          "VmRSS:\t   16100 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791227922
+      },
+      "reference": "runs/native-undegraded/strength1/input.wav",
+      "scope": "aligned bounded native clips; no inference/training; available reference is not necessarily a clean original",
+      "scores": {
+        "crest_db": 12.846610276977234,
+        "full_error": 40557.639320724586,
+        "full_nmse": 0.002444172539927313,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 38434.831817636514,
+        "high_nmse": 0.09206959896153942,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.2536399455443414E-7,
+        "log1p_db": 0.47345238033678105,
+        "lsd_db": 13.511373511783532,
+        "peak": 0.5653786659240723,
+        "stereo_correlation": 0.8134918854889388,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "seconds": 10.0
+    },
+    {
+      "candidate": "runs/native-undegraded/strength025/reconstructed.wav",
+      "damage": {
+        "cutoff": 6000.0,
+        "power": 2.0,
+        "transition": 500.0
+      },
+      "input": "runs/native-undegraded/strength1/input.wav",
+      "provenance": {
+        "architecture": {
+          "cache_limit_mib": 64,
+          "context_hops": [
+            -16,
+            -8,
+            -4,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            4,
+            8,
+            16
+          ],
+          "encoder": [
+            3098,
+            32,
+            32
+          ],
+          "flow": "direct diagonal plus correlated residual",
+          "frequency_shared_head": [
+            184,
+            32,
+            6
+          ],
+          "parameters": 106342,
+          "schema": "scene-v2-native-shared-v1"
+        },
+        "degradation_distribution": {
+          "cosine_power": [
+            1,
+            4
+          ],
+          "cutoff_hz": [
+            3500,
+            8000
+          ],
+          "method": "finite-clip Fourier lowpass",
+          "transition_hz": [
+            300,
+            1000
+          ]
+        },
+        "generator": {
+          "natural_training_examples": 0,
+          "patch_samples": 16384,
+          "scene_seconds": 2,
+          "updates_per_scene": 4,
+          "version": 2
+        },
+        "git_commit": "d1f8d1eaee0584a852e5733a3f9f7bf359f3b3c8",
+        "git_dirty": false,
+        "package_version": "0.1.0",
+        "process_cpu_and_memory": [
+          "VmHWM:\t   42348 kB",
+          "VmRSS:\t   16044 kB",
+          "Cpus_allowed_list:\t0-1,4-5"
+        ],
+        "stft": {
+          "analysis_loss_ffts": [
+            256,
+            1024,
+            4096
+          ],
+          "base_fft": 1024,
+          "base_hop": 256,
+          "channels": "orthonormal mid/side",
+          "sample_rate": 48000
+        },
+        "unix_time": 1791227922
+      },
+      "reference": "runs/native-undegraded/strength1/input.wav",
+      "scope": "aligned bounded native clips; no inference/training; available reference is not necessarily a clean original",
+      "scores": {
+        "crest_db": 12.846101785983075,
+        "full_error": 2447.10819126147,
+        "full_nmse": 0.00014747294821610004,
+        "full_target_energy": 16593607.308071109,
+        "high_error": 2312.846270505963,
+        "high_nmse": 0.005540360618605946,
+        "high_target_energy": 417454.1026695689,
+        "known_error": 1.2532572679256492E-7,
+        "log1p_db": 0.12339620710682524,
+        "lsd_db": 7.082199090752236,
+        "peak": 0.5641122460365295,
+        "stereo_correlation": 0.8147984579059132,
+        "target_crest_db": 12.84081104555576,
+        "target_stereo_correlation": 0.8148855334249826
+      },
+      "seconds": 10.0
+    }
+  ],
+  "interpretation": "self-reference distances describe modifications, not improvement; no new training, speed experiment or clean-original claim; strength1 and025 predeclared before inference"
+}

@@ -22,6 +22,11 @@ preserves Adam state, exact prefix/resume parity and the owner's preferred
 3000-step strength-1 candidate, alongside mixed 48-scene and matched-energy
 results. Each older report remains frozen.
 
+A subsequent [undegraded-input listening test](docs/UNDEGRADED_TEST.md) adds the
+same flow3000 residual to the original 160-second passage at strengths 1/0.25,
+without manufactured bandwidth loss. Its self-reference errors measure change,
+not enhancement quality; the test does not train new correction heads.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

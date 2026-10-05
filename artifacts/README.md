@@ -48,6 +48,11 @@ JSON provenance records the source commit when a run was executed, not the later
 commit packaging its results. Hashes in `SHA256SUMS` cover data artifacts, not
 this explanation or the manifest itself. Verify with:
 
+`native-undegraded-v1.json` records an additive listening test on the original
+160-second song excerpt, without manufactured loss, at strengths 1/0.25.
+Self-reference scores measure change and do not establish enhancement quality.
+Only metadata is published; the three listening WAVs remain local/Downloads.
+
 ```sh
 sha256sum -c artifacts/SHA256SUMS
 ```
