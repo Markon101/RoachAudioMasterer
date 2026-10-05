@@ -9,6 +9,7 @@ use crate::{
     scene_metrics::{self, Scores},
     scene_model::{self, Adam, Model, EMBED, HEAD_INPUT, HEAD_OUTPUT},
     scene_synth,
+    scene_training_state::TrainingState,
     synth::Rng,
 };
 use anyhow::{ensure, Result};
@@ -202,26 +203,73 @@ pub fn gradients(
     }
     result
 }
-pub fn train(
-    seed: u64,
-    steps: usize,
-    flow_prior: Option<&Path>,
+pub struct TrainOptions<'a> {
+    pub seed: Option<u64>,
+    pub steps: usize,
+    pub resume: Option<&'a Path>,
+    pub checkpoint_every: usize,
+    pub flow_prior: Option<&'a Path>,
+    pub backend: &'a str,
+    pub out: &'a Path,
+}
+fn save_training_snapshot(
+    dir: &Path,
+    m: &Model,
+    ea: &Adam,
+    ha: &Adam,
     backend: &str,
-    out: &Path,
 ) -> Result<()> {
-    new_run(out)?;
-    let mut m = Model::new(if flow_prior.is_some() { 73 } else { 71 });
+    TrainingState::new(m.clone(), ea.clone(), ha.clone(), backend)
+        .save(&dir.join("training-state.json"))?;
+    m.save(&dir.join("model.json"))
+}
+pub fn train(o: TrainOptions<'_>) -> Result<()> {
+    let TrainOptions {
+        seed,
+        steps,
+        resume,
+        checkpoint_every,
+        flow_prior,
+        backend,
+        out,
+    } = o;
+    ensure!(
+        (1..=12000).contains(&steps) && (1..=12000).contains(&checkpoint_every),
+        "invalid native training budget"
+    );
+    let (mut m, mut ea, mut ha) = if let Some(path) = resume {
+        let s = TrainingState::load(path)?;
+        ensure!(
+            s.prior_backend == backend,
+            "resume backend changed; keep frozen-prior arithmetic fixed"
+        );
+        ensure!(
+            seed.is_none_or(|seed| seed == s.model.training_seed_start),
+            "resume seed/schedule mismatch"
+        );
+        (s.model, s.encoder_adam, s.head_adam)
+    } else {
+        let mut m = Model::new(if flow_prior.is_some() { 73 } else { 71 });
+        m.stage = if flow_prior.is_some() {
+            "flow".into()
+        } else {
+            "deterministic".into()
+        };
+        m.training_seed_start = seed.unwrap_or(40000);
+        let ea = Adam::new(m.encoder.weights.len());
+        let ha = Adam::new(m.head.weights.len());
+        (m, ea, ha)
+    };
+    let start_step = m.optimizer_steps;
+    let seed = m.training_seed_start;
+    ensure!(
+        steps > start_step && seed.checked_add(steps.div_ceil(4) as u64).is_some(),
+        "--steps is a total and must exceed the saved step; seed must not overflow"
+    );
     ensure!(
         m.parameters() == 106342,
         "scene parameter/provenance mismatch"
     );
-    m.stage = if flow_prior.is_some() {
-        "flow".into()
-    } else {
-        "deterministic".into()
-    };
-    m.training_seed_start = seed;
-    m.training_examples = steps.div_ceil(4);
     let mut coarse = flow_prior
         .map(|p| Model::load(p).and_then(|m| Engine::new(&m, backend)))
         .transpose()?;
@@ -230,15 +278,25 @@ pub fn train(
             coarse.model.stage == "deterministic",
             "flow prior must be a native deterministic model"
         );
-        m.prior_fingerprint = Some(coarse.model.fingerprint());
+        let fingerprint = Some(coarse.model.fingerprint());
+        ensure!(
+            m.stage == "flow" && (resume.is_none() || m.prior_fingerprint == fingerprint),
+            "resume stage/frozen prior identity mismatch"
+        );
+        m.prior_fingerprint = fingerprint;
+    } else {
+        ensure!(
+            m.stage == "deterministic" && m.prior_fingerprint.is_none(),
+            "resuming flow needs its exact --flow-prior"
+        );
     }
+    TrainingState::new(m.clone(), ea.clone(), ha.clone(), backend).validate()?;
+    new_run(out)?;
     m.save(&out.join("initial.json"))?;
-    let mut ea = Adam::new(m.encoder.weights.len());
-    let mut ha = Adam::new(m.head.weights.len());
     let mut cached: Option<(u64, Audio)> = None;
     let mut records = Vec::new();
     let start = Instant::now();
-    for step in 0..steps {
+    for step in start_step..steps {
         let scene_seed = seed + (step / 4) as u64;
         if cached.as_ref().map(|x| x.0) != Some(scene_seed) {
             cached = Some((scene_seed, scene_synth::generate(scene_seed).0));
@@ -296,6 +354,7 @@ pub fn train(
         ea.update(&mut m.encoder.weights, &g.encoder, 0.001);
         ha.update(&mut m.head.weights, &g.head, 0.001);
         m.optimizer_steps += 1;
+        m.training_examples = m.optimizer_steps.div_ceil(4);
         records.push(json!({"step":step+1,"scene_seed":scene_seed,"patch_seed":patch_seed,"offset_samples":offset,"sample_seed":sample_seed,"damage":d,"rows":rows.len(),"loss":g.loss,"time":time}));
         if step == 0 || (step + 1) % 50 == 0 || step + 1 == steps {
             println!(
@@ -306,11 +365,18 @@ pub fn train(
                 g.loss
             );
         }
+        if m.optimizer_steps.is_multiple_of(checkpoint_every) {
+            let dir = out
+                .join("checkpoints")
+                .join(format!("step-{:06}", m.optimizer_steps));
+            std::fs::create_dir_all(&dir)?;
+            save_training_snapshot(&dir, &m, &ea, &ha, backend)?;
+        }
     }
-    m.save(&out.join("model.json"))?;
+    save_training_snapshot(out, &m, &ea, &ha, backend)?;
     write_json(
         &out.join("training.json"),
-        &json!({"provenance":provenance(),"model_fingerprint":m.fingerprint(),"stage":m.stage,"prior_checkpoint":flow_prior,"iterations":steps,"unique_scenes":m.training_examples,"rows":records,"backend":"CPU explicit gradients; optional GPU frozen-prior head for flow","observation_seconds":start.elapsed().as_secs_f64(),"timing_context":"incidental training observation, foreground unverified; not a speed experiment","loss":"sampled-block synthesized-waveform multiscale log/linear + envelope/onset; flow velocity MSE with 0.02 terminal auxiliary","limitations":"unsampled context uses fixed DSP prior during gradients; no claim of full-grid training"}),
+        &json!({"provenance":provenance(),"model_fingerprint":m.fingerprint(),"stage":m.stage,"prior_checkpoint":flow_prior,"iterations":steps,"step_start":start_step,"updates_this_run":steps-start_step,"unique_scenes":m.training_examples,"resume":resume,"checkpoint_every":checkpoint_every,"training_state":"training-state.json","rows":records,"backend":"CPU explicit gradients; optional GPU frozen-prior head for flow","observation_seconds":start.elapsed().as_secs_f64(),"timing_context":"incidental training observation, foreground unverified; not a speed experiment","loss":"sampled-block synthesized-waveform multiscale log/linear + envelope/onset; flow velocity MSE with 0.02 terminal auxiliary","limitations":"unsampled context uses fixed DSP prior during gradients; no claim of full-grid training"}),
     )?;
     Ok(())
 }
@@ -524,6 +590,55 @@ pub fn restore(o: RestoreOptions<'_>) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn native_training_resume_matches_uninterrupted_mid_scene() -> Result<()> {
+        let root = std::env::temp_dir().join(format!(
+            "highband-native-resume-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)?
+                .as_nanos()
+        ));
+        std::fs::create_dir(&root)?;
+        let whole = root.join("whole");
+        let prefix = root.join("prefix");
+        let suffix = root.join("suffix");
+        let options = |out, steps| TrainOptions {
+            seed: Some(40000),
+            steps,
+            resume: None,
+            checkpoint_every: 3,
+            flow_prior: None,
+            backend: "cpu",
+            out,
+        };
+        train(options(&whole, 6))?;
+        train(options(&prefix, 3))?;
+        let saved = prefix.join("training-state.json");
+        train(TrainOptions {
+            resume: Some(&saved),
+            seed: None,
+            ..options(&suffix, 6)
+        })?;
+        let a = TrainingState::load(&whole.join("training-state.json"))?;
+        let b = TrainingState::load(&suffix.join("training-state.json"))?;
+        assert_eq!(
+            serde_json::to_vec(&a)?,
+            serde_json::to_vec(&b)?,
+            "mid-scene resume changed weights, Adam moments or schedule"
+        );
+        assert!(
+            train(TrainOptions {
+                seed: Some(99),
+                resume: Some(&saved),
+                ..options(&root.join("invalid"), 6)
+            })
+            .is_err(),
+            "changed resume seed accepted"
+        );
+        std::fs::remove_dir_all(root)?;
+        Ok(())
+    }
     #[test]
     fn sampled_waveform_gradient_matches_weight_perturbation() {
         let a = Audio {

@@ -278,6 +278,11 @@ future backends. Kernels reuse Titan Image's validated Termux/OpenCL engineering
 lessons, while Titan Audio inspired smooth synthesis, multiscale/event metrics,
 M/S checks and frozen controls. Neither Titan repository was modified.
 
+Native `scene-train` now saves atomic model+Adam+schedule snapshots and supports
+strict `--resume` continuation. Older inference-only checkpoints still lack
+historical optimizer moments; the bounded longer-flow experiment replays and
+checks its old prefix first. See [NATIVE_LONGER_PLAN.md](NATIVE_LONGER_PLAN.md).
+
 No native-v2 CPU/GPU speed comparison has been run. Training elapsed observations
 are not benchmarks. Ask the owner and confirm foreground status before speed
 experiments; expected Android background restrictions and mobile thermals remain

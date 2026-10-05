@@ -24,7 +24,9 @@ initial submissions rather than later conference dates.
   [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980).**
   Source for bias-corrected first/second-moment optimization in `src/model.rs`
   and `src/flow.rs`, plus `src/scene_model.rs`. Gradient clipping and training budgets are our
-  choices. Current checkpoints omit optimizer moments.
+  choices. Legacy inference checkpoints omit optimizer moments. Native training
+  snapshots now persist both Adam states alongside the model and schedule;
+  exact disk/split continuation is checked independently of paper claims.
 
 The procedural generators, envelope/folding baselines, fixed-bin phase heuristic,
 frame features and protected-band finalization are project DSP choices, not

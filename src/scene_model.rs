@@ -123,16 +123,17 @@ impl Model {
             "scene checkpoint too large"
         );
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
-        ensure!(
-            m.schema == "scene-v2-native-shared-v1"
-                && m.encoder.validate()
-                && m.head.validate()
-                && (m.encoder.input, m.encoder.hidden, m.encoder.output)
-                    == (ENCODER_INPUT, 32, EMBED)
-                && (m.head.input, m.head.hidden, m.head.output) == (HEAD_INPUT, 32, HEAD_OUTPUT),
-            "invalid scene model"
-        );
+        ensure!(m.validate(), "invalid scene model");
         Ok(m)
+    }
+    pub fn validate(&self) -> bool {
+        self.schema == "scene-v2-native-shared-v1"
+            && (self.encoder.input, self.encoder.hidden, self.encoder.output)
+                == (ENCODER_INPUT, 32, EMBED)
+            && (self.head.input, self.head.hidden, self.head.output)
+                == (HEAD_INPUT, 32, HEAD_OUTPUT)
+            && self.encoder.validate()
+            && self.head.validate()
     }
     pub fn fingerprint(&self) -> String {
         let mut h = 0xcbf29ce484222325u64;
@@ -182,12 +183,23 @@ pub fn backend(d: &Dense, name: &str) -> Result<Box<dyn Predictor>> {
         _ => anyhow::bail!("scene backend {name} unavailable"),
     }
 }
+/// Adam (Kingma and Ba, 2014), https://arxiv.org/abs/1412.6980.
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Adam {
     m: Vec<f32>,
     v: Vec<f32>,
     step: i32,
 }
 impl Adam {
+    pub fn validate(&self, parameters: usize, steps: usize) -> bool {
+        steps <= i32::MAX as usize
+            && self.step >= 0
+            && self.step as usize == steps
+            && self.m.len() == parameters
+            && self.v.len() == parameters
+            && self.m.iter().all(|x| x.is_finite())
+            && self.v.iter().all(|x| x.is_finite() && *x >= 0.0)
+    }
     pub fn new(n: usize) -> Self {
         Self {
             m: vec![0.0; n],

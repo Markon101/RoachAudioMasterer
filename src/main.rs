@@ -20,6 +20,7 @@ mod scene_loss;
 mod scene_metrics;
 mod scene_model;
 mod scene_synth;
+mod scene_training_state;
 mod synth;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
@@ -52,10 +53,18 @@ enum Commands {
     },
     /// Opt-in native 48 kHz stereo shared-head synthetic training.
     SceneTrain {
-        #[arg(long, default_value_t = 40000)]
-        seed: u64,
+        /// Procedural seed start; defaults to 40000 or the resumed schedule.
+        #[arg(long)]
+        seed: Option<u64>,
+        /// Total optimizer updates, including any resumed prefix.
         #[arg(long, default_value_t = 600)]
         steps: usize,
+        /// Atomic snapshot containing model weights and both Adam states.
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        /// Save a model and resumable snapshot every N updates.
+        #[arg(long, default_value_t = 300)]
+        checkpoint_every: usize,
         /// Frozen native deterministic prior; supplied only for flow training.
         #[arg(long)]
         flow_prior: Option<PathBuf>,
@@ -263,15 +272,25 @@ fn run() -> Result<()> {
         Commands::SceneTrain {
             seed,
             steps,
+            resume,
+            checkpoint_every,
             flow_prior,
             backend,
             out,
         } => {
             ensure!(
-                (1..=2400).contains(&steps) && seed.checked_add(steps.div_ceil(4) as u64).is_some(),
+                (1..=12000).contains(&steps) && (1..=12000).contains(&checkpoint_every),
                 "invalid bounded scene training budget/seed"
             );
-            scene_experiment::train(seed, steps, flow_prior.as_deref(), &backend, &out)
+            scene_experiment::train(scene_experiment::TrainOptions {
+                seed,
+                steps,
+                resume: resume.as_deref(),
+                checkpoint_every,
+                flow_prior: flow_prior.as_deref(),
+                backend: &backend,
+                out: &out,
+            })
         }
         Commands::SceneEvaluate {
             model,

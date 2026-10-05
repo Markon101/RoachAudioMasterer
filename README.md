@@ -265,3 +265,28 @@ are capped at 64 MiB. No native-v2 speed claim is made without a new foreground
 benchmark. [Method citations](docs/REFERENCES.md) and the plan separate adapted
 [Flow Matching](https://arxiv.org/abs/2210.02747),
 [Adam](https://arxiv.org/abs/1412.6980), and project-specific architecture/losses.
+
+## Native training snapshots and exact continuation
+
+`scene-train` now writes `training-state.json` at the run endpoint and every
+`--checkpoint-every` updates (default 300) under `checkpoints/step-NNNNNN/`.
+The atomic snapshot bundles the model, encoder/head Adam first/second moments
+and step counters, learning rate, recipe, prior identity, backend and procedural
+seed/progress. `model.json` remains a standalone inference checkpoint with its
+existing schema. Legacy checkpoints cannot supply missing historical moments.
+
+```sh
+OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband scene-train \
+  --resume runs/native-flow/training-state.json --steps 1500 \
+  --flow-prior runs/native-det/model.json --backend opencl \
+  --out runs/native-flow-1500
+```
+
+`--steps` is the **total** update count; a 600-step state with `--steps 1500`
+performs 900 further updates. The saved schedule supplies the seed unless one
+is explicitly specified, in which case it must match. Keep the same prior
+backend and exact deterministic prior; malformed/mismatched state is rejected.
+Scenes/patch RNGs are regenerated from the saved seed and absolute update index,
+including resumes inside a four-update scene. Output directories remain fresh.
+The [longer Flow2 plan](docs/NATIVE_LONGER_PLAN.md) freezes the 600/1500/3000
+quality comparison; it does not authorize a new speed measurement.
