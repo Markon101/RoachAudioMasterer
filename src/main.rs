@@ -6,10 +6,20 @@ mod flow;
 mod flow_experiment;
 mod metrics;
 mod model;
+mod native_audio;
+mod native_dsp;
 #[cfg(feature = "opencl")]
 mod opencl;
 mod reconstruction;
 mod scene;
+mod scene_adapter;
+mod scene_engine;
+mod scene_experiment;
+mod scene_features;
+mod scene_loss;
+mod scene_metrics;
+mod scene_model;
+mod scene_synth;
 mod synth;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
@@ -25,6 +35,78 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    /// Gated same-song adapter: no reference labels above 8 kHz.
+    SceneAdapt {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long, default_value_t = 400)]
+        steps: usize,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    /// Opt-in native 48 kHz stereo shared-head synthetic training.
+    SceneTrain {
+        #[arg(long, default_value_t = 40000)]
+        seed: u64,
+        #[arg(long, default_value_t = 600)]
+        steps: usize,
+        /// Frozen native deterministic prior; supplied only for flow training.
+        #[arg(long)]
+        flow_prior: Option<PathBuf>,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    /// Fresh native-scene comparison with pooled errors and explicit controls.
+    SceneEvaluate {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        flow: Option<PathBuf>,
+        #[arg(long, default_value_t = 180000)]
+        seed: u64,
+        #[arg(long, default_value_t = 24)]
+        count: usize,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    /// Native-rate/channel completion of a bounded region, or controlled test.
+    SceneRestore {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        flow: Option<PathBuf>,
+        #[arg(long)]
+        adapter: Option<PathBuf>,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 30.0)]
+        start: f64,
+        #[arg(long, default_value_t = 10.0)]
+        seconds: f64,
+        #[arg(long, default_value_t = 6000.0)]
+        cutoff: f32,
+        #[arg(long, default_value_t = 500.0)]
+        transition: f32,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        /// Manufacture low-pass damage from the provided reference region.
+        #[arg(long)]
+        controlled: bool,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     /// Experimental complex-residual conditional flow matching, synthetic only.
     FlowTrain {
         #[arg(long, default_value_t = 20000)]
@@ -164,6 +246,88 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::SceneAdapt {
+            model,
+            input,
+            gate,
+            steps,
+            backend,
+            out,
+        } => {
+            ensure!(
+                (1..=800).contains(&steps),
+                "adapter budget must be 1..800 updates"
+            );
+            scene_adapter::run(&model, &input, &gate, steps, &backend, &out)
+        }
+        Commands::SceneTrain {
+            seed,
+            steps,
+            flow_prior,
+            backend,
+            out,
+        } => {
+            ensure!(
+                (1..=2400).contains(&steps) && seed.checked_add(steps.div_ceil(4) as u64).is_some(),
+                "invalid bounded scene training budget/seed"
+            );
+            scene_experiment::train(seed, steps, flow_prior.as_deref(), &backend, &out)
+        }
+        Commands::SceneEvaluate {
+            model,
+            flow,
+            seed,
+            count,
+            backend,
+            out,
+        } => {
+            ensure!(
+                (2..=48).contains(&count) && seed.checked_add(count as u64).is_some(),
+                "scene evaluation requires 2..48 valid independent seeds"
+            );
+            scene_experiment::evaluate(&model, flow.as_deref(), seed, count, &backend, &out)
+        }
+        Commands::SceneRestore {
+            model,
+            flow,
+            adapter,
+            input,
+            start,
+            seconds,
+            cutoff,
+            transition,
+            strength,
+            controlled,
+            backend,
+            out,
+        } => {
+            ensure!(
+                cutoff.is_finite()
+                    && (3000.0..=12000.0).contains(&cutoff)
+                    && transition.is_finite()
+                    && (100.0..=1500.0).contains(&transition)
+                    && strength.is_finite()
+                    && (0.0..=1.0).contains(&strength),
+                "invalid native restoration bandwidth/strength"
+            );
+            scene_experiment::restore(scene_experiment::RestoreOptions {
+                det: &model,
+                flow: flow.as_deref(),
+                adapter: adapter.as_deref(),
+                source: &input,
+                start,
+                seconds,
+                damage: scene_features::Damage {
+                    cutoff,
+                    transition,
+                    power: 2.0,
+                },
+                strength,
+                backend: &backend,
+                out: &out,
+                manufacture: controlled,
+            })
+        }
         Commands::FlowTrain { seed, steps, out } => {
             ensure!(
                 (1..=10000).contains(&steps) && seed.checked_add(steps as u64).is_some(),

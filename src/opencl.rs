@@ -47,7 +47,7 @@ impl OpenCl {
         capacity: usize,
     ) -> Result<Self> {
         ensure!(
-            (1..=2048).contains(&inputs)
+            (1..=4096).contains(&inputs)
                 && (1..=128).contains(&hidden)
                 && (1..=1024).contains(&outputs),
             "unsupported dense shape"

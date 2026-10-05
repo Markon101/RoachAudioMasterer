@@ -203,3 +203,36 @@ been trained yet.
 
 Engineering references: [RustFFT](https://docs.rs/rustfft/6.4.1/rustfft/)
 and [opencl3](https://docs.rs/opencl3/0.12.3/opencl3/).
+
+## Opt-in native scene v2 pilot
+
+`scene-*` commands process actual 48 kHz mono/stereo regions (not upsampled v0
+audio). They use orthonormal mid/side, a 106,342-parameter shared temporal/frequency
+model, 256/1024/4096 analysis/loss scales, input-linked harmonic/continuous-noise
+priors, and a direct diagonal flow path. Legacy commands/checkpoints remain intact.
+
+```sh
+cargo build --release --locked --features opencl
+./target/release/highband scene-train --seed 40000 --steps 600 --out runs/native-det
+OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband scene-train \
+  --seed 40000 --steps 600 --flow-prior runs/native-det/model.json \
+  --backend opencl --out runs/native-flow
+OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband scene-evaluate \
+  --model runs/native-det/model.json --flow runs/native-flow/model.json \
+  --seed 180000 --count 24 --backend opencl --out runs/native-test
+```
+
+`scene-restore --controlled` manufactures a bandwidth-loss test on a native source
+region; without that flag the cutoff is an explicit restoration assumption.
+Regions are bounded to 12 seconds. `scene-adapt` requires a passed synthetic gate
+for the exact frozen base and trains only a separate 64-parameter embedding gain/
+bias on specified song regions, with higher bands withheld. No full-band song
+training is implied. Read [the frozen plan](docs/SCENE_V2_PLAN.md) before running.
+
+Training uses bounded sampled blocks with a fixed DSP estimate in unsampled
+context, not a full-grid autograd tape. CPU FFT/adjoints/encoder/gradients and an
+optional OpenCL shared head implement heterogeneous compute. Conditioning caches
+are capped at 64 MiB. No native-v2 speed claim is made without a new foreground
+benchmark. [Method citations](docs/REFERENCES.md) and the plan separate adapted
+[Flow Matching](https://arxiv.org/abs/2210.02747),
+[Adam](https://arxiv.org/abs/1412.6980), and project-specific architecture/losses.
