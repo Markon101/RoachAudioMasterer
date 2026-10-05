@@ -165,12 +165,9 @@ pub fn evaluate(
                 reconstruction::restore(&stft, &input, d, method, None)?
             };
             let m = metrics::measure(
-                &target_spec,
-                &stft.analyze(&y),
-                &input_spec,
-                &x,
-                &y,
-                &input,
+                (&target_spec, &x),
+                (&stft.analyze(&y), &y),
+                (&input_spec, &input),
                 d,
                 copied,
             );

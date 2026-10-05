@@ -43,3 +43,9 @@ must not be generalized to thermally sustained training or all Android phones.
 Run speed experiments only after the device owner confirms foreground state.
 `/proc/self/status` affinity is recorded, but is evidence about CPU eligibility,
 not reliable proof that the Android app is foregrounded.
+
+FFmpeg validation on this Termux installation initially failed with missing
+`__from_chars_floating_point` in `libplacebo.so`. The established workaround was
+reverified: prefix both `ffmpeg` and `ffprobe` with
+`LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so`. This is a
+per-command environment adjustment; no package/library changes are required.

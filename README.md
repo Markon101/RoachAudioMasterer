@@ -77,7 +77,8 @@ feature is available to inference. Noise, codec damage and spectral holes are
 future controls; v0 focuses on clean bandwidth loss.
 
 Baselines: keep the degraded signal (zero added highs); extrapolate upper-low-band
-RMS and fitted slope; fold upper-low spectral magnitudes with decay (the cheap
+RMS and fitted slope (bounded by surviving RMS, no rising extrapolation in
+checkpoint schema 2); fold upper-low spectral magnitudes with decay (the cheap
 `harmonic` baseline is not a pitch tracker). Learned magnitude uses the same
 fixed hashed phase + bin-center progression as the DSP baselines. The surviving
 transition is retained and only missing high content is added. Known STFT bins
@@ -128,6 +129,10 @@ foreground confirmation and record affinity and process memory high-water mark.
 
 Possible future tiers: DSP only; DSP + tiny residual; optional stochastic
 refinement; multi-resolution iterative completion. Only the first two exist.
+Checkpoints from the first schema-1 experiment require source commit `3c0781a`;
+current code rejects them explicitly to avoid changing the prior underneath a
+trained residual. Schema-2 checkpoints use the bounded envelope prior.
+
 Song-specific self-supervision, learned phase and perceptual claims remain future
 work. The best initial continuation is a fixed family-held-out test plus an
 input-shuffling/null-prior control, then internal known-band adaptation on an

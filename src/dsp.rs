@@ -42,9 +42,9 @@ impl SpectralTransform for Stft {
         let mut frame = vec![C::default(); FFT];
         let mut scratch = vec![C::default(); self.forward.get_inplace_scratch_len()];
         for t in 0..frames {
-            for i in 0..FFT {
+            for (i, value) in frame.iter_mut().enumerate() {
                 let index = (t * HOP + i) as isize - FFT as isize / 2;
-                frame[i] = C::new(
+                *value = C::new(
                     if index >= 0 {
                         (audio.get(index as usize).copied().unwrap_or(0.0)) * self.window[i]
                     } else {

@@ -29,7 +29,7 @@ impl Model {
         }
         // Zero output makes the initial learned prediction exactly the DSP prior.
         Self {
-            schema: 1,
+            schema: 2,
             weights: w,
             seed,
             steps: 0,
@@ -39,10 +39,15 @@ impl Model {
         }
     }
     pub fn load(p: &Path) -> Result<Self> {
+        ensure!(
+            fs::metadata(p)?.len() <= 2_000_000,
+            "checkpoint too large for v0"
+        );
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
-            m.schema == 1 && m.weights.len() == PARAMS && m.weights.iter().all(|x| x.is_finite()),
-            "invalid model schema, shape or weights"
+            m.schema == 2 && m.weights.len() == PARAMS && m.weights.iter().all(|x| x.is_finite())
+                && m.training_seed_start.checked_add(m.training_examples as u64).is_some(),
+            "invalid model schema, shape, seed range or weights (schema 2 uses the bounded envelope prior)"
         );
         Ok(m)
     }
@@ -85,7 +90,7 @@ pub fn loss_gradient(model: &Model, batch: &TrainingBatch) -> (f64, Vec<f32>) {
     let norm = (batch.frames * (BINS - batch.first_missing)) as f32;
     let mut h = vec![0.0; HIDDEN];
     let mut y = vec![0.0; BINS];
-    let mut dh = vec![0.0; HIDDEN];
+    let mut dh = [0.0; HIDDEN];
     for t in 0..batch.frames {
         let x = &batch.features[t * INPUTS..(t + 1) * INPUTS];
         forward_row(&model.weights, x, &mut h, &mut y);

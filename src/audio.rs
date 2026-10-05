@@ -8,7 +8,10 @@ pub fn read(path: &Path) -> Result<Vec<f32>> {
         spec.sample_rate == crate::dsp::RATE,
         "v0 requires 24000 Hz WAV; convert with ffmpeg -i input -ar 24000 -ac 1 output.wav"
     );
-    ensure!(spec.channels > 0 && r.duration() > 0, "empty WAV");
+    ensure!(
+        (1..=8).contains(&spec.channels) && r.duration() > 0,
+        "empty WAV or unsupported channel count (1..8)"
+    );
     // Bound memory on phones; restore is whole-clip, not yet streaming.
     ensure!(
         r.duration() <= crate::dsp::RATE * 30,

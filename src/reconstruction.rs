@@ -48,7 +48,9 @@ pub fn prepare(stft: &Stft, input: &[f32], d: Degradation) -> Prepared {
     let cutoff = d.cutoff_bin();
     let scales: Vec<_> = spectrum
         .data
-        .chunks_exact(BINS)
+        .as_chunks::<BINS>()
+        .0
+        .iter()
         .map(|row| rms(&row[..=cutoff]).max(1e-5))
         .collect();
     let mut features = vec![0.0; spectrum.frames * INPUTS];
@@ -81,7 +83,12 @@ pub fn prepare(stft: &Stft, input: &[f32], d: Degradation) -> Prepared {
         x[38] = d.transition_hz / 1000.0;
         x[39] = 1.0;
         for k in 0..BINS {
-            let estimate = 0.85 * hi * (k.max(cutoff) as f32 / (cutoff as f32 * 0.875)).powf(slope);
+            // A narrow resonance near cutoff does not justify a rising unknown
+            // envelope. Bound the prior by surviving RMS. The learned residual
+            // may depart from this input-only prior; no target-dependent gate.
+            let estimate = 0.85
+                * hi.min(scale)
+                * (k.max(cutoff) as f32 / (cutoff as f32 * 0.875)).powf(slope.min(0.0));
             prior[t * BINS + k] = (estimate / scale).ln_1p();
         }
     }
@@ -193,6 +200,20 @@ pub fn restore(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn zero_initialized_model_equals_dsp_prior() {
+        let s = Stft::default();
+        let (x, _) = crate::synth::generate(17, 2048, RATE);
+        let d = Degradation::random(8);
+        let input = d.apply(&x);
+        let mut cpu = crate::backend::Cpu::new(&crate::model::Model::new(11));
+        let (a, _) = restore(&s, &input, d, "envelope", None).unwrap();
+        let (b, copied) = restore(&s, &input, d, "learned", Some(&mut cpu)).unwrap();
+        assert_eq!(a, b);
+        assert_eq!(copied, 0.0);
+        let p = prepare(&s, &input, d);
+        assert!(p.prior.iter().all(|v| *v <= 0.85f32.ln_1p() + 1e-6));
+    }
     #[test]
     fn reconstruction_preserves_known_spectrum_and_is_target_independent() {
         let s = Stft::default();

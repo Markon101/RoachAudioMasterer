@@ -16,15 +16,15 @@ pub struct Metrics {
     pub target_high_energy_fraction: f64,
 }
 pub fn measure(
-    target: &Spectrum,
-    restored: &Spectrum,
-    input: &Spectrum,
-    target_wav: &[f32],
-    restored_wav: &[f32],
-    input_wav: &[f32],
+    target: (&Spectrum, &[f32]),
+    restored: (&Spectrum, &[f32]),
+    input: (&Spectrum, &[f32]),
     d: Degradation,
     copied: f32,
 ) -> Metrics {
+    let (target, target_wav) = target;
+    let (restored, restored_wav) = restored;
+    let (input, input_wav) = input;
     let (
         mut high_e,
         mut high_p,
