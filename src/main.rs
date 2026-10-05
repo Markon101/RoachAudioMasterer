@@ -36,6 +36,23 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    /// Score aligned native reference/input/candidate clips, without training.
+    SceneScore {
+        #[arg(long)]
+        reference: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        candidate: PathBuf,
+        #[arg(long, default_value_t = 10.0)]
+        seconds: f64,
+        #[arg(long, default_value_t = 6000.0)]
+        cutoff: f32,
+        #[arg(long, default_value_t = 500.0)]
+        transition: f32,
+        #[arg(long)]
+        out: PathBuf,
+    },
     /// Gated same-song adapter: no reference labels above 8 kHz.
     SceneAdapt {
         #[arg(long)]
@@ -255,6 +272,32 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::SceneScore {
+            reference,
+            input,
+            candidate,
+            seconds,
+            cutoff,
+            transition,
+            out,
+        } => {
+            ensure!(
+                (1000.0..=12000.0).contains(&cutoff) && (100.0..=2000.0).contains(&transition),
+                "invalid native scoring band"
+            );
+            scene_experiment::score(scene_experiment::ScoreOptions {
+                reference: &reference,
+                input: &input,
+                candidate: &candidate,
+                seconds,
+                damage: scene_features::Damage {
+                    cutoff,
+                    transition,
+                    power: 2.0,
+                },
+                out: &out,
+            })
+        }
         Commands::SceneAdapt {
             model,
             input,

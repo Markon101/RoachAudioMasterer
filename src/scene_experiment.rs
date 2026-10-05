@@ -523,6 +523,36 @@ pub fn evaluate(
     )?;
     Ok(())
 }
+pub struct ScoreOptions<'a> {
+    pub reference: &'a Path,
+    pub input: &'a Path,
+    pub candidate: &'a Path,
+    pub seconds: f64,
+    pub damage: Damage,
+    pub out: &'a Path,
+}
+pub fn score(o: ScoreOptions<'_>) -> Result<()> {
+    let reference = native_audio::read_region(o.reference, 0.0, o.seconds)?;
+    let input = native_audio::read_region(o.input, 0.0, o.seconds)?;
+    let candidate = native_audio::read_region(o.candidate, 0.0, o.seconds)?;
+    ensure!(
+        reference.channels.len() == input.channels.len()
+            && input.channels.len() == candidate.channels.len(),
+        "native scoring channel geometry differs"
+    );
+    let scores = scene_metrics::measure(&reference, &candidate, &input, o.damage, 24000.0);
+    new_run(o.out)?;
+    write_json(
+        &o.out.join("scores.json"),
+        &json!({"provenance":provenance(),"reference":o.reference,"input":o.input,"candidate":o.candidate,"seconds":o.seconds,"damage":o.damage,"scores":scores,"scope":"aligned bounded native clips; no inference/training; available reference is not necessarily a clean original"}),
+    )?;
+    println!(
+        "native score {} high NMSE {:.6}",
+        o.out.display(),
+        scores.high_nmse
+    );
+    Ok(())
+}
 pub struct RestoreOptions<'a> {
     pub det: &'a Path,
     pub flow: Option<&'a Path>,

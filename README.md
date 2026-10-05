@@ -290,3 +290,10 @@ Scenes/patch RNGs are regenerated from the saved seed and absolute update index,
 including resumes inside a four-update scene. Output directories remain fresh.
 The [longer Flow2 plan](docs/NATIVE_LONGER_PLAN.md) freezes the 600/1500/3000
 quality comparison; it does not authorize a new speed measurement.
+
+`scene-score --reference reference.wav --input degraded.wav --candidate restored.wav
+--seconds 10 --cutoff 6000 --transition 500 --out runs/native-score` measures
+aligned native clips with the same Rust waveform metrics used in restoration.
+It runs no model/training and cannot detect an incorrect temporal alignment.
+`examples/energy_match.rs` creates an input-only residual-energy audition control;
+its gains and candidate ordering are logged, with no total normalization.
