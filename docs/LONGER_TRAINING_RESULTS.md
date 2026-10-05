@@ -4,6 +4,13 @@ The owner requested longer training and subsequently reported that the earlier
 **full-strength flow clip (strength 1)** sounded best. This is an informal
 preference for the 2,000-step audition, not a blind comparison with shaped noise.
 
+Later 10k listening feedback: mostly unchanged, with a small possibly favorable
+texture difference but no clear better/worse judgment.
+
+Method provenance remains [Adam](https://arxiv.org/abs/1412.6980) and adapted
+[Flow Matching](https://arxiv.org/abs/2210.02747); see `REFERENCES.md`. The scores
+below are project measurements, not results from those papers.
+
 Frozen plan: `LONGER_TRAINING_PLAN.md`. Source
 `92e9688053bfe9ac0c38bc7f5549100c3048ab86`, clean for training/evaluation.
 Both models ran 10,000 updates on seeds 20000–29999 with unchanged architecture,

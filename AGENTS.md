@@ -29,3 +29,10 @@ baselines. Don't tune against a frozen test, select best stochastic samples usin
 targets, or treat louder/brighter output as texture/depth improvement. Run only
 checks appropriate to changed behavior. Public GitHub commits/pushes are
 authorized in this session; preserve existing runs and avoid overwriting files.
+
+Documentation of implemented paper-derived methods must cite primary papers
+beside the method or in a linked docs/REFERENCES.md provenance section. Record
+authors/title and stable arXiv/DOI links. Distinguish implemented, adapted,
+proposed and background methods. Paper results do not prove project performance;
+do not imply a reproduction or a corpus-free method when the source uses learned
+components trained on natural audio.

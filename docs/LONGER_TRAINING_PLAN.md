@@ -2,6 +2,9 @@
 
 Requested after the initial v0 and flow pilots. Freeze this plan before runs.
 
+Inherited methods: [Adam](https://arxiv.org/abs/1412.6980) and adapted
+[Flow Matching](https://arxiv.org/abs/2210.02747). Only duration changes here.
+
 - Run deterministic and complex-flow models for 10,000 updates each, sequentially.
   Same model seeds (17/37), learning rate 0.001, Adam settings, generator v1,
   8,192-sample examples and degradation as the original 2,000-step models.

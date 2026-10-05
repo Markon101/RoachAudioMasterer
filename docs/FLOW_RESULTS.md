@@ -5,6 +5,10 @@ establish useful learned conditional refinement over its shaped-noise prior**.
 It is an experiment, not a replacement for deterministic v0. This does not
 show that diffusion/flow matching cannot work with a stronger representation.
 
+Implemented method provenance: adapted [Flow Matching](https://arxiv.org/abs/2210.02747)
+and [Adam](https://arxiv.org/abs/1412.6980). See `REFERENCES.md` for scope; these
+papers describe methods, not the measured outcome of this pilot.
+
 Plan: `FLOW_PLAN.md`, declared before training. Training/test source:
 `a25cf7bb3eeec2272aae19cf3a99ec49e5c46d63`, clean tree. Architecture 619→32→514,
 tanh, 36,802 parameters; real/imag high-band residual normalized by input-low

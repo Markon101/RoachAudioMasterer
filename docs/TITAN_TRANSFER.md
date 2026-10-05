@@ -11,10 +11,14 @@ Useful pieces:
    high-band harmonic/noise renderer with smooth amplitudes and input-linked
    frequencies/phase. Current highband phases already advance continuously at
    fixed bin centers, so merely removing phase resets is not the missing fix.
+   [DDSP](https://arxiv.org/abs/2001.04643) provides related harmonic/noise and
+   smooth-control background; its monophonic learned renderer is not implemented.
 2. `src/main.rs:8120–8260` has multiscale spectra, frame envelopes, onsets,
    modulation, recurrence, stereo and seam losses. `src/analysis/metrics.rs`
    supplies flatness/crest/rolloff diagnostics. Adapt missing-band texture
    measurements first and verify that they expose the user's texture complaint.
+   [Mesostructures](https://arxiv.org/abs/2301.10183) motivates broader temporal
+   texture comparisons; the current simple diagnostics do not implement JTFS.
 3. `src/stereo.rs` and stereo analysis jointly check mid/side energy, correlation
    and balance, exposing duplicated/panned mono. Future native 48 kHz stereo
    restoration should retain input channels in known bands and add shared/side

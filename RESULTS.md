@@ -23,6 +23,10 @@ audio examples enter training. Training streams examples and stores only logs
 and checkpoints. The final model saw 2,000 examples, about 11.4 minutes of
 generated audio, with repeated prefix examples in the earlier experiments.
 
+Optimizer provenance: [Kingma and Ba, Adam](https://arxiv.org/abs/1412.6980).
+Generator/baselines and measurements are project work. Implemented and proposed
+paper-derived methods are distinguished in `docs/REFERENCES.md`.
+
 Two randomized procedural voices mix harmonic/inharmonic partials, FM, PM/AM,
 chirps/drift, colored noise, modal decays, clicks/bursts, wavefolding, saturation,
 formants and logistic chaos. Twice-rate generation and Fourier band-limit

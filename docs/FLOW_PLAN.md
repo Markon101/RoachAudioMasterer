@@ -2,6 +2,10 @@
 
 Declared before training/scoring. Preserve deterministic v0 at `c195e4f`.
 
+Method basis: [Lipman et al., Flow Matching](https://arxiv.org/abs/2210.02747).
+Our independent complex-residual path, caps and conditioning are adaptations,
+not an optimal-transport coupling solver or diffusion sampler.
+
 - Synthetic generator v1 and degradation unchanged; no song training/adaptation.
 - 2,000 updates on seeds 20000–21999; one 8,192-sample example/update; model seed
   37; explicit CPU Adam, lr 0.001; gradient norm cap 1.

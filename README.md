@@ -65,7 +65,7 @@ analysis/synthesis and normalized overlap-add. A small `40 -> 32 tanh -> 257`
 MLP predicts a residual over a deterministic spectral-envelope continuation in
 `log1p(magnitude / surviving-band RMS)`. Features are pooled surviving spectrum,
 bandwidth, tilt, flatness, gain and neighboring-frame energy. Explicit backprop
-and Adam run on CPU. Each step streams a new procedural example; no training
+and [Adam](https://arxiv.org/abs/1412.6980) run on CPU. Each step streams a new procedural example; no training
 corpus is stored. Initial residual output is zero, so it starts at the DSP prior.
 
 The synthetic generator mixes two randomized families: harmonic and inharmonic
@@ -188,10 +188,18 @@ conditional improvement over shaped noise**. All predefined samples and null
 controls are recorded. See [flow plan](docs/FLOW_PLAN.md),
 [actual results](docs/FLOW_RESULTS.md), and [Titan reuse notes](docs/TITAN_TRANSFER.md).
 This is a flow-matching experiment, not an implemented diffusion sampler.
+Its probability-path regression is adapted from
+[Lipman et al., Flow Matching](https://arxiv.org/abs/2210.02747).
+[Method references](docs/REFERENCES.md) distinguish implementation from proposals.
 
 The [10,000-step comparison](docs/LONGER_TRAINING_RESULTS.md) preserves the
 earlier checkpoints and scores. Longer training alone did not consistently
 improve the frozen fresh-seed test; new listening clips are available locally.
+
+The [research direction](docs/RESEARCH_DIRECTION.md) recommends temporal/frequency
+sharing, multiscale supervision, an informative residual prior and a gated
+known-band song adapter. It is a cited proposal; no v2 or song adaptation has
+been trained yet.
 
 Engineering references: [RustFFT](https://docs.rs/rustfft/6.4.1/rustfft/)
 and [opencl3](https://docs.rs/opencl3/0.12.3/opencl3/).
