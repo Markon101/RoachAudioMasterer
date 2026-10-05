@@ -127,6 +127,25 @@ Background Android CPU affinity changes (four cores can be expected) and
 thermals make uncontrolled comparisons misleading. Benchmarks require explicit
 foreground confirmation and record affinity and process memory high-water mark.
 
+## Evaluate a local recording without training on it
+
+`evaluate-wav` creates a controlled degraded copy of a reference WAV, runs all
+four methods and scores the actual reconstructed waveforms. Convert/trim first
+to 24 kHz mono and at most 30 seconds. For example:
+
+```sh
+ffmpeg -ss 30 -t 10 -i song.wav -ar 24000 -ac 1 excerpt.wav
+./target/release/highband evaluate-wav --input excerpt.wav \
+  --model runs/train/model.json --cutoff 6000 --transition 500 --out runs/song-test
+```
+
+The source excerpt is the reference for a manufactured bandwidth-loss task,
+not proof of reconstruction beyond the source's own trustworthy bandwidth.
+No reference samples enter model training or adaptation. Song examples remain
+in ignored local run directories; public prototype artifacts contain procedural
+audio only. Repeating this across excerpts from one song is not independent
+validation across songs.
+
 Possible future tiers: DSP only; DSP + tiny residual; optional stochastic
 refinement; multi-resolution iterative completion. Only the first two exist.
 Checkpoints from the first schema-1 experiment require source commit `3c0781a`;

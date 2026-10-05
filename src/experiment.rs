@@ -273,6 +273,64 @@ fn dsp_known(a: &[f32], b: &[f32], c: f32) -> f64 {
     crate::dsp::fourier_low_error(a, b, c)
 }
 
+pub fn evaluate_wav(
+    input_path: &Path,
+    model_path: &Path,
+    cutoff: f32,
+    transition: f32,
+    backend_name: &str,
+    out: &Path,
+) -> Result<()> {
+    let target = audio::read(input_path)?;
+    let model = Model::load(model_path)?;
+    let mut predictor = backend::create(&model, backend_name, 2048)?;
+    new_run(out)?;
+    let stft = Stft::default();
+    let d = Degradation {
+        cutoff_hz: cutoff,
+        transition_hz: transition,
+        slope: 2.0,
+    };
+    let degraded = d.apply(&target);
+    let target_spec = stft.analyze(&target);
+    let input_spec = stft.analyze(&degraded);
+    audio::write(&out.join("reference.wav"), &target)?;
+    audio::write(&out.join("degraded.wav"), &degraded)?;
+    let mut scores = BTreeMap::new();
+    for method in ["zero", "envelope", "harmonic", "learned"] {
+        let (y, copied) = if method == "learned" {
+            reconstruction::restore(&stft, &degraded, d, method, Some(predictor.as_mut()))?
+        } else {
+            reconstruction::restore(&stft, &degraded, d, method, None)?
+        };
+        let score = metrics::measure(
+            (&target_spec, &target),
+            (&stft.analyze(&y), &y),
+            (&input_spec, &degraded),
+            d,
+            copied,
+        );
+        println!(
+            "{method:10} missing NMSE {:.6} log1p dB {:.4} LSD dB {:.3}",
+            score.missing_magnitude_nmse, score.missing_log1p_db_rmse, score.missing_lsd_db
+        );
+        audio::write(
+            &out.join(if method == "learned" {
+                "reconstructed.wav".into()
+            } else {
+                format!("{method}.wav")
+            }),
+            &y,
+        )?;
+        scores.insert(method, score);
+    }
+    write_json(
+        &out.join("evaluation.json"),
+        &json!({"provenance":provenance(),"source":input_path,"checkpoint":model_path,"backend":predictor.name(),"degradation":d,"scores":scores,"samples":target.len(),"purpose":"controlled evaluation only; no song examples used for training or adaptation; reference is the provided WAV, not an assumed lost original","metric_definition":"same synthesized-waveform metrics as procedural evaluation; missing bins above cutoff+transition"}),
+    )?;
+    Ok(())
+}
+
 pub fn benchmark(model_path: &Path, out: &Path, repeats: usize, foreground: bool) -> Result<()> {
     ensure!(foreground,"pass --foreground-confirmed after putting Termux in foreground; background performance can differ");
     let model = Model::load(model_path)?;

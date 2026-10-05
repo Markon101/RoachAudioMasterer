@@ -61,6 +61,21 @@ enum Commands {
         #[arg(long)]
         out: PathBuf,
     },
+    /// Controlled bandwidth removal from a local reference WAV (evaluation only).
+    EvaluateWav {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long, default_value_t = 6000.0)]
+        cutoff: f32,
+        #[arg(long, default_value_t = 500.0)]
+        transition: f32,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     /// Restore a 24 kHz WAV, with user-specified trustworthy bandwidth.
     Restore {
         #[arg(long)]
@@ -165,6 +180,24 @@ fn run() -> Result<()> {
                 &method,
                 &backend,
             )
+        }
+        Commands::EvaluateWav {
+            input,
+            model,
+            cutoff,
+            transition,
+            backend,
+            out,
+        } => {
+            ensure!(
+                cutoff.is_finite() && (3000.0..=8000.0).contains(&cutoff),
+                "evaluation cutoff must be within training support 3000..8000 Hz"
+            );
+            ensure!(
+                transition.is_finite() && (200.0..=1000.0).contains(&transition),
+                "evaluation transition must be 200..1000 Hz"
+            );
+            experiment::evaluate_wav(&input, &model, cutoff, transition, &backend, &out)
         }
         Commands::Benchmark {
             model,
