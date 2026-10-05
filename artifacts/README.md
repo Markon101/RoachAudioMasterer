@@ -14,6 +14,11 @@ post-hoc control diagnostics, one local-song score summary and procedural WAVs.
 See `docs/FLOW_RESULTS.md`: the flow pilot did not beat its shaped-noise control
 convincingly. Samples are predefined; no best-of-target selection occurred.
 
+`longer-v1/` contains 10k-step checkpoints, paired old/new fresh-seed reports,
+training metadata, prefix-parity and duration diagnostics. Raw 10k training logs
+remain local; `LOCAL_TRAINING_LOG_HASHES.txt` records their hashes. See
+`docs/LONGER_TRAINING_RESULTS.md` for mixed/negative results and listening paths.
+
 Only procedural WAVs are published. User-supplied song audio is in ignored local
 run directories and requested Downloads listening copies. See `RESULTS.md` for
 run parameters, limitations, commands, interpretation and output paths.

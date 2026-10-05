@@ -1,0 +1,60 @@
+{
+  "comparison": "10k minus 2k, paired on 48 fresh seeds",
+  "posthoc": true,
+  "methods": {
+    "envelope": {
+      "mean_log_delta_db": 0,
+      "se_log_delta_db": 0,
+      "log_improved_examples": 0,
+      "mean_full_nmse_delta": 0
+    },
+    "flow_11": {
+      "mean_log_delta_db": 0.03438051991929964,
+      "se_log_delta_db": 0.009156296246913111,
+      "log_improved_examples": 16,
+      "mean_full_nmse_delta": 0.007698708016321237
+    },
+    "flow_29": {
+      "mean_log_delta_db": 0.03411449221324966,
+      "se_log_delta_db": 0.008588765715881831,
+      "log_improved_examples": 12,
+      "mean_full_nmse_delta": 0.0079099193339614
+    },
+    "flow_47": {
+      "mean_log_delta_db": 0.03510382578162396,
+      "se_log_delta_db": 0.009502666478008154,
+      "log_improved_examples": 14,
+      "mean_full_nmse_delta": 0.007511400933647338
+    },
+    "flow_noise_only": {
+      "mean_log_delta_db": 0,
+      "se_log_delta_db": 0,
+      "log_improved_examples": 0,
+      "mean_full_nmse_delta": 0
+    },
+    "flow_shuffled_features": {
+      "mean_log_delta_db": 0.03421701716412095,
+      "se_log_delta_db": 0.00934199700739667,
+      "log_improved_examples": 15,
+      "mean_full_nmse_delta": 0.007750569170161312
+    },
+    "harmonic": {
+      "mean_log_delta_db": 0,
+      "se_log_delta_db": 0,
+      "log_improved_examples": 0,
+      "mean_full_nmse_delta": 0
+    },
+    "learned": {
+      "mean_log_delta_db": 0.027212144519273205,
+      "se_log_delta_db": 0.03137450283389084,
+      "log_improved_examples": 23,
+      "mean_full_nmse_delta": -0.003355049433779181
+    },
+    "zero": {
+      "mean_log_delta_db": 0,
+      "se_log_delta_db": 0,
+      "log_improved_examples": 0,
+      "mean_full_nmse_delta": 0
+    }
+  }
+}

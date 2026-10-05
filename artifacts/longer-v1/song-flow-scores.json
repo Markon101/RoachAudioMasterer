@@ -1,0 +1,63 @@
+{
+  "original_2k_flow": {
+    "metrics": {
+      "copied_known_max": 0.0,
+      "full_magnitude_nmse": 0.014357303330328216,
+      "known_fourier_relative_error": 1.573264662885105E-7,
+      "known_stft_relative_error": 0.0005598345186593567,
+      "missing_log1p_db_rmse": 1.2300421440429095,
+      "missing_lsd_db": 10.394752738436852,
+      "missing_magnitude_nmse": 0.7371776691290653,
+      "target_high_energy_fraction": 0.018084226782458527,
+      "waveform_rmse": 0.02760553515480245
+    },
+    "texture": {
+      "flatness_active_target_frames": 1863,
+      "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+      "high_envelope_normalized_rmse": 0.3111554892454939,
+      "high_flatness_absolute_error": 0.12840872206780204,
+      "high_onset_normalized_rmse": 0.09911059552870131
+    }
+  },
+  "new_10k_flow": {
+    "metrics": {
+      "copied_known_max": 0.0,
+      "full_magnitude_nmse": 0.014906044243190837,
+      "known_fourier_relative_error": 1.5759535725335997E-7,
+      "known_stft_relative_error": 0.0006229674600376426,
+      "missing_log1p_db_rmse": 1.2340548380543452,
+      "missing_lsd_db": 10.444303735763262,
+      "missing_magnitude_nmse": 0.7468803177270177,
+      "target_high_energy_fraction": 0.018084226782458527,
+      "waveform_rmse": 0.027951187760146195
+    },
+    "texture": {
+      "flatness_active_target_frames": 1863,
+      "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+      "high_envelope_normalized_rmse": 0.3107371769551008,
+      "high_flatness_absolute_error": 0.1156362474963441,
+      "high_onset_normalized_rmse": 0.0990021382324547
+    }
+  },
+  "new_10k_flow_strength025": {
+    "metrics": {
+      "copied_known_max": 0.0,
+      "full_magnitude_nmse": 0.01553388355384511,
+      "known_fourier_relative_error": 1.5643417476655167E-7,
+      "known_stft_relative_error": 0.0001557418099843448,
+      "missing_log1p_db_rmse": 1.3744436521979417,
+      "missing_lsd_db": 15.755817586424394,
+      "missing_magnitude_nmse": 0.8087756298101778,
+      "target_high_energy_fraction": 0.018084226782458527,
+      "waveform_rmse": 0.021640304837625652
+    },
+    "texture": {
+      "flatness_active_target_frames": 1863,
+      "flatness_gate": "target high RMS > 0.01 * surviving RMS; silence excluded, count disclosed",
+      "high_envelope_normalized_rmse": 0.3456385766937775,
+      "high_flatness_absolute_error": 0.11749910258996055,
+      "high_onset_normalized_rmse": 0.10121721557433308
+    }
+  },
+  "scope": "same previously inspected 30-40 second song excerpt; no adaptation; sample seed 11"
+}

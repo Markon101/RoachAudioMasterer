@@ -92,6 +92,11 @@ perceptual study was performed. The owner had previously reported that
 deterministic restoration changes texture too much; flow auditions do not
 resolve that complaint without further listening evidence.
 
+Later feedback: the owner preferred this pilot's **full-strength flow clip**.
+That positive informal audition evidence coexists with the weak flow/noise
+conditional control. A subsequent fivefold training comparison is recorded in
+`LONGER_TRAINING_RESULTS.md`; it does not overwrite this frozen pilot.
+
 Auditions are local in `runs/real-v0/flow_strength_1.wav`,
 `flow_strength_0.25.wav` and `flow_noise_only.wav`. Requested 48 kHz/16-bit copies
 are in `/sdcard/Download/highband-v0-20261005/listen-48k-pcm16/`:

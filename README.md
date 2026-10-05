@@ -189,5 +189,9 @@ controls are recorded. See [flow plan](docs/FLOW_PLAN.md),
 [actual results](docs/FLOW_RESULTS.md), and [Titan reuse notes](docs/TITAN_TRANSFER.md).
 This is a flow-matching experiment, not an implemented diffusion sampler.
 
+The [10,000-step comparison](docs/LONGER_TRAINING_RESULTS.md) preserves the
+earlier checkpoints and scores. Longer training alone did not consistently
+improve the frozen fresh-seed test; new listening clips are available locally.
+
 Engineering references: [RustFFT](https://docs.rs/rustfft/6.4.1/rustfft/)
 and [opencl3](https://docs.rs/opencl3/0.12.3/opencl3/).

@@ -1,0 +1,73 @@
+{
+  "backend": "cpu-f32 explicit backprop + Adam, one example/step",
+  "checkpoint": "model.json",
+  "learning_rate": 0.0010000000474974513,
+  "loss": "MSE of log1p normalized magnitude in fully removed bins",
+  "model_seed": 17,
+  "observation_examples_per_second": 142.26622026715788,
+  "observation_gradient_update_ms_per_step": 0.26910257460000037,
+  "observation_seconds": 70.290754764,
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "hidden": 32,
+      "inputs": 40,
+      "outputs": 257,
+      "parameters": 9793,
+      "prediction": "log1p normalized magnitude residual over DSP envelope"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "92e9688053bfe9ac0c38bc7f5549100c3048ab86",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t   23452 kB",
+      "VmRSS:\t   22960 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791179908
+  },
+  "samples_per_example": 8192,
+  "steps": 10000,
+  "timing_context": "Incidental training observation; foreground state unverified. Not a controlled speed experiment.",
+  "training_seed_start": 20000
+}

@@ -1,0 +1,84 @@
+{
+  "backend": "cpu explicit gradients + Adam",
+  "checkpoint": "flow.json",
+  "learning_rate": 0.001,
+  "limitations": "low-rank hidden bottleneck, framewise state, bounded/clipped complex targets; no claim of perceptual improvement",
+  "model_seed": 37,
+  "observation_seconds": 114.216290216,
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "conditioning": "40 input-only magnitude/context features plus 64 peak-bin real/imag summaries, current state, path time",
+      "coordinate_limit": 16.0,
+      "hidden": 32,
+      "inputs": 619,
+      "noise_floor": 0.019999999552965164,
+      "outputs": 514,
+      "parameters": 36802,
+      "path": "independent shaped-Gaussian to clipped target, straight linear interpolation",
+      "predeclared_test_sample_seeds": [
+        11,
+        29,
+        47
+      ],
+      "prediction": "normalized complex missing-band residual velocity",
+      "schema": "highband-flow-complex-v1",
+      "solver": "Euler",
+      "test_steps": 8
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "92e9688053bfe9ac0c38bc7f5549100c3048ab86",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t   24780 kB",
+      "VmRSS:\t   23752 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791180022
+  },
+  "samples_per_example": 8192,
+  "seed": 20000,
+  "steps": 10000,
+  "target_coordinate_clipped_fraction": 0.0006513894639333875,
+  "timing_context": "incidental training only, unverified foreground; no new speed benchmark"
+}
