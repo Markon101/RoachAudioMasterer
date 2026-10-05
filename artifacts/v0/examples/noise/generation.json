@@ -1,0 +1,81 @@
+{
+  "degradation": {
+    "cutoff_hz": 5398.46337890625,
+    "slope": 2.230107307434082,
+    "transition_hz": 594.559814453125
+  },
+  "outputs": [
+    "target.wav",
+    "degraded.wav",
+    "zero.wav",
+    "envelope.wav",
+    "harmonic.wav"
+  ],
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "hidden": 32,
+      "inputs": 40,
+      "outputs": 257,
+      "parameters": 9793,
+      "prediction": "log1p normalized magnitude residual over DSP envelope"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "57300b0a4b66ee8f446fdc7e4b816efedc12fde1",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t    8264 kB",
+      "VmRSS:\t    4784 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791174414
+  },
+  "recipe": {
+    "family": "colored_noise",
+    "generator_version": 1,
+    "mixture_family": "inharmonic",
+    "sample_rate": 24000,
+    "samples": 48000,
+    "seed": 120005
+  }
+}

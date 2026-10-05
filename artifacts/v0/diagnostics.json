@@ -1,0 +1,29 @@
+{
+  "posthoc": true,
+  "n": 96,
+  "paired_log1p_comparisons": {
+    "zero": {
+      "learned_minus_baseline_mean_db": -0.09038941421250608,
+      "standard_error": 0.05724394992529672,
+      "learned_lower_count": 62
+    },
+    "envelope": {
+      "learned_minus_baseline_mean_db": -0.3961570921749557,
+      "standard_error": 0.08333653277007308,
+      "learned_lower_count": 59
+    },
+    "harmonic": {
+      "learned_minus_baseline_mean_db": -0.13356947128610727,
+      "standard_error": 0.04733380297107255,
+      "learned_lower_count": 64
+    }
+  },
+  "median_nmse": {
+    "zero": 0.9988310696234888,
+    "envelope": 1.0301961877699775,
+    "harmonic": 1.0394261633142028,
+    "learned": 0.9543611176305791
+  },
+  "source_report": "artifacts/v0/test-cpu.json",
+  "scope": "Post-hoc diagnostics of the frozen 96-seed test. Means remain the primary recorded scores; medians do not replace catastrophic hallucination failures."
+}

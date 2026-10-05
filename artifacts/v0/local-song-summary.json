@@ -1,0 +1,52 @@
+{
+  "note": "Post-hoc analysis of frozen test artifacts; not new training or model selection",
+  "local_song_summary": {
+    "source_sha256": "2ffc515bdb05993f647ff309ed7cb2b7697959f5fa2b2c2d53291e1332f1e3c6",
+    "excerpt_start_seconds": [
+      30,
+      120,
+      210
+    ],
+    "duration_per_excerpt_seconds": 10,
+    "source_sample_rate": 48000,
+    "source_channels": 2,
+    "working_sample_rate": 24000,
+    "working_channels": 1,
+    "training_or_adaptation_on_song": false,
+    "independent_songs": 1,
+    "scores": [
+      {
+        "method": "envelope",
+        "missing_nmse_mean": 0.8761984937856407,
+        "log1p_db_mean": 1.109669708296656,
+        "lsd_db_mean": 10.118066437686158,
+        "full_nmse_mean": 0.01695163382448568,
+        "known_fourier_relative_error_mean": 1.5874862602742625E-7
+      },
+      {
+        "method": "harmonic",
+        "missing_nmse_mean": 0.676133079521842,
+        "log1p_db_mean": 1.0671291113735506,
+        "lsd_db_mean": 10.63636309659538,
+        "full_nmse_mean": 0.013406335615175144,
+        "known_fourier_relative_error_mean": 1.5735824543031356E-7
+      },
+      {
+        "method": "learned",
+        "missing_nmse_mean": 0.7222769961178835,
+        "log1p_db_mean": 1.0804266044478774,
+        "lsd_db_mean": 20.555408428080824,
+        "full_nmse_mean": 0.013995011290370075,
+        "known_fourier_relative_error_mean": 1.5696025568282176E-7
+      },
+      {
+        "method": "zero",
+        "missing_nmse_mean": 0.9978697413519018,
+        "log1p_db_mean": 1.3509928929899295,
+        "lsd_db_mean": 37.595131497465594,
+        "full_nmse_mean": 0.019335129057527437,
+        "known_fourier_relative_error_mean": 0
+      }
+    ]
+  }
+}

@@ -88,6 +88,9 @@ enum Commands {
         transition: f32,
         #[arg(long,default_value="learned",value_parser=["zero","envelope","harmonic","learned"])]
         method: String,
+        /// Fraction of reconstructed high-frequency residual (0..1).
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
         #[arg(long)]
         model: Option<PathBuf>,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
@@ -160,6 +163,7 @@ fn run() -> Result<()> {
             cutoff,
             transition,
             method,
+            strength,
             model,
             backend,
         } => {
@@ -175,10 +179,14 @@ fn run() -> Result<()> {
                 model.as_deref(),
                 &input,
                 &out,
-                cutoff,
-                transition,
+                reconstruction::Degradation {
+                    cutoff_hz: cutoff,
+                    transition_hz: transition,
+                    slope: 2.0,
+                },
                 &method,
                 &backend,
+                strength,
             )
         }
         Commands::EvaluateWav {

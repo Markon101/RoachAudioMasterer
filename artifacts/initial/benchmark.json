@@ -1,0 +1,225 @@
+{
+  "audio_samples": 16384,
+  "cpu_end_to_end_restore_ms": [
+    5.336511000000001,
+    4.144427,
+    1.998385,
+    1.9626560000000002,
+    1.884218,
+    1.869896,
+    1.8742699999999999,
+    1.848125,
+    1.9694790000000002,
+    1.9530210000000001
+  ],
+  "device": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.7 Compiler E031.47.18.50 | fp16=true (v0 uses f32) | max WG=1024 | capacity=4096",
+  "foreground_confirmed": true,
+  "model_batches": [
+    {
+      "cpu_ms": [
+        0.090312,
+        0.093385,
+        0.09192700000000001,
+        0.09208300000000001,
+        0.089895,
+        0.092032,
+        0.090677,
+        0.09255200000000001,
+        0.090573,
+        0.092292
+      ],
+      "frames": 32,
+      "max_residual_error": 2.384185791015625e-7,
+      "opencl_kernel_ms": [
+        0.0448,
+        0.045056,
+        0.0448,
+        0.045056,
+        0.0448,
+        0.0448,
+        0.045056,
+        0.045056,
+        0.0448,
+        0.045056
+      ],
+      "opencl_total_ms": [
+        1.070468,
+        0.816667,
+        0.853438,
+        0.827396,
+        0.777032,
+        0.629062,
+        0.845781,
+        0.522969,
+        0.796667,
+        0.379427
+      ]
+    },
+    {
+      "cpu_ms": [
+        0.976875,
+        0.982656,
+        1.570208,
+        1.790938,
+        1.7363540000000002,
+        1.768594,
+        1.72125,
+        2.633802,
+        2.5795839999999997,
+        2.63198
+      ],
+      "frames": 256,
+      "max_residual_error": 2.384185791015625e-7,
+      "opencl_kernel_ms": [
+        0.177152,
+        0.174848,
+        0.177152,
+        0.174848,
+        0.176896,
+        0.174848,
+        0.177152,
+        0.175104,
+        0.175872,
+        0.175104
+      ],
+      "opencl_total_ms": [
+        1.805885,
+        1.40375,
+        2.418958,
+        1.7325000000000002,
+        2.1209890000000002,
+        1.796875,
+        1.949479,
+        1.2023439999999999,
+        1.252813,
+        1.507188
+      ]
+    },
+    {
+      "cpu_ms": [
+        32.14625,
+        27.218906,
+        34.597292,
+        33.593436999999994,
+        37.180312,
+        35.058802,
+        32.434999999999995,
+        33.16375,
+        34.782292,
+        34.518437
+      ],
+      "frames": 4096,
+      "max_residual_error": 2.384185791015625e-7,
+      "opencl_kernel_ms": [
+        2.656,
+        2.58304,
+        2.584832,
+        2.5820160000000003,
+        2.584832,
+        2.583296,
+        2.585088,
+        2.586112,
+        2.5850880000000003,
+        2.5820160000000003
+      ],
+      "opencl_total_ms": [
+        4.9436979999999995,
+        4.522291,
+        5.5861979999999996,
+        4.9185929999999995,
+        5.927135,
+        5.190781,
+        5.589635,
+        4.823073,
+        5.8251040000000005,
+        5.372396
+      ]
+    }
+  ],
+  "opencl_initialization_ms": 84.95838599999999,
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "hidden": 32,
+      "inputs": 40,
+      "outputs": 257,
+      "parameters": 9793,
+      "prediction": "log1p normalized magnitude residual over DSP envelope"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "3c0781ae7a2f75d7ac29f66b73e19560b958b39d",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t   56192 kB",
+      "VmRSS:\t   47144 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791174121
+  },
+  "repeats": 10,
+  "scope": "single-thread CPU; persistent GPU weights and buffers; total includes transfers, output allocation and synchronization; kernel times are device event durations; init is separate; short-run observations, not sustained thermals",
+  "stft_ms": [
+    0.5201570000000001,
+    0.322552,
+    0.153698,
+    0.15062499999999998,
+    0.148906,
+    0.143594,
+    0.142343,
+    0.141406,
+    0.144323,
+    0.144375
+  ],
+  "synthetic_example_ms": [
+    26.523281,
+    22.017447999999998,
+    2.333281,
+    2.447032,
+    1.69875,
+    1.408021,
+    18.836719,
+    18.774011,
+    13.866042,
+    16.405
+  ]
+}

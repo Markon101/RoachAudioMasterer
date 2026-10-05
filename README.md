@@ -45,7 +45,7 @@ OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband benchmark \
 
 Use `HIGHBAND_OPENCL_DEVICE='Adreno'` (or another name substring) to choose a GPU.
 OpenCL is explicit opt-in; discovery/build errors fail visibly. CPU-only builds
-do not load OpenCL. `--help` lists options for all five commands. FFmpeg is useful
+do not load OpenCL. `--help` lists options for each command. FFmpeg is useful
 for input conversion and WAV validation, but is not a runtime dependency:
 
 ```sh
@@ -88,6 +88,9 @@ STFT low bins can still change near cutoff due to window leakage; both errors
 are reported. Float WAV avoids quantization/clipping invalidating this contract.
 Output may exceed unit amplitude; playback tools can clip, so audition safely
 with common gain across all A/B clips rather than normalizing each separately.
+`restore --strength 0.25` or `0.5` reduces only the added high residual for a
+gentler texture. Default `1` preserves full-strength behavior exactly;
+`0` returns the input exactly. This changes strength, not the learned model.
 
 Evaluation rejects overlapping training/evaluation seed ranges. Reports contain
 per-example and per-family scores, not frame-level pseudo-replication. Primary

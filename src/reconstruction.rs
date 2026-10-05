@@ -197,6 +197,20 @@ pub fn restore(
     let proposal = stft.synthesize(&s);
     Ok((dsp::lock_known(input, &proposal, d.cutoff_hz), known_max))
 }
+pub fn scale_residual(input: &[f32], restored: &[f32], strength: f32) -> Vec<f32> {
+    if strength == 0.0 {
+        return input.to_vec();
+    }
+    if strength == 1.0 {
+        return restored.to_vec();
+    }
+    input
+        .iter()
+        .zip(restored)
+        .map(|(x, y)| x + strength * (y - x))
+        .collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -225,6 +239,12 @@ mod tests {
             assert_eq!(exact, 0.0);
             assert!(y.iter().all(|x| x.is_finite()));
             assert!(dsp::fourier_low_error(&input, &y, d.cutoff_hz) < 2e-6);
+            assert_eq!(scale_residual(&input, &y, 0.0), input);
+            assert_eq!(scale_residual(&input, &y, 1.0), y);
+            assert!(
+                dsp::fourier_low_error(&input, &scale_residual(&input, &y, 0.5), d.cutoff_hz)
+                    < 2e-6
+            );
         }
     }
 }

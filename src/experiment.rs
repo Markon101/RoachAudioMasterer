@@ -224,22 +224,21 @@ pub fn restore(
     model_path: Option<&Path>,
     input_path: &Path,
     out: &Path,
-    cutoff: f32,
-    transition: f32,
+    d: Degradation,
     method: &str,
     backend_name: &str,
+    strength: f32,
 ) -> Result<()> {
+    ensure!(
+        strength.is_finite() && (0.0..=1.0).contains(&strength),
+        "strength must be 0..1"
+    );
     ensure!(!out.exists(), "output already exists");
     ensure!(
         !out.with_extension("json").exists(),
         "output sidecar already exists"
     );
     let input = audio::read(input_path)?;
-    let d = Degradation {
-        cutoff_hz: cutoff,
-        transition_hz: transition,
-        slope: 2.0,
-    };
     let mut predictor: Option<Box<dyn Predictor>> = if method == "learned" {
         Some(backend::create(
             &Model::load(
@@ -256,11 +255,12 @@ pub fn restore(
         Some(p) => reconstruction::restore(&Stft::default(), &input, d, method, Some(p.as_mut()))?,
         None => reconstruction::restore(&Stft::default(), &input, d, method, None)?,
     };
-    let known = dsp_known(&input, &y, cutoff);
+    let y = reconstruction::scale_residual(&input, &y, strength);
+    let known = dsp_known(&input, &y, d.cutoff_hz);
     audio::write(out, &y)?;
     write_json(
         &out.with_extension("json"),
-        &json!({"provenance":provenance(),"input":input_path,"output":out,"model":model_path,"method":method,"backend":backend_name,"degradation_assumption":d,"known_fourier_relative_error":known,"copied_known_max":copied,"output_peak":y.iter().fold(0.0f32,|p,x|p.max(x.abs())),"claim":"conditional spectral completion; original missing information is not recovered"}),
+        &json!({"provenance":provenance(),"input":input_path,"output":out,"model":model_path,"method":method,"backend":backend_name,"strength":strength,"degradation_assumption":d,"known_fourier_relative_error":known,"copied_known_max":copied,"output_peak":y.iter().fold(0.0f32,|p,x|p.max(x.abs())),"claim":"conditional spectral completion; original missing information is not recovered"}),
     )?;
     println!(
         "wrote {} known low Fourier rel. error {:.3e}",

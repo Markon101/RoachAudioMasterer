@@ -1,0 +1,4075 @@
+{
+  "backend": "cpu-f32 explicit backprop + Adam, one example/step",
+  "checkpoint": "model.json",
+  "learning_rate": 0.0010000000474974513,
+  "loss": "MSE of log1p normalized magnitude in fully removed bins",
+  "model_seed": 17,
+  "observation_examples_per_second": 136.01538919189966,
+  "observation_gradient_update_ms_per_step": 0.26687875499999963,
+  "observation_seconds": 2.940843697,
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "hidden": 32,
+      "inputs": 40,
+      "outputs": 257,
+      "parameters": 9793,
+      "prediction": "log1p normalized magnitude residual over DSP envelope"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "3c0781ae7a2f75d7ac29f66b73e19560b958b39d",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t    6248 kB",
+      "VmRSS:\t    5760 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791174106
+  },
+  "rows": [
+    {
+      "degradation": {
+        "cutoff_hz": 5963.8935546875,
+        "slope": 2.0626461505889893,
+        "transition_hz": 770.3738403320312
+      },
+      "loss": 0.07507672574589784,
+      "seed": 20000,
+      "step": 1
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7465.4267578125,
+        "slope": 2.0512306690216064,
+        "transition_hz": 395.4189758300781
+      },
+      "loss": 0.00556951526876046,
+      "seed": 20001,
+      "step": 2
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5956.3505859375,
+        "slope": 3.022110939025879,
+        "transition_hz": 283.4909362792969
+      },
+      "loss": 0.011735021871916966,
+      "seed": 20002,
+      "step": 3
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6785.7431640625,
+        "slope": 1.7636563777923584,
+        "transition_hz": 376.6927795410156
+      },
+      "loss": 0.05487619395931948,
+      "seed": 20003,
+      "step": 4
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5139.232421875,
+        "slope": 3.742701768875122,
+        "transition_hz": 550.0830078125
+      },
+      "loss": 0.041252625915671574,
+      "seed": 20004,
+      "step": 5
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5608.18701171875,
+        "slope": 1.2489776611328125,
+        "transition_hz": 896.7926025390625
+      },
+      "loss": 0.08054734977936731,
+      "seed": 20005,
+      "step": 6
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3670.5400390625,
+        "slope": 3.757805347442627,
+        "transition_hz": 932.45947265625
+      },
+      "loss": 0.04040096295871877,
+      "seed": 20006,
+      "step": 7
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7223.84765625,
+        "slope": 2.2126526832580566,
+        "transition_hz": 741.0177612304688
+      },
+      "loss": 0.3353819846668292,
+      "seed": 20007,
+      "step": 8
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7151.244140625,
+        "slope": 1.5859708786010742,
+        "transition_hz": 246.41847229003906
+      },
+      "loss": 0.4487776836835854,
+      "seed": 20008,
+      "step": 9
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3142.132080078125,
+        "slope": 2.1175129413604736,
+        "transition_hz": 533.6368408203125
+      },
+      "loss": 0.2011198118518386,
+      "seed": 20009,
+      "step": 10
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3950.16845703125,
+        "slope": 1.5093324184417725,
+        "transition_hz": 444.4609680175781
+      },
+      "loss": 0.0033970899895389823,
+      "seed": 20010,
+      "step": 11
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3447.53466796875,
+        "slope": 2.295499563217163,
+        "transition_hz": 445.9604187011719
+      },
+      "loss": 0.13132316066812533,
+      "seed": 20011,
+      "step": 12
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3331.40478515625,
+        "slope": 2.7341599464416504,
+        "transition_hz": 275.6859130859375
+      },
+      "loss": 0.004145264768606953,
+      "seed": 20012,
+      "step": 13
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6569.599609375,
+        "slope": 3.129713296890259,
+        "transition_hz": 812.1823120117188
+      },
+      "loss": 0.0038048472681675325,
+      "seed": 20013,
+      "step": 14
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3762.6865234375,
+        "slope": 3.498105525970459,
+        "transition_hz": 350.53607177734375
+      },
+      "loss": 0.005420888190703277,
+      "seed": 20014,
+      "step": 15
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6044.626953125,
+        "slope": 3.7529382705688477,
+        "transition_hz": 591.3090209960938
+      },
+      "loss": 0.06062901096708025,
+      "seed": 20015,
+      "step": 16
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6939.6337890625,
+        "slope": 1.0186948776245117,
+        "transition_hz": 942.8890991210938
+      },
+      "loss": 0.0016384107148251553,
+      "seed": 20016,
+      "step": 17
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7332.109375,
+        "slope": 2.1240921020507812,
+        "transition_hz": 313.51904296875
+      },
+      "loss": 0.031670156812007515,
+      "seed": 20017,
+      "step": 18
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5613.787109375,
+        "slope": 3.721893787384033,
+        "transition_hz": 359.5342102050781
+      },
+      "loss": 0.5136219873746481,
+      "seed": 20018,
+      "step": 19
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3799.904541015625,
+        "slope": 1.178196907043457,
+        "transition_hz": 967.713623046875
+      },
+      "loss": 0.32561171199607936,
+      "seed": 20019,
+      "step": 20
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6970.5966796875,
+        "slope": 2.456977605819702,
+        "transition_hz": 472.14068603515625
+      },
+      "loss": 0.43101403119626586,
+      "seed": 20020,
+      "step": 21
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7907.74853515625,
+        "slope": 1.26985764503479,
+        "transition_hz": 298.3235778808594
+      },
+      "loss": 0.011339371771006218,
+      "seed": 20021,
+      "step": 22
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7898.9453125,
+        "slope": 2.9492616653442383,
+        "transition_hz": 837.1548461914062
+      },
+      "loss": 0.09039486027347994,
+      "seed": 20022,
+      "step": 23
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4457.4150390625,
+        "slope": 1.427146077156067,
+        "transition_hz": 844.7236328125
+      },
+      "loss": 0.07909198355353864,
+      "seed": 20023,
+      "step": 24
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7113.31005859375,
+        "slope": 1.7738597393035889,
+        "transition_hz": 967.2776489257812
+      },
+      "loss": 0.03156823752184115,
+      "seed": 20024,
+      "step": 25
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7875.1064453125,
+        "slope": 3.6505534648895264,
+        "transition_hz": 976.6065673828125
+      },
+      "loss": 0.014543975863591529,
+      "seed": 20025,
+      "step": 26
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4397.6728515625,
+        "slope": 1.0566825866699219,
+        "transition_hz": 572.1624755859375
+      },
+      "loss": 0.12891854952517565,
+      "seed": 20026,
+      "step": 27
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3608.813720703125,
+        "slope": 3.991548538208008,
+        "transition_hz": 984.0914916992188
+      },
+      "loss": 0.09045409034878599,
+      "seed": 20027,
+      "step": 28
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4394.33740234375,
+        "slope": 1.485407829284668,
+        "transition_hz": 998.6565551757812
+      },
+      "loss": 0.022762291192051448,
+      "seed": 20028,
+      "step": 29
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4093.071044921875,
+        "slope": 1.5631976127624512,
+        "transition_hz": 238.7989501953125
+      },
+      "loss": 0.04678966182425295,
+      "seed": 20029,
+      "step": 30
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4605.470703125,
+        "slope": 1.9415984153747559,
+        "transition_hz": 259.69580078125
+      },
+      "loss": 0.021566225424159802,
+      "seed": 20030,
+      "step": 31
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6129.3154296875,
+        "slope": 3.4758574962615967,
+        "transition_hz": 355.7745056152344
+      },
+      "loss": 0.2235813168721148,
+      "seed": 20031,
+      "step": 32
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5217.16455078125,
+        "slope": 3.524156332015991,
+        "transition_hz": 268.80828857421875
+      },
+      "loss": 0.6131291434020384,
+      "seed": 20032,
+      "step": 33
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5945.81689453125,
+        "slope": 1.971765398979187,
+        "transition_hz": 232.8599853515625
+      },
+      "loss": 0.03660498490543677,
+      "seed": 20033,
+      "step": 34
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5482.2646484375,
+        "slope": 2.8919882774353027,
+        "transition_hz": 566.6838989257812
+      },
+      "loss": 0.01569274533123209,
+      "seed": 20034,
+      "step": 35
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4915.69970703125,
+        "slope": 3.9186015129089355,
+        "transition_hz": 654.0709228515625
+      },
+      "loss": 0.026104591200289167,
+      "seed": 20035,
+      "step": 36
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6883.94921875,
+        "slope": 3.8406195640563965,
+        "transition_hz": 306.23388671875
+      },
+      "loss": 0.019855883420604466,
+      "seed": 20036,
+      "step": 37
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5379.9677734375,
+        "slope": 1.5756042003631592,
+        "transition_hz": 261.82879638671875
+      },
+      "loss": 0.0062220203192639234,
+      "seed": 20037,
+      "step": 38
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3953.732666015625,
+        "slope": 1.9964295625686646,
+        "transition_hz": 359.3861999511719
+      },
+      "loss": 0.005658880082351592,
+      "seed": 20038,
+      "step": 39
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3413.11572265625,
+        "slope": 2.055234670639038,
+        "transition_hz": 206.39801025390625
+      },
+      "loss": 0.027343279707941745,
+      "seed": 20039,
+      "step": 40
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4928.544921875,
+        "slope": 1.0815010070800781,
+        "transition_hz": 515.6583251953125
+      },
+      "loss": 0.01243624169312492,
+      "seed": 20040,
+      "step": 41
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4984.623046875,
+        "slope": 2.3204712867736816,
+        "transition_hz": 397.3034362792969
+      },
+      "loss": 0.007088258053550119,
+      "seed": 20041,
+      "step": 42
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5127.30712890625,
+        "slope": 1.159712314605713,
+        "transition_hz": 759.3639526367188
+      },
+      "loss": 0.2367188857974598,
+      "seed": 20042,
+      "step": 43
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4055.2958984375,
+        "slope": 3.926981210708618,
+        "transition_hz": 421.18426513671875
+      },
+      "loss": 0.2619891671670718,
+      "seed": 20043,
+      "step": 44
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4542.34814453125,
+        "slope": 3.6104321479797363,
+        "transition_hz": 796.2682495117188
+      },
+      "loss": 0.5457722475734034,
+      "seed": 20044,
+      "step": 45
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5004.3671875,
+        "slope": 1.7714537382125854,
+        "transition_hz": 682.5341186523438
+      },
+      "loss": 0.03271748169206081,
+      "seed": 20045,
+      "step": 46
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6462.28759765625,
+        "slope": 1.3464672565460205,
+        "transition_hz": 877.5584716796875
+      },
+      "loss": 0.01703335946627922,
+      "seed": 20046,
+      "step": 47
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6427.904296875,
+        "slope": 1.2566754817962646,
+        "transition_hz": 364.0316162109375
+      },
+      "loss": 0.05705301547820482,
+      "seed": 20047,
+      "step": 48
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6524.73583984375,
+        "slope": 3.8355190753936768,
+        "transition_hz": 245.845703125
+      },
+      "loss": 0.0625615603758773,
+      "seed": 20048,
+      "step": 49
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6666.1220703125,
+        "slope": 3.7829651832580566,
+        "transition_hz": 478.3332824707031
+      },
+      "loss": 0.015518468173908942,
+      "seed": 20049,
+      "step": 50
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7050.36181640625,
+        "slope": 2.5316336154937744,
+        "transition_hz": 837.0172729492188
+      },
+      "loss": 0.015524715683445054,
+      "seed": 20050,
+      "step": 51
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5005.23486328125,
+        "slope": 1.5025312900543213,
+        "transition_hz": 206.22525024414062
+      },
+      "loss": 0.03883847510885519,
+      "seed": 20051,
+      "step": 52
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6907.9169921875,
+        "slope": 2.331263542175293,
+        "transition_hz": 918.7069091796875
+      },
+      "loss": 0.00467390639078426,
+      "seed": 20052,
+      "step": 53
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3968.63623046875,
+        "slope": 3.334859609603882,
+        "transition_hz": 979.4157104492188
+      },
+      "loss": 0.007428503181846713,
+      "seed": 20053,
+      "step": 54
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4091.12939453125,
+        "slope": 2.3013968467712402,
+        "transition_hz": 947.1032104492188
+      },
+      "loss": 0.5165227367439695,
+      "seed": 20054,
+      "step": 55
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5615.9287109375,
+        "slope": 3.272252082824707,
+        "transition_hz": 250.61993408203125
+      },
+      "loss": 0.008151379643566724,
+      "seed": 20055,
+      "step": 56
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7973.07763671875,
+        "slope": 3.0004138946533203,
+        "transition_hz": 910.389404296875
+      },
+      "loss": 0.03466721448686643,
+      "seed": 20056,
+      "step": 57
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5635.5302734375,
+        "slope": 1.4646592140197754,
+        "transition_hz": 728.6665649414062
+      },
+      "loss": 0.025344178270372903,
+      "seed": 20057,
+      "step": 58
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4931.71533203125,
+        "slope": 1.6129217147827148,
+        "transition_hz": 624.8345947265625
+      },
+      "loss": 0.007291657130768215,
+      "seed": 20058,
+      "step": 59
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5909.1357421875,
+        "slope": 1.5527009963989258,
+        "transition_hz": 487.4386901855469
+      },
+      "loss": 0.044737047233979775,
+      "seed": 20059,
+      "step": 60
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7489.966796875,
+        "slope": 3.92716646194458,
+        "transition_hz": 453.23992919921875
+      },
+      "loss": 0.017157229630855482,
+      "seed": 20060,
+      "step": 61
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4591.20703125,
+        "slope": 2.4641757011413574,
+        "transition_hz": 508.7309875488281
+      },
+      "loss": 0.00351434251182406,
+      "seed": 20061,
+      "step": 62
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6427.76123046875,
+        "slope": 3.891460657119751,
+        "transition_hz": 674.1939697265625
+      },
+      "loss": 0.432043736120454,
+      "seed": 20062,
+      "step": 63
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6298.72216796875,
+        "slope": 2.290722370147705,
+        "transition_hz": 579.34716796875
+      },
+      "loss": 0.04229773804662446,
+      "seed": 20063,
+      "step": 64
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4333.232421875,
+        "slope": 3.937844753265381,
+        "transition_hz": 279.1522216796875
+      },
+      "loss": 0.0557400133030032,
+      "seed": 20064,
+      "step": 65
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7403.74169921875,
+        "slope": 1.7465965747833252,
+        "transition_hz": 324.2716369628906
+      },
+      "loss": 0.006670539980960708,
+      "seed": 20065,
+      "step": 66
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4051.264404296875,
+        "slope": 1.4661798477172852,
+        "transition_hz": 571.8327026367188
+      },
+      "loss": 1.4635785222756295,
+      "seed": 20066,
+      "step": 67
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6681.84375,
+        "slope": 3.791931390762329,
+        "transition_hz": 786.7371215820312
+      },
+      "loss": 0.006660092550114798,
+      "seed": 20067,
+      "step": 68
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3329.16455078125,
+        "slope": 3.0047807693481445,
+        "transition_hz": 554.092041015625
+      },
+      "loss": 0.6470687240601745,
+      "seed": 20068,
+      "step": 69
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3203.30908203125,
+        "slope": 3.9172773361206055,
+        "transition_hz": 261.83087158203125
+      },
+      "loss": 0.22640162078340395,
+      "seed": 20069,
+      "step": 70
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6626.609375,
+        "slope": 2.437429666519165,
+        "transition_hz": 608.15576171875
+      },
+      "loss": 0.0008834382063070155,
+      "seed": 20070,
+      "step": 71
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3343.39111328125,
+        "slope": 3.7641899585723877,
+        "transition_hz": 537.65771484375
+      },
+      "loss": 0.043234046573136724,
+      "seed": 20071,
+      "step": 72
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3078.499267578125,
+        "slope": 2.999697685241699,
+        "transition_hz": 313.23895263671875
+      },
+      "loss": 0.10276775145615716,
+      "seed": 20072,
+      "step": 73
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3465.016357421875,
+        "slope": 2.979138135910034,
+        "transition_hz": 541.5435180664062
+      },
+      "loss": 0.0015651126378704325,
+      "seed": 20073,
+      "step": 74
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5318.60791015625,
+        "slope": 3.4389305114746094,
+        "transition_hz": 354.9261474609375
+      },
+      "loss": 0.02967510830314936,
+      "seed": 20074,
+      "step": 75
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5365.3759765625,
+        "slope": 3.324650764465332,
+        "transition_hz": 878.766357421875
+      },
+      "loss": 0.04634019510673928,
+      "seed": 20075,
+      "step": 76
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5488.6103515625,
+        "slope": 1.0187363624572754,
+        "transition_hz": 529.9357299804688
+      },
+      "loss": 0.006038336725860718,
+      "seed": 20076,
+      "step": 77
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5813.1953125,
+        "slope": 3.2857308387756348,
+        "transition_hz": 390.146728515625
+      },
+      "loss": 0.004852625608713471,
+      "seed": 20077,
+      "step": 78
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6301.134765625,
+        "slope": 1.9195152521133423,
+        "transition_hz": 901.6890258789062
+      },
+      "loss": 0.4140701033560358,
+      "seed": 20078,
+      "step": 79
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3823.908203125,
+        "slope": 3.747145175933838,
+        "transition_hz": 472.721435546875
+      },
+      "loss": 0.10810752476752418,
+      "seed": 20079,
+      "step": 80
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4713.23046875,
+        "slope": 3.6626992225646973,
+        "transition_hz": 639.3895263671875
+      },
+      "loss": 0.5134343808547531,
+      "seed": 20080,
+      "step": 81
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5219.38916015625,
+        "slope": 2.57753324508667,
+        "transition_hz": 909.4357299804688
+      },
+      "loss": 0.03863420265995003,
+      "seed": 20081,
+      "step": 82
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5755.3232421875,
+        "slope": 1.4106314182281494,
+        "transition_hz": 488.601318359375
+      },
+      "loss": 0.005669659761578182,
+      "seed": 20082,
+      "step": 83
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4094.50439453125,
+        "slope": 1.3256323337554932,
+        "transition_hz": 902.8236694335938
+      },
+      "loss": 0.06702458082389362,
+      "seed": 20083,
+      "step": 84
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4956.1865234375,
+        "slope": 2.1110243797302246,
+        "transition_hz": 905.2326049804688
+      },
+      "loss": 0.12309272309711791,
+      "seed": 20084,
+      "step": 85
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3266.902099609375,
+        "slope": 2.819037914276123,
+        "transition_hz": 481.7113342285156
+      },
+      "loss": 0.008871120475143428,
+      "seed": 20085,
+      "step": 86
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6152.626953125,
+        "slope": 3.1008334159851074,
+        "transition_hz": 508.8288879394531
+      },
+      "loss": 0.01131743416813575,
+      "seed": 20086,
+      "step": 87
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7477.19775390625,
+        "slope": 2.807889223098755,
+        "transition_hz": 870.4147338867188
+      },
+      "loss": 0.030163112478037404,
+      "seed": 20087,
+      "step": 88
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4469.447265625,
+        "slope": 1.5401039123535156,
+        "transition_hz": 299.551025390625
+      },
+      "loss": 0.012113189341883157,
+      "seed": 20088,
+      "step": 89
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4544.025390625,
+        "slope": 3.7708842754364014,
+        "transition_hz": 852.1307983398438
+      },
+      "loss": 0.003739771951966368,
+      "seed": 20089,
+      "step": 90
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3208.820068359375,
+        "slope": 1.9477035999298096,
+        "transition_hz": 298.2106628417969
+      },
+      "loss": 0.33065924841115646,
+      "seed": 20090,
+      "step": 91
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3018.611572265625,
+        "slope": 1.0487422943115234,
+        "transition_hz": 918.439697265625
+      },
+      "loss": 0.10873723245466418,
+      "seed": 20091,
+      "step": 92
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3603.78271484375,
+        "slope": 3.315415143966675,
+        "transition_hz": 905.3281860351562
+      },
+      "loss": 0.5435505832245697,
+      "seed": 20092,
+      "step": 93
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5917.34423828125,
+        "slope": 3.356583833694458,
+        "transition_hz": 956.8303833007812
+      },
+      "loss": 0.043292499859478646,
+      "seed": 20093,
+      "step": 94
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5014.67236328125,
+        "slope": 1.2849879264831543,
+        "transition_hz": 540.151611328125
+      },
+      "loss": 0.009386528105655028,
+      "seed": 20094,
+      "step": 95
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6995.12060546875,
+        "slope": 2.6549630165100098,
+        "transition_hz": 474.6240539550781
+      },
+      "loss": 0.06980098003836105,
+      "seed": 20095,
+      "step": 96
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3781.67236328125,
+        "slope": 1.3036620616912842,
+        "transition_hz": 563.979736328125
+      },
+      "loss": 0.43536417849825826,
+      "seed": 20096,
+      "step": 97
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3332.414794921875,
+        "slope": 3.3528308868408203,
+        "transition_hz": 997.216064453125
+      },
+      "loss": 0.0022072523006084347,
+      "seed": 20097,
+      "step": 98
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7214.38671875,
+        "slope": 2.2843737602233887,
+        "transition_hz": 486.4446716308594
+      },
+      "loss": 0.08643984576747826,
+      "seed": 20098,
+      "step": 99
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7170.82177734375,
+        "slope": 1.5903232097625732,
+        "transition_hz": 726.5391845703125
+      },
+      "loss": 0.057806918808266335,
+      "seed": 20099,
+      "step": 100
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7854.8203125,
+        "slope": 3.497274398803711,
+        "transition_hz": 641.3070068359375
+      },
+      "loss": 0.023465819161007907,
+      "seed": 20100,
+      "step": 101
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7744.58740234375,
+        "slope": 3.614248752593994,
+        "transition_hz": 673.9071044921875
+      },
+      "loss": 0.009206836496596357,
+      "seed": 20101,
+      "step": 102
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5590.6318359375,
+        "slope": 3.966094970703125,
+        "transition_hz": 989.6937866210938
+      },
+      "loss": 0.18182006389551966,
+      "seed": 20102,
+      "step": 103
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6057.4775390625,
+        "slope": 2.251295566558838,
+        "transition_hz": 222.73631286621094
+      },
+      "loss": 0.3130480807831492,
+      "seed": 20103,
+      "step": 104
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6343.35205078125,
+        "slope": 3.8931846618652344,
+        "transition_hz": 302.3231201171875
+      },
+      "loss": 0.43436096247769196,
+      "seed": 20104,
+      "step": 105
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5211.2392578125,
+        "slope": 1.1434297561645508,
+        "transition_hz": 806.5272216796875
+      },
+      "loss": 0.028044679283698692,
+      "seed": 20105,
+      "step": 106
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5886.59423828125,
+        "slope": 3.6008589267730713,
+        "transition_hz": 995.6233520507812
+      },
+      "loss": 0.03266707707432243,
+      "seed": 20106,
+      "step": 107
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7694.6259765625,
+        "slope": 1.5771610736846924,
+        "transition_hz": 329.9474182128906
+      },
+      "loss": 0.04512481038359315,
+      "seed": 20107,
+      "step": 108
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5847.2939453125,
+        "slope": 1.191309928894043,
+        "transition_hz": 782.140869140625
+      },
+      "loss": 0.19619574938343826,
+      "seed": 20108,
+      "step": 109
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3268.734619140625,
+        "slope": 1.144256591796875,
+        "transition_hz": 814.2066040039062
+      },
+      "loss": 0.002693807167219331,
+      "seed": 20109,
+      "step": 110
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5627.630859375,
+        "slope": 3.723562717437744,
+        "transition_hz": 314.9421691894531
+      },
+      "loss": 0.530551030583948,
+      "seed": 20110,
+      "step": 111
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4684.26318359375,
+        "slope": 3.577836513519287,
+        "transition_hz": 516.158935546875
+      },
+      "loss": 0.019929713205979607,
+      "seed": 20111,
+      "step": 112
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5973.806640625,
+        "slope": 1.4830145835876465,
+        "transition_hz": 531.6109619140625
+      },
+      "loss": 0.011457124777855737,
+      "seed": 20112,
+      "step": 113
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4806.06591796875,
+        "slope": 3.5658304691314697,
+        "transition_hz": 246.03619384765625
+      },
+      "loss": 0.0923396352861936,
+      "seed": 20113,
+      "step": 114
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4857.12548828125,
+        "slope": 3.2398996353149414,
+        "transition_hz": 988.9375
+      },
+      "loss": 0.1525875538518817,
+      "seed": 20114,
+      "step": 115
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4097.0498046875,
+        "slope": 2.753415822982788,
+        "transition_hz": 383.4192810058594
+      },
+      "loss": 0.3381106185348324,
+      "seed": 20115,
+      "step": 116
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7776.24609375,
+        "slope": 1.8763725757598877,
+        "transition_hz": 743.846435546875
+      },
+      "loss": 0.23889052843274775,
+      "seed": 20116,
+      "step": 117
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7696.2431640625,
+        "slope": 3.995095729827881,
+        "transition_hz": 563.197998046875
+      },
+      "loss": 0.03286310480537396,
+      "seed": 20117,
+      "step": 118
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4504.20068359375,
+        "slope": 1.5649268627166748,
+        "transition_hz": 708.1280517578125
+      },
+      "loss": 0.011262586303768793,
+      "seed": 20118,
+      "step": 119
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5088.63232421875,
+        "slope": 2.27170991897583,
+        "transition_hz": 654.4912109375
+      },
+      "loss": 0.08671879353054854,
+      "seed": 20119,
+      "step": 120
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4419.25146484375,
+        "slope": 2.7725844383239746,
+        "transition_hz": 571.4210205078125
+      },
+      "loss": 0.20650734451716513,
+      "seed": 20120,
+      "step": 121
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7123.36572265625,
+        "slope": 1.4457457065582275,
+        "transition_hz": 338.8768310546875
+      },
+      "loss": 0.035543818448412756,
+      "seed": 20121,
+      "step": 122
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5636.294921875,
+        "slope": 2.6394824981689453,
+        "transition_hz": 204.1603546142578
+      },
+      "loss": 0.013599039917912767,
+      "seed": 20122,
+      "step": 123
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3095.28515625,
+        "slope": 2.1722307205200195,
+        "transition_hz": 847.3558959960938
+      },
+      "loss": 0.043777142266345756,
+      "seed": 20123,
+      "step": 124
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5989.9111328125,
+        "slope": 1.2495830059051514,
+        "transition_hz": 627.0817260742188
+      },
+      "loss": 0.05399071476020258,
+      "seed": 20124,
+      "step": 125
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6727.5625,
+        "slope": 2.15594482421875,
+        "transition_hz": 553.5618896484375
+      },
+      "loss": 0.026861184824817398,
+      "seed": 20125,
+      "step": 126
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3040.677490234375,
+        "slope": 2.1145403385162354,
+        "transition_hz": 530.4259033203125
+      },
+      "loss": 0.4430316332144006,
+      "seed": 20126,
+      "step": 127
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5048.9599609375,
+        "slope": 1.0871222019195557,
+        "transition_hz": 872.9320678710938
+      },
+      "loss": 0.42362475586044546,
+      "seed": 20127,
+      "step": 128
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6560.0703125,
+        "slope": 2.7019920349121094,
+        "transition_hz": 751.7615966796875
+      },
+      "loss": 0.3781779938622293,
+      "seed": 20128,
+      "step": 129
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4759.9580078125,
+        "slope": 2.7891898155212402,
+        "transition_hz": 845.9503173828125
+      },
+      "loss": 0.09589816914704834,
+      "seed": 20129,
+      "step": 130
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7922.65576171875,
+        "slope": 2.6950578689575195,
+        "transition_hz": 255.87591552734375
+      },
+      "loss": 0.04697254168324361,
+      "seed": 20130,
+      "step": 131
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7179.9892578125,
+        "slope": 2.062338352203369,
+        "transition_hz": 489.7021179199219
+      },
+      "loss": 0.0577058783275847,
+      "seed": 20131,
+      "step": 132
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4172.5380859375,
+        "slope": 2.353508234024048,
+        "transition_hz": 256.0635986328125
+      },
+      "loss": 0.1616032545827931,
+      "seed": 20132,
+      "step": 133
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6299.3369140625,
+        "slope": 2.061022996902466,
+        "transition_hz": 208.5368194580078
+      },
+      "loss": 0.026651042372279502,
+      "seed": 20133,
+      "step": 134
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4417.72998046875,
+        "slope": 3.4654829502105713,
+        "transition_hz": 903.7728271484375
+      },
+      "loss": 0.027065553900843906,
+      "seed": 20134,
+      "step": 135
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4720.25244140625,
+        "slope": 2.7159056663513184,
+        "transition_hz": 581.9677734375
+      },
+      "loss": 0.07600971579171613,
+      "seed": 20135,
+      "step": 136
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7194.2646484375,
+        "slope": 3.945673942565918,
+        "transition_hz": 998.3955078125
+      },
+      "loss": 0.03442623058202107,
+      "seed": 20136,
+      "step": 137
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5430.3837890625,
+        "slope": 2.6249492168426514,
+        "transition_hz": 797.8997802734375
+      },
+      "loss": 0.02497626415215395,
+      "seed": 20137,
+      "step": 138
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6103.3466796875,
+        "slope": 2.5933449268341064,
+        "transition_hz": 356.61822509765625
+      },
+      "loss": 0.21878223017117346,
+      "seed": 20138,
+      "step": 139
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4564.34375,
+        "slope": 3.3389482498168945,
+        "transition_hz": 284.5946350097656
+      },
+      "loss": 0.5151658221956852,
+      "seed": 20139,
+      "step": 140
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4650.09423828125,
+        "slope": 1.1906646490097046,
+        "transition_hz": 259.7944641113281
+      },
+      "loss": 2.7841228863090204,
+      "seed": 20140,
+      "step": 141
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4478.71923828125,
+        "slope": 1.1982150077819824,
+        "transition_hz": 952.5470581054688
+      },
+      "loss": 0.06539587618395913,
+      "seed": 20141,
+      "step": 142
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3903.9775390625,
+        "slope": 3.4401535987854004,
+        "transition_hz": 303.7197265625
+      },
+      "loss": 0.020716717439815024,
+      "seed": 20142,
+      "step": 143
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7602.35400390625,
+        "slope": 1.7140369415283203,
+        "transition_hz": 449.68218994140625
+      },
+      "loss": 0.06966774455772486,
+      "seed": 20143,
+      "step": 144
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3025.8115234375,
+        "slope": 1.6831332445144653,
+        "transition_hz": 307.41387939453125
+      },
+      "loss": 0.16292069682423763,
+      "seed": 20144,
+      "step": 145
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4656.60986328125,
+        "slope": 2.2533628940582275,
+        "transition_hz": 213.37294006347656
+      },
+      "loss": 0.018056150876954367,
+      "seed": 20145,
+      "step": 146
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6282.876953125,
+        "slope": 3.1382007598876953,
+        "transition_hz": 853.7777709960938
+      },
+      "loss": 0.04797859191557067,
+      "seed": 20146,
+      "step": 147
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7249.95947265625,
+        "slope": 1.939213514328003,
+        "transition_hz": 651.322265625
+      },
+      "loss": 0.0878202224536878,
+      "seed": 20147,
+      "step": 148
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5323.16796875,
+        "slope": 1.3553085327148438,
+        "transition_hz": 910.0975341796875
+      },
+      "loss": 0.022347581421422767,
+      "seed": 20148,
+      "step": 149
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4016.40478515625,
+        "slope": 2.4899239540100098,
+        "transition_hz": 447.204833984375
+      },
+      "loss": 0.020394906404676814,
+      "seed": 20149,
+      "step": 150
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4545.1240234375,
+        "slope": 3.400212287902832,
+        "transition_hz": 863.0701904296875
+      },
+      "loss": 0.235143087563062,
+      "seed": 20150,
+      "step": 151
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5762.8193359375,
+        "slope": 2.875584840774536,
+        "transition_hz": 200.09512329101562
+      },
+      "loss": 0.00840951871378725,
+      "seed": 20151,
+      "step": 152
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6973.578125,
+        "slope": 1.8563846349716187,
+        "transition_hz": 663.6586303710938
+      },
+      "loss": 0.30111735974362636,
+      "seed": 20152,
+      "step": 153
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7032.55615234375,
+        "slope": 2.915189266204834,
+        "transition_hz": 446.56915283203125
+      },
+      "loss": 0.0672912161375731,
+      "seed": 20153,
+      "step": 154
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3630.93115234375,
+        "slope": 3.238725185394287,
+        "transition_hz": 838.7559204101562
+      },
+      "loss": 0.011517831352246414,
+      "seed": 20154,
+      "step": 155
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5602.189453125,
+        "slope": 3.2871289253234863,
+        "transition_hz": 222.4212188720703
+      },
+      "loss": 0.1798120083551495,
+      "seed": 20155,
+      "step": 156
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6779.79833984375,
+        "slope": 1.6120219230651855,
+        "transition_hz": 612.4315795898438
+      },
+      "loss": 0.15653802545280374,
+      "seed": 20156,
+      "step": 157
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4522.078125,
+        "slope": 1.8999371528625488,
+        "transition_hz": 755.753662109375
+      },
+      "loss": 0.004720398450729282,
+      "seed": 20157,
+      "step": 158
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4952.40625,
+        "slope": 3.108992099761963,
+        "transition_hz": 988.11572265625
+      },
+      "loss": 0.002677001485704795,
+      "seed": 20158,
+      "step": 159
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7804.84619140625,
+        "slope": 2.056025505065918,
+        "transition_hz": 264.693115234375
+      },
+      "loss": 0.06375413051737386,
+      "seed": 20159,
+      "step": 160
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3601.829345703125,
+        "slope": 3.196263313293457,
+        "transition_hz": 494.4251403808594
+      },
+      "loss": 0.005742787932079136,
+      "seed": 20160,
+      "step": 161
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4410.23828125,
+        "slope": 3.898912191390991,
+        "transition_hz": 475.3318786621094
+      },
+      "loss": 0.003378659673015247,
+      "seed": 20161,
+      "step": 162
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3233.877197265625,
+        "slope": 1.3987596035003662,
+        "transition_hz": 557.7708740234375
+      },
+      "loss": 0.21310694778473172,
+      "seed": 20162,
+      "step": 163
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6929.3916015625,
+        "slope": 1.086749792098999,
+        "transition_hz": 290.7509765625
+      },
+      "loss": 0.05626722428457937,
+      "seed": 20163,
+      "step": 164
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6373.36279296875,
+        "slope": 2.590303897857666,
+        "transition_hz": 771.2828369140625
+      },
+      "loss": 0.37451246260840493,
+      "seed": 20164,
+      "step": 165
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3274.83642578125,
+        "slope": 2.173414468765259,
+        "transition_hz": 346.44000244140625
+      },
+      "loss": 0.04006163991445367,
+      "seed": 20165,
+      "step": 166
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4921.94580078125,
+        "slope": 3.3215458393096924,
+        "transition_hz": 954.0157470703125
+      },
+      "loss": 0.0048964281446816195,
+      "seed": 20166,
+      "step": 167
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6776.583984375,
+        "slope": 3.649960517883301,
+        "transition_hz": 740.31201171875
+      },
+      "loss": 0.11405999733413753,
+      "seed": 20167,
+      "step": 168
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7563.3583984375,
+        "slope": 1.8806345462799072,
+        "transition_hz": 963.0023193359375
+      },
+      "loss": 0.12631559801582787,
+      "seed": 20168,
+      "step": 169
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7246.08251953125,
+        "slope": 2.133532762527466,
+        "transition_hz": 595.468994140625
+      },
+      "loss": 0.0027492350264765168,
+      "seed": 20169,
+      "step": 170
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5508.693359375,
+        "slope": 3.930443048477173,
+        "transition_hz": 212.7663116455078
+      },
+      "loss": 0.002917632443232269,
+      "seed": 20170,
+      "step": 171
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6399.3134765625,
+        "slope": 1.8456175327301025,
+        "transition_hz": 685.1202392578125
+      },
+      "loss": 0.042907376935800455,
+      "seed": 20171,
+      "step": 172
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5425.87890625,
+        "slope": 1.2111539840698242,
+        "transition_hz": 812.1826782226562
+      },
+      "loss": 0.002914675739365506,
+      "seed": 20172,
+      "step": 173
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6451.9208984375,
+        "slope": 3.328573226928711,
+        "transition_hz": 578.97998046875
+      },
+      "loss": 0.018386756697219144,
+      "seed": 20173,
+      "step": 174
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6563.2890625,
+        "slope": 1.6507787704467773,
+        "transition_hz": 763.0609130859375
+      },
+      "loss": 0.016130349752970466,
+      "seed": 20174,
+      "step": 175
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6076.359375,
+        "slope": 3.8847298622131348,
+        "transition_hz": 401.4629821777344
+      },
+      "loss": 0.18768838505624044,
+      "seed": 20175,
+      "step": 176
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4793.69091796875,
+        "slope": 1.151154637336731,
+        "transition_hz": 750.388671875
+      },
+      "loss": 0.6206920888716982,
+      "seed": 20176,
+      "step": 177
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7079.0986328125,
+        "slope": 2.0821566581726074,
+        "transition_hz": 736.7694091796875
+      },
+      "loss": 0.03476082066942366,
+      "seed": 20177,
+      "step": 178
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7624.66796875,
+        "slope": 3.277292251586914,
+        "transition_hz": 293.7066955566406
+      },
+      "loss": 0.012751512613638194,
+      "seed": 20178,
+      "step": 179
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6946.62109375,
+        "slope": 2.352365732192993,
+        "transition_hz": 853.27197265625
+      },
+      "loss": 0.1884489086862358,
+      "seed": 20179,
+      "step": 180
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3135.6611328125,
+        "slope": 1.3088009357452393,
+        "transition_hz": 747.4976806640625
+      },
+      "loss": 0.0023245593524189086,
+      "seed": 20180,
+      "step": 181
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6727.5888671875,
+        "slope": 1.3872108459472656,
+        "transition_hz": 376.88922119140625
+      },
+      "loss": 0.010802119446274086,
+      "seed": 20181,
+      "step": 182
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6031.44921875,
+        "slope": 3.0446062088012695,
+        "transition_hz": 469.5029602050781
+      },
+      "loss": 0.005704582174305453,
+      "seed": 20182,
+      "step": 183
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7203.2373046875,
+        "slope": 1.0353593826293945,
+        "transition_hz": 716.96435546875
+      },
+      "loss": 0.042666027749989226,
+      "seed": 20183,
+      "step": 184
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5984.1611328125,
+        "slope": 2.439406156539917,
+        "transition_hz": 603.58056640625
+      },
+      "loss": 0.001324346689058327,
+      "seed": 20184,
+      "step": 185
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5407.80859375,
+        "slope": 2.0238876342773438,
+        "transition_hz": 869.0263061523438
+      },
+      "loss": 0.061245686782603455,
+      "seed": 20185,
+      "step": 186
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6266.79296875,
+        "slope": 3.077183961868286,
+        "transition_hz": 416.23406982421875
+      },
+      "loss": 0.21944025534459494,
+      "seed": 20186,
+      "step": 187
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4334.31201171875,
+        "slope": 1.8451100587844849,
+        "transition_hz": 895.0413818359375
+      },
+      "loss": 0.40929825191254554,
+      "seed": 20187,
+      "step": 188
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7927.83154296875,
+        "slope": 1.3155475854873657,
+        "transition_hz": 396.9019775390625
+      },
+      "loss": 0.1303073385001629,
+      "seed": 20188,
+      "step": 189
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3277.14208984375,
+        "slope": 2.510801315307617,
+        "transition_hz": 596.1278076171875
+      },
+      "loss": 0.0026033552116710617,
+      "seed": 20189,
+      "step": 190
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3646.1845703125,
+        "slope": 1.5364925861358643,
+        "transition_hz": 396.599609375
+      },
+      "loss": 0.011460208761309858,
+      "seed": 20190,
+      "step": 191
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7092.20068359375,
+        "slope": 1.1256213188171387,
+        "transition_hz": 294.50048828125
+      },
+      "loss": 0.06999956757135391,
+      "seed": 20191,
+      "step": 192
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3533.344482421875,
+        "slope": 3.5108540058135986,
+        "transition_hz": 767.9391479492188
+      },
+      "loss": 0.022680351995140853,
+      "seed": 20192,
+      "step": 193
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3356.20458984375,
+        "slope": 2.2419352531433105,
+        "transition_hz": 912.8082885742188
+      },
+      "loss": 0.002117029449467267,
+      "seed": 20193,
+      "step": 194
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7734.86767578125,
+        "slope": 3.5576171875,
+        "transition_hz": 593.3919677734375
+      },
+      "loss": 0.008617079228418978,
+      "seed": 20194,
+      "step": 195
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7400.5810546875,
+        "slope": 1.6084061861038208,
+        "transition_hz": 887.154296875
+      },
+      "loss": 0.04688054277049612,
+      "seed": 20195,
+      "step": 196
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3940.48828125,
+        "slope": 1.3712944984436035,
+        "transition_hz": 898.7565307617188
+      },
+      "loss": 0.005649028370142878,
+      "seed": 20196,
+      "step": 197
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7394.57080078125,
+        "slope": 2.358416795730591,
+        "transition_hz": 537.61572265625
+      },
+      "loss": 0.0040166821882923415,
+      "seed": 20197,
+      "step": 198
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5904.34716796875,
+        "slope": 2.9228057861328125,
+        "transition_hz": 680.7013549804688
+      },
+      "loss": 0.6395959518922938,
+      "seed": 20198,
+      "step": 199
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4801.76416015625,
+        "slope": 1.9457552433013916,
+        "transition_hz": 444.25811767578125
+      },
+      "loss": 0.15263980126994287,
+      "seed": 20199,
+      "step": 200
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6693.083984375,
+        "slope": 2.2831082344055176,
+        "transition_hz": 295.4305725097656
+      },
+      "loss": 0.2732159013274905,
+      "seed": 20200,
+      "step": 201
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3322.572021484375,
+        "slope": 1.7300890684127808,
+        "transition_hz": 932.5823974609375
+      },
+      "loss": 0.003022071140627569,
+      "seed": 20201,
+      "step": 202
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5918.560546875,
+        "slope": 1.1350133419036865,
+        "transition_hz": 710.266357421875
+      },
+      "loss": 0.2839319463280449,
+      "seed": 20202,
+      "step": 203
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5580.0263671875,
+        "slope": 2.5387706756591797,
+        "transition_hz": 543.3778076171875
+      },
+      "loss": 0.027227157002923556,
+      "seed": 20203,
+      "step": 204
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7647.673828125,
+        "slope": 3.1195592880249023,
+        "transition_hz": 432.7353515625
+      },
+      "loss": 0.013790149156750073,
+      "seed": 20204,
+      "step": 205
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3768.45166015625,
+        "slope": 2.5407633781433105,
+        "transition_hz": 500.4388732910156
+      },
+      "loss": 0.0007029443294478376,
+      "seed": 20205,
+      "step": 206
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5958.673828125,
+        "slope": 3.670492649078369,
+        "transition_hz": 814.9111938476562
+      },
+      "loss": 0.4578942834851275,
+      "seed": 20206,
+      "step": 207
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5328.759765625,
+        "slope": 3.5424129962921143,
+        "transition_hz": 269.244873046875
+      },
+      "loss": 0.03154058355378091,
+      "seed": 20207,
+      "step": 208
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7821.810546875,
+        "slope": 3.9312143325805664,
+        "transition_hz": 802.1907958984375
+      },
+      "loss": 0.06203107336977028,
+      "seed": 20208,
+      "step": 209
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4840.6337890625,
+        "slope": 3.9804983139038086,
+        "transition_hz": 565.0234375
+      },
+      "loss": 0.005520887992675841,
+      "seed": 20209,
+      "step": 210
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5201.51904296875,
+        "slope": 1.3849480152130127,
+        "transition_hz": 425.9462890625
+      },
+      "loss": 0.2011970398908259,
+      "seed": 20210,
+      "step": 211
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3609.885498046875,
+        "slope": 1.6223113536834717,
+        "transition_hz": 307.27410888671875
+      },
+      "loss": 0.2552751157009417,
+      "seed": 20211,
+      "step": 212
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3724.364013671875,
+        "slope": 2.2375385761260986,
+        "transition_hz": 727.3461303710938
+      },
+      "loss": 0.5068501729854504,
+      "seed": 20212,
+      "step": 213
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5339.4130859375,
+        "slope": 1.8027863502502441,
+        "transition_hz": 990.37939453125
+      },
+      "loss": 0.016816891646353332,
+      "seed": 20213,
+      "step": 214
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6406.41845703125,
+        "slope": 2.015070915222168,
+        "transition_hz": 931.9506225585938
+      },
+      "loss": 0.002787628779353092,
+      "seed": 20214,
+      "step": 215
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5742.3232421875,
+        "slope": 1.0873093605041504,
+        "transition_hz": 285.46661376953125
+      },
+      "loss": 0.05545955161417506,
+      "seed": 20215,
+      "step": 216
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6371.349609375,
+        "slope": 2.3395841121673584,
+        "transition_hz": 389.72283935546875
+      },
+      "loss": 0.22761377791964943,
+      "seed": 20216,
+      "step": 217
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3388.966552734375,
+        "slope": 2.715806007385254,
+        "transition_hz": 416.59332275390625
+      },
+      "loss": 0.0007725353072035534,
+      "seed": 20217,
+      "step": 218
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7310.7548828125,
+        "slope": 2.2295541763305664,
+        "transition_hz": 474.4289855957031
+      },
+      "loss": 0.054991132048519305,
+      "seed": 20218,
+      "step": 219
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7073.2080078125,
+        "slope": 3.3796048164367676,
+        "transition_hz": 973.3916015625
+      },
+      "loss": 0.13764072559917986,
+      "seed": 20219,
+      "step": 220
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3815.21826171875,
+        "slope": 2.3991641998291016,
+        "transition_hz": 962.3216552734375
+      },
+      "loss": 0.013913346839734895,
+      "seed": 20220,
+      "step": 221
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5701.0615234375,
+        "slope": 1.6706633567810059,
+        "transition_hz": 672.107421875
+      },
+      "loss": 0.0097065375602684,
+      "seed": 20221,
+      "step": 222
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7255.056640625,
+        "slope": 1.6538299322128296,
+        "transition_hz": 598.663330078125
+      },
+      "loss": 0.169711209072444,
+      "seed": 20222,
+      "step": 223
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5771.3076171875,
+        "slope": 2.8841300010681152,
+        "transition_hz": 472.97216796875
+      },
+      "loss": 0.007189830721917283,
+      "seed": 20223,
+      "step": 224
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5357.095703125,
+        "slope": 2.718879222869873,
+        "transition_hz": 861.3108520507812
+      },
+      "loss": 0.7695332247905899,
+      "seed": 20224,
+      "step": 225
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3979.734619140625,
+        "slope": 1.0313239097595215,
+        "transition_hz": 368.682861328125
+      },
+      "loss": 0.007476584565191886,
+      "seed": 20225,
+      "step": 226
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4160.91845703125,
+        "slope": 3.483682155609131,
+        "transition_hz": 545.8541870117188
+      },
+      "loss": 0.007392673640587922,
+      "seed": 20226,
+      "step": 227
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6444.89208984375,
+        "slope": 3.8022265434265137,
+        "transition_hz": 970.7015991210938
+      },
+      "loss": 0.04190989794761489,
+      "seed": 20227,
+      "step": 228
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7850.82470703125,
+        "slope": 3.03250789642334,
+        "transition_hz": 831.4336547851562
+      },
+      "loss": 0.008253817887331772,
+      "seed": 20228,
+      "step": 229
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3581.312255859375,
+        "slope": 2.3844940662384033,
+        "transition_hz": 914.6726684570312
+      },
+      "loss": 0.019289629357821008,
+      "seed": 20229,
+      "step": 230
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5841.9599609375,
+        "slope": 2.9167861938476562,
+        "transition_hz": 814.5489501953125
+      },
+      "loss": 0.015765228726561,
+      "seed": 20230,
+      "step": 231
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7977.64453125,
+        "slope": 1.2645411491394043,
+        "transition_hz": 544.7816772460938
+      },
+      "loss": 0.11273251599266502,
+      "seed": 20231,
+      "step": 232
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5625.79833984375,
+        "slope": 1.1932318210601807,
+        "transition_hz": 274.41693115234375
+      },
+      "loss": 0.042349357649550015,
+      "seed": 20232,
+      "step": 233
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7803.6669921875,
+        "slope": 3.271003007888794,
+        "transition_hz": 328.375244140625
+      },
+      "loss": 0.005389191290257511,
+      "seed": 20233,
+      "step": 234
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6083.263671875,
+        "slope": 1.9487459659576416,
+        "transition_hz": 821.9839477539062
+      },
+      "loss": 0.2706513985594018,
+      "seed": 20234,
+      "step": 235
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5247.951171875,
+        "slope": 2.1347455978393555,
+        "transition_hz": 615.83251953125
+      },
+      "loss": 0.17386314138436426,
+      "seed": 20235,
+      "step": 236
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6102.5615234375,
+        "slope": 1.4672712087631226,
+        "transition_hz": 996.8783569335938
+      },
+      "loss": 0.2959271001010382,
+      "seed": 20236,
+      "step": 237
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5507.728515625,
+        "slope": 3.566058397293091,
+        "transition_hz": 499.858154296875
+      },
+      "loss": 0.00442594231019674,
+      "seed": 20237,
+      "step": 238
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4792.8837890625,
+        "slope": 3.879608392715454,
+        "transition_hz": 854.6052856445312
+      },
+      "loss": 0.0007789312989527716,
+      "seed": 20238,
+      "step": 239
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5480.1708984375,
+        "slope": 1.4168579578399658,
+        "transition_hz": 755.0028076171875
+      },
+      "loss": 0.09528958417723991,
+      "seed": 20239,
+      "step": 240
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3932.2919921875,
+        "slope": 1.411004900932312,
+        "transition_hz": 451.1547546386719
+      },
+      "loss": 0.044768581848075924,
+      "seed": 20240,
+      "step": 241
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6364.787109375,
+        "slope": 3.999525308609009,
+        "transition_hz": 749.376220703125
+      },
+      "loss": 0.0007718430816953677,
+      "seed": 20241,
+      "step": 242
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3103.724853515625,
+        "slope": 3.1638426780700684,
+        "transition_hz": 439.36260986328125
+      },
+      "loss": 0.4228715231413782,
+      "seed": 20242,
+      "step": 243
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4441.0126953125,
+        "slope": 2.370969772338867,
+        "transition_hz": 404.18084716796875
+      },
+      "loss": 0.024978554381189802,
+      "seed": 20243,
+      "step": 244
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7680.6748046875,
+        "slope": 1.5224430561065674,
+        "transition_hz": 776.72509765625
+      },
+      "loss": 0.03709123914903382,
+      "seed": 20244,
+      "step": 245
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4901.8046875,
+        "slope": 1.48702871799469,
+        "transition_hz": 983.2413330078125
+      },
+      "loss": 0.015972595791239653,
+      "seed": 20245,
+      "step": 246
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6306.6142578125,
+        "slope": 1.9796881675720215,
+        "transition_hz": 979.2836303710938
+      },
+      "loss": 0.03702623405122769,
+      "seed": 20246,
+      "step": 247
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5230.6953125,
+        "slope": 2.583021879196167,
+        "transition_hz": 533.8153076171875
+      },
+      "loss": 0.016886533585023032,
+      "seed": 20247,
+      "step": 248
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6890.7705078125,
+        "slope": 2.4457740783691406,
+        "transition_hz": 657.89404296875
+      },
+      "loss": 0.33175129793508634,
+      "seed": 20248,
+      "step": 249
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3082.7958984375,
+        "slope": 3.065566062927246,
+        "transition_hz": 611.732666015625
+      },
+      "loss": 0.02869082921907233,
+      "seed": 20249,
+      "step": 250
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3494.337646484375,
+        "slope": 2.7085025310516357,
+        "transition_hz": 475.9916687011719
+      },
+      "loss": 0.004211879736448968,
+      "seed": 20250,
+      "step": 251
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7175.77392578125,
+        "slope": 2.2735068798065186,
+        "transition_hz": 261.2087707519531
+      },
+      "loss": 0.07424806682103953,
+      "seed": 20251,
+      "step": 252
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3244.596923828125,
+        "slope": 3.559011459350586,
+        "transition_hz": 219.3359832763672
+      },
+      "loss": 0.1723827567815719,
+      "seed": 20252,
+      "step": 253
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4787.16796875,
+        "slope": 3.7359652519226074,
+        "transition_hz": 381.0614013671875
+      },
+      "loss": 0.00963164307169095,
+      "seed": 20253,
+      "step": 254
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5518.390625,
+        "slope": 2.1820883750915527,
+        "transition_hz": 753.9683227539062
+      },
+      "loss": 0.2900795758899382,
+      "seed": 20254,
+      "step": 255
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6604.3525390625,
+        "slope": 1.220956802368164,
+        "transition_hz": 778.667236328125
+      },
+      "loss": 0.049327646489408954,
+      "seed": 20255,
+      "step": 256
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7073.01611328125,
+        "slope": 2.7689614295959473,
+        "transition_hz": 444.79705810546875
+      },
+      "loss": 0.004187756349803213,
+      "seed": 20256,
+      "step": 257
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6315.8994140625,
+        "slope": 3.9776062965393066,
+        "transition_hz": 843.4796752929688
+      },
+      "loss": 0.0030838893976336402,
+      "seed": 20257,
+      "step": 258
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7097.46630859375,
+        "slope": 2.886007785797119,
+        "transition_hz": 405.77667236328125
+      },
+      "loss": 0.011171205655515229,
+      "seed": 20258,
+      "step": 259
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6247.3466796875,
+        "slope": 3.210766553878784,
+        "transition_hz": 953.1823120117188
+      },
+      "loss": 0.009023269044982957,
+      "seed": 20259,
+      "step": 260
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6147.49169921875,
+        "slope": 2.7627687454223633,
+        "transition_hz": 385.03106689453125
+      },
+      "loss": 0.32711656616056006,
+      "seed": 20260,
+      "step": 261
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3757.97314453125,
+        "slope": 2.7981314659118652,
+        "transition_hz": 923.701171875
+      },
+      "loss": 0.02360667067996695,
+      "seed": 20261,
+      "step": 262
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7465.60791015625,
+        "slope": 2.65482759475708,
+        "transition_hz": 324.888427734375
+      },
+      "loss": 0.08892536245610076,
+      "seed": 20262,
+      "step": 263
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6893.48046875,
+        "slope": 3.8343591690063477,
+        "transition_hz": 381.1749267578125
+      },
+      "loss": 0.01186983326939999,
+      "seed": 20263,
+      "step": 264
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5072.77783203125,
+        "slope": 3.919337511062622,
+        "transition_hz": 420.32000732421875
+      },
+      "loss": 0.10958363048655816,
+      "seed": 20264,
+      "step": 265
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4608.30419921875,
+        "slope": 1.7581886053085327,
+        "transition_hz": 794.5254516601562
+      },
+      "loss": 0.014842114793963005,
+      "seed": 20265,
+      "step": 266
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6348.89404296875,
+        "slope": 2.4064924716949463,
+        "transition_hz": 890.7643432617188
+      },
+      "loss": 0.01600631435374303,
+      "seed": 20266,
+      "step": 267
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4539.84814453125,
+        "slope": 3.0082991123199463,
+        "transition_hz": 930.1109619140625
+      },
+      "loss": 0.024250550664528803,
+      "seed": 20267,
+      "step": 268
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5848.125,
+        "slope": 2.4097723960876465,
+        "transition_hz": 862.9502563476562
+      },
+      "loss": 0.034960130788426635,
+      "seed": 20268,
+      "step": 269
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4012.902587890625,
+        "slope": 2.3068196773529053,
+        "transition_hz": 932.5375366210938
+      },
+      "loss": 0.014443395567026774,
+      "seed": 20269,
+      "step": 270
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4954.11572265625,
+        "slope": 1.9012410640716553,
+        "transition_hz": 922.5955810546875
+      },
+      "loss": 0.005960657180927236,
+      "seed": 20270,
+      "step": 271
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3503.32568359375,
+        "slope": 3.4979567527770996,
+        "transition_hz": 774.3163452148438
+      },
+      "loss": 0.3797248912958981,
+      "seed": 20271,
+      "step": 272
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4697.93896484375,
+        "slope": 1.0797851085662842,
+        "transition_hz": 224.9625244140625
+      },
+      "loss": 0.8859545912742929,
+      "seed": 20272,
+      "step": 273
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3384.882080078125,
+        "slope": 3.145930051803589,
+        "transition_hz": 433.5159912109375
+      },
+      "loss": 0.004443549661977202,
+      "seed": 20273,
+      "step": 274
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5526.40478515625,
+        "slope": 1.252907633781433,
+        "transition_hz": 238.52352905273438
+      },
+      "loss": 0.0007215250311190878,
+      "seed": 20274,
+      "step": 275
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4365.96435546875,
+        "slope": 2.687871217727661,
+        "transition_hz": 612.4810180664062
+      },
+      "loss": 0.00622117763787553,
+      "seed": 20275,
+      "step": 276
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3040.069580078125,
+        "slope": 1.3669157028198242,
+        "transition_hz": 850.9931030273438
+      },
+      "loss": 0.004024458160336875,
+      "seed": 20276,
+      "step": 277
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6384.166015625,
+        "slope": 1.768392562866211,
+        "transition_hz": 395.48785400390625
+      },
+      "loss": 0.011775490802295332,
+      "seed": 20277,
+      "step": 278
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3387.511474609375,
+        "slope": 2.244371175765991,
+        "transition_hz": 311.606689453125
+      },
+      "loss": 0.9812683282339335,
+      "seed": 20278,
+      "step": 279
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4086.5029296875,
+        "slope": 1.4435317516326904,
+        "transition_hz": 478.24688720703125
+      },
+      "loss": 0.01597105037877408,
+      "seed": 20279,
+      "step": 280
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6636.79296875,
+        "slope": 3.9994101524353027,
+        "transition_hz": 655.4051513671875
+      },
+      "loss": 0.0009380015833792217,
+      "seed": 20280,
+      "step": 281
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4758.6728515625,
+        "slope": 3.0979907512664795,
+        "transition_hz": 752.1642456054688
+      },
+      "loss": 0.009512158941339296,
+      "seed": 20281,
+      "step": 282
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7937.0439453125,
+        "slope": 3.399653434753418,
+        "transition_hz": 743.6234741210938
+      },
+      "loss": 0.014061943189243536,
+      "seed": 20282,
+      "step": 283
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6638.908203125,
+        "slope": 3.5940167903900146,
+        "transition_hz": 277.3142395019531
+      },
+      "loss": 0.029875850806109005,
+      "seed": 20283,
+      "step": 284
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6013.20166015625,
+        "slope": 3.464390993118286,
+        "transition_hz": 756.3487548828125
+      },
+      "loss": 0.2881890972833837,
+      "seed": 20284,
+      "step": 285
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3953.379638671875,
+        "slope": 1.6596646308898926,
+        "transition_hz": 759.0631103515625
+      },
+      "loss": 0.005007266353455672,
+      "seed": 20285,
+      "step": 286
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3387.429931640625,
+        "slope": 2.5462117195129395,
+        "transition_hz": 614.3592529296875
+      },
+      "loss": 0.030792520287903188,
+      "seed": 20286,
+      "step": 287
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3206.46435546875,
+        "slope": 3.305753231048584,
+        "transition_hz": 819.134521484375
+      },
+      "loss": 0.06918899872587629,
+      "seed": 20287,
+      "step": 288
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5971.423828125,
+        "slope": 2.9050960540771484,
+        "transition_hz": 863.447265625
+      },
+      "loss": 0.05861792529012772,
+      "seed": 20288,
+      "step": 289
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6243.994140625,
+        "slope": 1.2967835664749146,
+        "transition_hz": 508.4451599121094
+      },
+      "loss": 0.006180087426709961,
+      "seed": 20289,
+      "step": 290
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6250.619140625,
+        "slope": 1.083333969116211,
+        "transition_hz": 335.06732177734375
+      },
+      "loss": 0.0026271923200153844,
+      "seed": 20290,
+      "step": 291
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3498.58349609375,
+        "slope": 3.9331483840942383,
+        "transition_hz": 837.7032470703125
+      },
+      "loss": 0.09990388334078051,
+      "seed": 20291,
+      "step": 292
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6350.189453125,
+        "slope": 2.7516586780548096,
+        "transition_hz": 623.4051513671875
+      },
+      "loss": 0.06141876330969669,
+      "seed": 20292,
+      "step": 293
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3352.60009765625,
+        "slope": 3.492570400238037,
+        "transition_hz": 650.2002563476562
+      },
+      "loss": 0.015359838275690726,
+      "seed": 20293,
+      "step": 294
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5199.92431640625,
+        "slope": 3.612891674041748,
+        "transition_hz": 607.6331176757812
+      },
+      "loss": 0.5820023197418732,
+      "seed": 20294,
+      "step": 295
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5879.3017578125,
+        "slope": 1.0860906839370728,
+        "transition_hz": 878.4934692382812
+      },
+      "loss": 0.0044193331726870375,
+      "seed": 20295,
+      "step": 296
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3910.90966796875,
+        "slope": 1.9893293380737305,
+        "transition_hz": 723.3209228515625
+      },
+      "loss": 3.2505459151510685,
+      "seed": 20296,
+      "step": 297
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4722.3369140625,
+        "slope": 3.9400036334991455,
+        "transition_hz": 342.83929443359375
+      },
+      "loss": 0.050591612644526225,
+      "seed": 20297,
+      "step": 298
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4725.294921875,
+        "slope": 1.3548946380615234,
+        "transition_hz": 482.8379211425781
+      },
+      "loss": 0.0033368653934102623,
+      "seed": 20298,
+      "step": 299
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3186.57470703125,
+        "slope": 1.5164828300476074,
+        "transition_hz": 393.71954345703125
+      },
+      "loss": 0.06476346287082835,
+      "seed": 20299,
+      "step": 300
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6027.587890625,
+        "slope": 1.1060004234313965,
+        "transition_hz": 730.736328125
+      },
+      "loss": 0.1978638701103491,
+      "seed": 20300,
+      "step": 301
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6209.95751953125,
+        "slope": 3.445425510406494,
+        "transition_hz": 999.0830688476562
+      },
+      "loss": 0.004860172019953581,
+      "seed": 20301,
+      "step": 302
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3388.510009765625,
+        "slope": 2.4706223011016846,
+        "transition_hz": 212.32923889160156
+      },
+      "loss": 0.25315418009319346,
+      "seed": 20302,
+      "step": 303
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3497.99609375,
+        "slope": 1.2363560199737549,
+        "transition_hz": 726.2982177734375
+      },
+      "loss": 0.004412951560649578,
+      "seed": 20303,
+      "step": 304
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4883.38916015625,
+        "slope": 1.315246820449829,
+        "transition_hz": 617.7442626953125
+      },
+      "loss": 0.0015709900390533979,
+      "seed": 20304,
+      "step": 305
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5569.197265625,
+        "slope": 3.8778512477874756,
+        "transition_hz": 959.8596801757812
+      },
+      "loss": 0.014968488908341899,
+      "seed": 20305,
+      "step": 306
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7144.56396484375,
+        "slope": 2.7156381607055664,
+        "transition_hz": 974.0595092773438
+      },
+      "loss": 0.20726924558537163,
+      "seed": 20306,
+      "step": 307
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7297.96435546875,
+        "slope": 1.101555347442627,
+        "transition_hz": 607.35498046875
+      },
+      "loss": 0.003455064135287299,
+      "seed": 20307,
+      "step": 308
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7589.52392578125,
+        "slope": 3.6774988174438477,
+        "transition_hz": 979.3430786132812
+      },
+      "loss": 0.21154078626577336,
+      "seed": 20308,
+      "step": 309
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6153.4326171875,
+        "slope": 1.8496848344802856,
+        "transition_hz": 657.9221801757812
+      },
+      "loss": 0.002538192211086966,
+      "seed": 20309,
+      "step": 310
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6706.92578125,
+        "slope": 3.603921413421631,
+        "transition_hz": 635.2101440429688
+      },
+      "loss": 0.029299236010129508,
+      "seed": 20310,
+      "step": 311
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7364.216796875,
+        "slope": 3.481527328491211,
+        "transition_hz": 422.18603515625
+      },
+      "loss": 0.14198325826829297,
+      "seed": 20311,
+      "step": 312
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6857.265625,
+        "slope": 3.7969701290130615,
+        "transition_hz": 409.42901611328125
+      },
+      "loss": 0.033674642489570576,
+      "seed": 20312,
+      "step": 313
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3645.01904296875,
+        "slope": 2.997697353363037,
+        "transition_hz": 481.05255126953125
+      },
+      "loss": 0.001336516840888926,
+      "seed": 20313,
+      "step": 314
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6352.4951171875,
+        "slope": 1.4862968921661377,
+        "transition_hz": 617.7050170898438
+      },
+      "loss": 0.0015118777509588676,
+      "seed": 20314,
+      "step": 315
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3975.629638671875,
+        "slope": 3.349032163619995,
+        "transition_hz": 468.1536560058594
+      },
+      "loss": 0.020282419998434848,
+      "seed": 20315,
+      "step": 316
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3274.852294921875,
+        "slope": 2.1641199588775635,
+        "transition_hz": 432.1478271484375
+      },
+      "loss": 0.003578648764150128,
+      "seed": 20316,
+      "step": 317
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4569.20654296875,
+        "slope": 1.6197693347930908,
+        "transition_hz": 357.73040771484375
+      },
+      "loss": 0.051476627960991256,
+      "seed": 20317,
+      "step": 318
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6972.4990234375,
+        "slope": 1.9865858554840088,
+        "transition_hz": 974.8975219726562
+      },
+      "loss": 0.22536360220947838,
+      "seed": 20318,
+      "step": 319
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5631.447265625,
+        "slope": 2.2056756019592285,
+        "transition_hz": 844.1921997070312
+      },
+      "loss": 0.2306725735078472,
+      "seed": 20319,
+      "step": 320
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6308.5537109375,
+        "slope": 1.7624871730804443,
+        "transition_hz": 340.03515625
+      },
+      "loss": 0.28410214281813495,
+      "seed": 20320,
+      "step": 321
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3668.0732421875,
+        "slope": 1.4536398649215698,
+        "transition_hz": 928.2830810546875
+      },
+      "loss": 0.0219212012158841,
+      "seed": 20321,
+      "step": 322
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5712.81787109375,
+        "slope": 1.7430386543273926,
+        "transition_hz": 308.312255859375
+      },
+      "loss": 0.0022310702619000784,
+      "seed": 20322,
+      "step": 323
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7623.66650390625,
+        "slope": 2.280367612838745,
+        "transition_hz": 323.8206787109375
+      },
+      "loss": 0.0991390508933823,
+      "seed": 20323,
+      "step": 324
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4853.9111328125,
+        "slope": 1.8778464794158936,
+        "transition_hz": 302.3115539550781
+      },
+      "loss": 0.09574159282426366,
+      "seed": 20324,
+      "step": 325
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6400.513671875,
+        "slope": 1.6432864665985107,
+        "transition_hz": 787.4542236328125
+      },
+      "loss": 0.02437385830974787,
+      "seed": 20325,
+      "step": 326
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3115.911865234375,
+        "slope": 2.0726852416992188,
+        "transition_hz": 756.8096923828125
+      },
+      "loss": 0.009609598381397487,
+      "seed": 20326,
+      "step": 327
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6347.41748046875,
+        "slope": 2.114490509033203,
+        "transition_hz": 929.6784057617188
+      },
+      "loss": 0.011829939157264213,
+      "seed": 20327,
+      "step": 328
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4048.4921875,
+        "slope": 1.6263411045074463,
+        "transition_hz": 542.8157958984375
+      },
+      "loss": 0.007403484100419102,
+      "seed": 20328,
+      "step": 329
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6329.55078125,
+        "slope": 2.818063259124756,
+        "transition_hz": 359.24090576171875
+      },
+      "loss": 0.015181246231587509,
+      "seed": 20329,
+      "step": 330
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3624.087890625,
+        "slope": 3.6407065391540527,
+        "transition_hz": 635.635009765625
+      },
+      "loss": 0.2273222122110606,
+      "seed": 20330,
+      "step": 331
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6689.65771484375,
+        "slope": 1.0896105766296387,
+        "transition_hz": 809.7583618164062
+      },
+      "loss": 0.02766089229732113,
+      "seed": 20331,
+      "step": 332
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3223.22607421875,
+        "slope": 3.8976333141326904,
+        "transition_hz": 210.48536682128906
+      },
+      "loss": 0.6819984358713321,
+      "seed": 20332,
+      "step": 333
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6351.5615234375,
+        "slope": 2.1450552940368652,
+        "transition_hz": 987.5244140625
+      },
+      "loss": 0.011825896694700263,
+      "seed": 20333,
+      "step": 334
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5181.2373046875,
+        "slope": 1.3127137422561646,
+        "transition_hz": 742.4254150390625
+      },
+      "loss": 0.015411546287222813,
+      "seed": 20334,
+      "step": 335
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6043.7822265625,
+        "slope": 1.0755220651626587,
+        "transition_hz": 820.6646728515625
+      },
+      "loss": 0.033720484111602785,
+      "seed": 20335,
+      "step": 336
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5357.71923828125,
+        "slope": 2.18375301361084,
+        "transition_hz": 548.6639404296875
+      },
+      "loss": 0.2504621062337977,
+      "seed": 20336,
+      "step": 337
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6857.521484375,
+        "slope": 1.1442890167236328,
+        "transition_hz": 891.363525390625
+      },
+      "loss": 0.004202903398601934,
+      "seed": 20337,
+      "step": 338
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6410.080078125,
+        "slope": 1.4745209217071533,
+        "transition_hz": 709.5149536132812
+      },
+      "loss": 0.19132315323700963,
+      "seed": 20338,
+      "step": 339
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6415.80322265625,
+        "slope": 3.717768907546997,
+        "transition_hz": 247.14842224121094
+      },
+      "loss": 0.022320510760981103,
+      "seed": 20339,
+      "step": 340
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3661.00341796875,
+        "slope": 1.286855697631836,
+        "transition_hz": 316.56219482421875
+      },
+      "loss": 0.013837373513593315,
+      "seed": 20340,
+      "step": 341
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5691.2548828125,
+        "slope": 2.0169646739959717,
+        "transition_hz": 571.704833984375
+      },
+      "loss": 0.014521524451881993,
+      "seed": 20341,
+      "step": 342
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5239.8173828125,
+        "slope": 2.615527391433716,
+        "transition_hz": 303.7503662109375
+      },
+      "loss": 0.13638626724997904,
+      "seed": 20342,
+      "step": 343
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7927.1962890625,
+        "slope": 3.8905029296875,
+        "transition_hz": 911.3326416015625
+      },
+      "loss": 0.02633216501880339,
+      "seed": 20343,
+      "step": 344
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4314.74951171875,
+        "slope": 1.2128583192825317,
+        "transition_hz": 867.6255493164062
+      },
+      "loss": 0.47424316661603383,
+      "seed": 20344,
+      "step": 345
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5829.419921875,
+        "slope": 2.8709628582000732,
+        "transition_hz": 779.4686889648438
+      },
+      "loss": 0.04114478219565409,
+      "seed": 20345,
+      "step": 346
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6958.78173828125,
+        "slope": 2.319507122039795,
+        "transition_hz": 552.3209228515625
+      },
+      "loss": 0.00606596800504172,
+      "seed": 20346,
+      "step": 347
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3377.95703125,
+        "slope": 3.2991020679473877,
+        "transition_hz": 276.7347412109375
+      },
+      "loss": 0.054840650531733176,
+      "seed": 20347,
+      "step": 348
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6970.06005859375,
+        "slope": 1.818779706954956,
+        "transition_hz": 307.4778137207031
+      },
+      "loss": 0.002741639658767189,
+      "seed": 20348,
+      "step": 349
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7311.77978515625,
+        "slope": 3.72922945022583,
+        "transition_hz": 265.41168212890625
+      },
+      "loss": 0.010648919779844232,
+      "seed": 20349,
+      "step": 350
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7445.7158203125,
+        "slope": 3.298858404159546,
+        "transition_hz": 436.2051086425781
+      },
+      "loss": 0.016085753276161015,
+      "seed": 20350,
+      "step": 351
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3924.7568359375,
+        "slope": 2.4123306274414062,
+        "transition_hz": 569.8428955078125
+      },
+      "loss": 0.08199738386481223,
+      "seed": 20351,
+      "step": 352
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3198.25048828125,
+        "slope": 2.2645840644836426,
+        "transition_hz": 775.4011840820312
+      },
+      "loss": 0.001028366961329925,
+      "seed": 20352,
+      "step": 353
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4838.66064453125,
+        "slope": 1.629770040512085,
+        "transition_hz": 517.5753173828125
+      },
+      "loss": 0.03666741420745055,
+      "seed": 20353,
+      "step": 354
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4113.96484375,
+        "slope": 2.250323534011841,
+        "transition_hz": 382.38232421875
+      },
+      "loss": 0.21442646767741366,
+      "seed": 20354,
+      "step": 355
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4155.93115234375,
+        "slope": 2.4217336177825928,
+        "transition_hz": 822.1005249023438
+      },
+      "loss": 0.05391996861255656,
+      "seed": 20355,
+      "step": 356
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4742.8388671875,
+        "slope": 1.8149564266204834,
+        "transition_hz": 550.8665161132812
+      },
+      "loss": 0.41287703320743346,
+      "seed": 20356,
+      "step": 357
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5203.525390625,
+        "slope": 2.725193977355957,
+        "transition_hz": 748.702880859375
+      },
+      "loss": 0.03522830264956382,
+      "seed": 20357,
+      "step": 358
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7349.5224609375,
+        "slope": 2.9461755752563477,
+        "transition_hz": 819.8450317382812
+      },
+      "loss": 0.00265259583079137,
+      "seed": 20358,
+      "step": 359
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4985.30810546875,
+        "slope": 3.0008597373962402,
+        "transition_hz": 729.51708984375
+      },
+      "loss": 0.06717863035747251,
+      "seed": 20359,
+      "step": 360
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4976.3330078125,
+        "slope": 2.2481677532196045,
+        "transition_hz": 526.301513671875
+      },
+      "loss": 0.03900382585074625,
+      "seed": 20360,
+      "step": 361
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3578.836181640625,
+        "slope": 1.9150292873382568,
+        "transition_hz": 628.4737548828125
+      },
+      "loss": 0.011657442864416095,
+      "seed": 20361,
+      "step": 362
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5919.13818359375,
+        "slope": 1.2008697986602783,
+        "transition_hz": 308.2685546875
+      },
+      "loss": 0.03369427271435733,
+      "seed": 20362,
+      "step": 363
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5872.93359375,
+        "slope": 2.2100207805633545,
+        "transition_hz": 246.52748107910156
+      },
+      "loss": 0.03355493567914759,
+      "seed": 20363,
+      "step": 364
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7640.90771484375,
+        "slope": 1.8559417724609375,
+        "transition_hz": 356.6220703125
+      },
+      "loss": 0.056941615913902364,
+      "seed": 20364,
+      "step": 365
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6193.85498046875,
+        "slope": 2.610891342163086,
+        "transition_hz": 393.05841064453125
+      },
+      "loss": 0.006842694739065569,
+      "seed": 20365,
+      "step": 366
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3837.014892578125,
+        "slope": 2.4271957874298096,
+        "transition_hz": 328.2628479003906
+      },
+      "loss": 0.0017530137896341984,
+      "seed": 20366,
+      "step": 367
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7465.4228515625,
+        "slope": 2.3300223350524902,
+        "transition_hz": 913.270263671875
+      },
+      "loss": 0.005017288348251586,
+      "seed": 20367,
+      "step": 368
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6635.8427734375,
+        "slope": 2.987183094024658,
+        "transition_hz": 834.6290283203125
+      },
+      "loss": 0.18966545246746613,
+      "seed": 20368,
+      "step": 369
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6835.98681640625,
+        "slope": 1.3978049755096436,
+        "transition_hz": 200.42095947265625
+      },
+      "loss": 0.009961160274364006,
+      "seed": 20369,
+      "step": 370
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3900.007568359375,
+        "slope": 2.797734260559082,
+        "transition_hz": 397.9604187011719
+      },
+      "loss": 0.0007860993126915252,
+      "seed": 20370,
+      "step": 371
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5346.6220703125,
+        "slope": 2.962958812713623,
+        "transition_hz": 487.2851867675781
+      },
+      "loss": 0.025830541229698772,
+      "seed": 20371,
+      "step": 372
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4068.153076171875,
+        "slope": 1.0711833238601685,
+        "transition_hz": 956.7631225585938
+      },
+      "loss": 0.042950202290346934,
+      "seed": 20372,
+      "step": 373
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4405.16650390625,
+        "slope": 1.082311987876892,
+        "transition_hz": 244.08522033691406
+      },
+      "loss": 0.00471376870080672,
+      "seed": 20373,
+      "step": 374
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5433.3642578125,
+        "slope": 1.8665385246276855,
+        "transition_hz": 644.1089477539062
+      },
+      "loss": 0.2819272529085564,
+      "seed": 20374,
+      "step": 375
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3922.33203125,
+        "slope": 3.010525941848755,
+        "transition_hz": 362.9366455078125
+      },
+      "loss": 0.014474109694607846,
+      "seed": 20375,
+      "step": 376
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5451.01953125,
+        "slope": 3.194887638092041,
+        "transition_hz": 542.1373291015625
+      },
+      "loss": 0.0022081343154089408,
+      "seed": 20376,
+      "step": 377
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4440.3505859375,
+        "slope": 3.1429009437561035,
+        "transition_hz": 286.76165771484375
+      },
+      "loss": 0.014202478062225816,
+      "seed": 20377,
+      "step": 378
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4869.0869140625,
+        "slope": 2.556769847869873,
+        "transition_hz": 416.864013671875
+      },
+      "loss": 0.1128903875437943,
+      "seed": 20378,
+      "step": 379
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7890.49755859375,
+        "slope": 3.5877597332000732,
+        "transition_hz": 238.20619201660156
+      },
+      "loss": 0.03372610857746503,
+      "seed": 20379,
+      "step": 380
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3929.91455078125,
+        "slope": 3.36525297164917,
+        "transition_hz": 780.6105346679688
+      },
+      "loss": 0.3288365923728369,
+      "seed": 20380,
+      "step": 381
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6728.27978515625,
+        "slope": 1.4728209972381592,
+        "transition_hz": 249.06663513183594
+      },
+      "loss": 0.10238460376391748,
+      "seed": 20381,
+      "step": 382
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4961.75,
+        "slope": 3.481010913848877,
+        "transition_hz": 351.06134033203125
+      },
+      "loss": 0.002024670754983288,
+      "seed": 20382,
+      "step": 383
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4894.60107421875,
+        "slope": 2.8431766033172607,
+        "transition_hz": 610.8621215820312
+      },
+      "loss": 0.1741350797484717,
+      "seed": 20383,
+      "step": 384
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4935.23046875,
+        "slope": 2.295088768005371,
+        "transition_hz": 366.7326965332031
+      },
+      "loss": 0.1814013227590803,
+      "seed": 20384,
+      "step": 385
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6366.4716796875,
+        "slope": 2.570094585418701,
+        "transition_hz": 840.0046997070312
+      },
+      "loss": 0.05025937241663073,
+      "seed": 20385,
+      "step": 386
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3487.550537109375,
+        "slope": 3.486705780029297,
+        "transition_hz": 978.32861328125
+      },
+      "loss": 0.030959281384574548,
+      "seed": 20386,
+      "step": 387
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6152.505859375,
+        "slope": 1.0977141857147217,
+        "transition_hz": 403.23016357421875
+      },
+      "loss": 0.05070962996190946,
+      "seed": 20387,
+      "step": 388
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6222.6123046875,
+        "slope": 2.08176851272583,
+        "transition_hz": 495.7610168457031
+      },
+      "loss": 0.01026581762333699,
+      "seed": 20388,
+      "step": 389
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5726.7509765625,
+        "slope": 1.2478652000427246,
+        "transition_hz": 812.4874267578125
+      },
+      "loss": 0.0035307755570346787,
+      "seed": 20389,
+      "step": 390
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 5598.16796875,
+        "slope": 1.0370395183563232,
+        "transition_hz": 730.0444946289062
+      },
+      "loss": 0.0075117807107218425,
+      "seed": 20390,
+      "step": 391
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7562.216796875,
+        "slope": 2.632051467895508,
+        "transition_hz": 705.51416015625
+      },
+      "loss": 0.1763782991434485,
+      "seed": 20391,
+      "step": 392
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3064.94580078125,
+        "slope": 2.896345376968384,
+        "transition_hz": 369.2364196777344
+      },
+      "loss": 0.8136415914404445,
+      "seed": 20392,
+      "step": 393
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4705.65576171875,
+        "slope": 1.0834486484527588,
+        "transition_hz": 368.18096923828125
+      },
+      "loss": 0.05438106976769439,
+      "seed": 20393,
+      "step": 394
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7540.80517578125,
+        "slope": 3.2775819301605225,
+        "transition_hz": 737.763427734375
+      },
+      "loss": 0.014980748217014955,
+      "seed": 20394,
+      "step": 395
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 3298.16748046875,
+        "slope": 1.5011279582977295,
+        "transition_hz": 650.6715087890625
+      },
+      "loss": 0.05974681975323097,
+      "seed": 20395,
+      "step": 396
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6190.74072265625,
+        "slope": 2.3759682178497314,
+        "transition_hz": 467.0967102050781
+      },
+      "loss": 0.19277400622329086,
+      "seed": 20396,
+      "step": 397
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 6163.369140625,
+        "slope": 3.001469135284424,
+        "transition_hz": 318.71337890625
+      },
+      "loss": 0.007219035800873964,
+      "seed": 20397,
+      "step": 398
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 7753.39697265625,
+        "slope": 3.789854049682617,
+        "transition_hz": 261.4642639160156
+      },
+      "loss": 0.05121407434432441,
+      "seed": 20398,
+      "step": 399
+    },
+    {
+      "degradation": {
+        "cutoff_hz": 4455.3583984375,
+        "slope": 3.007434368133545,
+        "transition_hz": 540.5125732421875
+      },
+      "loss": 0.03104416867395094,
+      "seed": 20399,
+      "step": 400
+    }
+  ],
+  "samples_per_example": 8192,
+  "steps": 400,
+  "timing_context": "Incidental training observation; foreground state unverified. Not a controlled speed experiment.",
+  "training_seed_start": 20000
+}

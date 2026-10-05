@@ -1,0 +1,15 @@
+{
+  "degradation": {
+    "cutoff_hz": 5706.486328125,
+    "slope": 1.7639013528823853,
+    "transition_hz": 528.6361083984375
+  },
+  "recipe": {
+    "family": "inharmonic",
+    "generator_version": 1,
+    "mixture_family": "formant",
+    "sample_rate": 24000,
+    "samples": 8192,
+    "seed": 120001
+  }
+}

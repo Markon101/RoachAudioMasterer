@@ -1,0 +1,75 @@
+{
+  "backend": "opencl",
+  "claim": "conditional spectral completion; original missing information is not recovered",
+  "copied_known_max": 0.0,
+  "degradation_assumption": {
+    "cutoff_hz": 5398.46337890625,
+    "slope": 2.0,
+    "transition_hz": 594.559814453125
+  },
+  "input": "runs/v1/listen-noise/degraded.wav",
+  "known_fourier_relative_error": 1.3309523037532864e-7,
+  "method": "learned",
+  "model": "runs/v1/train2000/model.json",
+  "output": "runs/v1/listen-noise/reconstructed.wav",
+  "output_peak": 0.721987247467041,
+  "provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "hidden": 32,
+      "inputs": 40,
+      "outputs": 257,
+      "parameters": 9793,
+      "prediction": "log1p normalized magnitude residual over DSP envelope"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "57300b0a4b66ee8f446fdc7e4b816efedc12fde1",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t   44512 kB",
+      "VmRSS:\t   41220 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791174414
+  }
+}
