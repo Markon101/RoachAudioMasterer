@@ -1,5 +1,6 @@
 //! One useful compute boundary, rather than a speculative tensor framework.
-//! Row-major [frames, features], [outputs, inputs]; float32 everywhere in v0.
+//! Row-major [frames, features], [outputs, inputs]; float32 everywhere.
+//! Each instance validates its shape: v0 40/257; optional flow has its own width.
 use crate::dsp::BINS;
 use crate::model::{forward_row, Model, HIDDEN, INPUTS};
 use anyhow::{ensure, Result};

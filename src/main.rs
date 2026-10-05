@@ -2,6 +2,8 @@ mod audio;
 mod backend;
 mod dsp;
 mod experiment;
+mod flow;
+mod flow_experiment;
 mod metrics;
 mod model;
 #[cfg(feature = "opencl")]
@@ -22,6 +24,47 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    /// Experimental complex-residual conditional flow matching, synthetic only.
+    FlowTrain {
+        #[arg(long, default_value_t = 20000)]
+        seed: u64,
+        #[arg(long, default_value_t = 2000)]
+        steps: usize,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    /// Frozen three-sample flow test with DSP, deterministic and null controls.
+    FlowEvaluate {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        deterministic: PathBuf,
+        #[arg(long, default_value_t = 140000)]
+        seed: u64,
+        #[arg(long, default_value_t = 48)]
+        count: usize,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    /// Experimental eight-step stochastic completion; predefined sample seed 11.
+    FlowRestore {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        cutoff: f32,
+        #[arg(long, default_value_t = 500.0)]
+        transition: f32,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     /// Generate procedural target, randomized degradation and baseline WAVs.
     Generate {
         #[arg(long, default_value_t = 42)]
@@ -117,6 +160,60 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::FlowTrain { seed, steps, out } => {
+            ensure!(
+                (1..=10000).contains(&steps) && seed.checked_add(steps as u64).is_some(),
+                "invalid bounded flow training budget/seed"
+            );
+            flow_experiment::train(seed, steps, 8192, &out)
+        }
+        Commands::FlowEvaluate {
+            model,
+            deterministic,
+            seed,
+            count,
+            backend,
+            out,
+        } => {
+            ensure!(
+                (2..=192).contains(&count) && seed.checked_add(count as u64).is_some(),
+                "flow evaluation requires 2..192 examples and valid seeds"
+            );
+            flow_experiment::evaluate(&model, &deterministic, seed, count, &backend, &out)
+        }
+        Commands::FlowRestore {
+            model,
+            input,
+            cutoff,
+            transition,
+            strength,
+            backend,
+            out,
+        } => {
+            ensure!(
+                cutoff.is_finite()
+                    && (3000.0..=8000.0).contains(&cutoff)
+                    && transition.is_finite()
+                    && (200.0..=1000.0).contains(&transition),
+                "flow bandwidth must be within training support"
+            );
+            ensure!(
+                strength.is_finite() && (0.0..=1.0).contains(&strength),
+                "strength must be 0..1"
+            );
+            flow_experiment::restore(
+                &model,
+                &input,
+                reconstruction::Degradation {
+                    cutoff_hz: cutoff,
+                    transition_hz: transition,
+                    slope: 2.0,
+                },
+                &backend,
+                strength,
+                &out,
+            )
+        }
         Commands::Generate { seed, samples, out } => {
             validate_samples(samples)?;
             experiment::generate(seed, samples, &out)

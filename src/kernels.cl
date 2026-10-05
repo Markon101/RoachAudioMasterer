@@ -1,8 +1,14 @@
 // Portable CL1.2 scalar baseline. Row-major tensors; two dense kernels. Driver
 // chooses local size. No SVM/Adreno-specific indexing, fp16 or relaxed math.
+#ifndef INPUTS
 #define INPUTS 40
+#endif
+#ifndef HIDDEN
 #define HIDDEN 32
+#endif
+#ifndef BINS
 #define BINS 257
+#endif
 #define B1 (HIDDEN*INPUTS)
 #define W2 (B1+HIDDEN)
 #define B2 (W2+BINS*HIDDEN)

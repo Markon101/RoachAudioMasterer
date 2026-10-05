@@ -3,7 +3,7 @@
 use crate::{
     backend::Predictor,
     dsp::BINS,
-    model::{Model, HIDDEN, INPUTS, PARAMS},
+    model::{Model, HIDDEN, INPUTS},
 };
 use anyhow::{ensure, Context, Result};
 use opencl3::{
@@ -29,11 +29,34 @@ pub struct OpenCl {
     h: Buffer<f32>,
     y: Buffer<f32>,
     capacity: usize,
+    inputs: usize,
+    hidden: usize,
+    outputs: usize,
     info: String,
     pub last_kernel_ms: f64,
 }
 impl OpenCl {
     pub fn new(model: &Model, capacity: usize) -> Result<Self> {
+        Self::new_dense(&model.weights, INPUTS, HIDDEN, BINS, capacity)
+    }
+    pub fn new_dense(
+        payload: &[f32],
+        inputs: usize,
+        hidden: usize,
+        outputs: usize,
+        capacity: usize,
+    ) -> Result<Self> {
+        ensure!(
+            (1..=2048).contains(&inputs)
+                && (1..=128).contains(&hidden)
+                && (1..=1024).contains(&outputs),
+            "unsupported dense shape"
+        );
+        let count = inputs * hidden + hidden + hidden * outputs + outputs;
+        ensure!(
+            payload.len() == count && payload.iter().all(|x| x.is_finite()),
+            "invalid dense weights"
+        );
         ensure!(
             (1..=16384).contains(&capacity),
             "GPU frame capacity must be 1..16384"
@@ -62,7 +85,8 @@ impl OpenCl {
         );
         let context = ClContext::from_device(&device)?;
         let queue = CommandQueue::create_default(&context, CL_QUEUE_PROFILING_ENABLE)?;
-        let program = Program::create_and_build_from_source(&context, SOURCE, "-cl-std=CL1.2")
+        let options = format!("-cl-std=CL1.2 -DINPUTS={inputs} -DHIDDEN={hidden} -DBINS={outputs}");
+        let program = Program::create_and_build_from_source(&context, SOURCE, &options)
             .map_err(|e| anyhow::anyhow!("OpenCL build: {e}"))?;
         let hidden_kernel = Kernel::create(&program, "hidden_layer")?;
         let output_kernel = Kernel::create(&program, "output_layer")?;
@@ -70,29 +94,29 @@ impl OpenCl {
         // Writes/reads are blocking, and dependent kernels share one in-order queue.
         let (mut weights, x, h, y) = unsafe {
             (
-                Buffer::create(&context, CL_MEM_READ_ONLY, PARAMS, ptr::null_mut())?,
+                Buffer::create(&context, CL_MEM_READ_ONLY, count, ptr::null_mut())?,
                 Buffer::create(
                     &context,
                     CL_MEM_READ_ONLY,
-                    capacity * INPUTS,
+                    capacity * inputs,
                     ptr::null_mut(),
                 )?,
                 Buffer::create(
                     &context,
                     CL_MEM_READ_WRITE,
-                    capacity * HIDDEN,
+                    capacity * hidden,
                     ptr::null_mut(),
                 )?,
                 Buffer::create(
                     &context,
                     CL_MEM_READ_WRITE,
-                    capacity * BINS,
+                    capacity * outputs,
                     ptr::null_mut(),
                 )?,
             )
         };
         unsafe {
-            queue.enqueue_write_buffer(&mut weights, CL_BLOCKING, 0, &model.weights, &[])?;
+            queue.enqueue_write_buffer(&mut weights, CL_BLOCKING, 0, payload, &[])?;
         }
         Ok(Self {
             _context: context,
@@ -105,6 +129,9 @@ impl OpenCl {
             h,
             y,
             capacity,
+            inputs,
+            hidden,
+            outputs,
             info,
             last_kernel_ms: 0.0,
         })
@@ -119,10 +146,10 @@ impl Predictor for OpenCl {
     }
     fn predict(&mut self, features: &[f32], frames: usize) -> Result<Vec<f32>> {
         ensure!(
-            frames > 0 && features.len() == frames * INPUTS,
+            frames > 0 && features.len() == frames * self.inputs,
             "invalid OpenCL predictor shape"
         );
-        let mut out = vec![0.0; frames * BINS];
+        let mut out = vec![0.0; frames * self.outputs];
         self.last_kernel_ms = 0.0;
         for start in (0..frames).step_by(self.capacity) {
             let n = (frames - start).min(self.capacity);
@@ -134,7 +161,7 @@ impl Predictor for OpenCl {
                     &mut self.x,
                     CL_BLOCKING,
                     0,
-                    &features[start * INPUTS..(start + n) * INPUTS],
+                    &features[start * self.inputs..(start + n) * self.inputs],
                     &[],
                 )?;
                 let e1 = ExecuteKernel::new(&self.hidden_kernel)
@@ -142,20 +169,20 @@ impl Predictor for OpenCl {
                     .set_arg(&self.weights)
                     .set_arg(&self.h)
                     .set_arg(&n32)
-                    .set_global_work_size(n * HIDDEN)
+                    .set_global_work_size(n * self.hidden)
                     .enqueue_nd_range(&self.queue)?;
                 let e2 = ExecuteKernel::new(&self.output_kernel)
                     .set_arg(&self.h)
                     .set_arg(&self.weights)
                     .set_arg(&self.y)
                     .set_arg(&n32)
-                    .set_global_work_size(n * BINS)
+                    .set_global_work_size(n * self.outputs)
                     .enqueue_nd_range(&self.queue)?;
                 self.queue.enqueue_read_buffer(
                     &self.y,
                     CL_BLOCKING,
                     0,
-                    &mut out[start * BINS..(start + n) * BINS],
+                    &mut out[start * self.outputs..(start + n) * self.outputs],
                     &[],
                 )?;
                 for e in [e1, e2] {
