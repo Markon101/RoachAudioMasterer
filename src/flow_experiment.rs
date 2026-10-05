@@ -229,6 +229,7 @@ pub fn restore(
     backend_name: &str,
     strength: f32,
     out: &Path,
+    reference_path: Option<&Path>,
 ) -> Result<()> {
     ensure!(
         !out.exists() && !out.with_extension("json").exists(),
@@ -243,10 +244,24 @@ pub fn restore(
     let y = flow::synthesize(&p, &input, d, &state, &s);
     let y = reconstruction::scale_residual(&input, &y, strength);
     let known = crate::dsp::fourier_low_error(&input, &y, d.cutoff_hz);
+    // Reference is loaded only after sampling. It cannot influence the state,
+    // sample seed, conditions, prior, model, strength or numerical integration.
+    let reference_metrics = if let Some(path) = reference_path {
+        let target = audio::read(path)?;
+        ensure!(target.len() == y.len(), "reference length mismatch");
+        let ts = s.analyze(&target);
+        let ys = s.analyze(&y);
+        let input_s = s.analyze(&input);
+        Some(
+            json!({"metrics":metrics::measure((&ts,&target),(&ys,&y),(&input_s,&input),d,0.0),"texture":texture(&ts,&ys,&input_s,d)}),
+        )
+    } else {
+        None
+    };
     audio::write(out, &y)?;
     write_json(
         &out.with_extension("json"),
-        &json!({"provenance":provenance(),"checkpoint":flow_path,"input":input_path,"output":out,"scene_plan":crate::scene::bandwidth_plan(d.cutoff_hz,strength,true),"degradation_assumption":d,"backend":velocity.name(),"strength":strength,"sample_seed":SAMPLE_SEEDS[0],"known_fourier_relative_error":known,"claim":"experimental stochastic spectral completion; no recovery of lost information"}),
+        &json!({"provenance":provenance(),"checkpoint":flow_path,"input":input_path,"output":out,"scene_plan":crate::scene::bandwidth_plan(d.cutoff_hz,strength,true),"degradation_assumption":d,"backend":velocity.name(),"strength":strength,"sample_seed":SAMPLE_SEEDS[0],"known_fourier_relative_error":known,"evaluation_reference":reference_path,"reference_scores":reference_metrics,"claim":"experimental stochastic spectral completion; no recovery of lost information"}),
     )?;
     println!(
         "flow wrote {} low Fourier error {:.3e}",

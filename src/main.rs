@@ -55,6 +55,9 @@ enum Commands {
         model: PathBuf,
         #[arg(long)]
         input: PathBuf,
+        /// Optional aligned reference for controlled evaluation; never conditioning.
+        #[arg(long)]
+        reference: Option<PathBuf>,
         #[arg(long)]
         cutoff: f32,
         #[arg(long, default_value_t = 500.0)]
@@ -185,6 +188,7 @@ fn run() -> Result<()> {
         Commands::FlowRestore {
             model,
             input,
+            reference,
             cutoff,
             transition,
             strength,
@@ -213,6 +217,7 @@ fn run() -> Result<()> {
                 &backend,
                 strength,
                 &out,
+                reference.as_deref(),
             )
         }
         Commands::Generate { seed, samples, out } => {

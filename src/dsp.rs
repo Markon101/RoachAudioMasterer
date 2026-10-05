@@ -203,5 +203,27 @@ mod tests {
         );
         let locked = lock_known(&low, &x, 3000.0);
         assert!(fourier_low_error(&low, &locked, 3000.0) < 2e-6);
+        // A different restoration task can protect an upper band while allowing
+        // lower-band correction; validate against a separate tone oracle.
+        let upper = lock_known_bands(
+            &x,
+            &vec![0.0; x.len()],
+            RATE,
+            &[crate::scene::TrustedBand {
+                min_hz: 8000.0,
+                max_hz: 11000.0,
+            }],
+        );
+        let expected: Vec<_> = (0..2048)
+            .map(|i| (TAU * 800.0 * i as f32 / 2048.0).sin())
+            .collect();
+        assert!(
+            upper
+                .iter()
+                .zip(expected)
+                .map(|(a, b)| (a - b).abs())
+                .fold(0.0f32, f32::max)
+                < 0.0005
+        );
     }
 }
