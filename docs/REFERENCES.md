@@ -14,11 +14,16 @@ initial submissions rather than later conference dates.
   uses independent straight interpolation, an input-shaped Gaussian, complex
   residuals, coordinate caps and Euler integration. It does not implement an
   optimal-transport coupling solver, reflow, diffusion noise prediction, or the
-  paper's large-scale experiments. Code: `src/flow.rs`.
+  paper's large-scale experiments. Code: `src/flow.rs`. Native v2
+  (`src/scene_experiment.rs`, `src/scene_engine.rs`) instead starts at a frozen
+  learned harmonic/noise estimate and uses a diagonal-plus-neighborhood velocity
+  head, eight Euler steps and a 0.02 terminal waveform auxiliary. That auxiliary
+  and bounded block training are empirical modifications, not exact density or
+  likelihood guarantees.
 - **R2 — Kingma and Ba (2014),
   [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980).**
   Source for bias-corrected first/second-moment optimization in `src/model.rs`
-  and `src/flow.rs`. Gradient clipping and the project training budgets are our
+  and `src/flow.rs`, plus `src/scene_model.rs`. Gradient clipping and training budgets are our
   choices. Current checkpoints omit optimizer moments.
 
 The procedural generators, envelope/folding baselines, fixed-bin phase heuristic,
@@ -27,7 +32,7 @@ claimed reproductions of the papers below. Titan sources are engineering
 references documented separately. Current envelope/onset/flatness diagnostics
 are simple project measurements; no scattering transform is implemented.
 
-## Reviewed candidates for v2 — not implemented
+## Native v2 adaptations and reviewed candidates
 
 - **R3 — Engel, Hantrakul, Gu and Roberts (2020),
   [DDSP: Differentiable Digital Signal Processing](https://arxiv.org/abs/2001.04643).**
@@ -35,18 +40,24 @@ are simple project measurements; no scattering transform is implemented.
   controls and multiscale spectral training. Its experiments include monophonic
   instrument material and learned encoders; a single-pitch renderer should not
   be assumed sufficient for polyphonic songs. Our synth generator is not a DDSP
-  autoencoder or a differentiable learned renderer.
+  autoencoder or a differentiable learned renderer. Native v2 adapts the hybrid
+  harmonic/noise idea and multiscale synthesized-waveform spectral supervision
+  in `src/scene_features.rs` and `src/scene_loss.rs`; it does not reproduce DDSP.
 - **R4 — Han and Lee (2022),
   [NU-Wave 2: A General Neural Audio Upsampling Model for Various Sampling Rates](https://arxiv.org/abs/2206.08545).**
   Relevant ideas: explicit bandwidth conditioning and mixed temporal/spectral
   processing. The reported 1.7M-parameter diffusion system is trained on VCTK
-  speech; it is not a dataset-free recipe or our current architecture.
+  speech; it is not a dataset-free recipe or our current architecture. Native v2
+  includes bandwidth/transition coordinates motivated by this conditioning idea;
+  no diffusion sampler or its band-wise spectral feature transform is implemented.
 - **R5 — Yun, Kim and Lee (2025),
   [FLowHigh: Towards Efficient and High-Quality Audio Super-Resolution with Single-Step Flow Matching](https://arxiv.org/abs/2501.04926).**
   Relevant idea: a probability path initialized using input information rather
   than an uninformative noise source. Its mel model has 35.4M parameters and
   uses a pretrained BigVGAN vocoder plus VCTK training. Single-step performance
-  cannot be transferred to our tiny complex-STFT pilot by assumption.
+  cannot be transferred to our tiny complex-STFT pilot by assumption. Native v2
+  adapts informative initialization using its frozen deterministic residual
+  estimate, without the mel model, vocoder or single-step result.
 - **R6 — Li, Chen, Wang and Zhu (2025),
   [Audio Super-Resolution with Latent Bridge Models](https://arxiv.org/abs/2509.17609).**
   Relevant ideas: low-to-high informative bridges, explicit prior/target
@@ -57,7 +68,8 @@ are simple project measurements; no scattering transform is implemented.
   [Vocos: Closing the gap between time-domain and Fourier-based neural vocoders for high-quality audio synthesis](https://arxiv.org/abs/2306.00814).**
   Relevant ideas: temporal convolution at spectral frame rate and complex Fourier
   output with phase wrapping. Its adversarial vocoder and training data are not
-  imported; a small residual adaptation would need independent validation.
+  imported. Native v2 shares a head over complex Fourier coordinates with sparse
+  temporal context; it has no Vocos ConvNeXt stack, convolutional encoder or GAN.
 - **R8 — Vahidi, Han, Wang, Lagrange, Fazekas and Lostanlen (2023),
   [Mesostructures: Beyond Spectrogram Loss in Differentiable Time-Frequency Analysis](https://arxiv.org/abs/2301.10183).**
   Relevant idea: spectral-frame similarity can miss event/modulation/texture
@@ -81,6 +93,24 @@ are simple project measurements; no scattering transform is implemented.
   plausible source using a prior. Its pretrained audio autoencoder/diffusion
   machinery and iterative inference are a long-term reference, not the quickest
   phone-native next implementation.
+
+- **R12 — Perez, Strub, de Vries, Dumoulin and Courville (2017),
+  [FiLM: Visual Reasoning with a General Conditioning Layer](https://arxiv.org/abs/1709.07871).**
+  Related implemented operation: feature-wise affine modulation. The native song
+  adapter learns 32 static gains and 32 biases on a frozen embedding, with
+  magnitude caps and an exact zero bypass. It does not implement FiLM's
+  conditioning generator, visual model or reported experiments.
+- **R13 — Li, Kovachki, Azizzadenesheli, Liu, Bhattacharya, Stuart and Anandkumar
+  (2020), [Fourier Neural Operator for Parametric Partial Differential Equations](https://arxiv.org/abs/2010.08895).**
+  Background for the owner's fluid/structured-evolution ideas: learns operators
+  for PDE families including Navier–Stokes. This is not evidence that audio
+  restoration obeys fluid equations. No FNO or fluid solver is implemented; a
+  small latent spectral operator is only a possible future controlled experiment.
+- **R14 — Song, Sohl-Dickstein, Kingma, Kumar, Ermon and Poole (2020),
+  [Score-Based Generative Modeling through Stochastic Differential Equations](https://arxiv.org/abs/2011.13456).**
+  Background for future diffusion/stochastic refinement: score-based SDEs and
+  related probability-flow ODEs. Native v2 is a flow-matching Euler ODE pilot;
+  it has neither a trained score network nor reverse-time diffusion/SDE sampling.
 
 Scope notes come from the original papers, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown was available for

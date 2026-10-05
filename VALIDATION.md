@@ -33,3 +33,38 @@ as documented in `docs/OPENCL.md`. API playback did not return, but the owner
 listened and supplied texture feedback. Benchmarking ran only after explicit
 foreground approval (`0-7` affinity). Additional speed tests require fresh
 foreground approval; exploration of flow matching does not remove that rule.
+
+## Native scene-v2 delivery, 2026-10-05
+
+The opt-in native 48 kHz stereo path and frozen runs are in
+`docs/SCENE_V2_RESULTS.md`; legacy checkpoint paths and prior scores remain intact.
+
+- CPU-only suite: 19 passed. OpenCL-feature suite: 19 passed, 3 GPU tests ignored
+  unless explicitly enabled; real Adreno ignored suite: all 3 passed.
+- CPU and OpenCL builds, locked/offline strict Clippy, formatting and whitespace
+  checks pass with at most two jobs.
+- Exact STFT analysis/synthesis adjoint identities and waveform/Dense gradient
+  finite differences pass. The full waveform model fixture gave finite
+  difference −3.6053464 vs analytic −3.6054444.
+- Learned conditional Gaussian diagonal-head transport terminal RMSE 0.012146
+  passes its declared 0.08 gate; this is a toy capability check, not audio quality.
+- Native nonzero GPU head maximum difference 5.96e-8; two-step diagonal trajectory
+  3.07e-8. Legacy dense and flow parity tests remain passing.
+- Native phase-link convention, state-feature cache parity, strength-zero,
+  wholly trusted input identity, silent-side/mono and trusted-band checks pass.
+- Adapter fingerprint binding, exact alpha-zero, ceiling-band target mutation
+  controls pass. Paired and shuffled 400-update adapters and heldout-time/band
+  evaluation complete with the base frozen.
+- 600 deterministic + 600 flow updates, 24 fresh procedural scenes, and three
+  native song listening candidates complete; no new speed experiment.
+- Twelve published procedural WAVs and five Downloads listening WAVs decode;
+  listener files are 10 seconds, PCM16, native stereo 48 kHz. Downloads copies
+  match local copies. Source song remains local.
+- Old artifact hashes remain verified; the expanded `artifacts/SHA256SUMS`
+  covers the new frozen evidence and excludes itself and explanation documents.
+
+The metadata-summary correction is described in
+`artifacts/native-v2/RUN_CONTEXT.json`. No native-v2 speed claim follows from
+incidental training elapsed observations. Whole-song streaming, dedicated
+contrast expansion, trained diffusion/SDE, fluid/PDE evolution and a combined
+flow+song-adapter quality test have not been completed.

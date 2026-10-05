@@ -1,0 +1,52 @@
+{
+  "source_sha256": "2ffc515bdb05993f647ff309ed7cb2b7697959f5fa2b2c2d53291e1332f1e3c6",
+  "scope": "previously inspected 30-40 second excerpt, manufactured 6k bandwidth loss, native 48k stereo",
+  "base": {
+    "crest_db": 12.264644925372219,
+    "full_error": 234902.8605910137,
+    "full_nmse": 0.017535551165791936,
+    "full_target_energy": 13395807.087561544,
+    "high_error": 222444.2102711894,
+    "high_nmse": 0.7829487478284162,
+    "high_target_energy": 284110.8193712039,
+    "known_error": 1.254396955072595E-7,
+    "log1p_db": 1.0043363926063105,
+    "lsd_db": 20.376363887529656,
+    "peak": 0.4741055965423584,
+    "stereo_correlation": 0.7147946086820696,
+    "target_crest_db": 12.509922019166664,
+    "target_stereo_correlation": 0.7147669098436038
+  },
+  "adapted": {
+    "crest_db": 12.261005011220902,
+    "full_error": 229088.2355107007,
+    "full_nmse": 0.017101488100960845,
+    "full_target_energy": 13395807.087561544,
+    "high_error": 217085.9474325118,
+    "high_nmse": 0.7640889844074505,
+    "high_target_energy": 284110.8193712039,
+    "known_error": 1.2499052083192417E-7,
+    "log1p_db": 0.9865545409186024,
+    "lsd_db": 20.14265888751672,
+    "peak": 0.47431451082229614,
+    "stereo_correlation": 0.7147560538962592,
+    "target_crest_db": 12.509922019166664,
+    "target_stereo_correlation": 0.7147669098436038
+  },
+  "flow": {
+    "crest_db": 12.44544669321147,
+    "full_error": 262170.8420900266,
+    "full_nmse": 0.019571112093235577,
+    "full_target_energy": 13395807.087561544,
+    "high_error": 248915.70647119352,
+    "high_nmse": 0.8761218844889314,
+    "high_target_energy": 284110.8193712039,
+    "known_error": 1.2458274333919322E-7,
+    "log1p_db": 1.0385788963824272,
+    "lsd_db": 19.609298361378467,
+    "peak": 0.4860483705997467,
+    "stereo_correlation": 0.7146984465147204,
+    "target_crest_db": 12.509922019166664,
+    "target_stereo_correlation": 0.7147669098436038
+  }
+}

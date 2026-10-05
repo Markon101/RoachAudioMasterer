@@ -23,6 +23,17 @@ Only procedural WAVs are published. User-supplied song audio is in ignored local
 run directories and requested Downloads listening copies. See `RESULTS.md` for
 run parameters, limitations, commands, interpretation and output paths.
 
+`native-v2/` contains separate 106,342-parameter native 48 kHz stereo deterministic
+and flow checkpoints, complete compact training/evaluation receipts, the paired
+and shuffled 64-parameter song adapters, local-song score summaries and twelve
+procedural comparison WAVs from seed 180002. No user song waveform is published.
+See `docs/SCENE_V2_RESULTS.md` for the modest adapter gain, full-flow failures,
+positive informal texture feedback and the provenance correction. The preserved
+run receipts inherited v0's degradation-distribution summary by mistake; their
+per-step damage values are correct. `native-v2/RUN_CONTEXT.json` records the
+actual native distribution and the historical source commit without rewriting
+those receipts. Current source emits the corrected native summary.
+
 JSON provenance records the source commit when a run was executed, not the later
 commit packaging its results. Hashes in `SHA256SUMS` cover data artifacts, not
 this explanation or the manifest itself. Verify with:

@@ -96,3 +96,14 @@ DSP plus learned residuals over importing a large organism/runtime. Titan Audio'
 phase-continuous renderer, low-rate control interpolation, temporal/stereo
 measurements and evidence controls are reusable ideas; its generative ecosystem
 is not required for this engine. See `TITAN_TRANSFER.md` and `FLOW_PLAN.md`.
+
+## Native-v2 implemented milestone
+
+The opt-in native pipeline now retains 48 kHz stereo, uses shared M/S complex
+residual models, a frozen deterministic prior plus optional eight-step flow, and
+a separately gated song embedding adapter. This implements spectral completion
+and infrastructure for other domains, not dedicated dynamics/ambience/spatial
+repair. It remains bounded offline processing rather than whole-song streaming.
+See [CURRENT_MODEL.md](CURRENT_MODEL.md) for the full signal path, parameter
+counts, losses, fluid-inspired hypotheses and proposed versions, and
+[SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md) for frozen positive/negative evidence.

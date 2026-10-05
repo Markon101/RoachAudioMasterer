@@ -1,0 +1,18 @@
+{
+  "source_commit": "c2dc3d654fdfd2237333168a85f92a9bcec6d56f",
+  "source_dirty_at_runs": false,
+  "scope": "Native scene-v2 frozen training, evaluation, adapter and listening delivery, 2026-10-05",
+  "actual_scene_v2_degradation_distribution": {
+    "method": "finite-clip Fourier lowpass",
+    "cutoff_hz": [3500, 8000],
+    "transition_hz": [300, 1000],
+    "cosine_power": [1, 4]
+  },
+  "provenance_correction": "Historical receipts inherited v0's summary cutoff [3000,8000] and transition [200,1000]. Native Damage::random at the source commit actually uses [3500,8000] and [300,1000]. Per-step recipes are correct. Original receipts are preserved; this correction is metadata only, and current source emits the native distribution.",
+  "adapter_damage": {"cutoff_hz": [3500, 5500], "transition_hz": 500, "cosine_power": 2, "supervision_ceiling_hz": 8000},
+  "heldout_band_damage": {"cutoff_hz": 8500, "transition_hz": 500, "target_ceiling_hz": 12000, "scored_band_hz": [9000, 12000]},
+  "private_listening_excerpt": {"start_seconds": 30, "seconds": 10, "cutoff_hz": 6000, "transition_hz": 500, "cosine_power": 2, "strength": 1, "sample_seed": 11},
+  "public_audio": "Only seed_180002 procedural comparison WAVs; no user song audio",
+  "listening_feedback": "Owner reports flow2 works well and holds up spectral complexity. Interpreted as latest native flow delivery; informal, not a blind comparison or established metric improvement.",
+  "benchmark_status": "No native-v2 speed experiment. Elapsed training observations are incidental and foreground unverified. New speed tests require foreground approval."
+}

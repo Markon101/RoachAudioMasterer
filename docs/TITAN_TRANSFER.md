@@ -55,3 +55,13 @@ using the known target. Export local song clips after the frozen test; report
 negative results and phase/texture limits. No new speed experiment without
 foreground approval. Native stereo and a harmonic/noise renderer remain separate
 follow-ups, rather than claims from the flow smoke test.
+
+## Native-v2 reuse implemented later
+
+The separate native-v2 pilot now implements phase-linked input harmonic and
+continuous-waveform noise estimates, multiscale spectral/envelope/onset losses,
+and actual native 48 kHz M/S processing. It adapts these engineering ideas without
+importing Titan weights, million-parameter substrates or natural-audio corpora.
+Neither Titan repo changed. Independent controls and mixed results are in
+[SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md); this does not revise the original
+flow-v1 negative result or establish dedicated spatial/dynamic repair.

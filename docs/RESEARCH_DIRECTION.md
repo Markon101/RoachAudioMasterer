@@ -203,3 +203,14 @@ spectral/phase conditioning, not whether the entire pipeline uses the input.
 No new model, adaptation or performance experiment was run during this literature
 review. See `REFERENCES.md` for implemented/proposed method provenance. The
 recommendation is a discriminating experiment sequence, not a promise of quality.
+
+## Subsequent implementation, 2026-10-05
+
+The proposed native shared-coordinate model and gated known-band adapter now
+have a bounded implementation and frozen runs. Read
+[SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md): deterministic pooled spectral gains,
+modest same-song withheld-band transfer, full-flow metric failures and positive
+informal complexity feedback coexist. [CURRENT_MODEL.md](CURRENT_MODEL.md)
+describes exactly what is implemented and the next controlled versions. The
+proposal above remains the literature-review record, not a retrospective claim
+that every recommended control or restoration domain has been completed.

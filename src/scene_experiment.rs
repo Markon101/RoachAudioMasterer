@@ -21,6 +21,7 @@ pub fn provenance() -> Value {
     p["stft"] = json!({"sample_rate":RATE,"base_fft":FFT,"base_hop":HOP,"analysis_loss_ffts":[256,1024,4096],"channels":"orthonormal mid/side"});
     p["architecture"] = json!({"schema":"scene-v2-native-shared-v1","parameters":106342,"encoder":[scene_model::ENCODER_INPUT,32,32],"frequency_shared_head":[HEAD_INPUT,32,6],"context_hops":[-16,-8,-4,-2,-1,0,1,2,4,8,16],"flow":"direct diagonal plus correlated residual","cache_limit_mib":64});
     p["generator"] = json!({"version":2,"scene_seconds":2,"patch_samples":PATCH,"updates_per_scene":4,"natural_training_examples":0});
+    p["degradation_distribution"] = json!({"method":"finite-clip Fourier lowpass","cutoff_hz":[3500,8000],"transition_hz":[300,1000],"cosine_power":[1,4]});
     p
 }
 fn choose_rows(p: &Prepared, d: Damage, upper: f32, r: &mut Rng) -> (Vec<Row>, Region) {

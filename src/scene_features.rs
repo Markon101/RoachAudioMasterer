@@ -442,6 +442,17 @@ mod tests {
             );
         }
         assert_eq!(y.channels[0], y.channels[1]);
+        let trusted = Damage {
+            cutoff: 24000.0,
+            transition: 500.0,
+            power: 2.0,
+        };
+        let untouched = prepare(&a, trusted, 11);
+        assert_eq!(
+            waveform(&untouched, trusted, &prior_state(&untouched, "prior"), 1.0).channels,
+            a.channels,
+            "declared full-band identity must stay exact"
+        );
         let emb = vec![0.0; 2 * p.frames * EMBED];
         let x = features(
             &p,

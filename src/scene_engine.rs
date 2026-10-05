@@ -11,6 +11,8 @@ use rustfft::num_complex::Complex32 as C;
 use serde::{Deserialize, Serialize};
 use std::{fs, path::Path};
 #[derive(Clone, Serialize, Deserialize)]
+// Static feature-wise affine adaptation; related to FiLM (Perez et al., 2017),
+// https://arxiv.org/abs/1709.07871. No conditioning generator is implemented.
 pub struct Adapter {
     pub schema: String,
     pub base_fingerprint: String,

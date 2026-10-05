@@ -12,6 +12,11 @@ contrast/dynamic expansion as core goals (`docs/ARCHITECTURE.md`). A separate
 complex flow-matching pilot was implemented and tested; its negative conditional
 refinement result is in `docs/FLOW_RESULTS.md`. The v0 figures below remain frozen.
 
+The subsequent native 48 kHz stereo pilot, trained synthetic base/flow, gated
+same-song adapter, complete metrics and native listening paths are documented
+in [SCENE_V2_RESULTS.md](docs/SCENE_V2_RESULTS.md). Its current architecture and
+unimplemented extensions are explained in [CURRENT_MODEL.md](docs/CURRENT_MODEL.md).
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

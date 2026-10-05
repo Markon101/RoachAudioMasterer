@@ -150,22 +150,22 @@ ffmpeg -ss 30 -t 10 -i song.wav -ar 24000 -ac 1 excerpt.wav
 
 The source excerpt is the reference for a manufactured bandwidth-loss task,
 not proof of reconstruction beyond the source's own trustworthy bandwidth.
-No reference samples enter model training or adaptation. Song examples remain
+This evaluation command does not train or adapt on reference samples. Song examples remain
 in ignored local run directories; public prototype artifacts contain procedural
 audio only. Repeating this across excerpts from one song is not independent
 validation across songs.
 
-Possible future tiers: DSP only; DSP + tiny residual; optional stochastic
-refinement; multi-resolution iterative completion. Only the first two exist.
+Possible tiers: DSP only; DSP + tiny residual; optional stochastic refinement;
+multi-resolution iterative completion. V0 implements the first two; opt-in flow
+pilots below implement an experimental refinement path.
 Checkpoints from the first schema-1 experiment require source commit `3c0781a`;
 current code rejects them explicitly to avoid changing the prior underneath a
 trained residual. Schema-2 checkpoints use the bounded envelope prior.
 
-Song-specific self-supervision and validated phase/texture repair remain future
-work. The best initial continuation is a fixed family-held-out test plus an
-input-shuffling/null-prior control, then internal known-band adaptation on an
-unseen synthetic song; don't confuse in-distribution seed gains with real-audio
-or truly missing-band transfer.
+Song-specific self-supervision is absent from the legacy v0 path; a bounded
+native-v2 adapter is described below. Validated broad phase/texture repair and
+family-held-out generalization remain open. Don't confuse in-distribution seed
+gains or same-song manufactured tasks with unknown-original restoration.
 
 ## Experimental complex flow matching
 
@@ -196,10 +196,11 @@ The [10,000-step comparison](docs/LONGER_TRAINING_RESULTS.md) preserves the
 earlier checkpoints and scores. Longer training alone did not consistently
 improve the frozen fresh-seed test; new listening clips are available locally.
 
-The [research direction](docs/RESEARCH_DIRECTION.md) recommends temporal/frequency
+The [research direction](docs/RESEARCH_DIRECTION.md) proposed temporal/frequency
 sharing, multiscale supervision, an informative residual prior and a gated
-known-band song adapter. It is a cited proposal; no v2 or song adaptation has
-been trained yet.
+known-band song adapter. These now have a bounded native-v2 implementation and
+[recorded results](docs/SCENE_V2_RESULTS.md). The earlier v0/flow results remain
+frozen and use different data, rates and metric normalization.
 
 Engineering references: [RustFFT](https://docs.rs/rustfft/6.4.1/rustfft/)
 and [opencl3](https://docs.rs/opencl3/0.12.3/opencl3/).
@@ -228,6 +229,34 @@ Regions are bounded to 12 seconds. `scene-adapt` requires a passed synthetic gat
 for the exact frozen base and trains only a separate 64-parameter embedding gain/
 bias on specified song regions, with higher bands withheld. No full-band song
 training is implied. Read [the frozen plan](docs/SCENE_V2_PLAN.md) before running.
+
+The native pilot completed **600 deterministic + 600 flow updates**, using 150
+procedural scenes per stage. On 24 new scenes, pooled missing-band magnitude
+NMSE was 0.989 degraded, 0.757 harmonic, 0.738 deterministic and 1.012–1.036 full
+flow. Quiet/bandlimited false additions remain a serious failure. The full flow
+has mixed objective scores and encouraging informal listening feedback; it is
+not established as the best reconstruction. A separate 64-parameter song
+adapter trained only below 8 kHz improved a held-out 9–12 kHz manufactured task
+from 0.719 to 0.687 versus 0.704 shuffled supervision, across three regions of one
+song. This does not demonstrate correction beyond that song's available detail.
+
+Published checkpoints and procedural examples are in `artifacts/native-v2/`.
+See [how the model works and possible extensions](docs/CURRENT_MODEL.md) and
+[the complete native results](docs/SCENE_V2_RESULTS.md). Example native rendering:
+
+```sh
+./target/release/highband scene-restore \
+  --model artifacts/native-v2/deterministic.json \
+  --flow artifacts/native-v2/flow.json --input song.wav \
+  --start 30 --seconds 10 --cutoff 6000 --transition 500 \
+  --controlled --strength 1 --out runs/native-listen
+```
+
+Use a fresh output directory. `--controlled` deliberately damages the reference;
+omit it only when the cutoff describes the input's actual assumed missing band.
+For the deterministic song-adapted candidate, replace `--flow` with
+`--adapter artifacts/native-v2/song-adapter.json`. Combining flow and adapter has
+not been evaluated in this pilot.
 
 Training uses bounded sampled blocks with a fixed DSP estimate in unsampled
 context, not a full-grid autograd tape. CPU FFT/adjoints/encoder/gradients and an
