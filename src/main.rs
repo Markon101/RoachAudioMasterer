@@ -16,6 +16,7 @@ mod rich_dynamics;
 mod rich_experiment;
 mod rich_field;
 mod rich_gate;
+mod rich_oracle;
 mod rich_synth;
 mod scene;
 mod scene_adapter;
@@ -42,6 +43,22 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    RichOracle {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long, default_value_t = 580008)]
+        seed: u64,
+        #[arg(long, default_value_t = 48)]
+        count: usize,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     RichFieldTrain {
         #[arg(long)]
         det: PathBuf,
@@ -183,6 +200,10 @@ enum Commands {
         controlled: bool,
         #[arg(long, default_value_t = 0.5)]
         richness: f32,
+        #[arg(long)]
+        cap_h_boost: bool,
+        #[arg(long)]
+        cap_n_boost: bool,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
         backend: String,
         #[arg(long)]
@@ -430,6 +451,15 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::RichOracle {
+            det,
+            flow,
+            gate,
+            seed,
+            count,
+            backend,
+            out,
+        } => rich_oracle::run(&det, &flow, &gate, seed, count, &backend, &out),
         Commands::RichFieldTrain {
             det,
             flow,
@@ -541,10 +571,21 @@ fn run() -> Result<()> {
             start,
             controlled,
             richness,
+            cap_h_boost,
+            cap_n_boost,
             backend,
             out,
         } => rich_experiment::restore_gate(
-            &det, &flow, &gate, &input, start, controlled, richness, &backend, &out,
+            &det,
+            &flow,
+            &gate,
+            &input,
+            start,
+            controlled,
+            richness,
+            [cap_h_boost, cap_n_boost],
+            &backend,
+            &out,
         ),
         Commands::SceneScore {
             reference,

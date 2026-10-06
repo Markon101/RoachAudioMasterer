@@ -1,0 +1,126 @@
+{
+  "claim": "the same observed low audio admits both targets; no conditional gate can identify the true absent upper choice from that observation alone",
+  "continued": {
+    "crest_db": 3.1391062685234044,
+    "full_error": 26630.27560040918,
+    "full_nmse": 0.032046775854598364,
+    "full_target_energy": 830981.4291844908,
+    "high_error": 26626.407699707423,
+    "high_nmse": 0.9932604138886718,
+    "high_target_energy": 26807.07629881624,
+    "known_error": 9.539923720490003e-8,
+    "log1p_db": 0.6097396004103451,
+    "lsd_db": 6.128681463069145,
+    "peak": 0.22236259281635284,
+    "stereo_correlation": 1.0,
+    "target_crest_db": 4.107456899646604,
+    "target_stereo_correlation": 1.0
+  },
+  "gate": "artifacts/rich-gate-v1/gate4000/evidence.json",
+  "input_identical_by_construction": true,
+  "manufactured_lowpass_max_difference": 4.470348358154297e-8,
+  "provenance": {
+    "architecture": {
+      "cache_limit_mib": 64,
+      "context_hops": [
+        -16,
+        -8,
+        -4,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "encoder": [
+        3098,
+        32,
+        32
+      ],
+      "flow": "direct diagonal plus correlated residual",
+      "frequency_shared_head": [
+        184,
+        32,
+        6
+      ],
+      "parameters": 106342,
+      "schema": "scene-v2-native-shared-v1"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3500,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        300,
+        1000
+      ]
+    },
+    "generator": {
+      "natural_training_examples": 0,
+      "patch_samples": 16384,
+      "scene_seconds": 2,
+      "updates_per_scene": 4,
+      "version": 2
+    },
+    "git_commit": "641817a6546073f8e7c43564a4731159b35ab6d4",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t   67732 kB",
+      "VmRSS:\t   59776 kB",
+      "Cpus_allowed_list:\t0-1,4-5"
+    ],
+    "sprint": {
+      "gate": [
+        64,
+        24,
+        4
+      ],
+      "gate_parameters": 1660,
+      "gate_smoothing": [
+        3,
+        3
+      ],
+      "generator": "rich-v3",
+      "natural_training_examples": 0,
+      "whole_clip_gate_gradients": true
+    },
+    "stft": {
+      "analysis_loss_ffts": [
+        256,
+        1024,
+        4096
+      ],
+      "base_fft": 1024,
+      "base_hop": 256,
+      "channels": "orthonormal mid/side",
+      "sample_rate": 48000
+    },
+    "unix_time": 1791263369
+  },
+  "stopped": {
+    "crest_db": 3.1391062685234044,
+    "full_error": 2.012647102194471,
+    "full_nmse": 2.5027458855564232e-6,
+    "full_target_energy": 804175.5712434261,
+    "high_error": 1.9579148673339781,
+    "high_nmse": 0.49053847432263253,
+    "high_target_energy": 3.9913584149288077,
+    "known_error": 9.539923720490003e-8,
+    "log1p_db": 0.010742297091035987,
+    "lsd_db": 1.742739224527534,
+    "peak": 0.22236259281635284,
+    "stereo_correlation": 1.0,
+    "target_crest_db": 3.114472129275278,
+    "target_stereo_correlation": 1.0
+  }
+}

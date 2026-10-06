@@ -70,3 +70,43 @@ Next: matched shrink-only versus bounded H/N allocation from an exact inference
 warm start, then small diagonal/rotation/transport field siblings. The first
 branch tests actuator range: shrink-only cannot supply already-missing cymbal
 excitation. The second tests organization rather than adding model scale.
+
+## Allocation branch in progress, 2026-10-06
+
+Owner clarification: **frozen Flow3000 preferred for both controlled and
+undegraded V1 auditions**. Preserve this negative perceptual result. Richer
+cymbal/synth texture may be content-dependent; this is a listening hypothesis.
+V1 reduces7.46k generated power to3.296e-7 vs frozen7.346e-7 and manual-half
+1.836e-7, but increases separate187.5Hz-grid band power to1.250e-5 vs8.037e-6.
+Independent contribution reweighting may change cancellations; the audit does
+not prove a perceptual mechanism. Future common-field gating is only an ignored
+draft; no new checkpoint uses it.
+
+Independent-cutoff96 transfer is complete: gate NMSE.79426, frozen1.11243,
+matched attenuation.80606, frequency-only.90167, shuffled.84059. The exact-low
+stopped/continued twin control has maximum lowpass difference4.47e-8 and the same
+prediction for both targets: continued high error.99326. Abstention cannot infer
+unknowable harmonic continuation. Reports are preserved under rich-gate-v1.
+
+Allocator source641817a: 64→24→6,1710 parameters, only50 beyond the1660 gate.
+The two extra outputs scale H/N by exp(ln8*tanh(q)) in1/8..8, multiplied by
+original authorization. R/F stay shrink-only. Initialization matches V1 exactly;
+full gradients and release CPU/OpenCL parity pass. Whole chain214394 parameters.
+Four siblings (allocator evidence/frequency, shrink evidence/frequency) completed
+1200 additional Adam updates over300 seeds420000–420299, rate.003, same frozen
+parents and exact warm predictions; Adam reset explicitly for every sibling.
+All200-step checkpoints and moments are in artifacts/rich-allocation-v1.
+
+Development600 only,24 scenes530004–530027, two examples per family: allocator
+pooled NMSE.75472 vs matched shrink continuation.73059. Cymbal added RMS.02162
+vs.00981 (desired.04930), energy ratios.1923 vs.0396; cymbal NMSE.5394 vs.7736.
+Allocator stopped RMS.0000937 vs shrink.0001519; isolated.0000439 vs.0000352.
+But continued-stack NMSE.6498 vs.4687, gaps1.0025 vs.6227, FM2.2988 vs1.4282.
+This is a legitimate-event energy gain with important overshoot/texture costs,
+not an aggregate win. Inference H/N boost lesions and a target-only oracle will
+test whether useful excitation and excess harmonic energy are separable.
+
+Per the owner's frontier-budget update, coupled-field **training is deferred**.
+Its bounded operators/gradients/parity code is implemented and tested; no field
+model is trained or claimed useful. No broader architecture or psychoacoustic
+framework is introduced while the allocator question remains open.

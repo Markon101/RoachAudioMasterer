@@ -69,6 +69,9 @@ pub struct Gate {
     pub frequency_only: bool,
     pub steps: usize,
     pub data_seed: u64,
+    /// Opt-in causal inference lesions. False preserves the original path.
+    #[serde(default)]
+    pub cap_boost: [bool; 2],
 }
 impl Gate {
     pub fn new(det: &Model, flow: &Model, frequency_only: bool, seed: u64) -> Self {
@@ -85,6 +88,7 @@ impl Gate {
             frequency_only,
             steps: 0,
             data_seed: seed,
+            cap_boost: [false; 2],
         }
     }
     pub fn validate(&self) -> bool {
@@ -111,6 +115,10 @@ impl Gate {
     }
     pub fn fingerprint(&self) -> String {
         let mut h = 0xcbf29ce484222325u64;
+        if self.cap_boost.iter().any(|x| *x) {
+            h ^= 0x636170 + u64::from(self.cap_boost[0]) + 2 * u64::from(self.cap_boost[1]);
+            h = h.wrapping_mul(0x100000001b3);
+        }
         h ^= self.frequency_only as u64;
         for x in &self.head.weights {
             for b in x.to_bits().to_le_bytes() {
@@ -402,7 +410,7 @@ pub struct Forward {
     pub field: [Vec<C>; 2],
     pub logits: Vec<[f32; 6]>,
 }
-fn allowance(y: &[f32], richness: f32) -> [f32; 4] {
+fn allowance(g: &Gate, y: &[f32], richness: f32) -> [f32; 4] {
     std::array::from_fn(|j| {
         let p = sigmoid(y[j]);
         let q = if richness == 0.5 {
@@ -411,7 +419,14 @@ fn allowance(y: &[f32], richness: f32) -> [f32; 4] {
             sigmoid(y[j] + (richness - 0.5) * 8.0 * p * (1.0 - p))
         };
         q * if y.len() == 6 && j < 2 {
-            (8.0f32.ln() * y[j + 4].tanh()).exp()
+            (8.0f32.ln()
+                * (if g.cap_boost[j] {
+                    y[j + 4].min(0.0)
+                } else {
+                    y[j + 4]
+                })
+                .tanh())
+            .exp()
         } else {
             1.0
         }
@@ -438,7 +453,7 @@ pub fn inference_tiled(
         let ys = predictor.predict(xs, rows.len())?;
         ensure!(ys.iter().all(|x| x.is_finite()), "nonfinite gate inference");
         for (&(c, t, k), y) in rows.iter().zip(ys.chunks_exact(g.head.output)) {
-            let weights = allowance(y, richness);
+            let weights = allowance(g, y, richness);
             for j in 0..4 {
                 raw[j][c][t * BINS + k] = weights[j];
             }
@@ -504,7 +519,7 @@ pub fn forward(
         let mut h = [0.0; HIDDEN];
         let mut y = [0.0; 6];
         g.head.forward(&input, &mut h, &mut y[..g.head.output]);
-        let weights = allowance(&y[..g.head.output], richness);
+        let weights = allowance(g, &y[..g.head.output], richness);
         for j in 0..4 {
             raw[j][c][t * BINS + k] = weights[j];
         }
@@ -575,7 +590,14 @@ pub fn gradient(
         for j in 0..4 {
             let p = sigmoid(f.logits[row][j]);
             let budget = if g.head.output == 6 && j < 2 {
-                (8.0f32.ln() * f.logits[row][j + 4].tanh()).exp()
+                (8.0f32.ln()
+                    * (if g.cap_boost[j] {
+                        f.logits[row][j + 4].min(0.0)
+                    } else {
+                        f.logits[row][j + 4]
+                    })
+                    .tanh())
+                .exp()
             } else {
                 1.0
             };
@@ -585,6 +607,9 @@ pub fn gradient(
                     * f.raw[j][c][i]
                     * 8.0f32.ln()
                     * (1.0 - f.logits[row][j + 4].tanh().powi(2));
+                if g.cap_boost[j] && f.logits[row][j + 4] >= 0.0 {
+                    dy[j + 4] = 0.0;
+                }
             }
         }
         let mut input = *x;
@@ -600,6 +625,32 @@ pub fn gradient(
         );
     }
     (loss, grad)
+}
+/// Causal actuator lesion from already-computed logits; no target access.
+pub fn cap_from_forward(
+    g: &Gate,
+    f: &Forward,
+    p: &Prepared,
+    d: Damage,
+    parts: &Components,
+    cache: &Cache,
+) -> Forward {
+    let mut raw = f.raw.clone();
+    for (row, &(c, t, k)) in cache.indices.iter().enumerate() {
+        let weights = allowance(g, &f.logits[row][..g.head.output], 0.5);
+        for j in 0..4 {
+            raw[j][c][t * BINS + k] = weights[j];
+        }
+    }
+    let gates = smooth(p, d, &raw, false);
+    let field = combine(parts, &gates);
+    Forward {
+        raw,
+        gates,
+        field,
+        hidden: Vec::new(),
+        logits: f.logits.clone(),
+    }
 }
 #[cfg(test)]
 mod tests {

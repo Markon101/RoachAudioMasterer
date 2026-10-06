@@ -138,7 +138,7 @@ pub fn train_gate(
         &json!({"provenance":provenance(),"start_step":start,"total_steps":steps,"updates_this_run":steps-start,"unique_scenes_total":steps.div_ceil(4),"data_seed":seed,"deterministic":det_path,"flow":flow_path,"resume":resume,"backend":backend,"loss":"whole-clip multiscale waveform spectral/envelope/onset;0.02 added-energy penalty only for known no-upper synthetic cases","records":records,"timing_context":"quality/training run; no speed experiment"}),
     )
 }
-fn added_rms(y: &Audio, x: &Audio) -> f64 {
+pub fn added_rms(y: &Audio, x: &Audio) -> f64 {
     (y.channels
         .iter()
         .zip(&x.channels)
@@ -229,6 +229,57 @@ pub fn failure_metrics(target: &Audio, y: &Audio, input: &Audio, d: Damage) -> V
     }
     json!({"added_rms":energy.sqrt(),"desired_added_rms":desired.sqrt(),"energy_ratio":if desired>1e-12{Some(energy/desired)}else{None},"quiet_spectral_rms":(quiet_sum/quiet_n.max(1) as f64).sqrt(),"hf_envelope_nmse":envelope_num/envelope_den.max(1e-12),"excess_persistent_peak_energy":false_peak,"legitimate_persistent_peak_energy":target_peak})
 }
+fn distribution(mut a: Vec<f32>) -> Value {
+    if a.is_empty() {
+        return Value::Null;
+    }
+    a.sort_by(f32::total_cmp);
+    let n = a.len();
+    json!({"count":n,"mean":a.iter().map(|x|*x as f64).sum::<f64>()/n as f64,"p10":a[n/10],"p50":a[n/2],"p90":a[(n*9/10).min(n-1)],"fraction_below_0_95":a.iter().filter(|x|**x<0.95).count() as f64/n as f64,"fraction_above_1_05":a.iter().filter(|x|**x>1.05).count() as f64/n as f64})
+}
+fn coefficient_diagnostics(g: &Gate, f: &rich_gate::Forward, cache: &Cache, d: Damage) -> Value {
+    let rows: Vec<_> = cache
+        .indices
+        .iter()
+        .enumerate()
+        .filter(|(_, (_, _, k))| *k >= d.first_missing())
+        .collect();
+    let gains: Vec<_> = (0..2)
+        .map(|j| {
+            distribution(
+                rows.iter()
+                    .map(|(r, _)| {
+                        if g.head.output == 6 {
+                            (8.0f32.ln()
+                                * (if g.cap_boost[j] {
+                                    f.logits[*r][j + 4].min(0.0)
+                                } else {
+                                    f.logits[*r][j + 4]
+                                })
+                                .tanh())
+                            .exp()
+                        } else {
+                            1.0
+                        }
+                    })
+                    .collect(),
+            )
+        })
+        .collect();
+    let actual: Vec<_> = (0..4)
+        .map(|j| {
+            distribution(
+                rows.iter()
+                    .map(|entry| {
+                        let (c, t, k) = *entry.1;
+                        f.gates[j][c][t * BINS + k]
+                    })
+                    .collect(),
+            )
+        })
+        .collect();
+    json!({"allocator_H_N":gains,"smoothed_H_N_R_F":actual,"scope":"fully missing active-channel TF positions; per-scene distributions, not independent samples"})
+}
 #[allow(clippy::too_many_arguments)] // Research CLI entrypoint, not a numerical API.
 pub fn evaluate_gate(
     det_path: &Path,
@@ -286,6 +337,8 @@ pub fn evaluate_gate(
         let cache = Cache::new(&p, d, &parts);
         let evidence = rich_gate::forward(&gate, &p, d, &parts, &cache, 0.5);
         let frequency = rich_gate::forward(&freq, &p, d, &parts, &cache, 0.5);
+        let evidence_coefficients = coefficient_diagnostics(&gate, &evidence, &cache, d);
+        let frequency_coefficients = coefficient_diagnostics(&freq, &frequency, &cache, d);
         let full = scene_features::waveform(&p, d, &parts.flow, 1.0);
         let gated = scene_features::waveform(&p, d, &evidence.field, 1.0);
         let rms_gated = added_rms(&gated, &input);
@@ -308,7 +361,7 @@ pub fn evaluate_gate(
         let shuffled = rich_gate::forward(&gate, &p, d, &parts, &shuffled, 0.5);
         let conservative = rich_gate::forward(&gate, &p, d, &parts, &cache, 0.0);
         let rich = rich_gate::forward(&gate, &p, d, &parts, &cache, 1.0);
-        let outputs = vec![
+        let mut outputs = vec![
             ("zero", input.clone()),
             (
                 "harmonic",
@@ -342,6 +395,54 @@ pub fn evaluate_gate(
             ),
             ("rich", scene_features::waveform(&p, d, &rich.field, 1.0)),
         ];
+        let mut coefficients = BTreeMap::from([
+            ("gate", evidence_coefficients),
+            ("frequency_gate", frequency_coefficients),
+        ]);
+        if gate.head.output == 6 {
+            for (name, matched, scalar, cap) in [
+                (
+                    "allocator_no_h_boost",
+                    "no_h_boost_matched",
+                    "scalar_for_no_h_boost",
+                    [true, false],
+                ),
+                (
+                    "allocator_no_n_boost",
+                    "no_n_boost_matched",
+                    "scalar_for_no_n_boost",
+                    [false, true],
+                ),
+                (
+                    "allocator_no_boost",
+                    "no_boost_matched",
+                    "scalar_for_no_boost",
+                    [true, true],
+                ),
+            ] {
+                let mut limited = gate.clone();
+                limited.cap_boost = cap;
+                let f = rich_gate::cap_from_forward(&limited, &evidence, &p, d, &parts, &cache);
+                coefficients.insert(name, coefficient_diagnostics(&limited, &f, &cache, d));
+                let y = scene_features::waveform(&p, d, &f.field, 1.0);
+                let rms = added_rms(&y, &input);
+                let common = rms.min(rms_full);
+                outputs.push((name, y));
+                outputs.push((
+                    matched,
+                    scene_features::waveform(&p, d, &f.field, (common / rms.max(1e-12)) as f32),
+                ));
+                outputs.push((
+                    scalar,
+                    scene_features::waveform(
+                        &p,
+                        d,
+                        &parts.flow,
+                        (common / rms_full.max(1e-12)) as f32,
+                    ),
+                ));
+            }
+        }
         let dir = out.join(format!("seed_{scene_seed}"));
         if index < 12 {
             std::fs::create_dir(&dir)?;
@@ -361,7 +462,8 @@ pub fn evaluate_gate(
                 ensure!(y.channels == input.channels, "gate silence failure");
             }
             let failures = failure_metrics(&target, &y, &input, d);
-            records.push(json!({"scene_seed":scene_seed,"recipe":recipe,"actual_damage":d,"no_upper":no_upper,"method":name,"scores":score,"failures":failures,"matched_scalar_gain":ratio}));
+            let coefficients = coefficients.get(name).cloned().unwrap_or(Value::Null);
+            records.push(json!({"scene_seed":scene_seed,"recipe":recipe,"actual_damage":d,"no_upper":no_upper,"method":name,"scores":score,"failures":failures,"matched_scalar_gain":ratio,"coefficients":coefficients}));
             groups.entry(name.into()).or_default().push(score);
             if index < 12 {
                 native_audio::write(&dir.join(format!("{name}.wav")), &y, false)?;
@@ -395,13 +497,19 @@ pub fn restore_gate(
     start: f64,
     controlled: bool,
     richness: f32,
+    cap_boost: [bool; 2],
     backend: &str,
     out: &Path,
 ) -> Result<()> {
     ensure!((0.0..=1.0).contains(&richness), "invalid richness");
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
-    let gate = Gate::load(gate_path)?;
+    let mut gate = Gate::load(gate_path)?;
+    ensure!(
+        gate.head.output == 6 || !cap_boost.iter().any(|x| *x),
+        "boost caps require allocator"
+    );
+    gate.cap_boost = cap_boost;
     ensure!(
         gate.det_fingerprint == det.fingerprint() && gate.flow_fingerprint == flow.fingerprint(),
         "gate parent mismatch"
@@ -423,6 +531,15 @@ pub fn restore_gate(
     let parts = frozen.components(&p, d)?;
     let f = rich_gate::inference_tiled(&gate, &p, d, &parts, richness, backend)?;
     let y = scene_features::waveform(&p, d, &f.field, 1.0);
+    let full = scene_features::waveform(&p, d, &parts.flow, 1.0);
+    let full_rms = added_rms(&full, &input);
+    let candidate_rms = added_rms(&y, &input);
+    let scalar_gain = (candidate_rms / full_rms.max(1e-12)).min(1.0) as f32;
+    let scalar = scene_features::waveform(&p, d, &parts.flow, scalar_gain);
+    native_audio::write(&out.join("matched_scalar.wav"), &scalar, true)?;
+    let candidate_match_gain = (full_rms / candidate_rms.max(1e-12)).min(1.0) as f32;
+    let matched = scene_features::waveform(&p, d, &f.field, candidate_match_gain);
+    native_audio::write(&out.join("listen_matched.wav"), &matched, true)?;
     native_audio::write(&out.join("reconstructed.wav"), &y, false)?;
     native_audio::write(&out.join("listen.wav"), &y, true)?;
     native_audio::write(&out.join("input.wav"), &input, false)?;
@@ -439,7 +556,7 @@ pub fn restore_gate(
         .collect();
     write_json(
         &out.join("restoration.json"),
-        &json!({"provenance":provenance(),"source":source,"start":start,"controlled":controlled,"richness":richness,"det":det_path,"flow":flow_path,"gate":gate_path,"gate_fingerprint":gate.fingerprint(),"mean_allowance":mean_gates,"scores":score,"added_rms":added_rms(&y,&input),"claim":"gated conditional additions; undegraded reference distance is change, not quality"}),
+        &json!({"provenance":provenance(),"source":source,"start":start,"controlled":controlled,"richness":richness,"cap_H_N_boost":cap_boost,"det":det_path,"flow":flow_path,"gate":gate_path,"gate_fingerprint":gate.fingerprint(),"mean_allowance":mean_gates,"scores":score,"added_rms":added_rms(&y,&input),"matched_scalar_gain":scalar_gain,"candidate_match_gain":candidate_match_gain,"scalar_control_note":"both additions attenuated to common minimum RMS; use listen_matched.wav versus matched_scalar.wav","claim":"gated conditional additions; undegraded reference distance is change, not quality"}),
     )
 }
 pub fn ambiguity(

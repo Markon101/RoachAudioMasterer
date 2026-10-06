@@ -1,0 +1,520 @@
+{
+  "allocation": {
+    "summary": {
+      "conservative": {
+        "maximum_known_error": 1.705571852463448E-7,
+        "mean_crest_error_db": 0.37743628690677017,
+        "mean_high_nmse": 7.682493491819418,
+        "mean_log1p_db": 0.967076618695105,
+        "mean_lsd_db": 10.388488824382158,
+        "mean_stereo_correlation_error": 0.009129962527720184,
+        "pooled_full_nmse": 0.010228308540419104,
+        "pooled_high_nmse": 0.7401928571668769,
+        "scenes": 24
+      },
+      "evidence_shuffle": {
+        "maximum_known_error": 1.4396475142605225E-7,
+        "mean_crest_error_db": 0.48194662180206116,
+        "mean_high_nmse": 2757.74502642988,
+        "mean_log1p_db": 1.1824018040657782,
+        "mean_lsd_db": 12.91542213262588,
+        "mean_stereo_correlation_error": 0.01256591211320679,
+        "pooled_full_nmse": 0.018179667219606583,
+        "pooled_high_nmse": 1.3006898799165942,
+        "scenes": 24
+      },
+      "frequency_gate": {
+        "maximum_known_error": 1.5266562757940494E-7,
+        "mean_crest_error_db": 0.4276741979992574,
+        "mean_high_nmse": 67.93678304165185,
+        "mean_log1p_db": 1.193277043681919,
+        "mean_lsd_db": 11.23756802616932,
+        "mean_stereo_correlation_error": 0.005044461329816711,
+        "pooled_full_nmse": 0.012258392663637582,
+        "pooled_high_nmse": 0.8997562211459169,
+        "scenes": 24
+      },
+      "frozen_det": {
+        "maximum_known_error": 1.5074728782231552E-7,
+        "mean_crest_error_db": 1.1260291277396732,
+        "mean_high_nmse": 3156.021358841179,
+        "mean_log1p_db": 1.2860508313315584,
+        "mean_lsd_db": 20.675338765977873,
+        "mean_stereo_correlation_error": 0.005584465489203568,
+        "pooled_full_nmse": 0.013361404853847963,
+        "pooled_high_nmse": 0.9644534858252001,
+        "scenes": 24
+      },
+      "frozen_flow": {
+        "maximum_known_error": 1.5556621688928787E-7,
+        "mean_crest_error_db": 0.5837443621796522,
+        "mean_high_nmse": 3482.2906042644718,
+        "mean_log1p_db": 1.285387074928002,
+        "mean_lsd_db": 17.45097496446249,
+        "mean_stereo_correlation_error": 0.007990199272236764,
+        "pooled_full_nmse": 0.016435007724885216,
+        "pooled_high_nmse": 1.172088139533724,
+        "scenes": 24
+      },
+      "gate": {
+        "maximum_known_error": 1.7379484237428436E-7,
+        "mean_crest_error_db": 0.385595932832723,
+        "mean_high_nmse": 7.8997268834525345,
+        "mean_log1p_db": 0.9684810067205459,
+        "mean_lsd_db": 10.408622433179412,
+        "mean_stereo_correlation_error": 0.009202370805442325,
+        "pooled_full_nmse": 0.0104196901745794,
+        "pooled_high_nmse": 0.7547223670762299,
+        "scenes": 24
+      },
+      "gate_matched": {
+        "maximum_known_error": 1.7379484237428436E-7,
+        "mean_crest_error_db": 0.3734789038145283,
+        "mean_high_nmse": 7.869832546219507,
+        "mean_log1p_db": 1.0597684819577478,
+        "mean_lsd_db": 10.614170360019958,
+        "mean_stereo_correlation_error": 0.005422920403390897,
+        "pooled_full_nmse": 0.011501766389539956,
+        "pooled_high_nmse": 0.832386893245827,
+        "scenes": 24
+      },
+      "harmonic": {
+        "maximum_known_error": 1.4728157696671977E-7,
+        "mean_crest_error_db": 0.4516620701327508,
+        "mean_high_nmse": 795.6606983853202,
+        "mean_log1p_db": 1.2593433134898497,
+        "mean_lsd_db": 15.493408327172096,
+        "mean_stereo_correlation_error": 0.0018475877711309392,
+        "pooled_full_nmse": 0.01266658805582021,
+        "pooled_high_nmse": 0.9159483565622784,
+        "scenes": 24
+      },
+      "matched_scalar": {
+        "maximum_known_error": 1.6140866788475426E-7,
+        "mean_crest_error_db": 0.39587363531165437,
+        "mean_high_nmse": 8.063086064214952,
+        "mean_log1p_db": 1.0957916813455728,
+        "mean_lsd_db": 11.593908043483909,
+        "mean_stereo_correlation_error": 0.005315526997737435,
+        "pooled_full_nmse": 0.011698146983629911,
+        "pooled_high_nmse": 0.846489280658418,
+        "scenes": 24
+      },
+      "rich": {
+        "maximum_known_error": 1.4924213425499063E-7,
+        "mean_crest_error_db": 0.3941979221949646,
+        "mean_high_nmse": 8.118069729230799,
+        "mean_log1p_db": 0.9699217076800218,
+        "mean_lsd_db": 10.430568447296723,
+        "mean_stereo_correlation_error": 0.009277564718969516,
+        "pooled_full_nmse": 0.010609196943697191,
+        "pooled_high_nmse": 0.769066725857347,
+        "scenes": 24
+      },
+      "zero": {
+        "maximum_known_error": 0.0,
+        "mean_crest_error_db": 0.4530312067922367,
+        "mean_high_nmse": 0.6767314887069295,
+        "mean_log1p_db": 1.2674663630364986,
+        "mean_lsd_db": 17.43957081750583,
+        "mean_stereo_correlation_error": 0.0007070995501298657,
+        "pooled_full_nmse": 0.013621250857267878,
+        "pooled_high_nmse": 0.9989811876444609,
+        "scenes": 24
+      }
+    },
+    "families": [
+      {
+        "family": "continued_stack",
+        "scenes": 2,
+        "pooled_high_nmse": 0.6498004372350396,
+        "added_rms": 0.03032744193852834,
+        "desired_rms": 0.025449260438122703,
+        "pooled_added_energy_ratio": 1.4201075213681384,
+        "excess_persistent_peak_energy": 1524.3038492788655,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "cymbal_bursts",
+        "scenes": 2,
+        "pooled_high_nmse": 0.5393972284389477,
+        "added_rms": 0.021621180688682743,
+        "desired_rms": 0.049299667184252494,
+        "pooled_added_energy_ratio": 0.1923405429061518,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "dense_mix",
+        "scenes": 2,
+        "pooled_high_nmse": 0.8284064217827881,
+        "added_rms": 0.01046535964131576,
+        "desired_rms": 0.017104168315853215,
+        "pooled_added_energy_ratio": 0.3743728896589781,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "fm_events",
+        "scenes": 2,
+        "pooled_high_nmse": 2.2987557569224033,
+        "added_rms": 0.01974755956543937,
+        "desired_rms": 0.01146082812082424,
+        "pooled_added_energy_ratio": 2.968895190132724,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "isolated_tone",
+        "scenes": 2,
+        "pooled_high_nmse": 0.010507869664145872,
+        "added_rms": 4.38652830295258e-05,
+        "desired_rms": 3.4859293491225275e-08,
+        "pooled_added_energy_ratio": null,
+        "excess_persistent_peak_energy": 0.01803947955547518,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "modal_transients",
+        "scenes": 2,
+        "pooled_high_nmse": 2.2656423799100454,
+        "added_rms": 0.007738095275008843,
+        "desired_rms": 0.006154657376707708,
+        "pooled_added_energy_ratio": 1.5807397807975399,
+        "excess_persistent_peak_energy": 357.37065175194925,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "near_silence",
+        "scenes": 2,
+        "pooled_high_nmse": 0.4983852703343674,
+        "added_rms": 0.00011713186146644581,
+        "desired_rms": 0.00016469705363338948,
+        "pooled_added_energy_ratio": 0.5057995406426447,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "silence",
+        "scenes": 2,
+        "pooled_high_nmse": 0,
+        "added_rms": 0,
+        "desired_rms": 0,
+        "pooled_added_energy_ratio": null,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "spectral_gaps",
+        "scenes": 2,
+        "pooled_high_nmse": 1.00250675976431,
+        "added_rms": 0.04546753224009924,
+        "desired_rms": 0.036230468329411625,
+        "pooled_added_energy_ratio": 1.5749068464589044,
+        "excess_persistent_peak_energy": 8664.184181193574,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "stereo_ambience",
+        "scenes": 2,
+        "pooled_high_nmse": 0.5771674070900785,
+        "added_rms": 0.005189173549777948,
+        "desired_rms": 0.008562154750791185,
+        "pooled_added_energy_ratio": 0.3673078800744169,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "stopped_stack",
+        "scenes": 2,
+        "pooled_high_nmse": 0.27778115906158873,
+        "added_rms": 9.370949235698594e-05,
+        "desired_rms": 3.373411433109786e-08,
+        "pooled_added_energy_ratio": null,
+        "excess_persistent_peak_energy": 0.07209360381901046,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "weak_upper",
+        "scenes": 2,
+        "pooled_high_nmse": 0.40001138275765596,
+        "added_rms": 7.208901230296103e-05,
+        "desired_rms": 0.000107024836200163,
+        "pooled_added_energy_ratio": 0.45370023777750756,
+        "excess_persistent_peak_energy": 0.04370850755194026,
+        "H_gain": null,
+        "N_gain": null
+      }
+    ]
+  },
+  "shrink": {
+    "summary": {
+      "conservative": {
+        "maximum_known_error": 1.5667242263073648E-7,
+        "mean_crest_error_db": 0.38907420234076223,
+        "mean_high_nmse": 18.514647197780967,
+        "mean_log1p_db": 1.1084652782719038,
+        "mean_lsd_db": 10.415059361537905,
+        "mean_stereo_correlation_error": 0.004164386286681088,
+        "pooled_full_nmse": 0.010017626097019379,
+        "pooled_high_nmse": 0.7301572533865388,
+        "scenes": 24
+      },
+      "evidence_shuffle": {
+        "maximum_known_error": 1.5644430451304625E-7,
+        "mean_crest_error_db": 0.4027875413002104,
+        "mean_high_nmse": 594.5626834158496,
+        "mean_log1p_db": 1.1784872277981224,
+        "mean_lsd_db": 12.785170338836062,
+        "mean_stereo_correlation_error": 0.004485648564412216,
+        "pooled_full_nmse": 0.011114785505445925,
+        "pooled_high_nmse": 0.802920307231471,
+        "scenes": 24
+      },
+      "frequency_gate": {
+        "maximum_known_error": 1.498036736942517E-7,
+        "mean_crest_error_db": 0.42602286700310615,
+        "mean_high_nmse": 1024.9996160210123,
+        "mean_log1p_db": 1.2213731412372357,
+        "mean_lsd_db": 12.562495190488065,
+        "mean_stereo_correlation_error": 0.0031497804214559396,
+        "pooled_full_nmse": 0.011862747767146603,
+        "pooled_high_nmse": 0.8559508616629473,
+        "scenes": 24
+      },
+      "frozen_det": {
+        "maximum_known_error": 1.5074728782231552E-7,
+        "mean_crest_error_db": 1.1260291277396732,
+        "mean_high_nmse": 3156.021358841179,
+        "mean_log1p_db": 1.2860508313315584,
+        "mean_lsd_db": 20.675338765977873,
+        "mean_stereo_correlation_error": 0.005584465489203568,
+        "pooled_full_nmse": 0.013361404853847963,
+        "pooled_high_nmse": 0.9644534858252001,
+        "scenes": 24
+      },
+      "frozen_flow": {
+        "maximum_known_error": 1.5556621688928787E-7,
+        "mean_crest_error_db": 0.5837443621796522,
+        "mean_high_nmse": 3482.2906042644718,
+        "mean_log1p_db": 1.285387074928002,
+        "mean_lsd_db": 17.45097496446249,
+        "mean_stereo_correlation_error": 0.007990199272236764,
+        "pooled_full_nmse": 0.016435007724885216,
+        "pooled_high_nmse": 1.172088139533724,
+        "scenes": 24
+      },
+      "gate": {
+        "maximum_known_error": 1.5458922872366042E-7,
+        "mean_crest_error_db": 0.3935024520662163,
+        "mean_high_nmse": 19.007811324002205,
+        "mean_log1p_db": 1.1091486024902542,
+        "mean_lsd_db": 10.448245755355671,
+        "mean_stereo_correlation_error": 0.004281955853011212,
+        "pooled_full_nmse": 0.010023476096000116,
+        "pooled_high_nmse": 0.7305888612709629,
+        "scenes": 24
+      },
+      "gate_matched": {
+        "maximum_known_error": 1.5458922872366042E-7,
+        "mean_crest_error_db": 0.3932446588206488,
+        "mean_high_nmse": 19.00788615674569,
+        "mean_log1p_db": 1.109614539584497,
+        "mean_lsd_db": 10.449894561877471,
+        "mean_stereo_correlation_error": 0.004262330985580408,
+        "pooled_full_nmse": 0.010030086996094327,
+        "pooled_high_nmse": 0.731066692606025,
+        "scenes": 24
+      },
+      "harmonic": {
+        "maximum_known_error": 1.4728157696671977E-7,
+        "mean_crest_error_db": 0.4516620701327508,
+        "mean_high_nmse": 795.6606983853202,
+        "mean_log1p_db": 1.2593433134898497,
+        "mean_lsd_db": 15.493408327172096,
+        "mean_stereo_correlation_error": 0.0018475877711309392,
+        "pooled_full_nmse": 0.01266658805582021,
+        "pooled_high_nmse": 0.9159483565622784,
+        "scenes": 24
+      },
+      "matched_scalar": {
+        "maximum_known_error": 1.543157061014124E-7,
+        "mean_crest_error_db": 0.38886656343598186,
+        "mean_high_nmse": 19.078647481892126,
+        "mean_log1p_db": 1.1202759142276923,
+        "mean_lsd_db": 11.525571379469554,
+        "mean_stereo_correlation_error": 0.004401524963039254,
+        "pooled_full_nmse": 0.010108613309274296,
+        "pooled_high_nmse": 0.736623964653632,
+        "scenes": 24
+      },
+      "rich": {
+        "maximum_known_error": 1.5323620028988662E-7,
+        "mean_crest_error_db": 0.3979633766637349,
+        "mean_high_nmse": 19.68126383126991,
+        "mean_log1p_db": 1.1104102886595824,
+        "mean_lsd_db": 10.528220611345406,
+        "mean_stereo_correlation_error": 0.00441601904557901,
+        "pooled_full_nmse": 0.010038829414662423,
+        "pooled_high_nmse": 0.7316873320473674,
+        "scenes": 24
+      },
+      "zero": {
+        "maximum_known_error": 0.0,
+        "mean_crest_error_db": 0.4530312067922367,
+        "mean_high_nmse": 0.6767314887069295,
+        "mean_log1p_db": 1.2674663630364986,
+        "mean_lsd_db": 17.43957081750583,
+        "mean_stereo_correlation_error": 0.0007070995501298657,
+        "pooled_full_nmse": 0.013621250857267878,
+        "pooled_high_nmse": 0.9989811876444609,
+        "scenes": 24
+      }
+    },
+    "families": [
+      {
+        "family": "continued_stack",
+        "scenes": 2,
+        "pooled_high_nmse": 0.46867047428604663,
+        "added_rms": 0.014569739875020297,
+        "desired_rms": 0.025449260438122703,
+        "pooled_added_energy_ratio": 0.32775797201510537,
+        "excess_persistent_peak_energy": 22.907718292223915,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "cymbal_bursts",
+        "scenes": 2,
+        "pooled_high_nmse": 0.7736252674908077,
+        "added_rms": 0.009812161537866246,
+        "desired_rms": 0.049299667184252494,
+        "pooled_added_energy_ratio": 0.03961333475037429,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "dense_mix",
+        "scenes": 2,
+        "pooled_high_nmse": 0.7100653410526049,
+        "added_rms": 0.00713539012990063,
+        "desired_rms": 0.017104168315853215,
+        "pooled_added_energy_ratio": 0.1740329666170917,
+        "excess_persistent_peak_energy": 0.008853368418258794,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "fm_events",
+        "scenes": 2,
+        "pooled_high_nmse": 1.4282274854384587,
+        "added_rms": 0.014320147099267651,
+        "desired_rms": 0.01146082812082424,
+        "pooled_added_energy_ratio": 1.5612158777499745,
+        "excess_persistent_peak_energy": 6.097977262372928,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "isolated_tone",
+        "scenes": 2,
+        "pooled_high_nmse": 0.0068449276818270365,
+        "added_rms": 3.5219056058401827e-05,
+        "desired_rms": 3.4859293491225275e-08,
+        "pooled_added_energy_ratio": null,
+        "excess_persistent_peak_energy": 0.005655643753739214,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "modal_transients",
+        "scenes": 2,
+        "pooled_high_nmse": 4.476414541136047,
+        "added_rms": 0.012399813651259623,
+        "desired_rms": 0.006154657376707708,
+        "pooled_added_energy_ratio": 4.059032741699163,
+        "excess_persistent_peak_energy": 45.146810621240135,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "near_silence",
+        "scenes": 2,
+        "pooled_high_nmse": 0.5686922451706146,
+        "added_rms": 8.077405410958438e-05,
+        "desired_rms": 0.00016469705363338948,
+        "pooled_added_energy_ratio": 0.24053157897373983,
+        "excess_persistent_peak_energy": 0.00029454716579643613,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "silence",
+        "scenes": 2,
+        "pooled_high_nmse": 0,
+        "added_rms": 0,
+        "desired_rms": 0,
+        "pooled_added_energy_ratio": null,
+        "excess_persistent_peak_energy": 0,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "spectral_gaps",
+        "scenes": 2,
+        "pooled_high_nmse": 0.6227206400399474,
+        "added_rms": 0.02226220472014492,
+        "desired_rms": 0.036230468329411625,
+        "pooled_added_energy_ratio": 0.37756214820912704,
+        "excess_persistent_peak_energy": 1191.6549672993906,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "stereo_ambience",
+        "scenes": 2,
+        "pooled_high_nmse": 0.5784410292408223,
+        "added_rms": 0.0033479475061134532,
+        "desired_rms": 0.008562154750791185,
+        "pooled_added_energy_ratio": 0.15289424331644677,
+        "excess_persistent_peak_energy": 0.5088664724055069,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "stopped_stack",
+        "scenes": 2,
+        "pooled_high_nmse": 0.8273244274102155,
+        "added_rms": 0.00015193347715639134,
+        "desired_rms": 3.373411433109786e-08,
+        "pooled_added_energy_ratio": null,
+        "excess_persistent_peak_energy": 0.013541196316696712,
+        "H_gain": null,
+        "N_gain": null
+      },
+      {
+        "family": "weak_upper",
+        "scenes": 2,
+        "pooled_high_nmse": 0.45289216966950907,
+        "added_rms": 8.294839526567935e-05,
+        "desired_rms": 0.000107024836200163,
+        "pooled_added_energy_ratio": 0.6006850639747722,
+        "excess_persistent_peak_energy": 0.02764494187657182,
+        "H_gain": null,
+        "N_gain": null
+      }
+    ]
+  }
+}

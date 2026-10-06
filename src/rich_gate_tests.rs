@@ -140,6 +140,33 @@ fn allocation_warm_start_exact_and_full_gradient() {
     }
 }
 #[test]
+fn allocator_actuator_lesion_preserves_disabled_path() -> Result<()> {
+    let (g, p, d, parts, cache, _) = fixture();
+    let mut g = g.expanded(420000);
+    let b = g.head.b2();
+    g.head.weights[b + 4] = 0.6;
+    g.head.weights[b + 5] = 0.4;
+    let f = forward(&g, &p, d, &parts, &cache, 0.5);
+    assert_eq!(
+        f.field,
+        cap_from_forward(&g, &f, &p, d, &parts, &cache).field
+    );
+    g.cap_boost = [true, false];
+    let capped = cap_from_forward(&g, &f, &p, d, &parts, &cache);
+    assert_eq!(capped.field, forward(&g, &p, d, &parts, &cache, 0.5).field);
+    assert_eq!(capped.gates[1], f.gates[1]);
+    assert!(capped.gates[0]
+        .iter()
+        .flatten()
+        .zip(f.gates[0].iter().flatten())
+        .all(|(a, b)| a <= b));
+    assert_eq!(
+        capped.field,
+        inference_tiled(&g, &p, d, &parts, 0.5, "cpu")?.field
+    );
+    Ok(())
+}
+#[test]
 fn component_decomposition_and_tiled_cpu_parity() -> Result<()> {
     let (g, p, d, parts, cache, _) = fixture();
     let a = forward(&g, &p, d, &parts, &cache, 0.5);
@@ -174,16 +201,27 @@ fn gate_nonzero_gpu_parity() -> Result<()> {
     for w in &mut g.head.weights {
         *w = r.signed() * 0.1;
     }
-    let a = inference_tiled(&g, &p, d, &parts, 0.7, "cpu")?;
-    let b = inference_tiled(&g, &p, d, &parts, 0.7, "opencl")?;
-    let max = a
-        .field
-        .iter()
-        .flatten()
-        .zip(b.field.iter().flatten())
-        .map(|(a, b)| (a - b).norm())
-        .fold(0.0f32, f32::max);
-    println!("gate GPU max={max}");
-    assert!(max < 2e-6);
+    for allocator in [false, true] {
+        let mut g = if allocator {
+            g.expanded(420000)
+        } else {
+            g.clone()
+        };
+        let mut r = Rng(122);
+        for w in &mut g.head.weights {
+            *w = r.signed() * 0.1;
+        }
+        let a = inference_tiled(&g, &p, d, &parts, 0.7, "cpu")?;
+        let b = inference_tiled(&g, &p, d, &parts, 0.7, "opencl")?;
+        let max = a
+            .field
+            .iter()
+            .flatten()
+            .zip(b.field.iter().flatten())
+            .map(|(a, b)| (a - b).norm())
+            .fold(0.0f32, f32::max);
+        println!("gate GPU max={max}");
+        assert!(max < 2e-6);
+    }
     Ok(())
 }

@@ -113,3 +113,33 @@ is not a positive-diffusion guarantee. Finite-state guards remain mandatory.
 This is a project-designed local operator informed by complex geometry(R17),
 using the existing conditional-flow-matching recipe(R1/R5); it is not FNO(R13),
 Navier–Stokes or a phase-equivariant neural network.
+
+2026-10-06 priority update: preserve the implemented/parity-checked field code,
+but defer field training and the draft joint-phase gate. Remaining frontier
+budget goes first to allocation, matched continuation, family-level diagnostics
+and listening. Owner prefers frozen Flow3000 for both controlled and undegraded
+V1 comparisons; that is a negative perceptual result for the gate.
+
+Allocation600 development shows more legitimate cymbal energy but worse pooled
+error than equally trained shrinkage, with continued/gap overshoot. Before fresh
+evaluation, register causal inference lesions: cap only H boosts, only N boosts,
+or both at1 while retaining below1 attenuation and all learned authorization.
+These are lesions of the same trained allocator, not separately trained models.
+Their scalar controls match added RMS by attenuating both to the common minimum.
+No frequency is singled out. Log gain distributions by family; null ratios for
+almost-empty target energy. The primary96 seeds540000 and legacy48 seeds570000
+remain unseen; development24 seeds530004 only may guide continuation.
+
+Cheap diagnostic oracle48 seeds580008: fit nonnegative per-TF component gains
+with32 projected-coordinate iterations, ridge1e-4 local component power,
+shrink0..1 versus H/N0..8 and R/F0..1, then the same3×3 smoothing. Synthetic
+targets are deliberately used only by this diagnostic. No inference caller or
+checkpoint uses oracle coefficients. The complex-L2 fit is phase-sensitive and
+not a magnitude/perceptual optimum; smoothing after independent fitting is not
+a global constrained optimum. Success shows actuator headroom; failure alone
+cannot prove absence of perceptual or other optimization headroom.
+
+Future queued perceptual hypotheses: ERB/masking, tonal/noise audibility,
+temporal masking/modulation, transient salience and interaural/spatial coherence.
+No psychoacoustic framework, perceptual reward, attention, beam search or spatial
+resynthesis is added in this allocation test.
