@@ -1,0 +1,8599 @@
+{
+  "backend": "opencl",
+  "data_seed": 400008,
+  "deterministic": "artifacts/native-v2/deterministic.json",
+  "flow": "artifacts/native-longer-v2/flow3000.json",
+  "loss": "whole-clip multiscale waveform spectral/envelope/onset;0.02 added-energy penalty only for known no-upper synthetic cases",
+  "provenance": {
+    "architecture": {
+      "cache_limit_mib": 64,
+      "context_hops": [
+        -16,
+        -8,
+        -4,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "encoder": [
+        3098,
+        32,
+        32
+      ],
+      "flow": "direct diagonal plus correlated residual",
+      "frequency_shared_head": [
+        184,
+        32,
+        6
+      ],
+      "parameters": 106342,
+      "schema": "scene-v2-native-shared-v1"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3500,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        300,
+        1000
+      ]
+    },
+    "generator": {
+      "natural_training_examples": 0,
+      "patch_samples": 16384,
+      "scene_seconds": 2,
+      "updates_per_scene": 4,
+      "version": 2
+    },
+    "git_commit": "3da0fade9799ca5379be275b104f4866e06f3627",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t  119304 kB",
+      "VmRSS:\t   70312 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "sprint": {
+      "gate": [
+        64,
+        24,
+        4
+      ],
+      "gate_parameters": 1660,
+      "gate_smoothing": [
+        3,
+        3
+      ],
+      "generator": "rich-v3",
+      "natural_training_examples": 0,
+      "whole_clip_gate_gradients": true
+    },
+    "stft": {
+      "analysis_loss_ffts": [
+        256,
+        1024,
+        4096
+      ],
+      "base_fft": 1024,
+      "base_hop": 256,
+      "channels": "orthonormal mid/side",
+      "sample_rate": 48000
+    },
+    "unix_time": 1791259018
+  },
+  "records": [
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6189.98876953125,
+          "power": 2.0545804500579834,
+          "transition": 360.1661682128906
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400008,
+        "version": 3
+      },
+      "scene_seed": 400008,
+      "step": 1
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6189.98876953125,
+          "power": 2.0545804500579834,
+          "transition": 360.1661682128906
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400008,
+        "version": 3
+      },
+      "scene_seed": 400008,
+      "step": 2
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6189.98876953125,
+          "power": 2.0545804500579834,
+          "transition": 360.1661682128906
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400008,
+        "version": 3
+      },
+      "scene_seed": 400008,
+      "step": 3
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6189.98876953125,
+          "power": 2.0545804500579834,
+          "transition": 360.1661682128906
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400008,
+        "version": 3
+      },
+      "scene_seed": 400008,
+      "step": 4
+    },
+    {
+      "losses": [
+        2.620530865518273,
+        2.620530865518273
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6001.408203125,
+          "power": 2.47635817527771,
+          "transition": 317.84283447265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400009,
+        "version": 3
+      },
+      "scene_seed": 400009,
+      "step": 5
+    },
+    {
+      "losses": [
+        2.6166748359306378,
+        2.6172248357909327
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6001.408203125,
+          "power": 2.47635817527771,
+          "transition": 317.84283447265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400009,
+        "version": 3
+      },
+      "scene_seed": 400009,
+      "step": 6
+    },
+    {
+      "losses": [
+        2.6112566233003967,
+        2.6129307616183444
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6001.408203125,
+          "power": 2.47635817527771,
+          "transition": 317.84283447265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400009,
+        "version": 3
+      },
+      "scene_seed": 400009,
+      "step": 7
+    },
+    {
+      "losses": [
+        2.6044758249543825,
+        2.6080243350412013
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6001.408203125,
+          "power": 2.47635817527771,
+          "transition": 317.84283447265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400009,
+        "version": 3
+      },
+      "scene_seed": 400009,
+      "step": 8
+    },
+    {
+      "losses": [
+        2.3881246554446722,
+        2.3920422130812176
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7737.27587890625,
+          "power": 1.542093276977539,
+          "transition": 890.1915893554688
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400010,
+        "version": 3
+      },
+      "scene_seed": 400010,
+      "step": 9
+    },
+    {
+      "losses": [
+        2.3868747718536305,
+        2.3932504117879847
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7737.27587890625,
+          "power": 1.542093276977539,
+          "transition": 890.1915893554688
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400010,
+        "version": 3
+      },
+      "scene_seed": 400010,
+      "step": 10
+    },
+    {
+      "losses": [
+        2.38200278668875,
+        2.3918279342608315
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7737.27587890625,
+          "power": 1.542093276977539,
+          "transition": 890.1915893554688
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400010,
+        "version": 3
+      },
+      "scene_seed": 400010,
+      "step": 11
+    },
+    {
+      "losses": [
+        2.374936325608561,
+        2.3888031743815104
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7737.27587890625,
+          "power": 1.542093276977539,
+          "transition": 890.1915893554688
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400010,
+        "version": 3
+      },
+      "scene_seed": 400010,
+      "step": 12
+    },
+    {
+      "losses": [
+        6.109734368612105,
+        6.121052308815135
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7403.22412109375,
+          "power": 2.764033079147339,
+          "transition": 997.73974609375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400011,
+        "version": 3
+      },
+      "scene_seed": 400011,
+      "step": 13
+    },
+    {
+      "losses": [
+        6.101383806191665,
+        6.116460110792286
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7403.22412109375,
+          "power": 2.764033079147339,
+          "transition": 997.73974609375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400011,
+        "version": 3
+      },
+      "scene_seed": 400011,
+      "step": 14
+    },
+    {
+      "losses": [
+        6.091784385570219,
+        6.111512682450483
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7403.22412109375,
+          "power": 2.764033079147339,
+          "transition": 997.73974609375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400011,
+        "version": 3
+      },
+      "scene_seed": 400011,
+      "step": 15
+    },
+    {
+      "losses": [
+        6.080893490551612,
+        6.1063779516409715
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7403.22412109375,
+          "power": 2.764033079147339,
+          "transition": 997.73974609375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400011,
+        "version": 3
+      },
+      "scene_seed": 400011,
+      "step": 16
+    },
+    {
+      "losses": [
+        2.5065509311119554,
+        2.5044406394641783
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4678.640625,
+          "power": 1.0404376983642578,
+          "transition": 729.51220703125
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400012,
+        "version": 3
+      },
+      "scene_seed": 400012,
+      "step": 17
+    },
+    {
+      "losses": [
+        2.5044771693076924,
+        2.502575146999513
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4678.640625,
+          "power": 1.0404376983642578,
+          "transition": 729.51220703125
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400012,
+        "version": 3
+      },
+      "scene_seed": 400012,
+      "step": 18
+    },
+    {
+      "losses": [
+        2.5015388458293626,
+        2.500539699612046
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4678.640625,
+          "power": 1.0404376983642578,
+          "transition": 729.51220703125
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400012,
+        "version": 3
+      },
+      "scene_seed": 400012,
+      "step": 19
+    },
+    {
+      "losses": [
+        2.497637911232753,
+        2.4983045905374563
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4678.640625,
+          "power": 1.0404376983642578,
+          "transition": 729.51220703125
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400012,
+        "version": 3
+      },
+      "scene_seed": 400012,
+      "step": 20
+    },
+    {
+      "losses": [
+        2.1290139142223032,
+        2.1908504989940942
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3946.943359375,
+          "power": 1.653717041015625,
+          "transition": 824.5089111328125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400013,
+        "version": 3
+      },
+      "scene_seed": 400013,
+      "step": 21
+    },
+    {
+      "losses": [
+        2.116883366006885,
+        2.184806615128421
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3946.943359375,
+          "power": 1.653717041015625,
+          "transition": 824.5089111328125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400013,
+        "version": 3
+      },
+      "scene_seed": 400013,
+      "step": 22
+    },
+    {
+      "losses": [
+        2.1013920223751685,
+        2.1771448047422086
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3946.943359375,
+          "power": 1.653717041015625,
+          "transition": 824.5089111328125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400013,
+        "version": 3
+      },
+      "scene_seed": 400013,
+      "step": 23
+    },
+    {
+      "losses": [
+        2.082850681536435,
+        2.167912103654912
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3946.943359375,
+          "power": 1.653717041015625,
+          "transition": 824.5089111328125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400013,
+        "version": 3
+      },
+      "scene_seed": 400013,
+      "step": 24
+    },
+    {
+      "losses": [
+        6.35512404382341,
+        6.331060344688238
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6095.3095703125,
+          "power": 1.5494648218154907,
+          "transition": 733.5557250976562
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400014,
+        "version": 3
+      },
+      "scene_seed": 400014,
+      "step": 25
+    },
+    {
+      "losses": [
+        6.347918976441751,
+        6.3287024496053
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6095.3095703125,
+          "power": 1.5494648218154907,
+          "transition": 733.5557250976562
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400014,
+        "version": 3
+      },
+      "scene_seed": 400014,
+      "step": 26
+    },
+    {
+      "losses": [
+        6.336882363124298,
+        6.325463239014495
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6095.3095703125,
+          "power": 1.5494648218154907,
+          "transition": 733.5557250976562
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400014,
+        "version": 3
+      },
+      "scene_seed": 400014,
+      "step": 27
+    },
+    {
+      "losses": [
+        6.3234582397115275,
+        6.321608380704947
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6095.3095703125,
+          "power": 1.5494648218154907,
+          "transition": 733.5557250976562
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400014,
+        "version": 3
+      },
+      "scene_seed": 400014,
+      "step": 28
+    },
+    {
+      "losses": [
+        5.434419473108953,
+        5.363666634937931
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7131.2373046875,
+          "power": 3.7706825733184814,
+          "transition": 335.08966064453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400015,
+        "version": 3
+      },
+      "scene_seed": 400015,
+      "step": 29
+    },
+    {
+      "losses": [
+        5.447848740511535,
+        5.366167759523652
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7131.2373046875,
+          "power": 3.7706825733184814,
+          "transition": 335.08966064453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400015,
+        "version": 3
+      },
+      "scene_seed": 400015,
+      "step": 30
+    },
+    {
+      "losses": [
+        5.446041184502223,
+        5.3629237276619355
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7131.2373046875,
+          "power": 3.7706825733184814,
+          "transition": 335.08966064453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400015,
+        "version": 3
+      },
+      "scene_seed": 400015,
+      "step": 31
+    },
+    {
+      "losses": [
+        5.432207331780377,
+        5.355476437737421
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7131.2373046875,
+          "power": 3.7706825733184814,
+          "transition": 335.08966064453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400015,
+        "version": 3
+      },
+      "scene_seed": 400015,
+      "step": 32
+    },
+    {
+      "losses": [
+        3.289662819888525,
+        3.2836903607323995
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4372.892578125,
+          "power": 3.28007435798645,
+          "transition": 517.0956420898438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400016,
+        "version": 3
+      },
+      "scene_seed": 400016,
+      "step": 33
+    },
+    {
+      "losses": [
+        3.278775368956807,
+        3.2787468370309165
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4372.892578125,
+          "power": 3.28007435798645,
+          "transition": 517.0956420898438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400016,
+        "version": 3
+      },
+      "scene_seed": 400016,
+      "step": 34
+    },
+    {
+      "losses": [
+        3.2653148162929377,
+        3.273177402270027
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4372.892578125,
+          "power": 3.28007435798645,
+          "transition": 517.0956420898438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400016,
+        "version": 3
+      },
+      "scene_seed": 400016,
+      "step": 35
+    },
+    {
+      "losses": [
+        3.2495887796580623,
+        3.2669634376214653
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4372.892578125,
+          "power": 3.28007435798645,
+          "transition": 517.0956420898438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400016,
+        "version": 3
+      },
+      "scene_seed": 400016,
+      "step": 36
+    },
+    {
+      "losses": [
+        3.5845849278323634,
+        3.5557582564615875
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5280.70703125,
+          "power": 3.569758892059326,
+          "transition": 864.9695434570312
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400017,
+        "version": 3
+      },
+      "scene_seed": 400017,
+      "step": 37
+    },
+    {
+      "losses": [
+        3.5970519419820546,
+        3.560331526492877
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5280.70703125,
+          "power": 3.569758892059326,
+          "transition": 864.9695434570312
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400017,
+        "version": 3
+      },
+      "scene_seed": 400017,
+      "step": 38
+    },
+    {
+      "losses": [
+        3.6029391304039504,
+        3.563333099809018
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5280.70703125,
+          "power": 3.569758892059326,
+          "transition": 864.9695434570312
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400017,
+        "version": 3
+      },
+      "scene_seed": 400017,
+      "step": 39
+    },
+    {
+      "losses": [
+        3.6032816243639063,
+        3.56487261681137
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5280.70703125,
+          "power": 3.569758892059326,
+          "transition": 864.9695434570312
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400017,
+        "version": 3
+      },
+      "scene_seed": 400017,
+      "step": 40
+    },
+    {
+      "losses": [
+        1.256197366981756,
+        1.3396861970824854
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4476.7421875,
+          "power": 2.987215757369995,
+          "transition": 965.2848510742188
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          9309.1279296875,
+          10359.5341796875
+        ],
+        "mono": true,
+        "no_upper": false,
+        "seed": 400018,
+        "version": 3
+      },
+      "scene_seed": 400018,
+      "step": 41
+    },
+    {
+      "losses": [
+        1.251446316102585,
+        1.3385729339644339
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4476.7421875,
+          "power": 2.987215757369995,
+          "transition": 965.2848510742188
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          9309.1279296875,
+          10359.5341796875
+        ],
+        "mono": true,
+        "no_upper": false,
+        "seed": 400018,
+        "version": 3
+      },
+      "scene_seed": 400018,
+      "step": 42
+    },
+    {
+      "losses": [
+        1.2445511915299052,
+        1.336286770077305
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4476.7421875,
+          "power": 2.987215757369995,
+          "transition": 965.2848510742188
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          9309.1279296875,
+          10359.5341796875
+        ],
+        "mono": true,
+        "no_upper": false,
+        "seed": 400018,
+        "version": 3
+      },
+      "scene_seed": 400018,
+      "step": 43
+    },
+    {
+      "losses": [
+        1.2358963359631066,
+        1.3329149059046912
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4476.7421875,
+          "power": 2.987215757369995,
+          "transition": 965.2848510742188
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          9309.1279296875,
+          10359.5341796875
+        ],
+        "mono": true,
+        "no_upper": false,
+        "seed": 400018,
+        "version": 3
+      },
+      "scene_seed": 400018,
+      "step": 44
+    },
+    {
+      "losses": [
+        2.3026470471940095,
+        2.304356042704056
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4662.09375,
+          "power": 1.5478267669677734,
+          "transition": 443.65484619140625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400019,
+        "version": 3
+      },
+      "scene_seed": 400019,
+      "step": 45
+    },
+    {
+      "losses": [
+        2.2983007724252804,
+        2.3036975029289715
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4662.09375,
+          "power": 1.5478267669677734,
+          "transition": 443.65484619140625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400019,
+        "version": 3
+      },
+      "scene_seed": 400019,
+      "step": 46
+    },
+    {
+      "losses": [
+        2.2929850636056868,
+        2.302801447806923
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4662.09375,
+          "power": 1.5478267669677734,
+          "transition": 443.65484619140625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400019,
+        "version": 3
+      },
+      "scene_seed": 400019,
+      "step": 47
+    },
+    {
+      "losses": [
+        2.28681654307041,
+        2.3017081865808735
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4662.09375,
+          "power": 1.5478267669677734,
+          "transition": 443.65484619140625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400019,
+        "version": 3
+      },
+      "scene_seed": 400019,
+      "step": 48
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6032.28564453125,
+          "power": 1.0210075378417969,
+          "transition": 632.3204956054688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400020,
+        "version": 3
+      },
+      "scene_seed": 400020,
+      "step": 49
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6032.28564453125,
+          "power": 1.0210075378417969,
+          "transition": 632.3204956054688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400020,
+        "version": 3
+      },
+      "scene_seed": 400020,
+      "step": 50
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6032.28564453125,
+          "power": 1.0210075378417969,
+          "transition": 632.3204956054688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400020,
+        "version": 3
+      },
+      "scene_seed": 400020,
+      "step": 51
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6032.28564453125,
+          "power": 1.0210075378417969,
+          "transition": 632.3204956054688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400020,
+        "version": 3
+      },
+      "scene_seed": 400020,
+      "step": 52
+    },
+    {
+      "losses": [
+        1.536701368652315,
+        1.4643135735248487
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6836.43212890625,
+          "power": 1.9263455867767334,
+          "transition": 728.8951416015625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400021,
+        "version": 3
+      },
+      "scene_seed": 400021,
+      "step": 53
+    },
+    {
+      "losses": [
+        1.5394645501219912,
+        1.464961411420735
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6836.43212890625,
+          "power": 1.9263455867767334,
+          "transition": 728.8951416015625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400021,
+        "version": 3
+      },
+      "scene_seed": 400021,
+      "step": 54
+    },
+    {
+      "losses": [
+        1.5327580016923035,
+        1.4644333799555669
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6836.43212890625,
+          "power": 1.9263455867767334,
+          "transition": 728.8951416015625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400021,
+        "version": 3
+      },
+      "scene_seed": 400021,
+      "step": 55
+    },
+    {
+      "losses": [
+        1.5183203158082286,
+        1.4628539158667504
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6836.43212890625,
+          "power": 1.9263455867767334,
+          "transition": 728.8951416015625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400021,
+        "version": 3
+      },
+      "scene_seed": 400021,
+      "step": 56
+    },
+    {
+      "losses": [
+        2.277526868761436,
+        2.334353554281647
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3703.85693359375,
+          "power": 1.2838810682296753,
+          "transition": 434.43487548828125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400022,
+        "version": 3
+      },
+      "scene_seed": 400022,
+      "step": 57
+    },
+    {
+      "losses": [
+        2.266508970722783,
+        2.3314102046428378
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3703.85693359375,
+          "power": 1.2838810682296753,
+          "transition": 434.43487548828125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400022,
+        "version": 3
+      },
+      "scene_seed": 400022,
+      "step": 58
+    },
+    {
+      "losses": [
+        2.253835161974783,
+        2.3256312863951605
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3703.85693359375,
+          "power": 1.2838810682296753,
+          "transition": 434.43487548828125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400022,
+        "version": 3
+      },
+      "scene_seed": 400022,
+      "step": 59
+    },
+    {
+      "losses": [
+        2.2413705462575266,
+        2.3173898422686605
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3703.85693359375,
+          "power": 1.2838810682296753,
+          "transition": 434.43487548828125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400022,
+        "version": 3
+      },
+      "scene_seed": 400022,
+      "step": 60
+    },
+    {
+      "losses": [
+        5.133990566472254,
+        4.916969986555088
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5588.7578125,
+          "power": 2.1667375564575195,
+          "transition": 421.3689270019531
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400023,
+        "version": 3
+      },
+      "scene_seed": 400023,
+      "step": 61
+    },
+    {
+      "losses": [
+        5.046031910111326,
+        4.913141333405642
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5588.7578125,
+          "power": 2.1667375564575195,
+          "transition": 421.3689270019531
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400023,
+        "version": 3
+      },
+      "scene_seed": 400023,
+      "step": 62
+    },
+    {
+      "losses": [
+        4.950157570480227,
+        4.902354003262402
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5588.7578125,
+          "power": 2.1667375564575195,
+          "transition": 421.3689270019531
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400023,
+        "version": 3
+      },
+      "scene_seed": 400023,
+      "step": 63
+    },
+    {
+      "losses": [
+        4.850705430341222,
+        4.885055688071731
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5588.7578125,
+          "power": 2.1667375564575195,
+          "transition": 421.3689270019531
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400023,
+        "version": 3
+      },
+      "scene_seed": 400023,
+      "step": 64
+    },
+    {
+      "losses": [
+        1.9814119360505034,
+        2.0438445764863302
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7826.8515625,
+          "power": 1.346703290939331,
+          "transition": 840.1331787109375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400024,
+        "version": 3
+      },
+      "scene_seed": 400024,
+      "step": 65
+    },
+    {
+      "losses": [
+        1.976793082362526,
+        2.0389805561717798
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7826.8515625,
+          "power": 1.346703290939331,
+          "transition": 840.1331787109375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400024,
+        "version": 3
+      },
+      "scene_seed": 400024,
+      "step": 66
+    },
+    {
+      "losses": [
+        1.9729218897496883,
+        2.03371607333692
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7826.8515625,
+          "power": 1.346703290939331,
+          "transition": 840.1331787109375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400024,
+        "version": 3
+      },
+      "scene_seed": 400024,
+      "step": 67
+    },
+    {
+      "losses": [
+        1.9689575302105697,
+        2.0280006300497346
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7826.8515625,
+          "power": 1.346703290939331,
+          "transition": 840.1331787109375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400024,
+        "version": 3
+      },
+      "scene_seed": 400024,
+      "step": 68
+    },
+    {
+      "losses": [
+        3.294520403274784,
+        3.4655233370022467
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6776.455078125,
+          "power": 2.1941921710968018,
+          "transition": 546.5523681640625
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400025,
+        "version": 3
+      },
+      "scene_seed": 400025,
+      "step": 69
+    },
+    {
+      "losses": [
+        3.278751712065638,
+        3.448630979395752
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6776.455078125,
+          "power": 2.1941921710968018,
+          "transition": 546.5523681640625
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400025,
+        "version": 3
+      },
+      "scene_seed": 400025,
+      "step": 70
+    },
+    {
+      "losses": [
+        3.2588539385222886,
+        3.4295052805553725
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6776.455078125,
+          "power": 2.1941921710968018,
+          "transition": 546.5523681640625
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400025,
+        "version": 3
+      },
+      "scene_seed": 400025,
+      "step": 71
+    },
+    {
+      "losses": [
+        3.233733060549305,
+        3.408269214034237
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6776.455078125,
+          "power": 2.1941921710968018,
+          "transition": 546.5523681640625
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400025,
+        "version": 3
+      },
+      "scene_seed": 400025,
+      "step": 72
+    },
+    {
+      "losses": [
+        6.4065074566017675,
+        6.368626370222256
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5324.3525390625,
+          "power": 3.748722553253174,
+          "transition": 947.3531494140625
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400026,
+        "version": 3
+      },
+      "scene_seed": 400026,
+      "step": 73
+    },
+    {
+      "losses": [
+        6.4105327535803225,
+        6.3757573250101105
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5324.3525390625,
+          "power": 3.748722553253174,
+          "transition": 947.3531494140625
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400026,
+        "version": 3
+      },
+      "scene_seed": 400026,
+      "step": 74
+    },
+    {
+      "losses": [
+        6.4073062082308585,
+        6.378675901240335
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5324.3525390625,
+          "power": 3.748722553253174,
+          "transition": 947.3531494140625
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400026,
+        "version": 3
+      },
+      "scene_seed": 400026,
+      "step": 75
+    },
+    {
+      "losses": [
+        6.398283981522355,
+        6.37799400393802
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5324.3525390625,
+          "power": 3.748722553253174,
+          "transition": 947.3531494140625
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400026,
+        "version": 3
+      },
+      "scene_seed": 400026,
+      "step": 76
+    },
+    {
+      "losses": [
+        4.451001007951917,
+        4.557564246652515
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7051.4677734375,
+          "power": 2.3334968090057373,
+          "transition": 591.6444091796875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400027,
+        "version": 3
+      },
+      "scene_seed": 400027,
+      "step": 77
+    },
+    {
+      "losses": [
+        4.4441451638724825,
+        4.545748242943126
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7051.4677734375,
+          "power": 2.3334968090057373,
+          "transition": 591.6444091796875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400027,
+        "version": 3
+      },
+      "scene_seed": 400027,
+      "step": 78
+    },
+    {
+      "losses": [
+        4.430913076872574,
+        4.529322201158838
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7051.4677734375,
+          "power": 2.3334968090057373,
+          "transition": 591.6444091796875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400027,
+        "version": 3
+      },
+      "scene_seed": 400027,
+      "step": 79
+    },
+    {
+      "losses": [
+        4.4118450405203316,
+        4.509011523439922
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7051.4677734375,
+          "power": 2.3334968090057373,
+          "transition": 591.6444091796875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400027,
+        "version": 3
+      },
+      "scene_seed": 400027,
+      "step": 80
+    },
+    {
+      "losses": [
+        1.237248863075204,
+        1.2545307597058384
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5195.951171875,
+          "power": 3.580084800720215,
+          "transition": 999.822021484375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400028,
+        "version": 3
+      },
+      "scene_seed": 400028,
+      "step": 81
+    },
+    {
+      "losses": [
+        1.2261451655922293,
+        1.2457563257438067
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5195.951171875,
+          "power": 3.580084800720215,
+          "transition": 999.822021484375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400028,
+        "version": 3
+      },
+      "scene_seed": 400028,
+      "step": 82
+    },
+    {
+      "losses": [
+        1.2133548359611714,
+        1.2347784156874957
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5195.951171875,
+          "power": 3.580084800720215,
+          "transition": 999.822021484375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400028,
+        "version": 3
+      },
+      "scene_seed": 400028,
+      "step": 83
+    },
+    {
+      "losses": [
+        1.1988571832129025,
+        1.2215514044064273
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5195.951171875,
+          "power": 3.580084800720215,
+          "transition": 999.822021484375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400028,
+        "version": 3
+      },
+      "scene_seed": 400028,
+      "step": 84
+    },
+    {
+      "losses": [
+        2.2971920939072463,
+        2.254967193340727
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6379.31640625,
+          "power": 2.2428436279296875,
+          "transition": 816.370361328125
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400029,
+        "version": 3
+      },
+      "scene_seed": 400029,
+      "step": 85
+    },
+    {
+      "losses": [
+        2.3065260323485917,
+        2.264651943530212
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6379.31640625,
+          "power": 2.2428436279296875,
+          "transition": 816.370361328125
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400029,
+        "version": 3
+      },
+      "scene_seed": 400029,
+      "step": 86
+    },
+    {
+      "losses": [
+        2.312478286472221,
+        2.2718359254850014
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6379.31640625,
+          "power": 2.2428436279296875,
+          "transition": 816.370361328125
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400029,
+        "version": 3
+      },
+      "scene_seed": 400029,
+      "step": 87
+    },
+    {
+      "losses": [
+        2.31518913505203,
+        2.276501666119625
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6379.31640625,
+          "power": 2.2428436279296875,
+          "transition": 816.370361328125
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400029,
+        "version": 3
+      },
+      "scene_seed": 400029,
+      "step": 88
+    },
+    {
+      "losses": [
+        3.1531812421685492,
+        3.164102070084387
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4386.29150390625,
+          "power": 3.7787904739379883,
+          "transition": 628.6591796875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          12946.044921875,
+          15430.234375
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400030,
+        "version": 3
+      },
+      "scene_seed": 400030,
+      "step": 89
+    },
+    {
+      "losses": [
+        3.1496674833370033,
+        3.154441264135354
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4386.29150390625,
+          "power": 3.7787904739379883,
+          "transition": 628.6591796875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          12946.044921875,
+          15430.234375
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400030,
+        "version": 3
+      },
+      "scene_seed": 400030,
+      "step": 90
+    },
+    {
+      "losses": [
+        3.140399155166887,
+        3.139686608724312
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4386.29150390625,
+          "power": 3.7787904739379883,
+          "transition": 628.6591796875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          12946.044921875,
+          15430.234375
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400030,
+        "version": 3
+      },
+      "scene_seed": 400030,
+      "step": 91
+    },
+    {
+      "losses": [
+        3.126042607116526,
+        3.1203037674896263
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4386.29150390625,
+          "power": 3.7787904739379883,
+          "transition": 628.6591796875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          12946.044921875,
+          15430.234375
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400030,
+        "version": 3
+      },
+      "scene_seed": 400030,
+      "step": 92
+    },
+    {
+      "losses": [
+        2.2467076944161732,
+        2.2266664535719594
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7361.4765625,
+          "power": 1.3711966276168823,
+          "transition": 338.86505126953125
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400031,
+        "version": 3
+      },
+      "scene_seed": 400031,
+      "step": 93
+    },
+    {
+      "losses": [
+        2.2465315540140463,
+        2.225850991289657
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7361.4765625,
+          "power": 1.3711966276168823,
+          "transition": 338.86505126953125
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400031,
+        "version": 3
+      },
+      "scene_seed": 400031,
+      "step": 94
+    },
+    {
+      "losses": [
+        2.245745463760933,
+        2.2248509197018222
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7361.4765625,
+          "power": 1.3711966276168823,
+          "transition": 338.86505126953125
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400031,
+        "version": 3
+      },
+      "scene_seed": 400031,
+      "step": 95
+    },
+    {
+      "losses": [
+        2.244359595472048,
+        2.2236414720620203
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7361.4765625,
+          "power": 1.3711966276168823,
+          "transition": 338.86505126953125
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400031,
+        "version": 3
+      },
+      "scene_seed": 400031,
+      "step": 96
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5598.86181640625,
+          "power": 1.5092880725860596,
+          "transition": 575.8911743164062
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400032,
+        "version": 3
+      },
+      "scene_seed": 400032,
+      "step": 97
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5598.86181640625,
+          "power": 1.5092880725860596,
+          "transition": 575.8911743164062
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400032,
+        "version": 3
+      },
+      "scene_seed": 400032,
+      "step": 98
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5598.86181640625,
+          "power": 1.5092880725860596,
+          "transition": 575.8911743164062
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400032,
+        "version": 3
+      },
+      "scene_seed": 400032,
+      "step": 99
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5598.86181640625,
+          "power": 1.5092880725860596,
+          "transition": 575.8911743164062
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400032,
+        "version": 3
+      },
+      "scene_seed": 400032,
+      "step": 100
+    },
+    {
+      "losses": [
+        1.3378206190701796,
+        1.390926592863036
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7541.5126953125,
+          "power": 2.4857277870178223,
+          "transition": 492.9770812988281
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400033,
+        "version": 3
+      },
+      "scene_seed": 400033,
+      "step": 101
+    },
+    {
+      "losses": [
+        1.3238662223781694,
+        1.37335462812471
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7541.5126953125,
+          "power": 2.4857277870178223,
+          "transition": 492.9770812988281
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400033,
+        "version": 3
+      },
+      "scene_seed": 400033,
+      "step": 102
+    },
+    {
+      "losses": [
+        1.303769676607476,
+        1.3485491765632476
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7541.5126953125,
+          "power": 2.4857277870178223,
+          "transition": 492.9770812988281
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400033,
+        "version": 3
+      },
+      "scene_seed": 400033,
+      "step": 103
+    },
+    {
+      "losses": [
+        1.280699826423756,
+        1.321340222230327
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7541.5126953125,
+          "power": 2.4857277870178223,
+          "transition": 492.9770812988281
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400033,
+        "version": 3
+      },
+      "scene_seed": 400033,
+      "step": 104
+    },
+    {
+      "losses": [
+        1.9240091422228303,
+        2.0959031190263677
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5563.0810546875,
+          "power": 2.617887496948242,
+          "transition": 349.9256286621094
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400034,
+        "version": 3
+      },
+      "scene_seed": 400034,
+      "step": 105
+    },
+    {
+      "losses": [
+        1.9270793640563328,
+        2.104302472230108
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5563.0810546875,
+          "power": 2.617887496948242,
+          "transition": 349.9256286621094
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400034,
+        "version": 3
+      },
+      "scene_seed": 400034,
+      "step": 106
+    },
+    {
+      "losses": [
+        1.9079583111746128,
+        2.0909327510929123
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5563.0810546875,
+          "power": 2.617887496948242,
+          "transition": 349.9256286621094
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400034,
+        "version": 3
+      },
+      "scene_seed": 400034,
+      "step": 107
+    },
+    {
+      "losses": [
+        1.8676847684918365,
+        2.0555653632715596
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5563.0810546875,
+          "power": 2.617887496948242,
+          "transition": 349.9256286621094
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400034,
+        "version": 3
+      },
+      "scene_seed": 400034,
+      "step": 108
+    },
+    {
+      "losses": [
+        3.767535980575667,
+        3.914708443721458
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6968.68896484375,
+          "power": 3.845022439956665,
+          "transition": 340.4681396484375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400035,
+        "version": 3
+      },
+      "scene_seed": 400035,
+      "step": 109
+    },
+    {
+      "losses": [
+        3.733287050329389,
+        3.8609057517750456
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6968.68896484375,
+          "power": 3.845022439956665,
+          "transition": 340.4681396484375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400035,
+        "version": 3
+      },
+      "scene_seed": 400035,
+      "step": 110
+    },
+    {
+      "losses": [
+        3.6907895927166794,
+        3.7982920321704725
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6968.68896484375,
+          "power": 3.845022439956665,
+          "transition": 340.4681396484375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400035,
+        "version": 3
+      },
+      "scene_seed": 400035,
+      "step": 111
+    },
+    {
+      "losses": [
+        3.6390316518922536,
+        3.7293056652550463
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6968.68896484375,
+          "power": 3.845022439956665,
+          "transition": 340.4681396484375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400035,
+        "version": 3
+      },
+      "scene_seed": 400035,
+      "step": 112
+    },
+    {
+      "losses": [
+        3.560513630886295,
+        3.839144860827444
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3547.924072265625,
+          "power": 2.921624183654785,
+          "transition": 899.5418701171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400036,
+        "version": 3
+      },
+      "scene_seed": 400036,
+      "step": 113
+    },
+    {
+      "losses": [
+        3.5770115811123264,
+        3.872994718295255
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3547.924072265625,
+          "power": 2.921624183654785,
+          "transition": 899.5418701171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400036,
+        "version": 3
+      },
+      "scene_seed": 400036,
+      "step": 114
+    },
+    {
+      "losses": [
+        3.582742347107816,
+        3.890795355108569
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3547.924072265625,
+          "power": 2.921624183654785,
+          "transition": 899.5418701171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400036,
+        "version": 3
+      },
+      "scene_seed": 400036,
+      "step": 115
+    },
+    {
+      "losses": [
+        3.5775779445122846,
+        3.8927396879602942
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3547.924072265625,
+          "power": 2.921624183654785,
+          "transition": 899.5418701171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400036,
+        "version": 3
+      },
+      "scene_seed": 400036,
+      "step": 116
+    },
+    {
+      "losses": [
+        1.0919100796063443,
+        1.0690828018017005
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5702.2294921875,
+          "power": 1.5902951955795288,
+          "transition": 316.9891357421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400037,
+        "version": 3
+      },
+      "scene_seed": 400037,
+      "step": 117
+    },
+    {
+      "losses": [
+        1.0561058324745434,
+        1.0414164074416234
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5702.2294921875,
+          "power": 1.5902951955795288,
+          "transition": 316.9891357421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400037,
+        "version": 3
+      },
+      "scene_seed": 400037,
+      "step": 118
+    },
+    {
+      "losses": [
+        1.0194024919430704,
+        1.0204203186522465
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5702.2294921875,
+          "power": 1.5902951955795288,
+          "transition": 316.9891357421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400037,
+        "version": 3
+      },
+      "scene_seed": 400037,
+      "step": 119
+    },
+    {
+      "losses": [
+        0.991235994692417,
+        1.0120302706852737
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5702.2294921875,
+          "power": 1.5902951955795288,
+          "transition": 316.9891357421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400037,
+        "version": 3
+      },
+      "scene_seed": 400037,
+      "step": 120
+    },
+    {
+      "losses": [
+        5.858563741271523,
+        5.919509226600202
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6372.0166015625,
+          "power": 2.9454634189605713,
+          "transition": 823.2833251953125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400038,
+        "version": 3
+      },
+      "scene_seed": 400038,
+      "step": 121
+    },
+    {
+      "losses": [
+        5.843867089994607,
+        5.915310322438311
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6372.0166015625,
+          "power": 2.9454634189605713,
+          "transition": 823.2833251953125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400038,
+        "version": 3
+      },
+      "scene_seed": 400038,
+      "step": 122
+    },
+    {
+      "losses": [
+        5.824759232302398,
+        5.908487109074023
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6372.0166015625,
+          "power": 2.9454634189605713,
+          "transition": 823.2833251953125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400038,
+        "version": 3
+      },
+      "scene_seed": 400038,
+      "step": 123
+    },
+    {
+      "losses": [
+        5.803094394618457,
+        5.899707384786522
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6372.0166015625,
+          "power": 2.9454634189605713,
+          "transition": 823.2833251953125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400038,
+        "version": 3
+      },
+      "scene_seed": 400038,
+      "step": 124
+    },
+    {
+      "losses": [
+        8.742394767068904,
+        8.406403158696873
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3881.4296875,
+          "power": 1.290346622467041,
+          "transition": 815.5741577148438
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400039,
+        "version": 3
+      },
+      "scene_seed": 400039,
+      "step": 125
+    },
+    {
+      "losses": [
+        8.821166442757256,
+        8.464112735453137
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3881.4296875,
+          "power": 1.290346622467041,
+          "transition": 815.5741577148438
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400039,
+        "version": 3
+      },
+      "scene_seed": 400039,
+      "step": 126
+    },
+    {
+      "losses": [
+        8.872242946900748,
+        8.486205764410208
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3881.4296875,
+          "power": 1.290346622467041,
+          "transition": 815.5741577148438
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400039,
+        "version": 3
+      },
+      "scene_seed": 400039,
+      "step": 127
+    },
+    {
+      "losses": [
+        8.896380368100488,
+        8.476847965313908
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3881.4296875,
+          "power": 1.290346622467041,
+          "transition": 815.5741577148438
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400039,
+        "version": 3
+      },
+      "scene_seed": 400039,
+      "step": 128
+    },
+    {
+      "losses": [
+        1.6742383424221536,
+        1.541925357662377
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7419.5126953125,
+          "power": 2.3113231658935547,
+          "transition": 828.638671875
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400040,
+        "version": 3
+      },
+      "scene_seed": 400040,
+      "step": 129
+    },
+    {
+      "losses": [
+        1.6590664963750952,
+        1.5126616344287558
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7419.5126953125,
+          "power": 2.3113231658935547,
+          "transition": 828.638671875
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400040,
+        "version": 3
+      },
+      "scene_seed": 400040,
+      "step": 130
+    },
+    {
+      "losses": [
+        1.6299156462636244,
+        1.4734684677043077
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7419.5126953125,
+          "power": 2.3113231658935547,
+          "transition": 828.638671875
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400040,
+        "version": 3
+      },
+      "scene_seed": 400040,
+      "step": 131
+    },
+    {
+      "losses": [
+        1.5889291656551252,
+        1.4266583879678254
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7419.5126953125,
+          "power": 2.3113231658935547,
+          "transition": 828.638671875
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400040,
+        "version": 3
+      },
+      "scene_seed": 400040,
+      "step": 132
+    },
+    {
+      "losses": [
+        2.956600952988842,
+        3.1998886639533892
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6690.701171875,
+          "power": 2.1402759552001953,
+          "transition": 776.5526123046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400041,
+        "version": 3
+      },
+      "scene_seed": 400041,
+      "step": 133
+    },
+    {
+      "losses": [
+        2.964446738306086,
+        3.2265614027419063
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6690.701171875,
+          "power": 2.1402759552001953,
+          "transition": 776.5526123046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400041,
+        "version": 3
+      },
+      "scene_seed": 400041,
+      "step": 134
+    },
+    {
+      "losses": [
+        2.964906562182398,
+        3.241956992151006
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6690.701171875,
+          "power": 2.1402759552001953,
+          "transition": 776.5526123046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400041,
+        "version": 3
+      },
+      "scene_seed": 400041,
+      "step": 135
+    },
+    {
+      "losses": [
+        2.958340625402377,
+        3.2464059174746507
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6690.701171875,
+          "power": 2.1402759552001953,
+          "transition": 776.5526123046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400041,
+        "version": 3
+      },
+      "scene_seed": 400041,
+      "step": 136
+    },
+    {
+      "losses": [
+        2.472220201740216,
+        2.4951328442659273
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5203.2412109375,
+          "power": 1.1369349956512451,
+          "transition": 744.4865112304688
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7112.99951171875,
+          8781.9072265625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400042,
+        "version": 3
+      },
+      "scene_seed": 400042,
+      "step": 137
+    },
+    {
+      "losses": [
+        2.4727095295983057,
+        2.4948761971936757
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5203.2412109375,
+          "power": 1.1369349956512451,
+          "transition": 744.4865112304688
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7112.99951171875,
+          8781.9072265625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400042,
+        "version": 3
+      },
+      "scene_seed": 400042,
+      "step": 138
+    },
+    {
+      "losses": [
+        2.4673670076334617,
+        2.494403310439055
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5203.2412109375,
+          "power": 1.1369349956512451,
+          "transition": 744.4865112304688
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7112.99951171875,
+          8781.9072265625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400042,
+        "version": 3
+      },
+      "scene_seed": 400042,
+      "step": 139
+    },
+    {
+      "losses": [
+        2.456889456810101,
+        2.493726785699196
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5203.2412109375,
+          "power": 1.1369349956512451,
+          "transition": 744.4865112304688
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7112.99951171875,
+          8781.9072265625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400042,
+        "version": 3
+      },
+      "scene_seed": 400042,
+      "step": 140
+    },
+    {
+      "losses": [
+        2.5830822004649123,
+        2.6081880163402604
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7279.646484375,
+          "power": 3.0926125049591064,
+          "transition": 393.5631103515625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400043,
+        "version": 3
+      },
+      "scene_seed": 400043,
+      "step": 141
+    },
+    {
+      "losses": [
+        2.582102535651609,
+        2.6060565129339452
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7279.646484375,
+          "power": 3.0926125049591064,
+          "transition": 393.5631103515625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400043,
+        "version": 3
+      },
+      "scene_seed": 400043,
+      "step": 142
+    },
+    {
+      "losses": [
+        2.580447271443624,
+        2.602806286149583
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7279.646484375,
+          "power": 3.0926125049591064,
+          "transition": 393.5631103515625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400043,
+        "version": 3
+      },
+      "scene_seed": 400043,
+      "step": 143
+    },
+    {
+      "losses": [
+        2.5780191319166557,
+        2.598674239217902
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7279.646484375,
+          "power": 3.0926125049591064,
+          "transition": 393.5631103515625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400043,
+        "version": 3
+      },
+      "scene_seed": 400043,
+      "step": 144
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5121.365234375,
+          "power": 2.9166526794433594,
+          "transition": 344.390380859375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400044,
+        "version": 3
+      },
+      "scene_seed": 400044,
+      "step": 145
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5121.365234375,
+          "power": 2.9166526794433594,
+          "transition": 344.390380859375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400044,
+        "version": 3
+      },
+      "scene_seed": 400044,
+      "step": 146
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5121.365234375,
+          "power": 2.9166526794433594,
+          "transition": 344.390380859375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400044,
+        "version": 3
+      },
+      "scene_seed": 400044,
+      "step": 147
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5121.365234375,
+          "power": 2.9166526794433594,
+          "transition": 344.390380859375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400044,
+        "version": 3
+      },
+      "scene_seed": 400044,
+      "step": 148
+    },
+    {
+      "losses": [
+        2.8431801161248855,
+        2.8761777942417264
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7449.04931640625,
+          "power": 2.849246025085449,
+          "transition": 528.212158203125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400045,
+        "version": 3
+      },
+      "scene_seed": 400045,
+      "step": 149
+    },
+    {
+      "losses": [
+        2.840238463477205,
+        2.8717385493350345
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7449.04931640625,
+          "power": 2.849246025085449,
+          "transition": 528.212158203125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400045,
+        "version": 3
+      },
+      "scene_seed": 400045,
+      "step": 150
+    },
+    {
+      "losses": [
+        2.835966462501193,
+        2.8662965230032675
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7449.04931640625,
+          "power": 2.849246025085449,
+          "transition": 528.212158203125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400045,
+        "version": 3
+      },
+      "scene_seed": 400045,
+      "step": 151
+    },
+    {
+      "losses": [
+        2.830551624179049,
+        2.860172923579431
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7449.04931640625,
+          "power": 2.849246025085449,
+          "transition": 528.212158203125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400045,
+        "version": 3
+      },
+      "scene_seed": 400045,
+      "step": 152
+    },
+    {
+      "losses": [
+        2.4505235128687324,
+        2.392030416149158
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5953.69140625,
+          "power": 1.6932249069213867,
+          "transition": 471.8095703125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400046,
+        "version": 3
+      },
+      "scene_seed": 400046,
+      "step": 153
+    },
+    {
+      "losses": [
+        2.4159950921831626,
+        2.3297059780135077
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5953.69140625,
+          "power": 1.6932249069213867,
+          "transition": 471.8095703125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400046,
+        "version": 3
+      },
+      "scene_seed": 400046,
+      "step": 154
+    },
+    {
+      "losses": [
+        2.3506012738338677,
+        2.2627155146161133
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5953.69140625,
+          "power": 1.6932249069213867,
+          "transition": 471.8095703125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400046,
+        "version": 3
+      },
+      "scene_seed": 400046,
+      "step": 155
+    },
+    {
+      "losses": [
+        2.265135066273091,
+        2.203633299537563
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5953.69140625,
+          "power": 1.6932249069213867,
+          "transition": 471.8095703125
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400046,
+        "version": 3
+      },
+      "scene_seed": 400046,
+      "step": 156
+    },
+    {
+      "losses": [
+        2.77041715435182,
+        2.3926807490443633
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4109.048828125,
+          "power": 3.6568522453308105,
+          "transition": 612.445556640625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400047,
+        "version": 3
+      },
+      "scene_seed": 400047,
+      "step": 157
+    },
+    {
+      "losses": [
+        2.66462150797734,
+        2.4160490479583108
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4109.048828125,
+          "power": 3.6568522453308105,
+          "transition": 612.445556640625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400047,
+        "version": 3
+      },
+      "scene_seed": 400047,
+      "step": 158
+    },
+    {
+      "losses": [
+        2.5807367659324867,
+        2.4270486235277113
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4109.048828125,
+          "power": 3.6568522453308105,
+          "transition": 612.445556640625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400047,
+        "version": 3
+      },
+      "scene_seed": 400047,
+      "step": 159
+    },
+    {
+      "losses": [
+        2.539506065845834,
+        2.415213630548441
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4109.048828125,
+          "power": 3.6568522453308105,
+          "transition": 612.445556640625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400047,
+        "version": 3
+      },
+      "scene_seed": 400047,
+      "step": 160
+    },
+    {
+      "losses": [
+        2.4290791347928504,
+        2.441265331930982
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6768.93994140625,
+          "power": 2.2081027030944824,
+          "transition": 662.809326171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400048,
+        "version": 3
+      },
+      "scene_seed": 400048,
+      "step": 161
+    },
+    {
+      "losses": [
+        2.4393166388046916,
+        2.4434354336962594
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6768.93994140625,
+          "power": 2.2081027030944824,
+          "transition": 662.809326171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400048,
+        "version": 3
+      },
+      "scene_seed": 400048,
+      "step": 162
+    },
+    {
+      "losses": [
+        2.4419791489654536,
+        2.442291838870961
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6768.93994140625,
+          "power": 2.2081027030944824,
+          "transition": 662.809326171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400048,
+        "version": 3
+      },
+      "scene_seed": 400048,
+      "step": 163
+    },
+    {
+      "losses": [
+        2.438938809473924,
+        2.4383106010661737
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6768.93994140625,
+          "power": 2.2081027030944824,
+          "transition": 662.809326171875
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400048,
+        "version": 3
+      },
+      "scene_seed": 400048,
+      "step": 164
+    },
+    {
+      "losses": [
+        2.0255536245738384,
+        1.8477948328929903
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.94677734375,
+          "power": 2.0926711559295654,
+          "transition": 376.9664611816406
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400049,
+        "version": 3
+      },
+      "scene_seed": 400049,
+      "step": 165
+    },
+    {
+      "losses": [
+        2.0053502310617697,
+        1.8334545564772162
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.94677734375,
+          "power": 2.0926711559295654,
+          "transition": 376.9664611816406
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400049,
+        "version": 3
+      },
+      "scene_seed": 400049,
+      "step": 166
+    },
+    {
+      "losses": [
+        1.953178731169479,
+        1.8168282359283674
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.94677734375,
+          "power": 2.0926711559295654,
+          "transition": 376.9664611816406
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400049,
+        "version": 3
+      },
+      "scene_seed": 400049,
+      "step": 167
+    },
+    {
+      "losses": [
+        1.878694067897636,
+        1.8058377356029411
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.94677734375,
+          "power": 2.0926711559295654,
+          "transition": 376.9664611816406
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400049,
+        "version": 3
+      },
+      "scene_seed": 400049,
+      "step": 168
+    },
+    {
+      "losses": [
+        5.6027199335856,
+        5.723357888365102
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6899.7294921875,
+          "power": 1.5301836729049683,
+          "transition": 800.6970825195312
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400050,
+        "version": 3
+      },
+      "scene_seed": 400050,
+      "step": 169
+    },
+    {
+      "losses": [
+        5.587948057989283,
+        5.719986859943442
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6899.7294921875,
+          "power": 1.5301836729049683,
+          "transition": 800.6970825195312
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400050,
+        "version": 3
+      },
+      "scene_seed": 400050,
+      "step": 170
+    },
+    {
+      "losses": [
+        5.569922755932514,
+        5.714559669328171
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6899.7294921875,
+          "power": 1.5301836729049683,
+          "transition": 800.6970825195312
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400050,
+        "version": 3
+      },
+      "scene_seed": 400050,
+      "step": 171
+    },
+    {
+      "losses": [
+        5.549935726559145,
+        5.707546324701724
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6899.7294921875,
+          "power": 1.5301836729049683,
+          "transition": 800.6970825195312
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400050,
+        "version": 3
+      },
+      "scene_seed": 400050,
+      "step": 172
+    },
+    {
+      "losses": [
+        2.837737823521158,
+        2.578536813239836
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4556.69287109375,
+          "power": 1.5503647327423096,
+          "transition": 746.3524169921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400051,
+        "version": 3
+      },
+      "scene_seed": 400051,
+      "step": 173
+    },
+    {
+      "losses": [
+        2.85448962043243,
+        2.639464807347645
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4556.69287109375,
+          "power": 1.5503647327423096,
+          "transition": 746.3524169921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400051,
+        "version": 3
+      },
+      "scene_seed": 400051,
+      "step": 174
+    },
+    {
+      "losses": [
+        2.8740569880834768,
+        2.664084203945827
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4556.69287109375,
+          "power": 1.5503647327423096,
+          "transition": 746.3524169921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400051,
+        "version": 3
+      },
+      "scene_seed": 400051,
+      "step": 175
+    },
+    {
+      "losses": [
+        2.8868106256786943,
+        2.6551258860691505
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4556.69287109375,
+          "power": 1.5503647327423096,
+          "transition": 746.3524169921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400051,
+        "version": 3
+      },
+      "scene_seed": 400051,
+      "step": 176
+    },
+    {
+      "losses": [
+        1.6725567426415693,
+        1.5448618130129939
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6609.98583984375,
+          "power": 1.8816618919372559,
+          "transition": 697.86767578125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400052,
+        "version": 3
+      },
+      "scene_seed": 400052,
+      "step": 177
+    },
+    {
+      "losses": [
+        1.659916048656483,
+        1.521791317283918
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6609.98583984375,
+          "power": 1.8816618919372559,
+          "transition": 697.86767578125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400052,
+        "version": 3
+      },
+      "scene_seed": 400052,
+      "step": 178
+    },
+    {
+      "losses": [
+        1.6369206122524815,
+        1.4921684405305362
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6609.98583984375,
+          "power": 1.8816618919372559,
+          "transition": 697.86767578125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400052,
+        "version": 3
+      },
+      "scene_seed": 400052,
+      "step": 179
+    },
+    {
+      "losses": [
+        1.605064106338413,
+        1.4586591503653938
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6609.98583984375,
+          "power": 1.8816618919372559,
+          "transition": 697.86767578125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400052,
+        "version": 3
+      },
+      "scene_seed": 400052,
+      "step": 180
+    },
+    {
+      "losses": [
+        3.4696115687846634,
+        3.589108715882483
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6302.18994140625,
+          "power": 3.5993473529815674,
+          "transition": 699.50634765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400053,
+        "version": 3
+      },
+      "scene_seed": 400053,
+      "step": 181
+    },
+    {
+      "losses": [
+        3.4760717587730716,
+        3.5981731569674857
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6302.18994140625,
+          "power": 3.5993473529815674,
+          "transition": 699.50634765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400053,
+        "version": 3
+      },
+      "scene_seed": 400053,
+      "step": 182
+    },
+    {
+      "losses": [
+        3.4774088342566354,
+        3.6022045423658513
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6302.18994140625,
+          "power": 3.5993473529815674,
+          "transition": 699.50634765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400053,
+        "version": 3
+      },
+      "scene_seed": 400053,
+      "step": 183
+    },
+    {
+      "losses": [
+        3.4738956111330523,
+        3.603075643955855
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6302.18994140625,
+          "power": 3.5993473529815674,
+          "transition": 699.50634765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400053,
+        "version": 3
+      },
+      "scene_seed": 400053,
+      "step": 184
+    },
+    {
+      "losses": [
+        2.8960459624857333,
+        2.792945618065524
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5020.1748046875,
+          "power": 2.802394151687622,
+          "transition": 492.38885498046875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          13820.365234375,
+          15790.6337890625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400054,
+        "version": 3
+      },
+      "scene_seed": 400054,
+      "step": 185
+    },
+    {
+      "losses": [
+        2.8933321363324374,
+        2.79215201400193
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5020.1748046875,
+          "power": 2.802394151687622,
+          "transition": 492.38885498046875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          13820.365234375,
+          15790.6337890625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400054,
+        "version": 3
+      },
+      "scene_seed": 400054,
+      "step": 186
+    },
+    {
+      "losses": [
+        2.8847835907211103,
+        2.790819418113072
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5020.1748046875,
+          "power": 2.802394151687622,
+          "transition": 492.38885498046875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          13820.365234375,
+          15790.6337890625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400054,
+        "version": 3
+      },
+      "scene_seed": 400054,
+      "step": 187
+    },
+    {
+      "losses": [
+        2.871672095619707,
+        2.7890042985161676
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5020.1748046875,
+          "power": 2.802394151687622,
+          "transition": 492.38885498046875
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          13820.365234375,
+          15790.6337890625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400054,
+        "version": 3
+      },
+      "scene_seed": 400054,
+      "step": 188
+    },
+    {
+      "losses": [
+        1.100637336240163,
+        1.1435413993847259
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6383.529296875,
+          "power": 1.3688470125198364,
+          "transition": 553.6338500976562
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400055,
+        "version": 3
+      },
+      "scene_seed": 400055,
+      "step": 189
+    },
+    {
+      "losses": [
+        1.1044760106690439,
+        1.1442476687639478
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6383.529296875,
+          "power": 1.3688470125198364,
+          "transition": 553.6338500976562
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400055,
+        "version": 3
+      },
+      "scene_seed": 400055,
+      "step": 190
+    },
+    {
+      "losses": [
+        1.1063784549571538,
+        1.1446341769065518
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6383.529296875,
+          "power": 1.3688470125198364,
+          "transition": 553.6338500976562
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400055,
+        "version": 3
+      },
+      "scene_seed": 400055,
+      "step": 191
+    },
+    {
+      "losses": [
+        1.106263873193335,
+        1.1447182122619506
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6383.529296875,
+          "power": 1.3688470125198364,
+          "transition": 553.6338500976562
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400055,
+        "version": 3
+      },
+      "scene_seed": 400055,
+      "step": 192
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6540.3251953125,
+          "power": 2.775740146636963,
+          "transition": 899.6232299804688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400056,
+        "version": 3
+      },
+      "scene_seed": 400056,
+      "step": 193
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6540.3251953125,
+          "power": 2.775740146636963,
+          "transition": 899.6232299804688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400056,
+        "version": 3
+      },
+      "scene_seed": 400056,
+      "step": 194
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6540.3251953125,
+          "power": 2.775740146636963,
+          "transition": 899.6232299804688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400056,
+        "version": 3
+      },
+      "scene_seed": 400056,
+      "step": 195
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6540.3251953125,
+          "power": 2.775740146636963,
+          "transition": 899.6232299804688
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400056,
+        "version": 3
+      },
+      "scene_seed": 400056,
+      "step": 196
+    },
+    {
+      "losses": [
+        0.9003134212399636,
+        0.8929982859855632
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6720.857421875,
+          "power": 1.5810136795043945,
+          "transition": 901.6814575195312
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400057,
+        "version": 3
+      },
+      "scene_seed": 400057,
+      "step": 197
+    },
+    {
+      "losses": [
+        0.8938565238479633,
+        0.8874011955797827
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6720.857421875,
+          "power": 1.5810136795043945,
+          "transition": 901.6814575195312
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400057,
+        "version": 3
+      },
+      "scene_seed": 400057,
+      "step": 198
+    },
+    {
+      "losses": [
+        0.8777111126755569,
+        0.8754645494851176
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6720.857421875,
+          "power": 1.5810136795043945,
+          "transition": 901.6814575195312
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400057,
+        "version": 3
+      },
+      "scene_seed": 400057,
+      "step": 199
+    },
+    {
+      "losses": [
+        0.8559433869714252,
+        0.8607397722220044
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6720.857421875,
+          "power": 1.5810136795043945,
+          "transition": 901.6814575195312
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400057,
+        "version": 3
+      },
+      "scene_seed": 400057,
+      "step": 200
+    },
+    {
+      "losses": [
+        0.6363238022210082,
+        0.7324509328578892
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7116.37109375,
+          "power": 2.24835467338562,
+          "transition": 730.62451171875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400058,
+        "version": 3
+      },
+      "scene_seed": 400058,
+      "step": 201
+    },
+    {
+      "losses": [
+        0.5770674623249599,
+        0.7355237472351749
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7116.37109375,
+          "power": 2.24835467338562,
+          "transition": 730.62451171875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400058,
+        "version": 3
+      },
+      "scene_seed": 400058,
+      "step": 202
+    },
+    {
+      "losses": [
+        0.5558247442842958,
+        0.731215535775664
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7116.37109375,
+          "power": 2.24835467338562,
+          "transition": 730.62451171875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400058,
+        "version": 3
+      },
+      "scene_seed": 400058,
+      "step": 203
+    },
+    {
+      "losses": [
+        0.5693929273298648,
+        0.715025732009899
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7116.37109375,
+          "power": 2.24835467338562,
+          "transition": 730.62451171875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400058,
+        "version": 3
+      },
+      "scene_seed": 400058,
+      "step": 204
+    },
+    {
+      "losses": [
+        1.5086376928109817,
+        1.5462610497731364
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4270.20556640625,
+          "power": 2.0386719703674316,
+          "transition": 356.15533447265625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400059,
+        "version": 3
+      },
+      "scene_seed": 400059,
+      "step": 205
+    },
+    {
+      "losses": [
+        1.4904247777247879,
+        1.521163405554026
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4270.20556640625,
+          "power": 2.0386719703674316,
+          "transition": 356.15533447265625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400059,
+        "version": 3
+      },
+      "scene_seed": 400059,
+      "step": 206
+    },
+    {
+      "losses": [
+        1.463053222995083,
+        1.493525743383025
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4270.20556640625,
+          "power": 2.0386719703674316,
+          "transition": 356.15533447265625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400059,
+        "version": 3
+      },
+      "scene_seed": 400059,
+      "step": 207
+    },
+    {
+      "losses": [
+        1.4281144405494437,
+        1.4647883223426807
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4270.20556640625,
+          "power": 2.0386719703674316,
+          "transition": 356.15533447265625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400059,
+        "version": 3
+      },
+      "scene_seed": 400059,
+      "step": 208
+    },
+    {
+      "losses": [
+        1.6671175548348915,
+        1.6853814431693255
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5158.36376953125,
+          "power": 2.312883138656616,
+          "transition": 882.3648681640625
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400060,
+        "version": 3
+      },
+      "scene_seed": 400060,
+      "step": 209
+    },
+    {
+      "losses": [
+        1.6697222443197988,
+        1.688656344239996
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5158.36376953125,
+          "power": 2.312883138656616,
+          "transition": 882.3648681640625
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400060,
+        "version": 3
+      },
+      "scene_seed": 400060,
+      "step": 210
+    },
+    {
+      "losses": [
+        1.6707344343720818,
+        1.6906020080100694
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5158.36376953125,
+          "power": 2.312883138656616,
+          "transition": 882.3648681640625
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400060,
+        "version": 3
+      },
+      "scene_seed": 400060,
+      "step": 211
+    },
+    {
+      "losses": [
+        1.6702152885746737,
+        1.691534509404408
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5158.36376953125,
+          "power": 2.312883138656616,
+          "transition": 882.3648681640625
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400060,
+        "version": 3
+      },
+      "scene_seed": 400060,
+      "step": 212
+    },
+    {
+      "losses": [
+        0.9813275158889555,
+        1.1200779648069548
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6186.6142578125,
+          "power": 3.7140917778015137,
+          "transition": 619.94482421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400061,
+        "version": 3
+      },
+      "scene_seed": 400061,
+      "step": 213
+    },
+    {
+      "losses": [
+        0.9637707620428987,
+        1.0814691409056065
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6186.6142578125,
+          "power": 3.7140917778015137,
+          "transition": 619.94482421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400061,
+        "version": 3
+      },
+      "scene_seed": 400061,
+      "step": 214
+    },
+    {
+      "losses": [
+        0.937269070658768,
+        1.040985444307725
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6186.6142578125,
+          "power": 3.7140917778015137,
+          "transition": 619.94482421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400061,
+        "version": 3
+      },
+      "scene_seed": 400061,
+      "step": 215
+    },
+    {
+      "losses": [
+        0.9057138482873708,
+        1.0055086698709486
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6186.6142578125,
+          "power": 3.7140917778015137,
+          "transition": 619.94482421875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400061,
+        "version": 3
+      },
+      "scene_seed": 400061,
+      "step": 216
+    },
+    {
+      "losses": [
+        5.877426581437408,
+        6.113792079376426
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.9775390625,
+          "power": 2.0585083961486816,
+          "transition": 474.45867919921875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400062,
+        "version": 3
+      },
+      "scene_seed": 400062,
+      "step": 217
+    },
+    {
+      "losses": [
+        5.870446807962858,
+        6.117865225200094
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.9775390625,
+          "power": 2.0585083961486816,
+          "transition": 474.45867919921875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400062,
+        "version": 3
+      },
+      "scene_seed": 400062,
+      "step": 218
+    },
+    {
+      "losses": [
+        5.856477597873804,
+        6.120709511215747
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.9775390625,
+          "power": 2.0585083961486816,
+          "transition": 474.45867919921875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400062,
+        "version": 3
+      },
+      "scene_seed": 400062,
+      "step": 219
+    },
+    {
+      "losses": [
+        5.837361218047079,
+        6.122392806011722
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6187.9775390625,
+          "power": 2.0585083961486816,
+          "transition": 474.45867919921875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400062,
+        "version": 3
+      },
+      "scene_seed": 400062,
+      "step": 220
+    },
+    {
+      "losses": [
+        1.9352376029485083,
+        1.6739603938034313
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6346.2939453125,
+          "power": 1.2052558660507202,
+          "transition": 927.8709106445312
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400063,
+        "version": 3
+      },
+      "scene_seed": 400063,
+      "step": 221
+    },
+    {
+      "losses": [
+        1.9309194793951567,
+        1.6428799682187374
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6346.2939453125,
+          "power": 1.2052558660507202,
+          "transition": 927.8709106445312
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400063,
+        "version": 3
+      },
+      "scene_seed": 400063,
+      "step": 222
+    },
+    {
+      "losses": [
+        1.9187895658777359,
+        1.604530821939111
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6346.2939453125,
+          "power": 1.2052558660507202,
+          "transition": 927.8709106445312
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400063,
+        "version": 3
+      },
+      "scene_seed": 400063,
+      "step": 223
+    },
+    {
+      "losses": [
+        1.894884642504576,
+        1.5608034817098138
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6346.2939453125,
+          "power": 1.2052558660507202,
+          "transition": 927.8709106445312
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400063,
+        "version": 3
+      },
+      "scene_seed": 400063,
+      "step": 224
+    },
+    {
+      "losses": [
+        0.561941796769678,
+        0.545845539942091
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7393.802734375,
+          "power": 3.0452003479003906,
+          "transition": 352.864990234375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400064,
+        "version": 3
+      },
+      "scene_seed": 400064,
+      "step": 225
+    },
+    {
+      "losses": [
+        0.55018541108254,
+        0.5355077233572524
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7393.802734375,
+          "power": 3.0452003479003906,
+          "transition": 352.864990234375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400064,
+        "version": 3
+      },
+      "scene_seed": 400064,
+      "step": 226
+    },
+    {
+      "losses": [
+        0.5365581943110233,
+        0.5259203908731003
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7393.802734375,
+          "power": 3.0452003479003906,
+          "transition": 352.864990234375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400064,
+        "version": 3
+      },
+      "scene_seed": 400064,
+      "step": 227
+    },
+    {
+      "losses": [
+        0.5221314042328609,
+        0.5170999506611245
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7393.802734375,
+          "power": 3.0452003479003906,
+          "transition": 352.864990234375
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400064,
+        "version": 3
+      },
+      "scene_seed": 400064,
+      "step": 228
+    },
+    {
+      "losses": [
+        4.162202916615513,
+        4.6555863025197315
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7135.9912109375,
+          "power": 1.125375509262085,
+          "transition": 761.697998046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400065,
+        "version": 3
+      },
+      "scene_seed": 400065,
+      "step": 229
+    },
+    {
+      "losses": [
+        4.208312363393219,
+        4.685669114868207
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7135.9912109375,
+          "power": 1.125375509262085,
+          "transition": 761.697998046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400065,
+        "version": 3
+      },
+      "scene_seed": 400065,
+      "step": 230
+    },
+    {
+      "losses": [
+        4.227974170382049,
+        4.696021583451158
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7135.9912109375,
+          "power": 1.125375509262085,
+          "transition": 761.697998046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400065,
+        "version": 3
+      },
+      "scene_seed": 400065,
+      "step": 231
+    },
+    {
+      "losses": [
+        4.223903923245112,
+        4.6875255875657125
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7135.9912109375,
+          "power": 1.125375509262085,
+          "transition": 761.697998046875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400065,
+        "version": 3
+      },
+      "scene_seed": 400065,
+      "step": 232
+    },
+    {
+      "losses": [
+        3.148035524324336,
+        3.1572699417845502
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7237.283203125,
+          "power": 2.029545307159424,
+          "transition": 651.9141845703125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6647.44189453125,
+          8841.1357421875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400066,
+        "version": 3
+      },
+      "scene_seed": 400066,
+      "step": 233
+    },
+    {
+      "losses": [
+        3.1477214581926107,
+        3.155611520450306
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7237.283203125,
+          "power": 2.029545307159424,
+          "transition": 651.9141845703125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6647.44189453125,
+          8841.1357421875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400066,
+        "version": 3
+      },
+      "scene_seed": 400066,
+      "step": 234
+    },
+    {
+      "losses": [
+        3.1464772751317556,
+        3.1526965150732322
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7237.283203125,
+          "power": 2.029545307159424,
+          "transition": 651.9141845703125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6647.44189453125,
+          8841.1357421875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400066,
+        "version": 3
+      },
+      "scene_seed": 400066,
+      "step": 235
+    },
+    {
+      "losses": [
+        3.1444610857759585,
+        3.1488969791355426
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7237.283203125,
+          "power": 2.029545307159424,
+          "transition": 651.9141845703125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6647.44189453125,
+          8841.1357421875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400066,
+        "version": 3
+      },
+      "scene_seed": 400066,
+      "step": 236
+    },
+    {
+      "losses": [
+        1.9758184395521323,
+        2.0713936677125764
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7972.66845703125,
+          "power": 2.154599666595459,
+          "transition": 418.2094421386719
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400067,
+        "version": 3
+      },
+      "scene_seed": 400067,
+      "step": 237
+    },
+    {
+      "losses": [
+        1.9634052529897976,
+        2.052947489391903
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7972.66845703125,
+          "power": 2.154599666595459,
+          "transition": 418.2094421386719
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400067,
+        "version": 3
+      },
+      "scene_seed": 400067,
+      "step": 238
+    },
+    {
+      "losses": [
+        1.9455273260043504,
+        2.030662032167265
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7972.66845703125,
+          "power": 2.154599666595459,
+          "transition": 418.2094421386719
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400067,
+        "version": 3
+      },
+      "scene_seed": 400067,
+      "step": 239
+    },
+    {
+      "losses": [
+        1.9236062886754,
+        2.005875135948712
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7972.66845703125,
+          "power": 2.154599666595459,
+          "transition": 418.2094421386719
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400067,
+        "version": 3
+      },
+      "scene_seed": 400067,
+      "step": 240
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5132.9873046875,
+          "power": 1.0409190654754639,
+          "transition": 347.37353515625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400068,
+        "version": 3
+      },
+      "scene_seed": 400068,
+      "step": 241
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5132.9873046875,
+          "power": 1.0409190654754639,
+          "transition": 347.37353515625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400068,
+        "version": 3
+      },
+      "scene_seed": 400068,
+      "step": 242
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5132.9873046875,
+          "power": 1.0409190654754639,
+          "transition": 347.37353515625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400068,
+        "version": 3
+      },
+      "scene_seed": 400068,
+      "step": 243
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5132.9873046875,
+          "power": 1.0409190654754639,
+          "transition": 347.37353515625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400068,
+        "version": 3
+      },
+      "scene_seed": 400068,
+      "step": 244
+    },
+    {
+      "losses": [
+        2.86268905804658,
+        2.966497954802671
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4232.24462890625,
+          "power": 2.1537256240844727,
+          "transition": 328.84124755859375
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400069,
+        "version": 3
+      },
+      "scene_seed": 400069,
+      "step": 245
+    },
+    {
+      "losses": [
+        2.860043177133296,
+        2.96239585356822
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4232.24462890625,
+          "power": 2.1537256240844727,
+          "transition": 328.84124755859375
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400069,
+        "version": 3
+      },
+      "scene_seed": 400069,
+      "step": 246
+    },
+    {
+      "losses": [
+        2.852376157595415,
+        2.9571544964518246
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4232.24462890625,
+          "power": 2.1537256240844727,
+          "transition": 328.84124755859375
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400069,
+        "version": 3
+      },
+      "scene_seed": 400069,
+      "step": 247
+    },
+    {
+      "losses": [
+        2.8401388127876945,
+        2.9508372662968627
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4232.24462890625,
+          "power": 2.1537256240844727,
+          "transition": 328.84124755859375
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400069,
+        "version": 3
+      },
+      "scene_seed": 400069,
+      "step": 248
+    },
+    {
+      "losses": [
+        0.9537568322808143,
+        0.8200158008067777
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6627.5,
+          "power": 3.9124276638031006,
+          "transition": 897.5614013671875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400070,
+        "version": 3
+      },
+      "scene_seed": 400070,
+      "step": 249
+    },
+    {
+      "losses": [
+        0.891992830830975,
+        0.7975715105737367
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6627.5,
+          "power": 3.9124276638031006,
+          "transition": 897.5614013671875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400070,
+        "version": 3
+      },
+      "scene_seed": 400070,
+      "step": 250
+    },
+    {
+      "losses": [
+        0.810050001225667,
+        0.7532135795809791
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6627.5,
+          "power": 3.9124276638031006,
+          "transition": 897.5614013671875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400070,
+        "version": 3
+      },
+      "scene_seed": 400070,
+      "step": 251
+    },
+    {
+      "losses": [
+        0.7110919346616631,
+        0.6899139790948572
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6627.5,
+          "power": 3.9124276638031006,
+          "transition": 897.5614013671875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400070,
+        "version": 3
+      },
+      "scene_seed": 400070,
+      "step": 252
+    },
+    {
+      "losses": [
+        1.7340981545950027,
+        1.8228008077984479
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7079.5732421875,
+          "power": 1.3677854537963867,
+          "transition": 319.5274353027344
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400071,
+        "version": 3
+      },
+      "scene_seed": 400071,
+      "step": 253
+    },
+    {
+      "losses": [
+        1.6331087079757771,
+        1.7485016349083375
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7079.5732421875,
+          "power": 1.3677854537963867,
+          "transition": 319.5274353027344
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400071,
+        "version": 3
+      },
+      "scene_seed": 400071,
+      "step": 254
+    },
+    {
+      "losses": [
+        1.5273020290609036,
+        1.6654513876845498
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7079.5732421875,
+          "power": 1.3677854537963867,
+          "transition": 319.5274353027344
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400071,
+        "version": 3
+      },
+      "scene_seed": 400071,
+      "step": 255
+    },
+    {
+      "losses": [
+        1.424615174699727,
+        1.57859025274852
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7079.5732421875,
+          "power": 1.3677854537963867,
+          "transition": 319.5274353027344
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400071,
+        "version": 3
+      },
+      "scene_seed": 400071,
+      "step": 256
+    },
+    {
+      "losses": [
+        1.2442884520124502,
+        1.246034728353143
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4689.16357421875,
+          "power": 1.7043530941009521,
+          "transition": 335.97357177734375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400072,
+        "version": 3
+      },
+      "scene_seed": 400072,
+      "step": 257
+    },
+    {
+      "losses": [
+        1.2397675866786662,
+        1.2469545139867695
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4689.16357421875,
+          "power": 1.7043530941009521,
+          "transition": 335.97357177734375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400072,
+        "version": 3
+      },
+      "scene_seed": 400072,
+      "step": 258
+    },
+    {
+      "losses": [
+        1.2311154659282604,
+        1.2451108000650613
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4689.16357421875,
+          "power": 1.7043530941009521,
+          "transition": 335.97357177734375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400072,
+        "version": 3
+      },
+      "scene_seed": 400072,
+      "step": 259
+    },
+    {
+      "losses": [
+        1.2201409724278438,
+        1.241036703706138
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4689.16357421875,
+          "power": 1.7043530941009521,
+          "transition": 335.97357177734375
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400072,
+        "version": 3
+      },
+      "scene_seed": 400072,
+      "step": 260
+    },
+    {
+      "losses": [
+        0.5403529020363719,
+        0.4909060651277131
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6009.076171875,
+          "power": 2.1114304065704346,
+          "transition": 825.7474365234375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400073,
+        "version": 3
+      },
+      "scene_seed": 400073,
+      "step": 261
+    },
+    {
+      "losses": [
+        0.5750309144858244,
+        0.5035343299886145
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6009.076171875,
+          "power": 2.1114304065704346,
+          "transition": 825.7474365234375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400073,
+        "version": 3
+      },
+      "scene_seed": 400073,
+      "step": 262
+    },
+    {
+      "losses": [
+        0.5952850857550873,
+        0.5078692054335594
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6009.076171875,
+          "power": 2.1114304065704346,
+          "transition": 825.7474365234375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400073,
+        "version": 3
+      },
+      "scene_seed": 400073,
+      "step": 263
+    },
+    {
+      "losses": [
+        0.6015235261806423,
+        0.5038127396825239
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6009.076171875,
+          "power": 2.1114304065704346,
+          "transition": 825.7474365234375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400073,
+        "version": 3
+      },
+      "scene_seed": 400073,
+      "step": 264
+    },
+    {
+      "losses": [
+        2.7480858120327167,
+        2.947869984609358
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7557.9794921875,
+          "power": 1.590031623840332,
+          "transition": 507.0696105957031
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400074,
+        "version": 3
+      },
+      "scene_seed": 400074,
+      "step": 265
+    },
+    {
+      "losses": [
+        2.7471699326573917,
+        2.9476781525677387
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7557.9794921875,
+          "power": 1.590031623840332,
+          "transition": 507.0696105957031
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400074,
+        "version": 3
+      },
+      "scene_seed": 400074,
+      "step": 266
+    },
+    {
+      "losses": [
+        2.7445317608818507,
+        2.9472802038797346
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7557.9794921875,
+          "power": 1.590031623840332,
+          "transition": 507.0696105957031
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400074,
+        "version": 3
+      },
+      "scene_seed": 400074,
+      "step": 267
+    },
+    {
+      "losses": [
+        2.740440978427191,
+        2.9467080729569486
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7557.9794921875,
+          "power": 1.590031623840332,
+          "transition": 507.0696105957031
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400074,
+        "version": 3
+      },
+      "scene_seed": 400074,
+      "step": 268
+    },
+    {
+      "losses": [
+        0.5446694863717847,
+        0.3115724183920617
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5484.84765625,
+          "power": 1.6154043674468994,
+          "transition": 706.392333984375
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400075,
+        "version": 3
+      },
+      "scene_seed": 400075,
+      "step": 269
+    },
+    {
+      "losses": [
+        0.5237394535546276,
+        0.3032292482616821
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5484.84765625,
+          "power": 1.6154043674468994,
+          "transition": 706.392333984375
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400075,
+        "version": 3
+      },
+      "scene_seed": 400075,
+      "step": 270
+    },
+    {
+      "losses": [
+        0.4951348146028341,
+        0.29601010764049507
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5484.84765625,
+          "power": 1.6154043674468994,
+          "transition": 706.392333984375
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400075,
+        "version": 3
+      },
+      "scene_seed": 400075,
+      "step": 271
+    },
+    {
+      "losses": [
+        0.461279759360241,
+        0.29168323969238
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5484.84765625,
+          "power": 1.6154043674468994,
+          "transition": 706.392333984375
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400075,
+        "version": 3
+      },
+      "scene_seed": 400075,
+      "step": 272
+    },
+    {
+      "losses": [
+        2.820854614818576,
+        2.624582845275141
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3831.51220703125,
+          "power": 3.386810541152954,
+          "transition": 704.3095703125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400076,
+        "version": 3
+      },
+      "scene_seed": 400076,
+      "step": 273
+    },
+    {
+      "losses": [
+        2.8094225894063096,
+        2.624452635977798
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3831.51220703125,
+          "power": 3.386810541152954,
+          "transition": 704.3095703125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400076,
+        "version": 3
+      },
+      "scene_seed": 400076,
+      "step": 274
+    },
+    {
+      "losses": [
+        2.7945154795035547,
+        2.623421464912417
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3831.51220703125,
+          "power": 3.386810541152954,
+          "transition": 704.3095703125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400076,
+        "version": 3
+      },
+      "scene_seed": 400076,
+      "step": 275
+    },
+    {
+      "losses": [
+        2.7783491059455256,
+        2.6214916280018716
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 3831.51220703125,
+          "power": 3.386810541152954,
+          "transition": 704.3095703125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400076,
+        "version": 3
+      },
+      "scene_seed": 400076,
+      "step": 276
+    },
+    {
+      "losses": [
+        4.725946748717473,
+        4.7907107626066825
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6541.861328125,
+          "power": 2.01829195022583,
+          "transition": 621.96435546875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400077,
+        "version": 3
+      },
+      "scene_seed": 400077,
+      "step": 277
+    },
+    {
+      "losses": [
+        4.727874981744945,
+        4.791087844971052
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6541.861328125,
+          "power": 2.01829195022583,
+          "transition": 621.96435546875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400077,
+        "version": 3
+      },
+      "scene_seed": 400077,
+      "step": 278
+    },
+    {
+      "losses": [
+        4.728138497557113,
+        4.790878912643814
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6541.861328125,
+          "power": 2.01829195022583,
+          "transition": 621.96435546875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400077,
+        "version": 3
+      },
+      "scene_seed": 400077,
+      "step": 279
+    },
+    {
+      "losses": [
+        4.726602488744659,
+        4.79013484250755
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6541.861328125,
+          "power": 2.01829195022583,
+          "transition": 621.96435546875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400077,
+        "version": 3
+      },
+      "scene_seed": 400077,
+      "step": 280
+    },
+    {
+      "losses": [
+        5.313366752921244,
+        5.2851379659016855
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5404.212890625,
+          "power": 1.9416570663452148,
+          "transition": 852.4817504882812
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          8509.7421875,
+          10447.0
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400078,
+        "version": 3
+      },
+      "scene_seed": 400078,
+      "step": 281
+    },
+    {
+      "losses": [
+        5.307823941463868,
+        5.282246934876064
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5404.212890625,
+          "power": 1.9416570663452148,
+          "transition": 852.4817504882812
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          8509.7421875,
+          10447.0
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400078,
+        "version": 3
+      },
+      "scene_seed": 400078,
+      "step": 282
+    },
+    {
+      "losses": [
+        5.300594665692351,
+        5.278446831527736
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5404.212890625,
+          "power": 1.9416570663452148,
+          "transition": 852.4817504882812
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          8509.7421875,
+          10447.0
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400078,
+        "version": 3
+      },
+      "scene_seed": 400078,
+      "step": 283
+    },
+    {
+      "losses": [
+        5.292413812244727,
+        5.273924569310035
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5404.212890625,
+          "power": 1.9416570663452148,
+          "transition": 852.4817504882812
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          8509.7421875,
+          10447.0
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400078,
+        "version": 3
+      },
+      "scene_seed": 400078,
+      "step": 284
+    },
+    {
+      "losses": [
+        2.640632138108344,
+        2.6722036764853305
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.6123046875,
+          "power": 2.3255085945129395,
+          "transition": 583.7027587890625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400079,
+        "version": 3
+      },
+      "scene_seed": 400079,
+      "step": 285
+    },
+    {
+      "losses": [
+        2.644645214948715,
+        2.673091382476783
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.6123046875,
+          "power": 2.3255085945129395,
+          "transition": 583.7027587890625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400079,
+        "version": 3
+      },
+      "scene_seed": 400079,
+      "step": 286
+    },
+    {
+      "losses": [
+        2.643843126201006,
+        2.6725208484371175
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.6123046875,
+          "power": 2.3255085945129395,
+          "transition": 583.7027587890625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400079,
+        "version": 3
+      },
+      "scene_seed": 400079,
+      "step": 287
+    },
+    {
+      "losses": [
+        2.6391824939308326,
+        2.670741520366741
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.6123046875,
+          "power": 2.3255085945129395,
+          "transition": 583.7027587890625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400079,
+        "version": 3
+      },
+      "scene_seed": 400079,
+      "step": 288
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6846.51220703125,
+          "power": 1.4062269926071167,
+          "transition": 668.554443359375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400080,
+        "version": 3
+      },
+      "scene_seed": 400080,
+      "step": 289
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6846.51220703125,
+          "power": 1.4062269926071167,
+          "transition": 668.554443359375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400080,
+        "version": 3
+      },
+      "scene_seed": 400080,
+      "step": 290
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6846.51220703125,
+          "power": 1.4062269926071167,
+          "transition": 668.554443359375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400080,
+        "version": 3
+      },
+      "scene_seed": 400080,
+      "step": 291
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6846.51220703125,
+          "power": 1.4062269926071167,
+          "transition": 668.554443359375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400080,
+        "version": 3
+      },
+      "scene_seed": 400080,
+      "step": 292
+    },
+    {
+      "losses": [
+        0.4758188792809847,
+        0.5002849340861093
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5237.64599609375,
+          "power": 2.079761505126953,
+          "transition": 473.4032897949219
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400081,
+        "version": 3
+      },
+      "scene_seed": 400081,
+      "step": 293
+    },
+    {
+      "losses": [
+        0.47495973467991826,
+        0.5000607712152899
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5237.64599609375,
+          "power": 2.079761505126953,
+          "transition": 473.4032897949219
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400081,
+        "version": 3
+      },
+      "scene_seed": 400081,
+      "step": 294
+    },
+    {
+      "losses": [
+        0.47396252772281017,
+        0.49980210246184187
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5237.64599609375,
+          "power": 2.079761505126953,
+          "transition": 473.4032897949219
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400081,
+        "version": 3
+      },
+      "scene_seed": 400081,
+      "step": 295
+    },
+    {
+      "losses": [
+        0.47281891529566844,
+        0.49952663012006354
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5237.64599609375,
+          "power": 2.079761505126953,
+          "transition": 473.4032897949219
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400081,
+        "version": 3
+      },
+      "scene_seed": 400081,
+      "step": 296
+    },
+    {
+      "losses": [
+        0.37800069062533315,
+        0.3552165467776387
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6521.02734375,
+          "power": 1.2901866436004639,
+          "transition": 693.9847412109375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400082,
+        "version": 3
+      },
+      "scene_seed": 400082,
+      "step": 297
+    },
+    {
+      "losses": [
+        0.3727389677079609,
+        0.349600551538312
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6521.02734375,
+          "power": 1.2901866436004639,
+          "transition": 693.9847412109375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400082,
+        "version": 3
+      },
+      "scene_seed": 400082,
+      "step": 298
+    },
+    {
+      "losses": [
+        0.35576813091672255,
+        0.33306737123428454
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6521.02734375,
+          "power": 1.2901866436004639,
+          "transition": 693.9847412109375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400082,
+        "version": 3
+      },
+      "scene_seed": 400082,
+      "step": 299
+    },
+    {
+      "losses": [
+        0.32935524666800964,
+        0.30849768567020364
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6521.02734375,
+          "power": 1.2901866436004639,
+          "transition": 693.9847412109375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400082,
+        "version": 3
+      },
+      "scene_seed": 400082,
+      "step": 300
+    },
+    {
+      "losses": [
+        0.611640447211066,
+        0.6230734762742143
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6703.4658203125,
+          "power": 2.15733003616333,
+          "transition": 935.3645629882812
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400083,
+        "version": 3
+      },
+      "scene_seed": 400083,
+      "step": 301
+    },
+    {
+      "losses": [
+        0.6035662111231729,
+        0.6198413382337199
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6703.4658203125,
+          "power": 2.15733003616333,
+          "transition": 935.3645629882812
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400083,
+        "version": 3
+      },
+      "scene_seed": 400083,
+      "step": 302
+    },
+    {
+      "losses": [
+        0.5962034840886952,
+        0.617554584423138
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6703.4658203125,
+          "power": 2.15733003616333,
+          "transition": 935.3645629882812
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400083,
+        "version": 3
+      },
+      "scene_seed": 400083,
+      "step": 303
+    },
+    {
+      "losses": [
+        0.5904504038593237,
+        0.6157261355587043
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6703.4658203125,
+          "power": 2.15733003616333,
+          "transition": 935.3645629882812
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": true,
+        "no_upper": true,
+        "seed": 400083,
+        "version": 3
+      },
+      "scene_seed": 400083,
+      "step": 304
+    },
+    {
+      "losses": [
+        1.3251070467016846,
+        1.3290108432110976
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7863.37744140625,
+          "power": 2.0159153938293457,
+          "transition": 699.9617309570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400084,
+        "version": 3
+      },
+      "scene_seed": 400084,
+      "step": 305
+    },
+    {
+      "losses": [
+        1.327176208908654,
+        1.3297400531521637
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7863.37744140625,
+          "power": 2.0159153938293457,
+          "transition": 699.9617309570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400084,
+        "version": 3
+      },
+      "scene_seed": 400084,
+      "step": 306
+    },
+    {
+      "losses": [
+        1.3287568269439913,
+        1.3302814998309715
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7863.37744140625,
+          "power": 2.0159153938293457,
+          "transition": 699.9617309570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400084,
+        "version": 3
+      },
+      "scene_seed": 400084,
+      "step": 307
+    },
+    {
+      "losses": [
+        1.329919783601754,
+        1.3306831959054661
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7863.37744140625,
+          "power": 2.0159153938293457,
+          "transition": 699.9617309570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400084,
+        "version": 3
+      },
+      "scene_seed": 400084,
+      "step": 308
+    },
+    {
+      "losses": [
+        0.7168941798631846,
+        0.7575018936392623
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6676.78955078125,
+          "power": 2.1055643558502197,
+          "transition": 422.0614013671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400085,
+        "version": 3
+      },
+      "scene_seed": 400085,
+      "step": 309
+    },
+    {
+      "losses": [
+        0.7143394820774323,
+        0.7545611589464717
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6676.78955078125,
+          "power": 2.1055643558502197,
+          "transition": 422.0614013671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400085,
+        "version": 3
+      },
+      "scene_seed": 400085,
+      "step": 310
+    },
+    {
+      "losses": [
+        0.711201861386873,
+        0.7505861640401035
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6676.78955078125,
+          "power": 2.1055643558502197,
+          "transition": 422.0614013671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400085,
+        "version": 3
+      },
+      "scene_seed": 400085,
+      "step": 311
+    },
+    {
+      "losses": [
+        0.7069348405477989,
+        0.7454781157723308
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6676.78955078125,
+          "power": 2.1055643558502197,
+          "transition": 422.0614013671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400085,
+        "version": 3
+      },
+      "scene_seed": 400085,
+      "step": 312
+    },
+    {
+      "losses": [
+        7.451870232432857,
+        7.740585056108479
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4330.646484375,
+          "power": 1.134409785270691,
+          "transition": 937.139404296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400086,
+        "version": 3
+      },
+      "scene_seed": 400086,
+      "step": 313
+    },
+    {
+      "losses": [
+        7.445776481652577,
+        7.7411524097972855
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4330.646484375,
+          "power": 1.134409785270691,
+          "transition": 937.139404296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400086,
+        "version": 3
+      },
+      "scene_seed": 400086,
+      "step": 314
+    },
+    {
+      "losses": [
+        7.4332292217317,
+        7.741514794667383
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4330.646484375,
+          "power": 1.134409785270691,
+          "transition": 937.139404296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400086,
+        "version": 3
+      },
+      "scene_seed": 400086,
+      "step": 315
+    },
+    {
+      "losses": [
+        7.415793141552056,
+        7.741695024280979
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4330.646484375,
+          "power": 1.134409785270691,
+          "transition": 937.139404296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400086,
+        "version": 3
+      },
+      "scene_seed": 400086,
+      "step": 316
+    },
+    {
+      "losses": [
+        0.6127741953393007,
+        0.6115726921262343
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5113.0078125,
+          "power": 1.154488444328308,
+          "transition": 499.5858459472656
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400087,
+        "version": 3
+      },
+      "scene_seed": 400087,
+      "step": 317
+    },
+    {
+      "losses": [
+        0.614808783862066,
+        0.6081834467391245
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5113.0078125,
+          "power": 1.154488444328308,
+          "transition": 499.5858459472656
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400087,
+        "version": 3
+      },
+      "scene_seed": 400087,
+      "step": 318
+    },
+    {
+      "losses": [
+        0.6130748891559453,
+        0.6039013209243755
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5113.0078125,
+          "power": 1.154488444328308,
+          "transition": 499.5858459472656
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400087,
+        "version": 3
+      },
+      "scene_seed": 400087,
+      "step": 319
+    },
+    {
+      "losses": [
+        0.607463585211207,
+        0.5989391100685113
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5113.0078125,
+          "power": 1.154488444328308,
+          "transition": 499.5858459472656
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400087,
+        "version": 3
+      },
+      "scene_seed": 400087,
+      "step": 320
+    },
+    {
+      "losses": [
+        5.0955237589462845,
+        4.973107669696688
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4122.46484375,
+          "power": 2.762510299682617,
+          "transition": 413.6763916015625
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400088,
+        "version": 3
+      },
+      "scene_seed": 400088,
+      "step": 321
+    },
+    {
+      "losses": [
+        5.097019690474704,
+        4.973434466391622
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4122.46484375,
+          "power": 2.762510299682617,
+          "transition": 413.6763916015625
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400088,
+        "version": 3
+      },
+      "scene_seed": 400088,
+      "step": 322
+    },
+    {
+      "losses": [
+        5.09670787155984,
+        4.973683831342449
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4122.46484375,
+          "power": 2.762510299682617,
+          "transition": 413.6763916015625
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400088,
+        "version": 3
+      },
+      "scene_seed": 400088,
+      "step": 323
+    },
+    {
+      "losses": [
+        5.0947880752358605,
+        4.97385509719178
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4122.46484375,
+          "power": 2.762510299682617,
+          "transition": 413.6763916015625
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400088,
+        "version": 3
+      },
+      "scene_seed": 400088,
+      "step": 324
+    },
+    {
+      "losses": [
+        3.5458660211838398,
+        3.673007516870522
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7858.705078125,
+          "power": 3.6608495712280273,
+          "transition": 704.85009765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400089,
+        "version": 3
+      },
+      "scene_seed": 400089,
+      "step": 325
+    },
+    {
+      "losses": [
+        3.544618381334374,
+        3.6739099493260277
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7858.705078125,
+          "power": 3.6608495712280273,
+          "transition": 704.85009765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400089,
+        "version": 3
+      },
+      "scene_seed": 400089,
+      "step": 326
+    },
+    {
+      "losses": [
+        3.532681302467416,
+        3.674243307798055
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7858.705078125,
+          "power": 3.6608495712280273,
+          "transition": 704.85009765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400089,
+        "version": 3
+      },
+      "scene_seed": 400089,
+      "step": 327
+    },
+    {
+      "losses": [
+        3.5094680286208066,
+        3.674054162801618
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7858.705078125,
+          "power": 3.6608495712280273,
+          "transition": 704.85009765625
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400089,
+        "version": 3
+      },
+      "scene_seed": 400089,
+      "step": 328
+    },
+    {
+      "losses": [
+        3.9355746234108713,
+        3.9026297099686467
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5703.642578125,
+          "power": 1.6092727184295654,
+          "transition": 657.48876953125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          11358.9765625,
+          13823.1220703125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400090,
+        "version": 3
+      },
+      "scene_seed": 400090,
+      "step": 329
+    },
+    {
+      "losses": [
+        3.9427244110689053,
+        3.90198160731705
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5703.642578125,
+          "power": 1.6092727184295654,
+          "transition": 657.48876953125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          11358.9765625,
+          13823.1220703125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400090,
+        "version": 3
+      },
+      "scene_seed": 400090,
+      "step": 330
+    },
+    {
+      "losses": [
+        3.947995355677479,
+        3.901196181754154
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5703.642578125,
+          "power": 1.6092727184295654,
+          "transition": 657.48876953125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          11358.9765625,
+          13823.1220703125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400090,
+        "version": 3
+      },
+      "scene_seed": 400090,
+      "step": 331
+    },
+    {
+      "losses": [
+        3.950834389855512,
+        3.9003032363214434
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5703.642578125,
+          "power": 1.6092727184295654,
+          "transition": 657.48876953125
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          11358.9765625,
+          13823.1220703125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400090,
+        "version": 3
+      },
+      "scene_seed": 400090,
+      "step": 332
+    },
+    {
+      "losses": [
+        1.9089729816554715,
+        1.9765656764135677
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4995.3955078125,
+          "power": 2.6592791080474854,
+          "transition": 421.48193359375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400091,
+        "version": 3
+      },
+      "scene_seed": 400091,
+      "step": 333
+    },
+    {
+      "losses": [
+        1.9029862421882706,
+        1.9743723830211481
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4995.3955078125,
+          "power": 2.6592791080474854,
+          "transition": 421.48193359375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400091,
+        "version": 3
+      },
+      "scene_seed": 400091,
+      "step": 334
+    },
+    {
+      "losses": [
+        1.8937308411633447,
+        1.9718260178609976
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4995.3955078125,
+          "power": 2.6592791080474854,
+          "transition": 421.48193359375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400091,
+        "version": 3
+      },
+      "scene_seed": 400091,
+      "step": 335
+    },
+    {
+      "losses": [
+        1.8808294603626294,
+        1.969010216270675
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4995.3955078125,
+          "power": 2.6592791080474854,
+          "transition": 421.48193359375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400091,
+        "version": 3
+      },
+      "scene_seed": 400091,
+      "step": 336
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4874.95703125,
+          "power": 2.738494873046875,
+          "transition": 816.93212890625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400092,
+        "version": 3
+      },
+      "scene_seed": 400092,
+      "step": 337
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4874.95703125,
+          "power": 2.738494873046875,
+          "transition": 816.93212890625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400092,
+        "version": 3
+      },
+      "scene_seed": 400092,
+      "step": 338
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4874.95703125,
+          "power": 2.738494873046875,
+          "transition": 816.93212890625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400092,
+        "version": 3
+      },
+      "scene_seed": 400092,
+      "step": 339
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4874.95703125,
+          "power": 2.738494873046875,
+          "transition": 816.93212890625
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400092,
+        "version": 3
+      },
+      "scene_seed": 400092,
+      "step": 340
+    },
+    {
+      "losses": [
+        0.6540507116134683,
+        0.7171506967546835
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5356.904296875,
+          "power": 1.8874423503875732,
+          "transition": 766.4664916992188
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400093,
+        "version": 3
+      },
+      "scene_seed": 400093,
+      "step": 341
+    },
+    {
+      "losses": [
+        0.6499623864731028,
+        0.7166879211759529
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5356.904296875,
+          "power": 1.8874423503875732,
+          "transition": 766.4664916992188
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400093,
+        "version": 3
+      },
+      "scene_seed": 400093,
+      "step": 342
+    },
+    {
+      "losses": [
+        0.6463322622402772,
+        0.7162524253691238
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5356.904296875,
+          "power": 1.8874423503875732,
+          "transition": 766.4664916992188
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400093,
+        "version": 3
+      },
+      "scene_seed": 400093,
+      "step": 343
+    },
+    {
+      "losses": [
+        0.6434652099607459,
+        0.7158410124029223
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5356.904296875,
+          "power": 1.8874423503875732,
+          "transition": 766.4664916992188
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400093,
+        "version": 3
+      },
+      "scene_seed": 400093,
+      "step": 344
+    },
+    {
+      "losses": [
+        0.7057673586516657,
+        0.6081993718352119
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4885.39111328125,
+          "power": 2.517268180847168,
+          "transition": 558.4375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400094,
+        "version": 3
+      },
+      "scene_seed": 400094,
+      "step": 345
+    },
+    {
+      "losses": [
+        0.7132297871317144,
+        0.6071680463807364
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4885.39111328125,
+          "power": 2.517268180847168,
+          "transition": 558.4375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400094,
+        "version": 3
+      },
+      "scene_seed": 400094,
+      "step": 346
+    },
+    {
+      "losses": [
+        0.7097526308560298,
+        0.6035777939927649
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4885.39111328125,
+          "power": 2.517268180847168,
+          "transition": 558.4375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400094,
+        "version": 3
+      },
+      "scene_seed": 400094,
+      "step": 347
+    },
+    {
+      "losses": [
+        0.6967998224481227,
+        0.5985728411771074
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4885.39111328125,
+          "power": 2.517268180847168,
+          "transition": 558.4375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400094,
+        "version": 3
+      },
+      "scene_seed": 400094,
+      "step": 348
+    },
+    {
+      "losses": [
+        2.0862058140386655,
+        1.7529729905353308
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6639.94921875,
+          "power": 2.7060604095458984,
+          "transition": 572.8326416015625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400095,
+        "version": 3
+      },
+      "scene_seed": 400095,
+      "step": 349
+    },
+    {
+      "losses": [
+        2.0373884494922527,
+        1.7470738721849988
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6639.94921875,
+          "power": 2.7060604095458984,
+          "transition": 572.8326416015625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400095,
+        "version": 3
+      },
+      "scene_seed": 400095,
+      "step": 350
+    },
+    {
+      "losses": [
+        1.9757620240595992,
+        1.739073362673111
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6639.94921875,
+          "power": 2.7060604095458984,
+          "transition": 572.8326416015625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400095,
+        "version": 3
+      },
+      "scene_seed": 400095,
+      "step": 351
+    },
+    {
+      "losses": [
+        1.910361841843159,
+        1.7287599220420669
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6639.94921875,
+          "power": 2.7060604095458984,
+          "transition": 572.8326416015625
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400095,
+        "version": 3
+      },
+      "scene_seed": 400095,
+      "step": 352
+    },
+    {
+      "losses": [
+        1.4459149723125122,
+        1.4723437821088767
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6565.3046875,
+          "power": 1.4537086486816406,
+          "transition": 995.9793090820312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400096,
+        "version": 3
+      },
+      "scene_seed": 400096,
+      "step": 353
+    },
+    {
+      "losses": [
+        1.4530717440945242,
+        1.474843855962641
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6565.3046875,
+          "power": 1.4537086486816406,
+          "transition": 995.9793090820312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400096,
+        "version": 3
+      },
+      "scene_seed": 400096,
+      "step": 354
+    },
+    {
+      "losses": [
+        1.4575490608237913,
+        1.476975754606817
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6565.3046875,
+          "power": 1.4537086486816406,
+          "transition": 995.9793090820312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400096,
+        "version": 3
+      },
+      "scene_seed": 400096,
+      "step": 355
+    },
+    {
+      "losses": [
+        1.460065911202602,
+        1.4787257832677303
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6565.3046875,
+          "power": 1.4537086486816406,
+          "transition": 995.9793090820312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400096,
+        "version": 3
+      },
+      "scene_seed": 400096,
+      "step": 356
+    },
+    {
+      "losses": [
+        0.25829626881211165,
+        0.23417451621005975
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.62890625,
+          "power": 1.6609654426574707,
+          "transition": 842.6527099609375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400097,
+        "version": 3
+      },
+      "scene_seed": 400097,
+      "step": 357
+    },
+    {
+      "losses": [
+        0.2602977895326548,
+        0.23208542083813935
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.62890625,
+          "power": 1.6609654426574707,
+          "transition": 842.6527099609375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400097,
+        "version": 3
+      },
+      "scene_seed": 400097,
+      "step": 358
+    },
+    {
+      "losses": [
+        0.25827014974939955,
+        0.22999616432150177
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.62890625,
+          "power": 1.6609654426574707,
+          "transition": 842.6527099609375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400097,
+        "version": 3
+      },
+      "scene_seed": 400097,
+      "step": 359
+    },
+    {
+      "losses": [
+        0.25285909815880264,
+        0.22793270123030143
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6592.62890625,
+          "power": 1.6609654426574707,
+          "transition": 842.6527099609375
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 400097,
+        "version": 3
+      },
+      "scene_seed": 400097,
+      "step": 360
+    },
+    {
+      "losses": [
+        8.56675607538244,
+        8.805665838698257
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4048.83154296875,
+          "power": 3.1397876739501953,
+          "transition": 828.7108154296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400098,
+        "version": 3
+      },
+      "scene_seed": 400098,
+      "step": 361
+    },
+    {
+      "losses": [
+        8.56331533692918,
+        8.805765540511402
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4048.83154296875,
+          "power": 3.1397876739501953,
+          "transition": 828.7108154296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400098,
+        "version": 3
+      },
+      "scene_seed": 400098,
+      "step": 362
+    },
+    {
+      "losses": [
+        8.558141537847387,
+        8.8057782254164
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4048.83154296875,
+          "power": 3.1397876739501953,
+          "transition": 828.7108154296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400098,
+        "version": 3
+      },
+      "scene_seed": 400098,
+      "step": 363
+    },
+    {
+      "losses": [
+        8.551425243486559,
+        8.805713203819758
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4048.83154296875,
+          "power": 3.1397876739501953,
+          "transition": 828.7108154296875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400098,
+        "version": 3
+      },
+      "scene_seed": 400098,
+      "step": 364
+    },
+    {
+      "losses": [
+        0.9655019268750595,
+        0.7871558342754861
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4817.16748046875,
+          "power": 2.970970630645752,
+          "transition": 844.680419921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400099,
+        "version": 3
+      },
+      "scene_seed": 400099,
+      "step": 365
+    },
+    {
+      "losses": [
+        0.9420603123439755,
+        0.7844155287765323
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4817.16748046875,
+          "power": 2.970970630645752,
+          "transition": 844.680419921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400099,
+        "version": 3
+      },
+      "scene_seed": 400099,
+      "step": 366
+    },
+    {
+      "losses": [
+        0.9108822350440902,
+        0.7803884479878025
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4817.16748046875,
+          "power": 2.970970630645752,
+          "transition": 844.680419921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400099,
+        "version": 3
+      },
+      "scene_seed": 400099,
+      "step": 367
+    },
+    {
+      "losses": [
+        0.876987080167828,
+        0.7751133768826033
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4817.16748046875,
+          "power": 2.970970630645752,
+          "transition": 844.680419921875
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400099,
+        "version": 3
+      },
+      "scene_seed": 400099,
+      "step": 368
+    },
+    {
+      "losses": [
+        1.0981970897094635,
+        1.180775791257591
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6358.85400390625,
+          "power": 3.6221718788146973,
+          "transition": 369.448486328125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400100,
+        "version": 3
+      },
+      "scene_seed": 400100,
+      "step": 369
+    },
+    {
+      "losses": [
+        1.1121625579352368,
+        1.1827707531085172
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6358.85400390625,
+          "power": 3.6221718788146973,
+          "transition": 369.448486328125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400100,
+        "version": 3
+      },
+      "scene_seed": 400100,
+      "step": 370
+    },
+    {
+      "losses": [
+        1.1178104817218812,
+        1.1826882254655686
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6358.85400390625,
+          "power": 3.6221718788146973,
+          "transition": 369.448486328125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400100,
+        "version": 3
+      },
+      "scene_seed": 400100,
+      "step": 371
+    },
+    {
+      "losses": [
+        1.1167473116740643,
+        1.1803992583424612
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6358.85400390625,
+          "power": 3.6221718788146973,
+          "transition": 369.448486328125
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400100,
+        "version": 3
+      },
+      "scene_seed": 400100,
+      "step": 372
+    },
+    {
+      "losses": [
+        4.607412255722784,
+        4.821149864274011
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7865.7119140625,
+          "power": 1.5595409870147705,
+          "transition": 863.7987670898438
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400101,
+        "version": 3
+      },
+      "scene_seed": 400101,
+      "step": 373
+    },
+    {
+      "losses": [
+        4.5921228638752,
+        4.818479114637461
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7865.7119140625,
+          "power": 1.5595409870147705,
+          "transition": 863.7987670898438
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400101,
+        "version": 3
+      },
+      "scene_seed": 400101,
+      "step": 374
+    },
+    {
+      "losses": [
+        4.56207902841318,
+        4.812660890735159
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7865.7119140625,
+          "power": 1.5595409870147705,
+          "transition": 863.7987670898438
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400101,
+        "version": 3
+      },
+      "scene_seed": 400101,
+      "step": 375
+    },
+    {
+      "losses": [
+        4.5169072978278555,
+        4.804369049323625
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7865.7119140625,
+          "power": 1.5595409870147705,
+          "transition": 863.7987670898438
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400101,
+        "version": 3
+      },
+      "scene_seed": 400101,
+      "step": 376
+    },
+    {
+      "losses": [
+        2.7288666855971195,
+        2.7615351645618316
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5831.9736328125,
+          "power": 2.762472152709961,
+          "transition": 307.5193786621094
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6507.798828125,
+          8575.1640625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400102,
+        "version": 3
+      },
+      "scene_seed": 400102,
+      "step": 377
+    },
+    {
+      "losses": [
+        2.7230161307007488,
+        2.758248595726955
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5831.9736328125,
+          "power": 2.762472152709961,
+          "transition": 307.5193786621094
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6507.798828125,
+          8575.1640625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400102,
+        "version": 3
+      },
+      "scene_seed": 400102,
+      "step": 378
+    },
+    {
+      "losses": [
+        2.716031970657835,
+        2.755177693944512
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5831.9736328125,
+          "power": 2.762472152709961,
+          "transition": 307.5193786621094
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6507.798828125,
+          8575.1640625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400102,
+        "version": 3
+      },
+      "scene_seed": 400102,
+      "step": 379
+    },
+    {
+      "losses": [
+        2.707712551945777,
+        2.7523279712218844
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5831.9736328125,
+          "power": 2.762472152709961,
+          "transition": 307.5193786621094
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          6507.798828125,
+          8575.1640625
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 400102,
+        "version": 3
+      },
+      "scene_seed": 400102,
+      "step": 380
+    },
+    {
+      "losses": [
+        2.76601305620487,
+        3.0839802365768305
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6761.58984375,
+          "power": 2.5665769577026367,
+          "transition": 800.0845947265625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400103,
+        "version": 3
+      },
+      "scene_seed": 400103,
+      "step": 381
+    },
+    {
+      "losses": [
+        2.734851956791833,
+        3.075416987222743
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6761.58984375,
+          "power": 2.5665769577026367,
+          "transition": 800.0845947265625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400103,
+        "version": 3
+      },
+      "scene_seed": 400103,
+      "step": 382
+    },
+    {
+      "losses": [
+        2.698879814973711,
+        3.066575578885779
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6761.58984375,
+          "power": 2.5665769577026367,
+          "transition": 800.0845947265625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400103,
+        "version": 3
+      },
+      "scene_seed": 400103,
+      "step": 383
+    },
+    {
+      "losses": [
+        2.6605821116126513,
+        3.0577434113601942
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 6761.58984375,
+          "power": 2.5665769577026367,
+          "transition": 800.0845947265625
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400103,
+        "version": 3
+      },
+      "scene_seed": 400103,
+      "step": 384
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5460.794921875,
+          "power": 1.9038217067718506,
+          "transition": 623.788330078125
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400104,
+        "version": 3
+      },
+      "scene_seed": 400104,
+      "step": 385
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5460.794921875,
+          "power": 1.9038217067718506,
+          "transition": 623.788330078125
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400104,
+        "version": 3
+      },
+      "scene_seed": 400104,
+      "step": 386
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5460.794921875,
+          "power": 1.9038217067718506,
+          "transition": 623.788330078125
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400104,
+        "version": 3
+      },
+      "scene_seed": 400104,
+      "step": 387
+    },
+    {
+      "losses": [
+        0.0,
+        0.0
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5460.794921875,
+          "power": 1.9038217067718506,
+          "transition": 623.788330078125
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400104,
+        "version": 3
+      },
+      "scene_seed": 400104,
+      "step": 388
+    },
+    {
+      "losses": [
+        1.2607813884078154,
+        1.5332992778673782
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5339.24755859375,
+          "power": 3.86752986907959,
+          "transition": 631.5714111328125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400105,
+        "version": 3
+      },
+      "scene_seed": 400105,
+      "step": 389
+    },
+    {
+      "losses": [
+        1.2805335922890784,
+        1.5296955609648788
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5339.24755859375,
+          "power": 3.86752986907959,
+          "transition": 631.5714111328125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400105,
+        "version": 3
+      },
+      "scene_seed": 400105,
+      "step": 390
+    },
+    {
+      "losses": [
+        1.2899971368359875,
+        1.5261591677320578
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5339.24755859375,
+          "power": 3.86752986907959,
+          "transition": 631.5714111328125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400105,
+        "version": 3
+      },
+      "scene_seed": 400105,
+      "step": 391
+    },
+    {
+      "losses": [
+        1.28893319877686,
+        1.522726303434267
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 5339.24755859375,
+          "power": 3.86752986907959,
+          "transition": 631.5714111328125
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 400105,
+        "version": 3
+      },
+      "scene_seed": 400105,
+      "step": 392
+    },
+    {
+      "losses": [
+        1.0732285379388609,
+        0.6194729240077638
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7019.193359375,
+          "power": 3.1740832328796387,
+          "transition": 999.828857421875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400106,
+        "version": 3
+      },
+      "scene_seed": 400106,
+      "step": 393
+    },
+    {
+      "losses": [
+        1.0326868340066484,
+        0.6243343363649966
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7019.193359375,
+          "power": 3.1740832328796387,
+          "transition": 999.828857421875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400106,
+        "version": 3
+      },
+      "scene_seed": 400106,
+      "step": 394
+    },
+    {
+      "losses": [
+        0.9751937777023547,
+        0.6209431396239395
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7019.193359375,
+          "power": 3.1740832328796387,
+          "transition": 999.828857421875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400106,
+        "version": 3
+      },
+      "scene_seed": 400106,
+      "step": 395
+    },
+    {
+      "losses": [
+        0.9077476046386302,
+        0.6104984387377789
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 7019.193359375,
+          "power": 3.1740832328796387,
+          "transition": 999.828857421875
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400106,
+        "version": 3
+      },
+      "scene_seed": 400106,
+      "step": 396
+    },
+    {
+      "losses": [
+        1.5486158024527998,
+        0.8477861013609572
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4657.35400390625,
+          "power": 1.7485448122024536,
+          "transition": 645.5755615234375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400107,
+        "version": 3
+      },
+      "scene_seed": 400107,
+      "step": 397
+    },
+    {
+      "losses": [
+        1.4156406701059547,
+        0.8335367908956112
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4657.35400390625,
+          "power": 1.7485448122024536,
+          "transition": 645.5755615234375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400107,
+        "version": 3
+      },
+      "scene_seed": 400107,
+      "step": 398
+    },
+    {
+      "losses": [
+        1.2787451192294166,
+        0.8174195543612411
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4657.35400390625,
+          "power": 1.7485448122024536,
+          "transition": 645.5755615234375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400107,
+        "version": 3
+      },
+      "scene_seed": 400107,
+      "step": 399
+    },
+    {
+      "losses": [
+        1.1485285880108933,
+        0.8006950908519039
+      ],
+      "recipe": {
+        "damage": {
+          "cutoff": 4657.35400390625,
+          "power": 1.7485448122024536,
+          "transition": 645.5755615234375
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 400107,
+        "version": 3
+      },
+      "scene_seed": 400107,
+      "step": 400
+    }
+  ],
+  "resume": null,
+  "start_step": 0,
+  "timing_context": "quality/training run; no speed experiment",
+  "total_steps": 400,
+  "unique_scenes_total": 100,
+  "updates_this_run": 400
+}
