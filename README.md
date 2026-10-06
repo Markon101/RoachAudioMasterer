@@ -16,6 +16,13 @@ reference and an optional OpenCL model backend. No natural-audio corpus required
 
 ## Build and run
 
+The current learned-control sprint is documented in
+[RICH_SPRINT_RESULTS](docs/RICH_SPRINT_RESULTS.md), with frozen gates and exact
+Adam states under `artifacts/rich-gate-v1`. New opt-in `rich-allocate` and
+`rich-field-*` commands test excitation budgets and bounded coupled complex
+dynamics; prior native defaults and checkpoints remain intact. Their registered
+comparisons and limitations are in [RICH_SPRINT_PLAN](docs/RICH_SPRINT_PLAN.md).
+
 Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
 ML framework, service, dataset download, or GPU is required.
 

@@ -167,6 +167,11 @@ impl Engine {
             result[r.channel][i] = match mode {
                 1 => velocity(y, state[r.channel][i]),
                 2 => C::new(y[0], y[1]),
+                3..=6 => crate::rich_dynamics::velocity(
+                    crate::rich_dynamics::Kind::from_mode(mode),
+                    y,
+                    crate::rich_dynamics::terms(p, state, *r),
+                ),
                 _ => deterministic(y, p.harmonic[r.channel][i], p.noise[r.channel][i]),
             };
         }
@@ -244,6 +249,17 @@ impl Engine {
         steps: usize,
         disable_diagonal: bool,
     ) -> Result<[Vec<C>; 2]> {
+        self.refine_mode(p, d, prior, steps, if disable_diagonal { 2 } else { 1 })
+    }
+    pub fn refine_mode(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        prior: &[Vec<C>; 2],
+        steps: usize,
+        mode: u8,
+    ) -> Result<[Vec<C>; 2]> {
+        ensure!((1..=6).contains(&mode), "invalid refinement mode");
         ensure!(
             (1..=16).contains(&steps),
             "scene solver steps must be 1..16"
@@ -282,22 +298,9 @@ impl Engine {
         let mut state = prior.clone();
         for j in 0..steps {
             let v = if let Some(cache) = &cache {
-                self.cached_field(
-                    p,
-                    &state,
-                    j as f32 / steps as f32,
-                    if disable_diagonal { 2 } else { 1 },
-                    cache,
-                )?
+                self.cached_field(p, &state, j as f32 / steps as f32, mode, cache)?
             } else {
-                self.field(
-                    p,
-                    d,
-                    &e,
-                    &state,
-                    j as f32 / steps as f32,
-                    if disable_diagonal { 2 } else { 1 },
-                )?
+                self.field(p, d, &e, &state, j as f32 / steps as f32, mode)?
             };
             for c in 0..2 {
                 for (x, v) in state[c].iter_mut().zip(&v[c]) {
@@ -470,6 +473,18 @@ mod tests {
             .fold(0.0f32, f32::max);
         println!("native diagonal trajectory CPU/GPU max={max}");
         ensure!(max < 3e-5, "native trajectory parity");
+        for mode in 3..=6 {
+            let x = cpu.refine_mode(&p, d, &a, 8, mode)?;
+            let y = gpu.refine_mode(&p, d, &a, 8, mode)?;
+            let max = x
+                .iter()
+                .flatten()
+                .zip(y.iter().flatten())
+                .map(|(a, b)| (*a - *b).norm())
+                .fold(0.0f32, f32::max);
+            println!("bounded field mode{mode} CPU/GPU max={max}");
+            ensure!(max < 3e-5, "bounded field parity");
+        }
         Ok(())
     }
 }

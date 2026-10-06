@@ -88,9 +88,26 @@ impl Gate {
         }
     }
     pub fn validate(&self) -> bool {
-        self.schema == "rich-gate-v1"
-            && (self.head.input, self.head.hidden, self.head.output) == (INPUT, HIDDEN, OUTPUT)
+        ((self.schema == "rich-gate-v1" && self.head.output == 4)
+            || (self.schema == "rich-gate-allocate-v1" && self.head.output == 6))
+            && (self.head.input, self.head.hidden) == (INPUT, HIDDEN)
             && self.head.validate()
+    }
+    /// New architecture, exact inference warm start; optimizer is separately reset.
+    pub fn expanded(&self, seed: u64) -> Self {
+        let mut g = self.clone();
+        let mut h = Dense::new(INPUT, HIDDEN, 6, &mut Rng(103));
+        let start = h.w2();
+        h.weights[..start].copy_from_slice(&self.head.weights[..start]);
+        h.weights[start..start + 4 * HIDDEN]
+            .copy_from_slice(&self.head.weights[self.head.w2()..self.head.w2() + 4 * HIDDEN]);
+        let b = h.b2();
+        h.weights[b..b + 4].copy_from_slice(&self.head.weights[self.head.b2()..self.head.b2() + 4]);
+        g.head = h;
+        g.schema = "rich-gate-allocate-v1".into();
+        g.steps = 0;
+        g.data_seed = seed;
+        g
     }
     pub fn fingerprint(&self) -> String {
         let mut h = 0xcbf29ce484222325u64;
@@ -321,23 +338,15 @@ impl Cache {
         }
     }
 }
-fn neighbors(p: &Prepared, d: Damage, t: usize, k: usize) -> Vec<(usize, f32)> {
-    let mut a = Vec::with_capacity(9);
-    let mut norm = 0.0;
-    for dt in -1..=1 {
-        for dk in -1..=1 {
-            let u = at(t as isize + dt, p.frames);
-            let b =
-                (k as isize + dk).clamp(d.cutoff_bin() as isize + 1, BINS as isize - 1) as usize;
-            let w = if dt == 0 { 2.0 } else { 1.0 } * if dk == 0 { 2.0 } else { 1.0 };
-            a.push((u * BINS + b, w));
-            norm += w;
-        }
-    }
-    for (_, w) in &mut a {
-        *w /= norm;
-    }
-    a
+fn neighbors(p: &Prepared, d: Damage, t: usize, k: usize) -> [(usize, f32); 9] {
+    std::array::from_fn(|i| {
+        let dt = i as isize / 3 - 1;
+        let dk = i as isize % 3 - 1;
+        let u = at(t as isize + dt, p.frames);
+        let b = (k as isize + dk).clamp(d.cutoff_bin() as isize + 1, BINS as isize - 1) as usize;
+        let w = (if dt == 0 { 2.0 } else { 1.0 }) * (if dk == 0 { 2.0 } else { 1.0 }) / 16.0;
+        (u * BINS + b, w)
+    })
 }
 pub fn smooth(
     p: &Prepared,
@@ -391,6 +400,22 @@ pub struct Forward {
     pub gates: [[Vec<f32>; 2]; 4],
     pub hidden: Vec<[f32; HIDDEN]>,
     pub field: [Vec<C>; 2],
+    pub logits: Vec<[f32; 6]>,
+}
+fn allowance(y: &[f32], richness: f32) -> [f32; 4] {
+    std::array::from_fn(|j| {
+        let p = sigmoid(y[j]);
+        let q = if richness == 0.5 {
+            p
+        } else {
+            sigmoid(y[j] + (richness - 0.5) * 8.0 * p * (1.0 - p))
+        };
+        q * if y.len() == 6 && j < 2 {
+            (8.0f32.ln() * y[j + 4].tanh()).exp()
+        } else {
+            1.0
+        }
+    })
 }
 /// Bounded inference features, including CPU/GPU dense parity; no training tape.
 pub fn inference_tiled(
@@ -412,14 +437,10 @@ pub fn inference_tiled(
      -> Result<()> {
         let ys = predictor.predict(xs, rows.len())?;
         ensure!(ys.iter().all(|x| x.is_finite()), "nonfinite gate inference");
-        for (&(c, t, k), y) in rows.iter().zip(ys.as_chunks::<4>().0.iter()) {
+        for (&(c, t, k), y) in rows.iter().zip(ys.chunks_exact(g.head.output)) {
+            let weights = allowance(y, richness);
             for j in 0..4 {
-                let q = sigmoid(y[j]);
-                raw[j][c][t * BINS + k] = if richness == 0.5 {
-                    q
-                } else {
-                    sigmoid(y[j] + (richness - 0.5) * 8.0 * q * (1.0 - q))
-                };
+                raw[j][c][t * BINS + k] = weights[j];
             }
         }
         Ok(())
@@ -460,6 +481,7 @@ pub fn inference_tiled(
         raw,
         gates,
         hidden: Vec::new(),
+        logits: Vec::new(),
         field,
     })
 }
@@ -473,22 +495,20 @@ pub fn forward(
 ) -> Forward {
     let mut raw = std::array::from_fn(|_| std::array::from_fn(|_| vec![0.0; p.frames * BINS]));
     let mut hidden = Vec::with_capacity(cache.indices.len());
+    let mut logits = Vec::with_capacity(cache.indices.len());
     for (&(c, t, k), x) in cache.indices.iter().zip(&cache.features) {
         let mut input = *x;
         if g.frequency_only {
             input[5..].fill(0.0);
         }
         let mut h = [0.0; HIDDEN];
-        let mut y = [0.0; OUTPUT];
-        g.head.forward(&input, &mut h, &mut y);
+        let mut y = [0.0; 6];
+        g.head.forward(&input, &mut h, &mut y[..g.head.output]);
+        let weights = allowance(&y[..g.head.output], richness);
         for j in 0..4 {
-            let q = sigmoid(y[j]);
-            raw[j][c][t * BINS + k] = if richness == 0.5 {
-                q
-            } else {
-                sigmoid(y[j] + (richness - 0.5) * 8.0 * q * (1.0 - q))
-            };
+            raw[j][c][t * BINS + k] = weights[j];
         }
+        logits.push(y);
         hidden.push(h);
     }
     let gates = smooth(p, d, &raw, false);
@@ -498,6 +518,7 @@ pub fn forward(
         gates,
         hidden,
         field,
+        logits,
     }
 }
 pub fn gradient(
@@ -550,15 +571,33 @@ pub fn gradient(
     let mut grad = vec![0.0; g.head.weights.len()];
     for (row, (&(c, t, k), x)) in cache.indices.iter().zip(&cache.features).enumerate() {
         let i = t * BINS + k;
-        let dy = std::array::from_fn::<_, 4, _>(|j| {
-            qg[j][c][i] * f.raw[j][c][i] * (1.0 - f.raw[j][c][i])
-        });
+        let mut dy = [0.0; 6];
+        for j in 0..4 {
+            let p = sigmoid(f.logits[row][j]);
+            let budget = if g.head.output == 6 && j < 2 {
+                (8.0f32.ln() * f.logits[row][j + 4].tanh()).exp()
+            } else {
+                1.0
+            };
+            dy[j] = qg[j][c][i] * p * (1.0 - p) * budget;
+            if g.head.output == 6 && j < 2 {
+                dy[j + 4] = qg[j][c][i]
+                    * f.raw[j][c][i]
+                    * 8.0f32.ln()
+                    * (1.0 - f.logits[row][j + 4].tanh().powi(2));
+            }
+        }
         let mut input = *x;
         if g.frequency_only {
             input[5..].fill(0.0);
         }
-        g.head
-            .backward(&input, &f.hidden[row], &dy, &mut grad, &mut []);
+        g.head.backward(
+            &input,
+            &f.hidden[row],
+            &dy[..g.head.output],
+            &mut grad,
+            &mut [],
+        );
     }
     (loss, grad)
 }

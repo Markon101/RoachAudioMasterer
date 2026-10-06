@@ -238,9 +238,14 @@ pub fn evaluate_gate(
     seed: u64,
     count: usize,
     legacy: bool,
+    independent_damage: bool,
     backend: &str,
     out: &Path,
 ) -> Result<()> {
+    ensure!(
+        (1..=192).contains(&count),
+        "gate evaluation count must be1..192"
+    );
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
     let gate = Gate::load(gate_path)?;
@@ -267,8 +272,12 @@ pub fn evaluate_gate(
             (a, serde_json::to_value(r)?, d, false)
         } else {
             let (a, r) = rich_synth::generate(scene_seed);
-            let d = r.damage;
-            let no = r.no_upper;
+            let d = if independent_damage {
+                Damage::random(scene_seed ^ 0xa6530197)
+            } else {
+                r.damage
+            };
+            let no = r.no_upper && !independent_damage;
             (a, serde_json::to_value(r)?, d, no)
         };
         let input = d.apply(&target);
@@ -352,7 +361,7 @@ pub fn evaluate_gate(
                 ensure!(y.channels == input.channels, "gate silence failure");
             }
             let failures = failure_metrics(&target, &y, &input, d);
-            records.push(json!({"scene_seed":scene_seed,"recipe":recipe,"no_upper":no_upper,"method":name,"scores":score,"failures":failures,"matched_scalar_gain":ratio}));
+            records.push(json!({"scene_seed":scene_seed,"recipe":recipe,"actual_damage":d,"no_upper":no_upper,"method":name,"scores":score,"failures":failures,"matched_scalar_gain":ratio}));
             groups.entry(name.into()).or_default().push(score);
             if index < 12 {
                 native_audio::write(&dir.join(format!("{name}.wav")), &y, false)?;
@@ -374,7 +383,7 @@ pub fn evaluate_gate(
     }
     write_json(
         &out.join("evaluation.json"),
-        &json!({"provenance":provenance(),"seed_start":seed,"count":count,"legacy":legacy,"gate":gate_path,"frequency_gate":freq_path,"det":det_path,"flow":flow_path,"summary":summary,"records":records,"aggregation":"independent scene seeds; alternatives/richness/shuffles are not independent replication","scalar_control":"attenuate frozen flow to same added RMS as gate when gain<=1; no reference selection"}),
+        &json!({"provenance":provenance(),"seed_start":seed,"count":count,"legacy":legacy,"independent_damage":independent_damage,"gate":gate_path,"frequency_gate":freq_path,"det":det_path,"flow":flow_path,"summary":summary,"records":records,"aggregation":"independent scene seeds; alternatives/richness/shuffles are not independent replication","scalar_control":"both attenuated to common minimum added RMS; no reference selection"}),
     )
 }
 #[allow(clippy::too_many_arguments)] // Research CLI entrypoint, not a numerical API.
@@ -431,5 +440,64 @@ pub fn restore_gate(
     write_json(
         &out.join("restoration.json"),
         &json!({"provenance":provenance(),"source":source,"start":start,"controlled":controlled,"richness":richness,"det":det_path,"flow":flow_path,"gate":gate_path,"gate_fingerprint":gate.fingerprint(),"mean_allowance":mean_gates,"scores":score,"added_rms":added_rms(&y,&input),"claim":"gated conditional additions; undegraded reference distance is change, not quality"}),
+    )
+}
+pub fn ambiguity(
+    det_path: &Path,
+    flow_path: &Path,
+    gate_path: &Path,
+    backend: &str,
+    out: &Path,
+) -> Result<()> {
+    let det = Model::load(det_path)?;
+    let flow = Model::load(flow_path)?;
+    let gate = Gate::load(gate_path)?;
+    new_run(out)?;
+    let sine = |f: f64, i: usize| (std::f64::consts::TAU * f * i as f64 / 48000.0).sin() as f32;
+    let input = Audio {
+        rate: 48000,
+        channels: vec![
+            (0..rich_synth::SAMPLES)
+                .map(|i| 0.2 * sine(937.5, i) + 0.08 * sine(1875.0, i) + 0.04 * sine(3750.0, i))
+                .collect();
+            2
+        ],
+    };
+    let mut continued = input.clone();
+    for c in &mut continued.channels {
+        for (i, x) in c.iter_mut().enumerate() {
+            *x += 0.04 * sine(7500.0, i);
+        }
+    }
+    let d = Damage {
+        cutoff: 6000.0,
+        transition: 500.0,
+        power: 2.0,
+    };
+    let damaged = d.apply(&continued);
+    let low_difference = input
+        .channels
+        .iter()
+        .flatten()
+        .zip(damaged.channels.iter().flatten())
+        .map(|(a, b)| (a - b).abs())
+        .fold(0.0f32, f32::max);
+    ensure!(
+        low_difference < 2e-6,
+        "twins do not share bandlimited observation"
+    );
+    let p = scene_features::prepare(&input, d, 11);
+    let mut frozen = Frozen::new(&det, &flow, backend)?;
+    let parts = frozen.components(&p, d)?;
+    let cache = Cache::new(&p, d, &parts);
+    let f = rich_gate::forward(&gate, &p, d, &parts, &cache, 0.5);
+    let prediction = scene_features::waveform(&p, d, &f.field, 1.0);
+    native_audio::write(&out.join("input.wav"), &input, false)?;
+    native_audio::write(&out.join("stopped-target.wav"), &input, false)?;
+    native_audio::write(&out.join("continued-target.wav"), &continued, false)?;
+    native_audio::write(&out.join("shared-prediction.wav"), &prediction, false)?;
+    write_json(
+        &out.join("ambiguity.json"),
+        &json!({"provenance":provenance(),"gate":gate_path,"input_identical_by_construction":true,"manufactured_lowpass_max_difference":low_difference,"stopped":scene_metrics::measure(&input,&prediction,&input,d,24000.0),"continued":scene_metrics::measure(&continued,&prediction,&input,d,24000.0),"claim":"the same observed low audio admits both targets; no conditional gate can identify the true absent upper choice from that observation alone"}),
     )
 }

@@ -11,7 +11,10 @@ mod native_dsp;
 #[cfg(feature = "opencl")]
 mod opencl;
 mod reconstruction;
+mod rich_allocation;
+mod rich_dynamics;
 mod rich_experiment;
+mod rich_field;
 mod rich_gate;
 mod rich_synth;
 mod scene;
@@ -39,6 +42,94 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    RichFieldTrain {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long, default_value_t = 1000)]
+        steps: usize,
+        #[arg(long, default_value_t = 600012)]
+        seed: u64,
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichFieldEvaluate {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long)]
+        fields: PathBuf,
+        #[arg(long, default_value_t = 605004)]
+        seed: u64,
+        #[arg(long, default_value_t = 24)]
+        count: usize,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichFieldRestore {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long)]
+        field: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 160.0)]
+        start: f64,
+        #[arg(long)]
+        controlled: bool,
+        #[arg(long, default_value_t = 0.5)]
+        richness: f32,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichAmbiguity {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichAllocate {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        warm: PathBuf,
+        #[arg(long, default_value_t = 1200)]
+        steps: usize,
+        #[arg(long, default_value_t = 420000)]
+        seed: u64,
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     RichTrain {
         #[arg(long)]
         det: PathBuf,
@@ -70,6 +161,8 @@ enum Commands {
         count: usize,
         #[arg(long)]
         legacy: bool,
+        #[arg(long)]
+        independent_damage: bool,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
         backend: String,
         #[arg(long)]
@@ -337,6 +430,75 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::RichFieldTrain {
+            det,
+            flow,
+            gate,
+            steps,
+            seed,
+            resume,
+            backend,
+            out,
+        } => rich_field::train(
+            &det,
+            &flow,
+            &gate,
+            steps,
+            seed,
+            resume.as_deref(),
+            &backend,
+            &out,
+        ),
+        Commands::RichFieldEvaluate {
+            det,
+            flow,
+            gate,
+            fields,
+            seed,
+            count,
+            backend,
+            out,
+        } => rich_field::evaluate(&det, &flow, &gate, &fields, seed, count, &backend, &out),
+        Commands::RichFieldRestore {
+            det,
+            flow,
+            gate,
+            field,
+            input,
+            start,
+            controlled,
+            richness,
+            backend,
+            out,
+        } => rich_field::restore(
+            &det, &flow, &gate, &field, &input, start, controlled, richness, &backend, &out,
+        ),
+        Commands::RichAmbiguity {
+            det,
+            flow,
+            gate,
+            backend,
+            out,
+        } => rich_experiment::ambiguity(&det, &flow, &gate, &backend, &out),
+        Commands::RichAllocate {
+            det,
+            flow,
+            warm,
+            steps,
+            seed,
+            resume,
+            backend,
+            out,
+        } => rich_allocation::train(
+            &det,
+            &flow,
+            &warm,
+            steps,
+            seed,
+            resume.as_deref(),
+            &backend,
+            &out,
+        ),
         Commands::RichTrain {
             det,
             flow,
@@ -356,6 +518,7 @@ fn run() -> Result<()> {
             seed,
             count,
             legacy,
+            independent_damage,
             backend,
             out,
         } => rich_experiment::evaluate_gate(
@@ -366,6 +529,7 @@ fn run() -> Result<()> {
             seed,
             count,
             legacy,
+            independent_damage,
             &backend,
             &out,
         ),

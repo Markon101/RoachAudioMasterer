@@ -80,3 +80,36 @@ debug test ELF segfaults even with `--list`; existing native GPU test also fails
 at startup, while original release inference and release gate tests work. Cause
 unproven, not a24-hidden GPU-shape failure. Use release correctness checks for
 this sprint, preserving the unresolved debug observation; no timing claim.
+
+Follow-up preregistration before the next quality runs: H/N allocation adds two
+outputs (1710 parameters), with bounded multiplier exp(ln8*tanh(q)), initially1.
+The first four outputs copy gate4000 exactly. Compare evidence/frequency expanded
+heads against shrink-only evidence/frequency siblings, all with reset Adam and
+fresh seeds420000 onward, up to4000 additional updates. Development uses24
+scenes530004 onward; new primary96 scenes540000 onward. Retain shrink-only V1
+as a separate frozen control; expanding an uncertain excitation cannot identify
+an absent original. No target energy is used to select inference gain.
+
+Frozen V1 independent-damage transfer:96 scenes520008–520103, same clean v3
+targets but new damage from seed xor0xa6530197, breaking target-cutoff coupling.
+The recipe records original scene damage; evaluation records actual damage
+separately. This out-of-curriculum test is not a training-selection panel.
+
+Field siblings start from the useful frozen V1 gate4000, not from an unfrozen
+allocation candidate. Every sibling has106342 parameters, seed73, new Adam,
+fresh scenes600012 onward, fourupdates/scene, up to3000 updates with250-step
+checkpoints. Development24 scenes605004 onward; fresh96 scenes610008 onward.
+All use8 old Flow steps to construct the same initial state and8 new field steps.
+Diagonal has bounded independent real/imag growth; rotation uses common scalar
+growth plus90-degree rotation; transport adds bounded signed frequency(.08)
+and nominal-hop-phase-aligned temporal(.04) Laplacians. Growth/rotation caps.75.
+Basis replaces free complex excitation with bounded authorized H/N excitation.
+All allocate six outputs, though diagonal/rotation use only four. Train velocity
+MSE +.02 sampled-endpoint waveform loss over8×16 TF patches; unsampled context
+uses the frozen gated prior. This sampled auxiliary remains a limitation.
+Explicit rotation is tangent to constant-energy circles; Euler discretization
+does not conserve that energy exactly. Signed transport permits expansion and
+is not a positive-diffusion guarantee. Finite-state guards remain mandatory.
+This is a project-designed local operator informed by complex geometry(R17),
+using the existing conditional-flow-matching recipe(R1/R5); it is not FNO(R13),
+Navier–Stokes or a phase-equivariant neural network.

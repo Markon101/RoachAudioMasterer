@@ -113,6 +113,33 @@ fn complete_gate_waveform_gradient_matches_perturbation() {
     }
 }
 #[test]
+fn allocation_warm_start_exact_and_full_gradient() {
+    let (g, p, d, parts, cache, target) = fixture();
+    let mut a = g.expanded(420000);
+    assert_eq!(a.head.weights.len(), 1710);
+    assert_eq!(
+        forward(&g, &p, d, &parts, &cache, 0.5).field,
+        forward(&a, &p, d, &parts, &cache, 0.5).field
+    );
+    for j in [a.head.b2(), a.head.b2() + 4, a.head.b2() + 5] {
+        let old = a.head.weights[j];
+        a.head.weights[j] = old + 0.13;
+        let (_, gr) = gradient(&a, &p, d, &parts, &cache, &target, false);
+        let eps = 0.002;
+        a.head.weights[j] = old + 0.13 + eps;
+        let plus = gradient(&a, &p, d, &parts, &cache, &target, false).0;
+        a.head.weights[j] = old + 0.13 - eps;
+        let minus = gradient(&a, &p, d, &parts, &cache, &target, false).0;
+        let fd = (plus - minus) / (2.0 * eps as f64);
+        assert!(
+            (fd - gr[j] as f64).abs() < 1e-4 + 0.03 * fd.abs(),
+            "allocator j{j} finite{fd} analytic{}",
+            gr[j]
+        );
+        a.head.weights[j] = old;
+    }
+}
+#[test]
 fn component_decomposition_and_tiled_cpu_parity() -> Result<()> {
     let (g, p, d, parts, cache, _) = fixture();
     let a = forward(&g, &p, d, &parts, &cache, 0.5);
