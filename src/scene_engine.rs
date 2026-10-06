@@ -181,6 +181,61 @@ impl Engine {
         let e = encode(&self.model, p, adapter);
         self.field(p, d, &e, &zero_state(p), 0.0, 0)
     }
+    /// Frozen deterministic contribution decomposition, same head/layout as v2.
+    pub fn components(&mut self, p: &Prepared, d: Damage) -> Result<[[Vec<C>; 2]; 3]> {
+        let e = encode(&self.model, p, None);
+        let state = zero_state(p);
+        let mut result = std::array::from_fn(|_| zero_state(p));
+        let mut rows = Vec::with_capacity(1024);
+        let mut x = Vec::with_capacity(1024 * HEAD_INPUT);
+        for c in 0..2 {
+            if !p.active[c] {
+                continue;
+            }
+            for t in 0..p.frames {
+                for k in d.cutoff_bin() + 1..BINS {
+                    let row = Row {
+                        channel: c,
+                        time: t,
+                        bin: k,
+                    };
+                    x.extend(features(p, d, row, &e.values, &state, 0.0));
+                    rows.push(row);
+                    if rows.len() == 1024 {
+                        self.component_flush(p, &rows, &x, &mut result)?;
+                        rows.clear();
+                        x.clear();
+                    }
+                }
+            }
+        }
+        if !rows.is_empty() {
+            self.component_flush(p, &rows, &x, &mut result)?;
+        }
+        Ok(result)
+    }
+    fn component_flush(
+        &mut self,
+        p: &Prepared,
+        rows: &[Row],
+        x: &[f32],
+        result: &mut [[Vec<C>; 2]; 3],
+    ) -> Result<()> {
+        let y = self.head.predict(x, rows.len())?;
+        ensure!(
+            y.iter().all(|x| x.is_finite()),
+            "nonfinite contribution head"
+        );
+        for (r, y) in rows.iter().zip(y.as_chunks::<HEAD_OUTPUT>().0.iter()) {
+            let i = r.time * BINS + r.bin;
+            result[0][r.channel][i] =
+                p.harmonic[r.channel][i] * (2.0 * crate::scene_model::sigmoid(y[4]));
+            result[1][r.channel][i] =
+                p.noise[r.channel][i] * (2.0 * crate::scene_model::sigmoid(y[5]));
+            result[2][r.channel][i] = C::new(y[0], y[1]);
+        }
+        Ok(())
+    }
     pub fn refine(
         &mut self,
         p: &Prepared,

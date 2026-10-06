@@ -114,6 +114,28 @@ are simple project measurements; no scattering transform is implemented.
   related probability-flow ODEs. Native v2 is a flow-matching Euler ODE pilot;
   it has neither a trained score network nor reverse-time diffusion/SDE sampling.
 
+The rich sprint additionally uses these primary sources, checked 2026-10-05:
+
+- **R15 — Geifman and El-Yaniv (2019),
+  [SelectiveNet: A Deep Neural Network with an Integrated Reject Option](https://arxiv.org/abs/1901.09192).**
+  Borrowed concept: learn a selection/abstention function with the prediction task.
+  Our small four-output spectral gate instead authorizes frozen H/N/residual/flow
+  contributions using waveform supervision. It has no selective-risk denominator,
+  target-coverage constraint, auxiliary classifier or probabilistic risk guarantee.
+  A frequency-only and matched-energy control test whether the evidence matters.
+- **R16 — Kendall and Gal (2017),
+  [What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision?](https://arxiv.org/abs/1703.04977).**
+  Pressure-test only: model uncertainty and irreducible ambiguity are distinct.
+  Gate values are not calibrated aleatoric/epistemic uncertainty; no Bayesian
+  network, MC-dropout or heteroscedastic likelihood from this paper is implemented.
+- **R17 — Oh, Cho, Kim and Lee (2026),
+  [Toward Complex-Valued Neural Networks for Waveform Generation](https://arxiv.org/abs/2603.11589).**
+  Relevant warning: independent real/imaginary processing can miss complex geometry.
+  The sprint's small scalar/rotation/transport update is a project operator,
+  not ComVo's complex generator/discriminator, adversarial objective, phase
+  quantization or block-matrix training. We borrow no natural-audio data/weights,
+  and the paper's quality/timing results do not transfer to this phone experiment.
+
 Scope notes come from the original papers, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown was available for
 some papers; arXiv PDFs/HTML supplied the others. Full copyrighted paper text is

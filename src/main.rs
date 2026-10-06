@@ -11,6 +11,9 @@ mod native_dsp;
 #[cfg(feature = "opencl")]
 mod opencl;
 mod reconstruction;
+mod rich_experiment;
+mod rich_gate;
+mod rich_synth;
 mod scene;
 mod scene_adapter;
 mod scene_engine;
@@ -36,6 +39,62 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    RichTrain {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long, default_value_t = 400)]
+        steps: usize,
+        #[arg(long, default_value_t = 400008)]
+        seed: u64,
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichEvaluate {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long)]
+        frequency_gate: PathBuf,
+        #[arg(long, default_value_t = 500004)]
+        seed: u64,
+        #[arg(long, default_value_t = 24)]
+        count: usize,
+        #[arg(long)]
+        legacy: bool,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichRestore {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 160.0)]
+        start: f64,
+        #[arg(long)]
+        controlled: bool,
+        #[arg(long, default_value_t = 0.5)]
+        richness: f32,
+        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     /// Score aligned native reference/input/candidate clips, without training.
     SceneScore {
         #[arg(long)]
@@ -278,6 +337,51 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::RichTrain {
+            det,
+            flow,
+            steps,
+            seed,
+            resume,
+            backend,
+            out,
+        } => {
+            rich_experiment::train_gate(&det, &flow, steps, seed, resume.as_deref(), &backend, &out)
+        }
+        Commands::RichEvaluate {
+            det,
+            flow,
+            gate,
+            frequency_gate,
+            seed,
+            count,
+            legacy,
+            backend,
+            out,
+        } => rich_experiment::evaluate_gate(
+            &det,
+            &flow,
+            &gate,
+            &frequency_gate,
+            seed,
+            count,
+            legacy,
+            &backend,
+            &out,
+        ),
+        Commands::RichRestore {
+            det,
+            flow,
+            gate,
+            input,
+            start,
+            controlled,
+            richness,
+            backend,
+            out,
+        } => rich_experiment::restore_gate(
+            &det, &flow, &gate, &input, start, controlled, richness, &backend, &out,
+        ),
         Commands::SceneScore {
             reference,
             input,

@@ -318,3 +318,19 @@ The [streak diagnosis and preview](docs/STREAK_RESULTS.md) found a reinforced
 manual half-strength **generated** 7–8 kHz band on the undegraded passage. The
 `residual_band_guard` example preserves source content and all other residual
 frequencies; it is an opt-in DSP counterfactual, not a general learned correction.
+
+The [rich research sprint](docs/RICH_SPRINT_PLAN.md) adds separate `rich-*`
+commands. The first gate has1660 parameters, independent H/N/deterministic/flow
+authorization and full-clip gradients; parents remain frozen. Example:
+
+```sh
+OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband rich-train \
+  --det artifacts/native-v2/deterministic.json \
+  --flow artifacts/native-longer-v2/flow3000.json --steps 400 \
+  --backend opencl --out runs/rich-sprint/gate400
+```
+
+Gate optimizer snapshots support paired evidence/frequency-control continuation.
+Inference tiles features to1024 rows and optionally uses the existing OpenCL dense
+backend. Richness0/0.5/1 changes intermediate authorization, not a treble gain or
+calibrated uncertainty claim. The sprint is in progress; its plan is not a result.
