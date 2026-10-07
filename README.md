@@ -21,10 +21,15 @@ The current learned-control and coupled complex field sprints are documented in
 and field operators under `artifacts/rich-gate-v1`, `artifacts/rich-allocation-v1`,
 and `artifacts/rich-field-v1`. Opt-in `rich-field-*` subcommands support 1,000-step
 coupled complex field training and streaming full-song restoration (`rich-field-restore-song`)
-with exact equal-power cosine crossfading. The winning 1,000-step **Basis** coupled
-operator is frozen in `artifacts/rich-field-v1/basis.json`. All prior native defaults,
-checkpoints, and frozen evidence remain intact. Registered comparisons and
-provenance are in [RICH_SPRINT_PLAN](docs/RICH_SPRINT_PLAN.md).
+with exact equal-power cosine crossfading, high-band denoise, and bounded auto-EQ. The winning
+1,000-step **Basis** coupled operator is frozen in `artifacts/rich-field-v1/basis.json`.
+
+The subsequent mid-band extension is documented in [MID_BAND_FLOW_RESULTS](docs/MID_BAND_FLOW_RESULTS.md),
+extending conditional flow matching down into the midrange (500 Hz – 6 kHz) via `rich-mid-train`
+and `rich-mid-restore` with subharmonic bass feature routing and procedural generation `generate_mid`.
+The 1,000-step mid-band Basis model is preserved in `artifacts/rich-mid-v1/basis.json`. All prior
+native defaults, checkpoints, and frozen evidence remain intact. Registered comparisons and
+provenance are in [RICH_SPRINT_PLAN](docs/RICH_SPRINT_PLAN.md) and [SPRINT2_MID_FLOW_PLAN](docs/SPRINT2_MID_FLOW_PLAN.md).
 
 Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
 ML framework, service, dataset download, or GPU is required.

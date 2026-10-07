@@ -15,6 +15,7 @@ mod rich_allocation;
 mod rich_dynamics;
 mod rich_experiment;
 mod rich_field;
+pub mod rich_mid;
 mod rich_gate;
 mod rich_oracle;
 mod rich_synth;
@@ -163,6 +164,46 @@ enum Commands {
         allow_gate_mismatch: bool,
         #[arg(long)]
         resume: bool,
+        #[arg(long)]
+        denoise: bool,
+        #[arg(long)]
+        auto_eq: bool,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichMidTrain {
+        #[arg(long, default_value = "basis", value_parser = ["basis", "diagonal", "rotation", "transport"])]
+        kind: String,
+        #[arg(long, default_value_t = 500)]
+        steps: usize,
+        #[arg(long, default_value_t = 700010)]
+        seed: u64,
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichMidRestore {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 1500.0)]
+        mid_cutoff: f32,
+        #[arg(long)]
+        controlled: bool,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long, default_value_t = 10.0)]
+        chunk_seconds: f64,
+        #[arg(long, default_value_t = 2.0)]
+        overlap_seconds: f64,
         #[arg(long)]
         denoise: bool,
         #[arg(long)]
@@ -622,6 +663,49 @@ fn run() -> Result<()> {
             chunk_seconds,
             overlap_seconds,
             resume,
+            denoise,
+            auto_eq,
+            &backend,
+            &out,
+        ),
+        Commands::RichMidTrain {
+            kind,
+            steps,
+            seed,
+            resume,
+            backend,
+            out,
+        } => {
+            let k = match kind.as_str() {
+                "diagonal" => rich_dynamics::Kind::Diagonal,
+                "rotation" => rich_dynamics::Kind::Rotation,
+                "transport" => rich_dynamics::Kind::Transport,
+                _ => rich_dynamics::Kind::Basis,
+            };
+            rich_mid::train(k, steps, seed, resume.as_deref(), &backend, &out)
+        }
+        Commands::RichMidRestore {
+            model,
+            input,
+            mid_cutoff,
+            controlled,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            denoise,
+            auto_eq,
+            backend,
+            out,
+        } => rich_mid::restore(
+            &model,
+            &input,
+            mid_cutoff,
+            controlled,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
             denoise,
             auto_eq,
             &backend,

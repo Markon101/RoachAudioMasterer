@@ -25,6 +25,14 @@ impl Damage {
             power: r.range(1.0, 4.0),
         }
     }
+    pub fn mid_range(seed: u64) -> Self {
+        let mut r = Rng(seed ^ 0x78334612);
+        Self {
+            cutoff: r.range(500.0, 3500.0),
+            transition: r.range(150.0, 600.0),
+            power: r.range(1.0, 3.5),
+        }
+    }
     pub fn first_missing(&self) -> usize {
         ((self.cutoff + self.transition) * FFT as f32 / RATE as f32).ceil() as usize
     }
@@ -196,7 +204,7 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
                     let alignment = (-0.5 * (mismatch / 1.15).powi(2)).exp();
                     let start = j.saturating_sub(3).max(1);
                     let end = (j + 4).min(cut + 1);
-                    let local = band_rms(&row[start..end]).max(1e-8);
+                    let local = if start < end { band_rms(&row[start..end]).max(1e-8) } else { 1e-8 };
                     let tonal = ((mag / local - 1.2) / 1.6).clamp(0.0, 1.0);
                     let unit = centered(z, j) / mag;
                     let mut phase = C::new(1.0, 0.0);
@@ -486,5 +494,38 @@ mod tests {
             full, cached,
             "cached temporal/state features changed the model"
         );
+    }
+    #[test]
+    fn mid_range_damage_and_feature_extraction() {
+        let d = Damage::mid_range(42);
+        assert!(d.cutoff >= 500.0 && d.cutoff <= 3500.0);
+        assert!(d.transition >= 150.0 && d.transition <= 600.0);
+        let a = Audio {
+            rate: RATE,
+            channels: vec![
+                (0..4096)
+                    .map(|i| 0.2 * (i as f32 * 0.05).sin() + 0.1 * (i as f32 * 0.2).sin())
+                    .collect();
+                2
+            ],
+        };
+        let p = prepare(&d.apply(&a), d, 101);
+        assert_eq!(p.frames, 19);
+        assert!(p.encoder_features.iter().all(|x| x.is_finite()));
+        let emb = vec![0.0; 2 * p.frames * EMBED];
+        let x = features(
+            &p,
+            d,
+            Row {
+                channel: 0,
+                time: 4,
+                bin: d.cutoff_bin() + 5,
+            },
+            &emb,
+            &zero_state(&p),
+            0.5,
+        );
+        assert_eq!(x.len(), HEAD_INPUT);
+        assert!(x.iter().all(|x| x.is_finite()));
     }
 }

@@ -46,6 +46,17 @@ completed on the latest track, `Feelin’ Catchy ext v1.2.2.2.2.2` (179.9s, 23 c
 featuring weighted overlap-add (WOLA) chunk recombination and robust per-chunk disk caching
 (`docs/RICH_SPRINT_RESULTS.md`).
 
+The subsequent Sprint 1 clean & speed pass added native high-band minimum-statistics denoise (>14 kHz),
+bounded 8-band psychoacoustic auto-EQ ([-1.5 dB, +1.5 dB]), 8-core CPU multithreading (`std::thread::scope`),
+and 8,192-batch OpenCL GPU dense buffers, producing the production commercial render
+`/sdcard/Download/Feelin’ Catchy - Basis Clean Restored.wav` (peak 0.9900, crest factor 16.06 dB).
+
+The subsequent [Sprint 2 mid-band flow matching extension](docs/MID_BAND_FLOW_RESULTS.md) extended
+conditional flow matching down into the midrange (500 Hz – 6 kHz) via procedural curriculum `generate_mid`,
+subharmonic bass partial routing ($m \in \{1, 2, 3, 4, 6\}$), and a 1,000-step trained `MidField` Basis model
+(`artifacts/rich-mid-v1/basis.json`). A controlled 2,000 Hz cutoff restoration on `Feelin' Catchy` resynthesized
+missing midrange (2–6 kHz) to within -1.39 dB of pristine ground truth (`/sdcard/Download/Feelin’ Catchy - Mid Band Flow Restored.wav`).
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,
