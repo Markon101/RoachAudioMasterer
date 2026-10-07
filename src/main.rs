@@ -117,6 +117,30 @@ enum Commands {
         #[arg(long)]
         out: PathBuf,
     },
+    RichFieldRestoreSong {
+        #[arg(long)]
+        det: PathBuf,
+        #[arg(long)]
+        flow: PathBuf,
+        #[arg(long)]
+        gate: PathBuf,
+        #[arg(long)]
+        field: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        controlled: bool,
+        #[arg(long, default_value_t = 0.5)]
+        richness: f32,
+        #[arg(long, default_value_t = 10.0)]
+        chunk_seconds: f64,
+        #[arg(long, default_value_t = 2.0)]
+        overlap_seconds: f64,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     RichAmbiguity {
         #[arg(long)]
         det: PathBuf,
@@ -502,6 +526,31 @@ fn run() -> Result<()> {
             out,
         } => rich_field::restore(
             &det, &flow, &gate, &field, &input, start, controlled, richness, &backend, &out,
+        ),
+        Commands::RichFieldRestoreSong {
+            det,
+            flow,
+            gate,
+            field,
+            input,
+            controlled,
+            richness,
+            chunk_seconds,
+            overlap_seconds,
+            backend,
+            out,
+        } => rich_field::restore_song(
+            &det,
+            &flow,
+            &gate,
+            &field,
+            &input,
+            controlled,
+            richness,
+            chunk_seconds,
+            overlap_seconds,
+            &backend,
+            &out,
         ),
         Commands::RichAmbiguity {
             det,

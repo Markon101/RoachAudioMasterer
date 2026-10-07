@@ -99,6 +99,45 @@ pub fn read_region(path: &Path, start_seconds: f64, seconds: f64) -> Result<Audi
         channels,
     })
 }
+pub fn read_entire(path: &Path) -> Result<Audio> {
+    let mut r = hound::WavReader::open(path)?;
+    let spec = r.spec();
+    ensure!(
+        spec.sample_rate == 48000 && (1..=2).contains(&spec.channels),
+        "scene v2 requires native 48000 Hz mono/stereo WAV"
+    );
+    let count = r.duration() as usize;
+    let total = count * spec.channels as usize;
+    let interleaved: Vec<f32> = match spec.sample_format {
+        hound::SampleFormat::Float => r
+            .samples::<f32>()
+            .collect::<std::result::Result<Vec<_>, _>>()?,
+        hound::SampleFormat::Int => {
+            ensure!(
+                (1..=32).contains(&spec.bits_per_sample),
+                "invalid PCM depth"
+            );
+            let scale = 2.0f32.powi(spec.bits_per_sample as i32 - 1);
+            r.samples::<i32>()
+                .map(|x| x.map(|v| v as f32 / scale))
+                .collect::<std::result::Result<Vec<_>, _>>()?
+        }
+    };
+    ensure!(
+        interleaved.len() == total && interleaved.iter().all(|x| x.is_finite()),
+        "truncated/nonfinite native audio"
+    );
+    let mut channels = vec![Vec::with_capacity(count); spec.channels as usize];
+    for row in interleaved.chunks_exact(spec.channels as usize) {
+        for (c, x) in row.iter().enumerate() {
+            channels[c].push(*x);
+        }
+    }
+    Ok(Audio {
+        rate: spec.sample_rate,
+        channels,
+    })
+}
 pub fn write(path: &Path, a: &Audio, pcm16: bool) -> Result<()> {
     ensure!(
         (1..=2).contains(&a.channels.len())

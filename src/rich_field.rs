@@ -641,3 +641,210 @@ pub fn restore(
         &json!({"provenance":crate::rich_experiment::provenance(),"field":field_path,"kind":field.kind,"gate":gate_path,"source":source,"start":start,"controlled":controlled,"richness":richness,"scores":crate::scene_metrics::measure(&reference,&y,&input,d,24000.0)}),
     )
 }
+#[allow(clippy::too_many_arguments)]
+pub fn restore_song(
+    det_path: &Path,
+    flow_path: &Path,
+    gate_path: &Path,
+    field_path: &Path,
+    source: &Path,
+    controlled: bool,
+    richness: f32,
+    chunk_seconds: f64,
+    overlap_seconds: f64,
+    backend: &str,
+    out: &Path,
+) -> Result<()> {
+    ensure!((0.0..=1.0).contains(&richness), "richness must be 0..1");
+    ensure!(
+        (2.0..=12.0).contains(&chunk_seconds),
+        "chunk seconds must be 2..12"
+    );
+    ensure!(
+        overlap_seconds >= 0.5 && overlap_seconds < chunk_seconds,
+        "invalid overlap seconds"
+    );
+
+    let det = Model::load(det_path)?;
+    let flow = Model::load(flow_path)?;
+    let gate = Gate::load(gate_path)?;
+    let field = Field::load(field_path)?;
+    ensure!(
+        field.gate_fingerprint == gate.fingerprint()
+            && field.original_flow_fingerprint == flow.fingerprint(),
+        "field restore parent mismatch"
+    );
+
+    new_run(out)?;
+    println!("Loading entire song: {}...", source.display());
+    let audio = native_audio::read_entire(source)?;
+    let total_samples = audio.frames();
+    let num_channels = audio.channels.len();
+    ensure!(total_samples > 0, "empty audio file");
+
+    let chunk_samples = (chunk_seconds * audio.rate as f64).round() as usize;
+    let overlap_samples = (overlap_seconds * audio.rate as f64).round() as usize;
+    let step_samples = chunk_samples - overlap_samples;
+
+    let mut chunk_starts = Vec::new();
+    let mut curr = 0;
+    while curr + chunk_samples < total_samples {
+        chunk_starts.push(curr);
+        curr += step_samples;
+    }
+    chunk_starts.push(total_samples.saturating_sub(chunk_samples));
+
+    let num_chunks = chunk_starts.len();
+    println!(
+        "Processing {} samples ({:.2} s) across {} chunks of {:.1}s (overlap {:.1}s)...",
+        total_samples,
+        total_samples as f64 / audio.rate as f64,
+        num_chunks,
+        chunk_seconds,
+        overlap_seconds
+    );
+
+    let mut frozen = Frozen::new(&det, &flow, backend)?;
+    let mut engine = Engine::new(&field.core, backend)?;
+    let d = Damage {
+        cutoff: 6000.0,
+        transition: 500.0,
+        power: 2.0,
+    };
+
+    let mut output_channels = vec![vec![0.0f32; total_samples]; num_channels];
+    let start_time = std::time::Instant::now();
+
+    for (idx, &c_start) in chunk_starts.iter().enumerate() {
+        let chunk_t0 = std::time::Instant::now();
+        let c_end = c_start + chunk_samples;
+        let chunk_audio = Audio {
+            rate: audio.rate,
+            channels: (0..num_channels)
+                .map(|c| audio.channels[c][c_start..c_end].to_vec())
+                .collect(),
+        };
+
+        let chunk_input = if controlled {
+            d.apply(&chunk_audio)
+        } else {
+            chunk_audio.clone()
+        };
+
+        let mut p = scene_features::prepare(&chunk_input, d, 11);
+        let parts = frozen.components(&p, d)?;
+        let f = rich_gate::inference_tiled(&gate, &p, d, &parts, richness, backend)?;
+        for c in 0..2 {
+            for i in 0..p.frames * BINS {
+                p.harmonic[c][i] = parts.parts[0][c][i] * f.gates[0][c][i];
+                p.noise[c][i] = parts.parts[1][c][i] * f.gates[1][c][i];
+            }
+        }
+        let state = engine.refine_mode(&p, d, &f.field, 8, field.kind.mode())?;
+        let y = scene_features::waveform(&p, d, &state, 1.0);
+
+        if num_chunks == 1 {
+            for c in 0..num_channels {
+                output_channels[c][c_start..c_end].copy_from_slice(&y.channels[c]);
+            }
+        } else if idx == 0 {
+            let next_start = chunk_starts[1];
+            let over_len = c_end - next_start;
+            for c in 0..num_channels {
+                output_channels[c][c_start..next_start]
+                    .copy_from_slice(&y.channels[c][..next_start - c_start]);
+                for j in 0..over_len {
+                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len as f32);
+                    let w = theta.cos().powi(2);
+                    output_channels[c][next_start + j] +=
+                        y.channels[c][(next_start - c_start) + j] * w;
+                }
+            }
+        } else if idx == num_chunks - 1 {
+            let prev_start = chunk_starts[idx - 1];
+            let prev_end = prev_start + chunk_samples;
+            let over_len = prev_end - c_start;
+            for c in 0..num_channels {
+                for j in 0..over_len {
+                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len as f32);
+                    let w = theta.sin().powi(2);
+                    output_channels[c][c_start + j] += y.channels[c][j] * w;
+                }
+                output_channels[c][prev_end..c_end].copy_from_slice(&y.channels[c][over_len..]);
+            }
+        } else {
+            let prev_start = chunk_starts[idx - 1];
+            let prev_end = prev_start + chunk_samples;
+            let over_len_prev = prev_end - c_start;
+            let next_start = chunk_starts[idx + 1];
+            let over_len_next = c_end - next_start;
+            for c in 0..num_channels {
+                for j in 0..over_len_prev {
+                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len_prev as f32);
+                    let w = theta.sin().powi(2);
+                    output_channels[c][c_start + j] += y.channels[c][j] * w;
+                }
+                output_channels[c][prev_end..next_start]
+                    .copy_from_slice(&y.channels[c][over_len_prev..next_start - c_start]);
+                for j in 0..over_len_next {
+                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len_next as f32);
+                    let w = theta.cos().powi(2);
+                    output_channels[c][next_start + j] +=
+                        y.channels[c][(next_start - c_start) + j] * w;
+                }
+            }
+        }
+
+        println!(
+            "Chunk {}/{} ({:.1}s - {:.1}s) done in {:.2}s",
+            idx + 1,
+            num_chunks,
+            c_start as f64 / audio.rate as f64,
+            c_end as f64 / audio.rate as f64,
+            chunk_t0.elapsed().as_secs_f64()
+        );
+    }
+
+    println!(
+        "All chunks finished in {:.2}s. Writing output files...",
+        start_time.elapsed().as_secs_f64()
+    );
+    let full_reconstructed = Audio {
+        rate: audio.rate,
+        channels: output_channels,
+    };
+
+    native_audio::write(&out.join("reconstructed.wav"), &full_reconstructed, false)?;
+    native_audio::write(&out.join("listen.wav"), &full_reconstructed, true)?;
+
+    let peak = full_reconstructed
+        .channels
+        .iter()
+        .flatten()
+        .fold(0.0f32, |p, x| p.max(x.abs()));
+    write_json(
+        &out.join("restoration.json"),
+        &json!({
+            "provenance": crate::rich_experiment::provenance(),
+            "field": field_path,
+            "kind": field.kind,
+            "gate": gate_path,
+            "source": source,
+            "total_seconds": total_samples as f64 / audio.rate as f64,
+            "total_samples": total_samples,
+            "chunks": num_chunks,
+            "chunk_seconds": chunk_seconds,
+            "overlap_seconds": overlap_seconds,
+            "controlled": controlled,
+            "richness": richness,
+            "output_peak": peak,
+            "elapsed_seconds": start_time.elapsed().as_secs_f64()
+        }),
+    )?;
+    println!(
+        "Saved full-song restoration to {} (peak: {:.4})",
+        out.display(),
+        peak
+    );
+    Ok(())
+}
