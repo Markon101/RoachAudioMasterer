@@ -548,7 +548,8 @@ pub fn restore(
 
             let p = scene_features::prepare(&chunk_input, d, 11);
             let initial = scene_features::prior_state(&p, "harmonic");
-            let state = engine.refine_mode(&p, d, &initial, steps, field.kind.mode())?;
+            let ceil_bin = ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+            let state = engine.refine_mode_bounded(&p, d, &initial, steps, field.kind.mode(), Some(ceil_bin + 1))?;
             let y = mid_waveform(&p, d, mid_ceiling, &state, strength);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);

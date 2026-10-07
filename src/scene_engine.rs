@@ -122,34 +122,73 @@ impl Engine {
         time: f32,
         mode: u8,
     ) -> Result<[Vec<C>; 2]> {
+        self.field_bounded(p, d, encoding, state, time, mode, BINS)
+    }
+    pub fn field_bounded(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        encoding: &Encoding,
+        state: &[Vec<C>; 2],
+        time: f32,
+        mode: u8,
+        ceil_bin: usize,
+    ) -> Result<[Vec<C>; 2]> {
         let mut result = zero_state(p);
-        let mut rows = Vec::with_capacity(1024);
-        let mut x = Vec::with_capacity(1024 * HEAD_INPUT);
+        let batch_size = 8192;
+        let mut rows = Vec::with_capacity(batch_size);
+        let num_threads = std::thread::available_parallelism()
+            .map(|n| n.get().min(8))
+            .unwrap_or(4);
+        let max_k = ceil_bin.min(BINS);
         for c in 0..2 {
             if !p.active[c] {
                 continue;
             }
             for t in 0..p.frames {
-                for k in d.cutoff_bin() + 1..BINS {
-                    let row = Row {
+                for k in d.cutoff_bin() + 1..max_k {
+                    rows.push(Row {
                         channel: c,
                         time: t,
                         bin: k,
-                    };
-                    x.extend(features(p, d, row, &encoding.values, state, time));
-                    rows.push(row);
-                    if rows.len() == 1024 {
-                        self.flush(p, state, mode, &rows, &x, &mut result)?;
+                    });
+                    if rows.len() == batch_size {
+                        self.process_parallel_batch(p, d, encoding, state, time, mode, &rows, num_threads, &mut result)?;
                         rows.clear();
-                        x.clear();
                     }
                 }
             }
         }
         if !rows.is_empty() {
-            self.flush(p, state, mode, &rows, &x, &mut result)?;
+            self.process_parallel_batch(p, d, encoding, state, time, mode, &rows, num_threads, &mut result)?;
         }
         Ok(result)
+    }
+    fn process_parallel_batch(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        encoding: &Encoding,
+        state: &[Vec<C>; 2],
+        time: f32,
+        mode: u8,
+        rows: &[Row],
+        num_threads: usize,
+        result: &mut [Vec<C>; 2],
+    ) -> Result<()> {
+        let mut x = vec![0.0f32; rows.len() * HEAD_INPUT];
+        let step = (rows.len() + num_threads - 1) / num_threads;
+        let chunks_slice = x.as_chunks_mut::<HEAD_INPUT>().0;
+        std::thread::scope(|s| {
+            for (t_rows, t_chunks) in rows.chunks(step).zip(chunks_slice.chunks_mut(step)) {
+                s.spawn(move || {
+                    for (r, chunk) in t_rows.iter().zip(t_chunks.iter_mut()) {
+                        crate::scene_features::features_into(p, d, *r, &encoding.values, state, time, chunk);
+                    }
+                });
+            }
+        });
+        self.flush(p, state, mode, rows, &x, result)
     }
     fn flush(
         &mut self,
@@ -259,14 +298,26 @@ impl Engine {
         steps: usize,
         mode: u8,
     ) -> Result<[Vec<C>; 2]> {
+        self.refine_mode_bounded(p, d, prior, steps, mode, None)
+    }
+    pub fn refine_mode_bounded(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        prior: &[Vec<C>; 2],
+        steps: usize,
+        mode: u8,
+        ceil_bin: Option<usize>,
+    ) -> Result<[Vec<C>; 2]> {
         ensure!((1..=6).contains(&mode), "invalid refinement mode");
         ensure!(
             (1..=16).contains(&steps),
             "scene solver steps must be 1..16"
         );
+        let max_k = ceil_bin.unwrap_or(BINS).min(BINS);
         let e = encode(&self.model, p, None);
         let count =
-            p.active.iter().filter(|x| **x).count() * p.frames * (BINS - d.cutoff_bin() - 1);
+            p.active.iter().filter(|x| **x).count() * p.frames * max_k.saturating_sub(d.cutoff_bin() + 1);
         let cache = if count * (HEAD_INPUT * 4 + std::mem::size_of::<Row>()) <= 64 * 1024 * 1024 {
             let mut rows = Vec::with_capacity(count);
             let mut template = Vec::with_capacity(count * HEAD_INPUT);
@@ -276,13 +327,15 @@ impl Engine {
                     continue;
                 }
                 for t in 0..p.frames {
-                    for bin in d.cutoff_bin() + 1..BINS {
+                    for bin in d.cutoff_bin() + 1..max_k {
                         let r = Row {
                             channel: c,
                             time: t,
                             bin,
                         };
-                        template.extend(features(p, d, r, &e.values, &zero, 0.0));
+                        let mut f = [0.0; HEAD_INPUT];
+                        crate::scene_features::features_into(p, d, r, &e.values, &zero, 0.0, &mut f);
+                        template.extend_from_slice(&f);
                         rows.push(r);
                     }
                 }
@@ -300,7 +353,7 @@ impl Engine {
             let v = if let Some(cache) = &cache {
                 self.cached_field(p, &state, j as f32 / steps as f32, mode, cache)?
             } else {
-                self.field(p, d, &e, &state, j as f32 / steps as f32, mode)?
+                self.field_bounded(p, d, &e, &state, j as f32 / steps as f32, mode, max_k)?
             };
             for c in 0..2 {
                 for (x, v) in state[c].iter_mut().zip(&v[c]) {

@@ -234,17 +234,17 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
         frames,
     }
 }
-pub fn features(
+pub fn features_into(
     p: &Prepared,
     d: Damage,
     row: Row,
     embedding: &[f32],
     state: &[Vec<C>; 2],
     time: f32,
-) -> Vec<f32> {
+    x: &mut [f32; HEAD_INPUT],
+) {
     let (c, t, k) = (row.channel, row.time, row.bin);
     let cut = d.cutoff_bin();
-    let mut x = vec![0.0; HEAD_INPUT];
     x[..EMBED]
         .copy_from_slice(&embedding[(c * p.frames + t) * EMBED..(c * p.frames + t + 1) * EMBED]);
     let mut i = EMBED;
@@ -307,9 +307,22 @@ pub fn features(
         .clamp(-6.0, 6.0)
         / 6.0;
     x[i + 15] = 1.0;
-    assert_eq!(i + 16, HEAD_INPUT);
-    x
+    debug_assert_eq!(i + 16, HEAD_INPUT);
 }
+
+pub fn features(
+    p: &Prepared,
+    d: Damage,
+    row: Row,
+    embedding: &[f32],
+    state: &[Vec<C>; 2],
+    time: f32,
+) -> Vec<f32> {
+    let mut x = [0.0; HEAD_INPUT];
+    features_into(p, d, row, embedding, state, time, &mut x);
+    x.to_vec()
+}
+
 pub fn zero_state(p: &Prepared) -> [Vec<C>; 2] {
     std::array::from_fn(|_| vec![C::default(); p.frames * BINS])
 }

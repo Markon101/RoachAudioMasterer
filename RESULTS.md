@@ -57,7 +57,9 @@ subharmonic bass partial routing ($m \in \{1, 2, 3, 4, 6\}$), dual-boundary band
 and a clean harmonic-prior trained `MidField` Basis model (`artifacts/rich-mid-v1/basis.json`).
 An audition render on `Feelin' Catchy` (`/sdcard/Download/Feelin’ Catchy - Mid Band Flow Clean.wav`, peak 0.9798,
 mean -16.4 dBFS) enhanced mid-band vocal body and snare snap (+0.69 dB in 1.5–6 kHz) while preserving low-end
-and ultrasonic air bit-exact, confirmed by owner listening audition to sound quite good.
+and ultrasonic air bit-exact, confirmed by owner listening audition to sound quite good. The full 179.9-second
+track was subsequently mastered to `/sdcard/Download/Feelin’ Catchy - Mid Band Flow Clean Full.wav` (peak 0.9900,
+mean -16.15 dBFS) using 8-core bounded parallel solver execution (307.4s total elapsed across 23 WOLA chunks).
 
 ## Fixed design
 

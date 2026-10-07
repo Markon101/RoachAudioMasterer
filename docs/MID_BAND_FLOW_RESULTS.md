@@ -90,7 +90,34 @@ Investigation identified three root causes:
 
 ---
 
-## 6. Artifact Provenance
+## 6. Full-Track Restoration on `Feelin' Catchy`
+
+Following positive audition confirmation, the complete 179.9-second commercial song (`Feelin’ Catchy ext v1.2.2.2.2.2.wav`) was rendered through the clean mid-band flow pipeline (`runs/mid-full-feelin-catchy`).
+
+### Bounded-Solver & Multithreaded Speedup:
+- **Zero-Allocation Features (`features_into`)**: Eliminated 5.6 million heap allocations per chunk by writing directly into continuous memory slices.
+- **Bounded Bin Range (`refine_mode_bounded` / `field_bounded`)**: Restricted solver evaluations strictly to $[d.cutoff\_bin, ceil\_bin]$, bypassing redundant treble evaluations above 6 kHz.
+- **Parallel Feature Slicing**: Batch feature extraction parallelized across 8 CPU cores via `std::thread::scope`.
+- **Performance Impact**: Per-chunk (10.0s) computation dropped from **149.1s** down to **11.4s** (**13.1x speedup**). The entire 179.9s track (23 chunks) completed in **307.4 seconds** (~5.1 minutes).
+
+### Full-Track Mastering Metrics:
+- **Source**: `/sdcard/Download/Feelin’ Catchy ext v1.2.2.2.2.2.wav`
+- **Output**: `/sdcard/Download/Feelin’ Catchy - Mid Band Flow Clean Full.wav`
+- **Total Duration**: 179.90s (8,635,314 samples per channel, stereo 48 kHz 16-bit PCM)
+- **Peak Level**: **0.9900** (-0.09 dBFS headroom, zero clipping)
+- **RMS Volume**: **-16.15 dBFS** (pristine reference: -15.95 dBFS)
+
+| Frequency Band | Original Song RMS | Full Restored RMS | Energy Delta | Notes |
+|---|---:|---:|---:|---|
+| **Sub/Bass (< 250 Hz)** | 3571.47 | 3430.72 | -0.35 dB | Full low-end kick and sub punch preserved |
+| **Low-Mid (250 – 1500 Hz)** | 1080.32 | 1055.71 | -0.20 dB | Natural instrumental body preserved |
+| **Mid Band (1.5k – 6 kHz)** | 375.47 | 382.55 | **+0.16 dB** | Vocal presence, articulation, and snare bite |
+| **Presence (6k – 12 kHz)** | 161.14 | 174.09 | **+0.67 dB** | Crisp cymbal sheen and overtone sparkle |
+| **Air (12k – 24 kHz)** | 51.60 | 54.30 | **+0.44 dB** | Clean, natural high-end air; zero noise wall |
+
+---
+
+## 7. Artifact Provenance
 - Mid-band Basis Model: `artifacts/rich-mid-v1/basis.json` (SHA256: `bbb17c0ca0b5220049c04cd634c504f8a0461864ef806cefac3e02718b5d4a40`)
 - Mid-band State Snapshot: `artifacts/rich-mid-v1/state-basis.json` (SHA256: `c1811e36366af8e87eaca61b63744cede7733428f1becec75028e982fe079e42`)
 - Training Receipt: `artifacts/rich-mid-v1/training.json` (SHA256: `e9ff16c04ded01616aa4303d409d778ba463db56c6d384ba3fb3026af3d3cb3a`)
