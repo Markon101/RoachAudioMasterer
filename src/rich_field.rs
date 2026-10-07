@@ -328,6 +328,7 @@ pub fn train(
     det_path: &Path,
     flow_path: &Path,
     gate_path: &Path,
+    cap_boost: [bool; 2],
     steps: usize,
     seed: u64,
     resume: Option<&Path>,
@@ -336,7 +337,12 @@ pub fn train(
 ) -> Result<()> {
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
-    let gate = Gate::load(gate_path)?;
+    let mut gate = Gate::load(gate_path)?;
+    ensure!(
+        gate.head.output == 6 || !cap_boost.iter().any(|x| *x),
+        "boost caps require allocator"
+    );
+    gate.cap_boost = cap_boost;
     ensure!(
         gate.det_fingerprint == det.fingerprint() && gate.flow_fingerprint == flow.fingerprint(),
         "field/gate parent identity differs"
@@ -491,7 +497,7 @@ pub fn train(
     snapshot(out, &models, &ea, &ha, backend)?;
     write_json(
         &out.join("training.json"),
-        &json!({"provenance":crate::rich_experiment::provenance(),"det":det_path,"flow":flow_path,"gate":gate_path,"seed":seed,"start_step":start,"steps":steps,"models":["diagonal","rotation","transport","basis"],"parameters_each":106342,"basis_note":"same allocated params;diag/rotation last2outputs unused,transport/basis use them","loss":"velocity MSE +0.02 sampled endpoint waveform;unsampled context=frozen gated prior","temporal_transport":"nominal-hop phase aligned, no boundary extrapolation drift","records":records,"timing_context":"quality training; no speed experiment"}),
+        &json!({"provenance":crate::rich_experiment::provenance(),"det":det_path,"flow":flow_path,"gate":gate_path,"cap_boost":cap_boost,"seed":seed,"start_step":start,"steps":steps,"models":["diagonal","rotation","transport","basis"],"parameters_each":106342,"basis_note":"same allocated params;diag/rotation last2outputs unused,transport/basis use them","loss":"velocity MSE +0.02 sampled endpoint waveform;unsampled context=frozen gated prior","temporal_transport":"nominal-hop phase aligned, no boundary extrapolation drift","records":records,"timing_context":"quality training; no speed experiment"}),
     )
 }
 #[allow(clippy::too_many_arguments)]
@@ -499,6 +505,7 @@ pub fn evaluate(
     det_path: &Path,
     flow_path: &Path,
     gate_path: &Path,
+    cap_boost: [bool; 2],
     field_dir: &Path,
     seed: u64,
     count: usize,
@@ -511,7 +518,12 @@ pub fn evaluate(
     );
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
-    let gate = Gate::load(gate_path)?;
+    let mut gate = Gate::load(gate_path)?;
+    ensure!(
+        gate.head.output == 6 || !cap_boost.iter().any(|x| *x),
+        "boost caps require allocator"
+    );
+    gate.cap_boost = cap_boost;
     let mut frozen = Frozen::new(&det, &flow, backend)?;
     let models: Vec<_> = KINDS
         .iter()
@@ -581,7 +593,7 @@ pub fn evaluate(
     }
     write_json(
         &out.join("evaluation.json"),
-        &json!({"provenance":crate::rich_experiment::provenance(),"seed":seed,"count":count,"field_models":field_dir,"gate":gate_path,"summary":summary,"records":records}),
+        &json!({"provenance":crate::rich_experiment::provenance(),"seed":seed,"count":count,"field_models":field_dir,"gate":gate_path,"cap_boost":cap_boost,"summary":summary,"records":records}),
     )
 }
 #[allow(clippy::too_many_arguments)]
@@ -589,6 +601,8 @@ pub fn restore(
     det_path: &Path,
     flow_path: &Path,
     gate_path: &Path,
+    cap_boost: [bool; 2],
+    allow_gate_mismatch: bool,
     field_path: &Path,
     source: &Path,
     start: f64,
@@ -600,10 +614,15 @@ pub fn restore(
     ensure!((0.0..=1.0).contains(&richness), "richness must be0..1");
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
-    let gate = Gate::load(gate_path)?;
+    let mut gate = Gate::load(gate_path)?;
+    ensure!(
+        gate.head.output == 6 || !cap_boost.iter().any(|x| *x),
+        "boost caps require allocator"
+    );
+    gate.cap_boost = cap_boost;
     let field = Field::load(field_path)?;
     ensure!(
-        field.gate_fingerprint == gate.fingerprint()
+        (allow_gate_mismatch || field.gate_fingerprint == gate.fingerprint())
             && field.original_flow_fingerprint == flow.fingerprint(),
         "field restore parent mismatch"
     );
@@ -638,7 +657,7 @@ pub fn restore(
     native_audio::write(&out.join("reference.wav"), &reference, false)?;
     write_json(
         &out.join("restoration.json"),
-        &json!({"provenance":crate::rich_experiment::provenance(),"field":field_path,"kind":field.kind,"gate":gate_path,"source":source,"start":start,"controlled":controlled,"richness":richness,"scores":crate::scene_metrics::measure(&reference,&y,&input,d,24000.0)}),
+        &json!({"provenance":crate::rich_experiment::provenance(),"field":field_path,"kind":field.kind,"gate":gate_path,"cap_boost":cap_boost,"allow_gate_mismatch":allow_gate_mismatch,"source":source,"start":start,"controlled":controlled,"richness":richness,"scores":crate::scene_metrics::measure(&reference,&y,&input,d,24000.0)}),
     )
 }
 #[allow(clippy::too_many_arguments)]
@@ -646,6 +665,8 @@ pub fn restore_song(
     det_path: &Path,
     flow_path: &Path,
     gate_path: &Path,
+    cap_boost: [bool; 2],
+    allow_gate_mismatch: bool,
     field_path: &Path,
     source: &Path,
     controlled: bool,
@@ -667,10 +688,15 @@ pub fn restore_song(
 
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
-    let gate = Gate::load(gate_path)?;
+    let mut gate = Gate::load(gate_path)?;
+    ensure!(
+        gate.head.output == 6 || !cap_boost.iter().any(|x| *x),
+        "boost caps require allocator"
+    );
+    gate.cap_boost = cap_boost;
     let field = Field::load(field_path)?;
     ensure!(
-        field.gate_fingerprint == gate.fingerprint()
+        (allow_gate_mismatch || field.gate_fingerprint == gate.fingerprint())
             && field.original_flow_fingerprint == flow.fingerprint(),
         "field restore parent mismatch"
     );
@@ -829,6 +855,8 @@ pub fn restore_song(
             "field": field_path,
             "kind": field.kind,
             "gate": gate_path,
+            "cap_boost": cap_boost,
+            "allow_gate_mismatch": allow_gate_mismatch,
             "source": source,
             "total_seconds": total_samples as f64 / audio.rate as f64,
             "total_samples": total_samples,

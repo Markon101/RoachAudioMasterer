@@ -72,6 +72,10 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
+        #[arg(long)]
+        cap_h_boost: bool,
+        #[arg(long)]
+        cap_n_boost: bool,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
         backend: String,
         #[arg(long)]
@@ -90,6 +94,10 @@ enum Commands {
         seed: u64,
         #[arg(long, default_value_t = 24)]
         count: usize,
+        #[arg(long)]
+        cap_h_boost: bool,
+        #[arg(long)]
+        cap_n_boost: bool,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
         backend: String,
         #[arg(long)]
@@ -112,6 +120,12 @@ enum Commands {
         controlled: bool,
         #[arg(long, default_value_t = 0.5)]
         richness: f32,
+        #[arg(long)]
+        cap_h_boost: bool,
+        #[arg(long)]
+        cap_n_boost: bool,
+        #[arg(long)]
+        allow_gate_mismatch: bool,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
         backend: String,
         #[arg(long)]
@@ -136,6 +150,12 @@ enum Commands {
         chunk_seconds: f64,
         #[arg(long, default_value_t = 2.0)]
         overlap_seconds: f64,
+        #[arg(long)]
+        cap_h_boost: bool,
+        #[arg(long)]
+        cap_n_boost: bool,
+        #[arg(long)]
+        allow_gate_mismatch: bool,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -491,12 +511,15 @@ fn run() -> Result<()> {
             steps,
             seed,
             resume,
+            cap_h_boost,
+            cap_n_boost,
             backend,
             out,
         } => rich_field::train(
             &det,
             &flow,
             &gate,
+            [cap_h_boost, cap_n_boost],
             steps,
             seed,
             resume.as_deref(),
@@ -510,9 +533,21 @@ fn run() -> Result<()> {
             fields,
             seed,
             count,
+            cap_h_boost,
+            cap_n_boost,
             backend,
             out,
-        } => rich_field::evaluate(&det, &flow, &gate, &fields, seed, count, &backend, &out),
+        } => rich_field::evaluate(
+            &det,
+            &flow,
+            &gate,
+            [cap_h_boost, cap_n_boost],
+            &fields,
+            seed,
+            count,
+            &backend,
+            &out,
+        ),
         Commands::RichFieldRestore {
             det,
             flow,
@@ -522,10 +557,24 @@ fn run() -> Result<()> {
             start,
             controlled,
             richness,
+            cap_h_boost,
+            cap_n_boost,
+            allow_gate_mismatch,
             backend,
             out,
         } => rich_field::restore(
-            &det, &flow, &gate, &field, &input, start, controlled, richness, &backend, &out,
+            &det,
+            &flow,
+            &gate,
+            [cap_h_boost, cap_n_boost],
+            allow_gate_mismatch,
+            &field,
+            &input,
+            start,
+            controlled,
+            richness,
+            &backend,
+            &out,
         ),
         Commands::RichFieldRestoreSong {
             det,
@@ -537,12 +586,17 @@ fn run() -> Result<()> {
             richness,
             chunk_seconds,
             overlap_seconds,
+            cap_h_boost,
+            cap_n_boost,
+            allow_gate_mismatch,
             backend,
             out,
         } => rich_field::restore_song(
             &det,
             &flow,
             &gate,
+            [cap_h_boost, cap_n_boost],
+            allow_gate_mismatch,
             &field,
             &input,
             controlled,
