@@ -1,0 +1,5223 @@
+{
+  "count": 24,
+  "field_models": "runs/rich-sprint/field1000",
+  "gate": "artifacts/rich-gate-v1/gate4000/evidence.json",
+  "provenance": {
+    "architecture": {
+      "cache_limit_mib": 64,
+      "context_hops": [
+        -16,
+        -8,
+        -4,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "encoder": [
+        3098,
+        32,
+        32
+      ],
+      "flow": "direct diagonal plus correlated residual",
+      "frequency_shared_head": [
+        184,
+        32,
+        6
+      ],
+      "parameters": 106342,
+      "schema": "scene-v2-native-shared-v1"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3500,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        300,
+        1000
+      ]
+    },
+    "generator": {
+      "natural_training_examples": 0,
+      "patch_samples": 16384,
+      "scene_seconds": 2,
+      "updates_per_scene": 4,
+      "version": 2
+    },
+    "git_commit": "d8034f3e05233e0a4218fb65d2dbf574580da843",
+    "git_dirty": false,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t  111672 kB",
+      "VmRSS:\t   61732 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "sprint": {
+      "gate": [
+        64,
+        24,
+        4
+      ],
+      "gate_parameters": 1660,
+      "gate_smoothing": [
+        3,
+        3
+      ],
+      "generator": "rich-v3",
+      "natural_training_examples": 0,
+      "whole_clip_gate_gradients": true
+    },
+    "stft": {
+      "analysis_loss_ffts": [
+        256,
+        1024,
+        4096
+      ],
+      "base_fft": 1024,
+      "base_hop": 256,
+      "channels": "orthonormal mid/side",
+      "sample_rate": 48000
+    },
+    "unix_time": 1791277711
+  },
+  "records": [
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5226.126953125,
+          "power": 3.4653496742248535,
+          "transition": 707.4291381835938
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605004,
+        "version": 3
+      },
+      "scene_seed": 605004,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5226.126953125,
+          "power": 3.4653496742248535,
+          "transition": 707.4291381835938
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605004,
+        "version": 3
+      },
+      "scene_seed": 605004,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5226.126953125,
+          "power": 3.4653496742248535,
+          "transition": 707.4291381835938
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605004,
+        "version": 3
+      },
+      "scene_seed": 605004,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5226.126953125,
+          "power": 3.4653496742248535,
+          "transition": 707.4291381835938
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605004,
+        "version": 3
+      },
+      "scene_seed": 605004,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5226.126953125,
+          "power": 3.4653496742248535,
+          "transition": 707.4291381835938
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605004,
+        "version": 3
+      },
+      "scene_seed": 605004,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00005195424529104081,
+        "desired_added_rms": 0.00007056926669564,
+        "energy_ratio": 0.542014458552144,
+        "excess_persistent_peak_energy": 0.016884368060896732,
+        "hf_envelope_nmse": 0.07687764921826122,
+        "legitimate_persistent_peak_energy": 0.034192459542562205,
+        "quiet_spectral_rms": 0.00007086470767864704
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 3895.943115234375,
+          "power": 2.775913953781128,
+          "transition": 379.87017822265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605005,
+        "version": 3
+      },
+      "scene_seed": 605005,
+      "scores": {
+        "crest_db": 15.472184693466556,
+        "full_error": 0.08515752824169563,
+        "full_nmse": 0.008216664885511484,
+        "full_target_energy": 10.36400162696846,
+        "high_error": 0.07887294902125096,
+        "high_nmse": 0.49842507151268006,
+        "high_target_energy": 0.15824434509660176,
+        "known_error": 1.038901026457213e-7,
+        "log1p_db": 0.6180932134789454,
+        "lsd_db": 12.097192992595298,
+        "peak": 0.0032869279384613037,
+        "stereo_correlation": 0.9894376708615829,
+        "target_crest_db": 14.588189356460006,
+        "target_stereo_correlation": 0.9999999999999709
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00010142480414191957,
+        "desired_added_rms": 0.00007056926669564,
+        "energy_ratio": 2.065651945025239,
+        "excess_persistent_peak_energy": 0.11259160904382179,
+        "hf_envelope_nmse": 0.24719738443892006,
+        "legitimate_persistent_peak_energy": 0.034192459542562205,
+        "quiet_spectral_rms": 0.00023461332477940034
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 3895.943115234375,
+          "power": 2.775913953781128,
+          "transition": 379.87017822265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605005,
+        "version": 3
+      },
+      "scene_seed": 605005,
+      "scores": {
+        "crest_db": 15.240347202363873,
+        "full_error": 0.17607215069433704,
+        "full_nmse": 0.016988819283487448,
+        "full_target_energy": 10.36400162696846,
+        "high_error": 0.16980592718064563,
+        "high_nmse": 1.073061581296861,
+        "high_target_energy": 0.15824434509660176,
+        "known_error": 9.380020946698385e-8,
+        "log1p_db": 0.7307435302205412,
+        "lsd_db": 17.011681472027973,
+        "peak": 0.0032398104667663574,
+        "stereo_correlation": 0.9634701170857997,
+        "target_crest_db": 14.588189356460006,
+        "target_stereo_correlation": 0.9999999999999709
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.000101838064363745,
+        "desired_added_rms": 0.00007056926669564,
+        "energy_ratio": 2.0825194344088103,
+        "excess_persistent_peak_energy": 0.0918870085912202,
+        "hf_envelope_nmse": 0.2496119326903328,
+        "legitimate_persistent_peak_energy": 0.034192459542562205,
+        "quiet_spectral_rms": 0.0001619022181159325
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 3895.943115234375,
+          "power": 2.775913953781128,
+          "transition": 379.87017822265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605005,
+        "version": 3
+      },
+      "scene_seed": 605005,
+      "scores": {
+        "crest_db": 15.219168411533616,
+        "full_error": 0.17369846231346647,
+        "full_nmse": 0.016759787248728408,
+        "full_target_energy": 10.36400162696846,
+        "high_error": 0.16742923207200636,
+        "high_nmse": 1.0580424341217223,
+        "high_target_energy": 0.15824434509660176,
+        "known_error": 1.0583200453580016e-7,
+        "log1p_db": 0.731352302675699,
+        "lsd_db": 15.610356763048172,
+        "peak": 0.003232355695217848,
+        "stereo_correlation": 0.9629041003599305,
+        "target_crest_db": 14.588189356460006,
+        "target_stereo_correlation": 0.9999999999999709
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0001031678402371581,
+        "desired_added_rms": 0.00007056926669564,
+        "energy_ratio": 2.1372605457096965,
+        "excess_persistent_peak_energy": 0.11353574251943013,
+        "hf_envelope_nmse": 0.27034443498903427,
+        "legitimate_persistent_peak_energy": 0.034192459542562205,
+        "quiet_spectral_rms": 0.0001790916762385128
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 3895.943115234375,
+          "power": 2.775913953781128,
+          "transition": 379.87017822265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605005,
+        "version": 3
+      },
+      "scene_seed": 605005,
+      "scores": {
+        "crest_db": 15.231306617943055,
+        "full_error": 0.18009584684795063,
+        "full_nmse": 0.017377056983406695,
+        "full_target_energy": 10.36400162696846,
+        "high_error": 0.17356452144992646,
+        "high_nmse": 1.096813420687939,
+        "high_target_energy": 0.15824434509660176,
+        "known_error": 9.716458432794208e-8,
+        "log1p_db": 0.7383187480867021,
+        "lsd_db": 15.647486582508504,
+        "peak": 0.0032382875215262175,
+        "stereo_correlation": 0.9622010277591575,
+        "target_crest_db": 14.588189356460006,
+        "target_stereo_correlation": 0.9999999999999709
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0000755944098852329,
+        "desired_added_rms": 0.00007056926669564,
+        "energy_ratio": 1.147488001486721,
+        "excess_persistent_peak_energy": 0.03922867619175275,
+        "hf_envelope_nmse": 0.02733134371448412,
+        "legitimate_persistent_peak_energy": 0.034192459542562205,
+        "quiet_spectral_rms": 0.00011751882316512941
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 3895.943115234375,
+          "power": 2.775913953781128,
+          "transition": 379.87017822265625
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605005,
+        "version": 3
+      },
+      "scene_seed": 605005,
+      "scores": {
+        "crest_db": 15.302807980591137,
+        "full_error": 0.10239066818060288,
+        "full_nmse": 0.009879453117237,
+        "full_target_energy": 10.36400162696846,
+        "high_error": 0.09676010894149262,
+        "high_nmse": 0.611460137058449,
+        "high_target_energy": 0.15824434509660176,
+        "known_error": 9.628101937446591e-8,
+        "log1p_db": 0.6482644395497486,
+        "lsd_db": 13.477947872893601,
+        "peak": 0.003239317098632455,
+        "stereo_correlation": 0.9784290935775132,
+        "target_crest_db": 14.588189356460006,
+        "target_stereo_correlation": 0.9999999999999709
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.000025633185617090766,
+        "desired_added_rms": 1.6516208920704892e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.004102485633172212,
+        "hf_envelope_nmse": 1883954.8522458521,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0006591787913794331
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6377.568359375,
+          "power": 3.9754934310913086,
+          "transition": 584.8900146484375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605006,
+        "version": 3
+      },
+      "scene_seed": 605006,
+      "scores": {
+        "crest_db": 6.672929875681421,
+        "full_error": 0.011270555316064922,
+        "full_nmse": 2.3966671044312072e-8,
+        "full_target_energy": 470259.5239541924,
+        "high_error": 0.011019383418698812,
+        "high_nmse": 0.020719285078806722,
+        "high_target_energy": 0.5318418746972252,
+        "known_error": 1.3823154390450059e-7,
+        "log1p_db": 0.0015497031258456223,
+        "lsd_db": 0.3651754298976969,
+        "peak": 0.2552359998226166,
+        "stereo_correlation": 0.9999997797422431,
+        "target_crest_db": 6.672292593280277,
+        "target_stereo_correlation": 0.9999999999999589
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0016674252399385154,
+        "desired_added_rms": 1.6516208920704892e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 63.0859033062883,
+        "hf_envelope_nmse": 8044655315.650369,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.04305590281678233
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6377.568359375,
+          "power": 3.9754934310913086,
+          "transition": 584.8900146484375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605006,
+        "version": 3
+      },
+      "scene_seed": 605006,
+      "scores": {
+        "crest_db": 7.044158622688673,
+        "full_error": 89.95330869823,
+        "full_nmse": 0.0001912843953522827,
+        "full_target_energy": 470259.5239541924,
+        "high_error": 87.5986028901038,
+        "high_nmse": 164.70798381562795,
+        "high_target_energy": 0.5318418746972252,
+        "known_error": 1.3055132595934176e-7,
+        "log1p_db": 0.13567177198410907,
+        "lsd_db": 20.088775813249736,
+        "peak": 0.26640748977661133,
+        "stereo_correlation": 0.999997997916612,
+        "target_crest_db": 6.672292593280277,
+        "target_stereo_correlation": 0.9999999999999589
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0007781553225471817,
+        "desired_added_rms": 1.6516208920704892e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 13.298484530979598,
+        "hf_envelope_nmse": 1766808937.5526676,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.020178052001097877
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6377.568359375,
+          "power": 3.9754934310913086,
+          "transition": 584.8900146484375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605006,
+        "version": 3
+      },
+      "scene_seed": 605006,
+      "scores": {
+        "crest_db": 6.683040580880004,
+        "full_error": 19.268083745317874,
+        "full_nmse": 0.000040973298282832355,
+        "full_target_energy": 470259.5239541924,
+        "high_error": 18.963518555001865,
+        "high_nmse": 35.65630962360325,
+        "high_target_energy": 0.5318418746972252,
+        "known_error": 1.3258200427926716e-7,
+        "log1p_db": 0.06428752884198347,
+        "lsd_db": 13.927369657211887,
+        "peak": 0.25553879141807556,
+        "stereo_correlation": 0.9999982957727894,
+        "target_crest_db": 6.672292593280277,
+        "target_stereo_correlation": 0.9999999999999589
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0012344076576405426,
+        "desired_added_rms": 1.6516208920704892e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 34.96040227087241,
+        "hf_envelope_nmse": 4422866250.687187,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.031925135041664346
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6377.568359375,
+          "power": 3.9754934310913086,
+          "transition": 584.8900146484375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605006,
+        "version": 3
+      },
+      "scene_seed": 605006,
+      "scores": {
+        "crest_db": 7.011080508994474,
+        "full_error": 48.93048937844546,
+        "full_nmse": 0.00010404997003997252,
+        "full_target_energy": 470259.5239541924,
+        "high_error": 47.795585484071424,
+        "high_nmse": 89.8680373960422,
+        "high_target_energy": 0.5318418746972252,
+        "known_error": 1.5633736693663414e-7,
+        "log1p_db": 0.09966878593359439,
+        "lsd_db": 18.12270037735929,
+        "peak": 0.2653829753398895,
+        "stereo_correlation": 0.9999969118719763,
+        "target_crest_db": 6.672292593280277,
+        "target_stereo_correlation": 0.9999999999999589
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00003284455191723398,
+        "desired_added_rms": 1.6516208920704892e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.008583903393505213,
+        "hf_envelope_nmse": 3075796.278759564,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0008422003816459213
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6377.568359375,
+          "power": 3.9754934310913086,
+          "transition": 584.8900146484375
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605006,
+        "version": 3
+      },
+      "scene_seed": 605006,
+      "scores": {
+        "crest_db": 6.673702530226036,
+        "full_error": 0.017940986334183326,
+        "full_nmse": 3.815124504725808e-8,
+        "full_target_energy": 470259.5239541924,
+        "high_error": 0.017379732110048028,
+        "high_nmse": 0.03267838231042303,
+        "high_target_energy": 0.5318418746972252,
+        "known_error": 1.3076155158418738e-7,
+        "log1p_db": 0.0019656266271167134,
+        "lsd_db": 0.4697313026232435,
+        "peak": 0.255258709192276,
+        "stereo_correlation": 0.9999997094718046,
+        "target_crest_db": 6.672292593280277,
+        "target_stereo_correlation": 0.9999999999999589
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00017937906185157087,
+        "desired_added_rms": 2.1404733743881834e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.04662655542777081,
+        "hf_envelope_nmse": 55955607.239574574,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.004599013416136549
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5621.2685546875,
+          "power": 3.419020891189575,
+          "transition": 996.5020751953125
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605007,
+        "version": 3
+      },
+      "scene_seed": 605007,
+      "scores": {
+        "crest_db": 6.968838035869187,
+        "full_error": 0.9402442044220225,
+        "full_nmse": 1.2394006392903066e-6,
+        "full_target_energy": 758628.1421965506,
+        "high_error": 0.924422279234953,
+        "high_nmse": 2.9949543640601703,
+        "high_target_energy": 0.30865988822004664,
+        "known_error": 1.2523193736352156e-7,
+        "log1p_db": 0.012448465820218841,
+        "lsd_db": 2.633143297043256,
+        "peak": 0.335415244102478,
+        "stereo_correlation": 0.9999999916709218,
+        "target_crest_db": 6.964332296681911,
+        "target_stereo_correlation": 0.9999999999999594
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0027016410157780072,
+        "desired_added_rms": 2.1404733743881834e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 126.49918845508476,
+        "hf_envelope_nmse": 12435713581.755156,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.06855611985989489
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5621.2685546875,
+          "power": 3.419020891189575,
+          "transition": 996.5020751953125
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605007,
+        "version": 3
+      },
+      "scene_seed": 605007,
+      "scores": {
+        "crest_db": 7.0606429169353815,
+        "full_error": 240.48349961192204,
+        "full_nmse": 0.00031699786263612655,
+        "full_target_energy": 758628.1421965506,
+        "high_error": 230.8754808351763,
+        "high_nmse": 747.9931460047147,
+        "high_target_energy": 0.30865988822004664,
+        "known_error": 1.1342429541767849e-7,
+        "log1p_db": 0.1767159012298457,
+        "lsd_db": 23.218072290254803,
+        "peak": 0.33903366327285767,
+        "stereo_correlation": 0.9999978261787364,
+        "target_crest_db": 6.964332296681911,
+        "target_stereo_correlation": 0.9999999999999594
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0013912458420105454,
+        "desired_added_rms": 2.1404733743881834e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 15.74509512672205,
+        "hf_envelope_nmse": 3305787496.31833,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.03534691708392549
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5621.2685546875,
+          "power": 3.419020891189575,
+          "transition": 996.5020751953125
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605007,
+        "version": 3
+      },
+      "scene_seed": 605007,
+      "scores": {
+        "crest_db": 7.0028901910500005,
+        "full_error": 62.71788276139851,
+        "full_nmse": 0.00008267276056989345,
+        "full_target_energy": 758628.1421965506,
+        "high_error": 60.25958428991205,
+        "high_nmse": 195.22972238929992,
+        "high_target_energy": 0.30865988822004664,
+        "known_error": 1.2061873984609092e-7,
+        "log1p_db": 0.0900270028496393,
+        "lsd_db": 17.29950405434727,
+        "peak": 0.3367469608783722,
+        "stereo_correlation": 0.9999996037821485,
+        "target_crest_db": 6.964332296681911,
+        "target_stereo_correlation": 0.9999999999999594
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.001955601896374686,
+        "desired_added_rms": 2.1404733743881834e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 56.52658004961556,
+        "hf_envelope_nmse": 6542165823.573388,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.049724789019888985
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5621.2685546875,
+          "power": 3.419020891189575,
+          "transition": 996.5020751953125
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605007,
+        "version": 3
+      },
+      "scene_seed": 605007,
+      "scores": {
+        "crest_db": 6.9796698464671545,
+        "full_error": 126.05714056659141,
+        "full_nmse": 0.0001661645983783339,
+        "full_target_energy": 758628.1421965506,
+        "high_error": 121.02198463392352,
+        "high_nmse": 392.08847424854173,
+        "high_target_energy": 0.30865988822004664,
+        "known_error": 1.1636361796835543e-7,
+        "log1p_db": 0.12288513984087888,
+        "lsd_db": 20.107484966244133,
+        "peak": 0.3358619511127472,
+        "stereo_correlation": 0.999999114826645,
+        "target_crest_db": 6.964332296681911,
+        "target_stereo_correlation": 0.9999999999999594
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0003700889429515919,
+        "desired_added_rms": 2.1404733743881834e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.19119846846423993,
+        "hf_envelope_nmse": 240877501.36814293,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.009541624304068092
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5621.2685546875,
+          "power": 3.419020891189575,
+          "transition": 996.5020751953125
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605007,
+        "version": 3
+      },
+      "scene_seed": 605007,
+      "scores": {
+        "crest_db": 6.9746103389876,
+        "full_error": 4.2111326794535895,
+        "full_nmse": 5.5509840002251594e-6,
+        "full_target_energy": 758628.1421965506,
+        "high_error": 4.172598487157388,
+        "high_nmse": 13.518434517745636,
+        "high_target_energy": 0.30865988822004664,
+        "known_error": 1.1657241774049756e-7,
+        "log1p_db": 0.02644766668075335,
+        "lsd_db": 4.1482658151019445,
+        "peak": 0.33563899993896484,
+        "stereo_correlation": 0.9999999651859939,
+        "target_crest_db": 6.964332296681911,
+        "target_stereo_correlation": 0.9999999999999594
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00822302796696222,
+        "desired_added_rms": 0.015221749899204572,
+        "energy_ratio": 0.2918329805184959,
+        "excess_persistent_peak_energy": 13.434981810256602,
+        "hf_envelope_nmse": 0.18407118127990324,
+        "legitimate_persistent_peak_energy": 1420.5090806157677,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 7001.775390625,
+          "power": 2.317669153213501,
+          "transition": 956.9661254882812
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605008,
+        "version": 3
+      },
+      "scene_seed": 605008,
+      "scores": {
+        "crest_db": 6.812489378460849,
+        "full_error": 4408.019346839514,
+        "full_nmse": 0.0020900692623658378,
+        "full_target_energy": 2109030.27292497,
+        "high_error": 3225.3895214284844,
+        "high_nmse": 0.48763933605170395,
+        "high_target_energy": 6614.293152688771,
+        "known_error": 1.3020280439289737e-7,
+        "log1p_db": 0.35484989152565743,
+        "lsd_db": 13.141212120933291,
+        "peak": 0.5485219359397888,
+        "stereo_correlation": 0.9930772072106069,
+        "target_crest_db": 6.5298377357867965,
+        "target_stereo_correlation": 0.9999999999999523
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.01625635949820503,
+        "desired_added_rms": 0.015221749899204572,
+        "energy_ratio": 1.1405581329724517,
+        "excess_persistent_peak_energy": 431.2112096823391,
+        "hf_envelope_nmse": 0.03279165054764596,
+        "legitimate_persistent_peak_energy": 1420.5090806157677,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 7001.775390625,
+          "power": 2.317669153213501,
+          "transition": 956.9661254882812
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605008,
+        "version": 3
+      },
+      "scene_seed": 605008,
+      "scores": {
+        "crest_db": 6.982624199776617,
+        "full_error": 5518.243078243233,
+        "full_nmse": 0.0026164835797212608,
+        "full_target_energy": 2109030.27292497,
+        "high_error": 4233.467039439901,
+        "high_nmse": 0.6400482926462002,
+        "high_target_energy": 6614.293152688771,
+        "known_error": 1.3852512413873908e-7,
+        "log1p_db": 0.3960691755892011,
+        "lsd_db": 17.43204602733696,
+        "peak": 0.5602489113807678,
+        "stereo_correlation": 0.9743038671167462,
+        "target_crest_db": 6.5298377357867965,
+        "target_stereo_correlation": 0.9999999999999523
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.016002927482819684,
+        "desired_added_rms": 0.015221749899204572,
+        "energy_ratio": 1.1052733803217287,
+        "excess_persistent_peak_energy": 435.6215219453332,
+        "hf_envelope_nmse": 0.030439533294369797,
+        "legitimate_persistent_peak_energy": 1420.5090806157677,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 7001.775390625,
+          "power": 2.317669153213501,
+          "transition": 956.9661254882812
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605008,
+        "version": 3
+      },
+      "scene_seed": 605008,
+      "scores": {
+        "crest_db": 6.994840753043171,
+        "full_error": 5437.136383183606,
+        "full_nmse": 0.0025780267135013454,
+        "full_target_energy": 2109030.27292497,
+        "high_error": 4148.22292020831,
+        "high_nmse": 0.6271604273424166,
+        "high_target_energy": 6614.293152688771,
+        "known_error": 1.3093915971401246e-7,
+        "log1p_db": 0.39369162040042793,
+        "lsd_db": 17.577859574702494,
+        "peak": 0.5610008835792542,
+        "stereo_correlation": 0.9750464715746949,
+        "target_crest_db": 6.5298377357867965,
+        "target_stereo_correlation": 0.9999999999999523
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.016064894531795267,
+        "desired_added_rms": 0.015221749899204572,
+        "energy_ratio": 1.1138497030447023,
+        "excess_persistent_peak_energy": 355.23532625914936,
+        "hf_envelope_nmse": 0.030987963845646338,
+        "legitimate_persistent_peak_energy": 1420.5090806157677,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 7001.775390625,
+          "power": 2.317669153213501,
+          "transition": 956.9661254882812
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605008,
+        "version": 3
+      },
+      "scene_seed": 605008,
+      "scores": {
+        "crest_db": 6.998580492029917,
+        "full_error": 5496.8536297724595,
+        "full_nmse": 0.002606341739300398,
+        "full_target_energy": 2109030.27292497,
+        "high_error": 4215.959722061356,
+        "high_nmse": 0.6374014009868204,
+        "high_target_energy": 6614.293152688771,
+        "known_error": 1.3108977738596287e-7,
+        "log1p_db": 0.3941030856921393,
+        "lsd_db": 16.697855094714388,
+        "peak": 0.5612514615058899,
+        "stereo_correlation": 0.97523913226823,
+        "target_crest_db": 6.5298377357867965,
+        "target_stereo_correlation": 0.9999999999999523
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.009578075208046136,
+        "desired_added_rms": 0.015221749899204572,
+        "energy_ratio": 0.3959381246297864,
+        "excess_persistent_peak_energy": 83.24855471398668,
+        "hf_envelope_nmse": 0.12195834172567614,
+        "legitimate_persistent_peak_energy": 1420.5090806157677,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 7001.775390625,
+          "power": 2.317669153213501,
+          "transition": 956.9661254882812
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605008,
+        "version": 3
+      },
+      "scene_seed": 605008,
+      "scores": {
+        "crest_db": 6.879918607268633,
+        "full_error": 4496.263947404969,
+        "full_nmse": 0.0021319105776367994,
+        "full_target_energy": 2109030.27292497,
+        "high_error": 3285.228123116886,
+        "high_nmse": 0.4966861987030935,
+        "high_target_energy": 6614.293152688771,
+        "known_error": 1.3399791283495802e-7,
+        "log1p_db": 0.3587617768842622,
+        "lsd_db": 14.903828171898615,
+        "peak": 0.5529031157493591,
+        "stereo_correlation": 0.990754747766576,
+        "target_crest_db": 6.5298377357867965,
+        "target_stereo_correlation": 0.9999999999999523
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0001634775836694814,
+        "desired_added_rms": 0.00011142842429422418,
+        "energy_ratio": 2.152407225581575,
+        "excess_persistent_peak_energy": 0.09072935798494225,
+        "hf_envelope_nmse": 2.833619481137478,
+        "legitimate_persistent_peak_energy": 0.0016020525988904232,
+        "quiet_spectral_rms": 0.001438526344619465
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5408.44384765625,
+          "power": 3.2240729331970215,
+          "transition": 452.61163330078125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605009,
+        "version": 3
+      },
+      "scene_seed": 605009,
+      "scores": {
+        "crest_db": 6.49328038123101,
+        "full_error": 0.82756344044012,
+        "full_nmse": 6.474637435424617e-7,
+        "full_target_energy": 1278161.825575407,
+        "high_error": 0.7403407112644642,
+        "high_nmse": 1.205847047424186,
+        "high_target_energy": 0.6139590529710286,
+        "known_error": 1.2219948954831356e-7,
+        "log1p_db": 0.007827603620740446,
+        "lsd_db": 1.9675200099400227,
+        "peak": 0.41217678785324097,
+        "stereo_correlation": 0.9999994766916614,
+        "target_crest_db": 6.493922618680447,
+        "target_stereo_correlation": 0.9999999999999615
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.003013170591257207,
+        "desired_added_rms": 0.00011142842429422418,
+        "energy_ratio": 731.2324596719866,
+        "excess_persistent_peak_energy": 116.00705400467677,
+        "hf_envelope_nmse": 1358.500689333538,
+        "legitimate_persistent_peak_energy": 0.0016020525988904232,
+        "quiet_spectral_rms": 0.07659129790081985
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5408.44384765625,
+          "power": 3.2240729331970215,
+          "transition": 452.61163330078125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605009,
+        "version": 3
+      },
+      "scene_seed": 605009,
+      "scores": {
+        "crest_db": 6.602109827564645,
+        "full_error": 299.12693094564236,
+        "full_nmse": 0.00023402899770612415,
+        "full_target_energy": 1278161.825575407,
+        "high_error": 292.7804687797957,
+        "high_nmse": 476.8729565318607,
+        "high_target_energy": 0.6139590529710286,
+        "known_error": 8.89410938239454e-8,
+        "log1p_db": 0.14585113841793462,
+        "lsd_db": 21.466970033976082,
+        "peak": 0.41742321848869324,
+        "stereo_correlation": 0.999855288076227,
+        "target_crest_db": 6.493922618680447,
+        "target_stereo_correlation": 0.9999999999999615
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0014581092285688916,
+        "desired_added_rms": 0.00011142842429422418,
+        "energy_ratio": 171.23326548482515,
+        "excess_persistent_peak_energy": 27.313581123863493,
+        "hf_envelope_nmse": 316.01159252017476,
+        "legitimate_persistent_peak_energy": 0.0016020525988904232,
+        "quiet_spectral_rms": 0.035922668288225074
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5408.44384765625,
+          "power": 3.2240729331970215,
+          "transition": 452.61163330078125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605009,
+        "version": 3
+      },
+      "scene_seed": 605009,
+      "scores": {
+        "crest_db": 6.718991199538486,
+        "full_error": 68.27108737448313,
+        "full_nmse": 0.000053413492727142465,
+        "full_target_energy": 1278161.825575407,
+        "high_error": 67.35066402495693,
+        "high_nmse": 109.69895093009576,
+        "high_target_energy": 0.6139590529710286,
+        "known_error": 1.2620368064431789e-7,
+        "log1p_db": 0.07141085940230915,
+        "lsd_db": 15.726938633154226,
+        "peak": 0.42303961515426636,
+        "stereo_correlation": 0.9999653147002603,
+        "target_crest_db": 6.493922618680447,
+        "target_stereo_correlation": 0.9999999999999615
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0021817679640163015,
+        "desired_added_rms": 0.00011142842429422418,
+        "energy_ratio": 383.3761948790613,
+        "excess_persistent_peak_energy": 76.46743804755468,
+        "hf_envelope_nmse": 716.3636795867964,
+        "legitimate_persistent_peak_energy": 0.0016020525988904232,
+        "quiet_spectral_rms": 0.05556571752566296
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5408.44384765625,
+          "power": 3.2240729331970215,
+          "transition": 452.61163330078125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605009,
+        "version": 3
+      },
+      "scene_seed": 605009,
+      "scores": {
+        "crest_db": 6.645643910254982,
+        "full_error": 156.89972688178878,
+        "full_nmse": 0.00012275419570691306,
+        "full_target_energy": 1278161.825575407,
+        "high_error": 154.2062062840321,
+        "high_nmse": 251.1669231650026,
+        "high_target_energy": 0.6139590529710286,
+        "known_error": 9.394784146684882e-8,
+        "log1p_db": 0.10453876183496257,
+        "lsd_db": 18.898610030440846,
+        "peak": 0.4194968342781067,
+        "stereo_correlation": 0.9999179970384603,
+        "target_crest_db": 6.493922618680447,
+        "target_stereo_correlation": 0.9999999999999615
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0003250592960279961,
+        "desired_added_rms": 0.00011142842429422418,
+        "energy_ratio": 8.510071374029318,
+        "excess_persistent_peak_energy": 0.4244372923817212,
+        "hf_envelope_nmse": 12.720748819250428,
+        "legitimate_persistent_peak_energy": 0.0016020525988904232,
+        "quiet_spectral_rms": 0.002490147544737987
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5408.44384765625,
+          "power": 3.2240729331970215,
+          "transition": 452.61163330078125
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605009,
+        "version": 3
+      },
+      "scene_seed": 605009,
+      "scores": {
+        "crest_db": 6.492824818831569,
+        "full_error": 3.0168538678381696,
+        "full_nmse": 2.3603066587284694e-6,
+        "full_target_energy": 1278161.825575407,
+        "high_error": 2.910915884063617,
+        "high_nmse": 4.7412215358293235,
+        "high_target_energy": 0.6139590529710286,
+        "known_error": 1.2351698466660456e-7,
+        "log1p_db": 0.01589975442333806,
+        "lsd_db": 2.5730112984452056,
+        "peak": 0.4121555984020233,
+        "stereo_correlation": 0.9999979188437862,
+        "target_crest_db": 6.493922618680447,
+        "target_stereo_correlation": 0.9999999999999615
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.014321404358370645,
+        "desired_added_rms": 0.06837487694713713,
+        "energy_ratio": 0.04387105704110972,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.641213216420429,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0072477500476778554
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 7111.37451171875,
+          "power": 3.3295183181762695,
+          "transition": 431.91290283203125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605010,
+        "version": 3
+      },
+      "scene_seed": 605010,
+      "scores": {
+        "crest_db": 19.4582419746178,
+        "full_error": 118392.82771620654,
+        "full_nmse": 0.5580985272737372,
+        "full_target_energy": 212136.06904598942,
+        "high_error": 116877.94670132273,
+        "high_nmse": 0.7546775971554702,
+        "high_target_energy": 154871.3611505879,
+        "known_error": 1.1505181413384978e-7,
+        "log1p_db": 5.459269494614174,
+        "lsd_db": 18.34813931573434,
+        "peak": 0.40185827016830444,
+        "stereo_correlation": 0.9998279865935145,
+        "target_crest_db": 17.836703875286233,
+        "target_stereo_correlation": 0.9999999999999667
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.029033339637457474,
+        "desired_added_rms": 0.06837487694713713,
+        "energy_ratio": 0.18030213680078322,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.36365965243100573,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.02036351605860272
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 7111.37451171875,
+          "power": 3.3295183181762695,
+          "transition": 431.91290283203125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605010,
+        "version": 3
+      },
+      "scene_seed": 605010,
+      "scores": {
+        "crest_db": 19.71628197585216,
+        "full_error": 93191.03532580889,
+        "full_nmse": 0.43929839816917604,
+        "full_target_energy": 212136.06904598942,
+        "high_error": 91998.15908569244,
+        "high_nmse": 0.594029511991173,
+        "high_target_energy": 154871.3611505879,
+        "known_error": 1.2616407656249592e-7,
+        "log1p_db": 4.533064827621511,
+        "lsd_db": 18.304255195716422,
+        "peak": 0.4807446002960205,
+        "stereo_correlation": 0.9995370462732963,
+        "target_crest_db": 17.836703875286233,
+        "target_stereo_correlation": 0.9999999999999667
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.028660717417367396,
+        "desired_added_rms": 0.06837487694713713,
+        "energy_ratio": 0.1757037371526066,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.3693498054097937,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.016887009013060502
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 7111.37451171875,
+          "power": 3.3295183181762695,
+          "transition": 431.91290283203125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605010,
+        "version": 3
+      },
+      "scene_seed": 605010,
+      "scores": {
+        "crest_db": 19.70971599735847,
+        "full_error": 93360.20855739115,
+        "full_nmse": 0.44009587326307714,
+        "full_target_energy": 212136.06904598942,
+        "high_error": 92174.0871051356,
+        "high_nmse": 0.5951654742383963,
+        "high_target_energy": 154871.3611505879,
+        "known_error": 1.306870277930484e-7,
+        "log1p_db": 4.532468179327019,
+        "lsd_db": 17.627294863327027,
+        "peak": 0.47828853130340576,
+        "stereo_correlation": 0.9995451500308175,
+        "target_crest_db": 17.836703875286233,
+        "target_stereo_correlation": 0.9999999999999667
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.030100804118011887,
+        "desired_added_rms": 0.06837487694713713,
+        "energy_ratio": 0.19380415317096555,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.34700371026012977,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.019311579960043346
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 7111.37451171875,
+          "power": 3.3295183181762695,
+          "transition": 431.91290283203125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605010,
+        "version": 3
+      },
+      "scene_seed": 605010,
+      "scores": {
+        "crest_db": 19.747196878927067,
+        "full_error": 91456.5157801298,
+        "full_nmse": 0.43112195013052096,
+        "full_target_energy": 212136.06904598942,
+        "high_error": 90286.39143750284,
+        "high_nmse": 0.5829766766866187,
+        "high_target_energy": 154871.3611505879,
+        "known_error": 1.2954289490798782e-7,
+        "log1p_db": 4.46397870926124,
+        "lsd_db": 17.770780550747524,
+        "peak": 0.4885939955711365,
+        "stereo_correlation": 0.9995170541903842,
+        "target_crest_db": 17.836703875286233,
+        "target_stereo_correlation": 0.9999999999999667
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.023198019050835784,
+        "desired_added_rms": 0.06837487694713713,
+        "energy_ratio": 0.11510884228703236,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.4644120544086814,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.011393867877920748
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 7111.37451171875,
+          "power": 3.3295183181762695,
+          "transition": 431.91290283203125
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605010,
+        "version": 3
+      },
+      "scene_seed": 605010,
+      "scores": {
+        "crest_db": 19.64834842821417,
+        "full_error": 102635.37941037874,
+        "full_nmse": 0.4838186163812067,
+        "full_target_energy": 212136.06904598942,
+        "high_error": 101315.23845886505,
+        "high_nmse": 0.6541896300656388,
+        "high_target_energy": 154871.3611505879,
+        "known_error": 1.238983004032679e-7,
+        "log1p_db": 4.860631097437395,
+        "lsd_db": 16.900622986129267,
+        "peak": 0.4465748071670532,
+        "stereo_correlation": 0.9996403244497117,
+        "target_crest_db": 17.836703875286233,
+        "target_stereo_correlation": 0.9999999999999667
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00004584491444694738,
+        "desired_added_rms": 0.005093786052874366,
+        "energy_ratio": 0.00008100296824753942,
+        "excess_persistent_peak_energy": 0.00007198485773130923,
+        "hf_envelope_nmse": 0.9853872371450667,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.00037877882622510263
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 7336.912109375,
+          "power": 1.6691021919250488,
+          "transition": 741.6309814453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605011,
+        "version": 3
+      },
+      "scene_seed": 605011,
+      "scores": {
+        "crest_db": 25.1191753032224,
+        "full_error": 865.5990128564091,
+        "full_nmse": 0.047974323760280504,
+        "full_target_energy": 18042.964340292932,
+        "high_error": 865.5869746325906,
+        "high_nmse": 0.9942133670231663,
+        "high_target_energy": 870.6249617466885,
+        "known_error": 1.4459906086972553e-7,
+        "log1p_db": 0.8204864470516084,
+        "lsd_db": 6.897350249992449,
+        "peak": 0.40784767270088196,
+        "stereo_correlation": 0.999977793745318,
+        "target_crest_db": 26.19518062132149,
+        "target_stereo_correlation": 0.9999999999999768
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00035260415934729633,
+        "desired_added_rms": 0.005093786052874366,
+        "energy_ratio": 0.00479174239255064,
+        "excess_persistent_peak_energy": 1.7901735838932658,
+        "hf_envelope_nmse": 0.9308325547392166,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.007480732598262031
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 7336.912109375,
+          "power": 1.6691021919250488,
+          "transition": 741.6309814453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605011,
+        "version": 3
+      },
+      "scene_seed": 605011,
+      "scores": {
+        "crest_db": 25.1099861119083,
+        "full_error": 857.9632048284085,
+        "full_nmse": 0.04755112234592374,
+        "full_target_energy": 18042.964340292932,
+        "high_error": 857.8439558296502,
+        "high_nmse": 0.9853197341236386,
+        "high_target_energy": 870.6249617466885,
+        "known_error": 1.5044547357297913e-7,
+        "log1p_db": 0.8150135606664078,
+        "lsd_db": 21.78938241942436,
+        "peak": 0.4074650704860687,
+        "stereo_correlation": 0.9978486349918165,
+        "target_crest_db": 26.19518062132149,
+        "target_stereo_correlation": 0.9999999999999768
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00023036971251905628,
+        "desired_added_rms": 0.005093786052874366,
+        "energy_ratio": 0.002045358127275091,
+        "excess_persistent_peak_energy": 0.2479630641602558,
+        "hf_envelope_nmse": 0.9452979443274411,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.004281956813144458
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 7336.912109375,
+          "power": 1.6691021919250488,
+          "transition": 741.6309814453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605011,
+        "version": 3
+      },
+      "scene_seed": 605011,
+      "scores": {
+        "crest_db": 25.111978742133378,
+        "full_error": 859.4102605881164,
+        "full_nmse": 0.047631322901243604,
+        "full_target_energy": 18042.964340292932,
+        "high_error": 859.317984577223,
+        "high_nmse": 0.9870128038291242,
+        "high_target_energy": 870.6249617466885,
+        "known_error": 1.4541004980987607e-7,
+        "log1p_db": 0.8115411356052579,
+        "lsd_db": 17.058463131098033,
+        "peak": 0.40753018856048584,
+        "stereo_correlation": 0.999497167464771,
+        "target_crest_db": 26.19518062132149,
+        "target_stereo_correlation": 0.9999999999999768
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0002602042063427324,
+        "desired_added_rms": 0.005093786052874366,
+        "energy_ratio": 0.002609439462207961,
+        "excess_persistent_peak_energy": 0.6909342064026861,
+        "hf_envelope_nmse": 0.9394703718506847,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.004929337576997037
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 7336.912109375,
+          "power": 1.6691021919250488,
+          "transition": 741.6309814453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605011,
+        "version": 3
+      },
+      "scene_seed": 605011,
+      "scores": {
+        "crest_db": 25.11334646036374,
+        "full_error": 860.5476394576004,
+        "full_nmse": 0.04769436015210953,
+        "full_target_energy": 18042.964340292932,
+        "high_error": 860.4741934262852,
+        "high_nmse": 0.98834082553751,
+        "high_target_energy": 870.6249617466885,
+        "known_error": 1.4755787743618926e-7,
+        "log1p_db": 0.8143608194960608,
+        "lsd_db": 18.6918329749762,
+        "peak": 0.40760019421577454,
+        "stereo_correlation": 0.9991287367960903,
+        "target_crest_db": 26.19518062132149,
+        "target_stereo_correlation": 0.9999999999999768
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00008005402523220996,
+        "desired_added_rms": 0.005093786052874366,
+        "energy_ratio": 0.0002469931720228123,
+        "excess_persistent_peak_energy": 0.0003235499027386549,
+        "hf_envelope_nmse": 0.9764994270281587,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0007456656132670926
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 7336.912109375,
+          "power": 1.6691021919250488,
+          "transition": 741.6309814453125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605011,
+        "version": 3
+      },
+      "scene_seed": 605011,
+      "scores": {
+        "crest_db": 25.115108750520974,
+        "full_error": 863.550361310345,
+        "full_nmse": 0.047860780802071075,
+        "full_target_energy": 18042.964340292932,
+        "high_error": 863.5016325760517,
+        "high_nmse": 0.991818142732382,
+        "high_target_energy": 870.6249617466885,
+        "known_error": 1.4475164266003483e-7,
+        "log1p_db": 0.8156270351121805,
+        "lsd_db": 6.776747599609477,
+        "peak": 0.40765848755836487,
+        "stereo_correlation": 0.9999292430519383,
+        "target_crest_db": 26.19518062132149,
+        "target_stereo_correlation": 0.9999999999999768
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.008500083824895711,
+        "desired_added_rms": 0.0068147071525907175,
+        "energy_ratio": 1.555793747520255,
+        "excess_persistent_peak_energy": 114.89270343544658,
+        "hf_envelope_nmse": 0.22138809077875637,
+        "legitimate_persistent_peak_energy": 33.64202237940123,
+        "quiet_spectral_rms": 0.004158938730518593
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 4707.2353515625,
+          "power": 2.84049129486084,
+          "transition": 371.7150573730469
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605012,
+        "version": 3
+      },
+      "scene_seed": 605012,
+      "scores": {
+        "crest_db": 12.32721861899254,
+        "full_error": 1751.7540212519762,
+        "full_nmse": 0.031472641905921486,
+        "full_target_energy": 55659.579722869996,
+        "high_error": 1630.5319908507622,
+        "high_nmse": 1.5147401390246422,
+        "high_target_energy": 1076.4433772123314,
+        "known_error": 1.0092216502433483e-7,
+        "log1p_db": 0.7882256846747303,
+        "lsd_db": 12.383743661004367,
+        "peak": 0.1694718599319458,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 12.477834880415323,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.01637877845316185,
+        "desired_added_rms": 0.0068147071525907175,
+        "energy_ratio": 5.776551127401601,
+        "excess_persistent_peak_energy": 606.0744804095539,
+        "hf_envelope_nmse": 3.2086304886751185,
+        "legitimate_persistent_peak_energy": 33.64202237940123,
+        "quiet_spectral_rms": 0.011533902489396121
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 4707.2353515625,
+          "power": 2.84049129486084,
+          "transition": 371.7150573730469
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605012,
+        "version": 3
+      },
+      "scene_seed": 605012,
+      "scores": {
+        "crest_db": 13.57027187616021,
+        "full_error": 6264.004515352918,
+        "full_nmse": 0.11254135490317219,
+        "full_target_energy": 55659.579722869996,
+        "high_error": 6208.390184315931,
+        "high_nmse": 5.767502792756102,
+        "high_target_energy": 1076.4433772123314,
+        "known_error": 9.551084885016119e-8,
+        "log1p_db": 1.306690130615798,
+        "lsd_db": 16.13651489494484,
+        "peak": 0.20662082731723785,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 12.477834880415323,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.016104350315116263,
+        "desired_added_rms": 0.0068147071525907175,
+        "energy_ratio": 5.58459936791556,
+        "excess_persistent_peak_energy": 574.1065604610092,
+        "hf_envelope_nmse": 3.04188089062627,
+        "legitimate_persistent_peak_energy": 33.64202237940123,
+        "quiet_spectral_rms": 0.008667047307379253
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 4707.2353515625,
+          "power": 2.84049129486084,
+          "transition": 371.7150573730469
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605012,
+        "version": 3
+      },
+      "scene_seed": 605012,
+      "scores": {
+        "crest_db": 13.500973051901987,
+        "full_error": 6025.372670751714,
+        "full_nmse": 0.10825400947603536,
+        "full_target_energy": 55659.579722869996,
+        "high_error": 5971.326672170492,
+        "high_nmse": 5.547274291040235,
+        "high_target_energy": 1076.4433772123314,
+        "known_error": 1.0078571735598355e-7,
+        "log1p_db": 1.3025147484765327,
+        "lsd_db": 16.199545057888336,
+        "peak": 0.20449131727218628,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 12.477834880415323,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.016172178085270453,
+        "desired_added_rms": 0.0068147071525907175,
+        "energy_ratio": 5.631740494933238,
+        "excess_persistent_peak_energy": 554.898118642483,
+        "hf_envelope_nmse": 3.0732251938198427,
+        "legitimate_persistent_peak_energy": 33.64202237940123,
+        "quiet_spectral_rms": 0.00998427692436068
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 4707.2353515625,
+          "power": 2.84049129486084,
+          "transition": 371.7150573730469
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605012,
+        "version": 3
+      },
+      "scene_seed": 605012,
+      "scores": {
+        "crest_db": 13.546138669575994,
+        "full_error": 6083.5952618013,
+        "full_nmse": 0.10930005745806248,
+        "full_target_energy": 55659.579722869996,
+        "high_error": 6027.240220822912,
+        "high_nmse": 5.599217151980325,
+        "high_target_energy": 1076.4433772123314,
+        "known_error": 9.695929832268505e-8,
+        "log1p_db": 1.297361386105592,
+        "lsd_db": 15.994150087703499,
+        "peak": 0.20567773282527924,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 12.477834880415323,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.012519012159239793,
+        "desired_added_rms": 0.0068147071525907175,
+        "energy_ratio": 3.374782023612302,
+        "excess_persistent_peak_energy": 246.2145581408278,
+        "hf_envelope_nmse": 1.3001073221601784,
+        "legitimate_persistent_peak_energy": 33.64202237940123,
+        "quiet_spectral_rms": 0.0064099502379033665
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 4707.2353515625,
+          "power": 2.84049129486084,
+          "transition": 371.7150573730469
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605012,
+        "version": 3
+      },
+      "scene_seed": 605012,
+      "scores": {
+        "crest_db": 13.246772444744328,
+        "full_error": 3742.650383258528,
+        "full_nmse": 0.06724180099622111,
+        "full_target_energy": 55659.579722869996,
+        "high_error": 3691.8676801573642,
+        "high_nmse": 3.4296905515998484,
+        "high_target_energy": 1076.4433772123314,
+        "known_error": 9.783888356160728e-8,
+        "log1p_db": 1.1321320809396356,
+        "lsd_db": 15.343263164744183,
+        "peak": 0.19306722283363342,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 12.477834880415323,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.02833602405571442,
+        "desired_added_rms": 0.04259471897809825,
+        "energy_ratio": 0.44255404079082,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.17205862344319933,
+        "legitimate_persistent_peak_energy": 11499.992252182421,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 3586.763671875,
+          "power": 2.8495962619781494,
+          "transition": 466.1654357910156
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605013,
+        "version": 3
+      },
+      "scene_seed": 605013,
+      "scores": {
+        "crest_db": 16.733133743790404,
+        "full_error": 41586.32861712383,
+        "full_nmse": 0.15536427984729928,
+        "full_target_energy": 267669.81868674833,
+        "high_error": 40487.65896953686,
+        "high_nmse": 0.6977169621784618,
+        "high_target_energy": 58028.772646036,
+        "known_error": 1.0657303200845193e-7,
+        "log1p_db": 1.9353948045483875,
+        "lsd_db": 14.830762893656146,
+        "peak": 0.5725506544113159,
+        "stereo_correlation": 0.6209357735962227,
+        "target_crest_db": 15.62739254492865,
+        "target_stereo_correlation": 0.6218543016967792
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.05481074404506561,
+        "desired_added_rms": 0.04259471897809825,
+        "energy_ratio": 1.6558457608234645,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.14760692053308777,
+        "legitimate_persistent_peak_energy": 11499.992252182421,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 3586.763671875,
+          "power": 2.8495962619781494,
+          "transition": 466.1654357910156
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605013,
+        "version": 3
+      },
+      "scene_seed": 605013,
+      "scores": {
+        "crest_db": 17.606567306628122,
+        "full_error": 72694.53530369115,
+        "full_nmse": 0.2715828615282358,
+        "full_target_energy": 267669.81868674833,
+        "high_error": 68939.20976317026,
+        "high_nmse": 1.188017712931579,
+        "high_target_energy": 58028.772646036,
+        "known_error": 1.0922836750569841e-7,
+        "log1p_db": 2.3528363586318237,
+        "lsd_db": 15.18640046432103,
+        "peak": 0.7264220118522644,
+        "stereo_correlation": 0.6374935556360185,
+        "target_crest_db": 15.62739254492865,
+        "target_stereo_correlation": 0.6218543016967792
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.05337948958020032,
+        "desired_added_rms": 0.04259471897809825,
+        "energy_ratio": 1.5704977510062377,
+        "excess_persistent_peak_energy": 9.684303578146341,
+        "hf_envelope_nmse": 0.13159811012666706,
+        "legitimate_persistent_peak_energy": 11499.992252182421,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 3586.763671875,
+          "power": 2.8495962619781494,
+          "transition": 466.1654357910156
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605013,
+        "version": 3
+      },
+      "scene_seed": 605013,
+      "scores": {
+        "crest_db": 17.59099010194585,
+        "full_error": 69565.81528038092,
+        "full_nmse": 0.259894132336949,
+        "full_target_energy": 267669.81868674833,
+        "high_error": 66263.57497628259,
+        "high_nmse": 1.1419089523136607,
+        "high_target_energy": 58028.772646036,
+        "known_error": 1.1552972315688964e-7,
+        "log1p_db": 2.319798886041051,
+        "lsd_db": 15.151899815873067,
+        "peak": 0.7189658880233765,
+        "stereo_correlation": 0.6387496539894608,
+        "target_crest_db": 15.62739254492865,
+        "target_stereo_correlation": 0.6218543016967792
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.05508682463492617,
+        "desired_added_rms": 0.04259471897809825,
+        "energy_ratio": 1.67256869360062,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.1565443907374672,
+        "legitimate_persistent_peak_energy": 11499.992252182421,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 3586.763671875,
+          "power": 2.8495962619781494,
+          "transition": 466.1654357910156
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605013,
+        "version": 3
+      },
+      "scene_seed": 605013,
+      "scores": {
+        "crest_db": 17.621312722195892,
+        "full_error": 73403.3899679059,
+        "full_nmse": 0.2742311043061947,
+        "full_target_energy": 267669.81868674833,
+        "high_error": 69824.97579806054,
+        "high_nmse": 1.20328196882569,
+        "high_target_energy": 58028.772646036,
+        "known_error": 1.0529940259764977e-7,
+        "log1p_db": 2.3698879425004074,
+        "lsd_db": 15.2850774121002,
+        "peak": 0.7288659811019897,
+        "stereo_correlation": 0.6395462626148328,
+        "target_crest_db": 15.62739254492865,
+        "target_stereo_correlation": 0.6218543016967792
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.04149962136881451,
+        "desired_added_rms": 0.04259471897809825,
+        "energy_ratio": 0.9492415812277349,
+        "excess_persistent_peak_energy": 2.979890475047455,
+        "hf_envelope_nmse": 0.06741980340911163,
+        "legitimate_persistent_peak_energy": 11499.992252182421,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 3586.763671875,
+          "power": 2.8495962619781494,
+          "transition": 466.1654357910156
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605013,
+        "version": 3
+      },
+      "scene_seed": 605013,
+      "scores": {
+        "crest_db": 17.310123688411956,
+        "full_error": 52049.14189823773,
+        "full_nmse": 0.19445278572535063,
+        "full_target_energy": 267669.81868674833,
+        "high_error": 50180.21768181835,
+        "high_nmse": 0.8647471830553392,
+        "high_target_energy": 58028.772646036,
+        "known_error": 1.1613414371647103e-7,
+        "log1p_db": 2.080566760352848,
+        "lsd_db": 14.435202024145038,
+        "peak": 0.6510487794876099,
+        "stereo_correlation": 0.6288038274453391,
+        "target_crest_db": 15.62739254492865,
+        "target_stereo_correlation": 0.6218543016967792
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.015639240585886796,
+        "desired_added_rms": 0.02930152144804308,
+        "energy_ratio": 0.2848727965161146,
+        "excess_persistent_peak_energy": 819.1719710166439,
+        "hf_envelope_nmse": 0.24309541857172604,
+        "legitimate_persistent_peak_energy": 4162.106164163415,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6753.396484375,
+          "power": 3.025848388671875,
+          "transition": 599.5570068359375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7737.85693359375,
+          10050.283203125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605014,
+        "version": 3
+      },
+      "scene_seed": 605014,
+      "scores": {
+        "crest_db": 8.934084908489917,
+        "full_error": 18942.90233054004,
+        "full_nmse": 0.02932044803012144,
+        "full_target_energy": 646064.5591458782,
+        "high_error": 18505.075694631454,
+        "high_nmse": 0.6621805498533195,
+        "high_target_energy": 27945.664817141696,
+        "known_error": 1.0074874629464633e-7,
+        "log1p_db": 1.2973829023813288,
+        "lsd_db": 19.693610944830226,
+        "peak": 0.3817194402217865,
+        "stereo_correlation": 0.9968765974917024,
+        "target_crest_db": 9.021358258550427,
+        "target_stereo_correlation": 0.9999999999999452
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.031000350081280943,
+        "desired_added_rms": 0.02930152144804308,
+        "energy_ratio": 1.1193163669274993,
+        "excess_persistent_peak_energy": 3199.4034218708302,
+        "hf_envelope_nmse": 0.0043437031259011966,
+        "legitimate_persistent_peak_energy": 4162.106164163415,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6753.396484375,
+          "power": 3.025848388671875,
+          "transition": 599.5570068359375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7737.85693359375,
+          10050.283203125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605014,
+        "version": 3
+      },
+      "scene_seed": 605014,
+      "scores": {
+        "crest_db": 9.200591691792333,
+        "full_error": 25386.107898486036,
+        "full_nmse": 0.03929345378741628,
+        "full_target_energy": 646064.5591458782,
+        "high_error": 23692.508030752444,
+        "high_nmse": 0.8478062048543432,
+        "high_target_energy": 27945.664817141696,
+        "known_error": 1.1428494522751078e-7,
+        "log1p_db": 1.4162737339166513,
+        "lsd_db": 22.409521967928022,
+        "peak": 0.40155211091041565,
+        "stereo_correlation": 0.9888903863275357,
+        "target_crest_db": 9.021358258550427,
+        "target_stereo_correlation": 0.9999999999999452
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.031203327825752376,
+        "desired_added_rms": 0.02930152144804308,
+        "energy_ratio": 1.1340220141640347,
+        "excess_persistent_peak_energy": 3671.3805406780943,
+        "hf_envelope_nmse": 0.005012602534485796,
+        "legitimate_persistent_peak_energy": 4162.106164163415,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6753.396484375,
+          "power": 3.025848388671875,
+          "transition": 599.5570068359375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7737.85693359375,
+          10050.283203125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605014,
+        "version": 3
+      },
+      "scene_seed": 605014,
+      "scores": {
+        "crest_db": 9.147704164437688,
+        "full_error": 25205.66064812456,
+        "full_nmse": 0.03901415159105369,
+        "full_target_energy": 646064.5591458782,
+        "high_error": 23562.3274148457,
+        "high_nmse": 0.8431478574234067,
+        "high_target_energy": 27945.664817141696,
+        "known_error": 1.5107580430347065e-7,
+        "log1p_db": 1.4253198226307544,
+        "lsd_db": 23.386528726124933,
+        "peak": 0.3992249667644501,
+        "stereo_correlation": 0.9885087626964767,
+        "target_crest_db": 9.021358258550427,
+        "target_stereo_correlation": 0.9999999999999452
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.03145924966775273,
+        "desired_added_rms": 0.02930152144804308,
+        "energy_ratio": 1.1527002246532438,
+        "excess_persistent_peak_energy": 3362.852363544385,
+        "hf_envelope_nmse": 0.006096624294779016,
+        "legitimate_persistent_peak_energy": 4162.106164163415,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6753.396484375,
+          "power": 3.025848388671875,
+          "transition": 599.5570068359375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7737.85693359375,
+          10050.283203125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605014,
+        "version": 3
+      },
+      "scene_seed": 605014,
+      "scores": {
+        "crest_db": 9.192628396689013,
+        "full_error": 25763.08859026433,
+        "full_nmse": 0.03987695691638636,
+        "full_target_energy": 646064.5591458782,
+        "high_error": 24133.980461063402,
+        "high_nmse": 0.8636037331364459,
+        "high_target_energy": 27945.664817141696,
+        "known_error": 1.1908730171550917e-7,
+        "log1p_db": 1.4330605376801453,
+        "lsd_db": 22.856223195011303,
+        "peak": 0.4014137089252472,
+        "stereo_correlation": 0.9884670219273574,
+        "target_crest_db": 9.021358258550427,
+        "target_stereo_correlation": 0.9999999999999452
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.020364825473222558,
+        "desired_added_rms": 0.02930152144804308,
+        "energy_ratio": 0.48303771658710376,
+        "excess_persistent_peak_energy": 1379.7605985654573,
+        "hf_envelope_nmse": 0.11490364446812913,
+        "legitimate_persistent_peak_energy": 4162.106164163415,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6753.396484375,
+          "power": 3.025848388671875,
+          "transition": 599.5570068359375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7737.85693359375,
+          10050.283203125
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605014,
+        "version": 3
+      },
+      "scene_seed": 605014,
+      "scores": {
+        "crest_db": 9.177047801308374,
+        "full_error": 18837.890283656543,
+        "full_nmse": 0.029157906925835628,
+        "full_target_energy": 646064.5591458782,
+        "high_error": 18130.57252257608,
+        "high_nmse": 0.6487794311286128,
+        "high_target_energy": 27945.664817141696,
+        "known_error": 1.1150728359513937e-7,
+        "log1p_db": 1.3020810262629703,
+        "lsd_db": 22.20104745375912,
+        "peak": 0.39438700675964355,
+        "stereo_correlation": 0.9947601103401358,
+        "target_crest_db": 9.021358258550427,
+        "target_stereo_correlation": 0.9999999999999452
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.01738341812659968,
+        "desired_added_rms": 0.037486031559684385,
+        "energy_ratio": 0.2150460253317233,
+        "excess_persistent_peak_energy": 0.14289296330860518,
+        "hf_envelope_nmse": 0.3315143478579389,
+        "legitimate_persistent_peak_energy": 3292.125757973554,
+        "quiet_spectral_rms": 0.006233008685810474
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 3777.261474609375,
+          "power": 1.3276293277740479,
+          "transition": 929.8245239257812
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605015,
+        "version": 3
+      },
+      "scene_seed": 605015,
+      "scores": {
+        "crest_db": 15.491021879262357,
+        "full_error": 32241.862100392016,
+        "full_nmse": 0.16953799871269798,
+        "full_target_energy": 190174.84189505878,
+        "high_error": 29145.62041116438,
+        "high_nmse": 0.6786840100014417,
+        "high_target_energy": 42944.31573701355,
+        "known_error": 8.946037047506258e-8,
+        "log1p_db": 2.2559885493565126,
+        "lsd_db": 15.622079669889393,
+        "peak": 0.39969348907470703,
+        "stereo_correlation": 0.8820051230726846,
+        "target_crest_db": 17.07017307934773,
+        "target_stereo_correlation": 0.8865977728436885
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.03426245909973921,
+        "desired_added_rms": 0.037486031559684385,
+        "energy_ratio": 0.8354070332836921,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.05908491849949126,
+        "legitimate_persistent_peak_energy": 3292.125757973554,
+        "quiet_spectral_rms": 0.012767555683978294
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 3777.261474609375,
+          "power": 1.3276293277740479,
+          "transition": 929.8245239257812
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605015,
+        "version": 3
+      },
+      "scene_seed": 605015,
+      "scores": {
+        "crest_db": 16.414833958450956,
+        "full_error": 36368.22230175803,
+        "full_nmse": 0.19123571729759367,
+        "full_target_energy": 190174.84189505878,
+        "high_error": 32284.676863832123,
+        "high_nmse": 0.7517799808836184,
+        "high_target_energy": 42944.31573701355,
+        "known_error": 1.0179826643580775e-7,
+        "log1p_db": 2.2768554929727878,
+        "lsd_db": 16.204771971846213,
+        "peak": 0.48602011799812317,
+        "stereo_correlation": 0.8896495859827463,
+        "target_crest_db": 17.07017307934773,
+        "target_stereo_correlation": 0.8865977728436885
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.03354689535784965,
+        "desired_added_rms": 0.037486031559684385,
+        "energy_ratio": 0.8008768404704272,
+        "excess_persistent_peak_energy": 7.17463926142677,
+        "hf_envelope_nmse": 0.05997733192005486,
+        "legitimate_persistent_peak_energy": 3292.125757973554,
+        "quiet_spectral_rms": 0.013016117936935629
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 3777.261474609375,
+          "power": 1.3276293277740479,
+          "transition": 929.8245239257812
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605015,
+        "version": 3
+      },
+      "scene_seed": 605015,
+      "scores": {
+        "crest_db": 16.27339728220057,
+        "full_error": 35324.43822665473,
+        "full_nmse": 0.18574716757828183,
+        "full_target_energy": 190174.84189505878,
+        "high_error": 31528.85311125616,
+        "high_nmse": 0.7341798924992896,
+        "high_target_energy": 42944.31573701355,
+        "known_error": 1.0101450556050967e-7,
+        "log1p_db": 2.2570382137969434,
+        "lsd_db": 16.11128160144195,
+        "peak": 0.4759759306907654,
+        "stereo_correlation": 0.8889929323881248,
+        "target_crest_db": 17.07017307934773,
+        "target_stereo_correlation": 0.8865977728436885
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.033886226499894784,
+        "desired_added_rms": 0.037486031559684385,
+        "energy_ratio": 0.8171607264160691,
+        "excess_persistent_peak_energy": 0.17148552044389992,
+        "hf_envelope_nmse": 0.05784025824634275,
+        "legitimate_persistent_peak_energy": 3292.125757973554,
+        "quiet_spectral_rms": 0.013430093485443106
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 3777.261474609375,
+          "power": 1.3276293277740479,
+          "transition": 929.8245239257812
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605015,
+        "version": 3
+      },
+      "scene_seed": 605015,
+      "scores": {
+        "crest_db": 16.09252479716148,
+        "full_error": 35624.03905184782,
+        "full_nmse": 0.1873225643142939,
+        "full_target_energy": 190174.84189505878,
+        "high_error": 32014.005570187837,
+        "high_nmse": 0.7454771375620052,
+        "high_target_energy": 42944.31573701355,
+        "known_error": 9.853762708023042e-8,
+        "log1p_db": 2.2778974175075835,
+        "lsd_db": 16.120457270479562,
+        "peak": 0.46711936593055725,
+        "stereo_correlation": 0.8889620130801916,
+        "target_crest_db": 17.07017307934773,
+        "target_stereo_correlation": 0.8865977728436885
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.026461292532006662,
+        "desired_added_rms": 0.037486031559684385,
+        "energy_ratio": 0.4982911512922254,
+        "excess_persistent_peak_energy": 2.543835753659835,
+        "hf_envelope_nmse": 0.12954380341383662,
+        "legitimate_persistent_peak_energy": 3292.125757973554,
+        "quiet_spectral_rms": 0.01048128974278034
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 3777.261474609375,
+          "power": 1.3276293277740479,
+          "transition": 929.8245239257812
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605015,
+        "version": 3
+      },
+      "scene_seed": 605015,
+      "scores": {
+        "crest_db": 16.037910981439744,
+        "full_error": 32302.737380168448,
+        "full_nmse": 0.16985810035795146,
+        "full_target_energy": 190174.84189505878,
+        "high_error": 28753.366814190405,
+        "high_nmse": 0.6695500049476393,
+        "high_target_energy": 42944.31573701355,
+        "known_error": 9.669747954750764e-8,
+        "log1p_db": 2.1955925937740197,
+        "lsd_db": 15.406568082772885,
+        "peak": 0.4441279172897339,
+        "stereo_correlation": 0.8852355223562391,
+        "target_crest_db": 17.07017307934773,
+        "target_stereo_correlation": 0.8865977728436885
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5038.4326171875,
+          "power": 3.6863198280334473,
+          "transition": 473.4287109375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605016,
+        "version": 3
+      },
+      "scene_seed": 605016,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5038.4326171875,
+          "power": 3.6863198280334473,
+          "transition": 473.4287109375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605016,
+        "version": 3
+      },
+      "scene_seed": 605016,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5038.4326171875,
+          "power": 3.6863198280334473,
+          "transition": 473.4287109375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605016,
+        "version": 3
+      },
+      "scene_seed": 605016,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5038.4326171875,
+          "power": 3.6863198280334473,
+          "transition": 473.4287109375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605016,
+        "version": 3
+      },
+      "scene_seed": 605016,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0,
+        "desired_added_rms": 0.0,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.0,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5038.4326171875,
+          "power": 3.6863198280334473,
+          "transition": 473.4287109375
+        },
+        "family": "silence",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605016,
+        "version": 3
+      },
+      "scene_seed": 605016,
+      "scores": {
+        "crest_db": 0.0,
+        "full_error": 0.0,
+        "full_nmse": 0.0,
+        "full_target_energy": 0.0,
+        "high_error": 0.0,
+        "high_nmse": 0.0,
+        "high_target_energy": 0.0,
+        "known_error": 0.0,
+        "log1p_db": 0.0,
+        "lsd_db": 0.0,
+        "peak": 0.0,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 0.0,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00011433529260700802,
+        "desired_added_rms": 0.00026975951751425606,
+        "energy_ratio": 0.17964166131801912,
+        "excess_persistent_peak_energy": 0.00026657670927897207,
+        "hf_envelope_nmse": 0.3695162459118042,
+        "legitimate_persistent_peak_energy": 0.33465250786046147,
+        "quiet_spectral_rms": 0.00011193923476407591
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 3538.679931640625,
+          "power": 3.074915885925293,
+          "transition": 989.2561645507812
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605017,
+        "version": 3
+      },
+      "scene_seed": 605017,
+      "scores": {
+        "crest_db": 16.762217785833627,
+        "full_error": 1.439058793138442,
+        "full_nmse": 0.11579930521657143,
+        "full_target_energy": 12.427179856105957,
+        "high_error": 1.3159537446101197,
+        "high_nmse": 0.6056243938976261,
+        "high_target_energy": 2.172887614617067,
+        "known_error": 1.0058140695949095e-7,
+        "log1p_db": 1.4268858144665095,
+        "lsd_db": 10.717856213027838,
+        "peak": 0.0038331879768520594,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 20.568603290103816,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00022852369204571797,
+        "desired_added_rms": 0.00026975951751425606,
+        "energy_ratio": 0.7176437576282896,
+        "excess_persistent_peak_energy": 0.07997699800449698,
+        "hf_envelope_nmse": 0.06039233602208714,
+        "legitimate_persistent_peak_energy": 0.33465250786046147,
+        "quiet_spectral_rms": 0.00024128001017160238
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 3538.679931640625,
+          "power": 3.074915885925293,
+          "transition": 989.2561645507812
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605017,
+        "version": 3
+      },
+      "scene_seed": 605017,
+      "scores": {
+        "crest_db": 16.56516209656688,
+        "full_error": 1.3145431912424952,
+        "full_nmse": 0.10577968665968965,
+        "full_target_energy": 12.427179856105957,
+        "high_error": 1.1684038463485495,
+        "high_nmse": 0.5377194101014102,
+        "high_target_energy": 2.172887614617067,
+        "known_error": 1.0805600223399282e-7,
+        "log1p_db": 1.3365877178389096,
+        "lsd_db": 12.035655161225865,
+        "peak": 0.003984977025538683,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 20.568603290103816,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00022730369704189435,
+        "desired_added_rms": 0.00026975951751425606,
+        "energy_ratio": 0.7100017948742199,
+        "excess_persistent_peak_energy": 0.04184255466527131,
+        "hf_envelope_nmse": 0.06100637120419726,
+        "legitimate_persistent_peak_energy": 0.33465250786046147,
+        "quiet_spectral_rms": 0.000233555699711524
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 3538.679931640625,
+          "power": 3.074915885925293,
+          "transition": 989.2561645507812
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605017,
+        "version": 3
+      },
+      "scene_seed": 605017,
+      "scores": {
+        "crest_db": 16.498047230166947,
+        "full_error": 1.2856454068164729,
+        "full_nmse": 0.10345431720655313,
+        "full_target_energy": 12.427179856105957,
+        "high_error": 1.1474484214505567,
+        "high_nmse": 0.5280753655788011,
+        "high_target_energy": 2.172887614617067,
+        "known_error": 9.584434942816572e-8,
+        "log1p_db": 1.3234956013365204,
+        "lsd_db": 11.616683042143976,
+        "peak": 0.003950552549213171,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 20.568603290103816,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.000230276456368053,
+        "desired_added_rms": 0.00026975951751425606,
+        "energy_ratio": 0.7286945526127008,
+        "excess_persistent_peak_energy": 0.038114606934643976,
+        "hf_envelope_nmse": 0.0564156251474134,
+        "legitimate_persistent_peak_energy": 0.33465250786046147,
+        "quiet_spectral_rms": 0.0002432932907233128
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 3538.679931640625,
+          "power": 3.074915885925293,
+          "transition": 989.2561645507812
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605017,
+        "version": 3
+      },
+      "scene_seed": 605017,
+      "scores": {
+        "crest_db": 16.449922093750054,
+        "full_error": 1.2971399247903357,
+        "full_nmse": 0.10437926704287621,
+        "full_target_energy": 12.427179856105957,
+        "high_error": 1.1544345019863906,
+        "high_nmse": 0.5312904791856156,
+        "high_target_energy": 2.172887614617067,
+        "known_error": 1.098034624590348e-7,
+        "log1p_db": 1.3306486391977277,
+        "lsd_db": 11.660454282871498,
+        "peak": 0.003936502616852522,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 20.568603290103816,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0001793953997894384,
+        "desired_added_rms": 0.00026975951751425606,
+        "energy_ratio": 0.44225123284426443,
+        "excess_persistent_peak_energy": 0.0014803450797554794,
+        "hf_envelope_nmse": 0.14484634851050035,
+        "legitimate_persistent_peak_energy": 0.33465250786046147,
+        "quiet_spectral_rms": 0.00018976436257229422
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 3538.679931640625,
+          "power": 3.074915885925293,
+          "transition": 989.2561645507812
+        },
+        "family": "near_silence",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605017,
+        "version": 3
+      },
+      "scene_seed": 605017,
+      "scores": {
+        "crest_db": 16.656611544888026,
+        "full_error": 1.2377975172642288,
+        "full_nmse": 0.09960405591587626,
+        "full_target_energy": 12.427179856105957,
+        "high_error": 1.1287209829345297,
+        "high_nmse": 0.5194566784501862,
+        "high_target_energy": 2.172887614617067,
+        "known_error": 1.0814120147466526e-7,
+        "log1p_db": 1.3224488078546592,
+        "lsd_db": 10.93114060837888,
+        "peak": 0.0039043084252625704,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 20.568603290103816,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.000036980128218782286,
+        "desired_added_rms": 3.3884807555008535e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.0056614984295332085,
+        "hf_envelope_nmse": 319426.0083248855,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0005404666784687212
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 4841.0732421875,
+          "power": 2.4019200801849365,
+          "transition": 884.4013061523438
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605018,
+        "version": 3
+      },
+      "scene_seed": 605018,
+      "scores": {
+        "crest_db": 6.441638125605972,
+        "full_error": 0.02707094474692542,
+        "full_nmse": 1.3352104825927819e-8,
+        "full_target_energy": 2027466.4631420237,
+        "high_error": 0.00924363018820901,
+        "high_nmse": 0.004203651829509717,
+        "high_target_energy": 2.198952378338888,
+        "known_error": 1.0266553019068349e-7,
+        "log1p_db": 0.0006823465519236005,
+        "lsd_db": 0.12035927761106999,
+        "peak": 0.5160423517227173,
+        "stereo_correlation": 0.9999999429848713,
+        "target_crest_db": 6.440585926360037,
+        "target_stereo_correlation": 0.9999999999999587
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00356988896879194,
+        "desired_added_rms": 3.3884807555008535e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 273.6638989657871,
+        "hf_envelope_nmse": 8436397366.923324,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.08774138212429425
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 4841.0732421875,
+          "power": 2.4019200801849365,
+          "transition": 884.4013061523438
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605018,
+        "version": 3
+      },
+      "scene_seed": 605018,
+      "scores": {
+        "crest_db": 6.584431294235651,
+        "full_error": 418.4723363028589,
+        "full_nmse": 0.00020640160708470617,
+        "full_target_energy": 2027466.4631420237,
+        "high_error": 396.2661526684209,
+        "high_nmse": 180.2067914575597,
+        "high_target_energy": 2.198952378338888,
+        "known_error": 1.3614328771556363e-7,
+        "log1p_db": 0.13369831884635092,
+        "lsd_db": 20.85578620948386,
+        "peak": 0.5246513485908508,
+        "stereo_correlation": 0.9991851780697817,
+        "target_crest_db": 6.440585926360037,
+        "target_stereo_correlation": 0.9999999999999587
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.001592415248306589,
+        "desired_added_rms": 3.3884807555008535e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 15.459861028573751,
+        "hf_envelope_nmse": 1370067545.8373914,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.03535931408953429
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 4841.0732421875,
+          "power": 2.4019200801849365,
+          "transition": 884.4013061523438
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605018,
+        "version": 3
+      },
+      "scene_seed": 605018,
+      "scores": {
+        "crest_db": 6.450681970913773,
+        "full_error": 81.58468794363286,
+        "full_nmse": 0.00004023972254376958,
+        "full_target_energy": 2027466.4631420237,
+        "high_error": 62.68134633626625,
+        "high_nmse": 28.505094950540222,
+        "high_target_energy": 2.198952378338888,
+        "known_error": 1.0772364051171086e-7,
+        "log1p_db": 0.05575806963845673,
+        "lsd_db": 14.344252597453409,
+        "peak": 0.5165907740592957,
+        "stereo_correlation": 0.999889546686586,
+        "target_crest_db": 6.440585926360037,
+        "target_stereo_correlation": 0.9999999999999587
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.002589831351994389,
+        "desired_added_rms": 3.3884807555008535e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 140.04357150495477,
+        "hf_envelope_nmse": 4331573489.932535,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.06287103603846281
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 4841.0732421875,
+          "power": 2.4019200801849365,
+          "transition": 884.4013061523438
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605018,
+        "version": 3
+      },
+      "scene_seed": 605018,
+      "scores": {
+        "crest_db": 6.600318280340979,
+        "full_error": 219.73935324175986,
+        "full_nmse": 0.00010838125179206339,
+        "full_target_energy": 2027466.4631420237,
+        "high_error": 203.0324220518958,
+        "high_nmse": 92.33143202731323,
+        "high_target_energy": 2.198952378338888,
+        "known_error": 1.0213178719580547e-7,
+        "log1p_db": 0.09462676769596429,
+        "lsd_db": 18.242052413600014,
+        "peak": 0.5255855917930603,
+        "stereo_correlation": 0.9995962426807523,
+        "target_crest_db": 6.440585926360037,
+        "target_stereo_correlation": 0.9999999999999587
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00006756415410665381,
+        "desired_added_rms": 3.3884807555008535e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.02016816958998888,
+        "hf_envelope_nmse": 1129570.6560035564,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0010158609858136015
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 4841.0732421875,
+          "power": 2.4019200801849365,
+          "transition": 884.4013061523438
+        },
+        "family": "isolated_tone",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605018,
+        "version": 3
+      },
+      "scene_seed": 605018,
+      "scores": {
+        "crest_db": 6.442016111808182,
+        "full_error": 0.09562017284255793,
+        "full_nmse": 4.716239433838653e-8,
+        "full_target_energy": 2027466.4631420237,
+        "high_error": 0.03485911757972651,
+        "high_nmse": 0.01585260232241112,
+        "high_target_energy": 2.198952378338888,
+        "known_error": 1.0328825987699031e-7,
+        "log1p_db": 0.0012970715775638636,
+        "lsd_db": 0.25715228515191196,
+        "peak": 0.5160648226737976,
+        "stereo_correlation": 0.9999997901076068,
+        "target_crest_db": 6.440585926360037,
+        "target_stereo_correlation": 0.9999999999999587
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0003561942389469155,
+        "desired_added_rms": 2.5347596519059037e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 0.5213535542225998,
+        "hf_envelope_nmse": 172310731.43697843,
+        "legitimate_persistent_peak_energy": 8.644586851902503e-10,
+        "quiet_spectral_rms": 0.009260541618530314
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6371.8310546875,
+          "power": 1.42958664894104,
+          "transition": 381.3147277832031
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605019,
+        "version": 3
+      },
+      "scene_seed": 605019,
+      "scores": {
+        "crest_db": 9.079607899139807,
+        "full_error": 3.7479236186247777,
+        "full_nmse": 3.425592873410573e-6,
+        "full_target_energy": 1094094.87850005,
+        "high_error": 3.7352368295930645,
+        "high_nmse": 8.272335891553256,
+        "high_target_energy": 0.4515335062019245,
+        "known_error": 1.0691081289787964e-7,
+        "log1p_db": 0.017157855889742463,
+        "lsd_db": 2.758819182400487,
+        "peak": 0.5136124491691589,
+        "stereo_correlation": 0.9999957740383256,
+        "target_crest_db": 9.08029233716174,
+        "target_stereo_correlation": 0.9999999999999696
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0031785224885759853,
+        "desired_added_rms": 2.5347596519059037e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 179.68231086732138,
+        "hf_envelope_nmse": 13656871621.803055,
+        "legitimate_persistent_peak_energy": 8.644586851902503e-10,
+        "quiet_spectral_rms": 0.08244102192072572
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6371.8310546875,
+          "power": 1.42958664894104,
+          "transition": 381.3147277832031
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605019,
+        "version": 3
+      },
+      "scene_seed": 605019,
+      "scores": {
+        "crest_db": 9.311370706869987,
+        "full_error": 333.7246828884823,
+        "full_nmse": 0.0003050235308166348,
+        "full_target_energy": 1094094.87850005,
+        "high_error": 329.96288927425445,
+        "high_nmse": 730.7605852990586,
+        "high_target_energy": 0.4515335062019245,
+        "known_error": 1.2388379989081665e-7,
+        "log1p_db": 0.17154471245496547,
+        "lsd_db": 22.93115316265579,
+        "peak": 0.5275821685791016,
+        "stereo_correlation": 0.9995680225435962,
+        "target_crest_db": 9.08029233716174,
+        "target_stereo_correlation": 0.9999999999999696
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0018663089495467033,
+        "desired_added_rms": 2.5347596519059037e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 17.97082184123607,
+        "hf_envelope_nmse": 4634803069.133886,
+        "legitimate_persistent_peak_energy": 8.644586851902503e-10,
+        "quiet_spectral_rms": 0.04802704980923963
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6371.8310546875,
+          "power": 1.42958664894104,
+          "transition": 381.3147277832031
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605019,
+        "version": 3
+      },
+      "scene_seed": 605019,
+      "scores": {
+        "crest_db": 9.09964139524708,
+        "full_error": 113.21831998845006,
+        "full_nmse": 0.00010348126310916178,
+        "full_target_energy": 1094094.87850005,
+        "high_error": 110.41802719697503,
+        "high_nmse": 244.54005224497428,
+        "high_target_energy": 0.4515335062019245,
+        "known_error": 1.0939283657178631e-7,
+        "log1p_db": 0.09964648985103597,
+        "lsd_db": 17.687769097414318,
+        "peak": 0.5148249268531799,
+        "stereo_correlation": 0.9999126286232947,
+        "target_crest_db": 9.08029233716174,
+        "target_stereo_correlation": 0.9999999999999696
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0022521416710673484,
+        "desired_added_rms": 2.5347596519059037e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 49.256929855426776,
+        "hf_envelope_nmse": 6793660090.573594,
+        "legitimate_persistent_peak_energy": 8.644586851902503e-10,
+        "quiet_spectral_rms": 0.05814617487720578
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6371.8310546875,
+          "power": 1.42958664894104,
+          "transition": 381.3147277832031
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605019,
+        "version": 3
+      },
+      "scene_seed": 605019,
+      "scores": {
+        "crest_db": 9.150542689032346,
+        "full_error": 166.46507007429102,
+        "full_nmse": 0.0001521486603634471,
+        "full_target_energy": 1094094.87850005,
+        "high_error": 163.10584957337807,
+        "high_nmse": 361.2264590181655,
+        "high_target_energy": 0.4515335062019245,
+        "known_error": 1.1762246179242226e-7,
+        "log1p_db": 0.11912947641857204,
+        "lsd_db": 19.758775415036386,
+        "peak": 0.517863392829895,
+        "stereo_correlation": 0.9998457463568811,
+        "target_crest_db": 9.08029233716174,
+        "target_stereo_correlation": 0.9999999999999696
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0007288319202773788,
+        "desired_added_rms": 2.5347596519059037e-8,
+        "energy_ratio": null,
+        "excess_persistent_peak_energy": 2.37964112076583,
+        "hf_envelope_nmse": 723100453.2288536,
+        "legitimate_persistent_peak_energy": 8.644586851902503e-10,
+        "quiet_spectral_rms": 0.018970164464627827
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6371.8310546875,
+          "power": 1.42958664894104,
+          "transition": 381.3147277832031
+        },
+        "family": "stopped_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": true,
+        "seed": 605019,
+        "version": 3
+      },
+      "scene_seed": 605019,
+      "scores": {
+        "crest_db": 9.086325142846938,
+        "full_error": 16.56147994874557,
+        "full_nmse": 0.000015137151516009784,
+        "full_target_energy": 1094094.87850005,
+        "high_error": 16.531770699357537,
+        "high_nmse": 36.61250045077403,
+        "high_target_energy": 0.4515335062019245,
+        "known_error": 1.08368814627956e-7,
+        "log1p_db": 0.035444596508096685,
+        "lsd_db": 4.253326854245196,
+        "peak": 0.5140129923820496,
+        "stereo_correlation": 0.9999825888612827,
+        "target_crest_db": 9.08029233716174,
+        "target_stereo_correlation": 0.9999999999999696
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.007422942420896767,
+        "desired_added_rms": 0.012595116468919573,
+        "energy_ratio": 0.34733440793335846,
+        "excess_persistent_peak_energy": 67.66472830315281,
+        "hf_envelope_nmse": 0.16434702634878592,
+        "legitimate_persistent_peak_energy": 1014.3561825876823,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5350.7177734375,
+          "power": 2.650430202484131,
+          "transition": 667.5554809570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605020,
+        "version": 3
+      },
+      "scene_seed": 605020,
+      "scores": {
+        "crest_db": 5.641379412647998,
+        "full_error": 2414.6190431392138,
+        "full_nmse": 0.0027404460226681396,
+        "full_target_energy": 881104.3980309104,
+        "high_error": 2155.4980135366204,
+        "high_nmse": 0.47452269171848743,
+        "high_target_energy": 4542.455084140378,
+        "known_error": 1.34481124210189e-7,
+        "log1p_db": 0.4279025113107048,
+        "lsd_db": 12.583200920732775,
+        "peak": 0.30963143706321716,
+        "stereo_correlation": 0.9991387340556694,
+        "target_crest_db": 5.4705098704283595,
+        "target_stereo_correlation": 0.9999999999999656
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.014862097767514298,
+        "desired_added_rms": 0.012595116468919573,
+        "energy_ratio": 1.3923738303519813,
+        "excess_persistent_peak_energy": 1200.0978183887576,
+        "hf_envelope_nmse": 0.04694352721726221,
+        "legitimate_persistent_peak_energy": 1014.3561825876823,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5350.7177734375,
+          "power": 2.650430202484131,
+          "transition": 667.5554809570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605020,
+        "version": 3
+      },
+      "scene_seed": 605020,
+      "scores": {
+        "crest_db": 5.741406959230514,
+        "full_error": 3257.390762076283,
+        "full_nmse": 0.00369694075906997,
+        "full_target_energy": 881104.3980309104,
+        "high_error": 3075.6031459772075,
+        "high_nmse": 0.6770794843333581,
+        "high_target_energy": 4542.455084140378,
+        "known_error": 1.0321120883254756e-7,
+        "log1p_db": 0.4632275069287883,
+        "lsd_db": 15.226532585402094,
+        "peak": 0.3142094314098358,
+        "stereo_correlation": 0.9966267265450702,
+        "target_crest_db": 5.4705098704283595,
+        "target_stereo_correlation": 0.9999999999999656
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.014882532641023048,
+        "desired_added_rms": 0.012595116468919573,
+        "energy_ratio": 1.3962053949779631,
+        "excess_persistent_peak_energy": 1230.5829046902568,
+        "hf_envelope_nmse": 0.050816403256066185,
+        "legitimate_persistent_peak_energy": 1014.3561825876823,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5350.7177734375,
+          "power": 2.650430202484131,
+          "transition": 667.5554809570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605020,
+        "version": 3
+      },
+      "scene_seed": 605020,
+      "scores": {
+        "crest_db": 6.015884235058654,
+        "full_error": 3232.2483248481344,
+        "full_nmse": 0.0036684056192110193,
+        "full_target_energy": 881104.3980309104,
+        "high_error": 3041.064769474582,
+        "high_nmse": 0.6694760241201325,
+        "high_target_energy": 4542.455084140378,
+        "known_error": 1.0646062528179851e-7,
+        "log1p_db": 0.4633468300156691,
+        "lsd_db": 15.599621881714443,
+        "peak": 0.3243007957935333,
+        "stereo_correlation": 0.9966061417638442,
+        "target_crest_db": 5.4705098704283595,
+        "target_stereo_correlation": 0.9999999999999656
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.015213619696317328,
+        "desired_added_rms": 0.012595116468919573,
+        "energy_ratio": 1.459018288797348,
+        "excess_persistent_peak_energy": 1311.7508007421154,
+        "hf_envelope_nmse": 0.06385044270030774,
+        "legitimate_persistent_peak_energy": 1014.3561825876823,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5350.7177734375,
+          "power": 2.650430202484131,
+          "transition": 667.5554809570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605020,
+        "version": 3
+      },
+      "scene_seed": 605020,
+      "scores": {
+        "crest_db": 5.751454775965989,
+        "full_error": 3422.200579168095,
+        "full_nmse": 0.0038839898958806913,
+        "full_target_energy": 881104.3980309104,
+        "high_error": 3218.443893402708,
+        "high_nmse": 0.7085251992121286,
+        "high_target_energy": 4542.455084140378,
+        "known_error": 1.4451302639900938e-7,
+        "log1p_db": 0.47012264588555364,
+        "lsd_db": 14.505775193247167,
+        "peak": 0.3146362602710724,
+        "stereo_correlation": 0.9965144889911771,
+        "target_crest_db": 5.4705098704283595,
+        "target_stereo_correlation": 0.9999999999999656
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.008836940681600732,
+        "desired_added_rms": 0.012595116468919573,
+        "energy_ratio": 0.49226561810395253,
+        "excess_persistent_peak_energy": 170.700562765514,
+        "hf_envelope_nmse": 0.08928278200921339,
+        "legitimate_persistent_peak_energy": 1014.3561825876823,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5350.7177734375,
+          "power": 2.650430202484131,
+          "transition": 667.5554809570312
+        },
+        "family": "continued_stack",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605020,
+        "version": 3
+      },
+      "scene_seed": 605020,
+      "scores": {
+        "crest_db": 5.825440072528977,
+        "full_error": 2384.692949620759,
+        "full_nmse": 0.0027064817233350144,
+        "full_target_energy": 881104.3980309104,
+        "high_error": 2110.0786954270675,
+        "high_nmse": 0.46452384367965244,
+        "high_target_energy": 4542.455084140378,
+        "known_error": 1.3408501764301644e-7,
+        "log1p_db": 0.4219315017085419,
+        "lsd_db": 13.82175085097342,
+        "peak": 0.31640177965164185,
+        "stereo_correlation": 0.998776442552857,
+        "target_crest_db": 5.4705098704283595,
+        "target_stereo_correlation": 0.9999999999999656
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00009755852925501085,
+        "desired_added_rms": 0.00011244301753217247,
+        "energy_ratio": 0.7527755506624536,
+        "excess_persistent_peak_energy": 0.01441667117521206,
+        "hf_envelope_nmse": 0.8324688741766489,
+        "legitimate_persistent_peak_energy": 0.0018424332798873265,
+        "quiet_spectral_rms": 0.0009183978542624097
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5426.5380859375,
+          "power": 1.654295563697815,
+          "transition": 845.07763671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605021,
+        "version": 3
+      },
+      "scene_seed": 605021,
+      "scores": {
+        "crest_db": 8.370077846338184,
+        "full_error": 0.37570709908349986,
+        "full_nmse": 1.2192163389621948e-6,
+        "full_target_energy": 308154.5801816471,
+        "high_error": 0.24118471709667166,
+        "high_nmse": 0.40271888461811095,
+        "high_target_energy": 0.598891003895637,
+        "known_error": 1.1859582895940656e-7,
+        "log1p_db": 0.00866454855875582,
+        "lsd_db": 2.0017439540032567,
+        "peak": 0.2511967122554779,
+        "stereo_correlation": 0.9999998522269951,
+        "target_crest_db": 8.369251935275487,
+        "target_stereo_correlation": 0.9999999999999637
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0016117315504104316,
+        "desired_added_rms": 0.00011244301753217247,
+        "energy_ratio": 205.45675819619572,
+        "excess_persistent_peak_energy": 53.341123579637305,
+        "hf_envelope_nmse": 368.43413551454745,
+        "legitimate_persistent_peak_energy": 0.0018424332798873265,
+        "quiet_spectral_rms": 0.041124898590943204
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5426.5380859375,
+          "power": 1.654295563697815,
+          "transition": 845.07763671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605021,
+        "version": 3
+      },
+      "scene_seed": 605021,
+      "scores": {
+        "crest_db": 8.840408713105134,
+        "full_error": 84.54055948408617,
+        "full_nmse": 0.00027434464687901855,
+        "full_target_energy": 308154.5801816471,
+        "high_error": 81.82897202192773,
+        "high_nmse": 136.63416463037618,
+        "high_target_energy": 0.598891003895637,
+        "known_error": 1.0569842221248205e-7,
+        "log1p_db": 0.15877827472077619,
+        "lsd_db": 22.35787480782293,
+        "peak": 0.2652110755443573,
+        "stereo_correlation": 0.9999987114253585,
+        "target_crest_db": 8.369251935275487,
+        "target_stereo_correlation": 0.9999999999999637
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0007325443794851718,
+        "desired_added_rms": 0.00011244301753217247,
+        "energy_ratio": 42.44268959388045,
+        "excess_persistent_peak_energy": 7.890829564247349,
+        "hf_envelope_nmse": 70.83526828792692,
+        "legitimate_persistent_peak_energy": 0.0018424332798873265,
+        "quiet_spectral_rms": 0.017855484376816277
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5426.5380859375,
+          "power": 1.654295563697815,
+          "transition": 845.07763671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605021,
+        "version": 3
+      },
+      "scene_seed": 605021,
+      "scores": {
+        "crest_db": 8.384006204704985,
+        "full_error": 17.1588630427371,
+        "full_nmse": 0.0000556826480807863,
+        "full_target_energy": 308154.5801816471,
+        "high_error": 15.886279829719557,
+        "high_nmse": 26.52616206685901,
+        "high_target_energy": 0.598891003895637,
+        "known_error": 1.0454573055259548e-7,
+        "log1p_db": 0.07186581887673948,
+        "lsd_db": 15.826017751803693,
+        "peak": 0.2516070604324341,
+        "stereo_correlation": 0.9999988291693268,
+        "target_crest_db": 8.369251935275487,
+        "target_stereo_correlation": 0.9999999999999637
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.001094800828454667,
+        "desired_added_rms": 0.00011244301753217247,
+        "energy_ratio": 94.79932630698374,
+        "excess_persistent_peak_energy": 20.68806808698001,
+        "hf_envelope_nmse": 169.70703562939545,
+        "legitimate_persistent_peak_energy": 0.0018424332798873265,
+        "quiet_spectral_rms": 0.028130264698430645
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5426.5380859375,
+          "power": 1.654295563697815,
+          "transition": 845.07763671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605021,
+        "version": 3
+      },
+      "scene_seed": 605021,
+      "scores": {
+        "crest_db": 8.431319830995745,
+        "full_error": 38.98908102789314,
+        "full_nmse": 0.00012652442486790346,
+        "full_target_energy": 308154.5801816471,
+        "high_error": 37.69287523610791,
+        "high_nmse": 62.937788330305736,
+        "high_target_energy": 0.598891003895637,
+        "known_error": 1.151081279364425e-7,
+        "log1p_db": 0.10661883026554893,
+        "lsd_db": 19.118761664173316,
+        "peak": 0.2529904544353485,
+        "stereo_correlation": 0.999998088590217,
+        "target_crest_db": 8.369251935275487,
+        "target_stereo_correlation": 0.9999999999999637
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0001863626649025577,
+        "desired_added_rms": 0.00011244301753217247,
+        "energy_ratio": 2.7469631934493,
+        "excess_persistent_peak_energy": 0.08647053390797144,
+        "hf_envelope_nmse": 2.314045835615564,
+        "legitimate_persistent_peak_energy": 0.0018424332798873265,
+        "quiet_spectral_rms": 0.0016909060696579557
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5426.5380859375,
+          "power": 1.654295563697815,
+          "transition": 845.07763671875
+        },
+        "family": "weak_upper",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605021,
+        "version": 3
+      },
+      "scene_seed": 605021,
+      "scores": {
+        "crest_db": 8.373113839239817,
+        "full_error": 0.905348221125855,
+        "full_nmse": 2.937967758234136e-6,
+        "full_target_energy": 308154.5801816471,
+        "high_error": 0.5539058816791127,
+        "high_nmse": 0.9248859610114241,
+        "high_target_energy": 0.598891003895637,
+        "known_error": 1.2230913808302015e-7,
+        "log1p_db": 0.013151291621822133,
+        "lsd_db": 2.5913514953468195,
+        "peak": 0.2512848675251007,
+        "stereo_correlation": 0.9999994955379388,
+        "target_crest_db": 8.369251935275487,
+        "target_stereo_correlation": 0.9999999999999637
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.008721855675564019,
+        "desired_added_rms": 0.041541751166592596,
+        "energy_ratio": 0.04408067050314548,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.6366697976035373,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.017202384407843444
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6270.115234375,
+          "power": 1.90470552444458,
+          "transition": 943.4793701171875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605022,
+        "version": 3
+      },
+      "scene_seed": 605022,
+      "scores": {
+        "crest_db": 18.74539447981204,
+        "full_error": 44109.25942757087,
+        "full_nmse": 0.56816751101368,
+        "full_target_energy": 77634.2514707935,
+        "high_error": 42952.58061806309,
+        "high_nmse": 0.7626475458427997,
+        "high_target_energy": 56320.35512629404,
+        "known_error": 1.1218123480118253e-7,
+        "log1p_db": 5.584880002395976,
+        "lsd_db": 18.27036338619867,
+        "peak": 0.2190232127904892,
+        "stereo_correlation": 0.9952670426225526,
+        "target_crest_db": 18.75377665555686,
+        "target_stereo_correlation": 0.9999999999999754
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.017560226179414985,
+        "desired_added_rms": 0.041541751166592596,
+        "energy_ratio": 0.1786860344962551,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.3556641798380005,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.035034400940820096
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6270.115234375,
+          "power": 1.90470552444458,
+          "transition": 943.4793701171875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605022,
+        "version": 3
+      },
+      "scene_seed": 605022,
+      "scores": {
+        "crest_db": 18.037580232412175,
+        "full_error": 35147.20590948004,
+        "full_nmse": 0.45272808384972507,
+        "full_target_energy": 77634.2514707935,
+        "high_error": 34282.498203041956,
+        "high_nmse": 0.6087052918286134,
+        "high_target_energy": 56320.35512629404,
+        "known_error": 1.2638147028832505e-7,
+        "log1p_db": 4.7065873154112925,
+        "lsd_db": 18.562031121411092,
+        "peak": 0.2356233149766922,
+        "stereo_correlation": 0.9883352201128834,
+        "target_crest_db": 18.75377665555686,
+        "target_stereo_correlation": 0.9999999999999754
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.017313829165433545,
+        "desired_added_rms": 0.041541751166592596,
+        "energy_ratio": 0.17370673449844465,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.3619969626846121,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.031892925608685306
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6270.115234375,
+          "power": 1.90470552444458,
+          "transition": 943.4793701171875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605022,
+        "version": 3
+      },
+      "scene_seed": 605022,
+      "scores": {
+        "crest_db": 18.050893799752416,
+        "full_error": 35211.094168569696,
+        "full_nmse": 0.45355102292467303,
+        "full_target_energy": 77634.2514707935,
+        "high_error": 34343.32716622034,
+        "high_nmse": 0.6097853447338549,
+        "high_target_energy": 56320.35512629404,
+        "known_error": 1.293457535711561e-7,
+        "log1p_db": 4.710873025473176,
+        "lsd_db": 17.635882109082115,
+        "peak": 0.23481279611587524,
+        "stereo_correlation": 0.9884295685591904,
+        "target_crest_db": 18.75377665555686,
+        "target_stereo_correlation": 0.9999999999999754
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0180069816313416,
+        "desired_added_rms": 0.041541751166592596,
+        "energy_ratio": 0.18789371059302548,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.3433742982632939,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.03621391945791076
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6270.115234375,
+          "power": 1.90470552444458,
+          "transition": 943.4793701171875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605022,
+        "version": 3
+      },
+      "scene_seed": 605022,
+      "scores": {
+        "crest_db": 18.04772075665253,
+        "full_error": 34401.55720250781,
+        "full_nmse": 0.44312344810138204,
+        "full_target_energy": 77634.2514707935,
+        "high_error": 33550.75411597093,
+        "high_nmse": 0.595712758570786,
+        "high_target_energy": 56320.35512629404,
+        "known_error": 1.2524210606925735e-7,
+        "log1p_db": 4.641443319568307,
+        "lsd_db": 17.882307732137875,
+        "peak": 0.23802031576633453,
+        "stereo_correlation": 0.9879733437970725,
+        "target_crest_db": 18.75377665555686,
+        "target_stereo_correlation": 0.9999999999999754
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.013942434415756702,
+        "desired_added_rms": 0.041541751166592596,
+        "energy_ratio": 0.11264388500616304,
+        "excess_persistent_peak_energy": 0.0,
+        "hf_envelope_nmse": 0.46112832414354527,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.02656598932450726
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6270.115234375,
+          "power": 1.90470552444458,
+          "transition": 943.4793701171875
+        },
+        "family": "cymbal_bursts",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605022,
+        "version": 3
+      },
+      "scene_seed": 605022,
+      "scores": {
+        "crest_db": 18.32223463469866,
+        "full_error": 38760.14554677292,
+        "full_nmse": 0.4992660431762484,
+        "full_target_energy": 77634.2514707935,
+        "high_error": 37789.47004388816,
+        "high_nmse": 0.6709735753467498,
+        "high_target_energy": 56320.35512629404,
+        "known_error": 1.1905782051407499e-7,
+        "log1p_db": 5.033727588234593,
+        "lsd_db": 16.78517073969765,
+        "peak": 0.22703464329242706,
+        "stereo_correlation": 0.9905470083610114,
+        "target_crest_db": 18.75377665555686,
+        "target_stereo_correlation": 0.9999999999999754
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00008096186920721257,
+        "desired_added_rms": 0.008395579872665922,
+        "energy_ratio": 0.00009299501254564959,
+        "excess_persistent_peak_energy": 0.0022256111676917773,
+        "hf_envelope_nmse": 0.989377040736426,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0008744031305609663
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 4865.15966796875,
+          "power": 1.968908667564392,
+          "transition": 915.8194580078125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605023,
+        "version": 3
+      },
+      "scene_seed": 605023,
+      "scores": {
+        "crest_db": 23.18369953229553,
+        "full_error": 2352.7178041458574,
+        "full_nmse": 0.02982142673073585,
+        "full_target_energy": 78893.53602659787,
+        "high_error": 2349.1269732972924,
+        "high_nmse": 0.9948341706099696,
+        "high_target_energy": 2361.3251762924024,
+        "known_error": 9.703609440263987e-8,
+        "log1p_db": 0.589297672725809,
+        "lsd_db": 4.9549344214459135,
+        "peak": 0.6889856457710266,
+        "stereo_correlation": 0.9999994386344008,
+        "target_crest_db": 23.11364819188269,
+        "target_stereo_correlation": 0.9999999999999757
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0007648913944155414,
+        "desired_added_rms": 0.008395579872665922,
+        "energy_ratio": 0.008300383419919372,
+        "excess_persistent_peak_energy": 11.001200390653423,
+        "hf_envelope_nmse": 0.9127458110740425,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.013464696117105764
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 4865.15966796875,
+          "power": 1.968908667564392,
+          "transition": 915.8194580078125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605023,
+        "version": 3
+      },
+      "scene_seed": 605023,
+      "scores": {
+        "crest_db": 23.181653337149637,
+        "full_error": 2351.4829262571056,
+        "full_nmse": 0.029805774271092825,
+        "full_target_energy": 78893.53602659787,
+        "high_error": 2347.8928558323178,
+        "high_nmse": 0.9943115329498264,
+        "high_target_energy": 2361.3251762924024,
+        "known_error": 9.456729857701501e-8,
+        "log1p_db": 0.601386631858522,
+        "lsd_db": 22.00009486498205,
+        "peak": 0.6889106035232544,
+        "stereo_correlation": 0.9999099489724849,
+        "target_crest_db": 23.11364819188269,
+        "target_stereo_correlation": 0.9999999999999757
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00046014603837953824,
+        "desired_added_rms": 0.008395579872665922,
+        "energy_ratio": 0.0030039311832056152,
+        "excess_persistent_peak_energy": 1.5690927189529558,
+        "hf_envelope_nmse": 0.9371606810559141,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.00749243173619084
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 4865.15966796875,
+          "power": 1.968908667564392,
+          "transition": 915.8194580078125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605023,
+        "version": 3
+      },
+      "scene_seed": 605023,
+      "scores": {
+        "crest_db": 23.1843481830241,
+        "full_error": 2340.4991781223666,
+        "full_nmse": 0.02966655186216143,
+        "full_target_energy": 78893.53602659787,
+        "high_error": 2337.106295445078,
+        "high_nmse": 0.989743521523219,
+        "high_target_energy": 2361.3251762924024,
+        "known_error": 1.0212288902562235e-7,
+        "log1p_db": 0.5871947821895337,
+        "lsd_db": 15.975733973682999,
+        "peak": 0.6890680193901062,
+        "stereo_correlation": 0.9999830796455299,
+        "target_crest_db": 23.11364819188269,
+        "target_stereo_correlation": 0.9999999999999757
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.0005627510047275363,
+        "desired_added_rms": 0.008395579872665922,
+        "energy_ratio": 0.0044929456253193075,
+        "excess_persistent_peak_energy": 4.560032636207728,
+        "hf_envelope_nmse": 0.9264482732443119,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.008493573393906158
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 4865.15966796875,
+          "power": 1.968908667564392,
+          "transition": 915.8194580078125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605023,
+        "version": 3
+      },
+      "scene_seed": 605023,
+      "scores": {
+        "crest_db": 23.180496697002432,
+        "full_error": 2348.2893779235837,
+        "full_nmse": 0.029765295057023307,
+        "full_target_energy": 78893.53602659787,
+        "high_error": 2344.727853624333,
+        "high_nmse": 0.9929711829464634,
+        "high_target_energy": 2361.3251762924024,
+        "known_error": 9.961919900340521e-8,
+        "log1p_db": 0.5922772882743021,
+        "lsd_db": 18.59693094516339,
+        "peak": 0.6887784004211426,
+        "stereo_correlation": 0.9999651965654781,
+        "target_crest_db": 23.11364819188269,
+        "target_stereo_correlation": 0.9999999999999757
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00014680802395352342,
+        "desired_added_rms": 0.008395579872665922,
+        "energy_ratio": 0.0003057723357111114,
+        "excess_persistent_peak_energy": 0.009396809569837728,
+        "hf_envelope_nmse": 0.9810262707300677,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0018182707929792507
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 4865.15966796875,
+          "power": 1.968908667564392,
+          "transition": 915.8194580078125
+        },
+        "family": "modal_transients",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605023,
+        "version": 3
+      },
+      "scene_seed": 605023,
+      "scores": {
+        "crest_db": 23.18987558694912,
+        "full_error": 2345.0149751343315,
+        "full_nmse": 0.02972379098768931,
+        "full_target_energy": 78893.53602659787,
+        "high_error": 2341.6487939013978,
+        "high_nmse": 0.9916672288134838,
+        "high_target_energy": 2361.3251762924024,
+        "known_error": 1.005650815858756e-7,
+        "log1p_db": 0.5842676610512134,
+        "lsd_db": 5.163820751254618,
+        "peak": 0.6894779801368713,
+        "stereo_correlation": 0.9999980322610285,
+        "target_crest_db": 23.11364819188269,
+        "target_stereo_correlation": 0.9999999999999757
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.008885387540629328,
+        "desired_added_rms": 0.0029344292747648455,
+        "energy_ratio": 9.168651292855182,
+        "excess_persistent_peak_energy": 14.208246666554656,
+        "hf_envelope_nmse": 7.091743865728488,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.003719299004834377
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6303.81103515625,
+          "power": 3.0030126571655273,
+          "transition": 736.5184936523438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605024,
+        "version": 3
+      },
+      "scene_seed": 605024,
+      "scores": {
+        "crest_db": 13.361316991922266,
+        "full_error": 1729.4786162165183,
+        "full_nmse": 0.010039272453099601,
+        "full_target_energy": 172271.30992769758,
+        "high_error": 1690.4123166278139,
+        "high_nmse": 9.249862926048975,
+        "high_target_energy": 182.749985609772,
+        "known_error": 1.08402964085121e-7,
+        "log1p_db": 0.7541181809610025,
+        "lsd_db": 15.858140940921182,
+        "peak": 0.33544403314590454,
+        "stereo_correlation": 0.9999883673559165,
+        "target_crest_db": 12.81273563248574,
+        "target_stereo_correlation": 0.9999999999999803
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.01686730441649615,
+        "desired_added_rms": 0.0029344292747648455,
+        "energy_ratio": 33.040306903567405,
+        "excess_persistent_peak_energy": 36.612886494213626,
+        "hf_envelope_nmse": 34.97243665090502,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.024606105955551457
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6303.81103515625,
+          "power": 3.0030126571655273,
+          "transition": 736.5184936523438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605024,
+        "version": 3
+      },
+      "scene_seed": 605024,
+      "scores": {
+        "crest_db": 13.630176193102779,
+        "full_error": 7368.546491310963,
+        "full_nmse": 0.04277291729193647,
+        "full_target_energy": 172271.30992769758,
+        "high_error": 7119.4830894654415,
+        "high_nmse": 38.95750287317532,
+        "high_target_energy": 182.749985609772,
+        "known_error": 1.1510146340414781e-7,
+        "log1p_db": 1.355057608356049,
+        "lsd_db": 21.750859980740426,
+        "peak": 0.3527064025402069,
+        "stereo_correlation": 0.9999593003079648,
+        "target_crest_db": 12.81273563248574,
+        "target_stereo_correlation": 0.9999999999999803
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.016941616655230723,
+        "desired_added_rms": 0.0029344292747648455,
+        "energy_ratio": 33.33207940808624,
+        "excess_persistent_peak_energy": 87.07090586028376,
+        "hf_envelope_nmse": 35.4109047665561,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.015919970900859785
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6303.81103515625,
+          "power": 3.0030126571655273,
+          "transition": 736.5184936523438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605024,
+        "version": 3
+      },
+      "scene_seed": 605024,
+      "scores": {
+        "crest_db": 13.563546795226088,
+        "full_error": 7447.5929968723585,
+        "full_nmse": 0.043231766218055225,
+        "full_target_energy": 172271.30992769758,
+        "high_error": 7202.479651770795,
+        "high_nmse": 39.411656464643045,
+        "high_target_energy": 182.749985609772,
+        "known_error": 1.1391775269521191e-7,
+        "log1p_db": 1.3725397034762583,
+        "lsd_db": 21.693628787976596,
+        "peak": 0.3500921130180359,
+        "stereo_correlation": 0.9999612950337511,
+        "target_crest_db": 12.81273563248574,
+        "target_stereo_correlation": 0.9999999999999803
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.016730791186456487,
+        "desired_added_rms": 0.0029344292747648455,
+        "energy_ratio": 32.507656683451884,
+        "excess_persistent_peak_energy": 40.17240016098604,
+        "hf_envelope_nmse": 34.37417605173536,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.018021254084996375
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6303.81103515625,
+          "power": 3.0030126571655273,
+          "transition": 736.5184936523438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605024,
+        "version": 3
+      },
+      "scene_seed": 605024,
+      "scores": {
+        "crest_db": 13.5029619709219,
+        "full_error": 7251.456286665065,
+        "full_nmse": 0.042093232411760884,
+        "full_target_energy": 172271.30992769758,
+        "high_error": 7006.500780361756,
+        "high_nmse": 38.33926857495251,
+        "high_target_energy": 182.749985609772,
+        "known_error": 1.0810362295752553e-7,
+        "log1p_db": 1.3570417624838622,
+        "lsd_db": 21.279195815599753,
+        "peak": 0.34743326902389526,
+        "stereo_correlation": 0.9999635314615103,
+        "target_crest_db": 12.81273563248574,
+        "target_stereo_correlation": 0.9999999999999803
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.012898711789165154,
+        "desired_added_rms": 0.0029344292747648455,
+        "energy_ratio": 19.321702215206738,
+        "excess_persistent_peak_energy": 71.78042788535238,
+        "hf_envelope_nmse": 18.92465756081855,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0062262249095264895
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6303.81103515625,
+          "power": 3.0030126571655273,
+          "transition": 736.5184936523438
+        },
+        "family": "fm_events",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605024,
+        "version": 3
+      },
+      "scene_seed": 605024,
+      "scores": {
+        "crest_db": 13.466980800342913,
+        "full_error": 4128.437734107324,
+        "full_nmse": 0.023964743379730688,
+        "full_target_energy": 172271.30992769758,
+        "high_error": 4048.3005659728265,
+        "high_nmse": 22.152125224333563,
+        "high_target_energy": 182.749985609772,
+        "known_error": 1.1417048227843504e-7,
+        "log1p_db": 1.1268628878026827,
+        "lsd_db": 19.72310580918345,
+        "peak": 0.3423781096935272,
+        "stereo_correlation": 0.9999752116692933,
+        "target_crest_db": 12.81273563248574,
+        "target_stereo_correlation": 0.9999999999999803
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.00894246795764065,
+        "desired_added_rms": 0.023468609956317475,
+        "energy_ratio": 0.1451911185560705,
+        "excess_persistent_peak_energy": 0.9414890551958867,
+        "hf_envelope_nmse": 0.5729359961237692,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.002806130624972574
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6345.96533203125,
+          "power": 1.0769697427749634,
+          "transition": 773.2655029296875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605025,
+        "version": 3
+      },
+      "scene_seed": 605025,
+      "scores": {
+        "crest_db": 15.584943405844738,
+        "full_error": 14837.250840991495,
+        "full_nmse": 0.037413478162041255,
+        "full_target_energy": 396575.01974903216,
+        "high_error": 14581.38020801816,
+        "high_nmse": 0.8056132254451501,
+        "high_target_energy": 18099.72794322122,
+        "known_error": 1.1142668581949029e-7,
+        "log1p_db": 1.2377289858122618,
+        "lsd_db": 15.159613872324181,
+        "peak": 0.6400969624519348,
+        "stereo_correlation": 0.7716801043680308,
+        "target_crest_db": 15.980389250441345,
+        "target_stereo_correlation": 0.7775573244583668
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.017296782024838284,
+        "desired_added_rms": 0.023468609956317475,
+        "energy_ratio": 0.543195158740461,
+        "excess_persistent_peak_energy": 5.5035360206838835,
+        "hf_envelope_nmse": 0.4232845048480585,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.03227390779241093
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6345.96533203125,
+          "power": 1.0769697427749634,
+          "transition": 773.2655029296875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605025,
+        "version": 3
+      },
+      "scene_seed": 605025,
+      "scores": {
+        "crest_db": 15.937131898686056,
+        "full_error": 16542.23527326391,
+        "full_nmse": 0.041712751558916815,
+        "full_target_energy": 396575.01974903216,
+        "high_error": 16171.43496030966,
+        "high_nmse": 0.8934628747481395,
+        "high_target_energy": 18099.72794322122,
+        "known_error": 1.0921840494061806e-7,
+        "log1p_db": 1.3669605939259413,
+        "lsd_db": 15.090037743565306,
+        "peak": 0.673024594783783,
+        "stereo_correlation": 0.7624139873200708,
+        "target_crest_db": 15.980389250441345,
+        "target_stereo_correlation": 0.7775573244583668
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.017134924304799216,
+        "desired_added_rms": 0.023468609956317475,
+        "energy_ratio": 0.5330766332566942,
+        "excess_persistent_peak_energy": 39.72743139824296,
+        "hf_envelope_nmse": 0.42295306306004693,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.015755816653750344
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6345.96533203125,
+          "power": 1.0769697427749634,
+          "transition": 773.2655029296875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605025,
+        "version": 3
+      },
+      "scene_seed": 605025,
+      "scores": {
+        "crest_db": 15.948466753963624,
+        "full_error": 15898.205562751535,
+        "full_nmse": 0.040088772038169546,
+        "full_target_energy": 396575.01974903216,
+        "high_error": 15537.8070881336,
+        "high_nmse": 0.8584552837962893,
+        "high_target_energy": 18099.72794322122,
+        "known_error": 1.121459858843425e-7,
+        "log1p_db": 1.347449448525373,
+        "lsd_db": 14.71308773081265,
+        "peak": 0.6737401485443115,
+        "stereo_correlation": 0.7624620138919099,
+        "target_crest_db": 15.980389250441345,
+        "target_stereo_correlation": 0.7775573244583668
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.017056080870475332,
+        "desired_added_rms": 0.023468609956317475,
+        "energy_ratio": 0.5281821971011706,
+        "excess_persistent_peak_energy": 3.641304766651632,
+        "hf_envelope_nmse": 0.41341275012449674,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.021494030180163076
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6345.96533203125,
+          "power": 1.0769697427749634,
+          "transition": 773.2655029296875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605025,
+        "version": 3
+      },
+      "scene_seed": 605025,
+      "scores": {
+        "crest_db": 15.874614094642682,
+        "full_error": 16019.821508228646,
+        "full_nmse": 0.04039543771154976,
+        "full_target_energy": 396575.01974903216,
+        "high_error": 15644.889676211737,
+        "high_nmse": 0.8643715378092808,
+        "high_target_energy": 18099.72794322122,
+        "known_error": 1.083505877136902e-7,
+        "log1p_db": 1.3489353357607425,
+        "lsd_db": 14.815872501036962,
+        "peak": 0.6679579019546509,
+        "stereo_correlation": 0.7630971538088124,
+        "target_crest_db": 15.980389250441345,
+        "target_stereo_correlation": 0.7775573244583668
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.013768120232911555,
+        "desired_added_rms": 0.023468609956317475,
+        "energy_ratio": 0.344171231277962,
+        "excess_persistent_peak_energy": 18.93026260712941,
+        "hf_envelope_nmse": 0.4323085264702356,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0046190844098334405
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6345.96533203125,
+          "power": 1.0769697427749634,
+          "transition": 773.2655029296875
+        },
+        "family": "dense_mix",
+        "gap": null,
+        "mono": false,
+        "no_upper": false,
+        "seed": 605025,
+        "version": 3
+      },
+      "scene_seed": 605025,
+      "scores": {
+        "crest_db": 15.88345110136861,
+        "full_error": 13938.696965169791,
+        "full_nmse": 0.03514769279716794,
+        "full_target_energy": 396575.01974903216,
+        "high_error": 13680.86706613312,
+        "high_nmse": 0.7558603703353968,
+        "high_target_energy": 18099.72794322122,
+        "known_error": 1.0561978703762787e-7,
+        "log1p_db": 1.245954432451853,
+        "lsd_db": 14.472235260212118,
+        "peak": 0.6656894683837891,
+        "stereo_correlation": 0.7677933845584677,
+        "target_crest_db": 15.980389250441345,
+        "target_stereo_correlation": 0.7775573244583668
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.02440296642149789,
+        "desired_added_rms": 0.05016696491385748,
+        "energy_ratio": 0.23661898679984614,
+        "excess_persistent_peak_energy": 241.03404456648374,
+        "hf_envelope_nmse": 0.26880751468328534,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 6305.5302734375,
+          "power": 3.084796905517578,
+          "transition": 531.6771240234375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7979.9375,
+          9089.623046875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605026,
+        "version": 3
+      },
+      "scene_seed": 605026,
+      "scores": {
+        "crest_db": 11.682112984005018,
+        "full_error": 61468.33194330918,
+        "full_nmse": 0.09237270958256,
+        "full_target_energy": 665438.2254357344,
+        "high_error": 61356.969274075884,
+        "high_nmse": 0.7266109247646213,
+        "high_target_energy": 84442.67376512663,
+        "known_error": 1.1789921401553302e-7,
+        "log1p_db": 1.9580610887203806,
+        "lsd_db": 21.3940430012953,
+        "peak": 0.5136436223983765,
+        "stereo_correlation": 0.9851372464230302,
+        "target_crest_db": 12.745267259102711,
+        "target_stereo_correlation": 0.9999999999999616
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.047876271156882956,
+        "desired_added_rms": 0.05016696491385748,
+        "energy_ratio": 0.9107621670546027,
+        "excess_persistent_peak_energy": 611.8656470287052,
+        "hf_envelope_nmse": 0.009261990604087535,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 6305.5302734375,
+          "power": 3.084796905517578,
+          "transition": 531.6771240234375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7979.9375,
+          9089.623046875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605026,
+        "version": 3
+      },
+      "scene_seed": 605026,
+      "scores": {
+        "crest_db": 13.20066769978367,
+        "full_error": 75327.62016297213,
+        "full_nmse": 0.1132000196015896,
+        "full_target_energy": 665438.2254357344,
+        "high_error": 74834.35412233863,
+        "high_nmse": 0.8862148814767152,
+        "high_target_energy": 84442.67376512663,
+        "known_error": 1.3588599607670113e-7,
+        "log1p_db": 2.158184723022445,
+        "lsd_db": 24.538275858026008,
+        "peak": 0.6401156187057495,
+        "stereo_correlation": 0.9498812309838877,
+        "target_crest_db": 12.745267259102711,
+        "target_stereo_correlation": 0.9999999999999616
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.046992033433994745,
+        "desired_added_rms": 0.05016696491385748,
+        "energy_ratio": 0.8774306927501306,
+        "excess_persistent_peak_energy": 1218.5368051776193,
+        "hf_envelope_nmse": 0.01144196552842439,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 6305.5302734375,
+          "power": 3.084796905517578,
+          "transition": 531.6771240234375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7979.9375,
+          9089.623046875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605026,
+        "version": 3
+      },
+      "scene_seed": 605026,
+      "scores": {
+        "crest_db": 13.795285606386516,
+        "full_error": 72214.99970411981,
+        "full_nmse": 0.10852246977070311,
+        "full_target_energy": 665438.2254357344,
+        "high_error": 71708.56025963277,
+        "high_nmse": 0.849198125335145,
+        "high_target_energy": 84442.67376512663,
+        "known_error": 1.2287071949183524e-7,
+        "log1p_db": 2.1463034661095404,
+        "lsd_db": 25.183761756647513,
+        "peak": 0.6840019822120667,
+        "stereo_correlation": 0.9528404030769093,
+        "target_crest_db": 12.745267259102711,
+        "target_stereo_correlation": 0.9999999999999616
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.047437769238689476,
+        "desired_added_rms": 0.05016696491385748,
+        "energy_ratio": 0.8941551082663783,
+        "excess_persistent_peak_energy": 757.7503859184504,
+        "hf_envelope_nmse": 0.010313374851166807,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 6305.5302734375,
+          "power": 3.084796905517578,
+          "transition": 531.6771240234375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7979.9375,
+          9089.623046875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605026,
+        "version": 3
+      },
+      "scene_seed": 605026,
+      "scores": {
+        "crest_db": 13.461303385528057,
+        "full_error": 72427.17279064062,
+        "full_nmse": 0.10884131692797587,
+        "full_target_energy": 665438.2254357344,
+        "high_error": 71900.88940844024,
+        "high_nmse": 0.8514757551191382,
+        "high_target_energy": 84442.67376512663,
+        "known_error": 1.3129672222961945e-7,
+        "log1p_db": 2.15267971850127,
+        "lsd_db": 24.855226776054888,
+        "peak": 0.6589125394821167,
+        "stereo_correlation": 0.9485994010103813,
+        "target_crest_db": 12.745267259102711,
+        "target_stereo_correlation": 0.9999999999999616
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.03218823683478351,
+        "desired_added_rms": 0.05016696491385748,
+        "energy_ratio": 0.4116790076143241,
+        "excess_persistent_peak_energy": 1182.661791452526,
+        "hf_envelope_nmse": 0.13468852270948936,
+        "legitimate_persistent_peak_energy": 0.0,
+        "quiet_spectral_rms": 0.0
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 6305.5302734375,
+          "power": 3.084796905517578,
+          "transition": 531.6771240234375
+        },
+        "family": "spectral_gaps",
+        "gap": [
+          7979.9375,
+          9089.623046875
+        ],
+        "mono": false,
+        "no_upper": false,
+        "seed": 605026,
+        "version": 3
+      },
+      "scene_seed": 605026,
+      "scores": {
+        "crest_db": 13.27106830915627,
+        "full_error": 61116.583133212574,
+        "full_nmse": 0.09184411234144678,
+        "full_target_energy": 665438.2254357344,
+        "high_error": 60873.55904024651,
+        "high_nmse": 0.7208862098512356,
+        "high_target_energy": 84442.67376512663,
+        "known_error": 1.1678502535335633e-7,
+        "log1p_db": 2.008144920398524,
+        "lsd_db": 24.4125623626529,
+        "peak": 0.6242957711219788,
+        "stereo_correlation": 0.973527387628633,
+        "target_crest_db": 12.745267259102711,
+        "target_stereo_correlation": 0.9999999999999616
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.002604441487946161,
+        "desired_added_rms": 0.006442763600777414,
+        "energy_ratio": 0.16341232796699096,
+        "excess_persistent_peak_energy": 0.10513849800941857,
+        "hf_envelope_nmse": 0.3713819131379688,
+        "legitimate_persistent_peak_energy": 81.12615673884416,
+        "quiet_spectral_rms": 0.00037043190181991237
+      },
+      "method": "gated_prior",
+      "recipe": {
+        "damage": {
+          "cutoff": 5938.08544921875,
+          "power": 3.3055474758148193,
+          "transition": 473.72357177734375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605027,
+        "version": 3
+      },
+      "scene_seed": 605027,
+      "scores": {
+        "crest_db": 15.703050671504396,
+        "full_error": 855.7517065224165,
+        "full_nmse": 0.06569401612012293,
+        "full_target_energy": 13026.326552446664,
+        "high_error": 845.6256522101473,
+        "high_nmse": 0.6160178619071662,
+        "high_target_energy": 1372.7291114451207,
+        "known_error": 9.411334731673421e-8,
+        "log1p_db": 1.07935653570337,
+        "lsd_db": 10.033988639146633,
+        "peak": 0.11460934579372406,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 17.688383701914383,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.005139061300470832,
+        "desired_added_rms": 0.006442763600777414,
+        "energy_ratio": 0.6362432727841666,
+        "excess_persistent_peak_energy": 0.04268950313984493,
+        "hf_envelope_nmse": 0.06014005120274612,
+        "legitimate_persistent_peak_energy": 81.12615673884416,
+        "quiet_spectral_rms": 0.0015939271641588904
+      },
+      "method": "diagonal",
+      "recipe": {
+        "damage": {
+          "cutoff": 5938.08544921875,
+          "power": 3.3055474758148193,
+          "transition": 473.72357177734375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605027,
+        "version": 3
+      },
+      "scene_seed": 605027,
+      "scores": {
+        "crest_db": 15.822086116467812,
+        "full_error": 767.8113290556627,
+        "full_nmse": 0.058943043225908445,
+        "full_target_energy": 13026.326552446664,
+        "high_error": 739.8707410641565,
+        "high_nmse": 0.5389779636022057,
+        "high_target_energy": 1372.7291114451207,
+        "known_error": 1.0270089954295288e-7,
+        "log1p_db": 1.0506486885212631,
+        "lsd_db": 11.546977044487367,
+        "peak": 0.119379922747612,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 17.688383701914383,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.004993452791937056,
+        "desired_added_rms": 0.006442763600777414,
+        "energy_ratio": 0.6006998230279604,
+        "excess_persistent_peak_energy": 2.786975216331153,
+        "hf_envelope_nmse": 0.07045509698274664,
+        "legitimate_persistent_peak_energy": 81.12615673884416,
+        "quiet_spectral_rms": 0.0010465005550244887
+      },
+      "method": "rotation",
+      "recipe": {
+        "damage": {
+          "cutoff": 5938.08544921875,
+          "power": 3.3055474758148193,
+          "transition": 473.72357177734375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605027,
+        "version": 3
+      },
+      "scene_seed": 605027,
+      "scores": {
+        "crest_db": 15.809344256655324,
+        "full_error": 755.3199944698847,
+        "full_nmse": 0.0579841132823449,
+        "full_target_energy": 13026.326552446664,
+        "high_error": 736.034678651172,
+        "high_nmse": 0.5361834847928024,
+        "high_target_energy": 1372.7291114451207,
+        "known_error": 1.0024861396046077e-7,
+        "log1p_db": 1.0497439435925544,
+        "lsd_db": 11.43441029813939,
+        "peak": 0.11897006630897522,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 17.688383701914383,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.005149727510911945,
+        "desired_added_rms": 0.006442763600777414,
+        "energy_ratio": 0.6388870813664264,
+        "excess_persistent_peak_energy": 0.10390319888869232,
+        "hf_envelope_nmse": 0.059162734633277175,
+        "legitimate_persistent_peak_energy": 81.12615673884416,
+        "quiet_spectral_rms": 0.0012271866385645603
+      },
+      "method": "transport",
+      "recipe": {
+        "damage": {
+          "cutoff": 5938.08544921875,
+          "power": 3.3055474758148193,
+          "transition": 473.72357177734375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605027,
+        "version": 3
+      },
+      "scene_seed": 605027,
+      "scores": {
+        "crest_db": 15.798752770286367,
+        "full_error": 764.7260380950303,
+        "full_nmse": 0.058706192802405674,
+        "full_target_energy": 13026.326552446664,
+        "high_error": 741.1893153690492,
+        "high_nmse": 0.5399385131337185,
+        "high_target_energy": 1372.7291114451207,
+        "known_error": 9.919927966425379e-8,
+        "log1p_db": 1.0522476061115864,
+        "lsd_db": 11.396485478535118,
+        "peak": 0.11907853186130524,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 17.688383701914383,
+        "target_stereo_correlation": 1.0
+      }
+    },
+    {
+      "failures": {
+        "added_rms": 0.004075570634323956,
+        "desired_added_rms": 0.006442763600777414,
+        "energy_ratio": 0.40015887727818206,
+        "excess_persistent_peak_energy": 0.8932404819784432,
+        "hf_envelope_nmse": 0.1527785983829198,
+        "legitimate_persistent_peak_energy": 81.12615673884416,
+        "quiet_spectral_rms": 0.0005747539469973766
+      },
+      "method": "basis",
+      "recipe": {
+        "damage": {
+          "cutoff": 5938.08544921875,
+          "power": 3.3055474758148193,
+          "transition": 473.72357177734375
+        },
+        "family": "stereo_ambience",
+        "gap": null,
+        "mono": true,
+        "no_upper": false,
+        "seed": 605027,
+        "version": 3
+      },
+      "scene_seed": 605027,
+      "scores": {
+        "crest_db": 15.843485568242905,
+        "full_error": 767.1241571294919,
+        "full_nmse": 0.05889029067718306,
+        "full_target_energy": 13026.326552446664,
+        "high_error": 750.3705344789851,
+        "high_nmse": 0.5466268094868647,
+        "high_target_energy": 1372.7291114451207,
+        "known_error": 1.015634956975794e-7,
+        "log1p_db": 1.04091907617871,
+        "lsd_db": 10.869199855659462,
+        "peak": 0.11808761954307556,
+        "stereo_correlation": 1.0,
+        "target_crest_db": 17.688383701914383,
+        "target_stereo_correlation": 1.0
+      }
+    }
+  ],
+  "seed": 605004,
+  "summary": {
+    "basis": {
+      "maximum_known_error": 1.4475164266003483e-7,
+      "mean_crest_error_db": 0.6465300335797352,
+      "mean_high_nmse": 3.7931089445658905,
+      "mean_log1p_db": 1.0946716538930221,
+      "mean_lsd_db": 10.413210526869959,
+      "mean_stereo_correlation_error": 0.0038232769361766414,
+      "pooled_full_nmse": 0.028871992401103594,
+      "pooled_high_nmse": 0.7131903905105645,
+      "scenes": 24
+    },
+    "diagonal": {
+      "maximum_known_error": 1.5044547357297913e-7,
+      "mean_crest_error_db": 0.7349700581110832,
+      "mean_high_nmse": 103.87988199428737,
+      "mean_log1p_db": 1.1578519880729965,
+      "mean_lsd_db": 17.33931962878455,
+      "mean_stereo_correlation_error": 0.007352870887009917,
+      "pooled_full_nmse": 0.03263597033965818,
+      "pooled_high_nmse": 0.8010042218166981,
+      "scenes": 24
+    },
+    "gated_prior": {
+      "maximum_known_error": 1.4459906086972553e-7,
+      "mean_crest_error_db": 0.6184801369624332,
+      "mean_high_nmse": 1.3926995790666552,
+      "mean_log1p_db": 1.1098438459706077,
+      "mean_lsd_db": 9.65970809977599,
+      "mean_stereo_correlation_error": 0.0021943956505010853,
+      "pooled_full_nmse": 0.029517843071047756,
+      "pooled_high_nmse": 0.7324140132447888,
+      "scenes": 24
+    },
+    "rotation": {
+      "maximum_known_error": 1.5107580430347065e-7,
+      "mean_crest_error_db": 0.7242471693040414,
+      "mean_high_nmse": 29.00594824802933,
+      "mean_log1p_db": 1.134486144963853,
+      "mean_lsd_db": 15.30782878771202,
+      "mean_stereo_correlation_error": 0.00713747764427899,
+      "pooled_full_nmse": 0.03184517568290463,
+      "pooled_high_nmse": 0.7826108422217061,
+      "scenes": 24
+    },
+    "transport": {
+      "maximum_known_error": 1.5633736693663414e-7,
+      "mean_crest_error_db": 0.7369760827469554,
+      "mean_high_nmse": 54.364990854237654,
+      "mean_log1p_db": 1.1409096968376142,
+      "mean_lsd_db": 16.179354031655905,
+      "mean_stereo_correlation_error": 0.007399722319657613,
+      "pooled_full_nmse": 0.032087497196780446,
+      "pooled_high_nmse": 0.7885881260431649,
+      "scenes": 24
+    }
+  }
+}

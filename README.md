@@ -16,12 +16,15 @@ reference and an optional OpenCL model backend. No natural-audio corpus required
 
 ## Build and run
 
-The current learned-control sprint is documented in
-[RICH_SPRINT_RESULTS](docs/RICH_SPRINT_RESULTS.md), with frozen gates and exact
-Adam states under `artifacts/rich-gate-v1`. New opt-in `rich-allocate` and
-`rich-field-*` commands test excitation budgets and bounded coupled complex
-dynamics; prior native defaults and checkpoints remain intact. Their registered
-comparisons and limitations are in [RICH_SPRINT_PLAN](docs/RICH_SPRINT_PLAN.md).
+The current learned-control and coupled complex field sprints are documented in
+[RICH_SPRINT_RESULTS](docs/RICH_SPRINT_RESULTS.md), with frozen gates, allocators,
+and field operators under `artifacts/rich-gate-v1`, `artifacts/rich-allocation-v1`,
+and `artifacts/rich-field-v1`. Opt-in `rich-field-*` subcommands support 1,000-step
+coupled complex field training and streaming full-song restoration (`rich-field-restore-song`)
+with exact equal-power cosine crossfading. The winning 1,000-step **Basis** coupled
+operator is frozen in `artifacts/rich-field-v1/basis.json`. All prior native defaults,
+checkpoints, and frozen evidence remain intact. Registered comparisons and
+provenance are in [RICH_SPRINT_PLAN](docs/RICH_SPRINT_PLAN.md).
 
 Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
 ML framework, service, dataset download, or GPU is required.

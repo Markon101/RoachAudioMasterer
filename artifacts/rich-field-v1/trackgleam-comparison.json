@@ -1,0 +1,55 @@
+{
+  "reference_song": {
+    "description": "Original raw generation before processing",
+    "local_path": "/sdcard/Download/Verse 1 v 77.wav",
+    "format": "16-bit PCM stereo 48000 Hz",
+    "total_samples": 13681920,
+    "total_seconds": 285.04,
+    "rms_linear": 0.1315,
+    "rms_dbfs": -17.6,
+    "peak_linear": 0.5637,
+    "crest_factor_db": 12.6,
+    "spectral_power_above_8khz_pct": 1.368,
+    "spectral_power_above_12khz_pct": 0.385,
+    "spectral_power_above_16khz_pct": 0.0997
+  },
+  "trackgleam_master": {
+    "description": "External commercial mastering via TrackGleam",
+    "local_path": "/sdcard/Download/Verse 1 v 77_TrackGleam_Master_32bit-48k.wav",
+    "format": "32-bit float stereo 48000 Hz",
+    "total_samples": 13271040,
+    "total_seconds": 276.48,
+    "rms_linear": 0.1822,
+    "rms_dbfs": -14.8,
+    "gain_vs_og_db": 2.8,
+    "peak_linear": 0.8822,
+    "crest_factor_db": 13.7,
+    "spectral_power_above_8khz_pct": 2.657,
+    "spectral_power_above_12khz_pct": 0.787,
+    "spectral_power_above_16khz_pct": 0.0937,
+    "notes": "Commercial master with makeup gain (+2.8 dB) and brickwall limiter; prominent 8-12 kHz EQ/exciter boost, roll-off above 16 kHz."
+  },
+  "basis_restored": {
+    "description": "Full-song 48 kHz stereo restoration via frozen Basis coupled field operator",
+    "local_path": "/sdcard/Download/Verse 1 v 77 - Basis Restored.wav",
+    "format": "16-bit PCM stereo 48000 Hz",
+    "total_samples": 13681920,
+    "total_seconds": 285.04,
+    "rms_linear": 0.1319,
+    "rms_dbfs": -17.6,
+    "gain_vs_og_db": 0.0,
+    "peak_linear": 0.6783,
+    "crest_factor_db": 13.5,
+    "punch_headroom_increase_db": 0.9,
+    "spectral_power_above_8khz_pct": 1.875,
+    "spectral_power_above_12khz_pct": 0.698,
+    "spectral_power_above_16khz_pct": 0.2228,
+    "top_octave_expansion_factor": 2.23,
+    "clipping_detected": false,
+    "notes": "Exact volume match to OG raw; punchier transient attacks (+0.9 dB crest factor); authentic harmonic and noise air extension through 16-24 kHz."
+  },
+  "user_listening_evaluation": {
+    "verdict": "Owner prefers Basis bite and high-band definition for full-song restoration; TrackGleam balance and master loudness are noted.",
+    "qualifications": "Owner confirmed Basis restored song feels punchier, highs definitely better, and definition is very good. The slight top-octave bite/scratchiness was preferred over heavy damping to preserve high-band strength."
+  }
+}

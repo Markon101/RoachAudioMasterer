@@ -58,6 +58,21 @@ explicit residual-band previews. The owner prefers the half-band undegraded
 preview. Raw checkpoints remain unchanged; controlled magnitude error worsens
 under suppression. Public files omit song waveforms and full private PSD arrays.
 
+`rich-gate-v1/` contains the learned contribution authorization gate checkpoints
+(400, 1600, 4000 steps), ambiguity probes, and primary/legacy evaluation receipts.
+Gate V1 implements component-level shrink gating ($[0, 1]$) across deterministic harmonic,
+noise, residual, and flow delta contributions.
+
+`rich-allocation-v1/` contains the 6-output bidirectional component allocator
+checkpoints and causal lesion probes. It established that unconstrained harmonic boost
+causes high-frequency streakiness, whereas permitting noise boost with capped harmonic
+boost ($H \le 1.0$) achieved the project's lowest synthetic NMSE (0.6016).
+
+`rich-field-v1/` contains the 1,000-step coupled complex field operator models
+(`basis.json`, `transport.json`, `rotation.json`, `diagonal.json`), development receipts,
+full-song restoration receipt, and comparative metrics with the commercial TrackGleam master.
+`basis.json` is the winning operator favored in listening tests for full-length song restoration.
+
 ```sh
 sha256sum -c artifacts/SHA256SUMS
 ```

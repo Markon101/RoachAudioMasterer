@@ -34,6 +34,15 @@ ultrasonic frame-grid tones remain. The preview changes only the added residual
 and worsens controlled-reference magnitude matching, so it is an explicit local
 listening adjustment with mixed evidence, not a trained/general repair.
 
+The subsequent [learned-control and coupled-field sprints](docs/RICH_SPRINT_RESULTS.md)
+implemented component authorization gating (`artifacts/rich-gate-v1/`), bidirectional
+excitation allocation (`artifacts/rich-allocation-v1/`), and 1,000-step coupled complex
+field operators (`artifacts/rich-field-v1/`). The winning **Basis** coupled operator
+(phase transport + constant-energy rotation) was rendered across the entire 285-second
+song (`Verse 1 v 77 - Basis Restored.wav`). In formal listening, the owner confirmed
+Basis made the track feel punchier with significantly better highs and definition,
+preferring its high-band bite and strength.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

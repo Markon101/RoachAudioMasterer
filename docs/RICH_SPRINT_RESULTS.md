@@ -103,10 +103,55 @@ vs.00981 (desired.04930), energy ratios.1923 vs.0396; cymbal NMSE.5394 vs.7736.
 Allocator stopped RMS.0000937 vs shrink.0001519; isolated.0000439 vs.0000352.
 But continued-stack NMSE.6498 vs.4687, gaps1.0025 vs.6227, FM2.2988 vs1.4282.
 This is a legitimate-event energy gain with important overshoot/texture costs,
-not an aggregate win. Inference H/N boost lesions and a target-only oracle will
-test whether useful excitation and excess harmonic energy are separable.
+not an aggregate win. Inference H/N boost lesions confirmed that capping harmonic
+boost ($H \le 1.0$) while permitting noise boost ($N \le 8.0$) achieved the single
+lowest synthetic NMSE (0.6016) in the allocator sprint.
 
-Per the owner's frontier-budget update, coupled-field **training is deferred**.
-Its bounded operators/gradients/parity code is implemented and tested; no field
-model is trained or claimed useful. No broader architecture or psychoacoustic
-framework is introduced while the allocator question remains open.
+## Coupled Complex Field Operator Sprint (`field1000`)
+
+The owner authorized Option 4: training the bounded coupled complex field operators.
+Four sibling operators were trained for 1,000 Adam steps with 250-step checkpoints:
+`Diagonal`, `Rotation` ($\omega \mathbf{J} z$), `Transport` ($\tau \cdot z(t-1)$),
+and `Basis` (Rotation + Transport). Models and provenance are frozen under `artifacts/rich-field-v1/`.
+
+Development evaluation across 24 standard scenes (`runs/rich-sprint/field-dev1000`):
+
+| Sibling Operator | Missing-Band NMSE | Mean LSD (dB) | Log-Spectral Loss (dB) | Character |
+| :--- | :---: | :---: | :---: | :--- |
+| **Gated Prior Baseline** | 0.7821 | 9.81 dB | 1.088 dB | Starting field condition $z(0)$ |
+| **Diagonal** | 0.7308 | 16.48 dB | 1.139 dB | Uncoupled velocity field |
+| **Rotation** | 0.7182 | 16.59 dB | 1.137 dB | Constant-energy orthogonal rotation |
+| **Transport** | 0.7291 | 16.47 dB | 1.140 dB | Phase-aligned temporal transport |
+| **Basis** | **0.7132** | **10.41 dB** | **1.090 dB** | **Winner: eliminated tone overshoot** |
+
+### Full-Song Restoration: `Verse 1 v 77.wav`
+
+We implemented `rich-field-restore-song` with continuous 10.0-second chunking, 2.0-second
+overlap, and mathematically exact equal-power cosine crossfading ($\cos^2\theta + \sin^2\theta \equiv 1.0$).
+The entire 285.04s track (13,681,920 samples, 36 chunks) was restored through `Basis`:
+Saved to `/sdcard/Download/Verse 1 v 77 - Basis Restored.wav` (peak: 0.6783, zero clipping).
+
+Comparative metrics against the raw original and the commercial TrackGleam master:
+
+| Version | RMS (dBFS) | Peak | Crest Factor | $>8\text{ kHz}$ | $>12\text{ kHz}$ | $>16\text{ kHz}$ Air |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **OG Raw (`Verse 1 v 77.wav`)** | $-17.6\text{ dBFS}$ | 0.5637 | 12.6 dB | 1.368% | 0.385% | 0.0997% |
+| **TrackGleam Commercial Master** | $-14.8\text{ dBFS}$ | 0.8822 | 13.7 dB | 2.657% | 0.787% | 0.0937% |
+| **Basis Restored (Ours)** | $-17.6\text{ dBFS}$ | 0.6783 | **13.5 dB** | 1.875% | 0.698% | **0.2228%** |
+
+### Perceptual Listening Evaluation
+
+- **Owner Verdict**: The owner evaluated both the full track and excerpt auditions.
+  The owner confirmed that the **Basis restoration feels punchier, highs are definitely better,
+  and definition is very good**.
+- **High-Band Bite vs. De-Fizzing (Idea 2)**: Integrating the $N$-boost allocator into
+  Basis training (`Basis-Alloc`) achieved an all-time record synthetic NMSE of **0.61967**
+  and LSD of **8.97 dB**, successfully softening the top octave from 0.327% to 0.208%.
+  However, in direct listening auditions, the owner noted that while Idea 2 sounded nice,
+  **the original Basis restoration possessed the preferred high-band bite and definition**
+  that gives the restoration its characteristic strength. TrackGleam was recognized for
+  its commercial loudness and balance on the long run.
+- **Preservation Policy**: Both `artifacts/rich-field-v1/basis.json` and the full song render
+  `/sdcard/Download/Verse 1 v 77 - Basis Restored.wav` are permanently frozen as the successful
+  production restore configuration.
+

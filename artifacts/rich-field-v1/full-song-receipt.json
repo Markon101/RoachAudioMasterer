@@ -1,0 +1,103 @@
+{
+  "chunk_seconds": 10.0,
+  "chunks": 36,
+  "controlled": false,
+  "elapsed_seconds": 2837.312947199,
+  "field": "runs/rich-sprint/field1000/basis.json",
+  "gate": "artifacts/rich-gate-v1/gate4000/evidence.json",
+  "kind": "Basis",
+  "output_peak": 0.6783145070075989,
+  "overlap_seconds": 2.0,
+  "provenance": {
+    "architecture": {
+      "cache_limit_mib": 64,
+      "context_hops": [
+        -16,
+        -8,
+        -4,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "encoder": [
+        3098,
+        32,
+        32
+      ],
+      "flow": "direct diagonal plus correlated residual",
+      "frequency_shared_head": [
+        184,
+        32,
+        6
+      ],
+      "parameters": 106342,
+      "schema": "scene-v2-native-shared-v1"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3500,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        300,
+        1000
+      ]
+    },
+    "generator": {
+      "natural_training_examples": 0,
+      "patch_samples": 16384,
+      "scene_seconds": 2,
+      "updates_per_scene": 4,
+      "version": 2
+    },
+    "git_commit": "d8034f3e05233e0a4218fb65d2dbf574580da843",
+    "git_dirty": true,
+    "package_version": "0.1.0",
+    "process_cpu_and_memory": [
+      "VmHWM:\t  511316 kB",
+      "VmRSS:\t  221840 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "sprint": {
+      "gate": [
+        64,
+        24,
+        4
+      ],
+      "gate_parameters": 1660,
+      "gate_smoothing": [
+        3,
+        3
+      ],
+      "generator": "rich-v3",
+      "natural_training_examples": 0,
+      "whole_clip_gate_gradients": true
+    },
+    "stft": {
+      "analysis_loss_ffts": [
+        256,
+        1024,
+        4096
+      ],
+      "base_fft": 1024,
+      "base_hop": 256,
+      "channels": "orthonormal mid/side",
+      "sample_rate": 48000
+    },
+    "unix_time": 1791344265
+  },
+  "richness": 0.5,
+  "source": "/sdcard/Download/Verse 1 v 77.wav",
+  "total_samples": 13681920,
+  "total_seconds": 285.04
+}
