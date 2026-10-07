@@ -156,6 +156,8 @@ enum Commands {
         cap_n_boost: bool,
         #[arg(long)]
         allow_gate_mismatch: bool,
+        #[arg(long)]
+        resume: bool,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -589,6 +591,7 @@ fn run() -> Result<()> {
             cap_h_boost,
             cap_n_boost,
             allow_gate_mismatch,
+            resume,
             backend,
             out,
         } => rich_field::restore_song(
@@ -603,6 +606,7 @@ fn run() -> Result<()> {
             richness,
             chunk_seconds,
             overlap_seconds,
+            resume,
             &backend,
             &out,
         ),

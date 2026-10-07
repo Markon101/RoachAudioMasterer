@@ -41,7 +41,10 @@ field operators (`artifacts/rich-field-v1/`). The winning **Basis** coupled oper
 (phase transport + constant-energy rotation) was rendered across the entire 285-second
 song (`Verse 1 v 77 - Basis Restored.wav`). In formal listening, the owner confirmed
 Basis made the track feel punchier with significantly better highs and definition,
-preferring its high-band bite and strength.
+preferring its high-band bite and strength. A second full-song restoration was subsequently
+completed on the latest track, `Feelin’ Catchy ext v1.2.2.2.2.2` (179.9s, 23 chunks, peak 0.9929),
+featuring weighted overlap-add (WOLA) chunk recombination and robust per-chunk disk caching
+(`docs/RICH_SPRINT_RESULTS.md`).
 
 ## Fixed design
 

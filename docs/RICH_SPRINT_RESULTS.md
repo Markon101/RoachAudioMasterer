@@ -155,3 +155,28 @@ Comparative metrics against the raw original and the commercial TrackGleam maste
   `/sdcard/Download/Verse 1 v 77 - Basis Restored.wav` are permanently frozen as the successful
   production restore configuration.
 
+### Full-Song Restoration: `Feelin’ Catchy ext v1.2.2.2.2.2`
+
+Following the success on `Verse 1 v 77`, the user requested a full-song restoration run on the latest track, `/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2.flac` (losslessly converted to 48 kHz stereo 16-bit WAV, 179.90s, 8,635,314 samples).
+
+#### Architectural Improvements
+1. **Weighted Overlap-Add (WOLA) Accumulator**: Replaced rigid chunk slice indexing with true WOLA accumulation and normalization ($\sum_k w_k(t) \cdot y_k(t) / \sum_k w_k(t)$). This completely resolved irregular boundary panics on songs whose length does not evenly divide into standard hop intervals, guaranteeing mathematically exact equal-power unity gain across arbitrary chunk lengths and overlaps.
+2. **Chunk Disk Caching & Resumption**: Added per-chunk caching (`chunks/chunk_{:04}.bin`) and `--resume` support to `rich-field-restore-song`, ensuring long mobile restoration runs can resume immediately without re-rendering completed chunks.
+
+#### Execution & Metrics
+- **Configuration**: `Basis` coupled operator (`artifacts/rich-field-v1/basis.json`), 10.0s chunks, 2.0s overlap, 23 chunks, OpenCL Adreno 830 backend. Total render time: 1,726.39s (~28.7 min). Peak level: **0.9929** (completely safe headroom under 1.0, zero clipping).
+- Saved output: `/sdcard/Download/Feelin’ Catchy - Basis Restored.wav`.
+
+Comparative spectral & dynamic measurements:
+
+| Metric | Original (`Feelin’ Catchy ext...wav`) | Basis Restored (`Feelin’ Catchy - Basis Restored.wav`) | Delta / Interpretation |
+| :--- | :---: | :---: | :---: |
+| **RMS** | $-15.95\text{ dBFS}$ | $-15.90\text{ dBFS}$ | $+0.05\text{ dB}$ (virtually identical loudness calibration) |
+| **Peak** | $-0.14\text{ dBFS}$ (0.9835) | $-0.06\text{ dBFS}$ (0.9929) | $+0.08\text{ dB}$ (clean headroom preserved) |
+| **Crest Factor** | $15.80\text{ dB}$ | $15.84\text{ dB}$ | $+0.04\text{ dB}$ (full microdynamic contrast intact) |
+| **Trusted Band (< 8 kHz)** | $51.62\text{ dB}$ | $51.63\text{ dB}$ | $+0.01\text{ dB}$ (near-perfect known-band preservation) |
+| **High Band (8–12 kHz)** | $34.42\text{ dB}$ | $34.97\text{ dB}$ | **$+0.55\text{ dB}$** (restored harmonic sparkle & bite) |
+| **Top Octave (12–16 kHz)** | $29.19\text{ dB}$ | $30.62\text{ dB}$ | **$+1.43\text{ dB}$** (extended upper air) |
+| **Ultrasonic Air (16–24 kHz)** | $20.11\text{ dB}$ | $24.83\text{ dB}$ | **$+4.72\text{ dB}$** (clean high-frequency completion) |
+| **Total Energy $> 8\text{ kHz}$** | $35.68\text{ dB}$ (2.49%) | $36.62\text{ dB}$ (**3.06%**) | **$+0.94\text{ dB}$** ($+23\%$ relative high-frequency energy) |
+

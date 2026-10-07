@@ -673,6 +673,7 @@ pub fn restore_song(
     richness: f32,
     chunk_seconds: f64,
     overlap_seconds: f64,
+    resume: bool,
     backend: &str,
     out: &Path,
 ) -> Result<()> {
@@ -701,7 +702,14 @@ pub fn restore_song(
         "field restore parent mismatch"
     );
 
-    new_run(out)?;
+    if resume {
+        ensure!(out.exists(), "resume output directory must exist");
+    } else {
+        new_run(out)?;
+    }
+    let chunk_dir = out.join("chunks");
+    fs::create_dir_all(&chunk_dir)?;
+
     println!("Loading entire song: {}...", source.display());
     let audio = native_audio::read_entire(source)?;
     let total_samples = audio.frames();
@@ -739,96 +747,118 @@ pub fn restore_song(
     };
 
     let mut output_channels = vec![vec![0.0f32; total_samples]; num_channels];
+    let mut weights = vec![0.0f32; total_samples];
     let start_time = std::time::Instant::now();
 
     for (idx, &c_start) in chunk_starts.iter().enumerate() {
         let chunk_t0 = std::time::Instant::now();
         let c_end = c_start + chunk_samples;
-        let chunk_audio = Audio {
-            rate: audio.rate,
-            channels: (0..num_channels)
-                .map(|c| audio.channels[c][c_start..c_end].to_vec())
-                .collect(),
-        };
-
-        let chunk_input = if controlled {
-            d.apply(&chunk_audio)
-        } else {
-            chunk_audio.clone()
-        };
-
-        let mut p = scene_features::prepare(&chunk_input, d, 11);
-        let parts = frozen.components(&p, d)?;
-        let f = rich_gate::inference_tiled(&gate, &p, d, &parts, richness, backend)?;
-        for c in 0..2 {
-            for i in 0..p.frames * BINS {
-                p.harmonic[c][i] = parts.parts[0][c][i] * f.gates[0][c][i];
-                p.noise[c][i] = parts.parts[1][c][i] * f.gates[1][c][i];
+        let chunk_cache_file = chunk_dir.join(format!("chunk_{:04}.bin", idx));
+        let y = if chunk_cache_file.exists() {
+            println!(
+                "Chunk {}/{} ({:.1}s - {:.1}s) loaded from cache",
+                idx + 1,
+                num_chunks,
+                c_start as f64 / audio.rate as f64,
+                c_end as f64 / audio.rate as f64
+            );
+            let bytes = fs::read(&chunk_cache_file)?;
+            let expected_bytes = chunk_samples * 4;
+            ensure!(
+                bytes.len() == num_channels * expected_bytes,
+                "corrupt chunk cache file"
+            );
+            let mut chs = Vec::with_capacity(num_channels);
+            let mut offset = 0;
+            for _ in 0..num_channels {
+                let ch_bytes = &bytes[offset..offset + expected_bytes];
+                let samples: Vec<f32> = ch_bytes
+                    .chunks_exact(4)
+                    .map(|b| f32::from_le_bytes(b.try_into().unwrap()))
+                    .collect();
+                chs.push(samples);
+                offset += expected_bytes;
             }
-        }
-        let state = engine.refine_mode(&p, d, &f.field, 8, field.kind.mode())?;
-        let y = scene_features::waveform(&p, d, &state, 1.0);
-
-        if num_chunks == 1 {
-            for c in 0..num_channels {
-                output_channels[c][c_start..c_end].copy_from_slice(&y.channels[c]);
-            }
-        } else if idx == 0 {
-            let next_start = chunk_starts[1];
-            let over_len = c_end - next_start;
-            for c in 0..num_channels {
-                output_channels[c][c_start..next_start]
-                    .copy_from_slice(&y.channels[c][..next_start - c_start]);
-                for j in 0..over_len {
-                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len as f32);
-                    let w = theta.cos().powi(2);
-                    output_channels[c][next_start + j] +=
-                        y.channels[c][(next_start - c_start) + j] * w;
-                }
-            }
-        } else if idx == num_chunks - 1 {
-            let prev_start = chunk_starts[idx - 1];
-            let prev_end = prev_start + chunk_samples;
-            let over_len = prev_end - c_start;
-            for c in 0..num_channels {
-                for j in 0..over_len {
-                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len as f32);
-                    let w = theta.sin().powi(2);
-                    output_channels[c][c_start + j] += y.channels[c][j] * w;
-                }
-                output_channels[c][prev_end..c_end].copy_from_slice(&y.channels[c][over_len..]);
+            Audio {
+                rate: audio.rate,
+                channels: chs,
             }
         } else {
-            let prev_start = chunk_starts[idx - 1];
-            let prev_end = prev_start + chunk_samples;
-            let over_len_prev = prev_end - c_start;
-            let next_start = chunk_starts[idx + 1];
-            let over_len_next = c_end - next_start;
+            let chunk_audio = Audio {
+                rate: audio.rate,
+                channels: (0..num_channels)
+                    .map(|c| audio.channels[c][c_start..c_end].to_vec())
+                    .collect(),
+            };
+
+            let chunk_input = if controlled {
+                d.apply(&chunk_audio)
+            } else {
+                chunk_audio.clone()
+            };
+
+            let mut p = scene_features::prepare(&chunk_input, d, 11);
+            let parts = frozen.components(&p, d)?;
+            let f = rich_gate::inference_tiled(&gate, &p, d, &parts, richness, backend)?;
+            for c in 0..2 {
+                for i in 0..p.frames * BINS {
+                    p.harmonic[c][i] = parts.parts[0][c][i] * f.gates[0][c][i];
+                    p.noise[c][i] = parts.parts[1][c][i] * f.gates[1][c][i];
+                }
+            }
+            let state = engine.refine_mode(&p, d, &f.field, 8, field.kind.mode())?;
+            let y = scene_features::waveform(&p, d, &state, 1.0);
+
+            let mut bytes = Vec::with_capacity(num_channels * chunk_samples * 4);
             for c in 0..num_channels {
-                for j in 0..over_len_prev {
-                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len_prev as f32);
-                    let w = theta.sin().powi(2);
-                    output_channels[c][c_start + j] += y.channels[c][j] * w;
+                for &val in &y.channels[c] {
+                    bytes.extend_from_slice(&val.to_le_bytes());
                 }
-                output_channels[c][prev_end..next_start]
-                    .copy_from_slice(&y.channels[c][over_len_prev..next_start - c_start]);
-                for j in 0..over_len_next {
-                    let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / over_len_next as f32);
-                    let w = theta.cos().powi(2);
-                    output_channels[c][next_start + j] +=
-                        y.channels[c][(next_start - c_start) + j] * w;
-                }
+            }
+            fs::write(&chunk_cache_file, bytes)?;
+
+            println!(
+                "Chunk {}/{} ({:.1}s - {:.1}s) done in {:.2}s",
+                idx + 1,
+                num_chunks,
+                c_start as f64 / audio.rate as f64,
+                c_end as f64 / audio.rate as f64,
+                chunk_t0.elapsed().as_secs_f64()
+            );
+            y
+        };
+
+        let mut w = vec![1.0f32; chunk_samples];
+        if idx > 0 {
+            for j in 0..overlap_samples {
+                let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / overlap_samples as f32);
+                w[j] = theta.sin().powi(2);
+            }
+        }
+        if idx < num_chunks - 1 {
+            let start_fade = chunk_samples - overlap_samples;
+            for j in 0..overlap_samples {
+                let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / overlap_samples as f32);
+                w[start_fade + j] = theta.cos().powi(2);
             }
         }
 
-        println!(
-            "Chunk {}/{} ({:.1}s - {:.1}s) done in {:.2}s",
-            idx + 1,
-            num_chunks,
-            c_start as f64 / audio.rate as f64,
-            c_end as f64 / audio.rate as f64,
-            chunk_t0.elapsed().as_secs_f64()
-        );
+        for c in 0..num_channels {
+            for j in 0..chunk_samples {
+                output_channels[c][c_start + j] += y.channels[c][j] * w[j];
+            }
+        }
+        for j in 0..chunk_samples {
+            weights[c_start + j] += w[j];
+        }
+    }
+
+    for t in 0..total_samples {
+        if weights[t] > 1e-8 {
+            for c in 0..num_channels {
+                output_channels[c][t] /= weights[t];
+            }
+        }
     }
 
     println!(
