@@ -3,7 +3,7 @@
 #![allow(clippy::needless_range_loop)]
 
 use crate::{
-    dsp::SpectralTransform,
+    dsp::{SpectralTransform, Spectrum},
     experiment::{new_run, write_json},
     native_audio::{self, Audio},
     native_dsp::{self, Stft, BINS, FFT, HOP, RATE},
@@ -127,6 +127,65 @@ pub struct Point<'a> {
     pub time: f32,
 }
 
+fn centered(x: C, k: usize) -> C {
+    x * if k.is_multiple_of(2) { 1.0 } else { -1.0 }
+}
+
+pub fn mid_waveform(
+    p: &Prepared,
+    d: Damage,
+    ceiling_hz: f32,
+    state: &[Vec<C>; 2],
+    strength: f32,
+) -> Audio {
+    if strength == 0.0 || state.iter().flatten().all(|z| z.re == 0.0 && z.im == 0.0) {
+        return p.input.clone();
+    }
+    let s = Stft::default();
+    let ceil_bin = ((ceiling_hz * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+    let ms = std::array::from_fn(|c| {
+        let mut data = p.base[c].data.clone();
+        for t in 0..p.frames {
+            for k in d.cutoff_bin() + 1..=ceil_bin {
+                if p.active[c] {
+                    data[t * BINS + k] +=
+                        centered(state[c][t * BINS + k], k) * p.scale[c] * d.missing(k);
+                }
+            }
+        }
+        let proposal = s.synthesize(&Spectrum {
+            data,
+            frames: p.frames,
+            samples: p.ms[c].len(),
+        });
+        let locked = crate::dsp::lock_known_bands(
+            &p.ms[c],
+            &proposal,
+            RATE,
+            &[
+                crate::scene::TrustedBand {
+                    min_hz: 0.0,
+                    max_hz: d.cutoff,
+                },
+                crate::scene::TrustedBand {
+                    min_hz: ceiling_hz,
+                    max_hz: 24000.0,
+                },
+            ],
+        );
+        if strength == 1.0 {
+            locked
+        } else {
+            p.ms[c]
+                .iter()
+                .zip(locked)
+                .map(|(x, y)| x + strength * (y - x))
+                .collect()
+        }
+    });
+    Audio::from_mid_side(RATE, ms, p.input.channels.len() == 2)
+}
+
 pub fn gradient(
     m: &MidField,
     p: &Prepared,
@@ -153,7 +212,7 @@ pub fn gradient(
         hs.push(h);
         ys.push(y);
     }
-    let waveform = scene_features::waveform(p, d, &field, 1.0);
+    let waveform = mid_waveform(p, d, 6000.0, &field, 1.0);
     let (loss, wg) = scene_loss::loss_and_gradient(&waveform, target, p.scale, point.region);
     let mut loss = 0.02 * loss;
     let s = Stft::default();
@@ -186,7 +245,7 @@ pub fn gradient(
 
 fn choose_mid_rows(p: &Prepared, d: Damage, r: &mut Rng) -> (Vec<Row>, Region) {
     let first = d.first_missing();
-    let last = ((8000.0 * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+    let last = ((6000.0 * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
     let last = last.max(first + 16).min(BINS);
     let width = 16.min(last.saturating_sub(first));
     let k = first + (r.next_u64() as usize % (last.saturating_sub(first + width) + 1));
@@ -267,7 +326,7 @@ pub fn train(
             let d = recipe.damage;
             let input = d.apply(&target);
             let p = scene_features::prepare(&input, d, scene_seed ^ 0x55821333);
-            let initial = scene_features::prior_state(&p, "prior");
+            let initial = scene_features::prior_state(&p, "harmonic");
             let actual = desired(&p, &target, d);
             cached = Some((scene_seed, target, recipe, p, initial, actual));
         }
@@ -370,6 +429,7 @@ pub fn restore(
     model_path: &Path,
     input_path: &Path,
     mid_cutoff: f32,
+    mid_ceiling: f32,
     controlled: bool,
     steps: usize,
     strength: f32,
@@ -487,9 +547,9 @@ pub fn restore(
             };
 
             let p = scene_features::prepare(&chunk_input, d, 11);
-            let initial = scene_features::prior_state(&p, "prior");
+            let initial = scene_features::prior_state(&p, "harmonic");
             let state = engine.refine_mode(&p, d, &initial, steps, field.kind.mode())?;
-            let y = scene_features::waveform(&p, d, &state, strength);
+            let y = mid_waveform(&p, d, mid_ceiling, &state, strength);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);
             for c in 0..num_channels {
@@ -575,6 +635,7 @@ pub fn restore(
             "kind": field.kind.name(),
             "input": input_path,
             "mid_cutoff": mid_cutoff,
+            "mid_ceiling": mid_ceiling,
             "controlled": controlled,
             "steps": steps,
             "strength": strength,
@@ -721,14 +782,14 @@ mod tests {
         };
         let degraded = d.apply(&input);
         let p = scene_features::prepare(&degraded, d, 29);
-        let initial = scene_features::prior_state(&p, "prior");
+        let initial = scene_features::prior_state(&p, "harmonic");
 
         // When strength is 0, waveform is exact degraded input
-        let zero_wave = scene_features::waveform(&p, d, &initial, 0.0);
+        let zero_wave = mid_waveform(&p, d, 6000.0, &initial, 0.0);
         assert_eq!(zero_wave.channels, degraded.channels);
 
         // When reconstructed with strength 1.0, lock_known_bands guarantees low band is preserved
-        let wave = scene_features::waveform(&p, d, &initial, 1.0);
+        let wave = mid_waveform(&p, d, 6000.0, &initial, 1.0);
         for c in 0..2 {
             let err = native_dsp::low_error(&degraded.channels[c], &wave.channels[c], d.cutoff);
             assert!(err < 2e-6, "known band low error {err} exceeds tolerance");

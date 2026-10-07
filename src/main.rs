@@ -194,6 +194,8 @@ enum Commands {
         input: PathBuf,
         #[arg(long, default_value_t = 1500.0)]
         mid_cutoff: f32,
+        #[arg(long, default_value_t = 6000.0)]
+        mid_ceiling: f32,
         #[arg(long)]
         controlled: bool,
         #[arg(long, default_value_t = 8)]
@@ -688,6 +690,7 @@ fn run() -> Result<()> {
             model,
             input,
             mid_cutoff,
+            mid_ceiling,
             controlled,
             steps,
             strength,
@@ -701,6 +704,7 @@ fn run() -> Result<()> {
             &model,
             &input,
             mid_cutoff,
+            mid_ceiling,
             controlled,
             steps,
             strength,

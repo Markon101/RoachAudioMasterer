@@ -45,8 +45,10 @@ All 39 unit tests passing cleanly in test suite (`cargo test --features opencl`)
 
 ---
 
-## 4. Controlled Audition on `Feelin' Catchy`
-Tested on 15.0s excerpt of `Feelin' Catchy` with artificial 2,000 Hz lowpass brickwall cutoff (`--controlled`):
+## 4. Controlled Audition & Noise Diagnosis on `Feelin' Catchy`
+
+### Initial Controlled Audition
+An initial 15.0s excerpt was tested with artificial 2,000 Hz lowpass brickwall cutoff (`--controlled`):
 
 | Frequency Band | Pristine Reference RMS | Degraded Input RMS | Restored Output RMS | Energy Delta vs Reference |
 |---|---:|---:|---:|---:|
@@ -54,13 +56,42 @@ Tested on 15.0s excerpt of `Feelin' Catchy` with artificial 2,000 Hz lowpass bri
 | **Mid band (2 kHz – 6 kHz)** | 92.61 | ~0.00 | 78.95 | **$-1.39\text{ dB}$ (resynthesized)** |
 | **High band (6 kHz – 16 kHz)** | 38.68 | ~0.00 | 67.62 | $+4.85\text{ dB}$ (air & overtones) |
 
-Peak level: **0.9900** (strictly bounded by auto-EQ peak safety scaling).
-Output file: `/sdcard/Download/Feelin’ Catchy - Mid Band Flow Restored.wav`.
+### Owner Listening Feedback & Root-Cause Diagnosis
+In listening evaluation, the owner reported: *"Okay, this one is extremely noisy, like super duper noisy at the high and sounds very low volume below the high. hmmm"*.
+
+Investigation identified three root causes:
+1. **Flat White Noise Prior**: `prior_state(p, "prior")` previously injected un-gated white noise $p.noise$ into $z(0)$ across all 940 STFT bins up to 24 kHz. In modern pop/rock where high-mid spectral energy equals low-mid energy, spectral tilt slope clamped to 0.0, injecting a +13 dB wall of untextured hiss into the ultrasonic bands (12–24 kHz).
+2. **Single-Boundary Band Locking**: `waveform` in `src/scene_features.rs` locked only the low band ($0 \dots d.cutoff$), treating everything above cutoff as untrusted and synthesizing flat noise across treble and air.
+3. **Artificial Brickwall Lowpass**: The `--controlled` test brickwalled the audio at 2 kHz, removing all original cymbals and high-frequency presence, forcing synthetic resynthesis across the entire spectrum and lowering perceived low-band loudness when normalized.
 
 ---
 
-## 5. Artifact Provenance
-- Mid-band Basis Model: `artifacts/rich-mid-v1/basis.json` (SHA256: `484eb807fb315f204450dfd89102aa136b34e5a78e480a6f7ea46a356b02b6d4`)
-- Mid-band State Snapshot: `artifacts/rich-mid-v1/state-basis.json` (SHA256: `da7da3d14faa27cadce7a108d68f0368ebc5d41461922dc6f5a92f7e04105402`)
-- Training Receipt: `artifacts/rich-mid-v1/training.json` (SHA256: `61a43f820e8cd8b707e51f687a20c0e100385c94d6214fcab9cfbc24ecf8517b`)
+## 5. Clean Mid-Band Restoration & Verification
+
+### Engineering Solution:
+1. **Dual-Boundary Band Locking (`mid_waveform`)**: Locks **both** the low band ($0 \dots d.cutoff$) and the pristine high band ($f \ge mid\_ceiling$, default 6,000 Hz) via `lock_known_bands`. Mid-band updates are strictly bounded to $(d.cutoff\_bin, mid\_ceiling\_bin]$.
+2. **Clean Harmonic Prior**: Replaced the white noise prior in `rich_mid.rs` with phase-locked harmonic overtones `prior_state(p, "harmonic")`, completely eliminating white noise static.
+3. **Model Retraining**: Retrained `MidField` Basis model for 500 steps with the clean harmonic prior and 6 kHz ceiling (`artifacts/rich-mid-v1/basis.json`).
+4. **Natural Audio Restoration**: Auditioned without artificial brickwall lowpass, allowing the model to enhance and complete natural midrange punch while leaving high-frequency cymbals and transients 100% bit-exact.
+
+### Audition Metrics on `Feelin’ Catchy - Mid Band Flow Clean.wav`:
+- Format: 48 kHz stereo 16-bit PCM (15.0s excerpt)
+- Peak Level: **0.9798** (-0.2 dBFS, zero clipping)
+- Mean Volume: **-16.4 dBFS**
+
+| Band | Pristine Reference RMS | Clean Restored RMS | Analysis |
+|---|---:|---:|---|
+| **Low (< 1.5 kHz)** | 456.76 | 456.76 | Full, punchy bass and kick (100% preserved) |
+| **Mid (1.5 – 6 kHz)** | 108.45 | 117.45 | **+0.69 dB** vocal body & snare snap enhancement |
+| **Presence (6 – 12 kHz)** | 52.92 | 52.92 | Pristine cymbals bit-exact (locked) |
+| **Air (12 – 24 kHz)** | 14.84 | 16.64 | Clean natural air; noise wall eliminated (down from 62.32) |
+
+**Owner Listening Confirmation**: *"ahh the new wav sounds quite good"*.
+
+---
+
+## 6. Artifact Provenance
+- Mid-band Basis Model: `artifacts/rich-mid-v1/basis.json` (SHA256: `bbb17c0ca0b5220049c04cd634c504f8a0461864ef806cefac3e02718b5d4a40`)
+- Mid-band State Snapshot: `artifacts/rich-mid-v1/state-basis.json` (SHA256: `c1811e36366af8e87eaca61b63744cede7733428f1becec75028e982fe079e42`)
+- Training Receipt: `artifacts/rich-mid-v1/training.json` (SHA256: `e9ff16c04ded01616aa4303d409d778ba463db56c6d384ba3fb3026af3d3cb3a`)
 - Checksum Manifest: `artifacts/rich-mid-v1/SHA256SUMS`

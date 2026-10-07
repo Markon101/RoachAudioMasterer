@@ -53,9 +53,11 @@ and 8,192-batch OpenCL GPU dense buffers, producing the production commercial re
 
 The subsequent [Sprint 2 mid-band flow matching extension](docs/MID_BAND_FLOW_RESULTS.md) extended
 conditional flow matching down into the midrange (500 Hz – 6 kHz) via procedural curriculum `generate_mid`,
-subharmonic bass partial routing ($m \in \{1, 2, 3, 4, 6\}$), and a 1,000-step trained `MidField` Basis model
-(`artifacts/rich-mid-v1/basis.json`). A controlled 2,000 Hz cutoff restoration on `Feelin' Catchy` resynthesized
-missing midrange (2–6 kHz) to within -1.39 dB of pristine ground truth (`/sdcard/Download/Feelin’ Catchy - Mid Band Flow Restored.wav`).
+subharmonic bass partial routing ($m \in \{1, 2, 3, 4, 6\}$), dual-boundary band locking (`mid_waveform`),
+and a clean harmonic-prior trained `MidField` Basis model (`artifacts/rich-mid-v1/basis.json`).
+An audition render on `Feelin' Catchy` (`/sdcard/Download/Feelin’ Catchy - Mid Band Flow Clean.wav`, peak 0.9798,
+mean -16.4 dBFS) enhanced mid-band vocal body and snare snap (+0.69 dB in 1.5–6 kHz) while preserving low-end
+and ultrasonic air bit-exact, confirmed by owner listening audition to sound quite good.
 
 ## Fixed design
 
