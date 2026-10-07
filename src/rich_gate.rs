@@ -443,8 +443,9 @@ pub fn inference_tiled(
 ) -> Result<Forward> {
     let mut predictor = crate::scene_model::backend(&g.head, backend)?;
     let mut raw = std::array::from_fn(|_| std::array::from_fn(|_| vec![0.0; p.frames * BINS]));
-    let mut rows = Vec::with_capacity(1024);
-    let mut xs = Vec::with_capacity(1024 * INPUT);
+    let batch_size = 8192;
+    let mut rows = Vec::with_capacity(batch_size);
+    let mut xs = Vec::with_capacity(batch_size * INPUT);
     let flush = |rows: &[(usize, usize, usize)],
                  xs: &[f32],
                  raw: &mut [[Vec<f32>; 2]; 4],
@@ -472,7 +473,7 @@ pub fn inference_tiled(
                 }
                 xs.extend(x);
                 rows.push((c, t, k));
-                if rows.len() == 1024 {
+                if rows.len() == batch_size {
                     flush(&rows, &xs, &mut raw, &mut predictor)?;
                     rows.clear();
                     xs.clear();

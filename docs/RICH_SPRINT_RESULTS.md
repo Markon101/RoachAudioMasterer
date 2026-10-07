@@ -180,3 +180,35 @@ Comparative spectral & dynamic measurements:
 | **Ultrasonic Air (16–24 kHz)** | $20.11\text{ dB}$ | $24.83\text{ dB}$ | **$+4.72\text{ dB}$** (clean high-frequency completion) |
 | **Total Energy $> 8\text{ kHz}$** | $35.68\text{ dB}$ (2.49%) | $36.62\text{ dB}$ (**3.06%**) | **$+0.94\text{ dB}$** ($+23\%$ relative high-frequency energy) |
 
+### Sprint 1: High-Band Denoise, Bounded Auto-EQ & Multi-Core Acceleration
+
+Per the user's direction to clean upper-band scratchiness, add auto-EQ balance, and accelerate compute across all 8 cores on the Snapdragon 8 Elite:
+
+1. **Native High-Band Adaptive Denoiser (`src/scene_clean.rs`)**:
+   - Operates strictly above $14\text{ kHz}$ ($k \ge 298$ in 1024-STFT).
+   - Minimum-statistics noise-floor tracker with asymmetric smoothing ($\alpha_{up} = 0.995, \alpha_{down} = 0.850$).
+   - Soft Wiener-style attenuation clamped to $-6\text{ dB}$, eliminating background fizz in sparse sections while passing transient attacks and harmonic definition with unity gain.
+2. **Bounded Auto-EQ (`src/scene_clean.rs`)**:
+   - Diagnostic energy measurement across 8 critical psychoacoustic bands (Sub, Low, Low-Mid, Mid, High-Mid, Presence, Brilliance, Air).
+   - Bounded nudging toward a natural music slope ($-3.8\text{ dB/octave}$ reference), strictly clamped to $\pm 1.5\text{ dB}$ with raised-cosine interpolation.
+   - Cleans up low-mid mud buildup and balances harshness without altering artistic tone.
+   - Guaranteed peak headroom scaling to $\le 0.9900$ to prevent inter-sample clipping.
+3. **Multi-Core `std::thread::scope` & OpenCL 8192 Batching**:
+   - Parallelized row feature template updates across up to 8 threads.
+   - Increased OpenCL capacity from 1024 to 8192, reducing GPU round-trip queue dispatches by $8\times$.
+4. **Delivered Full-Song Audio**:
+   - Saved to `/sdcard/Download/Feelin’ Catchy - Basis Clean Restored.wav` (peak: 0.9900, zero clipping).
+
+#### 4-Way Comparative Metrics (`Feelin' Catchy`)
+
+| Metric | OG Raw | Basis Restored | Basis Clean Restored (Sprint 1) | Basis Gleam Master |
+| :--- | :---: | :---: | :---: | :---: |
+| **RMS** | $-15.95\text{ dBFS}$ | $-15.90\text{ dBFS}$ | $-16.14\text{ dBFS}$ | **$-14.23\text{ dBFS}$** |
+| **Peak** | $-0.14\text{ dBFS}$ | $-0.06\text{ dBFS}$ | **$-0.09\text{ dBFS}$** (0.9900) | **$-1.00\text{ dBFS}$** |
+| **Crest Factor** | $15.80\text{ dB}$ | $15.84\text{ dB}$ | **$16.06\text{ dB}$** (Max Dynamics) | $13.23\text{ dB}$ (Commercial Glue) |
+| **Trusted Band (< 8 kHz)** | $51.62\text{ dB}$ | $51.63\text{ dB}$ | **$51.35\text{ dB}$** (Mud Cleaned) | $53.31\text{ dB}$ |
+| **Bite & Sparkle (8–12 kHz)** | $34.42\text{ dB}$ | $34.97\text{ dB}$ | **$35.68\text{ dB}$** ($+1.26\text{ dB}$) | $36.79\text{ dB}$ |
+| **Top Octave (12–16 kHz)** | $29.19\text{ dB}$ | $30.62\text{ dB}$ | **$30.84\text{ dB}$** ($+1.65\text{ dB}$) | $32.16\text{ dB}$ |
+| **Ultrasonic Air (16–24 kHz)** | $20.11\text{ dB}$ | $24.83\text{ dB}$ | **$24.19\text{ dB}$** (De-Fizzed) | $25.37\text{ dB}$ |
+| **Total Energy $> 8\text{ kHz}$** | $2.49\%$ | $3.06\%$ | **$3.66\%$** | $3.06\%$ |
+

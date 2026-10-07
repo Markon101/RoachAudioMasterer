@@ -29,6 +29,7 @@ mod scene_model;
 mod scene_synth;
 mod scene_training_state;
 mod synth;
+pub mod scene_clean;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
@@ -126,6 +127,10 @@ enum Commands {
         cap_n_boost: bool,
         #[arg(long)]
         allow_gate_mismatch: bool,
+        #[arg(long)]
+        denoise: bool,
+        #[arg(long)]
+        auto_eq: bool,
         #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
         backend: String,
         #[arg(long)]
@@ -158,6 +163,10 @@ enum Commands {
         allow_gate_mismatch: bool,
         #[arg(long)]
         resume: bool,
+        #[arg(long)]
+        denoise: bool,
+        #[arg(long)]
+        auto_eq: bool,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -562,6 +571,8 @@ fn run() -> Result<()> {
             cap_h_boost,
             cap_n_boost,
             allow_gate_mismatch,
+            denoise,
+            auto_eq,
             backend,
             out,
         } => rich_field::restore(
@@ -575,6 +586,8 @@ fn run() -> Result<()> {
             start,
             controlled,
             richness,
+            denoise,
+            auto_eq,
             &backend,
             &out,
         ),
@@ -592,6 +605,8 @@ fn run() -> Result<()> {
             cap_n_boost,
             allow_gate_mismatch,
             resume,
+            denoise,
+            auto_eq,
             backend,
             out,
         } => rich_field::restore_song(
@@ -607,6 +622,8 @@ fn run() -> Result<()> {
             chunk_seconds,
             overlap_seconds,
             resume,
+            denoise,
+            auto_eq,
             &backend,
             &out,
         ),

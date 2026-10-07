@@ -608,10 +608,12 @@ pub fn restore(
     start: f64,
     controlled: bool,
     richness: f32,
+    denoise: bool,
+    auto_eq: bool,
     backend: &str,
     out: &Path,
 ) -> Result<()> {
-    ensure!((0.0..=1.0).contains(&richness), "richness must be0..1");
+    ensure!((0.0..=1.0).contains(&richness), "richness must be 0..1");
     let det = Model::load(det_path)?;
     let flow = Model::load(flow_path)?;
     let mut gate = Gate::load(gate_path)?;
@@ -651,13 +653,18 @@ pub fn restore(
     let mut engine = Engine::new(&field.core, backend)?;
     let state = engine.refine_mode(&p, d, &f.field, 8, field.kind.mode())?;
     let y = scene_features::waveform(&p, d, &state, 1.0);
+    let y = if denoise || auto_eq {
+        crate::scene_clean::clean_audio(&y, denoise, auto_eq)
+    } else {
+        y
+    };
     native_audio::write(&out.join("listen.wav"), &y, true)?;
     native_audio::write(&out.join("reconstructed.wav"), &y, false)?;
     native_audio::write(&out.join("input.wav"), &input, false)?;
     native_audio::write(&out.join("reference.wav"), &reference, false)?;
     write_json(
         &out.join("restoration.json"),
-        &json!({"provenance":crate::rich_experiment::provenance(),"field":field_path,"kind":field.kind,"gate":gate_path,"cap_boost":cap_boost,"allow_gate_mismatch":allow_gate_mismatch,"source":source,"start":start,"controlled":controlled,"richness":richness,"scores":crate::scene_metrics::measure(&reference,&y,&input,d,24000.0)}),
+        &json!({"provenance":crate::rich_experiment::provenance(),"field":field_path,"kind":field.kind,"gate":gate_path,"cap_boost":cap_boost,"allow_gate_mismatch":allow_gate_mismatch,"source":source,"start":start,"controlled":controlled,"richness":richness,"denoise":denoise,"auto_eq":auto_eq,"scores":crate::scene_metrics::measure(&reference,&y,&input,d,24000.0)}),
     )
 }
 #[allow(clippy::too_many_arguments)]
@@ -674,6 +681,8 @@ pub fn restore_song(
     chunk_seconds: f64,
     overlap_seconds: f64,
     resume: bool,
+    denoise: bool,
+    auto_eq: bool,
     backend: &str,
     out: &Path,
 ) -> Result<()> {
@@ -869,6 +878,15 @@ pub fn restore_song(
         rate: audio.rate,
         channels: output_channels,
     };
+    let full_reconstructed = if denoise || auto_eq {
+        println!(
+            "Applying acoustic post-processing: denoise={}, auto_eq={}",
+            denoise, auto_eq
+        );
+        crate::scene_clean::clean_audio(&full_reconstructed, denoise, auto_eq)
+    } else {
+        full_reconstructed
+    };
 
     native_audio::write(&out.join("reconstructed.wav"), &full_reconstructed, false)?;
     native_audio::write(&out.join("listen.wav"), &full_reconstructed, true)?;
@@ -895,6 +913,8 @@ pub fn restore_song(
             "overlap_seconds": overlap_seconds,
             "controlled": controlled,
             "richness": richness,
+            "denoise": denoise,
+            "auto_eq": auto_eq,
             "output_peak": peak,
             "elapsed_seconds": start_time.elapsed().as_secs_f64()
         }),

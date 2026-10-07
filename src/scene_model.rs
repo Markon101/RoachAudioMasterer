@@ -178,7 +178,7 @@ pub fn backend(d: &Dense, name: &str) -> Result<Box<dyn Predictor>> {
         "cpu" => Ok(Box::new(Cpu { d: d.clone() })),
         #[cfg(feature = "opencl")]
         "opencl" => Ok(Box::new(crate::opencl::OpenCl::new_dense(
-            &d.weights, d.input, d.hidden, d.output, 1024,
+            &d.weights, d.input, d.hidden, d.output, 8192,
         )?)),
         _ => anyhow::bail!("scene backend {name} unavailable"),
     }

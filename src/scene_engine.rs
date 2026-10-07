@@ -326,15 +326,26 @@ impl Engine {
         cache: &CachedField,
     ) -> Result<[Vec<C>; 2]> {
         let mut result = zero_state(p);
-        for (chunk_index, rows) in cache.rows.chunks(1024).enumerate() {
-            let start = chunk_index * 1024 * HEAD_INPUT;
+        let num_threads = std::thread::available_parallelism()
+            .map(|n| n.get().min(8))
+            .unwrap_or(4);
+        let batch_size = 8192;
+        for (chunk_index, rows) in cache.rows.chunks(batch_size).enumerate() {
+            let start = chunk_index * batch_size * HEAD_INPUT;
             let mut x = cache.template[start..start + rows.len() * HEAD_INPUT].to_vec();
-            for (r, row) in rows
-                .iter()
-                .zip(x.as_chunks_mut::<HEAD_INPUT>().0.iter_mut())
-            {
-                crate::scene_features::update_state_features(row, p, cache.damage, *r, state, time);
-            }
+            let num_rows = rows.len();
+            let step = (num_rows + num_threads - 1) / num_threads;
+            let rows_slice = &rows[..];
+            let chunks_slice = x.as_chunks_mut::<HEAD_INPUT>().0;
+            std::thread::scope(|s| {
+                for (t_rows, t_chunks) in rows_slice.chunks(step).zip(chunks_slice.chunks_mut(step)) {
+                    s.spawn(move || {
+                        for (r, chunk) in t_rows.iter().zip(t_chunks.iter_mut()) {
+                            crate::scene_features::update_state_features(chunk, p, cache.damage, *r, state, time);
+                        }
+                    });
+                }
+            });
             self.flush(p, state, mode, rows, &x, &mut result)?;
         }
         Ok(result)
