@@ -388,8 +388,8 @@ pub fn train(
             }
         }
 
-        enc_opt.update(&mut field.core.encoder.weights, &eg, 0.001);
-        head_opt.update(&mut field.core.head.weights, &hg, 0.001);
+        enc_opt.update_with_decay(&mut field.core.encoder.weights, &eg, 0.001, 1e-4);
+        head_opt.update_with_decay(&mut field.core.head.weights, &hg, 0.001, 1e-4);
         field.core.optimizer_steps += 1;
 
         if (step + 1) % 50 == 0 || step + 1 == steps {

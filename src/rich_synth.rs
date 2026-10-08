@@ -1,6 +1,6 @@
 //! Targeted synthetic support/abstention curriculum; legacy generator is intact.
 #![allow(clippy::needless_range_loop)] // Explicit stereo/oscillator reference loops.
-use crate::{native_audio::Audio, native_dsp::RATE, scene_features::Damage, synth::Rng};
+use crate::{dsp::SpectralTransform, native_audio::Audio, native_dsp::RATE, scene_features::Damage, synth::Rng};
 use serde::Serialize;
 use std::f32::consts::{PI, TAU};
 pub const SAMPLES: usize = 16384;
@@ -509,6 +509,149 @@ pub fn generate_low(seed: u64) -> (Audio, Recipe) {
     )
 }
 
+/// Standard vowel formant center frequencies: [F1, F2, F3] in Hz.
+#[allow(dead_code)]
+pub const VOWEL_FORMANTS: [[f32; 3]; 5] = [
+    [800.0, 1200.0, 2500.0], // /a/
+    [300.0, 2300.0, 3000.0], // /i/
+    [350.0, 800.0, 2200.0],  // /u/
+    [500.0, 1800.0, 2500.0], // /e/
+    [500.0, 1000.0, 2400.0], // /o/
+];
+
+/// Generates procedural speech-like vocal source with glottal pulse excitation and vowel formants.
+#[allow(dead_code)]
+pub fn generate_speech_vocal(seed: u64) -> Audio {
+    let mut rng = Rng(seed ^ 0x48a1c937);
+    let n = SAMPLES * 2;
+    let rate = RATE * 2;
+    let f0 = rng.range(85.0, 280.0);
+    let vowel_idx = rng.next_u64() as usize % 5;
+    let formants = VOWEL_FORMANTS[vowel_idx];
+    let mut channels = vec![vec![0.0f32; n]; 2];
+
+    // Vocal glottal excitation + formant filtering
+    let mut phase = 0.0f32;
+    let pan = rng.range(-0.5, 0.5);
+    let (gl, gr) = (
+        ((pan + 1.0) * PI / 4.0).cos(),
+        ((pan + 1.0) * PI / 4.0).sin(),
+    );
+
+    // Formant resonator filter states (2nd-order biquads)
+    let mut z1 = [0.0f32; 3];
+    let mut z2 = [0.0f32; 3];
+
+    for i in 0..n {
+        let t = i as f32 / rate as f32;
+        let instant_f = f0 * (1.0 + 0.015 * (TAU * 4.5 * t).sin() + rng.range(-0.005, 0.005));
+        phase = (phase + TAU * instant_f / rate as f32).rem_euclid(TAU);
+
+        // Glottal flow pulse (Liljencrants-Fant approximation)
+        let glottal = if phase < PI {
+            (phase).sin() - 0.25 * (2.0 * phase).sin()
+        } else {
+            -0.1 * (phase - PI).sin()
+        };
+        let aspiration = rng.signed() * 0.08;
+        let excitation = glottal + aspiration;
+
+        // Parallel 2nd-order bandpass resonators for F1, F2, F3
+        let mut vocal_out = 0.0f32;
+        for (f_idx, &fc) in formants.iter().enumerate() {
+            let bw = (fc * 0.12).max(50.0);
+            let omega = TAU * fc / rate as f32;
+            let alpha = (omega / 2.0).sin() * (bw / fc);
+            let a0 = 1.0 + alpha;
+            let a1 = -2.0 * omega.cos();
+            let a2 = 1.0 - alpha;
+            let b0 = alpha / a0;
+            let b2 = -alpha / a0;
+            let a1_norm = a1 / a0;
+            let a2_norm = a2 / a0;
+
+            let out = b0 * excitation + z1[f_idx];
+            z1[f_idx] = -a1_norm * out + z2[f_idx];
+            z2[f_idx] = b2 * excitation - a2_norm * out;
+
+            let weight = (1.0 / (f_idx + 1) as f32).sqrt();
+            vocal_out += out * weight;
+        }
+
+        let envelope = env(t, 0.005, n as f32 / rate as f32, 0.02, 1.8);
+        let s = (vocal_out * envelope).tanh() * 0.7;
+        channels[0][i] = s * gl;
+        channels[1][i] = s * gr;
+    }
+
+    // Decimate to 48 kHz
+    let mut out_channels = vec![vec![0.0f32; SAMPLES]; 2];
+    for c in 0..2 {
+        let filtered = crate::dsp::lowpass(&channels[c], rate, 22000.0, 1000.0, 2.0);
+        for i in 0..SAMPLES {
+            out_channels[c][i] = filtered[i * 2];
+        }
+    }
+
+    Audio {
+        rate: RATE,
+        channels: out_channels,
+    }
+}
+
+/// Applies realistic room acoustics (early wall reflections and exponential RT60 tail).
+#[allow(dead_code)]
+pub fn apply_room_acoustics(audio: &mut Audio, rt60: f32, seed: u64) {
+    let mut rng = Rng(seed ^ 0x93710815);
+    let n = audio.channels[0].len();
+    let delays_ms = [8.3f32, 14.1, 19.7, 26.5, 33.2, 41.0];
+    let gains = [0.40f32, 0.30, 0.22, 0.16, 0.12, 0.08];
+
+    for c in 0..audio.channels.len() {
+        let dry = audio.channels[c].clone();
+        for (tap, &d_ms) in delays_ms.iter().enumerate() {
+            let delay = ((d_ms * 0.001 * audio.rate as f32).round() as usize).max(1);
+            let gain = gains[tap] * rng.range(0.85, 1.15);
+            for i in delay..n {
+                let decay = (-6.91 * (i - delay) as f32 / (rt60 * audio.rate as f32)).exp();
+                audio.channels[c][i] += dry[i - delay] * gain * decay.min(1.0);
+            }
+        }
+    }
+}
+
+/// Simulates lossy codec MDCT quantization and AI phase shimmer artifacts.
+#[allow(dead_code)]
+pub fn apply_ai_codec_degradation(audio: &mut Audio, seed: u64) {
+    let mut rng = Rng(seed ^ 0x7c491823);
+    for c in 0..audio.channels.len() {
+        let n = audio.channels[c].len();
+        // Add subtle harmonic drive saturation
+        let drive = rng.range(0.02, 0.08);
+        for x in &mut audio.channels[c] {
+            *x = (*x * (1.0 + drive)).tanh() / (1.0 + drive);
+        }
+
+        // Add high-frequency phase micro-jitter (AI shimmer)
+        let s = crate::native_dsp::Stft::default();
+        let mut spec = s.analyze(&audio.channels[c]);
+        for t in 0..spec.frames {
+            for k in 120..spec.data.len() / spec.frames {
+                if rng.unit() < 0.15 {
+                    let jitter_angle = rng.range(-0.35, 0.35);
+                    let idx = t * (crate::native_dsp::FFT / 2 + 1) + k;
+                    if idx < spec.data.len() {
+                        let polar = rustfft::num_complex::Complex32::from_polar(1.0, jitter_angle);
+                        spec.data[idx] *= polar;
+                    }
+                }
+            }
+        }
+        audio.channels[c] = s.synthesize(&spec);
+        audio.channels[c].truncate(n);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -566,5 +709,29 @@ mod tests {
                 assert!(diff < 2e-6, "stopped low target has low energy {diff}");
             }
         }
+    }
+
+    #[test]
+    fn test_synthetic_v2_speech_room_and_codec() {
+        // Test speech formant vocal generation
+        let vocal = generate_speech_vocal(882233);
+        assert_eq!(vocal.channels.len(), 2);
+        assert_eq!(vocal.frames(), SAMPLES);
+        assert!(vocal.channels.iter().flatten().all(|x| x.is_finite()));
+
+        let vocal_rms = (vocal.channels[0].iter().map(|x| x * x).sum::<f32>() / vocal.frames() as f32).sqrt();
+        assert!(vocal_rms > 0.01 && vocal_rms < 1.0, "Vocal RMS abnormal: {}", vocal_rms);
+
+        // Test room acoustics decoration
+        let mut room_audio = vocal.clone();
+        apply_room_acoustics(&mut room_audio, 0.45, 991122);
+        assert!(room_audio.channels.iter().flatten().all(|x| x.is_finite()));
+        let room_rms = (room_audio.channels[0].iter().map(|x| x * x).sum::<f32>() / room_audio.frames() as f32).sqrt();
+        assert!(room_rms >= vocal_rms * 0.99, "Room reverb failed to add energy: room={room_rms}, dry={vocal_rms}");
+
+        // Test AI codec degradation
+        let mut degraded = vocal.clone();
+        apply_ai_codec_degradation(&mut degraded, 445566);
+        assert!(degraded.channels.iter().flatten().all(|x| x.is_finite()));
     }
 }

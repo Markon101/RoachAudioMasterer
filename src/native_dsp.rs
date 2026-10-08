@@ -189,6 +189,7 @@ pub fn low_error(a: &[f32], b: &[f32], cutoff: f32) -> f64 {
     }
     (e / d.max(1e-20)).sqrt()
 }
+#[allow(dead_code)]
 pub fn high_error(a: &[f32], b: &[f32], cutoff: f32) -> f64 {
     let mut p = FftPlanner::new();
     let fft = p.plan_fft_forward(a.len());
@@ -216,9 +217,9 @@ mod tests {
     }
     #[test]
     fn native_roundtrip_and_adjoint_checks() {
-        for n in [256, 1024, 4096] {
+        for n in [256, 1024, 4096, 8192] {
             let s = Stft::new(n, n / 4);
-            let x: Vec<_> = (0..2307).map(|i| (i as f32 * 0.17).sin() * 0.2).collect();
+            let x: Vec<_> = (0..9500).map(|i| (i as f32 * 0.17).sin() * 0.2).collect();
             let spec = s.analyze(&x);
             let y = s.synthesize(&spec);
             assert!(x.iter().zip(&y).all(|(a, b)| (a - b).abs() < 2e-6));

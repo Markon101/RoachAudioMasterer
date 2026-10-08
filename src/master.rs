@@ -117,16 +117,35 @@ fn db(x: f32) -> f32 {
     20.0 * x.max(1e-9).log10()
 }
 
-/// Gentle stereo-linked feed-forward glue compressor with soft knee.
-fn glue(a: &Audio, threshold_db: f32, ratio: f32, knee_db: f32, attack_ms: f32, release_ms: f32) -> (Audio, f32) {
+/// Gentle stereo-linked feed-forward glue compressor with soft knee and high-pass sidechain filter.
+fn glue(
+    a: &Audio,
+    threshold_db: f32,
+    ratio: f32,
+    knee_db: f32,
+    attack_ms: f32,
+    release_ms: f32,
+    sidechain_hp_hz: f32,
+) -> (Audio, f32) {
     let n = a.channels[0].len();
     let att = (-1.0 / (attack_ms * 0.001 * RATE as f32)).exp();
     let rel = (-1.0 / (release_ms * 0.001 * RATE as f32)).exp();
     let mut gain_db = vec![0.0f32; n];
     let mut env = 0.0f32;
     let mut max_gr = 0.0f32;
+
+    // Filter detector sidechain if sidechain_hp_hz > 20 Hz (preserves bass dynamics from over-compression)
+    let sidechain_channels: Vec<Vec<f32>> = if sidechain_hp_hz > 20.0 {
+        a.channels
+            .iter()
+            .map(|c| crate::dsp::highpass(c, RATE, sidechain_hp_hz, (sidechain_hp_hz * 0.5).max(10.0), 2.0))
+            .collect()
+    } else {
+        a.channels.clone()
+    };
+
     for i in 0..n {
-        let level = a.channels.iter().fold(0.0f32, |m, c| m.max(c[i].abs()));
+        let level = sidechain_channels.iter().fold(0.0f32, |m, c| m.max(c[i].abs()));
         let lv = db(level);
         let over = lv - threshold_db;
         let target_gr = if 2.0 * over < -knee_db {
@@ -235,23 +254,36 @@ pub fn run(
     ceiling_db: f32,
     glue_threshold_db: f32,
     glue_ratio: f32,
+    sidechain_hp_hz: f32,
+    apply_spatial: bool,
     out: &Path,
 ) -> Result<()> {
     ensure!((-24.0..=-6.0).contains(&target_lufs), "target LUFS must be -24..-6");
     ensure!((-6.0..=-0.1).contains(&ceiling_db), "ceiling must be -6..-0.1 dBTP");
     ensure!((1.0..=4.0).contains(&glue_ratio), "glue ratio must be 1..4");
     new_run(out)?;
-    let input_audio = native_audio::read_entire(input)?;
+    let mut input_audio = native_audio::read_entire(input)?;
     ensure!(input_audio.rate == RATE, "mastering requires 48 kHz input");
     ensure!(
         (1..=2).contains(&input_audio.channels.len()),
         "mastering supports mono/stereo"
     );
+
+    if apply_spatial && input_audio.channels.len() == 2 {
+        println!("=== Applying 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
+        let (spat_audio, spat_metrics) = crate::spatial::process_spatial(&input_audio, &crate::spatial::SpatialConfig::default());
+        println!(
+            "Spatial Metrics: Initial Corr = {:.3}, Final Corr = {:.3}, Sub-Bass Side Energy = {:.1} dB",
+            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.side_energy_below_cutoff_db
+        );
+        input_audio = spat_audio;
+    }
+
     let before = metrics(&input_audio);
     println!("Before: {}", before);
 
     let (compressed, glue_gr) = if glue_ratio > 1.0 {
-        glue(&input_audio, glue_threshold_db, glue_ratio, 8.0, 20.0, 160.0)
+        glue(&input_audio, glue_threshold_db, glue_ratio, 8.0, 20.0, 160.0, sidechain_hp_hz)
     } else {
         (input_audio.clone(), 0.0)
     };
@@ -354,9 +386,27 @@ mod tests {
     #[test]
     fn glue_is_identity_below_threshold() {
         let quiet = tone(0.01, 440.0, 1);
-        let (g, gr) = glue(&quiet, -20.0, 2.0, 8.0, 20.0, 160.0);
+        let (g, gr) = glue(&quiet, -20.0, 2.0, 8.0, 20.0, 160.0, 0.0);
         assert!(gr < 1e-6);
         let diff = g.channels[0].iter().zip(&quiet.channels[0]).map(|(a, b)| (a - b).abs()).fold(0.0f32, f32::max);
         assert!(diff < 1e-6);
+    }
+
+    #[test]
+    fn glue_sidechain_highpass_preserves_sub_bass_dynamics() {
+        // Hot 40 Hz sub-bass note (amplitude 0.6)
+        let sub = tone(0.6, 40.0, 1);
+
+        // Without sidechain HPF: 40 Hz triggers compressor (>3 dB GR)
+        let (_g_raw, gr_raw) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 0.0);
+        assert!(gr_raw > 2.0, "Raw detector did not compress sub: {}", gr_raw);
+
+        // With 100 Hz sidechain HPF: 40 Hz is filtered from detector (GR < 0.5 dB)
+        let (_g_hp, gr_hp) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 100.0);
+        assert!(
+            gr_hp < 0.5,
+            "Sidechain HPF failed to preserve sub-bass punch: GR = {}",
+            gr_hp
+        );
     }
 }

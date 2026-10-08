@@ -208,14 +208,24 @@ impl Adam {
         }
     }
     pub fn update(&mut self, w: &mut [f32], g: &[f32], lr: f32) {
+        self.update_with_decay(w, g, lr, 0.0);
+    }
+    /// AdamW (Loshchilov & Hutter, 2017) with decoupled weight decay and gradient norm stabilization.
+    pub fn update_with_decay(&mut self, w: &mut [f32], g: &[f32], lr: f32, weight_decay: f32) {
         self.step += 1;
         let clip = 1.0 / g.iter().map(|x| x * x).sum::<f32>().sqrt().max(1.0);
         for (i, g) in g.iter().enumerate() {
             let g = g * clip;
             self.m[i] = 0.9 * self.m[i] + 0.1 * g;
             self.v[i] = 0.999 * self.v[i] + 0.001 * g * g;
-            w[i] -= lr * (self.m[i] / (1.0 - 0.9f32.powi(self.step)))
-                / ((self.v[i] / (1.0 - 0.999f32.powi(self.step))).sqrt() + 1e-8);
+            let m_hat = self.m[i] / (1.0 - 0.9f32.powi(self.step));
+            let v_hat = self.v[i] / (1.0 - 0.999f32.powi(self.step));
+            let step = m_hat / (v_hat.sqrt() + 1e-8);
+            if weight_decay > 0.0 {
+                w[i] = w[i] * (1.0 - lr * weight_decay) - lr * step;
+            } else {
+                w[i] -= lr * step;
+            }
         }
     }
 }

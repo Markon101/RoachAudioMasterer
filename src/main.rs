@@ -33,6 +33,9 @@ mod scene_synth;
 mod scene_training_state;
 mod synth;
 pub mod scene_clean;
+pub mod stft_hires;
+pub mod spatial;
+pub mod sfht;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
@@ -228,6 +231,10 @@ enum Commands {
         glue_threshold_db: f32,
         #[arg(long, default_value_t = 1.6)]
         glue_ratio: f32,
+        #[arg(long, default_value_t = 90.0)]
+        sidechain_hp_hz: f32,
+        #[arg(long)]
+        spatial: bool,
         #[arg(long)]
         out: PathBuf,
     },
@@ -267,9 +274,53 @@ enum Commands {
         #[arg(long)]
         out: PathBuf,
     },
+    RichLowSfhtTrain {
+        #[arg(long, default_value_t = 2000)]
+        steps: usize,
+        #[arg(long, default_value_t = 800010)]
+        seed: u64,
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichLowSfhtRestore {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 200.0)]
+        low_cutoff: f32,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichLowSfhtEvaluate {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long, default_value_t = 900000)]
+        seed: u64,
+        #[arg(long, default_value_t = 16)]
+        count: usize,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     RichTribandRestore {
         #[arg(long)]
         low_model: Option<PathBuf>,
+        #[arg(long)]
+        sfht_model: Option<PathBuf>,
         #[arg(long)]
         mid_model: Option<PathBuf>,
         #[arg(long)]
@@ -292,6 +343,8 @@ enum Commands {
         denoise: bool,
         #[arg(long)]
         auto_eq: bool,
+        #[arg(long)]
+        spatial: bool,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -803,8 +856,10 @@ fn run() -> Result<()> {
             ceiling_db,
             glue_threshold_db,
             glue_ratio,
+            sidechain_hp_hz,
+            spatial,
             out,
-        } => master::run(&input, target_lufs, ceiling_db, glue_threshold_db, glue_ratio, &out),
+        } => master::run(&input, target_lufs, ceiling_db, glue_threshold_db, glue_ratio, sidechain_hp_hz, spatial, &out),
         Commands::RichLowTrain {
             kind,
             steps,
@@ -844,8 +899,43 @@ fn run() -> Result<()> {
             &backend,
             &out,
         ),
+        Commands::RichLowSfhtTrain {
+            steps,
+            seed,
+            resume,
+            backend,
+            out,
+        } => sfht::train_sfht(steps, seed, resume.as_deref(), &backend, &out),
+        Commands::RichLowSfhtRestore {
+            model,
+            input,
+            low_cutoff,
+            steps,
+            strength,
+            backend: _,
+            out,
+        } => {
+            if !out.exists() {
+                experiment::new_run(&out)?;
+            }
+            let audio = native_audio::read_entire(&input)?;
+            let restored = sfht::restore_sfht(&model, &audio, low_cutoff, steps, strength)?;
+            native_audio::write(&out.join("restored.wav"), &restored, false)?;
+            native_audio::write(&out.join("listen.wav"), &restored, true)?;
+            println!("SFHT restoration saved to {}", out.display());
+            Ok(())
+        }
+        Commands::RichLowSfhtEvaluate {
+            model,
+            seed,
+            count,
+            steps,
+            backend,
+            out,
+        } => sfht::evaluate_sfht(&model, seed, count, steps, &backend, &out),
         Commands::RichTribandRestore {
             low_model,
+            sfht_model,
             mid_model,
             input,
             low_cutoff,
@@ -857,10 +947,12 @@ fn run() -> Result<()> {
             overlap_seconds,
             denoise,
             auto_eq,
+            spatial,
             backend,
             out,
         } => triband_restore(
             low_model.as_deref(),
+            sfht_model.as_deref(),
             mid_model.as_deref(),
             &input,
             low_cutoff,
@@ -872,6 +964,7 @@ fn run() -> Result<()> {
             overlap_seconds,
             denoise,
             auto_eq,
+            spatial,
             &backend,
             &out,
         ),
@@ -1241,6 +1334,7 @@ fn run() -> Result<()> {
 
 fn triband_restore(
     low_model: Option<&std::path::Path>,
+    sfht_model: Option<&std::path::Path>,
     mid_model: Option<&std::path::Path>,
     input: &std::path::Path,
     low_cutoff: f32,
@@ -1252,6 +1346,7 @@ fn triband_restore(
     overlap_seconds: f64,
     denoise: bool,
     auto_eq: bool,
+    spatial: bool,
     backend: &str,
     out: &std::path::Path,
 ) -> Result<()> {
@@ -1262,7 +1357,16 @@ fn triband_restore(
     let mut current_input = input.to_path_buf();
 
     // Stage 1: Low-band restoration (sub-bass 20 Hz - 500 Hz)
-    if let Some(m) = low_model {
+    if let Some(m) = sfht_model {
+        println!("=== Stage 1: High-Resolution SFHT Low-Band Restoration (cutoff={:.1}Hz, 5.86 Hz/bin) ===", low_cutoff);
+        let stage1_dir = out.join("stage1_sfht");
+        std::fs::create_dir_all(&stage1_dir)?;
+        let in_audio = native_audio::read_entire(&current_input)?;
+        let restored = sfht::restore_sfht(m, &in_audio, low_cutoff, steps, strength)?;
+        let out_wav = stage1_dir.join("restored.wav");
+        native_audio::write(&out_wav, &restored, false)?;
+        current_input = out_wav;
+    } else if let Some(m) = low_model {
         println!("=== Stage 1: Low-band restoration (cutoff={:.1}Hz) ===", low_cutoff);
         let stage1_dir = out.join("stage1_low");
         rich_low::restore(
@@ -1314,6 +1418,18 @@ fn triband_restore(
         println!("=== Stage 3: Clean polish (denoise={}, auto_eq={}) ===", denoise, auto_eq);
         current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
     }
+
+    // Stage 4: 3D Spatial Acoustics & Depth Expansion
+    if spatial && current_audio.channels.len() == 2 {
+        println!("=== Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
+        let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial::SpatialConfig::default());
+        println!(
+            "Spatial Metrics: Initial Corr = {:.3}, Final Corr = {:.3}, Mono Bass Guard = {:.1} Hz",
+            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.mono_bass_hz
+        );
+        current_audio = spat_audio;
+    }
+
     native_audio::write(&final_wav, &current_audio, false)?;
     native_audio::write(&out.join("listen.wav"), &current_audio, true)?;
 
@@ -1321,6 +1437,7 @@ fn triband_restore(
         "schema": "rich-triband-restoration-v1",
         "input": input.display().to_string(),
         "low_model": low_model.map(|p| p.display().to_string()),
+        "sfht_model": sfht_model.map(|p| p.display().to_string()),
         "mid_model": mid_model.map(|p| p.display().to_string()),
         "low_cutoff": low_cutoff,
         "mid_cutoff": mid_cutoff,
@@ -1329,6 +1446,7 @@ fn triband_restore(
         "strength": strength,
         "denoise": denoise,
         "auto_eq": auto_eq,
+        "spatial": spatial,
         "elapsed_seconds": start_time.elapsed().as_secs_f64(),
         "output_wav": final_wav.display().to_string(),
     });
