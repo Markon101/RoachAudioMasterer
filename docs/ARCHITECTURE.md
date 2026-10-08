@@ -107,3 +107,15 @@ repair. It remains bounded offline processing rather than whole-song streaming.
 See [CURRENT_MODEL.md](CURRENT_MODEL.md) for the full signal path, parameter
 counts, losses, fluid-inspired hypotheses and proposed versions, and
 [SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md) for frozen positive/negative evidence.
+
+## Tri-band restoration and autonomous mastering milestone
+
+The full-spectrum tri-band pipeline is now implemented and operational across the entire audio frequency range:
+1. **Low-Band Completion ($20\text{--}500\text{ Hz}$)**: `src/rich_low.rs` reconstructs sub-bass fundamentals from surviving low-mid superharmonics ($m \in \{2, 3, 4, 5, 6\}$) paired with a clean zero-noise sub-bass prior.
+2. **Mid-Band Completion ($500\text{--}6000\text{ Hz}$)**: `src/rich_mid.rs` reconstructs vocal and instrument bodies conditioned on surviving low fundamentals ($m \in \{1, 2, 3, 4, 6\}$).
+3. **High-Band Completion ($>6000\text{ Hz}$)**: `src/scene_clean.rs` / `src/rich_field.rs` reconstructs high-frequency air and crisp transient bite.
+4. **Band-Locking Guarantee**: Passbands are bit-exact protected using `dsp::lock_known_bands`, preventing distortion in trusted regions.
+5. **Streaming Chunk Caching**: Restructured streaming processing with 8.0s windows and 2.0s equal-power crossfades, restoring a full 3m24s track in 3.2 seconds.
+6. **Autonomous Mastering Pass**: `src/master.rs` provides broadcast-standard finalization conforming to ITU-R BS.1770-4 and EBU R128 (integrated LUFS, soft-knee glue compression, 4x polyphase FIR oversampled true-peak detection, and lookahead peak limiting to -1.0 dBTP).
+
+Roadmap forward, including high-resolution low-band STFT binning (5.86 Hz bins), section-aware macro-dynamic tracking, and 3D spatial acoustics (ITD/ILD duplex cues and mono sub-bass guard <120 Hz), is formalized in [SPRINT4_ROADMAP_AND_EXPANSION_PLAN](SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md).

@@ -668,6 +668,35 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore = "diagnostic: prints per-family low-task target statistics"]
+    fn low_family_target_statistics() {
+        for i in 0..24u64 {
+            let seed = 800010 + 300000 + i;
+            let (audio, recipe) = rich_synth::generate_low(seed);
+            let d = recipe.damage;
+            let degraded = d.apply(&audio);
+            let p = scene_features::prepare(&degraded, d, 11);
+            let des = desired(&p, &audio, d);
+            let mut mags: Vec<f32> = des.iter().flatten().map(|z| z.norm()).filter(|m| *m > 0.0).collect();
+            mags.sort_by(f32::total_cmp);
+            let peak = audio.channels.iter().flatten().fold(0.0f32, |m, x| m.max(x.abs()));
+            let rms = |a: &Audio| (a.channels.iter().flatten().map(|x| x * x).sum::<f32>() / (a.channels.len() * a.frames()) as f32).sqrt();
+            println!(
+                "{:>18} cut {:>5.0} peak {:.3} target_rms {:.4} input_rms {:.5} scale {:.4} |des| median {:.2} p99 {:.2} max {:.2}",
+                recipe.family,
+                d.cutoff_hz(),
+                peak,
+                rms(&audio),
+                rms(&degraded),
+                p.scale[0],
+                mags.get(mags.len() / 2).copied().unwrap_or(0.0),
+                mags.get(mags.len() * 99 / 100).copied().unwrap_or(0.0),
+                mags.last().copied().unwrap_or(0.0),
+            );
+        }
+    }
+
+    #[test]
     fn low_gradient_matches_finite_difference() {
         let target = Audio {
             rate: 48000,

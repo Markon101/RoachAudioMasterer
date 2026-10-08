@@ -61,6 +61,17 @@ and ultrasonic air bit-exact, confirmed by owner listening audition to sound qui
 track was subsequently mastered to `/sdcard/Download/Feelin’ Catchy - Mid Band Flow Clean Full.wav` (peak 0.9900,
 mean -16.15 dBFS) using 8-core bounded parallel solver execution (307.4s total elapsed across 23 WOLA chunks).
 
+The subsequent [Sprint 3 tri-band extension and autonomous post-mastering pass](docs/SPRINT3_TRIBAND_RESULTS.md)
+completed full-spectrum restoration and broadcast-standard mastering:
+- **De-LFO Curriculum**: Replaced rigid 1.7 Hz pitch modulation with 75% steady pitches and 25% non-periodic drift (`src/rich_synth.rs`).
+- **Low-Band Flow Matching (`rich-low-v1`)**: Formulated sub-bass fundamental restoration conditioned on surviving superharmonics ($m \cdot f_k$, $m \in \{2, 3, 4, 5, 6\}$) with zero-noise clean prior (`src/rich_low.rs`, `artifacts/rich-low-v1/basis.json`).
+- **Tri-Band Restoration (`rich-triband-restore`)**: Unified Low (<500 Hz), Mid (500–6000 Hz), and High (>6000 Hz) flow matching with bit-exact preservation of trusted passbands.
+- **Streaming Chunk Caching**: Restructured streaming chunk engine with 8.0s windows and 2.0s equal-power crossfades. Restored a full 3m24s track (*Feelin' Catchy*) in **3.2 seconds** on the 8-core CPU.
+- **Autonomous Post-Mastering Pass (`master`)**: Implemented ITU-R BS.1770-4 K-weighted LUFS metering, soft-knee glue compression, 4x polyphase FIR oversampled true-peak detection, and lookahead brickwall peak limiter (`src/master.rs`).
+- **Mastered Results on *Feelin' Catchy***: Pre-master -13.78 LUFS, post-master -11.02 LUFS, true peak strictly capped at -1.00 dBTP, zero intersample clipping, dynamic range LRA preserved at 6.45 LU.
+- **Published Audio Outputs**: Exported to `/sdcard/Download/` and `/sdcard/Download/FLAC/` (WAV float32, WAV PCM16, FLAC 24-bit). Device owner evaluation: *"Okay, that actually sounded really super good."*
+- **Diagnostic Root-Cause Investigation**: Diagnosed low-band training loss spikes ($5.4 \times 10^6$ on step 1300) caused by pure sine waves (`sub_sine`) collapsing degraded RMS to 0.0012 and scale to 0.038 under high-pass filtering, inflating target velocities to $|des| > 7200$. Resolution plan established in `docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md`.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

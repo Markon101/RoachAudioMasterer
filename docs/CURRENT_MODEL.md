@@ -1,16 +1,14 @@
 # Current model and next controlled extensions
 
-Status: 2026-10-05. This describes the **implemented native scene v2**, the latest
-48 kHz stereo listening delivery. Older v0 and flow-v1 models remain available
-and have different architectures. Exact run evidence is in
-[SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md); citations and adaptation scope are in
-[REFERENCES.md](REFERENCES.md). Nothing below implies recovered original content.
+Status: Updated 2026-10-08. This describes the **implemented native scene v2** baseline
+from 2026-10-05. Older v0 and flow-v1 models remain available. Exact run evidence for v2 is in
+[SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md). Subsequent sprints expanded this system into:
+- **Coupled Complex Field Sprint**: [RICH_SPRINT_RESULTS.md](RICH_SPRINT_RESULTS.md) (Basis rotational/transport operator and full-track streaming).
+- **Mid-Band Flow Sprint**: [MID_BAND_FLOW_RESULTS.md](MID_BAND_FLOW_RESULTS.md) (500 Hz – 6 kHz flow matching).
+- **Tri-Band & Autonomous Mastering Sprint**: [SPRINT3_TRIBAND_RESULTS.md](SPRINT3_TRIBAND_RESULTS.md) (sub-bass flow matching, chunk caching full-track restore in 3.2s, ITU-R BS.1770-4 LUFS and true-peak mastering).
+- **Sprint 4 Roadmap**: [SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md](SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md) (stabilization, 8192-point STFT binning, macro-dynamics, 3D spatial acoustics).
 
-The original native pilot below trained 600 updates per stage. The subsequent
-[longer-flow comparison](NATIVE_LONGER_RESULTS.md) continues the same architecture
-to 1500/3000 updates with persisted Adam. The owner now prefers 3000/strength1,
-especially the 160-second passage; objective scores are mixed. Those results
-update training/preference status, not the signal-path description below.
+The signal path below describes the core native scene v2 STFT engine that anchors these residual heads.
 
 ## Signal path
 
@@ -32,9 +30,9 @@ flowchart TD
 The supplied cutoff/transition describe what is trusted and what may be added.
 There is no automatic damage classifier. A controlled test first low-passes an
 available reference and scores reconstruction against that reference. Direct
-restoration instead accepts an assumed cutoff and has no clean-reference score.
-Restoration reads bounded regions of up to 12 seconds; whole-song streaming and
-seam handling are not implemented yet. This is an offline, noncausal model.
+Legacy `scene-restore` reads bounded regions of up to 12 seconds. Full-song streaming
+with 8.0-second chunk caching and equal-power cosine crossfading is now implemented in
+`rich-field-restore-song` and `rich-triband-restore`. This is an offline, noncausal model.
 
 Stereo is converted to orthonormal mid/side: `M=(L+R)/sqrt(2)` and
 `S=(L-R)/sqrt(2)`. Both channels use shared weights. Each sees its own complex
@@ -269,7 +267,13 @@ The most useful immediate comparison is a tiny rotation/coupling extension
 against a capacity-matched ordinary flow head, alongside the energy/quiet fixes.
 One changed mechanism at a time makes a combined system interpretable. No
 novelty claim, PDE/audio equivalence or competence claim follows from implementing
-an unusual rule. All these extensions remain proposals, not trained features.
+an unusual rule.
+
+*Implemented Milestone Update (2026-10-07)*: The rotation, Laplacian transport, and dynamic excitation
+allocator were subsequently implemented in `src/rich_field.rs` as the **Basis** dynamic field operator.
+In listening auditions on *Feelin' Catchy*, the owner preferred its punchier transient definition and high-end bite.
+The 1,000-step Basis model is frozen as the primary high-band operator in `artifacts/rich-field-v1/basis.json`.
+See [RICH_SPRINT_RESULTS.md](RICH_SPRINT_RESULTS.md) for full benchmark and listening provenance.
 
 ## Mobile implementation
 

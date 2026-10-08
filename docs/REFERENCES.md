@@ -136,7 +136,21 @@ The rich sprint additionally uses these primary sources, checked 2026-10-05:
   quantization or block-matrix training. We borrow no natural-audio data/weights,
   and the paper's quality/timing results do not transfer to this phone experiment.
 
-Scope notes come from the original papers, including method/experiment sections,
-not Hugging Face's generated summaries. Public HF markdown was available for
-some papers; arXiv PDFs/HTML supplied the others. Full copyrighted paper text is
+## Autonomous mastering and spatial acoustics standards
+
+- **R18 — International Telecommunication Union (ITU-R),
+  [Recommendation ITU-R BS.1770-4: Algorithms to measure audio programme loudness and true-peak audio level](https://www.itu.int/rec/R-REC-BS.1770-4-201510-I/en) (2015).**
+  Defines K-frequency weighting (pre-filter high shelf + RLB weighting curve), mean-square energy integration with absolute (-70 LKFS) and relative (-10 LU) gating thresholds, and Annex 2 specification for 4x oversampled polyphase FIR true-peak detection to measure inter-sample peaks. Implemented in `src/master.rs`.
+- **R19 — European Broadcasting Union (EBU),
+  [EBU Tech 3341 / Tech 3342: 'EBU Mode' Loudness Metering and Loudness Range (LRA)](https://tech.ebu.ch/publications/tech3341) (2011/2016).**
+  Standardizes Momentary (400 ms sliding window) and Short-Term (3.0 s sliding window) loudness meters, target loudness normalization (-23 LUFS broadcast, adapted to -14/-11 LUFS for streaming/commercial audition), and Loudness Range (LRA) percentiles (10% to 95%). Used in `src/master.rs` and the dynamic section-aware mastering tracker.
+- **R20 — Blauert, J.,
+  [Spatial Hearing: The Psychophysics of Human Sound Localization](https://mitpress.mit.edu/9780262024136/spatial-hearing/) (MIT Press, 1997; Lord Rayleigh 1907 Duplex Theory).**
+  Psychoacoustic foundation for binaural spatialization: Interaural Time Differences (ITD) dominate horizontal localization below 1.5 kHz (time delay $\le 0.7\text{ ms}$), whereas Interaural Level Differences (ILD) dominate above 1.5 kHz due to head-shadow acoustic diffraction. Provides basis for Mid/Side spatial processing and mono sub-bass constraints (<120 Hz).
+- **R21 — Schroeder, M. R.,
+  [Natural Sounding Artificial Reverberation](https://doi.org/10.1121/1.1908906) (Journal of the Audio Engineering Society, 1962).**
+  Foundation for early reflection delay networks (ERDN) using prime delay lines, feedback comb filters, and all-pass diffusers to reconstruct acoustic depth without flutter echoes.
+
+Scope notes come from the original papers and standards organizations, including method/experiment sections,
+not Hugging Face's generated summaries. Public HF markdown and official ITU/EBU PDFs supplied the standards text. Full copyrighted text is
 not redistributed in this repository.

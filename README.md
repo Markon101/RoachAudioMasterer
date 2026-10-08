@@ -1,14 +1,15 @@
 # highband
 
-A small Rust experiment in synthetic-supervised conditional audio high-frequency
-reconstruction, developed on a Samsung Galaxy S25 Ultra in Android/Termux.
-Generated highs are plausible spectral completion, not recovery of lost information.
+A small Rust experiment in synthetic-supervised conditional audio multi-band restoration,
+expansion, and autonomous mastering, developed on a Samsung Galaxy S25 Ultra in Android/Termux.
+Generated content (sub-bass fundamentals, mid overtones, and high air) represents plausible
+spectral completion and contrast expansion conditioned on surviving physical relationships,
+not recovery of lost information.
 
 The core direction is a unified acoustic-scene restoration/correction engine.
-Bandwidth extension is the first task. Spectral, transient, microdynamic/dynamic
+Multi-band completion is the initial entry point. Spectral, transient, microdynamic/dynamic
 expansion, phase/coherence, stereo/spatial, ambience/depth and texture residuals
-are first-class design targets, with conservative-to-creative policies. Most are
-not implemented yet. See [architecture](docs/ARCHITECTURE.md).
+are first-class design targets, with conservative-to-creative policies. See [architecture](docs/ARCHITECTURE.md).
 
 The v0 plan: deterministic procedural signals, randomized bandwidth removal,
 STFT magnitude prediction, untouched known spectral coefficients, CPU numerical
@@ -27,9 +28,15 @@ with exact equal-power cosine crossfading, high-band denoise, and bounded auto-E
 The subsequent mid-band extension is documented in [MID_BAND_FLOW_RESULTS](docs/MID_BAND_FLOW_RESULTS.md),
 extending conditional flow matching down into the midrange (500 Hz – 6 kHz) via `rich-mid-train`
 and `rich-mid-restore` with subharmonic bass feature routing and procedural generation `generate_mid`.
-The 1,000-step mid-band Basis model is preserved in `artifacts/rich-mid-v1/basis.json`. All prior
-native defaults, checkpoints, and frozen evidence remain intact. Registered comparisons and
-provenance are in [RICH_SPRINT_PLAN](docs/RICH_SPRINT_PLAN.md) and [SPRINT2_MID_FLOW_PLAN](docs/SPRINT2_MID_FLOW_PLAN.md).
+The 1,000-step mid-band Basis model is preserved in `artifacts/rich-mid-v1/basis.json`.
+
+The full-spectrum tri-band and autonomous mastering extension is documented in [SPRINT3_TRIBAND_RESULTS](docs/SPRINT3_TRIBAND_RESULTS.md),
+extending flow matching to sub-bass fundamentals (20–500 Hz) via `rich-low-train` and `rich-low-restore` with superharmonic overtone
+routing ($m \in \{2, 3, 4, 5, 6\}$), uniting all three bands in streaming chunk-cached `rich-triband-restore` (3.2s runtime for a 3m24s track),
+and introducing broadcast-standard autonomous mastering via `master` (ITU-R BS.1770-4 LUFS, soft-knee glue compression, 4x polyphase true peak
+detection, and lookahead peak limiting to -1.0 dBTP). The 2,000-step low-band Basis model is frozen in `artifacts/rich-low-v1/basis.json`.
+Future research directions, including low-band stabilization, 8192-point STFT binning, section-aware macro-dynamics, and 3D spatial acoustics,
+are formalized in [SPRINT4_ROADMAP_AND_EXPANSION_PLAN](docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md).
 
 Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
 ML framework, service, dataset download, or GPU is required.
@@ -37,11 +44,21 @@ ML framework, service, dataset download, or GPU is required.
 ```sh
 cargo test --locked
 cargo build --release --locked
-./target/release/highband generate --seed 42 --out runs/generated
-./target/release/highband train --seed 20000 --steps 400 --out runs/train
-./target/release/highband evaluate --model runs/train/model.json --out runs/eval
-./target/release/highband restore --input runs/eval/seed_100000/degraded.wav \
-  --cutoff 5000 --model runs/train/model.json --out runs/restored.wav
+
+# Full-track tri-band restoration (sub-bass + mids + highs)
+./target/release/highband rich-triband-restore \
+  --input song.wav \
+  --low artifacts/rich-low-v1/basis.json \
+  --mid artifacts/rich-mid-v1/basis.json \
+  --high artifacts/rich-field-v1/basis.json \
+  --out runs/song-triband.wav
+
+# Autonomous mastering pass (EBU R128 / BS.1770-4 LUFS, 4x true peak limit)
+./target/release/highband master \
+  --input runs/song-triband.wav \
+  --target-lufs -11.0 \
+  --ceiling-dbtp -1.0 \
+  --out runs/song-mastered.wav
 ```
 
 For the generated evaluation clips, use the actual cutoff and transition from
