@@ -72,6 +72,26 @@ completed full-spectrum restoration and broadcast-standard mastering:
 - **Published Audio Outputs**: Exported to `/sdcard/Download/` and `/sdcard/Download/FLAC/` (WAV float32, WAV PCM16, FLAC 24-bit). Device owner evaluation: *"Okay, that actually sounded really super good."*
 - **Diagnostic Root-Cause Investigation**: Diagnosed low-band training loss spikes ($5.4 \times 10^6$ on step 1300) caused by pure sine waves (`sub_sine`) collapsing degraded RMS to 0.0012 and scale to 0.038 under high-pass filtering, inflating target velocities to $|des| > 7200$. Resolution plan established in `docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md`.
 
+## Stage 1: Low-band stabilization & solver step-count benchmark (Sprint 4)
+
+- **Training Stabilization (`rich-low-v2`)**:
+  - Clamped scaling denominator `p.scale[c].max(1.0)` in `desired()`.
+  - Added subtle physical saturation harmonics ($j \in \{2, 3\}$, tilt 2.0–3.0) to `sub_sine` in `rich_synth.rs`.
+  - Added gradient norm clipping (`max_norm = 10.0`) in `rich_low::train`.
+  - Enlarged procedural scene pool from 32 to 128 scenes.
+  - Re-trained 2,000 steps in **63.7s** on 4-core background affinity (`taskset -c 0-3`). Loss remained strictly bounded: step 1300 loss dropped from $5.4\times 10^6$ down to **2.55**, final step 2000 loss was **21.72**.
+  - Checkpoint preserved in `artifacts/rich-low-v2/basis.json`.
+
+- **Solver Step-Count Benchmark (16 Held-Out Synthetic Scenes, Seeds 900000..900015)**:
+
+| Solver Steps | Missing NMSE | Log Spectral Distance (LSD) | Time / Scene | Latency / 1k Frames |
+|---:|---:|---:|---:|---:|
+| **4 steps** | 54.5990 | 17.90 dB | 21.79 ms | 325.21 ms |
+| **8 steps** | 54.3984 | 17.90 dB | 32.84 ms | 490.17 ms |
+| **16 steps** | 54.2942 | 17.91 dB | 57.27 ms | 854.70 ms |
+
+  - **Takeaway**: 8 steps is the optimal production default, capturing virtually all accuracy gains of 16 steps (54.39 vs 54.29) at nearly half the latency (32.8ms vs 57.3ms). 4 steps provides 99.6% accuracy at 33% faster speed (21.8ms), suitable for fast mobile preview.
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

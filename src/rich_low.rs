@@ -104,13 +104,14 @@ pub fn desired(p: &Prepared, target: &Audio, d: Damage) -> [Vec<C>; 2] {
     let cut_bin = d.cutoff_bin();
     std::array::from_fn(|c| {
         let t = s.analyze(&ms[c]);
+        let scale_denom = p.scale[c].max(1.0);
         (0..p.frames * BINS)
             .map(|i| {
                 let bin = i % BINS;
                 if bin > 0 && bin <= cut_bin {
                     (t.data[i] - p.base[c].data[i])
                         * (if bin.is_multiple_of(2) { 1.0 } else { -1.0 })
-                        / p.scale[c]
+                        / scale_denom
                 } else {
                     C::default()
                 }
@@ -320,7 +321,7 @@ pub fn train(
     let start_time = Instant::now();
     let state_path = out.join(format!("state-{}.json", kind.name()));
 
-    let pool_size = 32;
+    let pool_size = 128;
     let mut cached_scenes: Vec<CachedScene> = Vec::with_capacity(pool_size);
     let mut rng = Rng(seed ^ 0x93710823);
 
@@ -371,7 +372,21 @@ pub fn train(
             time,
         };
 
-        let (loss, eg, hg) = gradient(&field, p, audio, recipe.damage, point);
+        let (loss, mut eg, mut hg) = gradient(&field, p, audio, recipe.damage, point);
+
+        let eg_norm_sq: f32 = eg.iter().map(|g| g * g).sum();
+        let hg_norm_sq: f32 = hg.iter().map(|g| g * g).sum();
+        let total_norm = (eg_norm_sq + hg_norm_sq).sqrt();
+        let max_norm = 10.0f32;
+        if total_norm > max_norm {
+            let clip_factor = max_norm / total_norm;
+            for g in eg.iter_mut() {
+                *g *= clip_factor;
+            }
+            for g in hg.iter_mut() {
+                *g *= clip_factor;
+            }
+        }
 
         enc_opt.update(&mut field.core.encoder.weights, &eg, 0.001);
         head_opt.update(&mut field.core.head.weights, &hg, 0.001);
@@ -834,6 +849,91 @@ mod tests {
         for c in 0..2 {
             let err = native_dsp::high_error(&degraded.channels[c], &wave.channels[c], d.cutoff_hz() + d.transition);
             assert!(err < 2e-6, "known band high error {err} exceeds tolerance");
+        }
+    }
+
+    #[test]
+    #[ignore = "benchmark: evaluates solver step counts (4 vs 8 vs 16) on held-out synthetic test scenes"]
+    fn low_step_count_benchmark() {
+        let model_path = Path::new("artifacts/rich-low-v2/basis.json");
+        if !model_path.exists() {
+            println!("artifacts/rich-low-v2/basis.json not found, skipping benchmark");
+            return;
+        }
+        let field = LowField::load(model_path).expect("load low model");
+        let mut engine = Engine::new(&field.core, "cpu").expect("engine cpu");
+        let step_options = [4, 8, 16];
+        let num_scenes = 16;
+        let base_seed = 900000u64;
+
+        println!("--- Solver Step-Count Benchmark on 16 Held-Out Synthetic Scenes ---");
+        for &steps in &step_options {
+            let mut total_nmse = 0.0f64;
+            let mut total_lsd = 0.0f64;
+            let mut total_time_ms = 0.0f64;
+            let mut total_frames = 0usize;
+
+            for i in 0..num_scenes {
+                let s_seed = base_seed + i as u64;
+                let (audio, recipe) = rich_synth::generate_low(s_seed);
+                let d = recipe.damage;
+                let degraded = d.apply(&audio);
+                let p = scene_features::prepare(&degraded, d, 11);
+                let prior = scene_features::prior_state(&p, "harmonic");
+                let ceil_bin = d.cutoff_bin();
+
+                let t0 = Instant::now();
+                let state = engine
+                    .refine_mode_bounded(&p, d, &prior, steps, field.kind.mode(), Some(ceil_bin + 1))
+                    .expect("refine");
+                let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
+                total_time_ms += elapsed_ms;
+                total_frames += p.frames;
+
+                let restored = low_waveform(&p, d, d.cutoff_hz(), &state, 1.0);
+
+                let s = Stft::default();
+                let mut num_bins = 0usize;
+                let mut missing_err_sq = 0.0f64;
+                let mut missing_ref_sq = 0.0f64;
+                let mut lsd_accum = 0.0f64;
+
+                for c in 0..audio.channels.len() {
+                    let target_stft = s.analyze(&audio.channels[c]);
+                    let restored_stft = s.analyze(&restored.channels[c]);
+                    let cut = d.cutoff_bin().min(BINS - 1);
+                    for t in 0..p.frames {
+                        let mut frame_lsd = 0.0f64;
+                        for k in 1..=cut {
+                            let tm = target_stft.data[t * BINS + k].norm() as f64;
+                            let rm = restored_stft.data[t * BINS + k].norm() as f64;
+                            missing_err_sq += (tm - rm).powi(2);
+                            missing_ref_sq += tm.powi(2);
+                            let tm_db = 20.0 * (tm + 1e-6).log10();
+                            let rm_db = 20.0 * (rm + 1e-6).log10();
+                            frame_lsd += (tm_db - rm_db).powi(2);
+                        }
+                        if cut > 0 {
+                            lsd_accum += (frame_lsd / cut as f64).sqrt();
+                            num_bins += 1;
+                        }
+                    }
+                }
+                let nmse = missing_err_sq / missing_ref_sq.max(1e-8);
+                let lsd = if num_bins > 0 { lsd_accum / num_bins as f64 } else { 0.0 };
+                total_nmse += nmse;
+                total_lsd += lsd;
+            }
+
+            let avg_nmse = total_nmse / num_scenes as f64;
+            let avg_lsd = total_lsd / num_scenes as f64;
+            let avg_ms_per_scene = total_time_ms / num_scenes as f64;
+            let ms_per_1000_frames = total_time_ms / (total_frames as f64) * 1000.0;
+
+            println!(
+                "Steps: {:>2} | Missing NMSE: {:.4} | LSD: {:.2} dB | Time/scene: {:.2} ms | Latency/1k frames: {:.2} ms",
+                steps, avg_nmse, avg_lsd, avg_ms_per_scene, ms_per_1000_frames
+            );
         }
     }
 }

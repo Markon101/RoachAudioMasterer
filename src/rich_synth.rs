@@ -384,9 +384,13 @@ pub fn generate_low(seed: u64) -> (Audio, Recipe) {
                 _ => r.range(35.0, 180.0),
             };
             let phase0 = r.range(0.0, TAU);
-            let tilt = r.range(0.75, 1.8);
+            let tilt = if family == 2 {
+                r.range(2.0, 3.0)
+            } else {
+                r.range(0.75, 1.8)
+            };
             let count = if family == 2 {
-                1
+                3
             } else if family == 3 {
                 (2000.0 / f).floor().max(2.0).min(32.0) as usize
             } else {
