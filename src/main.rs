@@ -36,6 +36,8 @@ pub mod scene_clean;
 pub mod stft_hires;
 pub mod spatial;
 pub mod sfht;
+pub mod critics;
+pub mod assess;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
@@ -237,6 +239,12 @@ enum Commands {
         spatial: bool,
         #[arg(long)]
         out: PathBuf,
+    },
+    Assess {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        out: Option<PathBuf>,
     },
     RichLowTrain {
         #[arg(long, default_value = "basis", value_parser = ["basis", "diagonal", "rotation", "transport"])]
@@ -860,6 +868,51 @@ fn run() -> Result<()> {
             spatial,
             out,
         } => master::run(&input, target_lufs, ceiling_db, glue_threshold_db, glue_ratio, sidechain_hp_hz, spatial, &out),
+        Commands::Assess { input, out } => {
+            let audio = native_audio::read_entire(&input)?;
+            let assessor = assess::SceneAssessor::default();
+            let profile = assessor.assess(&audio);
+            println!("=======================================================");
+            println!("  ACOUSTIC-SCENE ASSESSMENT & SPECIALIST AUTHORITIES");
+            println!("=======================================================");
+            println!("Input: {}", input.display());
+            println!("Duration: {:.2}s, Channels: {}", audio.frames() as f32 / audio.rate as f32, audio.channels.len());
+            println!("-- Millisecond Dynamics --");
+            println!("  Peak Sample: {:.2} dBFS (Clipping Samples: {})", profile.peak_sample_dbfs, profile.clipping_sample_count);
+            println!("  Transient Density: {:.1} onsets/sec", profile.transient_density_per_sec);
+            println!("-- Spectral & Spatial Sub-Second Balance --");
+            println!("  Sub-Bass (<120 Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS", profile.sub_energy_dbfs, profile.low_mid_energy_dbfs, profile.mid_energy_dbfs);
+            println!("  High (>6 kHz): {:.1} dBFS | Ultrasonic: {:.1} dBFS | Est. Cutoff: {:.0} Hz", profile.high_energy_dbfs, profile.ultrasonic_energy_dbfs, profile.estimated_cutoff_hz);
+            println!("  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leak: {:.3}", profile.interchannel_correlation, profile.side_to_mid_ratio, profile.sub_side_leak_ratio);
+            println!("-- Objective Artifact Critics (0.0=Clean, 1.0=Severe) --");
+            println!("  AI Phase Shimmer:       {:.3}", profile.artifacts.ai_shimmer);
+            println!("  Metallic Grain:         {:.3}", profile.artifacts.metallic_grain);
+            println!("  Spectral Combing:       {:.3}", profile.artifacts.spectral_combing);
+            println!("  Codec Swish:            {:.3}", profile.artifacts.codec_swish);
+            println!("  Phase Haze:             {:.3}", profile.artifacts.phase_haze);
+            println!("  Sub-Bass Instability:   {:.3}", profile.artifacts.sub_instability);
+            println!("  Over-Wide Transients:   {:.3}", profile.artifacts.over_wide_transient);
+            println!("  Composite Defect Index: {:.3}", profile.artifacts.composite_defect_index);
+            println!("-- Explicit Specialist Authorities & Learned Abstention --");
+            println!("  Sub-Bass Specialist:       alpha = {:.2} [{}]", profile.authorities.sub_bass_authority, if profile.authorities.sub_bass_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
+            println!("  Mid-Flow Specialist:       alpha = {:.2} [{}]", profile.authorities.mid_flow_authority, if profile.authorities.mid_flow_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
+            println!("  High-Field Specialist:     alpha = {:.2} [{}]", profile.authorities.high_field_authority, if profile.authorities.high_field_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
+            println!("  Spatial Cleanup:           alpha = {:.2} [{}]", profile.authorities.spatial_cleanup_authority, if profile.authorities.spatial_cleanup_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
+            println!("  Conservative De-fizz:      alpha = {:.2} [{}]", profile.authorities.conservative_defizz_authority, if profile.authorities.conservative_defizz_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
+            println!("  Mastering Glue:            alpha = {:.2}", profile.authorities.master_glue_authority);
+            println!("-- Multi-Second Macro Dynamics --");
+            println!("  Integrated LUFS: {:.2} | Crest Factor: {:.2} dB | Dyn Range LRA: {:.1} LU", profile.integrated_lufs, profile.crest_factor_db, profile.dynamic_range_lra_lu);
+            println!("=======================================================");
+            if let Some(ref out_path) = out {
+                if !out_path.exists() {
+                    let _ = std::fs::create_dir_all(out_path);
+                }
+                let json_path = if out_path.is_dir() { out_path.join("assessment.json") } else { out_path.clone() };
+                std::fs::write(&json_path, serde_json::to_string_pretty(&profile)?)?;
+                println!("Assessment saved to {}", json_path.display());
+            }
+            Ok(())
+        }
         Commands::RichLowTrain {
             kind,
             steps,

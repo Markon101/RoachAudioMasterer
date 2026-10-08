@@ -413,15 +413,14 @@ pub fn train_sfht(
     Ok(())
 }
 
-/// Restores damaged sub-bass using the trained SFHT flow model.
-pub fn restore_sfht(
-    model_path: &Path,
+/// Restores a single bounded chunk using the SFHT flow model.
+fn restore_sfht_single(
+    model: &SfhtModel,
     input: &Audio,
     low_cutoff: f32,
     solver_steps: usize,
     strength: f32,
 ) -> Result<Audio> {
-    let model = SfhtModel::load(model_path)?;
     let hires = HiResStft::default();
 
     let ms = input.mid_side();
@@ -501,6 +500,86 @@ pub fn restore_sfht(
         restored_ms,
         input.channels.len() == 2,
     ))
+}
+
+/// Restores damaged sub-bass using the trained SFHT flow model.
+/// Automatically applies streaming WOLA (weighted overlap-add) chunking for tracks longer than 8 seconds.
+pub fn restore_sfht(
+    model_path: &Path,
+    input: &Audio,
+    low_cutoff: f32,
+    solver_steps: usize,
+    strength: f32,
+) -> Result<Audio> {
+    let model = SfhtModel::load(model_path)?;
+    let total_samples = input.channels[0].len();
+    let chunk_samples = 8 * crate::native_dsp::RATE as usize; // 8.0s
+    let overlap_samples = 2 * crate::native_dsp::RATE as usize; // 2.0s
+
+    if total_samples <= chunk_samples {
+        return restore_sfht_single(&model, input, low_cutoff, solver_steps, strength);
+    }
+
+    // Streaming WOLA chunking for memory boundedness (<35 MiB)
+    let step_samples = chunk_samples - overlap_samples;
+    let mut chunk_starts = Vec::new();
+    let mut pos = 0;
+    while pos + chunk_samples <= total_samples {
+        chunk_starts.push(pos);
+        pos += step_samples;
+    }
+    if pos < total_samples {
+        let final_start = total_samples.saturating_sub(chunk_samples);
+        if chunk_starts.last() != Some(&final_start) {
+            chunk_starts.push(final_start);
+        }
+    }
+
+    let num_channels = input.channels.len();
+    let mut out_channels = vec![vec![0.0f32; total_samples]; num_channels];
+    let num_chunks = chunk_starts.len();
+
+    for (idx, &c_start) in chunk_starts.iter().enumerate() {
+        let c_end = (c_start + chunk_samples).min(total_samples);
+        let actual_len = c_end - c_start;
+        let chunk_audio = Audio {
+            rate: input.rate,
+            channels: (0..num_channels)
+                .map(|c| input.channels[c][c_start..c_end].to_vec())
+                .collect(),
+        };
+
+        let restored_chunk = restore_sfht_single(&model, &chunk_audio, low_cutoff, solver_steps, strength)?;
+
+        // Equal-power crossfade weights
+        let mut w = vec![1.0f32; actual_len];
+        if idx > 0 {
+            let fade_in = overlap_samples.min(actual_len);
+            for j in 0..fade_in {
+                let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / fade_in as f32);
+                w[j] = theta.sin().powi(2);
+            }
+        }
+        if idx < num_chunks - 1 && actual_len > overlap_samples {
+            let fade_out = overlap_samples;
+            let start_fade = actual_len - fade_out;
+            for j in 0..fade_out {
+                let theta = std::f32::consts::FRAC_PI_2 * (j as f32 / fade_out as f32);
+                w[start_fade + j] = theta.cos().powi(2);
+            }
+        }
+
+        for c in 0..num_channels {
+            for j in 0..actual_len {
+                out_channels[c][c_start + j] += restored_chunk.channels[c][j] * w[j];
+            }
+        }
+    }
+
+    Ok(Audio {
+        rate: input.rate,
+        channels: out_channels,
+    })
 }
 
 /// Evaluates SFHT model on held-out synthetic test scenes.
