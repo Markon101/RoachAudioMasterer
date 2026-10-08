@@ -92,6 +92,15 @@ completed full-spectrum restoration and broadcast-standard mastering:
 
   - **Takeaway**: 8 steps is the optimal production default, capturing virtually all accuracy gains of 16 steps (54.39 vs 54.29) at nearly half the latency (32.8ms vs 57.3ms). 4 steps provides 99.6% accuracy at 33% faster speed (21.8ms), suitable for fast mobile preview.
 
+- **6,000-Step Extended Training Experiment (`rich-low-v2-6000`)**:
+  - Resumed from 2,000-step state and trained 4,000 further updates (6,000 total) in **129.3s** on 4-core background affinity.
+  - Final step 6000 loss converged to **1.0–2.0** on clean acoustic targets.
+  - **Empirical Findings on Held-Out Test Scenes**:
+    - **Reconstruction Accuracy**: On valid scenes, missing-band NMSE dropped by **35%** (54.4 $\to$ 35.1–35.9) and Log Spectral Distance dropped by **3.91 dB** (17.90 $\to$ 13.99 dB).
+    - **Finite-State Instability**: On 4 of 16 seeds, Euler integration exceeded the declared finite-state bound ($|z| < 64.0$).
+    - **Root Cause**: Without weight decay (AdamW / $L_2$ penalty), encoder weight norm doubled from 12.19 to 24.37, steepening vector field velocity slopes and destabilizing trajectory integration on extreme edge cases.
+    - **Model Capacity Conclusion**: The 106k-parameter architecture has surplus capacity. Doubling model size without weight decay or higher STFT resolution would exacerbate weight drift. The optimal path is introducing AdamW weight decay ($10^{-4}$) to stabilize 6000+ step training, while addressing the physical frequency resolution limit via multirate STFT (Stage 3).
+
 ## Fixed design
 
 All runs use generator v1, 24 kHz mono, 512-point centered square-root-Hann STFT,

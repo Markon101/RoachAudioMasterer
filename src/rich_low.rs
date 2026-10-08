@@ -855,23 +855,27 @@ mod tests {
     #[test]
     #[ignore = "benchmark: evaluates solver step counts (4 vs 8 vs 16) on held-out synthetic test scenes"]
     fn low_step_count_benchmark() {
-        let model_path = Path::new("artifacts/rich-low-v2/basis.json");
-        if !model_path.exists() {
-            println!("artifacts/rich-low-v2/basis.json not found, skipping benchmark");
-            return;
-        }
-        let field = LowField::load(model_path).expect("load low model");
-        let mut engine = Engine::new(&field.core, "cpu").expect("engine cpu");
+        let models = [
+            ("rich-low-v2 (2000 steps)", Path::new("artifacts/rich-low-v2/basis.json")),
+            ("rich-low-v2-6000 (6000 steps)", Path::new("artifacts/rich-low-v2-6000/basis.json")),
+        ];
         let step_options = [4, 8, 16];
         let num_scenes = 16;
         let base_seed = 900000u64;
 
         println!("--- Solver Step-Count Benchmark on 16 Held-Out Synthetic Scenes ---");
-        for &steps in &step_options {
-            let mut total_nmse = 0.0f64;
-            let mut total_lsd = 0.0f64;
-            let mut total_time_ms = 0.0f64;
-            let mut total_frames = 0usize;
+        for &(model_name, model_path) in &models {
+            if !model_path.exists() {
+                continue;
+            }
+            let field = LowField::load(model_path).expect("load low model");
+            let mut engine = Engine::new(&field.core, "cpu").expect("engine cpu");
+            println!("Testing Model: {model_name}");
+            for &steps in &step_options {
+                let mut total_nmse = 0.0f64;
+                let mut total_lsd = 0.0f64;
+                let mut total_time_ms = 0.0f64;
+                let mut total_frames = 0usize;
 
             for i in 0..num_scenes {
                 let s_seed = base_seed + i as u64;
@@ -883,9 +887,13 @@ mod tests {
                 let ceil_bin = d.cutoff_bin();
 
                 let t0 = Instant::now();
-                let state = engine
-                    .refine_mode_bounded(&p, d, &prior, steps, field.kind.mode(), Some(ceil_bin + 1))
-                    .expect("refine");
+                let state = match engine.refine_mode_bounded(&p, d, &prior, steps, field.kind.mode(), Some(ceil_bin + 1)) {
+                    Ok(s) => s,
+                    Err(e) => {
+                        println!("  Scene {:>2} (seed {}) failed with: {}", i, s_seed, e);
+                        continue;
+                    }
+                };
                 let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
                 total_time_ms += elapsed_ms;
                 total_frames += p.frames;
@@ -936,4 +944,5 @@ mod tests {
             );
         }
     }
+}
 }
