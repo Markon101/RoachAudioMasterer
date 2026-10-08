@@ -52,6 +52,69 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    /// Unified autonomous mastering pipeline: Pre-Assessment, SFHT low-end, CFM mid-range, clean polish, 3D spatial acoustics, dynamic mastering, preservation verification, and lossless export.
+    AutoMaster {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        out: Option<PathBuf>,
+        #[arg(long)]
+        sfht_model: Option<PathBuf>,
+        #[arg(long)]
+        mid_model: Option<PathBuf>,
+        #[arg(long)]
+        no_sfht: bool,
+        #[arg(long)]
+        no_mid: bool,
+        #[arg(long, default_value_t = 200.0)]
+        low_cutoff: f32,
+        #[arg(long, default_value_t = 1500.0)]
+        mid_cutoff: f32,
+        #[arg(long, default_value_t = 6000.0)]
+        mid_ceiling: f32,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long, default_value_t = 10.0)]
+        chunk_seconds: f64,
+        #[arg(long, default_value_t = 2.0)]
+        overlap_seconds: f64,
+        #[arg(long, default_value_t = true, action = clap::ArgAction::Set)]
+        denoise: bool,
+        #[arg(long)]
+        no_denoise: bool,
+        #[arg(long, default_value_t = true, action = clap::ArgAction::Set)]
+        auto_eq: bool,
+        #[arg(long)]
+        no_auto_eq: bool,
+        #[arg(long, default_value_t = true, action = clap::ArgAction::Set)]
+        spatial: bool,
+        #[arg(long)]
+        no_spatial: bool,
+        #[arg(long, default_value_t = 120.0)]
+        mono_bass_hz: f32,
+        #[arg(long, default_value_t = 1.15)]
+        width_factor: f32,
+        #[arg(long, default_value_t = 0.12)]
+        room_depth: f32,
+        #[arg(long, default_value_t = -11.0, allow_hyphen_values = true)]
+        target_lufs: f32,
+        #[arg(long, default_value_t = -1.0, allow_hyphen_values = true)]
+        ceiling_db: f32,
+        #[arg(long, default_value_t = -20.0, allow_hyphen_values = true)]
+        glue_threshold_db: f32,
+        #[arg(long, default_value_t = 1.6)]
+        glue_ratio: f32,
+        #[arg(long, default_value_t = 90.0)]
+        sidechain_hp_hz: f32,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long, default_value_t = true, action = clap::ArgAction::Set)]
+        export_sdcard: bool,
+        #[arg(long)]
+        no_export_sdcard: bool,
+    },
     RichOracle {
         #[arg(long)]
         det: PathBuf,
@@ -692,6 +755,65 @@ fn validate_samples(n: usize) -> Result<()> {
 }
 fn run() -> Result<()> {
     match Cli::parse().command {
+        Commands::AutoMaster {
+            input,
+            out,
+            sfht_model,
+            mid_model,
+            no_sfht,
+            no_mid,
+            low_cutoff,
+            mid_cutoff,
+            mid_ceiling,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            denoise,
+            no_denoise,
+            auto_eq,
+            no_auto_eq,
+            spatial,
+            no_spatial,
+            mono_bass_hz,
+            width_factor,
+            room_depth,
+            target_lufs,
+            ceiling_db,
+            glue_threshold_db,
+            glue_ratio,
+            sidechain_hp_hz,
+            backend,
+            export_sdcard,
+            no_export_sdcard,
+        } => auto_master_pipeline(
+            &input,
+            out.as_deref(),
+            sfht_model.as_deref(),
+            mid_model.as_deref(),
+            no_sfht,
+            no_mid,
+            low_cutoff,
+            mid_cutoff,
+            mid_ceiling,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            denoise && !no_denoise,
+            auto_eq && !no_auto_eq,
+            spatial && !no_spatial,
+            mono_bass_hz,
+            width_factor,
+            room_depth,
+            target_lufs,
+            ceiling_db,
+            glue_threshold_db,
+            glue_ratio,
+            sidechain_hp_hz,
+            &backend,
+            export_sdcard && !no_export_sdcard,
+        ),
         Commands::RichOracle {
             det,
             flow,
@@ -1509,6 +1631,386 @@ fn triband_restore(
         "=== Tri-band restoration complete in {:.1}s -> {} ===",
         start_time.elapsed().as_secs_f64(),
         final_wav.display()
+    );
+    Ok(())
+}
+
+fn auto_master_pipeline(
+    input: &std::path::Path,
+    out: Option<&std::path::Path>,
+    sfht_model: Option<&std::path::Path>,
+    mid_model: Option<&std::path::Path>,
+    no_sfht: bool,
+    no_mid: bool,
+    low_cutoff: f32,
+    mid_cutoff: f32,
+    mid_ceiling: f32,
+    steps: usize,
+    strength: f32,
+    chunk_seconds: f64,
+    overlap_seconds: f64,
+    denoise: bool,
+    auto_eq: bool,
+    spatial: bool,
+    mono_bass_hz: f32,
+    width_factor: f32,
+    room_depth: f32,
+    target_lufs: f32,
+    ceiling_db: f32,
+    glue_threshold_db: f32,
+    glue_ratio: f32,
+    sidechain_hp_hz: f32,
+    backend: &str,
+    export_sdcard: bool,
+) -> Result<()> {
+    let pipeline_start = std::time::Instant::now();
+
+    // 1. Determine run directory
+    let out_dir = match out {
+        Some(p) => p.to_path_buf(),
+        None => {
+            let stem = input.file_stem().and_then(|s| s.to_str()).unwrap_or("track");
+            let mut slug = String::new();
+            let mut last_dash = false;
+            for c in stem.chars() {
+                if c.is_alphanumeric() {
+                    slug.push(c.to_ascii_lowercase());
+                    last_dash = false;
+                } else if !last_dash {
+                    slug.push('-');
+                    last_dash = true;
+                }
+            }
+            let slug = slug.trim_matches('-');
+            let ts = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0);
+            std::path::PathBuf::from(format!("runs/master-{}-{}", slug, ts))
+        }
+    };
+    if !out_dir.exists() {
+        experiment::new_run(&out_dir)?;
+    }
+
+    // 2. Read / transcode input audio
+    let is_flac = input.extension().map(|e| e.to_string_lossy().to_lowercase()) == Some("flac".into());
+    let mut current_audio = if is_flac {
+        let temp_wav = out_dir.join("input_prepared_48k.wav");
+        let st = std::process::Command::new("ffmpeg")
+            .args(["-y", "-v", "error", "-i"])
+            .arg(input)
+            .args(["-ar", "48000", "-ac", "2"])
+            .arg(&temp_wav)
+            .status();
+        if let Ok(s) = st {
+            if s.success() {
+                native_audio::read_entire(&temp_wav)?
+            } else {
+                native_audio::read_entire(input)?
+            }
+        } else {
+            native_audio::read_entire(input)?
+        }
+    } else {
+        match native_audio::read_entire(input) {
+            Ok(a) => a,
+            Err(_) => {
+                let temp_wav = out_dir.join("input_prepared_48k.wav");
+                let st = std::process::Command::new("ffmpeg")
+                    .args(["-y", "-v", "error", "-i"])
+                    .arg(input)
+                    .args(["-ar", "48000", "-ac", "2"])
+                    .arg(&temp_wav)
+                    .status();
+                if let Ok(s) = st {
+                    if s.success() {
+                        native_audio::read_entire(&temp_wav)?
+                    } else {
+                        native_audio::read_entire(input)?
+                    }
+                } else {
+                    native_audio::read_entire(input)?
+                }
+            }
+        }
+    };
+
+    let original_input_audio = current_audio.clone();
+    let num_frames = current_audio.frames();
+    let duration_s = num_frames as f32 / current_audio.rate as f32;
+    let num_channels = current_audio.channels.len();
+
+    println!("================================================================================");
+    println!("             HIGHBAND AUTONOMOUS MASTERING ENGINE (v1)");
+    println!("================================================================================");
+    println!("Input:            {}", input.display());
+    println!("Duration:         {:.2}s ({} frames @ {} Hz, {} ch)", duration_s, num_frames, current_audio.rate, num_channels);
+    println!("Output Run Dir:   {}", out_dir.display());
+    println!("Mastering Target: {:.1} LUFS | Ceiling: {:.1} dBTP | Glue Sidechain HP: {:.1} Hz", target_lufs, ceiling_db, sidechain_hp_hz);
+    println!("Spatial Dynamics: Mono Sub-Bass <= {:.1} Hz | Width: {:.2}x | Room Depth: {:.2}", mono_bass_hz, width_factor, room_depth);
+    println!("Backend:          {}", backend);
+    println!("================================================================================");
+
+    // Stage 0: Acoustic Scene Pre-Assessment
+    println!("\n--- Stage 0: Acoustic-Scene Pre-Assessment & Specialist Routing ---");
+    let assessor = assess::SceneAssessor::default();
+    let pre_profile = assessor.assess(&current_audio);
+    let pre_master_metrics = master::metrics(&current_audio);
+    println!("  Spectral: Sub (<120Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS | High (>6kHz): {:.1} dBFS", pre_profile.sub_energy_dbfs, pre_profile.low_mid_energy_dbfs, pre_profile.mid_energy_dbfs, pre_profile.high_energy_dbfs);
+    println!("  Spatial:  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leakage: {:.3}", pre_profile.interchannel_correlation, pre_profile.side_to_mid_ratio, pre_profile.sub_side_leak_ratio);
+    println!("  Dynamics: Integrated LUFS: {:.2} | True Peak: {:.2} dBTP | Crest Factor: {:.2} dB", pre_profile.integrated_lufs, pre_master_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0), pre_profile.crest_factor_db);
+    println!("  Critics:  AI Shimmer: {:.3} | Metallic Grain: {:.3} | Sub Instability: {:.3} | CDI: {:.3}", pre_profile.artifacts.ai_shimmer, pre_profile.artifacts.metallic_grain, pre_profile.artifacts.sub_instability, pre_profile.artifacts.composite_defect_index);
+    println!("  Authorities: Sub: {:.2} [{}] | Mid: {:.2} [{}] | Spatial: {:.2} [{}] | De-fizz: {:.2} [{}] | Glue: {:.2}",
+        pre_profile.authorities.sub_bass_authority, if pre_profile.authorities.sub_bass_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" },
+        pre_profile.authorities.mid_flow_authority, if pre_profile.authorities.mid_flow_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" },
+        pre_profile.authorities.spatial_cleanup_authority, if pre_profile.authorities.spatial_cleanup_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" },
+        pre_profile.authorities.conservative_defizz_authority, if pre_profile.authorities.conservative_defizz_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" },
+        pre_profile.authorities.master_glue_authority
+    );
+    std::fs::write(out_dir.join("pre_assessment.json"), serde_json::to_string_pretty(&pre_profile)?)?;
+
+    // Model Resolution
+    let resolved_sfht = if !no_sfht {
+        sfht_model.map(|p| p.to_path_buf()).or_else(|| {
+            let default_p = std::path::PathBuf::from("artifacts/rich-low-sfht/basis.json");
+            if default_p.exists() { Some(default_p) } else { None }
+        })
+    } else {
+        None
+    };
+
+    let resolved_mid = if !no_mid {
+        mid_model.map(|p| p.to_path_buf()).or_else(|| {
+            let default_p = std::path::PathBuf::from("artifacts/rich-mid-v1/basis.json");
+            if default_p.exists() { Some(default_p) } else { None }
+        })
+    } else {
+        None
+    };
+
+    // Stage 1: High-Resolution SFHT Sub-Bass Restoration
+    if let Some(ref m_path) = resolved_sfht {
+        println!("\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin) ---", low_cutoff);
+        let t0 = std::time::Instant::now();
+        current_audio = sfht::restore_sfht(m_path, &current_audio, low_cutoff, steps, strength)?;
+        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+        let stage1_wav = out_dir.join("stage1_sfht.wav");
+        native_audio::write(&stage1_wav, &current_audio, false)?;
+    } else {
+        println!("\n--- Stage 1: Sub-bass restoration skipped (disabled or model not found) ---");
+    }
+
+    // Stage 2: Mid-Band CFM Restoration
+    if let Some(ref m_path) = resolved_mid {
+        println!("\n--- Stage 2: Mid-Band CFM Restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ---", mid_cutoff, mid_ceiling);
+        let t0 = std::time::Instant::now();
+        let stage2_dir = out_dir.join("stage2_mid");
+        let stage2_in = out_dir.join("stage2_in.wav");
+        native_audio::write(&stage2_in, &current_audio, false)?;
+        rich_mid::restore(
+            m_path,
+            &stage2_in,
+            mid_cutoff,
+            mid_ceiling,
+            false,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            false,
+            false,
+            backend,
+            &stage2_dir,
+        )?;
+        let mid_wav = if stage2_dir.join("restored.wav").exists() {
+            stage2_dir.join("restored.wav")
+        } else {
+            stage2_dir.join("reconstructed.wav")
+        };
+        current_audio = native_audio::read_entire(&mid_wav)?;
+        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+    } else {
+        println!("\n--- Stage 2: Mid-band restoration skipped (disabled or model not found) ---");
+    }
+
+    // Stage 3: Clean Polish (Adaptive High-Band Denoise & Auto-EQ)
+    if denoise || auto_eq {
+        println!("\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}) ---", denoise, auto_eq);
+        let t0 = std::time::Instant::now();
+        current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
+        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+        native_audio::write(&out_dir.join("stage3_clean.wav"), &current_audio, false)?;
+    }
+
+    // Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth)
+    if spatial && current_audio.channels.len() == 2 {
+        println!("\n--- Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ---");
+        let t0 = std::time::Instant::now();
+        let spatial_cfg = spatial::SpatialConfig {
+            mono_bass_hz,
+            width_factor,
+            room_depth,
+            min_correlation: 0.20,
+        };
+        let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial_cfg);
+        println!(
+            "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz | Sub Side Leak: {:.1} dB",
+            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.mono_bass_hz, spat_metrics.side_energy_below_cutoff_db
+        );
+        current_audio = spat_audio;
+        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+        native_audio::write(&out_dir.join("stage4_spatial.wav"), &current_audio, false)?;
+    }
+
+    // Stage 5: Dynamic Post-Mastering
+    println!("\n--- Stage 5: Dynamic Post-Mastering (Target: {:.1} LUFS, Ceiling: {:.1} dBTP) ---", target_lufs, ceiling_db);
+    let t0 = std::time::Instant::now();
+    let master_res = master::master_audio(
+        &current_audio,
+        target_lufs,
+        ceiling_db,
+        glue_threshold_db,
+        glue_ratio,
+        sidechain_hp_hz,
+    )?;
+    current_audio = master_res.mastered;
+    println!("  Completed in {:.2}s | Glue GR: {:.2} dB | Limiter GR: {:.2} dB | Pre-Gain: {:+.2} dB", t0.elapsed().as_secs_f64(), master_res.glue_gr, master_res.limiter_gr, master_res.pre_gain_db);
+    let mastered_wav = out_dir.join("mastered.wav");
+    let listen_wav = out_dir.join("listen.wav");
+    native_audio::write(&mastered_wav, &current_audio, false)?;
+    native_audio::write(&listen_wav, &current_audio, true)?;
+    experiment::write_json(
+        &out_dir.join("master.json"),
+        &serde_json::json!({
+            "schema": "highband-post-master-v1",
+            "input": input.display().to_string(),
+            "target_lufs": target_lufs,
+            "ceiling_dbtp": ceiling_db,
+            "glue": {"threshold_db": glue_threshold_db, "ratio": glue_ratio, "sidechain_hp_hz": sidechain_hp_hz, "max_gain_reduction_db": master_res.glue_gr},
+            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": master_res.limiter_gr},
+            "pre_gain_db": master_res.pre_gain_db,
+            "before": master_res.before_metrics,
+            "after": master_res.after_metrics,
+        }),
+    )?;
+
+    // Stage 6: Post-Assessment & Quality / Preservation Verification
+    println!("\n--- Stage 6: Post-Assessment & Preservation Verification ---");
+    let post_profile = assessor.assess(&current_audio);
+    let preservation = assessor.verify_preservation(&original_input_audio, &current_audio);
+    std::fs::write(out_dir.join("post_assessment.json"), serde_json::to_string_pretty(&post_profile)?)?;
+
+    println!("================================================================================");
+    println!("                       BEFORE / AFTER MASTERING SUMMARY                        ");
+    println!("================================================================================");
+    println!("{:<30} | {:>16} | {:>16} | {:>10}", "Metric", "Before", "After", "Delta");
+    println!("-------------------------------+------------------+------------------+----------");
+    println!("{:<30} | {:>14.2} LU | {:>14.2} LU | {:>+7.2} LU", "Integrated Loudness", pre_profile.integrated_lufs, post_profile.integrated_lufs, post_profile.integrated_lufs - pre_profile.integrated_lufs);
+    let pre_tp = pre_master_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0) as f32;
+    let post_tp = master_res.after_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0) as f32;
+    println!("{:<30} | {:>14.2} dB | {:>14.2} dB | {:>+7.2} dB", "True Peak (dBTP)", pre_tp, post_tp, post_tp - pre_tp);
+    println!("{:<30} | {:>14.2} dB | {:>14.2} dB | {:>+7.2} dB", "Crest Factor", pre_profile.crest_factor_db, post_profile.crest_factor_db, post_profile.crest_factor_db - pre_profile.crest_factor_db);
+    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Inter-Channel Correlation", pre_profile.interchannel_correlation, post_profile.interchannel_correlation, post_profile.interchannel_correlation - pre_profile.interchannel_correlation);
+    let leak_delta_pct = (post_profile.sub_side_leak_ratio - pre_profile.sub_side_leak_ratio) / pre_profile.sub_side_leak_ratio.max(1e-5) * 100.0;
+    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+7.1}%", "Sub-Bass Side Leak Ratio", pre_profile.sub_side_leak_ratio, post_profile.sub_side_leak_ratio, leak_delta_pct);
+    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Sub Instability Critic", pre_profile.artifacts.sub_instability, post_profile.artifacts.sub_instability, post_profile.artifacts.sub_instability - pre_profile.artifacts.sub_instability);
+    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "AI Phase Shimmer Critic", pre_profile.artifacts.ai_shimmer, post_profile.artifacts.ai_shimmer, post_profile.artifacts.ai_shimmer - pre_profile.artifacts.ai_shimmer);
+    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Metallic Grain Critic", pre_profile.artifacts.metallic_grain, post_profile.artifacts.metallic_grain, post_profile.artifacts.metallic_grain - pre_profile.artifacts.metallic_grain);
+    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Composite Defect Index (CDI)", pre_profile.artifacts.composite_defect_index, post_profile.artifacts.composite_defect_index, post_profile.artifacts.composite_defect_index - pre_profile.artifacts.composite_defect_index);
+    println!("-------------------------------+------------------+------------------+----------");
+    println!("Preservation Guardrails: Mono Compat: [{}] | Known Band: [{}] | Transients: [{}]",
+        if preservation.mono_compatibility_passed { "PASS" } else { "FAIL" },
+        if preservation.known_band_preserved { "PASS" } else { "FAIL" },
+        if preservation.transient_timing_passed { "PASS" } else { "FAIL" }
+    );
+    println!("================================================================================");
+
+    // Stage 7: Lossless Export & Phone Storage Sync
+    println!("\n--- Stage 7: Lossless Audio Export & Phone Storage Sync ---");
+    let flac_path = out_dir.join("mastered.flac");
+    let flac_st = std::process::Command::new("ffmpeg")
+        .args(["-y", "-v", "error", "-i"])
+        .arg(&listen_wav)
+        .args(["-c:a", "flac"])
+        .arg(&flac_path)
+        .status();
+    let flac_created = flac_st.map(|s| s.success()).unwrap_or(false);
+    if flac_created {
+        println!("Rendered FLAC:        {}", flac_path.display());
+    }
+
+    if export_sdcard {
+        let sd_download = std::path::Path::new("/sdcard/Download");
+        if sd_download.exists() {
+            let base_stem = input.file_stem().and_then(|s| s.to_str()).unwrap_or("Mastered");
+            let sanitized_stem = format!("{} [Highband Mastered]", base_stem);
+            let target_wav = sd_download.join(format!("{}.wav", sanitized_stem));
+            if let Err(e) = std::fs::copy(&listen_wav, &target_wav) {
+                eprintln!("Warning: failed copying to {}: {}", target_wav.display(), e);
+            } else {
+                println!("Exported to Android:  {}", target_wav.display());
+            }
+
+            if flac_created {
+                let flac_dir = sd_download.join("FLAC");
+                let target_flac = if flac_dir.exists() {
+                    flac_dir.join(format!("{}.flac", sanitized_stem))
+                } else {
+                    sd_download.join(format!("{}.flac", sanitized_stem))
+                };
+                if let Err(e) = std::fs::copy(&flac_path, &target_flac) {
+                    eprintln!("Warning: failed copying to {}: {}", target_flac.display(), e);
+                } else {
+                    println!("Exported to Android:  {}", target_flac.display());
+                }
+            }
+        }
+    }
+
+    let summary_meta = serde_json::json!({
+        "schema": "highband-auto-master-v1",
+        "input": input.display().to_string(),
+        "duration_seconds": duration_s,
+        "elapsed_seconds": pipeline_start.elapsed().as_secs_f64(),
+        "sfht_model": resolved_sfht.map(|p| p.display().to_string()),
+        "mid_model": resolved_mid.map(|p| p.display().to_string()),
+        "settings": {
+            "low_cutoff": low_cutoff,
+            "mid_cutoff": mid_cutoff,
+            "mid_ceiling": mid_ceiling,
+            "steps": steps,
+            "strength": strength,
+            "denoise": denoise,
+            "auto_eq": auto_eq,
+            "spatial": spatial,
+            "mono_bass_hz": mono_bass_hz,
+            "width_factor": width_factor,
+            "room_depth": room_depth,
+            "target_lufs": target_lufs,
+            "ceiling_db": ceiling_db,
+            "glue_threshold_db": glue_threshold_db,
+            "glue_ratio": glue_ratio,
+            "sidechain_hp_hz": sidechain_hp_hz,
+            "backend": backend,
+        },
+        "pre_assessment": pre_profile,
+        "post_assessment": post_profile,
+        "preservation": preservation,
+        "master_stats": {
+            "glue_gr_db": master_res.glue_gr,
+            "limiter_gr_db": master_res.limiter_gr,
+            "pre_gain_db": master_res.pre_gain_db,
+            "before": master_res.before_metrics,
+            "after": master_res.after_metrics,
+        }
+    });
+    experiment::write_json(&out_dir.join("summary.json"), &summary_meta)?;
+
+    println!(
+        "\n=== Auto-Master Pipeline complete in {:.1}s -> {} ===",
+        pipeline_start.elapsed().as_secs_f64(),
+        out_dir.display()
     );
     Ok(())
 }

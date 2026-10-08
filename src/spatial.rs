@@ -135,9 +135,13 @@ impl EarlyReflectionNetwork {
         let mut er_left = vec![0.0f32; n];
         let mut er_right = vec![0.0f32; n];
 
-        // Lowpass damping for air absorption above 4.5 kHz
-        let filter = Lr4Filter::new(4500.0, rate as f32);
-        let (damped_mid, _) = filter.split(mid);
+        // Air absorption lowpass damping above 4.5 kHz
+        let lp_filter = Lr4Filter::new(4500.0, rate as f32);
+        let (lp_mid, _) = lp_filter.split(mid);
+
+        // Sub-bass highpass damping below 180 Hz to keep kick/sub transients dry and eliminate reflection smear
+        let hp_filter = Lr4Filter::new(180.0, rate as f32);
+        let (_, damped_mid) = hp_filter.split(&lp_mid);
 
         for tap in 0..6 {
             let delay = self.delay_samples[tap];

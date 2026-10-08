@@ -360,3 +360,41 @@ shuffling/null conditioning with unchanged DSP prior, paired family-held-out
 seeds and explicit near-empty-high negative controls. This can distinguish
 conditional benefit from a generic spectral prior before adding model size,
 learned phase or known-band song adaptation.
+
+## Sprint 4: Unified Autonomous Mastering (`auto-master`) & Physical Low-End Transient Smear Fix
+
+### 1. Unified Single-Command Architecture
+The pipeline previously required chaining multiple disjoint CLI tools (`assess`, `rich-triband-restore`, `master`, `ffmpeg`, manual file copying). We implemented a single unified entry point:
+```sh
+highband auto-master --input "<song.wav|song.flac>" [--out <dir>] [params...]
+```
+The command executes 7 stages automatically:
+1. **Stage 0 (Pre-Assessment)**: Multi-timescale analysis (millisecond transients, sub-second balance, multi-second loudness) and autonomous routing with explicit specialist confidence ($\alpha \in [0.0, 1.0]$).
+2. **Stage 1 (SFHT Low-Band Flow)**: Reconstructs low-end fundamentals on a 5.86 Hz/bin grid with streaming WOLA chunking (<35 MiB RAM).
+3. **Stage 2 (Mid-Band CFM)**: Resynthesizes mid overtones (500 Hz – 6 kHz) conditioned on surviving bass and treble.
+4. **Stage 3 (Clean Polish)**: Adaptive high-band denoiser (>14 kHz) and bounded scene auto-EQ.
+5. **Stage 4 (3D Spatial Acoustics)**: Lord Rayleigh Duplex Theory spatializer with mono sub-bass guard (<120 Hz) and 180 Hz bandpassed ERDN depth.
+6. **Stage 5 (Dynamic Post-Mastering)**: Sidechain high-passed (90 Hz) glue compression and iterative true-peak lookahead limiter matching commercial loudness targets (-11.0 LUFS / -1.0 dBTP).
+7. **Stage 6 & 7 (Preservation & Export)**: Preservation verification, side-by-side metric report, and automatic lossless export (16-bit PCM WAV and 24-bit FLAC) directly to Android storage (`/sdcard/Download/` and `/sdcard/Download/FLAC/`).
+
+### 2. Physical Cause & Acoustic Fix of Low-End Smear
+User audition of *Feelin' Catchy* identified minor transient smear in the low end. Acoustic analysis revealed the physical mechanism:
+- In `EarlyReflectionNetwork::process` (`src/spatial.rs`), early reflections damped only high frequencies (>4.5 kHz), allowing unfiltered sub-bass (20–180 Hz) into 6 prime delay lines (7.1–34.7 ms).
+- Delaying 40–100 Hz bass wavelengths (>3.4 m) by 7–35 ms introduces direct phase comb filtering and destructive interference (e.g. 7.1 ms delay on an 80 Hz kick corresponds to a ~0.57-cycle shift, nearly 180° anti-phase).
+- **Physical Solution**: Added a 4th-order Linkwitz-Riley high-pass filter at 180 Hz to the ERDN excitation (`Lr4Filter::new(180.0, rate)`). ERDN early reflections now strictly operate on the 180 Hz – 4.5 kHz body band. Sub-bass and kick transients below 180 Hz remain 100% bone-dry, punchy, and zero-smeared, avoiding artificial EQ or heavy-handed dynamics.
+
+### 3. Empirical Results: Full Track Run on *Chasing Horizons (1)*
+- **Input**: `/sdcard/Download/OLD_WAVS/Chasing Horizons (1).wav` (03:36.40, 10,387,200 samples @ 48 kHz stereo, Suno v4 source).
+- **Elapsed time**: 1078.1s on CPU.
+- **Before vs. After Metrics**:
+  - Integrated Loudness: -16.23 LUFS -> **-11.03 LUFS** (+5.20 LU, exact target match)
+  - True-Peak Ceiling: -4.66 dBTP -> **-1.00 dBTP** (0 overshoots)
+  - Crest Factor: 14.05 dB -> **12.35 dB** (healthy macro-dynamic punch preserved)
+  - Inter-Channel Correlation: 0.740 -> **0.726** (mono compatibility passed)
+  - Sub-Bass Side Leak Ratio: 0.215 -> **0.096** (**-55.5% reduction in out-of-phase low-end mud**)
+  - Sub Instability Critic: 0.353 -> **0.113** (**-68.0% reduction in sub instability**)
+  - Transient Timing Correlation: **0.968** (preservation passed > 0.90)
+- **Exports**:
+  - `/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav` (40 MB, 16-bit PCM)
+  - `/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Mastered].flac` (27 MB, 24-bit Lossless FLAC)
+

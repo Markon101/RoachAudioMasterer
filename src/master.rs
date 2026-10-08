@@ -235,7 +235,16 @@ fn limit(a: &Audio, ceiling: f32, lookahead: usize, release_ms: f32) -> (Audio, 
     (Audio { rate: a.rate, channels }, max_gr)
 }
 
-fn metrics(a: &Audio) -> serde_json::Value {
+pub struct MasterResult {
+    pub mastered: Audio,
+    pub before_metrics: serde_json::Value,
+    pub after_metrics: serde_json::Value,
+    pub glue_gr: f32,
+    pub limiter_gr: f32,
+    pub pre_gain_db: f32,
+}
+
+pub fn metrics(a: &Audio) -> serde_json::Value {
     let n: usize = a.channels.iter().map(|c| c.len()).sum();
     let rms = (a.channels.iter().flatten().map(|x| (*x as f64).powi(2)).sum::<f64>() / n as f64).sqrt() as f32;
     let peak = sample_peak(a);
@@ -248,42 +257,27 @@ fn metrics(a: &Audio) -> serde_json::Value {
     })
 }
 
-pub fn run(
-    input: &Path,
+pub fn master_audio(
+    input_audio: &Audio,
     target_lufs: f32,
     ceiling_db: f32,
     glue_threshold_db: f32,
     glue_ratio: f32,
     sidechain_hp_hz: f32,
-    apply_spatial: bool,
-    out: &Path,
-) -> Result<()> {
+) -> Result<MasterResult> {
     ensure!((-24.0..=-6.0).contains(&target_lufs), "target LUFS must be -24..-6");
     ensure!((-6.0..=-0.1).contains(&ceiling_db), "ceiling must be -6..-0.1 dBTP");
     ensure!((1.0..=4.0).contains(&glue_ratio), "glue ratio must be 1..4");
-    new_run(out)?;
-    let mut input_audio = native_audio::read_entire(input)?;
     ensure!(input_audio.rate == RATE, "mastering requires 48 kHz input");
     ensure!(
         (1..=2).contains(&input_audio.channels.len()),
         "mastering supports mono/stereo"
     );
 
-    if apply_spatial && input_audio.channels.len() == 2 {
-        println!("=== Applying 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
-        let (spat_audio, spat_metrics) = crate::spatial::process_spatial(&input_audio, &crate::spatial::SpatialConfig::default());
-        println!(
-            "Spatial Metrics: Initial Corr = {:.3}, Final Corr = {:.3}, Sub-Bass Side Energy = {:.1} dB",
-            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.side_energy_below_cutoff_db
-        );
-        input_audio = spat_audio;
-    }
-
-    let before = metrics(&input_audio);
-    println!("Before: {}", before);
+    let before = metrics(input_audio);
 
     let (compressed, glue_gr) = if glue_ratio > 1.0 {
-        glue(&input_audio, glue_threshold_db, glue_ratio, 8.0, 20.0, 160.0, sidechain_hp_hz)
+        glue(input_audio, glue_threshold_db, glue_ratio, 8.0, 20.0, 160.0, sidechain_hp_hz)
     } else {
         (input_audio.clone(), 0.0)
     };
@@ -326,10 +320,58 @@ pub fn run(
         }
     }
     let after = metrics(&mastered);
-    println!("After: {}", after);
+    Ok(MasterResult {
+        mastered,
+        before_metrics: before,
+        after_metrics: after,
+        glue_gr,
+        limiter_gr,
+        pre_gain_db,
+    })
+}
 
-    native_audio::write(&out.join("mastered.wav"), &mastered, false)?;
-    native_audio::write(&out.join("listen.wav"), &mastered, true)?;
+pub fn run(
+    input: &Path,
+    target_lufs: f32,
+    ceiling_db: f32,
+    glue_threshold_db: f32,
+    glue_ratio: f32,
+    sidechain_hp_hz: f32,
+    apply_spatial: bool,
+    out: &Path,
+) -> Result<()> {
+    new_run(out)?;
+    let mut input_audio = native_audio::read_entire(input)?;
+    ensure!(input_audio.rate == RATE, "mastering requires 48 kHz input");
+    ensure!(
+        (1..=2).contains(&input_audio.channels.len()),
+        "mastering supports mono/stereo"
+    );
+
+    if apply_spatial && input_audio.channels.len() == 2 {
+        println!("=== Applying 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
+        let (spat_audio, spat_metrics) = crate::spatial::process_spatial(&input_audio, &crate::spatial::SpatialConfig::default());
+        println!(
+            "Spatial Metrics: Initial Corr = {:.3}, Final Corr = {:.3}, Sub-Bass Side Energy = {:.1} dB",
+            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.side_energy_below_cutoff_db
+        );
+        input_audio = spat_audio;
+    }
+
+    let result = master_audio(
+        &input_audio,
+        target_lufs,
+        ceiling_db,
+        glue_threshold_db,
+        glue_ratio,
+        sidechain_hp_hz,
+    )?;
+
+    println!("Before: {}", result.before_metrics);
+    println!("After: {}", result.after_metrics);
+
+    native_audio::write(&out.join("mastered.wav"), &result.mastered, false)?;
+    native_audio::write(&out.join("listen.wav"), &result.mastered, true)?;
     write_json(
         &out.join("master.json"),
         &json!({
@@ -338,11 +380,11 @@ pub fn run(
             "input": input.display().to_string(),
             "target_lufs": target_lufs,
             "ceiling_dbtp": ceiling_db,
-            "glue": {"threshold_db": glue_threshold_db, "ratio": glue_ratio, "knee_db": 8.0, "attack_ms": 20.0, "release_ms": 160.0, "max_gain_reduction_db": glue_gr},
-            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": limiter_gr},
-            "pre_gain_db": pre_gain_db,
-            "before": before,
-            "after": after,
+            "glue": {"threshold_db": glue_threshold_db, "ratio": glue_ratio, "knee_db": 8.0, "attack_ms": 20.0, "release_ms": 160.0, "max_gain_reduction_db": result.glue_gr},
+            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": result.limiter_gr},
+            "pre_gain_db": result.pre_gain_db,
+            "before": result.before_metrics,
+            "after": result.after_metrics,
         }),
     )?;
     println!("Mastered to {}", out.display());
