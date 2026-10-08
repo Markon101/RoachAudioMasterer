@@ -140,13 +140,17 @@ impl Engine {
         let num_threads = std::thread::available_parallelism()
             .map(|n| n.get().min(8))
             .unwrap_or(4);
-        let max_k = ceil_bin.min(BINS);
+        let (min_k, max_k) = if d.is_highpass() {
+            (1, (d.cutoff_bin() + 1).min(ceil_bin).min(BINS))
+        } else {
+            (d.cutoff_bin() + 1, ceil_bin.min(BINS))
+        };
         for c in 0..2 {
             if !p.active[c] {
                 continue;
             }
             for t in 0..p.frames {
-                for k in d.cutoff_bin() + 1..max_k {
+                for k in min_k..max_k {
                     rows.push(Row {
                         channel: c,
                         time: t,
@@ -232,12 +236,17 @@ impl Engine {
         let mut result = std::array::from_fn(|_| zero_state(p));
         let mut rows = Vec::with_capacity(1024);
         let mut x = Vec::with_capacity(1024 * HEAD_INPUT);
+        let (min_k, max_k) = if d.is_highpass() {
+            (1, d.cutoff_bin() + 1)
+        } else {
+            (d.cutoff_bin() + 1, BINS)
+        };
         for c in 0..2 {
             if !p.active[c] {
                 continue;
             }
             for t in 0..p.frames {
-                for k in d.cutoff_bin() + 1..BINS {
+                for k in min_k..max_k {
                     let row = Row {
                         channel: c,
                         time: t,
@@ -314,10 +323,14 @@ impl Engine {
             (1..=16).contains(&steps),
             "scene solver steps must be 1..16"
         );
-        let max_k = ceil_bin.unwrap_or(BINS).min(BINS);
+        let (min_k, max_k) = if d.is_highpass() {
+            (1, (d.cutoff_bin() + 1).min(ceil_bin.unwrap_or(BINS)).min(BINS))
+        } else {
+            (d.cutoff_bin() + 1, ceil_bin.unwrap_or(BINS).min(BINS))
+        };
         let e = encode(&self.model, p, None);
         let count =
-            p.active.iter().filter(|x| **x).count() * p.frames * max_k.saturating_sub(d.cutoff_bin() + 1);
+            p.active.iter().filter(|x| **x).count() * p.frames * max_k.saturating_sub(min_k);
         let cache = if count * (HEAD_INPUT * 4 + std::mem::size_of::<Row>()) <= 64 * 1024 * 1024 {
             let mut rows = Vec::with_capacity(count);
             let mut template = Vec::with_capacity(count * HEAD_INPUT);
@@ -327,7 +340,7 @@ impl Engine {
                     continue;
                 }
                 for t in 0..p.frames {
-                    for bin in d.cutoff_bin() + 1..max_k {
+                    for bin in min_k..max_k {
                         let r = Row {
                             channel: c,
                             time: t,

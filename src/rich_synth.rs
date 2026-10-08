@@ -24,6 +24,8 @@ pub struct Recipe {
     pub seed: u64,
     pub family: String,
     pub no_upper: bool,
+    #[serde(default)]
+    pub no_lower: bool,
     pub mono: bool,
     pub gap: Option<[f32; 2]>,
     pub damage: Damage,
@@ -71,12 +73,19 @@ pub fn generate(seed: u64) -> (Audio, Recipe) {
                 r.range(0.11, 0.18),
                 r.range(0.23, 0.28),
             ];
+            let drift_rate = if r.unit() < 0.75 { 0.0 } else { r.range(0.05, 0.25) };
+            let drift_depth = if drift_rate == 0.0 { 0.0 } else { r.range(0.0005, 0.002) };
+            let drift_phase = r.range(0.0, TAU);
             let mut phase = phase0;
             let mut color = 0.0;
             for i in 0..n {
                 let t = i as f32 / rate as f32;
-                phase = (phase + TAU * f * (1.0 + 0.006 * (TAU * 1.7 * t).sin()) / rate as f32)
-                    .rem_euclid(TAU);
+                let drift = if drift_depth > 0.0 {
+                    (TAU * drift_rate * t + drift_phase).sin() * drift_depth
+                } else {
+                    0.0
+                };
+                phase = (phase + TAU * f * (1.0 + drift) / rate as f32).rem_euclid(TAU);
                 let e = if matches!(family, 2 | 3 | 4 | 5 | 10) {
                     env(t, 0.003, duration, 0.003, 2.0)
                 } else {
@@ -94,8 +103,8 @@ pub fn generate(seed: u64) -> (Audio, Recipe) {
                             / (j as f32).sqrt();
                     }
                 } else if family == 8 || (v == 1 && family == 9) {
-                    x = (phase + 4.0 * (phase * 1.618).sin()).sin()
-                        + 0.2 * (phase * 11.37 + 2.0 * (phase * 0.71).sin()).sin();
+                    x = (phase + 1.2 * (phase * 1.5).sin()).sin()
+                        + 0.15 * (phase * 2.0).sin();
                 } else {
                     let (sp, cp) = phase.sin_cos();
                     let (mut sh, mut ch) = (sp, cp);
@@ -177,6 +186,7 @@ pub fn generate(seed: u64) -> (Audio, Recipe) {
             seed,
             family: FAMILIES[family].into(),
             no_upper,
+            no_lower: false,
             mono,
             gap,
             damage,
@@ -217,12 +227,19 @@ pub fn generate_mid(seed: u64) -> (Audio, Recipe) {
                 r.range(0.11, 0.18),
                 r.range(0.23, 0.28),
             ];
+            let drift_rate = if r.unit() < 0.75 { 0.0 } else { r.range(0.05, 0.25) };
+            let drift_depth = if drift_rate == 0.0 { 0.0 } else { r.range(0.0005, 0.002) };
+            let drift_phase = r.range(0.0, TAU);
             let mut phase = phase0;
             let mut color = 0.0;
             for i in 0..n {
                 let t = i as f32 / rate as f32;
-                phase = (phase + TAU * f * (1.0 + 0.006 * (TAU * 1.7 * t).sin()) / rate as f32)
-                    .rem_euclid(TAU);
+                let drift = if drift_depth > 0.0 {
+                    (TAU * drift_rate * t + drift_phase).sin() * drift_depth
+                } else {
+                    0.0
+                };
+                phase = (phase + TAU * f * (1.0 + drift) / rate as f32).rem_euclid(TAU);
                 let e = if matches!(family, 2 | 3 | 4 | 5 | 10) {
                     env(t, 0.003, duration, 0.003, 2.0)
                 } else {
@@ -240,8 +257,8 @@ pub fn generate_mid(seed: u64) -> (Audio, Recipe) {
                             / (j as f32).sqrt();
                     }
                 } else if family == 8 || (v == 1 && family == 9) {
-                    x = (phase + 4.0 * (phase * 1.618).sin()).sin()
-                        + 0.2 * (phase * 11.37 + 2.0 * (phase * 0.71).sin()).sin();
+                    x = (phase + 1.2 * (phase * 1.5).sin()).sin()
+                        + 0.15 * (phase * 2.0).sin();
                 } else {
                     let (sp, cp) = phase.sin_cos();
                     let (mut sh, mut ch) = (sp, cp);
@@ -323,12 +340,171 @@ pub fn generate_mid(seed: u64) -> (Audio, Recipe) {
             seed,
             family: FAMILIES[family].into(),
             no_upper,
+            no_lower: false,
             mono,
             gap,
             damage,
         },
     )
 }
+
+pub const LOW_FAMILIES: [&str; 12] = [
+    "silence",
+    "near_silence",
+    "sub_sine",
+    "stopped_sub",
+    "bass_overtones",
+    "acoustic_upright",
+    "kick_transient",
+    "sub_fm_growl",
+    "low_modal_drum",
+    "dense_low_mix",
+    "low_spectral_gap",
+    "stereo_low_scene",
+];
+
+pub fn generate_low(seed: u64) -> (Audio, Recipe) {
+    let family = seed as usize % 12;
+    let damage = Damage::low_cut(seed ^ 0x4811a923);
+    let mut r = Rng(seed ^ 0xb2940251);
+    let n = SAMPLES * 2;
+    let rate = RATE * 2;
+    let duration = n as f32 / rate as f32;
+    let mono = r.unit() < 0.25;
+    let no_lower = matches!(family, 0 | 3);
+    let mut channels = vec![vec![0.0; n]; 2];
+    let gap = None;
+    if family != 0 {
+        let voices = if matches!(family, 9 | 11) { 3 } else { 1 };
+        for v in 0..voices {
+            let f = match family {
+                2 => r.range(28.0, 75.0),
+                3 => damage.cutoff_hz() * r.range(1.2, 2.5),
+                6 => r.range(42.0, 65.0),
+                _ => r.range(35.0, 180.0),
+            };
+            let phase0 = r.range(0.0, TAU);
+            let tilt = r.range(0.75, 1.8);
+            let count = if family == 2 {
+                1
+            } else if family == 3 {
+                (2000.0 / f).floor().max(2.0).min(32.0) as usize
+            } else {
+                (3000.0 / f).floor().max(2.0).min(48.0) as usize
+            };
+            let pan = if family == 2 || (family == 6 && v == 0) {
+                0.0
+            } else {
+                r.range(-0.7, 0.7)
+            };
+            let (gl, gr) = (
+                ((pan + 1.0) * PI / 4.0).cos(),
+                ((pan + 1.0) * PI / 4.0).sin(),
+            );
+            let starts = [
+                r.range(0.005, 0.03),
+                r.range(0.12, 0.16),
+                r.range(0.24, 0.28),
+            ];
+            let mut phase = phase0;
+            for i in 0..n {
+                let t = i as f32 / rate as f32;
+                let instant_f = if family == 6 {
+                    let kick_env = (-t * 45.0).exp();
+                    f + 110.0 * kick_env
+                } else {
+                    f
+                };
+                phase = (phase + TAU * instant_f / rate as f32).rem_euclid(TAU);
+                let e = if matches!(family, 2 | 4 | 5 | 7 | 10) {
+                    env(t, 0.002, duration, 0.005, 1.8)
+                } else if family == 6 {
+                    env(t, 0.001, duration, 0.001, 0.18)
+                } else {
+                    starts.iter().map(|s| env(t, *s, 0.11, 0.002, 0.08)).sum()
+                };
+                let mut x = 0.0;
+                if family == 7 {
+                    let mod_ratio = if v == 1 { 3.0 } else { 2.0 };
+                    let mod_idx = 1.2 * (-t * 3.0).exp().max(0.2);
+                    x = (phase + mod_idx * (phase * mod_ratio).sin()).sin();
+                } else if family == 8 {
+                    for j in 1..=8 {
+                        let f2 = f * j as f32 * (1.0 + 0.04 * (j as f32 - 1.0));
+                        x += (TAU * f2 * t + phase0).sin() * (-t * (4.0 + 2.0 * j as f32)).exp()
+                            / (j as f32).sqrt();
+                    }
+                } else {
+                    let (sp, cp) = phase.sin_cos();
+                    let (mut sh, mut ch) = (sp, cp);
+                    for j in 1..=count {
+                        if family == 10 && j == 1 {
+                            let next = sh * cp + ch * sp;
+                            ch = ch * cp - sh * sp;
+                            sh = next;
+                            continue;
+                        }
+                        let amplitude = (j as f32).powf(-tilt);
+                        x += amplitude * sh;
+                        let next = sh * cp + ch * sp;
+                        ch = ch * cp - sh * sp;
+                        sh = next;
+                    }
+                }
+                channels[0][i] += x * e * gl;
+                channels[1][i] += x * e * gr;
+            }
+        }
+        if family == 11 {
+            let left = channels[0].clone();
+            let right = channels[1].clone();
+            for i in 1600..n {
+                channels[0][i] += 0.12 * right[i - 900];
+                channels[1][i] += 0.12 * left[i - 900];
+            }
+        }
+        for c in &mut channels {
+            *c = crate::dsp::lowpass(c, rate, 12000.0, 1000.0, 2.0)
+                .into_iter()
+                .step_by(2)
+                .collect();
+        }
+        if family == 3 {
+            let hp_cut = damage.cutoff_hz() + 40.0;
+            for c in &mut channels {
+                *c = crate::dsp::highpass(c, RATE, hp_cut, 30.0, 2.0);
+            }
+        }
+    } else {
+        channels = vec![vec![0.0; SAMPLES]; 2];
+    }
+    if mono {
+        let avg: Vec<f32> = channels[0]
+            .iter()
+            .zip(&channels[1])
+            .map(|(a, b)| 0.5 * (a + b))
+            .collect();
+        channels[0] = avg.clone();
+        channels[1] = avg;
+    }
+    (
+        Audio {
+            rate: RATE,
+            channels,
+        },
+        Recipe {
+            version: 5,
+            seed,
+            family: LOW_FAMILIES[family].to_string(),
+            no_upper: false,
+            no_lower,
+            mono,
+            gap,
+            damage,
+        },
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -362,6 +538,29 @@ mod tests {
             assert_eq!(a.frames(), SAMPLES);
             assert!(a.channels.iter().flatten().all(|x| x.is_finite()));
             assert!(r.damage.cutoff >= 500.0 && r.damage.cutoff <= 3500.0);
+        }
+    }
+    #[test]
+    fn low_families_are_reproducible_and_bounded() {
+        for i in 0..12 {
+            let (a, r) = generate_low(600008 + i);
+            let (b, _) = generate_low(600008 + i);
+            assert_eq!(a.channels, b.channels);
+            assert_eq!(a.frames(), SAMPLES);
+            assert!(a.channels.iter().flatten().all(|x| x.is_finite()));
+            assert!(r.damage.cutoff_hz() >= 60.0 && r.damage.cutoff_hz() <= 350.0);
+            assert!(r.damage.is_highpass());
+            if r.no_lower && r.family == "stopped_sub" {
+                let filtered = r.damage.apply(&a);
+                let diff = a
+                    .channels
+                    .iter()
+                    .flatten()
+                    .zip(filtered.channels.iter().flatten())
+                    .map(|(a, b)| (a - b).abs())
+                    .fold(0.0f32, f32::max);
+                assert!(diff < 2e-6, "stopped low target has low energy {diff}");
+            }
         }
     }
 }

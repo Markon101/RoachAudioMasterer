@@ -162,6 +162,17 @@ pub fn highpass_gradient(g: &[f32], cutoff: f32) -> Vec<f32> {
         }],
     )
 }
+pub fn lowpass_gradient(g: &[f32], cutoff: f32) -> Vec<f32> {
+    crate::dsp::lock_known_bands(
+        &vec![0.0; g.len()],
+        g,
+        RATE,
+        &[crate::scene::TrustedBand {
+            min_hz: cutoff,
+            max_hz: 24000.0,
+        }],
+    )
+}
 pub fn low_error(a: &[f32], b: &[f32], cutoff: f32) -> f64 {
     let mut p = FftPlanner::new();
     let fft = p.plan_fft_forward(a.len());
@@ -172,6 +183,22 @@ pub fn low_error(a: &[f32], b: &[f32], cutoff: f32) -> f64 {
     let (mut e, mut d) = (0.0f64, 0.0f64);
     for k in 0..=a.len() / 2 {
         if k as f32 * RATE as f32 / a.len() as f32 <= cutoff {
+            e += (x[k] - y[k]).norm_sqr() as f64;
+            d += x[k].norm_sqr() as f64;
+        }
+    }
+    (e / d.max(1e-20)).sqrt()
+}
+pub fn high_error(a: &[f32], b: &[f32], cutoff: f32) -> f64 {
+    let mut p = FftPlanner::new();
+    let fft = p.plan_fft_forward(a.len());
+    let mut x: Vec<C> = a.iter().map(|v| C::new(*v, 0.0)).collect();
+    let mut y: Vec<C> = b.iter().map(|v| C::new(*v, 0.0)).collect();
+    fft.process(&mut x);
+    fft.process(&mut y);
+    let (mut e, mut d) = (0.0f64, 0.0f64);
+    for k in 0..=a.len() / 2 {
+        if k as f32 * RATE as f32 / a.len() as f32 >= cutoff {
             e += (x[k] - y[k]).norm_sqr() as f64;
             d += x[k].norm_sqr() as f64;
         }

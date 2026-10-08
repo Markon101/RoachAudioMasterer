@@ -1,5 +1,5 @@
-//! Procedural conditional flow matching for mid frequencies (500 Hz – 6 kHz).
-//! Bridges physical DSP subharmonic bass priors with neural overtone and transient resynthesis.
+//! Procedural conditional flow matching for low frequencies (20 Hz – 500 Hz).
+//! Restores deep sub-bass, 808 pitch drops, upright bass resonance, and missing fundamentals.
 #![allow(clippy::needless_range_loop)]
 
 use crate::{
@@ -9,7 +9,6 @@ use crate::{
     native_dsp::{self, Stft, BINS, FFT, HOP, RATE},
     rich_dynamics::{self, Kind},
     rich_synth,
-    scene_clean,
     scene_engine::{self, Engine},
     scene_features::{self, Damage, Prepared, Row},
     scene_loss::{self, Region},
@@ -32,31 +31,31 @@ type CachedScene = (
 );
 
 #[derive(Clone, Serialize, Deserialize)]
-pub struct MidField {
+pub struct LowField {
     pub schema: String,
     pub kind: Kind,
     pub core: Model,
     pub recipe: String,
 }
 
-impl MidField {
+impl LowField {
     pub fn new(kind: Kind, seed: u64) -> Self {
         let mut core = Model::new(seed);
-        core.stage = "mid-flow".into();
+        core.stage = "low-flow".into();
         Self {
-            schema: "rich-mid-field-v1".into(),
+            schema: "rich-low-field-v1".into(),
             kind,
             core,
-            recipe: "rich-mid-cfm-v1".into(),
+            recipe: "rich-low-cfm-v1".into(),
         }
     }
 
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 5_000_000, "mid field checkpoint too large");
+        ensure!(fs::metadata(p)?.len() < 5_000_000, "low field checkpoint too large");
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
-            m.schema == "rich-mid-field-v1" && m.core.validate() && m.recipe == "rich-mid-cfm-v1",
-            "invalid mid field model"
+            m.schema == "rich-low-field-v1" && m.core.validate() && m.recipe == "rich-low-cfm-v1",
+            "invalid low field model"
         );
         Ok(m)
     }
@@ -68,24 +67,24 @@ impl MidField {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct MidState {
+pub struct LowState {
     pub schema: String,
-    pub field: MidField,
+    pub field: LowField,
     pub encoder: Adam,
     pub head: Adam,
     pub backend: String,
 }
 
-impl MidState {
+impl LowState {
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 16_000_000, "mid state checkpoint too large");
+        ensure!(fs::metadata(p)?.len() < 16_000_000, "low state checkpoint too large");
         let s: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
-            s.schema == "rich-mid-state-v1"
+            s.schema == "rich-low-state-v1"
                 && s.field.core.validate()
                 && s.encoder.validate(s.field.core.encoder.weights.len(), s.field.core.optimizer_steps)
                 && s.head.validate(s.field.core.head.weights.len(), s.field.core.optimizer_steps),
-            "invalid mid state"
+            "invalid low state"
         );
         Ok(s)
     }
@@ -102,13 +101,15 @@ impl MidState {
 pub fn desired(p: &Prepared, target: &Audio, d: Damage) -> [Vec<C>; 2] {
     let ms = target.mid_side();
     let s = Stft::default();
+    let cut_bin = d.cutoff_bin();
     std::array::from_fn(|c| {
         let t = s.analyze(&ms[c]);
         (0..p.frames * BINS)
             .map(|i| {
-                if i % BINS > d.cutoff_bin() {
+                let bin = i % BINS;
+                if bin > 0 && bin <= cut_bin {
                     (t.data[i] - p.base[c].data[i])
-                        * (if (i % BINS).is_multiple_of(2) { 1.0 } else { -1.0 })
+                        * (if bin.is_multiple_of(2) { 1.0 } else { -1.0 })
                         / p.scale[c]
                 } else {
                     C::default()
@@ -131,7 +132,7 @@ fn centered(x: C, k: usize) -> C {
     x * if k.is_multiple_of(2) { 1.0 } else { -1.0 }
 }
 
-pub fn mid_waveform(
+pub fn low_waveform(
     p: &Prepared,
     d: Damage,
     ceiling_hz: f32,
@@ -142,11 +143,13 @@ pub fn mid_waveform(
         return p.input.clone();
     }
     let s = Stft::default();
-    let ceil_bin = ((ceiling_hz * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+    let ceil_bin = ((ceiling_hz * FFT as f32 / RATE as f32).ceil() as usize)
+        .min(d.cutoff_bin())
+        .min(BINS - 1);
     let ms = std::array::from_fn(|c| {
         let mut data = p.base[c].data.clone();
         for t in 0..p.frames {
-            for k in d.cutoff_bin() + 1..=ceil_bin {
+            for k in 1..=ceil_bin {
                 if p.active[c] {
                     data[t * BINS + k] +=
                         centered(state[c][t * BINS + k], k) * p.scale[c] * d.missing(k);
@@ -162,16 +165,10 @@ pub fn mid_waveform(
             &p.ms[c],
             &proposal,
             RATE,
-            &[
-                crate::scene::TrustedBand {
-                    min_hz: 0.0,
-                    max_hz: d.cutoff,
-                },
-                crate::scene::TrustedBand {
-                    min_hz: ceiling_hz,
-                    max_hz: 24000.0,
-                },
-            ],
+            &[crate::scene::TrustedBand {
+                min_hz: d.cutoff_hz(),
+                max_hz: 24000.0,
+            }],
         );
         if strength == 1.0 {
             locked
@@ -187,7 +184,7 @@ pub fn mid_waveform(
 }
 
 pub fn gradient(
-    m: &MidField,
+    m: &LowField,
     p: &Prepared,
     target: &Audio,
     d: Damage,
@@ -212,12 +209,12 @@ pub fn gradient(
         hs.push(h);
         ys.push(y);
     }
-    let waveform = mid_waveform(p, d, 6000.0, &field, 1.0);
+    let waveform = low_waveform(p, d, d.cutoff_hz(), &field, 1.0);
     let (loss, wg) = scene_loss::loss_and_gradient(&waveform, target, p.scale, point.region);
     let mut loss = 0.02 * loss;
     let s = Stft::default();
     let sg: [Vec<C>; 2] = std::array::from_fn(|c| {
-        s.synthesis_vjp(&p.base[c], &native_dsp::highpass_gradient(&wg[c], d.cutoff))
+        s.synthesis_vjp(&p.base[c], &native_dsp::lowpass_gradient(&wg[c], d.cutoff_hz()))
     });
     let mut de = vec![0.0; e.values.len()];
     let mut eg = vec![0.0; m.core.encoder.weights.len()];
@@ -228,11 +225,19 @@ pub fn gradient(
         let c = row.channel;
         let error = predictions[n] - point.target_velocity[c][i];
         loss += error.norm_sqr() as f64 / denom as f64;
-        let g = error * (2.0 / denom)
-            + sg[c][i]
-                * (if row.bin.is_multiple_of(2) { 1.0 } else { -1.0 })
-                * (p.scale[c] * d.missing(row.bin) * 0.02 * (1.0 - point.time));
-        let dy = rich_dynamics::derivative(m.kind, &ys[n], rich_dynamics::terms(p, point.state, row), g);
+        let velocity_grad = error * (2.0 / denom);
+        let wave_grad = sg[c][i]
+            * if row.bin.is_multiple_of(2) { 1.0 } else { -1.0 }
+            * p.scale[c]
+            * d.missing(row.bin)
+            * 0.02;
+        let total_v = velocity_grad + wave_grad * (1.0 - point.time);
+        let dy = rich_dynamics::derivative(
+            m.kind,
+            &ys[n],
+            rich_dynamics::terms(p, point.state, row),
+            total_v,
+        );
         let mut dx = [0.0; EMBED];
         m.core.head.backward(&xs[n], &hs[n], &dy, &mut hg, &mut dx);
         for j in 0..EMBED {
@@ -243,25 +248,22 @@ pub fn gradient(
     (loss, eg, hg)
 }
 
-fn choose_mid_rows(p: &Prepared, d: Damage, r: &mut Rng) -> (Vec<Row>, Region) {
-    let first = d.first_missing();
-    let last = ((6000.0 * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
-    let last = last.max(first + 16).min(BINS);
-    let width = 16.min(last.saturating_sub(first));
-    let k = first + (r.next_u64() as usize % (last.saturating_sub(first + width) + 1));
+fn choose_low_rows(p: &Prepared, d: Damage, r: &mut Rng) -> (Vec<Row>, Region) {
+    let first = 1usize;
+    let cut_bin = d.cutoff_bin().max(1).min(BINS - 1);
     let t = if p.frames > 32 {
-        12 + r.next_u64() as usize % (p.frames - 24)
+        8 + r.next_u64() as usize % (p.frames - 16)
     } else {
         0
     };
-    let end = (t + 8).min(p.frames);
+    let end = (t + 12).min(p.frames);
     let mut rows = Vec::new();
     for c in 0..2 {
         if !p.active[c] {
             continue;
         }
         for time in t..end {
-            for bin in k..k + width {
+            for bin in first..=cut_bin {
                 rows.push(Row {
                     channel: c,
                     time,
@@ -273,8 +275,8 @@ fn choose_mid_rows(p: &Prepared, d: Damage, r: &mut Rng) -> (Vec<Row>, Region) {
     (
         rows,
         Region {
-            low_hz: k as f32 * RATE as f32 / FFT as f32,
-            high_hz: (k + width - 1) as f32 * RATE as f32 / FFT as f32,
+            low_hz: 20.0,
+            high_hz: d.cutoff_hz(),
             start: t * HOP,
             end: (end * HOP).min(p.input.frames()),
         },
@@ -289,22 +291,22 @@ pub fn train(
     backend: &str,
     out: &Path,
 ) -> Result<()> {
-    let (mut m, mut ea, mut ha) = if let Some(dir) = resume {
-        let s = MidState::load(&dir.join(format!("state-{}.json", kind.name())))?;
+    let (mut field, mut enc_opt, mut head_opt) = if let Some(dir) = resume {
+        let s = LowState::load(&dir.join(format!("state-{}.json", kind.name())))?;
         ensure!(
             s.backend == backend && s.field.kind == kind,
-            "mid field continuation backend/kind mismatch"
+            "low field continuation backend/kind mismatch"
         );
         (s.field, s.encoder, s.head)
     } else {
-        let mut field = MidField::new(kind, seed);
-        field.core.training_seed_start = seed;
-        let ea = Adam::new(field.core.encoder.weights.len());
-        let ha = Adam::new(field.core.head.weights.len());
-        (field, ea, ha)
+        let mut f = LowField::new(kind, seed);
+        f.core.training_seed_start = seed;
+        let enc_opt = Adam::new(f.core.encoder.weights.len());
+        let head_opt = Adam::new(f.core.head.weights.len());
+        (f, enc_opt, head_opt)
     };
 
-    let start_step = m.core.optimizer_steps;
+    let start_step = field.core.optimizer_steps;
     ensure!(
         steps > start_step && steps <= 10000,
         "invalid training steps budget"
@@ -315,87 +317,102 @@ pub fn train(
     } else {
         new_run(out)?;
     }
-    let mut cached: Option<CachedScene> = None;
-    let mut records = Vec::new();
     let start_time = Instant::now();
+    let state_path = out.join(format!("state-{}.json", kind.name()));
+
+    let pool_size = 32;
+    let mut cached_scenes: Vec<CachedScene> = Vec::with_capacity(pool_size);
+    let mut rng = Rng(seed ^ 0x93710823);
+
+    println!(
+        "Generating initial pool of {} procedural low synthetic scenes...",
+        pool_size
+    );
+    for idx in 0..pool_size {
+        let s_seed = seed + 300000 + idx as u64;
+        let (audio, recipe) = rich_synth::generate_low(s_seed);
+        let degraded = recipe.damage.apply(&audio);
+        let p = scene_features::prepare(&degraded, recipe.damage, 11);
+        let des = desired(&p, &audio, recipe.damage);
+        let prior = scene_features::prior_state(&p, "harmonic");
+        cached_scenes.push((s_seed, audio, recipe, p, des, prior));
+    }
+
+    let mut records = Vec::new();
 
     for step in start_step..steps {
-        let scene_seed = seed + (step / 4) as u64;
-        if cached.as_ref().map(|x| x.0) != Some(scene_seed) {
-            let (target, recipe) = rich_synth::generate_mid(scene_seed);
-            let d = recipe.damage;
-            let input = d.apply(&target);
-            let p = scene_features::prepare(&input, d, scene_seed ^ 0x55821333);
-            let initial = scene_features::prior_state(&p, "harmonic");
-            let actual = desired(&p, &target, d);
-            cached = Some((scene_seed, target, recipe, p, initial, actual));
+        let pool_idx = rng.next_u64() as usize % pool_size;
+        let (_, ref audio, ref recipe, ref p, ref des, ref prior) = cached_scenes[pool_idx];
+
+        let time = rng.range(0.05, 0.95);
+        let state: [Vec<C>; 2] = std::array::from_fn(|c| {
+            (0..p.frames * BINS)
+                .map(|i| prior[c][i] * (1.0 - time) + des[c][i] * time)
+                .collect()
+        });
+
+        let target_v: [Vec<C>; 2] = std::array::from_fn(|c| {
+            (0..p.frames * BINS)
+                .map(|i| des[c][i] - prior[c][i])
+                .collect()
+        });
+
+        let (rows, region) = choose_low_rows(p, recipe.damage, &mut rng);
+        if rows.is_empty() {
+            continue;
         }
 
-        let (_, target, recipe, p, initial, actual) = cached.as_ref().unwrap();
-        let mut random = Rng(scene_seed ^ (step as u64).wrapping_mul(0x829ab591));
-        let time = random.unit();
-        let state = std::array::from_fn(|c| {
-            initial[c]
-                .iter()
-                .zip(&actual[c])
-                .map(|(a, b)| *a * (1.0 - time) + *b * time)
-                .collect()
-        });
-        let velocity = std::array::from_fn(|c| {
-            actual[c]
-                .iter()
-                .zip(&initial[c])
-                .map(|(a, b)| a - b)
-                .collect()
-        });
+        let point = Point {
+            state: &state,
+            target_velocity: &target_v,
+            initial: prior,
+            rows: &rows,
+            region: &region,
+            time,
+        };
 
-        let (rows, region) = choose_mid_rows(p, recipe.damage, &mut random);
-        let (loss, eg, hg) = gradient(
-            &m,
-            p,
-            target,
-            recipe.damage,
-            Point {
-                state: &state,
-                target_velocity: &velocity,
-                initial,
-                rows: &rows,
-                region: &region,
-                time,
-            },
-        );
+        let (loss, eg, hg) = gradient(&field, p, audio, recipe.damage, point);
 
-        ea.update(&mut m.core.encoder.weights, &eg, 0.001);
-        ha.update(&mut m.core.head.weights, &hg, 0.001);
-        m.core.optimizer_steps += 1;
+        enc_opt.update(&mut field.core.encoder.weights, &eg, 0.001);
+        head_opt.update(&mut field.core.head.weights, &hg, 0.001);
+        field.core.optimizer_steps += 1;
 
-        records.push(json!({
-            "step": step + 1,
-            "scene_seed": scene_seed,
-            "loss": loss,
-            "cutoff_hz": recipe.damage.cutoff,
-            "time": time,
-        }));
-
-        if step == start_step || (step + 1) % 50 == 0 || step + 1 == steps {
+        if (step + 1) % 50 == 0 || step + 1 == steps {
             println!(
-                "Mid-flow [{}] step {}/{} loss {:.6} cutoff {:.1}Hz (elapsed {:.1}s)",
+                "Low-flow [{}] step {}/{} loss: {:.6} ({:.1}s)",
                 kind.name(),
                 step + 1,
                 steps,
                 loss,
-                recipe.damage.cutoff,
                 start_time.elapsed().as_secs_f64()
             );
+            records.push(json!({
+                "step": step + 1,
+                "loss": loss,
+                "elapsed": start_time.elapsed().as_secs_f64(),
+            }));
+        }
+
+        if (step + 1) % 200 == 0 || step + 1 == steps {
+            field.save(&out.join("field.json"))?;
+            LowState {
+                schema: "rich-low-state-v1".into(),
+                field: field.clone(),
+                encoder: enc_opt.clone(),
+                head: head_opt.clone(),
+                backend: backend.into(),
+            }
+            .save(&state_path)?;
         }
     }
 
-    m.save(&out.join(format!("{}.json", kind.name())))?;
-    MidState {
-        schema: "rich-mid-state-v1".into(),
-        field: m.clone(),
-        encoder: ea,
-        head: ha,
+    field.save(&out.join(format!("{}.json", kind.name())))?;
+    field.save(&out.join("field.json"))?;
+    LowState {
+        schema: "rich-low-state-v1".into(),
+        field: field.clone(),
+        encoder: enc_opt,
+        head: head_opt,
         backend: backend.into(),
     }
     .save(&out.join(format!("state-{}.json", kind.name())))?;
@@ -404,7 +421,7 @@ pub fn train(
         &out.join("training.json"),
         &json!({
             "kind": kind.name(),
-            "schema": "rich-mid-field-v1",
+            "schema": "rich-low-field-v1",
             "seed": seed,
             "start_step": start_step,
             "steps": steps,
@@ -415,7 +432,7 @@ pub fn train(
     )?;
 
     println!(
-        "Mid-flow [{}] finished {} steps in {:.1}s. Checkpoint saved to {}",
+        "Low-flow [{}] finished {} steps in {:.1}s. Checkpoint saved to {}",
         kind.name(),
         steps,
         start_time.elapsed().as_secs_f64(),
@@ -428,28 +445,25 @@ pub fn train(
 pub fn restore(
     model_path: &Path,
     input_path: &Path,
-    mid_cutoff: f32,
-    mid_ceiling: f32,
+    low_cutoff: f32,
     controlled: bool,
     steps: usize,
     strength: f32,
     chunk_seconds: f64,
     overlap_seconds: f64,
-    denoise: bool,
-    auto_eq: bool,
     backend: &str,
     out: &Path,
 ) -> Result<()> {
     if !out.exists() {
         new_run(out)?;
     }
-    let field = MidField::load(model_path)?;
+    let field = LowField::load(model_path)?;
     let audio = native_audio::read_entire(input_path)?;
     let mut engine = Engine::new(&field.core, backend)?;
 
     let d = Damage {
-        cutoff: mid_cutoff,
-        transition: (mid_cutoff * 0.15).clamp(150.0, 500.0),
+        cutoff: -low_cutoff.abs(),
+        transition: (low_cutoff * 0.25).clamp(20.0, 80.0),
         power: 2.0,
     };
 
@@ -482,14 +496,14 @@ pub fn restore(
 
     let num_chunks = chunk_starts.len();
     println!(
-        "Mid-flow restoration: {} samples ({:.2}s), {} channels, {} chunks (chunk={:.1}s, overlap={:.1}s), cutoff={:.1}Hz",
+        "Low-flow restoration: {} samples ({:.2}s), {} channels, {} chunks (chunk={:.1}s, overlap={:.1}s), cutoff={:.1}Hz",
         total_samples,
         total_samples as f64 / audio.rate as f64,
         num_channels,
         num_chunks,
         chunk_seconds,
         overlap_seconds,
-        d.cutoff
+        d.cutoff_hz()
     );
 
     let chunk_dir = out.join("chunks");
@@ -550,9 +564,9 @@ pub fn restore(
 
             let p = scene_features::prepare(&chunk_input, d, 11);
             let initial = scene_features::prior_state(&p, "harmonic");
-            let ceil_bin = ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+            let ceil_bin = d.cutoff_bin();
             let state = engine.refine_mode_bounded(&p, d, &initial, steps, field.kind.mode(), Some(ceil_bin + 1))?;
-            let y = mid_waveform(&p, d, mid_ceiling, &state, strength);
+            let y = low_waveform(&p, d, d.cutoff_hz(), &state, strength);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);
             for c in 0..num_channels {
@@ -600,60 +614,48 @@ pub fn restore(
         }
     }
 
-    for t in 0..total_samples {
-        if weights[t] > 1e-8 {
-            for c in 0..num_channels {
-                output_channels[c][t] /= weights[t];
-            }
+    for j in 0..total_samples {
+        let weight = weights[j].max(1e-8);
+        for c in 0..num_channels {
+            output_channels[c][j] /= weight;
         }
     }
 
-    let mut full_reconstructed = Audio {
+    let out_audio = Audio {
         rate: audio.rate,
         channels: output_channels,
     };
 
-    if denoise || auto_eq {
-        println!(
-            "Applying acoustic post-processing: denoise={}, auto_eq={}",
-            denoise, auto_eq
-        );
-        full_reconstructed = scene_clean::clean_audio(&full_reconstructed, denoise, auto_eq);
+    let restored_path = out.join("restored.wav");
+    native_audio::write(&restored_path, &out_audio, false)?;
+
+    let mut peak = 0.0f32;
+    for c in &out_audio.channels {
+        for &s in c {
+            peak = peak.max(s.abs());
+        }
     }
 
-    native_audio::write(&out.join("reconstructed.wav"), &full_reconstructed, false)?;
-    native_audio::write(&out.join("restored.wav"), &full_reconstructed, false)?;
-    native_audio::write(&out.join("listen.wav"), &full_reconstructed, true)?;
-
-    let peak = full_reconstructed
-        .channels
-        .iter()
-        .flatten()
-        .fold(0.0f32, |p, x| p.max(x.abs()));
-
-    write_json(
-        &out.join("restoration.json"),
-        &json!({
-            "schema": "rich-mid-restoration-v1",
-            "model": model_path,
-            "kind": field.kind.name(),
-            "input": input_path,
-            "mid_cutoff": mid_cutoff,
-            "mid_ceiling": mid_ceiling,
-            "controlled": controlled,
-            "steps": steps,
-            "strength": strength,
-            "total_seconds": total_samples as f64 / audio.rate as f64,
-            "denoise": denoise,
-            "auto_eq": auto_eq,
-            "output_peak": peak,
-            "elapsed_seconds": start_time.elapsed().as_secs_f64(),
-        }),
-    )?;
+    let meta = json!({
+        "schema": "rich-low-restoration-v1",
+        "input": input_path.display().to_string(),
+        "cutoff_hz": d.cutoff_hz(),
+        "strength": strength,
+        "steps": steps,
+        "controlled": controlled,
+        "chunk_seconds": chunk_seconds,
+        "overlap_seconds": overlap_seconds,
+        "num_chunks": num_chunks,
+        "total_seconds": total_samples as f64 / audio.rate as f64,
+        "elapsed_seconds": start_time.elapsed().as_secs_f64(),
+        "peak_amplitude": peak,
+        "output_wav": restored_path.display().to_string(),
+    });
+    write_json(&out.join("restoration.json"), &meta)?;
 
     println!(
-        "Saved mid-band restoration to {} (peak: {:.4}, elapsed: {:.1}s)",
-        out.display(),
+        "Saved low-band restoration to {} (peak: {:.4}, elapsed: {:.1}s)",
+        restored_path.display(),
         peak,
         start_time.elapsed().as_secs_f64()
     );
@@ -666,47 +668,53 @@ mod tests {
     use super::*;
 
     #[test]
-    fn mid_gradient_matches_finite_difference() {
+    fn low_gradient_matches_finite_difference() {
         let target = Audio {
             rate: 48000,
             channels: vec![
                 (0..2048)
-                    .map(|i| 0.2 * (i as f32 * 0.05).sin() + 0.05 * (i as f32 * 0.3).sin())
+                    .map(|i| 0.3 * (i as f32 * 0.005).sin() + 0.1 * (i as f32 * 0.02).sin() + 0.05 * (i as f32 * 0.1).sin())
                     .collect();
                 2
             ],
         };
         let d = Damage {
-            cutoff: 1500.0,
-            transition: 300.0,
+            cutoff: -180.0,
+            transition: 40.0,
             power: 2.0,
         };
-        let p = scene_features::prepare(&d.apply(&target), d, 17);
+        let degraded = d.apply(&target);
+        let p = scene_features::prepare(&degraded, d, 19);
         let actual = desired(&p, &target, d);
-        let initial = std::array::from_fn(|c| actual[c].iter().map(|z| z * 0.25).collect());
+        let initial = std::array::from_fn(|c| actual[c].iter().map(|z| z * 0.2).collect());
         let state = std::array::from_fn(|c| actual[c].iter().map(|z| z * 0.5).collect());
-        let velocity = std::array::from_fn(|c| actual[c].iter().map(|z| z * 0.75).collect());
+        let velocity = std::array::from_fn(|c| actual[c].iter().map(|z| z * 0.8).collect());
         let rows = vec![
             Row {
                 channel: 0,
                 time: 3,
-                bin: d.cutoff_bin() + 4,
+                bin: 1,
+            },
+            Row {
+                channel: 0,
+                time: 3,
+                bin: 2,
             },
             Row {
                 channel: 0,
                 time: 4,
-                bin: d.cutoff_bin() + 5,
+                bin: 1,
             },
         ];
         let region = Region {
-            low_hz: 1600.0,
-            high_hz: 2000.0,
+            low_hz: 20.0,
+            high_hz: 180.0,
             start: 512,
             end: 1536,
         };
 
-        let mut m = MidField::new(Kind::Basis, 91);
-        let mut rng = Rng(331);
+        let mut m = LowField::new(Kind::Basis, 42);
+        let mut rng = Rng(107);
         for w in &mut m.core.head.weights {
             *w = rng.signed() * 0.04;
         }
@@ -714,7 +722,7 @@ mod tests {
             *w = rng.signed() * 0.015;
         }
 
-        let run = |m: &MidField| {
+        let run = |m: &LowField| {
             gradient(
                 m,
                 &p,
@@ -726,7 +734,7 @@ mod tests {
                     initial: &initial,
                     rows: &rows,
                     region: &region,
-                    time: 0.35,
+                    time: 0.4,
                 },
             )
         };
@@ -763,40 +771,40 @@ mod tests {
             };
             weights[j] = old;
             let fd = (plus - minus) / 0.004;
-            println!("Mid gradient encoder={} finite={:.6} analytic={:.6}", encoder, fd, grad[j]);
-            assert!((fd - grad[j] as f64).abs() < 2e-4 + 0.04 * fd.abs());
+            println!("Low gradient encoder={} finite={:.6} analytic={:.6}", encoder, fd, grad[j]);
+            assert!((fd - grad[j] as f64).abs() < 3e-4 + 0.05 * fd.abs());
         }
     }
 
     #[test]
-    fn mid_zero_update_and_known_band_preservation() {
+    fn low_zero_update_and_known_band_preservation() {
         let input = Audio {
             rate: RATE,
             channels: vec![
                 (0..4096)
-                    .map(|i| 0.3 * (i as f32 * 0.02).sin() + 0.1 * (i as f32 * 0.08).sin())
+                    .map(|i| 0.3 * (i as f32 * 0.02).sin() + 0.2 * (i as f32 * 0.1).sin())
                     .collect();
                 2
             ],
         };
         let d = Damage {
-            cutoff: 2000.0,
-            transition: 300.0,
+            cutoff: -200.0,
+            transition: 40.0,
             power: 2.0,
         };
         let degraded = d.apply(&input);
-        let p = scene_features::prepare(&degraded, d, 29);
+        let p = scene_features::prepare(&degraded, d, 31);
         let initial = scene_features::prior_state(&p, "harmonic");
 
         // When strength is 0, waveform is exact degraded input
-        let zero_wave = mid_waveform(&p, d, 6000.0, &initial, 0.0);
+        let zero_wave = low_waveform(&p, d, d.cutoff_hz(), &initial, 0.0);
         assert_eq!(zero_wave.channels, degraded.channels);
 
-        // When reconstructed with strength 1.0, lock_known_bands guarantees low band is preserved
-        let wave = mid_waveform(&p, d, 6000.0, &initial, 1.0);
+        // When reconstructed with strength 1.0, lock_known_bands guarantees high band is preserved
+        let wave = low_waveform(&p, d, d.cutoff_hz(), &initial, 1.0);
         for c in 0..2 {
-            let err = native_dsp::low_error(&degraded.channels[c], &wave.channels[c], d.cutoff);
-            assert!(err < 2e-6, "known band low error {err} exceeds tolerance");
+            let err = native_dsp::high_error(&degraded.channels[c], &wave.channels[c], d.cutoff_hz() + d.transition);
+            assert!(err < 2e-6, "known band high error {err} exceeds tolerance");
         }
     }
 }

@@ -94,6 +94,10 @@ pub fn gain(f: f32, cutoff: f32, transition: f32, slope: f32) -> f32 {
     let t = ((f - cutoff) / transition).clamp(0.0, 1.0);
     (0.5 + 0.5 * (PI * t).cos()).max(0.0).powf(slope)
 }
+pub fn highpass_gain(f: f32, cutoff: f32, transition: f32, slope: f32) -> f32 {
+    let t = ((cutoff - f) / transition).clamp(0.0, 1.0);
+    (0.5 + 0.5 * (PI * t).cos()).max(0.0).powf(slope)
+}
 // Whole-clip Fourier filtering used for degradation and exact low-band locking.
 // Periodic finite-clip boundary; not an analog causal filter or a streaming DSP.
 pub fn lowpass(x: &[f32], rate: u32, cutoff: f32, transition: f32, slope: f32) -> Vec<f32> {
@@ -104,6 +108,18 @@ pub fn lowpass(x: &[f32], rate: u32, cutoff: f32, transition: f32, slope: f32) -
     for (k, v) in z.iter_mut().enumerate() {
         let f = k.min(n - k) as f32 * rate as f32 / n as f32;
         *v *= gain(f, cutoff, transition, slope);
+    }
+    p.plan_fft_inverse(n).process(&mut z);
+    z.iter().map(|v| v.re / n as f32).collect()
+}
+pub fn highpass(x: &[f32], rate: u32, cutoff: f32, transition: f32, slope: f32) -> Vec<f32> {
+    let mut p = FftPlanner::new();
+    let n = x.len();
+    let mut z: Vec<C> = x.iter().map(|x| C::new(*x, 0.0)).collect();
+    p.plan_fft_forward(n).process(&mut z);
+    for (k, v) in z.iter_mut().enumerate() {
+        let f = k.min(n - k) as f32 * rate as f32 / n as f32;
+        *v *= highpass_gain(f, cutoff, transition, slope);
     }
     p.plan_fft_inverse(n).process(&mut z);
     z.iter().map(|v| v.re / n as f32).collect()

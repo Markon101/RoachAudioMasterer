@@ -33,11 +33,29 @@ impl Damage {
             power: r.range(1.0, 3.5),
         }
     }
+    pub fn low_cut(seed: u64) -> Self {
+        let mut r = Rng(seed ^ 0x78334612);
+        Self {
+            cutoff: -r.range(60.0, 350.0),
+            transition: r.range(20.0, 100.0),
+            power: r.range(1.0, 3.0),
+        }
+    }
+    pub fn is_highpass(&self) -> bool {
+        self.cutoff < 0.0
+    }
+    pub fn cutoff_hz(&self) -> f32 {
+        self.cutoff.abs()
+    }
     pub fn first_missing(&self) -> usize {
-        ((self.cutoff + self.transition) * FFT as f32 / RATE as f32).ceil() as usize
+        if self.is_highpass() {
+            0
+        } else {
+            ((self.cutoff + self.transition) * FFT as f32 / RATE as f32).ceil() as usize
+        }
     }
     pub fn cutoff_bin(&self) -> usize {
-        (self.cutoff * FFT as f32 / RATE as f32).floor() as usize
+        (self.cutoff.abs() * FFT as f32 / RATE as f32).floor() as usize
     }
     pub fn apply(&self, a: &Audio) -> Audio {
         Audio {
@@ -45,17 +63,23 @@ impl Damage {
             channels: a
                 .channels
                 .iter()
-                .map(|c| crate::dsp::lowpass(c, a.rate, self.cutoff, self.transition, self.power))
+                .map(|c| {
+                    if self.is_highpass() {
+                        crate::dsp::highpass(c, a.rate, self.cutoff_hz(), self.transition, self.power)
+                    } else {
+                        crate::dsp::lowpass(c, a.rate, self.cutoff, self.transition, self.power)
+                    }
+                })
                 .collect(),
         }
     }
     pub fn missing(&self, k: usize) -> f32 {
-        1.0 - crate::dsp::gain(
-            k as f32 * RATE as f32 / FFT as f32,
-            self.cutoff,
-            self.transition,
-            self.power,
-        )
+        let f = k as f32 * RATE as f32 / FFT as f32;
+        if self.is_highpass() {
+            (1.0 - crate::dsp::highpass_gain(f, self.cutoff_hz(), self.transition, self.power)).max(0.0)
+        } else {
+            (1.0 - crate::dsp::gain(f, self.cutoff, self.transition, self.power)).max(0.0)
+        }
     }
 }
 #[derive(Clone, Copy)]
@@ -142,7 +166,7 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
             for offset in [-4, 0, 4] {
                 let u = bounded_time(t as isize + offset, frames);
                 for k in 0..BINS {
-                    let z = if k <= cut {
+                    let z = if (d.is_highpass() && k > cut) || (!d.is_highpass() && k <= cut) {
                         centered(base[c].data[u * BINS + k], k) / scale[c]
                     } else {
                         C::default()
@@ -156,7 +180,7 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
                 (&fs, 256, (t * 4).min(fs.frames - 1)),
                 (&cs, 4096, t.min(cs.frames - 1)),
             ] {
-                let cb = (d.cutoff * n as f32 / RATE as f32).floor() as usize;
+                let cb = (d.cutoff_hz() * n as f32 / RATE as f32).floor() as usize;
                 let row = &spec.data[frame * (n / 2 + 1)..(frame + 1) * (n / 2 + 1)];
                 for b in 0..8 {
                     let lo = b * cb / 8;
@@ -167,57 +191,79 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
                     i += 1;
                 }
             }
-            input[i] = d.cutoff / 24000.0;
+            input[i] = d.cutoff_hz() / 24000.0;
             input[i + 1] = d.transition / 2000.0;
             input[i + 2] = c as f32;
             input[i + 3] = scale[c].ln().clamp(-8.0, 5.0) / 8.0;
             assert_eq!(i + 4, ENCODER_INPUT);
             let row = &base[c].data[t * BINS..(t + 1) * BINS];
-            let hi = band_rms(&row[cut * 3 / 4..=cut]).min(low_rms[c][t]);
-            let lo = band_rms(&row[cut / 4..cut / 2]).max(1e-8);
-            let slope = (hi.max(1e-8) / lo).ln() / 3.0f32.ln();
-            let slope = slope.clamp(-3.0, 0.0);
-            for k in cut + 1..BINS {
-                if !active[c] {
-                    continue;
-                }
-                let noise_mag =
-                    0.75 * (hi / scale[c]) * (k as f32 / (cut as f32 * 0.875)).powf(slope);
-                noise[c][t * BINS + k] =
-                    centered(ns.data[t * BINS + k], k) / (FFT as f32 / 6.0).sqrt() * noise_mag;
-                let mut h = C::default();
-                for m in [2usize, 3, 4, 6] {
-                    let (j, z) = peak(&base[c], t, k as f32 / m as f32, cut);
-                    let mag = z.norm();
-                    if mag < 1e-7 || j > cut {
+            if d.is_highpass() {
+                for k in 1..=cut {
+                    if !active[c] {
                         continue;
                     }
-                    let prev = base[c].data[t.saturating_sub(1) * BINS + j];
-                    let delta = if t > 0 {
-                        wrap((z * prev.conj()).arg() - TAU * j as f32 * HOP as f32 / FFT as f32)
-                            * FFT as f32
-                            / (TAU * HOP as f32)
-                    } else {
-                        0.0
-                    };
-                    let mismatch = (j as f32 + delta) * m as f32 - k as f32;
-                    let alignment = (-0.5 * (mismatch / 1.15).powi(2)).exp();
-                    let start = j.saturating_sub(3).max(1);
-                    let end = (j + 4).min(cut + 1);
-                    let local = if start < end { band_rms(&row[start..end]).max(1e-8) } else { 1e-8 };
-                    let tonal = ((mag / local - 1.2) / 1.6).clamp(0.0, 1.0);
-                    let unit = centered(z, j) / mag;
-                    let mut phase = C::new(1.0, 0.0);
-                    for _ in 0..m {
-                        phase *= unit;
+                    let mut h = C::default();
+                    for m in [2usize, 3, 4, 6] {
+                        let target = k as f32 * m as f32;
+                        if target >= BINS as f32 {
+                            continue;
+                        }
+                        let (j, z) = peak(&base[c], t, target, BINS - 1);
+                        let mag = z.norm();
+                        if mag < 1e-7 || j <= cut {
+                            continue;
+                        }
+                        let unit = centered(z, j) / mag;
+                        h += unit * (0.5 * mag / scale[c] * (m as f32).powf(-0.5));
                     }
-                    // Fourier sine phase convention for positive additive
-                    // harmonics. This is a sine-family prior, not universal phase.
-                    phase *= C::from_polar(1.0, std::f32::consts::FRAC_PI_2 * (m - 1) as f32);
-                    h +=
-                        phase * (0.5 * mag / scale[c] * (m as f32).powf(-1.35) * alignment * tonal);
+                    harmonic[c][t * BINS + k] = h;
+                    noise[c][t * BINS + k] = C::default();
                 }
-                harmonic[c][t * BINS + k] = h;
+            } else {
+                let hi = band_rms(&row[cut * 3 / 4..=cut]).min(low_rms[c][t]);
+                let lo = band_rms(&row[cut / 4..cut / 2]).max(1e-8);
+                let slope = (hi.max(1e-8) / lo).ln() / 3.0f32.ln();
+                let slope = slope.clamp(-3.0, 0.0);
+                for k in cut + 1..BINS {
+                    if !active[c] {
+                        continue;
+                    }
+                    let noise_mag =
+                        0.75 * (hi / scale[c]) * (k as f32 / (cut as f32 * 0.875)).powf(slope);
+                    noise[c][t * BINS + k] =
+                        centered(ns.data[t * BINS + k], k) / (FFT as f32 / 6.0).sqrt() * noise_mag;
+                    let mut h = C::default();
+                    for m in [2usize, 3, 4, 6] {
+                        let (j, z) = peak(&base[c], t, k as f32 / m as f32, cut);
+                        let mag = z.norm();
+                        if mag < 1e-7 || j > cut {
+                            continue;
+                        }
+                        let prev = base[c].data[t.saturating_sub(1) * BINS + j];
+                        let delta = if t > 0 {
+                            wrap((z * prev.conj()).arg() - TAU * j as f32 * HOP as f32 / FFT as f32)
+                                * FFT as f32
+                                / (TAU * HOP as f32)
+                        } else {
+                            0.0
+                        };
+                        let mismatch = (j as f32 + delta) * m as f32 - k as f32;
+                        let alignment = (-0.5 * (mismatch / 1.15).powi(2)).exp();
+                        let start = j.saturating_sub(3).max(1);
+                        let end = (j + 4).min(cut + 1);
+                        let local = if start < end { band_rms(&row[start..end]).max(1e-8) } else { 1e-8 };
+                        let tonal = ((mag / local - 1.2) / 1.6).clamp(0.0, 1.0);
+                        let unit = centered(z, j) / mag;
+                        let mut phase = C::new(1.0, 0.0);
+                        for _ in 0..m {
+                            phase *= unit;
+                        }
+                        phase *= C::from_polar(1.0, std::f32::consts::FRAC_PI_2 * (m - 1) as f32);
+                        h +=
+                            phase * (0.5 * mag / scale[c] * (m as f32).powf(-1.35) * alignment * tonal);
+                    }
+                    harmonic[c][t * BINS + k] = h;
+                }
             }
         }
     }
@@ -251,8 +297,13 @@ pub fn features_into(
     for offset in [-16, -8, -4, -2, -1, 0, 1, 2, 4, 8, 16] {
         let u = bounded_time(t as isize + offset, p.frames);
         for m in [1usize, 2, 3, 4, 6] {
-            let (j, z) = peak(&p.base[c], u, k as f32 / m as f32, cut);
-            let z = if j <= cut {
+            let target_pos = if d.is_highpass() {
+                (k as f32 * m as f32).min(BINS as f32 - 1.0)
+            } else {
+                k as f32 / m as f32
+            };
+            let (j, z) = peak(&p.base[c], u, target_pos, if d.is_highpass() { BINS - 1 } else { cut });
+            let z = if (d.is_highpass() && j > cut) || (!d.is_highpass() && j <= cut) {
                 centered(z, j) / p.scale[c]
             } else {
                 C::default()
@@ -273,7 +324,7 @@ pub fn features_into(
         let u = bounded_time(t as isize + dt, p.frames);
         for dk in -1..=1 {
             let b = (k as isize + dk).clamp(0, BINS as isize - 1) as usize;
-            let z = if b > cut {
+            let z = if (d.is_highpass() && b <= cut) || (!d.is_highpass() && b > cut) {
                 state[c][u * BINS + b]
             } else {
                 C::default()
@@ -290,9 +341,9 @@ pub fn features_into(
     i += 4;
     let f = k as f32 * RATE as f32 / FFT as f32;
     x[i] = f / 24000.0;
-    x[i + 1] = d.cutoff / 24000.0;
+    x[i + 1] = d.cutoff_hz() / 24000.0;
     x[i + 2] = d.transition / 2000.0;
-    x[i + 3] = (f / d.cutoff).min(8.0);
+    x[i + 3] = (f / d.cutoff_hz()).min(8.0);
     x[i + 4] = c as f32;
     x[i + 5] = (p.scale[1] / p.scale[0]).ln().clamp(-6.0, 6.0) / 6.0;
     x[i + 6] = (p.low_rms[c][t] / p.scale[c]).ln_1p();
@@ -339,7 +390,7 @@ pub fn update_state_features(
         let t = bounded_time(row.time as isize + dt, p.frames);
         for dk in -1..=1 {
             let k = (row.bin as isize + dk).clamp(0, BINS as isize - 1) as usize;
-            let z = if k > d.cutoff_bin() {
+            let z = if (d.is_highpass() && k <= d.cutoff_bin()) || (!d.is_highpass() && k > d.cutoff_bin()) {
                 state[row.channel][t * BINS + k]
             } else {
                 C::default()
@@ -533,6 +584,40 @@ mod tests {
                 channel: 0,
                 time: 4,
                 bin: d.cutoff_bin() + 5,
+            },
+            &emb,
+            &zero_state(&p),
+            0.5,
+        );
+        assert_eq!(x.len(), HEAD_INPUT);
+        assert!(x.iter().all(|x| x.is_finite()));
+    }
+    #[test]
+    fn low_cut_damage_and_feature_extraction() {
+        let d = Damage::low_cut(88);
+        assert!(d.cutoff_hz() >= 60.0 && d.cutoff_hz() <= 350.0);
+        assert!(d.transition >= 20.0 && d.transition <= 100.0);
+        assert!(d.is_highpass());
+        let a = Audio {
+            rate: RATE,
+            channels: vec![
+                (0..4096)
+                    .map(|i| 0.3 * (i as f32 * 0.02).sin() + 0.2 * (i as f32 * 0.08).sin())
+                    .collect();
+                2
+            ],
+        };
+        let p = prepare(&d.apply(&a), d, 103);
+        assert_eq!(p.frames, 19);
+        assert!(p.encoder_features.iter().all(|x| x.is_finite()));
+        let emb = vec![0.0; 2 * p.frames * EMBED];
+        let x = features(
+            &p,
+            d,
+            Row {
+                channel: 0,
+                time: 4,
+                bin: 2,
             },
             &emb,
             &zero_state(&p),

@@ -16,6 +16,7 @@ mod rich_dynamics;
 mod rich_experiment;
 mod rich_field;
 pub mod rich_mid;
+pub mod rich_low;
 mod rich_gate;
 mod rich_oracle;
 mod rich_synth;
@@ -198,6 +199,72 @@ enum Commands {
         mid_ceiling: f32,
         #[arg(long)]
         controlled: bool,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long, default_value_t = 10.0)]
+        chunk_seconds: f64,
+        #[arg(long, default_value_t = 2.0)]
+        overlap_seconds: f64,
+        #[arg(long)]
+        denoise: bool,
+        #[arg(long)]
+        auto_eq: bool,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichLowTrain {
+        #[arg(long, default_value = "basis", value_parser = ["basis", "diagonal", "rotation", "transport"])]
+        kind: String,
+        #[arg(long, default_value_t = 500)]
+        steps: usize,
+        #[arg(long, default_value_t = 800010)]
+        seed: u64,
+        #[arg(long)]
+        resume: Option<PathBuf>,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichLowRestore {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 200.0)]
+        low_cutoff: f32,
+        #[arg(long)]
+        controlled: bool,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long, default_value_t = 10.0)]
+        chunk_seconds: f64,
+        #[arg(long, default_value_t = 2.0)]
+        overlap_seconds: f64,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichTribandRestore {
+        #[arg(long)]
+        low_model: Option<PathBuf>,
+        #[arg(long)]
+        mid_model: Option<PathBuf>,
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = 200.0)]
+        low_cutoff: f32,
+        #[arg(long, default_value_t = 1500.0)]
+        mid_cutoff: f32,
+        #[arg(long, default_value_t = 6000.0)]
+        mid_ceiling: f32,
         #[arg(long, default_value_t = 8)]
         steps: usize,
         #[arg(long, default_value_t = 1.0)]
@@ -715,6 +782,76 @@ fn run() -> Result<()> {
             &backend,
             &out,
         ),
+        Commands::RichLowTrain {
+            kind,
+            steps,
+            seed,
+            resume,
+            backend,
+            out,
+        } => {
+            let k = match kind.as_str() {
+                "diagonal" => rich_dynamics::Kind::Diagonal,
+                "rotation" => rich_dynamics::Kind::Rotation,
+                "transport" => rich_dynamics::Kind::Transport,
+                _ => rich_dynamics::Kind::Basis,
+            };
+            rich_low::train(k, steps, seed, resume.as_deref(), &backend, &out)
+        }
+        Commands::RichLowRestore {
+            model,
+            input,
+            low_cutoff,
+            controlled,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            backend,
+            out,
+        } => rich_low::restore(
+            &model,
+            &input,
+            low_cutoff,
+            controlled,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            &backend,
+            &out,
+        ),
+        Commands::RichTribandRestore {
+            low_model,
+            mid_model,
+            input,
+            low_cutoff,
+            mid_cutoff,
+            mid_ceiling,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            denoise,
+            auto_eq,
+            backend,
+            out,
+        } => triband_restore(
+            low_model.as_deref(),
+            mid_model.as_deref(),
+            &input,
+            low_cutoff,
+            mid_cutoff,
+            mid_ceiling,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            denoise,
+            auto_eq,
+            &backend,
+            &out,
+        ),
         Commands::RichAmbiguity {
             det,
             flow,
@@ -1078,6 +1215,110 @@ fn run() -> Result<()> {
         }
     }
 }
+
+fn triband_restore(
+    low_model: Option<&std::path::Path>,
+    mid_model: Option<&std::path::Path>,
+    input: &std::path::Path,
+    low_cutoff: f32,
+    mid_cutoff: f32,
+    mid_ceiling: f32,
+    steps: usize,
+    strength: f32,
+    chunk_seconds: f64,
+    overlap_seconds: f64,
+    denoise: bool,
+    auto_eq: bool,
+    backend: &str,
+    out: &std::path::Path,
+) -> Result<()> {
+    if !out.exists() {
+        experiment::new_run(out)?;
+    }
+    let start_time = std::time::Instant::now();
+    let mut current_input = input.to_path_buf();
+
+    // Stage 1: Low-band restoration (sub-bass 20 Hz - 500 Hz)
+    if let Some(m) = low_model {
+        println!("=== Stage 1: Low-band restoration (cutoff={:.1}Hz) ===", low_cutoff);
+        let stage1_dir = out.join("stage1_low");
+        rich_low::restore(
+            m,
+            &current_input,
+            low_cutoff,
+            false,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            backend,
+            &stage1_dir,
+        )?;
+        current_input = stage1_dir.join("restored.wav");
+    }
+
+    // Stage 2: Mid-band restoration (500 Hz - 6 kHz)
+    if let Some(m) = mid_model {
+        println!("=== Stage 2: Mid-band restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ===", mid_cutoff, mid_ceiling);
+        let stage2_dir = out.join("stage2_mid");
+        rich_mid::restore(
+            m,
+            &current_input,
+            mid_cutoff,
+            mid_ceiling,
+            false,
+            steps,
+            strength,
+            chunk_seconds,
+            overlap_seconds,
+            false,
+            false,
+            backend,
+            &stage2_dir,
+        )?;
+        let mid_wav = if stage2_dir.join("restored.wav").exists() {
+            stage2_dir.join("restored.wav")
+        } else {
+            stage2_dir.join("reconstructed.wav")
+        };
+        current_input = mid_wav;
+    }
+
+    // Stage 3: Clean polish (top-band denoise & auto-eq)
+    let final_wav = out.join("restored.wav");
+    let mut current_audio = native_audio::read_entire(&current_input)?;
+    if denoise || auto_eq {
+        println!("=== Stage 3: Clean polish (denoise={}, auto_eq={}) ===", denoise, auto_eq);
+        current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
+    }
+    native_audio::write(&final_wav, &current_audio, false)?;
+    native_audio::write(&out.join("listen.wav"), &current_audio, true)?;
+
+    let meta = serde_json::json!({
+        "schema": "rich-triband-restoration-v1",
+        "input": input.display().to_string(),
+        "low_model": low_model.map(|p| p.display().to_string()),
+        "mid_model": mid_model.map(|p| p.display().to_string()),
+        "low_cutoff": low_cutoff,
+        "mid_cutoff": mid_cutoff,
+        "mid_ceiling": mid_ceiling,
+        "steps": steps,
+        "strength": strength,
+        "denoise": denoise,
+        "auto_eq": auto_eq,
+        "elapsed_seconds": start_time.elapsed().as_secs_f64(),
+        "output_wav": final_wav.display().to_string(),
+    });
+    experiment::write_json(&out.join("triband.json"), &meta)?;
+
+    println!(
+        "=== Tri-band restoration complete in {:.1}s -> {} ===",
+        start_time.elapsed().as_secs_f64(),
+        final_wav.display()
+    );
+    Ok(())
+}
+
 fn main() {
     if let Err(e) = run() {
         eprintln!("highband: {e:#}");
