@@ -4,6 +4,7 @@ mod dsp;
 mod experiment;
 mod flow;
 mod flow_experiment;
+mod master;
 mod metrics;
 mod model;
 mod native_audio;
@@ -213,6 +214,20 @@ enum Commands {
         auto_eq: bool,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    Master {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value_t = -11.0, allow_hyphen_values = true)]
+        target_lufs: f32,
+        #[arg(long, default_value_t = -1.0, allow_hyphen_values = true)]
+        ceiling_db: f32,
+        #[arg(long, default_value_t = -20.0, allow_hyphen_values = true)]
+        glue_threshold_db: f32,
+        #[arg(long, default_value_t = 1.6)]
+        glue_ratio: f32,
         #[arg(long)]
         out: PathBuf,
     },
@@ -782,6 +797,14 @@ fn run() -> Result<()> {
             &backend,
             &out,
         ),
+        Commands::Master {
+            input,
+            target_lufs,
+            ceiling_db,
+            glue_threshold_db,
+            glue_ratio,
+            out,
+        } => master::run(&input, target_lufs, ceiling_db, glue_threshold_db, glue_ratio, &out),
         Commands::RichLowTrain {
             kind,
             steps,
