@@ -129,6 +129,24 @@ completed full-spectrum restoration and broadcast-standard mastering:
   - Added 90 Hz high-pass sidechain filter to the soft-knee glue compressor (`--sidechain-hp-hz 90.0`).
   - Auditioned on *Feelin' Catchy* (20s sample): Crest factor increased to **11.96 dB** (eliminating the "flat bass" compression artifact), achieving **-11.03 LUFS** integrated loudness and **-1.00 dBTP** true peak with zero overs.
 
+- **Full Track Production Run (*Feelin' Catchy ext v1.2.2.2.2.2*, 179.9s, 48 kHz stereo)**:
+  - **Tri-Band Pipeline Execution**:
+    - Stage 1: High-Resolution SFHT sub-bass restoration ($\Delta f = 5.86\text{ Hz/bin}$, 8 steps, streaming WOLA chunking across 20–200 Hz).
+    - Stage 2: Mid-Band flow matching ($500\text{--}6000\text{ Hz}$, 30 chunks, 8.0s windows, 2.0s overlap).
+    - Stage 3: Clean polish (minimum-statistics denoise + bounded psychoacoustic auto-EQ).
+    - Stage 4: 3D spatial acoustics (Linkwitz-Riley LR4 sub guard $<120\text{ Hz}$, ERDN room diffusion, mono coherence protection).
+    - Total elapsed: 447.6s on CPU, peak resident memory strictly $<35\text{ MiB}$.
+  - **Mastering Pass & Assessment Results**:
+    - Pre-master: -17.64 LUFS, Crest Factor 19.97 dB.
+    - Post-master: **-11.03 LUFS** (target: -11.0 LUFS), True Peak **-1.000 dBTP** (target: -1.00 dBTP, 0 overshoots), Crest Factor **12.06 dB** (sub-bass punch dynamic impact preserved).
+    - Spatial Coherence: Interchannel correlation $r = 0.808$ (wide immersive stereo, rock-solid mono compatibility).
+    - Sub-Bass Phase Cleanup: Sub side-leak dropped from **0.115** on raw down to **0.057** (**-50.4% reduction**); sub-bass instability critic dropped from **0.103** down to **0.039** (**-62% reduction**).
+  - **Audition Exports**:
+    - `/sdcard/Download/Feelin’ Catchy - Full Track (SFHT High-Res + 3D Spatial Restored).wav` (16-bit PCM)
+    - `/sdcard/Download/Feelin’ Catchy - Full Track (SFHT High-Res + 3D Spatial Mastered -11 LUFS).wav` (16-bit PCM)
+    - `/sdcard/Download/FLAC/Feelin’ Catchy - Full Track (SFHT High-Res + 3D Spatial Restored).flac` (24-bit FLAC)
+    - `/sdcard/Download/FLAC/Feelin’ Catchy - Full Track (SFHT High-Res + 3D Spatial Mastered -11 LUFS).flac` (24-bit FLAC)
+
 
 ## Fixed design
 
