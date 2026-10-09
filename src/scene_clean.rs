@@ -26,7 +26,7 @@ pub fn high_band_denoise(audio: &Audio, min_gain_db: f32) -> Audio {
 
             // Running noise floor tracker per bin for bins >= start_bin
             let mut noise_floor = vec![0.0f32; BINS];
-            
+
             // First pass: initialize noise floor with lowest observed magnitude
             for k in start_bin..BINS {
                 let mut min_val = f32::INFINITY;
@@ -90,14 +90,14 @@ pub fn bounded_auto_eq(audio: &Audio, max_adjust_db: f32) -> Audio {
     // 8 Critical Psychoacoustic Bands:
     // (center_freq, min_freq, max_freq)
     let bands: [(f32, f32, f32); 8] = [
-        (45.0, 20.0, 60.0),       // Sub
-        (120.0, 60.0, 250.0),     // Low / Punch
-        (400.0, 250.0, 600.0),    // Low-Mid / Mud
-        (1000.0, 600.0, 2000.0),  // Mid / Body
-        (3000.0, 2000.0, 4000.0), // High-Mid / Snap
-        (6000.0, 4000.0, 8000.0), // Presence
-        (10500.0, 8000.0, 14000.0),// Brilliance / Bite
-        (17000.0, 14000.0, 22000.0),// Air
+        (45.0, 20.0, 60.0),          // Sub
+        (120.0, 60.0, 250.0),        // Low / Punch
+        (400.0, 250.0, 600.0),       // Low-Mid / Mud
+        (1000.0, 600.0, 2000.0),     // Mid / Body
+        (3000.0, 2000.0, 4000.0),    // High-Mid / Snap
+        (6000.0, 4000.0, 8000.0),    // Presence
+        (10500.0, 8000.0, 14000.0),  // Brilliance / Bite
+        (17000.0, 14000.0, 22000.0), // Air
     ];
 
     // Compute long-term average energy across all channels and frames
@@ -240,16 +240,19 @@ mod tests {
             channels: vec![sine],
         };
         let cleaned = high_band_denoise(&input, -6.0);
-        
+
         let spec_in = stft.analyze(&input.channels[0]);
         let spec_out = stft.analyze(&cleaned.channels[0]);
-        
+
         // Bins below 12.6 kHz (safe from 14 kHz window edge leakage) must be completely identical
         let safe_bin = (12600.0 * FFT as f32 / RATE as f32).floor() as usize;
         for t in 5..spec_in.frames - 5 {
             for k in 0..safe_bin {
                 let diff = (spec_in.data[t * BINS + k] - spec_out.data[t * BINS + k]).norm();
-                assert!(diff < 1e-4, "low frequency bin {k} was altered by denoiser: diff={diff}");
+                assert!(
+                    diff < 1e-4,
+                    "low frequency bin {k} was altered by denoiser: diff={diff}"
+                );
             }
         }
     }
@@ -268,11 +271,18 @@ mod tests {
             channels: vec![noise],
         };
         let equalized = bounded_auto_eq(&input, 1.5);
-        
+
         // Energy change in any region must not exceed +/- 2.5 dB
         let rms_in: f32 = input.channels[0].iter().map(|x| x * x).sum::<f32>().sqrt();
-        let rms_out: f32 = equalized.channels[0].iter().map(|x| x * x).sum::<f32>().sqrt();
+        let rms_out: f32 = equalized.channels[0]
+            .iter()
+            .map(|x| x * x)
+            .sum::<f32>()
+            .sqrt();
         let delta_db = 20.0 * (rms_out / rms_in).log10();
-        assert!(delta_db.abs() < 1.6, "Auto-EQ exceeded bound: {delta_db} dB");
+        assert!(
+            delta_db.abs() < 1.6,
+            "Auto-EQ exceeded bound: {delta_db} dB"
+        );
     }
 }

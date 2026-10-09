@@ -51,7 +51,10 @@ impl LowField {
     }
 
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 5_000_000, "low field checkpoint too large");
+        ensure!(
+            fs::metadata(p)?.len() < 5_000_000,
+            "low field checkpoint too large"
+        );
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
             m.schema == "rich-low-field-v1" && m.core.validate() && m.recipe == "rich-low-cfm-v1",
@@ -77,13 +80,22 @@ pub struct LowState {
 
 impl LowState {
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 16_000_000, "low state checkpoint too large");
+        ensure!(
+            fs::metadata(p)?.len() < 16_000_000,
+            "low state checkpoint too large"
+        );
         let s: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
             s.schema == "rich-low-state-v1"
                 && s.field.core.validate()
-                && s.encoder.validate(s.field.core.encoder.weights.len(), s.field.core.optimizer_steps)
-                && s.head.validate(s.field.core.head.weights.len(), s.field.core.optimizer_steps),
+                && s.encoder.validate(
+                    s.field.core.encoder.weights.len(),
+                    s.field.core.optimizer_steps
+                )
+                && s.head.validate(
+                    s.field.core.head.weights.len(),
+                    s.field.core.optimizer_steps
+                ),
             "invalid low state"
         );
         Ok(s)
@@ -215,7 +227,10 @@ pub fn gradient(
     let mut loss = 0.02 * loss;
     let s = Stft::default();
     let sg: [Vec<C>; 2] = std::array::from_fn(|c| {
-        s.synthesis_vjp(&p.base[c], &native_dsp::lowpass_gradient(&wg[c], d.cutoff_hz()))
+        s.synthesis_vjp(
+            &p.base[c],
+            &native_dsp::lowpass_gradient(&wg[c], d.cutoff_hz()),
+        )
     });
     let mut de = vec![0.0; e.values.len()];
     let mut eg = vec![0.0; m.core.encoder.weights.len()];
@@ -580,7 +595,14 @@ pub fn restore(
             let p = scene_features::prepare(&chunk_input, d, 11);
             let initial = scene_features::prior_state(&p, "harmonic");
             let ceil_bin = d.cutoff_bin();
-            let state = engine.refine_mode_bounded(&p, d, &initial, steps, field.kind.mode(), Some(ceil_bin + 1))?;
+            let state = engine.refine_mode_bounded(
+                &p,
+                d,
+                &initial,
+                steps,
+                field.kind.mode(),
+                Some(ceil_bin + 1),
+            )?;
             let y = low_waveform(&p, d, d.cutoff_hz(), &state, strength);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);
@@ -692,10 +714,23 @@ mod tests {
             let degraded = d.apply(&audio);
             let p = scene_features::prepare(&degraded, d, 11);
             let des = desired(&p, &audio, d);
-            let mut mags: Vec<f32> = des.iter().flatten().map(|z| z.norm()).filter(|m| *m > 0.0).collect();
+            let mut mags: Vec<f32> = des
+                .iter()
+                .flatten()
+                .map(|z| z.norm())
+                .filter(|m| *m > 0.0)
+                .collect();
             mags.sort_by(f32::total_cmp);
-            let peak = audio.channels.iter().flatten().fold(0.0f32, |m, x| m.max(x.abs()));
-            let rms = |a: &Audio| (a.channels.iter().flatten().map(|x| x * x).sum::<f32>() / (a.channels.len() * a.frames()) as f32).sqrt();
+            let peak = audio
+                .channels
+                .iter()
+                .flatten()
+                .fold(0.0f32, |m, x| m.max(x.abs()));
+            let rms = |a: &Audio| {
+                (a.channels.iter().flatten().map(|x| x * x).sum::<f32>()
+                    / (a.channels.len() * a.frames()) as f32)
+                    .sqrt()
+            };
             println!(
                 "{:>18} cut {:>5.0} peak {:.3} target_rms {:.4} input_rms {:.5} scale {:.4} |des| median {:.2} p99 {:.2} max {:.2}",
                 recipe.family,
@@ -717,7 +752,9 @@ mod tests {
             rate: 48000,
             channels: vec![
                 (0..2048)
-                    .map(|i| 0.3 * (i as f32 * 0.005).sin() + 0.1 * (i as f32 * 0.02).sin() + 0.05 * (i as f32 * 0.1).sin())
+                    .map(|i| 0.3 * (i as f32 * 0.005).sin()
+                        + 0.1 * (i as f32 * 0.02).sin()
+                        + 0.05 * (i as f32 * 0.1).sin())
                     .collect();
                 2
             ],
@@ -815,7 +852,10 @@ mod tests {
             };
             weights[j] = old;
             let fd = (plus - minus) / 0.004;
-            println!("Low gradient encoder={} finite={:.6} analytic={:.6}", encoder, fd, grad[j]);
+            println!(
+                "Low gradient encoder={} finite={:.6} analytic={:.6}",
+                encoder, fd, grad[j]
+            );
             assert!((fd - grad[j] as f64).abs() < 3e-4 + 0.05 * fd.abs());
         }
     }
@@ -847,7 +887,11 @@ mod tests {
         // When reconstructed with strength 1.0, lock_known_bands guarantees high band is preserved
         let wave = low_waveform(&p, d, d.cutoff_hz(), &initial, 1.0);
         for c in 0..2 {
-            let err = native_dsp::high_error(&degraded.channels[c], &wave.channels[c], d.cutoff_hz() + d.transition);
+            let err = native_dsp::high_error(
+                &degraded.channels[c],
+                &wave.channels[c],
+                d.cutoff_hz() + d.transition,
+            );
             assert!(err < 2e-6, "known band high error {err} exceeds tolerance");
         }
     }
@@ -856,8 +900,14 @@ mod tests {
     #[ignore = "benchmark: evaluates solver step counts (4 vs 8 vs 16) on held-out synthetic test scenes"]
     fn low_step_count_benchmark() {
         let models = [
-            ("rich-low-v2 (2000 steps)", Path::new("artifacts/rich-low-v2/basis.json")),
-            ("rich-low-v2-6000 (6000 steps)", Path::new("artifacts/rich-low-v2-6000/basis.json")),
+            (
+                "rich-low-v2 (2000 steps)",
+                Path::new("artifacts/rich-low-v2/basis.json"),
+            ),
+            (
+                "rich-low-v2-6000 (6000 steps)",
+                Path::new("artifacts/rich-low-v2-6000/basis.json"),
+            ),
         ];
         let step_options = [4, 8, 16];
         let num_scenes = 16;
@@ -877,72 +927,83 @@ mod tests {
                 let mut total_time_ms = 0.0f64;
                 let mut total_frames = 0usize;
 
-            for i in 0..num_scenes {
-                let s_seed = base_seed + i as u64;
-                let (audio, recipe) = rich_synth::generate_low(s_seed);
-                let d = recipe.damage;
-                let degraded = d.apply(&audio);
-                let p = scene_features::prepare(&degraded, d, 11);
-                let prior = scene_features::prior_state(&p, "harmonic");
-                let ceil_bin = d.cutoff_bin();
+                for i in 0..num_scenes {
+                    let s_seed = base_seed + i as u64;
+                    let (audio, recipe) = rich_synth::generate_low(s_seed);
+                    let d = recipe.damage;
+                    let degraded = d.apply(&audio);
+                    let p = scene_features::prepare(&degraded, d, 11);
+                    let prior = scene_features::prior_state(&p, "harmonic");
+                    let ceil_bin = d.cutoff_bin();
 
-                let t0 = Instant::now();
-                let state = match engine.refine_mode_bounded(&p, d, &prior, steps, field.kind.mode(), Some(ceil_bin + 1)) {
-                    Ok(s) => s,
-                    Err(e) => {
-                        println!("  Scene {:>2} (seed {}) failed with: {}", i, s_seed, e);
-                        continue;
-                    }
-                };
-                let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
-                total_time_ms += elapsed_ms;
-                total_frames += p.frames;
-
-                let restored = low_waveform(&p, d, d.cutoff_hz(), &state, 1.0);
-
-                let s = Stft::default();
-                let mut num_bins = 0usize;
-                let mut missing_err_sq = 0.0f64;
-                let mut missing_ref_sq = 0.0f64;
-                let mut lsd_accum = 0.0f64;
-
-                for c in 0..audio.channels.len() {
-                    let target_stft = s.analyze(&audio.channels[c]);
-                    let restored_stft = s.analyze(&restored.channels[c]);
-                    let cut = d.cutoff_bin().min(BINS - 1);
-                    for t in 0..p.frames {
-                        let mut frame_lsd = 0.0f64;
-                        for k in 1..=cut {
-                            let tm = target_stft.data[t * BINS + k].norm() as f64;
-                            let rm = restored_stft.data[t * BINS + k].norm() as f64;
-                            missing_err_sq += (tm - rm).powi(2);
-                            missing_ref_sq += tm.powi(2);
-                            let tm_db = 20.0 * (tm + 1e-6).log10();
-                            let rm_db = 20.0 * (rm + 1e-6).log10();
-                            frame_lsd += (tm_db - rm_db).powi(2);
+                    let t0 = Instant::now();
+                    let state = match engine.refine_mode_bounded(
+                        &p,
+                        d,
+                        &prior,
+                        steps,
+                        field.kind.mode(),
+                        Some(ceil_bin + 1),
+                    ) {
+                        Ok(s) => s,
+                        Err(e) => {
+                            println!("  Scene {:>2} (seed {}) failed with: {}", i, s_seed, e);
+                            continue;
                         }
-                        if cut > 0 {
-                            lsd_accum += (frame_lsd / cut as f64).sqrt();
-                            num_bins += 1;
+                    };
+                    let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
+                    total_time_ms += elapsed_ms;
+                    total_frames += p.frames;
+
+                    let restored = low_waveform(&p, d, d.cutoff_hz(), &state, 1.0);
+
+                    let s = Stft::default();
+                    let mut num_bins = 0usize;
+                    let mut missing_err_sq = 0.0f64;
+                    let mut missing_ref_sq = 0.0f64;
+                    let mut lsd_accum = 0.0f64;
+
+                    for c in 0..audio.channels.len() {
+                        let target_stft = s.analyze(&audio.channels[c]);
+                        let restored_stft = s.analyze(&restored.channels[c]);
+                        let cut = d.cutoff_bin().min(BINS - 1);
+                        for t in 0..p.frames {
+                            let mut frame_lsd = 0.0f64;
+                            for k in 1..=cut {
+                                let tm = target_stft.data[t * BINS + k].norm() as f64;
+                                let rm = restored_stft.data[t * BINS + k].norm() as f64;
+                                missing_err_sq += (tm - rm).powi(2);
+                                missing_ref_sq += tm.powi(2);
+                                let tm_db = 20.0 * (tm + 1e-6).log10();
+                                let rm_db = 20.0 * (rm + 1e-6).log10();
+                                frame_lsd += (tm_db - rm_db).powi(2);
+                            }
+                            if cut > 0 {
+                                lsd_accum += (frame_lsd / cut as f64).sqrt();
+                                num_bins += 1;
+                            }
                         }
                     }
+                    let nmse = missing_err_sq / missing_ref_sq.max(1e-8);
+                    let lsd = if num_bins > 0 {
+                        lsd_accum / num_bins as f64
+                    } else {
+                        0.0
+                    };
+                    total_nmse += nmse;
+                    total_lsd += lsd;
                 }
-                let nmse = missing_err_sq / missing_ref_sq.max(1e-8);
-                let lsd = if num_bins > 0 { lsd_accum / num_bins as f64 } else { 0.0 };
-                total_nmse += nmse;
-                total_lsd += lsd;
-            }
 
-            let avg_nmse = total_nmse / num_scenes as f64;
-            let avg_lsd = total_lsd / num_scenes as f64;
-            let avg_ms_per_scene = total_time_ms / num_scenes as f64;
-            let ms_per_1000_frames = total_time_ms / (total_frames as f64) * 1000.0;
+                let avg_nmse = total_nmse / num_scenes as f64;
+                let avg_lsd = total_lsd / num_scenes as f64;
+                let avg_ms_per_scene = total_time_ms / num_scenes as f64;
+                let ms_per_1000_frames = total_time_ms / (total_frames as f64) * 1000.0;
 
-            println!(
+                println!(
                 "Steps: {:>2} | Missing NMSE: {:.4} | LSD: {:.2} dB | Time/scene: {:.2} ms | Latency/1k frames: {:.2} ms",
                 steps, avg_nmse, avg_lsd, avg_ms_per_scene, ms_per_1000_frames
             );
+            }
         }
     }
-}
 }

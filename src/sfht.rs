@@ -9,7 +9,7 @@ use crate::{
     experiment::{new_run, write_json},
     native_audio::Audio,
     scene_model::{Adam, Dense},
-    stft_hires::{HiResStft, HIRES_BIN_WIDTH_HZ, HIRES_BINS, HIRES_FFT},
+    stft_hires::{HiResStft, HIRES_BINS, HIRES_BIN_WIDTH_HZ, HIRES_FFT},
     synth::{self, Rng},
 };
 use anyhow::{ensure, Result};
@@ -45,7 +45,10 @@ impl SfhtModel {
     }
 
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 5_000_000, "SFHT model file too large");
+        ensure!(
+            fs::metadata(p)?.len() < 5_000_000,
+            "SFHT model file too large"
+        );
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
             m.schema == "sfht-flow-v1" && m.dense.validate(),
@@ -125,17 +128,41 @@ pub fn sfht_features(
     }
     f[18] = (comb_energy / scale.max(1e-6)).min(10.0);
     f[19] = comb_count / 6.0;
-    f[20] = if comb_count > 0.0 { (comb_energy / comb_count / scale.max(1e-6)).min(10.0) } else { 0.0 };
+    f[20] = if comb_count > 0.0 {
+        (comb_energy / comb_count / scale.max(1e-6)).min(10.0)
+    } else {
+        0.0
+    };
     f[21] = (k as f32 * HIRES_BIN_WIDTH_HZ / 500.0).clamp(0.0, 1.0);
 
     // 3. Local spectral neighborhood (indices 22..28)
     let z_self = spec[c].data[t * num_bins + k];
     f[22] = (z_self.re / scale.max(1e-6)).clamp(-10.0, 10.0);
     f[23] = (z_self.im / scale.max(1e-6)).clamp(-10.0, 10.0);
-    f[24] = if k > 1 { spec[c].data[t * num_bins + k - 1].norm() / scale.max(1e-6) } else { 0.0 }.min(10.0);
-    f[25] = if k + 1 < num_bins { spec[c].data[t * num_bins + k + 1].norm() / scale.max(1e-6) } else { 0.0 }.min(10.0);
-    f[26] = if t > 0 { spec[c].data[(t - 1) * num_bins + k].norm() / scale.max(1e-6) } else { 0.0 }.min(10.0);
-    f[27] = if t + 1 < frames { spec[c].data[(t + 1) * num_bins + k].norm() / scale.max(1e-6) } else { 0.0 }.min(10.0);
+    f[24] = if k > 1 {
+        spec[c].data[t * num_bins + k - 1].norm() / scale.max(1e-6)
+    } else {
+        0.0
+    }
+    .min(10.0);
+    f[25] = if k + 1 < num_bins {
+        spec[c].data[t * num_bins + k + 1].norm() / scale.max(1e-6)
+    } else {
+        0.0
+    }
+    .min(10.0);
+    f[26] = if t > 0 {
+        spec[c].data[(t - 1) * num_bins + k].norm() / scale.max(1e-6)
+    } else {
+        0.0
+    }
+    .min(10.0);
+    f[27] = if t + 1 < frames {
+        spec[c].data[(t + 1) * num_bins + k].norm() / scale.max(1e-6)
+    } else {
+        0.0
+    }
+    .min(10.0);
 
     // 4. Frequency & scale context (indices 28..32)
     f[28] = k as f32 / SFHT_MAX_LOW_BIN as f32;
@@ -168,7 +195,9 @@ pub fn sfht_features(
         surviving_sub_energy += spec[c].data[t * num_bins + bin].norm();
     }
     f[44] = (surviving_sub_energy / scale.max(1e-6)).min(10.0);
-    f[45] = ((spec[c].data[t * num_bins + k].norm() - spec[other_c].data[t * num_bins + k].norm()) / scale.max(1e-6)).clamp(-5.0, 5.0);
+    f[45] = ((spec[c].data[t * num_bins + k].norm() - spec[other_c].data[t * num_bins + k].norm())
+        / scale.max(1e-6))
+    .clamp(-5.0, 5.0);
     f[46] = (k as f32 * HIRES_BIN_WIDTH_HZ / 120.0).min(1.0); // Mono-guard normalized distance
     f[47] = 1.0; // Bias
 
@@ -176,7 +205,11 @@ pub fn sfht_features(
 }
 
 /// Computes deterministic superharmonic prior $z_0$ across the high-resolution grid.
-pub fn sfht_superharmonic_prior(spec: &[Spectrum; 2], cut_bin: usize, scale: &[f32; 2]) -> [Vec<C>; 2] {
+pub fn sfht_superharmonic_prior(
+    spec: &[Spectrum; 2],
+    cut_bin: usize,
+    scale: &[f32; 2],
+) -> [Vec<C>; 2] {
     let num_bins = HIRES_BINS;
     let frames = spec[0].frames;
     std::array::from_fn(|c| {
@@ -192,7 +225,8 @@ pub fn sfht_superharmonic_prior(spec: &[Spectrum; 2], cut_bin: usize, scale: &[f
                         let mag = z.norm();
                         if mag > 1e-6 {
                             let unit = z / mag;
-                            sum_h += unit * (0.4 * mag / scale[c].max(1.0) * (m as f32).powf(-0.75));
+                            sum_h +=
+                                unit * (0.4 * mag / scale[c].max(1.0) * (m as f32).powf(-0.75));
                         }
                     }
                 }
@@ -204,7 +238,11 @@ pub fn sfht_superharmonic_prior(spec: &[Spectrum; 2], cut_bin: usize, scale: &[f
 }
 
 /// Evaluates flow velocity $v_\theta(z, s)$ with soft $\tanh$ limiting to guarantee ODE stability.
-pub fn sfht_velocity(dense: &Dense, x: &[f32], state_z: C) -> (C, [f32; SFHT_OUTPUT_DIM], Vec<f32>) {
+pub fn sfht_velocity(
+    dense: &Dense,
+    x: &[f32],
+    state_z: C,
+) -> (C, [f32; SFHT_OUTPUT_DIM], Vec<f32>) {
     let mut h = vec![0.0f32; dense.hidden];
     let mut y = [0.0f32; SFHT_OUTPUT_DIM];
     dense.forward(x, &mut h, &mut y);
@@ -251,7 +289,10 @@ pub fn train_sfht(
     let mut scenes = Vec::with_capacity(pool_size);
     let mut rng = synth::Rng(seed ^ 0x5f87a1c9);
 
-    println!("Generating procedural pool of {} high-res low synthetic scenes...", pool_size);
+    println!(
+        "Generating procedural pool of {} high-res low synthetic scenes...",
+        pool_size
+    );
     for idx in 0..pool_size {
         let s_seed = seed + 400000 + idx as u64;
         let (audio, recipe) = crate::rich_synth::generate_low(s_seed);
@@ -260,18 +301,20 @@ pub fn train_sfht(
         let target_ms = audio.mid_side();
         let degraded_ms = damaged.mid_side();
 
-        let target_spec: [Spectrum; 2] = [
-            hires.analyze(&target_ms[0]),
-            hires.analyze(&target_ms[1]),
-        ];
+        let target_spec: [Spectrum; 2] =
+            [hires.analyze(&target_ms[0]), hires.analyze(&target_ms[1])];
         let degraded_spec: [Spectrum; 2] = [
             hires.analyze(&degraded_ms[0]),
             hires.analyze(&degraded_ms[1]),
         ];
 
-        let cut_bin = hires.hz_to_bin(recipe.damage.cutoff_hz()).min(SFHT_MAX_LOW_BIN);
+        let cut_bin = hires
+            .hz_to_bin(recipe.damage.cutoff_hz())
+            .min(SFHT_MAX_LOW_BIN);
         let scale: [f32; 2] = std::array::from_fn(|c| {
-            let rms = (degraded_ms[c].iter().map(|x| x * x).sum::<f32>() / degraded_ms[c].len().max(1) as f32).sqrt();
+            let rms = (degraded_ms[c].iter().map(|x| x * x).sum::<f32>()
+                / degraded_ms[c].len().max(1) as f32)
+                .sqrt();
             (rms * (HIRES_FFT as f32 / 2.0).sqrt()).max(1.0)
         });
 
@@ -284,7 +327,8 @@ pub fn train_sfht(
 
     for step in start_step..steps {
         let scene_idx = rng.next_u64() as usize % pool_size;
-        let (ref _recipe, ref target_spec, ref degraded_spec, cut_bin, scale, ref prior) = scenes[scene_idx];
+        let (ref _recipe, ref target_spec, ref degraded_spec, cut_bin, scale, ref prior) =
+            scenes[scene_idx];
 
         let time_s = rng.range(0.05, 0.95);
         let frames = target_spec[0].frames;
@@ -299,7 +343,8 @@ pub fn train_sfht(
             for t in 0..frames {
                 for k in 1..=cut_bin {
                     let idx = t * num_bins + k;
-                    let target_z = (target_spec[c].data[idx] - degraded_spec[c].data[idx]) / scale[c];
+                    let target_z =
+                        (target_spec[c].data[idx] - degraded_spec[c].data[idx]) / scale[c];
                     let prior_z = prior[c][idx];
 
                     // Target velocity in CFM
@@ -339,7 +384,11 @@ pub fn train_sfht(
             }
         }
 
-        let mean_loss = if count > 0 { total_loss / count as f64 } else { 0.0 };
+        let mean_loss = if count > 0 {
+            total_loss / count as f64
+        } else {
+            0.0
+        };
 
         // Normalize gradient by cell count
         if count > 0 {
@@ -424,10 +473,7 @@ fn restore_sfht_single(
     let hires = HiResStft::default();
 
     let ms = input.mid_side();
-    let degraded_spec: [Spectrum; 2] = [
-        hires.analyze(&ms[0]),
-        hires.analyze(&ms[1]),
-    ];
+    let degraded_spec: [Spectrum; 2] = [hires.analyze(&ms[0]), hires.analyze(&ms[1])];
 
     let cut_bin = hires.hz_to_bin(low_cutoff).min(SFHT_MAX_LOW_BIN);
     let scale: [f32; 2] = std::array::from_fn(|c| {
@@ -549,7 +595,8 @@ pub fn restore_sfht(
                 .collect(),
         };
 
-        let restored_chunk = restore_sfht_single(&model, &chunk_audio, low_cutoff, solver_steps, strength)?;
+        let restored_chunk =
+            restore_sfht_single(&model, &chunk_audio, low_cutoff, solver_steps, strength)?;
 
         // Equal-power crossfade weights
         let mut w = vec![1.0f32; actual_len];
@@ -623,7 +670,9 @@ pub fn evaluate_sfht(
         )?;
         let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
 
-        let cut_bin = hires.hz_to_bin(recipe.damage.cutoff_hz()).min(SFHT_MAX_LOW_BIN);
+        let cut_bin = hires
+            .hz_to_bin(recipe.damage.cutoff_hz())
+            .min(SFHT_MAX_LOW_BIN);
         let orig_spec = hires.analyze(&audio.channels[0]);
         let recon_spec = hires.analyze(&restored.channels[0]);
 
@@ -632,7 +681,9 @@ pub fn evaluate_sfht(
         let mut den = 0.0f64;
         for t in 0..orig_spec.frames {
             for k in 1..=cut_bin {
-                let diff = (orig_spec.data[t * HIRES_BINS + k] - recon_spec.data[t * HIRES_BINS + k]).norm_sqr() as f64;
+                let diff = (orig_spec.data[t * HIRES_BINS + k]
+                    - recon_spec.data[t * HIRES_BINS + k])
+                    .norm_sqr() as f64;
                 num += diff;
                 den += orig_spec.data[t * HIRES_BINS + k].norm_sqr() as f64;
             }
@@ -651,7 +702,11 @@ pub fn evaluate_sfht(
                 lsd_count += 1;
             }
         }
-        let lsd = if lsd_count > 0 { (sum_lsd_sq / lsd_count as f64).sqrt() } else { 0.0 };
+        let lsd = if lsd_count > 0 {
+            (sum_lsd_sq / lsd_count as f64).sqrt()
+        } else {
+            0.0
+        };
 
         total_nmse += nmse;
         total_lsd += lsd;
@@ -686,10 +741,7 @@ pub fn evaluate_sfht(
     println!("---------------------------------------------------------------");
     println!(
         "SFHT Mean ({} steps): NMSE = {:.4} | LSD = {:.2} dB | Latency = {:.2} ms/scene",
-        solver_steps,
-        mean_nmse,
-        mean_lsd,
-        mean_ms
+        solver_steps, mean_nmse, mean_lsd, mean_ms
     );
 
     let summary = json!({
@@ -719,7 +771,11 @@ mod tests {
         let (v, y, h) = sfht_velocity(&model.dense, &x, state_z);
 
         assert!(v.re.is_finite() && v.im.is_finite());
-        assert!(v.norm() <= 16.0, "Velocity exceeded stability clamp: {}", v.norm());
+        assert!(
+            v.norm() <= 16.0,
+            "Velocity exceeded stability clamp: {}",
+            v.norm()
+        );
         assert_eq!(y.len(), SFHT_OUTPUT_DIM);
         assert_eq!(h.len(), SFHT_HIDDEN_DIM);
     }
@@ -847,7 +903,10 @@ mod tests {
         let mut p = rustfft::FftPlanner::new();
         let fft = p.plan_fft_forward(samples);
         let mut orig_f: Vec<C> = audio.channels[0].iter().map(|v| C::new(*v, 0.0)).collect();
-        let mut recon_f: Vec<C> = restored.channels[0].iter().map(|v| C::new(*v, 0.0)).collect();
+        let mut recon_f: Vec<C> = restored.channels[0]
+            .iter()
+            .map(|v| C::new(*v, 0.0))
+            .collect();
         fft.process(&mut orig_f);
         fft.process(&mut recon_f);
 
@@ -880,7 +939,8 @@ mod tests {
             SFHT_HIDDEN_DIM,
             SFHT_OUTPUT_DIM,
             16,
-        ).unwrap();
+        )
+        .unwrap();
 
         let x = vec![0.25f32; SFHT_INPUT_DIM * 4];
         let cl_y = cl.predict(&x, 4).unwrap();
@@ -894,7 +954,10 @@ mod tests {
         }
 
         for (a, b) in cpu_y.iter().zip(&cl_y) {
-            assert!((a - b).abs() < 1e-5, "CPU/OpenCL parity mismatch: cpu={a}, cl={b}");
+            assert!(
+                (a - b).abs() < 1e-5,
+                "CPU/OpenCL parity mismatch: cpu={a}, cl={b}"
+            );
         }
     }
 }

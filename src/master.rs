@@ -93,7 +93,11 @@ pub fn true_peak(a: &Audio) -> f32 {
         let frac = (p + 1) as f32 / 4.0;
         for (k, h) in ph.iter_mut().enumerate() {
             let d = (k as f32 - (TAPS as f32 - 1.0)) - frac;
-            let sinc = if d.abs() < 1e-6 { 1.0 } else { (PI * d).sin() / (PI * d) };
+            let sinc = if d.abs() < 1e-6 {
+                1.0
+            } else {
+                (PI * d).sin() / (PI * d)
+            };
             let w = 0.5 + 0.5 * (PI * d / TAPS as f32).cos();
             *h = sinc * w;
         }
@@ -138,14 +142,24 @@ fn glue(
     let sidechain_channels: Vec<Vec<f32>> = if sidechain_hp_hz > 20.0 {
         a.channels
             .iter()
-            .map(|c| crate::dsp::highpass(c, RATE, sidechain_hp_hz, (sidechain_hp_hz * 0.5).max(10.0), 2.0))
+            .map(|c| {
+                crate::dsp::highpass(
+                    c,
+                    RATE,
+                    sidechain_hp_hz,
+                    (sidechain_hp_hz * 0.5).max(10.0),
+                    2.0,
+                )
+            })
             .collect()
     } else {
         a.channels.clone()
     };
 
     for i in 0..n {
-        let level = sidechain_channels.iter().fold(0.0f32, |m, c| m.max(c[i].abs()));
+        let level = sidechain_channels
+            .iter()
+            .fold(0.0f32, |m, c| m.max(c[i].abs()));
         let lv = db(level);
         let over = lv - threshold_db;
         let target_gr = if 2.0 * over < -knee_db {
@@ -170,7 +184,13 @@ fn glue(
                 .collect()
         })
         .collect();
-    (Audio { rate: a.rate, channels }, max_gr)
+    (
+        Audio {
+            rate: a.rate,
+            channels,
+        },
+        max_gr,
+    )
 }
 
 /// Lookahead limiter: sliding-minimum then boxcar smoothing (never exceeds ceiling),
@@ -180,7 +200,11 @@ fn limit(a: &Audio, ceiling: f32, lookahead: usize, release_ms: f32) -> (Audio, 
     let need: Vec<f32> = (0..n)
         .map(|i| {
             let p = a.channels.iter().fold(0.0f32, |m, c| m.max(c[i].abs()));
-            if p > ceiling { ceiling / p } else { 1.0 }
+            if p > ceiling {
+                ceiling / p
+            } else {
+                1.0
+            }
         })
         .collect();
     // sliding minimum over [i - lookahead, i]
@@ -232,7 +256,13 @@ fn limit(a: &Audio, ceiling: f32, lookahead: usize, release_ms: f32) -> (Audio, 
         .iter()
         .map(|c| c.iter().zip(&gains).map(|(x, g)| x * g).collect())
         .collect();
-    (Audio { rate: a.rate, channels }, max_gr)
+    (
+        Audio {
+            rate: a.rate,
+            channels,
+        },
+        max_gr,
+    )
 }
 
 pub struct MasterResult {
@@ -246,7 +276,14 @@ pub struct MasterResult {
 
 pub fn metrics(a: &Audio) -> serde_json::Value {
     let n: usize = a.channels.iter().map(|c| c.len()).sum();
-    let rms = (a.channels.iter().flatten().map(|x| (*x as f64).powi(2)).sum::<f64>() / n as f64).sqrt() as f32;
+    let rms = (a
+        .channels
+        .iter()
+        .flatten()
+        .map(|x| (*x as f64).powi(2))
+        .sum::<f64>()
+        / n as f64)
+        .sqrt() as f32;
     let peak = sample_peak(a);
     json!({
         "lufs_integrated": lufs(a),
@@ -265,8 +302,14 @@ pub fn master_audio(
     glue_ratio: f32,
     sidechain_hp_hz: f32,
 ) -> Result<MasterResult> {
-    ensure!((-24.0..=-6.0).contains(&target_lufs), "target LUFS must be -24..-6");
-    ensure!((-6.0..=-0.1).contains(&ceiling_db), "ceiling must be -6..-0.1 dBTP");
+    ensure!(
+        (-24.0..=-6.0).contains(&target_lufs),
+        "target LUFS must be -24..-6"
+    );
+    ensure!(
+        (-6.0..=-0.1).contains(&ceiling_db),
+        "ceiling must be -6..-0.1 dBTP"
+    );
     ensure!((1.0..=4.0).contains(&glue_ratio), "glue ratio must be 1..4");
     ensure!(input_audio.rate == RATE, "mastering requires 48 kHz input");
     ensure!(
@@ -277,7 +320,15 @@ pub fn master_audio(
     let before = metrics(input_audio);
 
     let (compressed, glue_gr) = if glue_ratio > 1.0 {
-        glue(input_audio, glue_threshold_db, glue_ratio, 8.0, 20.0, 160.0, sidechain_hp_hz)
+        glue(
+            input_audio,
+            glue_threshold_db,
+            glue_ratio,
+            8.0,
+            20.0,
+            160.0,
+            sidechain_hp_hz,
+        )
     } else {
         (input_audio.clone(), 0.0)
     };
@@ -350,7 +401,10 @@ pub fn run(
 
     if apply_spatial && input_audio.channels.len() == 2 {
         println!("=== Applying 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
-        let (spat_audio, spat_metrics) = crate::spatial::process_spatial(&input_audio, &crate::spatial::SpatialConfig::default());
+        let (spat_audio, spat_metrics) = crate::spatial::process_spatial(
+            &input_audio,
+            &crate::spatial::SpatialConfig::default(),
+        );
         println!(
             "Spatial Metrics: Initial Corr = {:.3}, Final Corr = {:.3}, Sub-Bass Side Energy = {:.1} dB",
             spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.side_energy_below_cutoff_db
@@ -399,7 +453,10 @@ mod tests {
         let c: Vec<f32> = (0..RATE as usize * secs)
             .map(|i| amp * (2.0 * PI * hz * i as f32 / RATE as f32).sin())
             .collect();
-        Audio { rate: RATE, channels: vec![c.clone(), c] }
+        Audio {
+            rate: RATE,
+            channels: vec![c.clone(), c],
+        }
     }
 
     #[test]
@@ -409,7 +466,10 @@ mod tests {
         let a = tone(0.1, 997.0, 5);
         let b = tone(0.2, 997.0, 5);
         let d = lufs(&b) - lufs(&a);
-        assert!((d - 6.02).abs() < 0.05, "6 dB amplitude step must be 6 dB LUFS, got {d}");
+        assert!(
+            (d - 6.02).abs() < 0.05,
+            "6 dB amplitude step must be 6 dB LUFS, got {d}"
+        );
     }
 
     #[test]
@@ -430,7 +490,11 @@ mod tests {
         let quiet = tone(0.01, 440.0, 1);
         let (g, gr) = glue(&quiet, -20.0, 2.0, 8.0, 20.0, 160.0, 0.0);
         assert!(gr < 1e-6);
-        let diff = g.channels[0].iter().zip(&quiet.channels[0]).map(|(a, b)| (a - b).abs()).fold(0.0f32, f32::max);
+        let diff = g.channels[0]
+            .iter()
+            .zip(&quiet.channels[0])
+            .map(|(a, b)| (a - b).abs())
+            .fold(0.0f32, f32::max);
         assert!(diff < 1e-6);
     }
 
@@ -441,7 +505,11 @@ mod tests {
 
         // Without sidechain HPF: 40 Hz triggers compressor (>3 dB GR)
         let (_g_raw, gr_raw) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 0.0);
-        assert!(gr_raw > 2.0, "Raw detector did not compress sub: {}", gr_raw);
+        assert!(
+            gr_raw > 2.0,
+            "Raw detector did not compress sub: {}",
+            gr_raw
+        );
 
         // With 100 Hz sidechain HPF: 40 Hz is filtered from detector (GR < 0.5 dB)
         let (_g_hp, gr_hp) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 100.0);

@@ -76,7 +76,8 @@ impl CriticsSuite {
         let metallic_grain = self.evaluate_metallic_grain(&mid_spec);
         let spectral_combing = self.evaluate_spectral_combing(&mid_spec);
         let codec_swish = self.evaluate_codec_swish(&mid_spec);
-        let (phase_haze, sub_instability, over_wide_transient) = if let Some(ref s_spec) = side_spec {
+        let (phase_haze, sub_instability, over_wide_transient) = if let Some(ref s_spec) = side_spec
+        {
             (
                 self.evaluate_phase_haze(&mid_spec, s_spec),
                 self.evaluate_sub_instability(audio, &mid_spec, s_spec),
@@ -121,7 +122,11 @@ impl CriticsSuite {
         // Only evaluate phase shimmer if high-band energy is physically present (>0.2% of total energy)
         let total_energy: f32 = spec.data.iter().map(|c| c.norm_sqr()).sum();
         let high_energy: f32 = (0..spec.frames)
-            .map(|t| (k_min..k_max).map(|k| spec.data[t * num_bins + k].norm_sqr()).sum::<f32>())
+            .map(|t| {
+                (k_min..k_max)
+                    .map(|k| spec.data[t * num_bins + k].norm_sqr())
+                    .sum::<f32>()
+            })
             .sum();
         if high_energy < total_energy * 0.002 || total_energy < 1e-6 {
             return 0.0;
@@ -208,7 +213,11 @@ impl CriticsSuite {
 
         // Only evaluate combing if broadband energy is physically active in this band
         let total_band_energy: f32 = (0..spec.frames)
-            .map(|t| (k_start..k_end).map(|k| spec.data[t * num_bins + k].norm_sqr()).sum::<f32>())
+            .map(|t| {
+                (k_start..k_end)
+                    .map(|k| spec.data[t * num_bins + k].norm_sqr())
+                    .sum::<f32>()
+            })
             .sum();
         let total_spec_energy: f32 = spec.data.iter().map(|c| c.norm_sqr()).sum();
         if total_band_energy < total_spec_energy * 0.05 || total_band_energy < 1e-4 {
@@ -234,7 +243,10 @@ impl CriticsSuite {
         // Comb filtering requires multiple alternating peaks across frequency (at least 3 peaks)
         let mut peaks = 0usize;
         for i in 1..avg_log.len() - 1 {
-            if avg_log[i] > avg_log[i - 1] && avg_log[i] > avg_log[i + 1] && avg_log[i] > mean + 0.15 {
+            if avg_log[i] > avg_log[i - 1]
+                && avg_log[i] > avg_log[i + 1]
+                && avg_log[i] > mean + 0.15
+            {
                 peaks += 1;
             }
         }
@@ -304,7 +316,9 @@ impl CriticsSuite {
     fn evaluate_phase_haze(&self, mid: &Spectrum, side: &Spectrum) -> f32 {
         let num_bins = FFT / 2 + 1;
         let k_min = (1000.0 * FFT as f32 / RATE as f32).round() as usize;
-        let k_max = (10000.0 * FFT as f32 / RATE as f32).round().min((FFT / 2) as f32) as usize;
+        let k_max = (10000.0 * FFT as f32 / RATE as f32)
+            .round()
+            .min((FFT / 2) as f32) as usize;
 
         if mid.frames == 0 || k_min >= k_max {
             return 0.0;

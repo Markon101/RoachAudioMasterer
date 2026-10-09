@@ -1,11 +1,14 @@
+pub mod assess;
 mod audio;
 mod backend;
+pub mod critics;
 mod dsp;
 mod experiment;
 mod flow;
 mod flow_experiment;
 mod master;
 mod metrics;
+pub mod microstructure;
 mod model;
 mod native_audio;
 mod native_dsp;
@@ -16,13 +19,14 @@ mod rich_allocation;
 mod rich_dynamics;
 mod rich_experiment;
 mod rich_field;
-pub mod rich_mid;
-pub mod rich_low;
 mod rich_gate;
+pub mod rich_low;
+pub mod rich_mid;
 mod rich_oracle;
 mod rich_synth;
 mod scene;
 mod scene_adapter;
+pub mod scene_clean;
 mod scene_engine;
 mod scene_experiment;
 mod scene_features;
@@ -31,21 +35,19 @@ mod scene_metrics;
 mod scene_model;
 mod scene_synth;
 mod scene_training_state;
-mod synth;
-pub mod scene_clean;
-pub mod stft_hires;
-pub mod spatial;
 pub mod sfht;
-pub mod critics;
-pub mod assess;
-pub mod microstructure;
+pub mod spatial;
+pub mod stft_hires;
+mod synth;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 #[derive(Parser)]
 #[command(
+    name = "roach-audio-masterer",
+    bin_name = "roach-audio-masterer",
     version,
-    about = "Synthetic-supervised conditional audio high-band reconstruction (not recovery of lost information)"
+    about = "Autonomous mastering, spatial dynamics, and acoustic scene restoration engine"
 )]
 struct Cli {
     #[command(subcommand)]
@@ -1040,7 +1042,16 @@ fn run() -> Result<()> {
             sidechain_hp_hz,
             spatial,
             out,
-        } => master::run(&input, target_lufs, ceiling_db, glue_threshold_db, glue_ratio, sidechain_hp_hz, spatial, &out),
+        } => master::run(
+            &input,
+            target_lufs,
+            ceiling_db,
+            glue_threshold_db,
+            glue_ratio,
+            sidechain_hp_hz,
+            spatial,
+            &out,
+        ),
         Commands::Assess { input, out } => {
             let audio = native_audio::read_entire(&input)?;
             let assessor = assess::SceneAssessor::default();
@@ -1049,38 +1060,135 @@ fn run() -> Result<()> {
             println!("  ACOUSTIC-SCENE ASSESSMENT & SPECIALIST AUTHORITIES");
             println!("=======================================================");
             println!("Input: {}", input.display());
-            println!("Duration: {:.2}s, Channels: {}", audio.frames() as f32 / audio.rate as f32, audio.channels.len());
+            println!(
+                "Duration: {:.2}s, Channels: {}",
+                audio.frames() as f32 / audio.rate as f32,
+                audio.channels.len()
+            );
             println!("-- Millisecond Dynamics --");
-            println!("  Peak Sample: {:.2} dBFS (Clipping Samples: {})", profile.peak_sample_dbfs, profile.clipping_sample_count);
-            println!("  Transient Density: {:.1} onsets/sec", profile.transient_density_per_sec);
+            println!(
+                "  Peak Sample: {:.2} dBFS (Clipping Samples: {})",
+                profile.peak_sample_dbfs, profile.clipping_sample_count
+            );
+            println!(
+                "  Transient Density: {:.1} onsets/sec",
+                profile.transient_density_per_sec
+            );
             println!("-- Spectral & Spatial Sub-Second Balance --");
-            println!("  Sub-Bass (<120 Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS", profile.sub_energy_dbfs, profile.low_mid_energy_dbfs, profile.mid_energy_dbfs);
-            println!("  High (>6 kHz): {:.1} dBFS | Ultrasonic: {:.1} dBFS | Est. Cutoff: {:.0} Hz", profile.high_energy_dbfs, profile.ultrasonic_energy_dbfs, profile.estimated_cutoff_hz);
-            println!("  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leak: {:.3}", profile.interchannel_correlation, profile.side_to_mid_ratio, profile.sub_side_leak_ratio);
+            println!(
+                "  Sub-Bass (<120 Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS",
+                profile.sub_energy_dbfs, profile.low_mid_energy_dbfs, profile.mid_energy_dbfs
+            );
+            println!(
+                "  High (>6 kHz): {:.1} dBFS | Ultrasonic: {:.1} dBFS | Est. Cutoff: {:.0} Hz",
+                profile.high_energy_dbfs,
+                profile.ultrasonic_energy_dbfs,
+                profile.estimated_cutoff_hz
+            );
+            println!(
+                "  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leak: {:.3}",
+                profile.interchannel_correlation,
+                profile.side_to_mid_ratio,
+                profile.sub_side_leak_ratio
+            );
             println!("-- Objective Artifact Critics (0.0=Clean, 1.0=Severe) --");
-            println!("  AI Phase Shimmer:       {:.3}", profile.artifacts.ai_shimmer);
-            println!("  Metallic Grain:         {:.3}", profile.artifacts.metallic_grain);
-            println!("  Spectral Combing:       {:.3}", profile.artifacts.spectral_combing);
-            println!("  Codec Swish:            {:.3}", profile.artifacts.codec_swish);
-            println!("  Phase Haze:             {:.3}", profile.artifacts.phase_haze);
-            println!("  Sub-Bass Instability:   {:.3}", profile.artifacts.sub_instability);
-            println!("  Over-Wide Transients:   {:.3}", profile.artifacts.over_wide_transient);
-            println!("  Composite Defect Index: {:.3}", profile.artifacts.composite_defect_index);
+            println!(
+                "  AI Phase Shimmer:       {:.3}",
+                profile.artifacts.ai_shimmer
+            );
+            println!(
+                "  Metallic Grain:         {:.3}",
+                profile.artifacts.metallic_grain
+            );
+            println!(
+                "  Spectral Combing:       {:.3}",
+                profile.artifacts.spectral_combing
+            );
+            println!(
+                "  Codec Swish:            {:.3}",
+                profile.artifacts.codec_swish
+            );
+            println!(
+                "  Phase Haze:             {:.3}",
+                profile.artifacts.phase_haze
+            );
+            println!(
+                "  Sub-Bass Instability:   {:.3}",
+                profile.artifacts.sub_instability
+            );
+            println!(
+                "  Over-Wide Transients:   {:.3}",
+                profile.artifacts.over_wide_transient
+            );
+            println!(
+                "  Composite Defect Index: {:.3}",
+                profile.artifacts.composite_defect_index
+            );
             println!("-- Explicit Specialist Authorities & Learned Abstention --");
-            println!("  Sub-Bass Specialist:       alpha = {:.2} [{}]", profile.authorities.sub_bass_authority, if profile.authorities.sub_bass_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
-            println!("  Mid-Flow Specialist:       alpha = {:.2} [{}]", profile.authorities.mid_flow_authority, if profile.authorities.mid_flow_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
-            println!("  High-Field Specialist:     alpha = {:.2} [{}]", profile.authorities.high_field_authority, if profile.authorities.high_field_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
-            println!("  Spatial Cleanup:           alpha = {:.2} [{}]", profile.authorities.spatial_cleanup_authority, if profile.authorities.spatial_cleanup_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
-            println!("  Conservative De-fizz:      alpha = {:.2} [{}]", profile.authorities.conservative_defizz_authority, if profile.authorities.conservative_defizz_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" });
-            println!("  Mastering Glue:            alpha = {:.2}", profile.authorities.master_glue_authority);
+            println!(
+                "  Sub-Bass Specialist:       alpha = {:.2} [{}]",
+                profile.authorities.sub_bass_authority,
+                if profile.authorities.sub_bass_authority > 0.0 {
+                    "ACTIVE"
+                } else {
+                    "ABSTAIN"
+                }
+            );
+            println!(
+                "  Mid-Flow Specialist:       alpha = {:.2} [{}]",
+                profile.authorities.mid_flow_authority,
+                if profile.authorities.mid_flow_authority > 0.0 {
+                    "ACTIVE"
+                } else {
+                    "ABSTAIN"
+                }
+            );
+            println!(
+                "  High-Field Specialist:     alpha = {:.2} [{}]",
+                profile.authorities.high_field_authority,
+                if profile.authorities.high_field_authority > 0.0 {
+                    "ACTIVE"
+                } else {
+                    "ABSTAIN"
+                }
+            );
+            println!(
+                "  Spatial Cleanup:           alpha = {:.2} [{}]",
+                profile.authorities.spatial_cleanup_authority,
+                if profile.authorities.spatial_cleanup_authority > 0.0 {
+                    "ACTIVE"
+                } else {
+                    "ABSTAIN"
+                }
+            );
+            println!(
+                "  Conservative De-fizz:      alpha = {:.2} [{}]",
+                profile.authorities.conservative_defizz_authority,
+                if profile.authorities.conservative_defizz_authority > 0.0 {
+                    "ACTIVE"
+                } else {
+                    "ABSTAIN"
+                }
+            );
+            println!(
+                "  Mastering Glue:            alpha = {:.2}",
+                profile.authorities.master_glue_authority
+            );
             println!("-- Multi-Second Macro Dynamics --");
-            println!("  Integrated LUFS: {:.2} | Crest Factor: {:.2} dB | Dyn Range LRA: {:.1} LU", profile.integrated_lufs, profile.crest_factor_db, profile.dynamic_range_lra_lu);
+            println!(
+                "  Integrated LUFS: {:.2} | Crest Factor: {:.2} dB | Dyn Range LRA: {:.1} LU",
+                profile.integrated_lufs, profile.crest_factor_db, profile.dynamic_range_lra_lu
+            );
             println!("=======================================================");
             if let Some(ref out_path) = out {
                 if !out_path.exists() {
                     let _ = std::fs::create_dir_all(out_path);
                 }
-                let json_path = if out_path.is_dir() { out_path.join("assessment.json") } else { out_path.clone() };
+                let json_path = if out_path.is_dir() {
+                    out_path.join("assessment.json")
+                } else {
+                    out_path.clone()
+                };
                 std::fs::write(&json_path, serde_json::to_string_pretty(&profile)?)?;
                 println!("Assessment saved to {}", json_path.display());
             }
@@ -1593,7 +1701,10 @@ fn triband_restore(
         native_audio::write(&out_wav, &restored, false)?;
         current_input = out_wav;
     } else if let Some(m) = low_model {
-        println!("=== Stage 1: Low-band restoration (cutoff={:.1}Hz) ===", low_cutoff);
+        println!(
+            "=== Stage 1: Low-band restoration (cutoff={:.1}Hz) ===",
+            low_cutoff
+        );
         let stage1_dir = out.join("stage1_low");
         rich_low::restore(
             m,
@@ -1612,7 +1723,10 @@ fn triband_restore(
 
     // Stage 2: Mid-band restoration (500 Hz - 6 kHz)
     if let Some(m) = mid_model {
-        println!("=== Stage 2: Mid-band restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ===", mid_cutoff, mid_ceiling);
+        println!(
+            "=== Stage 2: Mid-band restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ===",
+            mid_cutoff, mid_ceiling
+        );
         let stage2_dir = out.join("stage2_mid");
         rich_mid::restore(
             m,
@@ -1641,17 +1755,23 @@ fn triband_restore(
     let final_wav = out.join("restored.wav");
     let mut current_audio = native_audio::read_entire(&current_input)?;
     if denoise || auto_eq {
-        println!("=== Stage 3: Clean polish (denoise={}, auto_eq={}) ===", denoise, auto_eq);
+        println!(
+            "=== Stage 3: Clean polish (denoise={}, auto_eq={}) ===",
+            denoise, auto_eq
+        );
         current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
     }
 
     // Stage 4: 3D Spatial Acoustics & Depth Expansion
     if spatial && current_audio.channels.len() == 2 {
         println!("=== Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
-        let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial::SpatialConfig::default());
+        let (spat_audio, spat_metrics) =
+            spatial::process_spatial(&current_audio, &spatial::SpatialConfig::default());
         println!(
             "Spatial Metrics: Initial Corr = {:.3}, Final Corr = {:.3}, Mono Bass Guard = {:.1} Hz",
-            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.mono_bass_hz
+            spat_metrics.initial_correlation,
+            spat_metrics.final_correlation,
+            spat_metrics.mono_bass_hz
         );
         current_audio = spat_audio;
     }
@@ -1720,7 +1840,10 @@ fn auto_master_pipeline(
     let out_dir = match out {
         Some(p) => p.to_path_buf(),
         None => {
-            let stem = input.file_stem().and_then(|s| s.to_str()).unwrap_or("track");
+            let stem = input
+                .file_stem()
+                .and_then(|s| s.to_str())
+                .unwrap_or("track");
             let mut slug = String::new();
             let mut last_dash = false;
             for c in stem.chars() {
@@ -1745,7 +1868,10 @@ fn auto_master_pipeline(
     }
 
     // 2. Read / transcode input audio
-    let is_flac = input.extension().map(|e| e.to_string_lossy().to_lowercase()) == Some("flac".into());
+    let is_flac = input
+        .extension()
+        .map(|e| e.to_string_lossy().to_lowercase())
+        == Some("flac".into());
     let mut current_audio = if is_flac {
         let temp_wav = out_dir.join("input_prepared_48k.wav");
         let st = std::process::Command::new("ffmpeg")
@@ -1796,10 +1922,19 @@ fn auto_master_pipeline(
     println!("             HIGHBAND AUTONOMOUS MASTERING ENGINE (v1)");
     println!("================================================================================");
     println!("Input:            {}", input.display());
-    println!("Duration:         {:.2}s ({} frames @ {} Hz, {} ch)", duration_s, num_frames, current_audio.rate, num_channels);
+    println!(
+        "Duration:         {:.2}s ({} frames @ {} Hz, {} ch)",
+        duration_s, num_frames, current_audio.rate, num_channels
+    );
     println!("Output Run Dir:   {}", out_dir.display());
-    println!("Mastering Target: {:.1} LUFS | Ceiling: {:.1} dBTP | Glue Sidechain HP: {:.1} Hz", target_lufs, ceiling_db, sidechain_hp_hz);
-    println!("Spatial Dynamics: Mono Sub-Bass <= {:.1} Hz | Width: {:.2}x | Room Depth: {:.2}", mono_bass_hz, width_factor, room_depth);
+    println!(
+        "Mastering Target: {:.1} LUFS | Ceiling: {:.1} dBTP | Glue Sidechain HP: {:.1} Hz",
+        target_lufs, ceiling_db, sidechain_hp_hz
+    );
+    println!(
+        "Spatial Dynamics: Mono Sub-Bass <= {:.1} Hz | Width: {:.2}x | Room Depth: {:.2}",
+        mono_bass_hz, width_factor, room_depth
+    );
     println!("Backend:          {}", backend);
     println!("================================================================================");
 
@@ -1809,8 +1944,18 @@ fn auto_master_pipeline(
     let pre_profile = assessor.assess(&current_audio);
     let pre_master_metrics = master::metrics(&current_audio);
     println!("  Spectral: Sub (<120Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS | High (>6kHz): {:.1} dBFS", pre_profile.sub_energy_dbfs, pre_profile.low_mid_energy_dbfs, pre_profile.mid_energy_dbfs, pre_profile.high_energy_dbfs);
-    println!("  Spatial:  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leakage: {:.3}", pre_profile.interchannel_correlation, pre_profile.side_to_mid_ratio, pre_profile.sub_side_leak_ratio);
-    println!("  Dynamics: Integrated LUFS: {:.2} | True Peak: {:.2} dBTP | Crest Factor: {:.2} dB", pre_profile.integrated_lufs, pre_master_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0), pre_profile.crest_factor_db);
+    println!(
+        "  Spatial:  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leakage: {:.3}",
+        pre_profile.interchannel_correlation,
+        pre_profile.side_to_mid_ratio,
+        pre_profile.sub_side_leak_ratio
+    );
+    println!(
+        "  Dynamics: Integrated LUFS: {:.2} | True Peak: {:.2} dBTP | Crest Factor: {:.2} dB",
+        pre_profile.integrated_lufs,
+        pre_master_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0),
+        pre_profile.crest_factor_db
+    );
     println!("  Critics:  AI Shimmer: {:.3} | Metallic Grain: {:.3} | Sub Instability: {:.3} | CDI: {:.3}", pre_profile.artifacts.ai_shimmer, pre_profile.artifacts.metallic_grain, pre_profile.artifacts.sub_instability, pre_profile.artifacts.composite_defect_index);
     println!("  Authorities: Sub: {:.2} [{}] | Mid: {:.2} [{}] | Spatial: {:.2} [{}] | De-fizz: {:.2} [{}] | Glue: {:.2}",
         pre_profile.authorities.sub_bass_authority, if pre_profile.authorities.sub_bass_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" },
@@ -1819,13 +1964,20 @@ fn auto_master_pipeline(
         pre_profile.authorities.conservative_defizz_authority, if pre_profile.authorities.conservative_defizz_authority > 0.0 { "ACTIVE" } else { "ABSTAIN" },
         pre_profile.authorities.master_glue_authority
     );
-    std::fs::write(out_dir.join("pre_assessment.json"), serde_json::to_string_pretty(&pre_profile)?)?;
+    std::fs::write(
+        out_dir.join("pre_assessment.json"),
+        serde_json::to_string_pretty(&pre_profile)?,
+    )?;
 
     // Model Resolution
     let resolved_sfht = if !no_sfht {
         sfht_model.map(|p| p.to_path_buf()).or_else(|| {
             let default_p = std::path::PathBuf::from("artifacts/rich-low-sfht/basis.json");
-            if default_p.exists() { Some(default_p) } else { None }
+            if default_p.exists() {
+                Some(default_p)
+            } else {
+                None
+            }
         })
     } else {
         None
@@ -1834,7 +1986,11 @@ fn auto_master_pipeline(
     let resolved_mid = if !no_mid {
         mid_model.map(|p| p.to_path_buf()).or_else(|| {
             let default_p = std::path::PathBuf::from("artifacts/rich-mid-v1/basis.json");
-            if default_p.exists() { Some(default_p) } else { None }
+            if default_p.exists() {
+                Some(default_p)
+            } else {
+                None
+            }
         })
     } else {
         None
@@ -1854,7 +2010,10 @@ fn auto_master_pipeline(
 
     // Stage 2: Mid-Band CFM Restoration
     if let Some(ref m_path) = resolved_mid {
-        println!("\n--- Stage 2: Mid-Band CFM Restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ---", mid_cutoff, mid_ceiling);
+        println!(
+            "\n--- Stage 2: Mid-Band CFM Restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ---",
+            mid_cutoff, mid_ceiling
+        );
         let t0 = std::time::Instant::now();
         let stage2_dir = out_dir.join("stage2_mid");
         let stage2_in = out_dir.join("stage2_in.wav");
@@ -1887,7 +2046,10 @@ fn auto_master_pipeline(
 
     // Stage 3: Clean Polish (Adaptive High-Band Denoise & Auto-EQ)
     if denoise || auto_eq {
-        println!("\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}) ---", denoise, auto_eq);
+        println!(
+            "\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}) ---",
+            denoise, auto_eq
+        );
         let t0 = std::time::Instant::now();
         current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
         println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
@@ -1907,7 +2069,10 @@ fn auto_master_pipeline(
         let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial_cfg);
         println!(
             "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz | Sub Side Leak: {:.1} dB",
-            spat_metrics.initial_correlation, spat_metrics.final_correlation, spat_metrics.mono_bass_hz, spat_metrics.side_energy_below_cutoff_db
+            spat_metrics.initial_correlation,
+            spat_metrics.final_correlation,
+            spat_metrics.mono_bass_hz,
+            spat_metrics.side_energy_below_cutoff_db
         );
         current_audio = spat_audio;
         println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
@@ -1915,7 +2080,10 @@ fn auto_master_pipeline(
     }
 
     // Stage 5: Dynamic Post-Mastering
-    println!("\n--- Stage 5: Dynamic Post-Mastering (Target: {:.1} LUFS, Ceiling: {:.1} dBTP) ---", target_lufs, ceiling_db);
+    println!(
+        "\n--- Stage 5: Dynamic Post-Mastering (Target: {:.1} LUFS, Ceiling: {:.1} dBTP) ---",
+        target_lufs, ceiling_db
+    );
     let t0 = std::time::Instant::now();
     let master_res = master::master_audio(
         &current_audio,
@@ -1926,7 +2094,13 @@ fn auto_master_pipeline(
         sidechain_hp_hz,
     )?;
     current_audio = master_res.mastered;
-    println!("  Completed in {:.2}s | Glue GR: {:.2} dB | Limiter GR: {:.2} dB | Pre-Gain: {:+.2} dB", t0.elapsed().as_secs_f64(), master_res.glue_gr, master_res.limiter_gr, master_res.pre_gain_db);
+    println!(
+        "  Completed in {:.2}s | Glue GR: {:.2} dB | Limiter GR: {:.2} dB | Pre-Gain: {:+.2} dB",
+        t0.elapsed().as_secs_f64(),
+        master_res.glue_gr,
+        master_res.limiter_gr,
+        master_res.pre_gain_db
+    );
     let mastered_wav = out_dir.join("mastered.wav");
     let listen_wav = out_dir.join("listen.wav");
     native_audio::write(&mastered_wav, &current_audio, false)?;
@@ -1950,30 +2124,108 @@ fn auto_master_pipeline(
     println!("\n--- Stage 6: Post-Assessment & Preservation Verification ---");
     let post_profile = assessor.assess(&current_audio);
     let preservation = assessor.verify_preservation(&original_input_audio, &current_audio);
-    std::fs::write(out_dir.join("post_assessment.json"), serde_json::to_string_pretty(&post_profile)?)?;
+    std::fs::write(
+        out_dir.join("post_assessment.json"),
+        serde_json::to_string_pretty(&post_profile)?,
+    )?;
 
     println!("================================================================================");
     println!("                       BEFORE / AFTER MASTERING SUMMARY                        ");
     println!("================================================================================");
-    println!("{:<30} | {:>16} | {:>16} | {:>10}", "Metric", "Before", "After", "Delta");
+    println!(
+        "{:<30} | {:>16} | {:>16} | {:>10}",
+        "Metric", "Before", "After", "Delta"
+    );
     println!("-------------------------------+------------------+------------------+----------");
-    println!("{:<30} | {:>14.2} LU | {:>14.2} LU | {:>+7.2} LU", "Integrated Loudness", pre_profile.integrated_lufs, post_profile.integrated_lufs, post_profile.integrated_lufs - pre_profile.integrated_lufs);
+    println!(
+        "{:<30} | {:>14.2} LU | {:>14.2} LU | {:>+7.2} LU",
+        "Integrated Loudness",
+        pre_profile.integrated_lufs,
+        post_profile.integrated_lufs,
+        post_profile.integrated_lufs - pre_profile.integrated_lufs
+    );
     let pre_tp = pre_master_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0) as f32;
-    let post_tp = master_res.after_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0) as f32;
-    println!("{:<30} | {:>14.2} dB | {:>14.2} dB | {:>+7.2} dB", "True Peak (dBTP)", pre_tp, post_tp, post_tp - pre_tp);
-    println!("{:<30} | {:>14.2} dB | {:>14.2} dB | {:>+7.2} dB", "Crest Factor", pre_profile.crest_factor_db, post_profile.crest_factor_db, post_profile.crest_factor_db - pre_profile.crest_factor_db);
-    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Inter-Channel Correlation", pre_profile.interchannel_correlation, post_profile.interchannel_correlation, post_profile.interchannel_correlation - pre_profile.interchannel_correlation);
-    let leak_delta_pct = (post_profile.sub_side_leak_ratio - pre_profile.sub_side_leak_ratio) / pre_profile.sub_side_leak_ratio.max(1e-5) * 100.0;
-    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+7.1}%", "Sub-Bass Side Leak Ratio", pre_profile.sub_side_leak_ratio, post_profile.sub_side_leak_ratio, leak_delta_pct);
-    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Sub Instability Critic", pre_profile.artifacts.sub_instability, post_profile.artifacts.sub_instability, post_profile.artifacts.sub_instability - pre_profile.artifacts.sub_instability);
-    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "AI Phase Shimmer Critic", pre_profile.artifacts.ai_shimmer, post_profile.artifacts.ai_shimmer, post_profile.artifacts.ai_shimmer - pre_profile.artifacts.ai_shimmer);
-    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Metallic Grain Critic", pre_profile.artifacts.metallic_grain, post_profile.artifacts.metallic_grain, post_profile.artifacts.metallic_grain - pre_profile.artifacts.metallic_grain);
-    println!("{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}", "Composite Defect Index (CDI)", pre_profile.artifacts.composite_defect_index, post_profile.artifacts.composite_defect_index, post_profile.artifacts.composite_defect_index - pre_profile.artifacts.composite_defect_index);
+    let post_tp = master_res.after_metrics["true_peak_dbtp"]
+        .as_f64()
+        .unwrap_or(0.0) as f32;
+    println!(
+        "{:<30} | {:>14.2} dB | {:>14.2} dB | {:>+7.2} dB",
+        "True Peak (dBTP)",
+        pre_tp,
+        post_tp,
+        post_tp - pre_tp
+    );
+    println!(
+        "{:<30} | {:>14.2} dB | {:>14.2} dB | {:>+7.2} dB",
+        "Crest Factor",
+        pre_profile.crest_factor_db,
+        post_profile.crest_factor_db,
+        post_profile.crest_factor_db - pre_profile.crest_factor_db
+    );
+    println!(
+        "{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}",
+        "Inter-Channel Correlation",
+        pre_profile.interchannel_correlation,
+        post_profile.interchannel_correlation,
+        post_profile.interchannel_correlation - pre_profile.interchannel_correlation
+    );
+    let leak_delta_pct = (post_profile.sub_side_leak_ratio - pre_profile.sub_side_leak_ratio)
+        / pre_profile.sub_side_leak_ratio.max(1e-5)
+        * 100.0;
+    println!(
+        "{:<30} | {:>16.3} | {:>16.3} | {:>+7.1}%",
+        "Sub-Bass Side Leak Ratio",
+        pre_profile.sub_side_leak_ratio,
+        post_profile.sub_side_leak_ratio,
+        leak_delta_pct
+    );
+    println!(
+        "{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}",
+        "Sub Instability Critic",
+        pre_profile.artifacts.sub_instability,
+        post_profile.artifacts.sub_instability,
+        post_profile.artifacts.sub_instability - pre_profile.artifacts.sub_instability
+    );
+    println!(
+        "{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}",
+        "AI Phase Shimmer Critic",
+        pre_profile.artifacts.ai_shimmer,
+        post_profile.artifacts.ai_shimmer,
+        post_profile.artifacts.ai_shimmer - pre_profile.artifacts.ai_shimmer
+    );
+    println!(
+        "{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}",
+        "Metallic Grain Critic",
+        pre_profile.artifacts.metallic_grain,
+        post_profile.artifacts.metallic_grain,
+        post_profile.artifacts.metallic_grain - pre_profile.artifacts.metallic_grain
+    );
+    println!(
+        "{:<30} | {:>16.3} | {:>16.3} | {:>+10.3}",
+        "Composite Defect Index (CDI)",
+        pre_profile.artifacts.composite_defect_index,
+        post_profile.artifacts.composite_defect_index,
+        post_profile.artifacts.composite_defect_index
+            - pre_profile.artifacts.composite_defect_index
+    );
     println!("-------------------------------+------------------+------------------+----------");
-    println!("Preservation Guardrails: Mono Compat: [{}] | Known Band: [{}] | Transients: [{}]",
-        if preservation.mono_compatibility_passed { "PASS" } else { "FAIL" },
-        if preservation.known_band_preserved { "PASS" } else { "FAIL" },
-        if preservation.transient_timing_passed { "PASS" } else { "FAIL" }
+    println!(
+        "Preservation Guardrails: Mono Compat: [{}] | Known Band: [{}] | Transients: [{}]",
+        if preservation.mono_compatibility_passed {
+            "PASS"
+        } else {
+            "FAIL"
+        },
+        if preservation.known_band_preserved {
+            "PASS"
+        } else {
+            "FAIL"
+        },
+        if preservation.transient_timing_passed {
+            "PASS"
+        } else {
+            "FAIL"
+        }
     );
     println!("================================================================================");
 
@@ -1994,7 +2246,10 @@ fn auto_master_pipeline(
     if export_sdcard {
         let sd_download = std::path::Path::new("/sdcard/Download");
         if sd_download.exists() {
-            let base_stem = input.file_stem().and_then(|s| s.to_str()).unwrap_or("Mastered");
+            let base_stem = input
+                .file_stem()
+                .and_then(|s| s.to_str())
+                .unwrap_or("Mastered");
             let sanitized_stem = format!("{} [Highband Mastered]", base_stem);
             let target_wav = sd_download.join(format!("{}.wav", sanitized_stem));
             if let Err(e) = std::fs::copy(&listen_wav, &target_wav) {
@@ -2011,7 +2266,11 @@ fn auto_master_pipeline(
                     sd_download.join(format!("{}.flac", sanitized_stem))
                 };
                 if let Err(e) = std::fs::copy(&flac_path, &target_flac) {
-                    eprintln!("Warning: failed copying to {}: {}", target_flac.display(), e);
+                    eprintln!(
+                        "Warning: failed copying to {}: {}",
+                        target_flac.display(),
+                        e
+                    );
                 } else {
                     println!("Exported to Android:  {}", target_flac.display());
                 }
@@ -2091,30 +2350,48 @@ fn run_microstructure_cli(
     };
 
     println!("================================================================================");
-    println!("     CONDITIONAL MICROSTRUCTURE SYNTHESIS ({})", family_label);
+    println!(
+        "     CONDITIONAL MICROSTRUCTURE SYNTHESIS ({})",
+        family_label
+    );
     println!("================================================================================");
     println!("Input:            {}", input.display());
     println!("Family:           {:?}", family_enum);
-    println!("Crossover:        {:.1} Hz (content below locked/invariant)", crossover_hz);
+    println!(
+        "Crossover:        {:.1} Hz (content below locked/invariant)",
+        crossover_hz
+    );
     println!("Settings:         strength={:.2}, air={:.2}, resonance={:.2}, desmear={:.2}, phase_cont={:.2}, seed={}",
         strength, air_coupling, harmonic_resonance, transient_desmear, phase_continuity, seed
     );
 
     let audio = native_audio::read_entire(input)?;
-    println!("Duration:         {:.2}s ({} frames @ {} Hz, {} ch)",
-        audio.frames() as f32 / audio.rate as f32, audio.frames(), audio.rate, audio.channels.len()
+    println!(
+        "Duration:         {:.2}s ({} frames @ {} Hz, {} ch)",
+        audio.frames() as f32 / audio.rate as f32,
+        audio.frames(),
+        audio.rate,
+        audio.channels.len()
     );
 
     if compare_baselines {
         println!("\n--- Running Baseline Comparison Suite (Matched Loudness) ---");
         let results = microstructure::compare_microstructure_baselines(&audio);
 
-        println!("--------------------------------------------------------------------------------");
-        println!("{:<32} | {:>10} | {:>10} | {:>10} | {:>10}", "Method / Baseline", "Shimmer", "Metallic", "Combing", "CDI");
-        println!("---------------------------------+------------+------------+------------+------------");
+        println!(
+            "--------------------------------------------------------------------------------"
+        );
+        println!(
+            "{:<32} | {:>10} | {:>10} | {:>10} | {:>10}",
+            "Method / Baseline", "Shimmer", "Metallic", "Combing", "CDI"
+        );
+        println!(
+            "---------------------------------+------------+------------+------------+------------"
+        );
         let print_row = |name: &str, key: &str| {
             if let Some(obj) = results.get(key) {
-                println!("{:<32} | {:>10.3} | {:>10.3} | {:>10.3} | {:>10.3}",
+                println!(
+                    "{:<32} | {:>10.3} | {:>10.3} | {:>10.3} | {:>10.3}",
                     name,
                     obj["ai_shimmer"].as_f64().unwrap_or(0.0),
                     obj["metallic_grain"].as_f64().unwrap_or(0.0),
@@ -2124,13 +2401,27 @@ fn run_microstructure_cli(
             }
         };
         print_row("0. Identity (Bypass)", "baseline_0_identity");
-        print_row("A. Prototype A (HTS Procedural)", "prototype_a_microstructure");
+        print_row(
+            "A. Prototype A (HTS Procedural)",
+            "prototype_a_microstructure",
+        );
         print_row("B. Prototype B (NCA Dynamics)", "prototype_b_nca");
-        print_row("C. Prototype C (Self-Supervised)", "prototype_c_self_supervised");
-        print_row("1. Static Exciter (Polynomial)", "baseline_1_static_exciter");
-        print_row("2. Unconditioned Dither (-32dB)", "baseline_2_unconditioned_dither");
+        print_row(
+            "C. Prototype C (Self-Supervised)",
+            "prototype_c_self_supervised",
+        );
+        print_row(
+            "1. Static Exciter (Polynomial)",
+            "baseline_1_static_exciter",
+        );
+        print_row(
+            "2. Unconditioned Dither (-32dB)",
+            "baseline_2_unconditioned_dither",
+        );
         print_row("3. High-Shelf EQ (+2.5dB)", "baseline_3_high_shelf_eq");
-        println!("--------------------------------------------------------------------------------");
+        println!(
+            "--------------------------------------------------------------------------------"
+        );
 
         if let Some(out_path) = out {
             let out_dir = if out_path.extension().is_some() {
@@ -2143,7 +2434,10 @@ fn run_microstructure_cli(
             }
             let json_path = out_dir.join("microstructure_baselines.json");
             std::fs::write(&json_path, serde_json::to_string_pretty(&results)?)?;
-            println!("Baseline comparison report saved to: {}", json_path.display());
+            println!(
+                "Baseline comparison report saved to: {}",
+                json_path.display()
+            );
         }
     }
 
@@ -2170,28 +2464,50 @@ fn run_microstructure_cli(
         report.hts.detected_onsets
     );
     println!("Artifact Critics Before / After:");
-    println!("  AI Phase Shimmer:       {:.3} -> {:.3} ({:+.3})",
-        report.initial_artifacts.ai_shimmer, report.final_artifacts.ai_shimmer,
+    println!(
+        "  AI Phase Shimmer:       {:.3} -> {:.3} ({:+.3})",
+        report.initial_artifacts.ai_shimmer,
+        report.final_artifacts.ai_shimmer,
         report.final_artifacts.ai_shimmer - report.initial_artifacts.ai_shimmer
     );
-    println!("  Metallic Grain:         {:.3} -> {:.3} ({:+.3})",
-        report.initial_artifacts.metallic_grain, report.final_artifacts.metallic_grain,
+    println!(
+        "  Metallic Grain:         {:.3} -> {:.3} ({:+.3})",
+        report.initial_artifacts.metallic_grain,
+        report.final_artifacts.metallic_grain,
         report.final_artifacts.metallic_grain - report.initial_artifacts.metallic_grain
     );
-    println!("  Composite Defect Index: {:.3} -> {:.3} ({:+.3})",
-        report.initial_artifacts.composite_defect_index, report.final_artifacts.composite_defect_index,
-        report.final_artifacts.composite_defect_index - report.initial_artifacts.composite_defect_index
+    println!(
+        "  Composite Defect Index: {:.3} -> {:.3} ({:+.3})",
+        report.initial_artifacts.composite_defect_index,
+        report.final_artifacts.composite_defect_index,
+        report.final_artifacts.composite_defect_index
+            - report.initial_artifacts.composite_defect_index
     );
-    println!("Preservation Guardrails: Mono Compat: [{}] (r={:.3}) | Transient Timing: [{}] (r={:.3})",
-        if report.mono_compatibility_passed { "PASS" } else { "FAIL" },
+    println!(
+        "Preservation Guardrails: Mono Compat: [{}] (r={:.3}) | Transient Timing: [{}] (r={:.3})",
+        if report.mono_compatibility_passed {
+            "PASS"
+        } else {
+            "FAIL"
+        },
         report.interchannel_correlation,
-        if report.transient_correlation >= 0.90 { "PASS" } else { "FAIL" },
+        if report.transient_correlation >= 0.90 {
+            "PASS"
+        } else {
+            "FAIL"
+        },
         report.transient_correlation
     );
 
     if let Some(out_path) = out {
         let (out_dir, wav_path) = if out_path.extension().map(|e| e == "wav").unwrap_or(false) {
-            (out_path.parent().unwrap_or(std::path::Path::new(".")).to_path_buf(), out_path.to_path_buf())
+            (
+                out_path
+                    .parent()
+                    .unwrap_or(std::path::Path::new("."))
+                    .to_path_buf(),
+                out_path.to_path_buf(),
+            )
         } else {
             (out_path.to_path_buf(), out_path.join("microstructure.wav"))
         };
@@ -2211,7 +2527,14 @@ fn run_microstructure_cli(
 
 fn main() {
     if let Err(e) = run() {
-        eprintln!("highband: {e:#}");
+        let prog = std::env::args()
+            .next()
+            .unwrap_or_else(|| "roach-audio-masterer".into());
+        let bin = std::path::Path::new(&prog)
+            .file_name()
+            .and_then(|f| f.to_str())
+            .unwrap_or("roach-audio-masterer");
+        eprintln!("{bin}: {e:#}");
         std::process::exit(1);
     }
 }

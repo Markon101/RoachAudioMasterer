@@ -195,9 +195,9 @@ impl SpectralTransform for HiResStft {
 /// Multiscale time-frequency filterbank uniting fine bass resolution (8192),
 /// balanced midrange (1024), and sharp transient highs (256).
 pub struct MultiscaleFilterbank {
-    pub low: HiResStft,  // 8192-point (5.86 Hz bins, 42.7 ms hop)
-    pub mid: Stft,       // 1024-point (46.88 Hz bins, 5.33 ms hop)
-    pub high: Stft,      // 256-point (187.5 Hz bins, 1.33 ms hop)
+    pub low: HiResStft, // 8192-point (5.86 Hz bins, 42.7 ms hop)
+    pub mid: Stft,      // 1024-point (46.88 Hz bins, 5.33 ms hop)
+    pub high: Stft,     // 256-point (187.5 Hz bins, 1.33 ms hop)
 }
 
 impl MultiscaleFilterbank {

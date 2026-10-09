@@ -1,10 +1,19 @@
 [package]
-name = "highband"
+name = "roach-audio-masterer"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.88"
 license = "MIT"
-description = "Phone-first synthetic audio high-band reconstruction experiment"
+description = "Autonomous mastering, spatial dynamics, and acoustic scene restoration engine"
+default-run = "roach-audio-masterer"
+
+[[bin]]
+name = "roach-audio-masterer"
+path = "src/main.rs"
+
+[[bin]]
+name = "highband"
+path = "src/bin/highband.rs"
 
 [dependencies]
 anyhow = "1"

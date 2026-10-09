@@ -1,6 +1,9 @@
 //! Targeted synthetic support/abstention curriculum; legacy generator is intact.
 #![allow(clippy::needless_range_loop)] // Explicit stereo/oscillator reference loops.
-use crate::{dsp::SpectralTransform, native_audio::Audio, native_dsp::RATE, scene_features::Damage, synth::Rng};
+use crate::{
+    dsp::SpectralTransform, native_audio::Audio, native_dsp::RATE, scene_features::Damage,
+    synth::Rng,
+};
 use serde::Serialize;
 use std::f32::consts::{PI, TAU};
 pub const SAMPLES: usize = 16384;
@@ -73,8 +76,16 @@ pub fn generate(seed: u64) -> (Audio, Recipe) {
                 r.range(0.11, 0.18),
                 r.range(0.23, 0.28),
             ];
-            let drift_rate = if r.unit() < 0.75 { 0.0 } else { r.range(0.05, 0.25) };
-            let drift_depth = if drift_rate == 0.0 { 0.0 } else { r.range(0.0005, 0.002) };
+            let drift_rate = if r.unit() < 0.75 {
+                0.0
+            } else {
+                r.range(0.05, 0.25)
+            };
+            let drift_depth = if drift_rate == 0.0 {
+                0.0
+            } else {
+                r.range(0.0005, 0.002)
+            };
             let drift_phase = r.range(0.0, TAU);
             let mut phase = phase0;
             let mut color = 0.0;
@@ -103,8 +114,7 @@ pub fn generate(seed: u64) -> (Audio, Recipe) {
                             / (j as f32).sqrt();
                     }
                 } else if family == 8 || (v == 1 && family == 9) {
-                    x = (phase + 1.2 * (phase * 1.5).sin()).sin()
-                        + 0.15 * (phase * 2.0).sin();
+                    x = (phase + 1.2 * (phase * 1.5).sin()).sin() + 0.15 * (phase * 2.0).sin();
                 } else {
                     let (sp, cp) = phase.sin_cos();
                     let (mut sh, mut ch) = (sp, cp);
@@ -227,8 +237,16 @@ pub fn generate_mid(seed: u64) -> (Audio, Recipe) {
                 r.range(0.11, 0.18),
                 r.range(0.23, 0.28),
             ];
-            let drift_rate = if r.unit() < 0.75 { 0.0 } else { r.range(0.05, 0.25) };
-            let drift_depth = if drift_rate == 0.0 { 0.0 } else { r.range(0.0005, 0.002) };
+            let drift_rate = if r.unit() < 0.75 {
+                0.0
+            } else {
+                r.range(0.05, 0.25)
+            };
+            let drift_depth = if drift_rate == 0.0 {
+                0.0
+            } else {
+                r.range(0.0005, 0.002)
+            };
             let drift_phase = r.range(0.0, TAU);
             let mut phase = phase0;
             let mut color = 0.0;
@@ -257,8 +275,7 @@ pub fn generate_mid(seed: u64) -> (Audio, Recipe) {
                             / (j as f32).sqrt();
                     }
                 } else if family == 8 || (v == 1 && family == 9) {
-                    x = (phase + 1.2 * (phase * 1.5).sin()).sin()
-                        + 0.15 * (phase * 2.0).sin();
+                    x = (phase + 1.2 * (phase * 1.5).sin()).sin() + 0.15 * (phase * 2.0).sin();
                 } else {
                     let (sp, cp) = phase.sin_cos();
                     let (mut sh, mut ch) = (sp, cp);
@@ -719,15 +736,25 @@ mod tests {
         assert_eq!(vocal.frames(), SAMPLES);
         assert!(vocal.channels.iter().flatten().all(|x| x.is_finite()));
 
-        let vocal_rms = (vocal.channels[0].iter().map(|x| x * x).sum::<f32>() / vocal.frames() as f32).sqrt();
-        assert!(vocal_rms > 0.01 && vocal_rms < 1.0, "Vocal RMS abnormal: {}", vocal_rms);
+        let vocal_rms =
+            (vocal.channels[0].iter().map(|x| x * x).sum::<f32>() / vocal.frames() as f32).sqrt();
+        assert!(
+            vocal_rms > 0.01 && vocal_rms < 1.0,
+            "Vocal RMS abnormal: {}",
+            vocal_rms
+        );
 
         // Test room acoustics decoration
         let mut room_audio = vocal.clone();
         apply_room_acoustics(&mut room_audio, 0.45, 991122);
         assert!(room_audio.channels.iter().flatten().all(|x| x.is_finite()));
-        let room_rms = (room_audio.channels[0].iter().map(|x| x * x).sum::<f32>() / room_audio.frames() as f32).sqrt();
-        assert!(room_rms >= vocal_rms * 0.99, "Room reverb failed to add energy: room={room_rms}, dry={vocal_rms}");
+        let room_rms = (room_audio.channels[0].iter().map(|x| x * x).sum::<f32>()
+            / room_audio.frames() as f32)
+            .sqrt();
+        assert!(
+            room_rms >= vocal_rms * 0.99,
+            "Room reverb failed to add energy: room={room_rms}, dry={vocal_rms}"
+        );
 
         // Test AI codec degradation
         let mut degraded = vocal.clone();

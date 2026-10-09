@@ -171,7 +171,8 @@ impl SceneAssessor {
         };
 
         // Spatial inter-channel correlation & sub-side leakage
-        let (interchannel_correlation, side_to_mid_ratio, sub_side_leak_ratio) = if n_channels == 2 {
+        let (interchannel_correlation, side_to_mid_ratio, sub_side_leak_ratio) = if n_channels == 2
+        {
             let (mut dot, mut l2, mut r2) = (0.0f64, 0.0f64, 0.0f64);
             let (mut m_tot, mut s_tot) = (0.0f64, 0.0f64);
             for i in 0..total_samples {
@@ -280,11 +281,12 @@ impl SceneAssessor {
         };
 
         // Conservative De-fizz Authority:
-        let conservative_defizz_authority = if artifacts.ai_shimmer > 0.25 || artifacts.metallic_grain > 0.30 {
-            (artifacts.ai_shimmer.max(artifacts.metallic_grain) * 1.2).min(1.0)
-        } else {
-            0.0 // Abstain
-        };
+        let conservative_defizz_authority =
+            if artifacts.ai_shimmer > 0.25 || artifacts.metallic_grain > 0.30 {
+                (artifacts.ai_shimmer.max(artifacts.metallic_grain) * 1.2).min(1.0)
+            } else {
+                0.0 // Abstain
+            };
 
         // Mastering Glue Authority:
         // If crest factor is already crushed (<9 dB), reduce glue compression to avoid squashing!
@@ -348,12 +350,23 @@ impl SceneAssessor {
         let mono_compatibility_passed = correlation_value >= 0.20;
 
         // 2. Known-Band Invariance (check mid frequencies 1-3 kHz are within 1.0 dB)
-        let orig_lp = crate::dsp::lowpass(&original.channels[0][..n_samples], RATE, 2500.0, 500.0, 2.0);
+        let orig_lp =
+            crate::dsp::lowpass(&original.channels[0][..n_samples], RATE, 2500.0, 500.0, 2.0);
         let orig_mid = crate::dsp::highpass(&orig_lp, RATE, 1000.0, 300.0, 2.0);
-        let proc_lp = crate::dsp::lowpass(&processed.channels[0][..n_samples], RATE, 2500.0, 500.0, 2.0);
+        let proc_lp = crate::dsp::lowpass(
+            &processed.channels[0][..n_samples],
+            RATE,
+            2500.0,
+            500.0,
+            2.0,
+        );
         let proc_mid = crate::dsp::highpass(&proc_lp, RATE, 1000.0, 300.0, 2.0);
-        let orig_rms = (orig_mid.iter().map(|x| x * x).sum::<f32>() / n_samples as f32).sqrt().max(1e-8);
-        let proc_rms = (proc_mid.iter().map(|x| x * x).sum::<f32>() / n_samples as f32).sqrt().max(1e-8);
+        let orig_rms = (orig_mid.iter().map(|x| x * x).sum::<f32>() / n_samples as f32)
+            .sqrt()
+            .max(1e-8);
+        let proc_rms = (proc_mid.iter().map(|x| x * x).sum::<f32>() / n_samples as f32)
+            .sqrt()
+            .max(1e-8);
         let diff_db = 20.0 * (proc_rms / orig_rms).log10().abs();
         let known_band_preserved = diff_db < 1.0;
 
@@ -363,7 +376,10 @@ impl SceneAssessor {
         let hop = 256usize;
         for i in (hop..n_samples).step_by(hop) {
             let o_e: f32 = original.channels[0][i - hop..i].iter().map(|x| x * x).sum();
-            let p_e: f32 = processed.channels[0][i - hop..i].iter().map(|x| x * x).sum();
+            let p_e: f32 = processed.channels[0][i - hop..i]
+                .iter()
+                .map(|x| x * x)
+                .sum();
             orig_onsets.push(o_e);
             proc_onsets.push(p_e);
         }

@@ -157,14 +157,34 @@ impl Engine {
                         bin: k,
                     });
                     if rows.len() == batch_size {
-                        self.process_parallel_batch(p, d, encoding, state, time, mode, &rows, num_threads, &mut result)?;
+                        self.process_parallel_batch(
+                            p,
+                            d,
+                            encoding,
+                            state,
+                            time,
+                            mode,
+                            &rows,
+                            num_threads,
+                            &mut result,
+                        )?;
                         rows.clear();
                     }
                 }
             }
         }
         if !rows.is_empty() {
-            self.process_parallel_batch(p, d, encoding, state, time, mode, &rows, num_threads, &mut result)?;
+            self.process_parallel_batch(
+                p,
+                d,
+                encoding,
+                state,
+                time,
+                mode,
+                &rows,
+                num_threads,
+                &mut result,
+            )?;
         }
         Ok(result)
     }
@@ -187,7 +207,15 @@ impl Engine {
             for (t_rows, t_chunks) in rows.chunks(step).zip(chunks_slice.chunks_mut(step)) {
                 s.spawn(move || {
                     for (r, chunk) in t_rows.iter().zip(t_chunks.iter_mut()) {
-                        crate::scene_features::features_into(p, d, *r, &encoding.values, state, time, chunk);
+                        crate::scene_features::features_into(
+                            p,
+                            d,
+                            *r,
+                            &encoding.values,
+                            state,
+                            time,
+                            chunk,
+                        );
                     }
                 });
             }
@@ -324,7 +352,10 @@ impl Engine {
             "scene solver steps must be 1..16"
         );
         let (min_k, max_k) = if d.is_highpass() {
-            (1, (d.cutoff_bin() + 1).min(ceil_bin.unwrap_or(BINS)).min(BINS))
+            (
+                1,
+                (d.cutoff_bin() + 1).min(ceil_bin.unwrap_or(BINS)).min(BINS),
+            )
         } else {
             (d.cutoff_bin() + 1, ceil_bin.unwrap_or(BINS).min(BINS))
         };
@@ -347,7 +378,9 @@ impl Engine {
                             bin,
                         };
                         let mut f = [0.0; HEAD_INPUT];
-                        crate::scene_features::features_into(p, d, r, &e.values, &zero, 0.0, &mut f);
+                        crate::scene_features::features_into(
+                            p, d, r, &e.values, &zero, 0.0, &mut f,
+                        );
                         template.extend_from_slice(&f);
                         rows.push(r);
                     }
@@ -404,10 +437,18 @@ impl Engine {
             let rows_slice = &rows[..];
             let chunks_slice = x.as_chunks_mut::<HEAD_INPUT>().0;
             std::thread::scope(|s| {
-                for (t_rows, t_chunks) in rows_slice.chunks(step).zip(chunks_slice.chunks_mut(step)) {
+                for (t_rows, t_chunks) in rows_slice.chunks(step).zip(chunks_slice.chunks_mut(step))
+                {
                     s.spawn(move || {
                         for (r, chunk) in t_rows.iter().zip(t_chunks.iter_mut()) {
-                            crate::scene_features::update_state_features(chunk, p, cache.damage, *r, state, time);
+                            crate::scene_features::update_state_features(
+                                chunk,
+                                p,
+                                cache.damage,
+                                *r,
+                                state,
+                                time,
+                            );
                         }
                     });
                 }

@@ -178,7 +178,8 @@ pub fn decompose_hts(spec: &Spectrum) -> HtsSpectrum {
             let mut neighbors = [0.0f32; 9];
             let len = k_max - k_min + 1;
             for (step, kappa) in (k_min..=k_max).enumerate() {
-                neighbors[step] = mag[t * bins + kappa] * (1.0 - transient_weights[t * bins + kappa]);
+                neighbors[step] =
+                    mag[t * bins + kappa] * (1.0 - transient_weights[t * bins + kappa]);
             }
             neighbors[..len].sort_by(|a, b| a.partial_cmp(b).unwrap());
             let med = neighbors[len / 2];
@@ -229,16 +230,31 @@ pub fn decompose_hts(spec: &Spectrum) -> HtsSpectrum {
     };
 
     HtsSpectrum {
-        harmonic: Spectrum { data: harm_data, frames, samples: spec.samples },
-        transient: Spectrum { data: trans_data, frames, samples: spec.samples },
-        stochastic: Spectrum { data: stoch_data, frames, samples: spec.samples },
+        harmonic: Spectrum {
+            data: harm_data,
+            frames,
+            samples: spec.samples,
+        },
+        transient: Spectrum {
+            data: trans_data,
+            frames,
+            samples: spec.samples,
+        },
+        stochastic: Spectrum {
+            data: stoch_data,
+            frames,
+            samples: spec.samples,
+        },
         onset_frames,
         stats,
     }
 }
 
 /// Applies Prototype Family A conditional microstructure synthesis to a single stereo or mono audio signal.
-pub fn process_microstructure(input: &Audio, config: &MicrostructureConfig) -> (Audio, MicrostructureReport) {
+pub fn process_microstructure(
+    input: &Audio,
+    config: &MicrostructureConfig,
+) -> (Audio, MicrostructureReport) {
     let t_start = Instant::now();
     let critics = CriticsSuite::default();
     let initial_artifacts = critics.evaluate(input);
@@ -268,7 +284,8 @@ pub fn process_microstructure(input: &Audio, config: &MicrostructureConfig) -> (
     }
 
     let stft = Stft::new(FFT, HOP);
-    let crossover_bin = ((config.crossover_hz * FFT as f32 / RATE as f32).round() as usize).min(BINS - 1);
+    let crossover_bin =
+        ((config.crossover_hz * FFT as f32 / RATE as f32).round() as usize).min(BINS - 1);
     let shimmer_bin = ((8000.0f32 * FFT as f32 / RATE as f32).round() as usize).min(BINS - 1);
 
     let num_channels = input.channels.len();
@@ -428,7 +445,8 @@ fn process_family_a_procedural(
 
     // 1. Transient Pre-Echo Anti-Smear
     if config.transient_desmear > 0.0 {
-        let smear_atten = (1.0 - config.transient_desmear * effective_strength * 0.5).clamp(0.4, 1.0);
+        let smear_atten =
+            (1.0 - config.transient_desmear * effective_strength * 0.5).clamp(0.4, 1.0);
         for &onset_t in &hts.onset_frames {
             let pre_min = onset_t.saturating_sub(2);
             for t in pre_min..onset_t {
@@ -444,7 +462,9 @@ fn process_family_a_procedural(
     // 2. Harmonic Body Resonance & Lorentzian Q-Skirt Dispersion in 3-8 kHz
     if config.harmonic_resonance > 0.0 {
         let res_scale = config.harmonic_resonance * effective_strength * 0.25;
-        let k_res_min = ((3000.0f32 * FFT as f32 / RATE as f32).round() as usize).max(crossover_bin).max(3);
+        let k_res_min = ((3000.0f32 * FFT as f32 / RATE as f32).round() as usize)
+            .max(crossover_bin)
+            .max(3);
         let k_res_max = ((8000.0f32 * FFT as f32 / RATE as f32).round() as usize).min(BINS - 4);
 
         for t in 0..frames {
@@ -473,7 +493,8 @@ fn process_family_a_procedural(
     // 3. Harmonic-Conditioned Air & Breath Excitation (>6 kHz)
     if config.air_coupling > 0.0 {
         let air_scale = config.air_coupling * effective_strength * 0.15;
-        let k_air_start = ((6000.0f32 * FFT as f32 / RATE as f32).round() as usize).max(crossover_bin);
+        let k_air_start =
+            ((6000.0f32 * FFT as f32 / RATE as f32).round() as usize).max(crossover_bin);
         for t in 0..frames {
             for k in k_air_start..BINS {
                 let idx = t * BINS + k;
@@ -633,9 +654,20 @@ fn process_family_b_nca(
                 let is_transient = if curr[3] > 0.5 { 1.0f32 } else { 0.0f32 };
 
                 let p = [
-                    curr[0], curr[1], curr[2], curr[3], curr[4], curr[5],
-                    dt_s0, dt_s1, dk_s0, dk_s1, lap_s0, lap_s1,
-                    h_prom.min(5.0), is_transient,
+                    curr[0],
+                    curr[1],
+                    curr[2],
+                    curr[3],
+                    curr[4],
+                    curr[5],
+                    dt_s0,
+                    dt_s1,
+                    dk_s0,
+                    dk_s1,
+                    lap_s0,
+                    lap_s1,
+                    h_prom.min(5.0),
+                    is_transient,
                 ];
 
                 // Forward 2-layer MLP
@@ -720,9 +752,13 @@ fn process_family_c_self_supervised(
 
         for t in (t_start + 1)..(t_end - 1) {
             for k in crossover_bin..bins {
-                let p0 = spec.data[(t - 1) * bins + k].im.atan2(spec.data[(t - 1) * bins + k].re);
+                let p0 = spec.data[(t - 1) * bins + k]
+                    .im
+                    .atan2(spec.data[(t - 1) * bins + k].re);
                 let p1 = spec.data[t * bins + k].im.atan2(spec.data[t * bins + k].re);
-                let p2 = spec.data[(t + 1) * bins + k].im.atan2(spec.data[(t + 1) * bins + k].re);
+                let p2 = spec.data[(t + 1) * bins + k]
+                    .im
+                    .atan2(spec.data[(t + 1) * bins + k].re);
                 let d2 = ((p2 - 2.0 * p1 + p0 + PI).rem_euclid(2.0 * PI)) - PI;
                 jitter_sum += (d2 * d2) as f64;
                 count += 1;
@@ -757,7 +793,10 @@ fn process_family_c_self_supervised(
             let flutter = 0.60 * ((3.7 * t as f32 + 1.9 * k as f32).sin());
             let new_phi = orig_phi + flutter;
             let comb = 1.0 + 0.15 * ((2.0 * PI * k as f32 / 4.0).cos());
-            degraded_spec[idx] = C::new(orig_mag * comb * new_phi.cos(), orig_mag * comb * new_phi.sin());
+            degraded_spec[idx] = C::new(
+                orig_mag * comb * new_phi.cos(),
+                orig_mag * comb * new_phi.sin(),
+            );
         }
     }
 
@@ -768,7 +807,11 @@ fn process_family_c_self_supervised(
 
     for b in 0..num_subbands {
         let k_start = crossover_bin + b * band_width;
-        let k_end = if b == num_subbands - 1 { bins } else { k_start + band_width };
+        let k_end = if b == num_subbands - 1 {
+            bins
+        } else {
+            k_start + band_width
+        };
 
         let mut m = [[C::default(); 3]; 3];
         let mut v = [C::default(); 3];
@@ -812,7 +855,11 @@ fn process_family_c_self_supervised(
 
     for b in 0..num_subbands {
         let k_start = crossover_bin + b * band_width;
-        let k_end = if b == num_subbands - 1 { bins } else { k_start + band_width };
+        let k_end = if b == num_subbands - 1 {
+            bins
+        } else {
+            k_start + band_width
+        };
         let k_weights = kernels[b];
 
         for t in 1..(frames - 1) {
@@ -822,7 +869,8 @@ fn process_family_c_self_supervised(
                 let c_prev = spec.data[(t - 1) * bins + k];
                 let c_next = spec.data[(t + 1) * bins + k];
 
-                let restored = k_weights[0] * c_curr + k_weights[1] * c_prev + k_weights[2] * c_next;
+                let restored =
+                    k_weights[0] * c_curr + k_weights[1] * c_prev + k_weights[2] * c_next;
                 out_data[idx] = c_curr * (1.0 - blend) + restored * blend;
             }
         }
@@ -845,7 +893,10 @@ pub fn baseline_static_exciter(input: &Audio, drive: f32) -> Audio {
             .collect();
         channels.push(excited);
     }
-    let res = Audio { rate: input.rate, channels };
+    let res = Audio {
+        rate: input.rate,
+        channels,
+    };
     match_loudness(&res, orig_rms)
 }
 
@@ -862,7 +913,10 @@ pub fn baseline_unconditioned_dither(input: &Audio, level_db: f32) -> Audio {
         let out_ch: Vec<f32> = ch.iter().zip(&hp_noise).map(|(&x, &n)| x + n).collect();
         channels.push(out_ch);
     }
-    let res = Audio { rate: input.rate, channels };
+    let res = Audio {
+        rate: input.rate,
+        channels,
+    };
     match_loudness(&res, orig_rms)
 }
 
@@ -877,7 +931,10 @@ pub fn baseline_high_shelf_eq(input: &Audio, boost_db: f32) -> Audio {
         let out_ch: Vec<f32> = ch.iter().zip(&hp).map(|(&x, &h)| x + gain * h).collect();
         channels.push(out_ch);
     }
-    let res = Audio { rate: input.rate, channels };
+    let res = Audio {
+        rate: input.rate,
+        channels,
+    };
     match_loudness(&res, orig_rms)
 }
 
@@ -889,22 +946,31 @@ pub fn compare_microstructure_baselines(input: &Audio) -> serde_json::Value {
     let rep_0 = critics.evaluate(input);
 
     // 1. Prototype Family A (Procedural HTS)
-    let (_audio_a, rep_a) = process_microstructure(input, &MicrostructureConfig {
-        family: MicrostructureFamily::FamilyA,
-        ..MicrostructureConfig::default()
-    });
+    let (_audio_a, rep_a) = process_microstructure(
+        input,
+        &MicrostructureConfig {
+            family: MicrostructureFamily::FamilyA,
+            ..MicrostructureConfig::default()
+        },
+    );
 
     // 2. Prototype Family B (Neural Cellular Automata)
-    let (_audio_b, rep_b) = process_microstructure(input, &MicrostructureConfig {
-        family: MicrostructureFamily::FamilyB,
-        ..MicrostructureConfig::default()
-    });
+    let (_audio_b, rep_b) = process_microstructure(
+        input,
+        &MicrostructureConfig {
+            family: MicrostructureFamily::FamilyB,
+            ..MicrostructureConfig::default()
+        },
+    );
 
     // 3. Prototype Family C (Self-Supervised Adaptation)
-    let (_audio_c, rep_c) = process_microstructure(input, &MicrostructureConfig {
-        family: MicrostructureFamily::FamilyC,
-        ..MicrostructureConfig::default()
-    });
+    let (_audio_c, rep_c) = process_microstructure(
+        input,
+        &MicrostructureConfig {
+            family: MicrostructureFamily::FamilyC,
+            ..MicrostructureConfig::default()
+        },
+    );
 
     // 4. Baseline 1: Static Exciter
     let exciter_audio = baseline_static_exciter(input, 1.0);
@@ -1064,7 +1130,10 @@ mod tests {
         let c: Vec<f32> = (0..n)
             .map(|i| 0.3 * (2.0 * PI * freq * i as f32 / RATE as f32).sin())
             .collect();
-        Audio { rate: RATE, channels: vec![c.clone(), c] }
+        Audio {
+            rate: RATE,
+            channels: vec![c.clone(), c],
+        }
     }
 
     #[test]
@@ -1079,9 +1148,15 @@ mod tests {
             let recon = hts.harmonic.data[i] + hts.transient.data[i] + hts.stochastic.data[i];
             let orig = spec.data[i];
             let diff = (recon - orig).norm();
-            assert!(diff < 1e-4, "HTS failed exact orthogonal sum at bin {i}: diff={diff}");
+            assert!(
+                diff < 1e-4,
+                "HTS failed exact orthogonal sum at bin {i}: diff={diff}"
+            );
         }
-        assert!(hts.stats.harmonic_energy_ratio > 0.80, "1 kHz sine should be predominantly harmonic");
+        assert!(
+            hts.stats.harmonic_energy_ratio > 0.80,
+            "1 kHz sine should be predominantly harmonic"
+        );
     }
 
     #[test]
@@ -1114,7 +1189,11 @@ mod tests {
         let (out, rep) = process_microstructure(&audio, &cfg);
 
         // 440 Hz is far below 6 kHz crossover; must have transient correlation > 0.99
-        assert!(rep.transient_correlation > 0.98, "Transient correlation degraded: {}", rep.transient_correlation);
+        assert!(
+            rep.transient_correlation > 0.98,
+            "Transient correlation degraded: {}",
+            rep.transient_correlation
+        );
         assert!(rep.mono_compatibility_passed, "Mono compatibility failed");
         assert!(out.channels[0].iter().all(|x| x.is_finite()));
     }
@@ -1122,7 +1201,10 @@ mod tests {
     #[test]
     fn deterministic_seed_produces_bitwise_identical_output() {
         let audio = make_test_tone(800.0, 1);
-        let cfg = MicrostructureConfig { seed: 999888, ..MicrostructureConfig::default() };
+        let cfg = MicrostructureConfig {
+            seed: 999888,
+            ..MicrostructureConfig::default()
+        };
         let (out1, _) = process_microstructure(&audio, &cfg);
         let (out2, _) = process_microstructure(&audio, &cfg);
 
@@ -1160,8 +1242,14 @@ mod tests {
             ..MicrostructureConfig::default()
         };
         let (out, rep) = process_microstructure(&audio, &cfg);
-        assert!(rep.transient_correlation > 0.98, "NCA transient correlation degraded");
-        assert!(rep.mono_compatibility_passed, "NCA mono compatibility failed");
+        assert!(
+            rep.transient_correlation > 0.98,
+            "NCA transient correlation degraded"
+        );
+        assert!(
+            rep.mono_compatibility_passed,
+            "NCA mono compatibility failed"
+        );
         assert!(out.channels[0].iter().all(|x| x.is_finite()));
     }
 
@@ -1174,8 +1262,14 @@ mod tests {
             ..MicrostructureConfig::default()
         };
         let (out, rep) = process_microstructure(&audio, &cfg);
-        assert!(rep.transient_correlation > 0.98, "Family C transient correlation degraded");
-        assert!(rep.mono_compatibility_passed, "Family C mono compatibility failed");
+        assert!(
+            rep.transient_correlation > 0.98,
+            "Family C transient correlation degraded"
+        );
+        assert!(
+            rep.mono_compatibility_passed,
+            "Family C mono compatibility failed"
+        );
         assert!(out.channels[0].iter().all(|x| x.is_finite()));
     }
 }

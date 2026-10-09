@@ -1,64 +1,38 @@
-# highband
+# RoachAudioMasterer
 
-A small Rust experiment in synthetic-supervised conditional audio multi-band restoration,
-expansion, and autonomous mastering, developed on a Samsung Galaxy S25 Ultra in Android/Termux.
-Generated content (sub-bass fundamentals, mid overtones, and high air) represents plausible
-spectral completion and contrast expansion conditioned on surviving physical relationships,
-not recovery of lost information.
+A Rust-first autonomous mastering, 3D spatial acoustics, and multi-band acoustic scene restoration engine, developed on a Samsung Galaxy S25 Ultra in Android/Termux.
+Generated content (sub-bass fundamentals, mid overtones, and high air) represents plausible spectral completion, microdynamic expansion, and transparent mastering conditioned on surviving physical acoustic relationships, not recovery of lost information.
 
-The core direction is a unified acoustic-scene restoration/correction engine.
-Multi-band completion is the initial entry point. Spectral, transient, microdynamic/dynamic
-expansion, phase/coherence, stereo/spatial, ambience/depth and texture residuals
-are first-class design targets, with conservative-to-creative policies. See [architecture](docs/ARCHITECTURE.md).
+> **Project & Repository Identity**: The canonical project name and primary binary is **`roach-audio-masterer`** (repository: [`Markon101/RoachAudioMasterer`](https://github.com/Markon101/RoachAudioMasterer)). The legacy **`highband`** binary alias and CLI subcommands remain fully supported for backward compatibility with existing automation, scripts, and historical checkpoints.
 
-The v0 plan: deterministic procedural signals, randomized bandwidth removal,
-STFT magnitude prediction, untouched known spectral coefficients, CPU numerical
-reference and an optional OpenCL model backend. No natural-audio corpus required.
+The core direction is a unified autonomous mastering and scene restoration engine:
+- **Autonomous Mastering (`auto-master`)**: Single-command mastering with content-aware specialist routing, ITU-R BS.1770-4 LUFS target matching (-11.0 LUFS), soft-knee glue compression, 4x polyphase FIR true-peak limiting (-1.0 dBTP), and automated lossless export to device storage.
+- **Tri-Band Conditional Flow Matching**: Superharmonic sub-bass flow (`rich-low-sfht`), subharmonic mid overtones (`rich-mid`), and Basis high-band field completion (`rich-field`).
+- **3D Spatial Acoustics**: Lord Rayleigh Duplex Theory spatial field dynamics, 120 Hz mono sub-bass guard, and 180 Hz bandpassed early reflection network (zero low-end smear).
+- **Conditional Microstructure Synthesis (`microstructure`)**: HTS orthogonal physical priors, harmonic-coupled air excitation, and Lorentzian Q-skirt dispersion softening metallic grain.
 
 ## Build and run
-
-The current learned-control and coupled complex field sprints are documented in
-[RICH_SPRINT_RESULTS](docs/RICH_SPRINT_RESULTS.md), with frozen gates, allocators,
-and field operators under `artifacts/rich-gate-v1`, `artifacts/rich-allocation-v1`,
-and `artifacts/rich-field-v1`. Opt-in `rich-field-*` subcommands support 1,000-step
-coupled complex field training and streaming full-song restoration (`rich-field-restore-song`)
-with exact equal-power cosine crossfading, high-band denoise, and bounded auto-EQ. The winning
-1,000-step **Basis** coupled operator is frozen in `artifacts/rich-field-v1/basis.json`.
-
-The subsequent mid-band extension is documented in [MID_BAND_FLOW_RESULTS](docs/MID_BAND_FLOW_RESULTS.md),
-extending conditional flow matching down into the midrange (500 Hz – 6 kHz) via `rich-mid-train`
-and `rich-mid-restore` with subharmonic bass feature routing and procedural generation `generate_mid`.
-The 1,000-step mid-band Basis model is preserved in `artifacts/rich-mid-v1/basis.json`.
-
-The full-spectrum tri-band and autonomous mastering extension is documented in [SPRINT3_TRIBAND_RESULTS](docs/SPRINT3_TRIBAND_RESULTS.md),
-extending flow matching to sub-bass fundamentals (20–500 Hz) via `rich-low-train` and `rich-low-restore` with superharmonic overtone
-routing ($m \in \{2, 3, 4, 5, 6\}$), uniting all three bands in streaming chunk-cached `rich-triband-restore` (3.2s runtime for a 3m24s track),
-and introducing broadcast-standard autonomous mastering via `master` (ITU-R BS.1770-4 LUFS, soft-knee glue compression, 4x polyphase true peak
-detection, and lookahead peak limiting to -1.0 dBTP). The 2,000-step low-band Basis model is frozen in `artifacts/rich-low-v1/basis.json`.
-Future research directions, including low-band stabilization, 8192-point STFT binning, section-aware macro-dynamics, and 3D spatial acoustics,
-are formalized in [SPRINT4_ROADMAP_AND_EXPANSION_PLAN](docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md).
 
 Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
 ML framework, service, dataset download, or GPU is required.
 
 ```sh
-cargo test --locked
-cargo build --release --locked
+cargo test
+cargo build --release
+
+# Unified autonomous mastering (canonical binary)
+./target/release/roach-audio-masterer auto-master --input song.wav
+
+# Or via the legacy binary alias
+./target/release/highband auto-master --input song.wav
 
 # Full-track tri-band restoration (sub-bass + mids + highs)
-./target/release/highband rich-triband-restore \
+./target/release/roach-audio-masterer rich-triband-restore \
   --input song.wav \
   --low artifacts/rich-low-v1/basis.json \
   --mid artifacts/rich-mid-v1/basis.json \
   --high artifacts/rich-field-v1/basis.json \
   --out runs/song-triband.wav
-
-# Autonomous mastering pass (EBU R128 / BS.1770-4 LUFS, 4x true peak limit)
-./target/release/highband master \
-  --input runs/song-triband.wav \
-  --target-lufs -11.0 \
-  --ceiling-dbtp -1.0 \
-  --out runs/song-mastered.wav
 ```
 
 For the generated evaluation clips, use the actual cutoff and transition from

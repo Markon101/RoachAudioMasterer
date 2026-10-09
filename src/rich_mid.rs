@@ -8,8 +8,7 @@ use crate::{
     native_audio::{self, Audio},
     native_dsp::{self, Stft, BINS, FFT, HOP, RATE},
     rich_dynamics::{self, Kind},
-    rich_synth,
-    scene_clean,
+    rich_synth, scene_clean,
     scene_engine::{self, Engine},
     scene_features::{self, Damage, Prepared, Row},
     scene_loss::{self, Region},
@@ -52,7 +51,10 @@ impl MidField {
     }
 
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 5_000_000, "mid field checkpoint too large");
+        ensure!(
+            fs::metadata(p)?.len() < 5_000_000,
+            "mid field checkpoint too large"
+        );
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
             m.schema == "rich-mid-field-v1" && m.core.validate() && m.recipe == "rich-mid-cfm-v1",
@@ -78,13 +80,22 @@ pub struct MidState {
 
 impl MidState {
     pub fn load(p: &Path) -> Result<Self> {
-        ensure!(fs::metadata(p)?.len() < 16_000_000, "mid state checkpoint too large");
+        ensure!(
+            fs::metadata(p)?.len() < 16_000_000,
+            "mid state checkpoint too large"
+        );
         let s: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
             s.schema == "rich-mid-state-v1"
                 && s.field.core.validate()
-                && s.encoder.validate(s.field.core.encoder.weights.len(), s.field.core.optimizer_steps)
-                && s.head.validate(s.field.core.head.weights.len(), s.field.core.optimizer_steps),
+                && s.encoder.validate(
+                    s.field.core.encoder.weights.len(),
+                    s.field.core.optimizer_steps
+                )
+                && s.head.validate(
+                    s.field.core.head.weights.len(),
+                    s.field.core.optimizer_steps
+                ),
             "invalid mid state"
         );
         Ok(s)
@@ -108,7 +119,11 @@ pub fn desired(p: &Prepared, target: &Audio, d: Damage) -> [Vec<C>; 2] {
             .map(|i| {
                 if i % BINS > d.cutoff_bin() {
                     (t.data[i] - p.base[c].data[i])
-                        * (if (i % BINS).is_multiple_of(2) { 1.0 } else { -1.0 })
+                        * (if (i % BINS).is_multiple_of(2) {
+                            1.0
+                        } else {
+                            -1.0
+                        })
                         / p.scale[c]
                 } else {
                     C::default()
@@ -232,7 +247,8 @@ pub fn gradient(
             + sg[c][i]
                 * (if row.bin.is_multiple_of(2) { 1.0 } else { -1.0 })
                 * (p.scale[c] * d.missing(row.bin) * 0.02 * (1.0 - point.time));
-        let dy = rich_dynamics::derivative(m.kind, &ys[n], rich_dynamics::terms(p, point.state, row), g);
+        let dy =
+            rich_dynamics::derivative(m.kind, &ys[n], rich_dynamics::terms(p, point.state, row), g);
         let mut dx = [0.0; EMBED];
         m.core.head.backward(&xs[n], &hs[n], &dy, &mut hg, &mut dx);
         for j in 0..EMBED {
@@ -550,8 +566,16 @@ pub fn restore(
 
             let p = scene_features::prepare(&chunk_input, d, 11);
             let initial = scene_features::prior_state(&p, "harmonic");
-            let ceil_bin = ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
-            let state = engine.refine_mode_bounded(&p, d, &initial, steps, field.kind.mode(), Some(ceil_bin + 1))?;
+            let ceil_bin =
+                ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+            let state = engine.refine_mode_bounded(
+                &p,
+                d,
+                &initial,
+                steps,
+                field.kind.mode(),
+                Some(ceil_bin + 1),
+            )?;
             let y = mid_waveform(&p, d, mid_ceiling, &state, strength);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);
@@ -763,7 +787,10 @@ mod tests {
             };
             weights[j] = old;
             let fd = (plus - minus) / 0.004;
-            println!("Mid gradient encoder={} finite={:.6} analytic={:.6}", encoder, fd, grad[j]);
+            println!(
+                "Mid gradient encoder={} finite={:.6} analytic={:.6}",
+                encoder, fd, grad[j]
+            );
             assert!((fd - grad[j] as f64).abs() < 2e-4 + 0.04 * fd.abs());
         }
     }

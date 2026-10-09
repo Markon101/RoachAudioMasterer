@@ -65,7 +65,13 @@ impl Damage {
                 .iter()
                 .map(|c| {
                     if self.is_highpass() {
-                        crate::dsp::highpass(c, a.rate, self.cutoff_hz(), self.transition, self.power)
+                        crate::dsp::highpass(
+                            c,
+                            a.rate,
+                            self.cutoff_hz(),
+                            self.transition,
+                            self.power,
+                        )
                     } else {
                         crate::dsp::lowpass(c, a.rate, self.cutoff, self.transition, self.power)
                     }
@@ -76,7 +82,8 @@ impl Damage {
     pub fn missing(&self, k: usize) -> f32 {
         let f = k as f32 * RATE as f32 / FFT as f32;
         if self.is_highpass() {
-            (1.0 - crate::dsp::highpass_gain(f, self.cutoff_hz(), self.transition, self.power)).max(0.0)
+            (1.0 - crate::dsp::highpass_gain(f, self.cutoff_hz(), self.transition, self.power))
+                .max(0.0)
         } else {
             (1.0 - crate::dsp::gain(f, self.cutoff, self.transition, self.power)).max(0.0)
         }
@@ -251,7 +258,11 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
                         let alignment = (-0.5 * (mismatch / 1.15).powi(2)).exp();
                         let start = j.saturating_sub(3).max(1);
                         let end = (j + 4).min(cut + 1);
-                        let local = if start < end { band_rms(&row[start..end]).max(1e-8) } else { 1e-8 };
+                        let local = if start < end {
+                            band_rms(&row[start..end]).max(1e-8)
+                        } else {
+                            1e-8
+                        };
                         let tonal = ((mag / local - 1.2) / 1.6).clamp(0.0, 1.0);
                         let unit = centered(z, j) / mag;
                         let mut phase = C::new(1.0, 0.0);
@@ -259,8 +270,8 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
                             phase *= unit;
                         }
                         phase *= C::from_polar(1.0, std::f32::consts::FRAC_PI_2 * (m - 1) as f32);
-                        h +=
-                            phase * (0.5 * mag / scale[c] * (m as f32).powf(-1.35) * alignment * tonal);
+                        h += phase
+                            * (0.5 * mag / scale[c] * (m as f32).powf(-1.35) * alignment * tonal);
                     }
                     harmonic[c][t * BINS + k] = h;
                 }
@@ -302,7 +313,12 @@ pub fn features_into(
             } else {
                 k as f32 / m as f32
             };
-            let (j, z) = peak(&p.base[c], u, target_pos, if d.is_highpass() { BINS - 1 } else { cut });
+            let (j, z) = peak(
+                &p.base[c],
+                u,
+                target_pos,
+                if d.is_highpass() { BINS - 1 } else { cut },
+            );
             let z = if (d.is_highpass() && j > cut) || (!d.is_highpass() && j <= cut) {
                 centered(z, j) / p.scale[c]
             } else {
@@ -390,7 +406,9 @@ pub fn update_state_features(
         let t = bounded_time(row.time as isize + dt, p.frames);
         for dk in -1..=1 {
             let k = (row.bin as isize + dk).clamp(0, BINS as isize - 1) as usize;
-            let z = if (d.is_highpass() && k <= d.cutoff_bin()) || (!d.is_highpass() && k > d.cutoff_bin()) {
+            let z = if (d.is_highpass() && k <= d.cutoff_bin())
+                || (!d.is_highpass() && k > d.cutoff_bin())
+            {
                 state[row.channel][t * BINS + k]
             } else {
                 C::default()

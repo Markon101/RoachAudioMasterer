@@ -57,11 +57,7 @@ impl Lr4Filter {
             (1.0 - cs) / a0,
             ((1.0 - cs) / 2.0) / a0,
         ];
-        let lp_a = [
-            1.0,
-            (-2.0 * cs) / a0,
-            (1.0 - alpha) / a0,
-        ];
+        let lp_a = [1.0, (-2.0 * cs) / a0, (1.0 - alpha) / a0];
 
         let hp_b = [
             ((1.0 + cs) / 2.0) / a0,
@@ -117,7 +113,8 @@ impl EarlyReflectionNetwork {
         let delays_ms = [7.1f32, 11.3, 17.9, 23.5, 29.1, 34.7];
         let mut delay_samples = [0usize; 6];
         for i in 0..6 {
-            delay_samples[i] = ((delays_ms[i] * 0.001 * sample_rate as f32).round() as usize).max(1);
+            delay_samples[i] =
+                ((delays_ms[i] * 0.001 * sample_rate as f32).round() as usize).max(1);
         }
         // Quadratic distance decay with air absorption
         let gains = [0.45f32, 0.35, 0.28, 0.22, 0.16, 0.12];
@@ -147,10 +144,7 @@ impl EarlyReflectionNetwork {
             let delay = self.delay_samples[tap];
             let gain = self.gains[tap];
             let pan = self.pans[tap];
-            let (gl, gr) = (
-                ((1.0 - pan) / 2.0).sqrt(),
-                ((1.0 + pan) / 2.0).sqrt(),
-            );
+            let (gl, gr) = (((1.0 - pan) / 2.0).sqrt(), ((1.0 + pan) / 2.0).sqrt());
 
             for i in delay..n {
                 let s = damped_mid[i - delay] * gain;
@@ -219,7 +213,11 @@ pub fn process_spatial(audio: &Audio, config: &SpatialConfig) -> (Audio, Spatial
     let (side_sub, side_high) = crossover.split(&side);
 
     let side_sub_rms = (side_sub.iter().map(|x| x * x).sum::<f32>() / n.max(1) as f32).sqrt();
-    let side_sub_db = if side_sub_rms > 1e-9 { 20.0 * side_sub_rms.log10() } else { -120.0 };
+    let side_sub_db = if side_sub_rms > 1e-9 {
+        20.0 * side_sub_rms.log10()
+    } else {
+        -120.0
+    };
 
     // Zero out sub-bass in the side channel (<120 Hz) so bass is 100% focused and mono
     // Scale high side energy by width_factor
@@ -352,7 +350,8 @@ mod tests {
         let lr = Lr4Filter::new(80.0, RATE as f32);
         let (proc_sub_side, _) = lr.split(&proc_side);
 
-        let proc_sub_rms = (proc_sub_side.iter().map(|x| x * x).sum::<f32>() / samples as f32).sqrt();
+        let proc_sub_rms =
+            (proc_sub_side.iter().map(|x| x * x).sum::<f32>() / samples as f32).sqrt();
 
         // The sub-bass side energy should be heavily attenuated (>30 dB attenuation)
         assert!(
@@ -365,7 +364,9 @@ mod tests {
     fn phase_coherence_guard_protects_mono_compatibility() {
         let samples = RATE as usize;
         // Pure anti-phase signal (r = -1.0)
-        let left: Vec<f32> = (0..samples).map(|i| (i as f32 * 0.05).sin() * 0.5).collect();
+        let left: Vec<f32> = (0..samples)
+            .map(|i| (i as f32 * 0.05).sin() * 0.5)
+            .collect();
         let right: Vec<f32> = left.iter().map(|x| -x).collect();
 
         let audio = Audio {
