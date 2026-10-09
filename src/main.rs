@@ -38,6 +38,7 @@ pub mod spatial;
 pub mod sfht;
 pub mod critics;
 pub mod assess;
+pub mod microstructure;
 use anyhow::{ensure, Result};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
@@ -114,6 +115,31 @@ enum Commands {
         export_sdcard: bool,
         #[arg(long)]
         no_export_sdcard: bool,
+    },
+    /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, and baseline comparisons.
+    Microstructure {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long, default_value = "a", value_parser = ["a", "b", "c"])]
+        family: String,
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        #[arg(long, default_value_t = 0.15)]
+        air_coupling: f32,
+        #[arg(long, default_value_t = 0.20)]
+        harmonic_resonance: f32,
+        #[arg(long, default_value_t = 0.25)]
+        transient_desmear: f32,
+        #[arg(long, default_value_t = 0.40)]
+        phase_continuity: f32,
+        #[arg(long, default_value_t = 3000.0)]
+        crossover_hz: f32,
+        #[arg(long, default_value_t = 420042)]
+        seed: u64,
+        #[arg(long)]
+        compare_baselines: bool,
+        #[arg(long)]
+        out: Option<PathBuf>,
     },
     RichOracle {
         #[arg(long)]
@@ -813,6 +839,31 @@ fn run() -> Result<()> {
             sidechain_hp_hz,
             &backend,
             export_sdcard && !no_export_sdcard,
+        ),
+        Commands::Microstructure {
+            input,
+            family,
+            strength,
+            air_coupling,
+            harmonic_resonance,
+            transient_desmear,
+            phase_continuity,
+            crossover_hz,
+            seed,
+            compare_baselines,
+            out,
+        } => run_microstructure_cli(
+            &input,
+            &family,
+            strength,
+            air_coupling,
+            harmonic_resonance,
+            transient_desmear,
+            phase_continuity,
+            crossover_hz,
+            seed,
+            compare_baselines,
+            out.as_deref(),
         ),
         Commands::RichOracle {
             det,
@@ -2012,6 +2063,149 @@ fn auto_master_pipeline(
         pipeline_start.elapsed().as_secs_f64(),
         out_dir.display()
     );
+    Ok(())
+}
+
+fn run_microstructure_cli(
+    input: &std::path::Path,
+    family: &str,
+    strength: f32,
+    air_coupling: f32,
+    harmonic_resonance: f32,
+    transient_desmear: f32,
+    phase_continuity: f32,
+    crossover_hz: f32,
+    seed: u64,
+    compare_baselines: bool,
+    out: Option<&std::path::Path>,
+) -> Result<()> {
+    let family_enum = match family.to_lowercase().as_str() {
+        "b" => microstructure::MicrostructureFamily::FamilyB,
+        "c" => microstructure::MicrostructureFamily::FamilyC,
+        _ => microstructure::MicrostructureFamily::FamilyA,
+    };
+    let family_label = match family_enum {
+        microstructure::MicrostructureFamily::FamilyA => "PROTOTYPE FAMILY A - PROCEDURAL HTS",
+        microstructure::MicrostructureFamily::FamilyB => "PROTOTYPE FAMILY B - NCA DYNAMICS",
+        microstructure::MicrostructureFamily::FamilyC => "PROTOTYPE FAMILY C - SELF-SUPERVISED",
+    };
+
+    println!("================================================================================");
+    println!("     CONDITIONAL MICROSTRUCTURE SYNTHESIS ({})", family_label);
+    println!("================================================================================");
+    println!("Input:            {}", input.display());
+    println!("Family:           {:?}", family_enum);
+    println!("Crossover:        {:.1} Hz (content below locked/invariant)", crossover_hz);
+    println!("Settings:         strength={:.2}, air={:.2}, resonance={:.2}, desmear={:.2}, phase_cont={:.2}, seed={}",
+        strength, air_coupling, harmonic_resonance, transient_desmear, phase_continuity, seed
+    );
+
+    let audio = native_audio::read_entire(input)?;
+    println!("Duration:         {:.2}s ({} frames @ {} Hz, {} ch)",
+        audio.frames() as f32 / audio.rate as f32, audio.frames(), audio.rate, audio.channels.len()
+    );
+
+    if compare_baselines {
+        println!("\n--- Running Baseline Comparison Suite (Matched Loudness) ---");
+        let results = microstructure::compare_microstructure_baselines(&audio);
+
+        println!("--------------------------------------------------------------------------------");
+        println!("{:<32} | {:>10} | {:>10} | {:>10} | {:>10}", "Method / Baseline", "Shimmer", "Metallic", "Combing", "CDI");
+        println!("---------------------------------+------------+------------+------------+------------");
+        let print_row = |name: &str, key: &str| {
+            if let Some(obj) = results.get(key) {
+                println!("{:<32} | {:>10.3} | {:>10.3} | {:>10.3} | {:>10.3}",
+                    name,
+                    obj["ai_shimmer"].as_f64().unwrap_or(0.0),
+                    obj["metallic_grain"].as_f64().unwrap_or(0.0),
+                    obj["spectral_combing"].as_f64().unwrap_or(0.0),
+                    obj["composite_defect_index"].as_f64().unwrap_or(0.0)
+                );
+            }
+        };
+        print_row("0. Identity (Bypass)", "baseline_0_identity");
+        print_row("A. Prototype A (HTS Procedural)", "prototype_a_microstructure");
+        print_row("B. Prototype B (NCA Dynamics)", "prototype_b_nca");
+        print_row("C. Prototype C (Self-Supervised)", "prototype_c_self_supervised");
+        print_row("1. Static Exciter (Polynomial)", "baseline_1_static_exciter");
+        print_row("2. Unconditioned Dither (-32dB)", "baseline_2_unconditioned_dither");
+        print_row("3. High-Shelf EQ (+2.5dB)", "baseline_3_high_shelf_eq");
+        println!("--------------------------------------------------------------------------------");
+
+        if let Some(out_path) = out {
+            let out_dir = if out_path.extension().is_some() {
+                out_path.parent().unwrap_or(std::path::Path::new("."))
+            } else {
+                out_path
+            };
+            if !out_dir.exists() {
+                std::fs::create_dir_all(out_dir)?;
+            }
+            let json_path = out_dir.join("microstructure_baselines.json");
+            std::fs::write(&json_path, serde_json::to_string_pretty(&results)?)?;
+            println!("Baseline comparison report saved to: {}", json_path.display());
+        }
+    }
+
+    let cfg = microstructure::MicrostructureConfig {
+        family: family_enum,
+        seed,
+        strength,
+        air_coupling,
+        harmonic_resonance,
+        transient_desmear,
+        phase_continuity,
+        crossover_hz,
+        authority: 1.0,
+        bypass: false,
+    };
+
+    println!("\n--- Processing Microstructure Synthesis ---");
+    let (refined_audio, report) = microstructure::process_microstructure(&audio, &cfg);
+
+    println!("HTS Decomposition Energy: Harmonic: {:.1}%, Transient: {:.1}%, Stochastic: {:.1}% (Onsets: {})",
+        report.hts.harmonic_energy_ratio * 100.0,
+        report.hts.transient_energy_ratio * 100.0,
+        report.hts.stochastic_energy_ratio * 100.0,
+        report.hts.detected_onsets
+    );
+    println!("Artifact Critics Before / After:");
+    println!("  AI Phase Shimmer:       {:.3} -> {:.3} ({:+.3})",
+        report.initial_artifacts.ai_shimmer, report.final_artifacts.ai_shimmer,
+        report.final_artifacts.ai_shimmer - report.initial_artifacts.ai_shimmer
+    );
+    println!("  Metallic Grain:         {:.3} -> {:.3} ({:+.3})",
+        report.initial_artifacts.metallic_grain, report.final_artifacts.metallic_grain,
+        report.final_artifacts.metallic_grain - report.initial_artifacts.metallic_grain
+    );
+    println!("  Composite Defect Index: {:.3} -> {:.3} ({:+.3})",
+        report.initial_artifacts.composite_defect_index, report.final_artifacts.composite_defect_index,
+        report.final_artifacts.composite_defect_index - report.initial_artifacts.composite_defect_index
+    );
+    println!("Preservation Guardrails: Mono Compat: [{}] (r={:.3}) | Transient Timing: [{}] (r={:.3})",
+        if report.mono_compatibility_passed { "PASS" } else { "FAIL" },
+        report.interchannel_correlation,
+        if report.transient_correlation >= 0.90 { "PASS" } else { "FAIL" },
+        report.transient_correlation
+    );
+
+    if let Some(out_path) = out {
+        let (out_dir, wav_path) = if out_path.extension().map(|e| e == "wav").unwrap_or(false) {
+            (out_path.parent().unwrap_or(std::path::Path::new(".")).to_path_buf(), out_path.to_path_buf())
+        } else {
+            (out_path.to_path_buf(), out_path.join("microstructure.wav"))
+        };
+        if !out_dir.exists() {
+            std::fs::create_dir_all(&out_dir)?;
+        }
+        native_audio::write(&wav_path, &refined_audio, false)?;
+        let report_json = out_dir.join("microstructure_report.json");
+        std::fs::write(&report_json, serde_json::to_string_pretty(&report)?)?;
+        println!("\nExported refined audio to:  {}", wav_path.display());
+        println!("Exported detailed report to: {}", report_json.display());
+    }
+
+    println!("================================================================================");
     Ok(())
 }
 

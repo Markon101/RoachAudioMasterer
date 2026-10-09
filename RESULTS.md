@@ -398,3 +398,47 @@ User audition of *Feelin' Catchy* identified minor transient smear in the low en
   - `/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav` (40 MB, 16-bit PCM)
   - `/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Mastered].flac` (27 MB, 24-bit Lossless FLAC)
 
+### 4. Experimental Specialist: Conditional Microstructure Synthesis Benchmark & Epistemic Falsification
+
+To address fine-scale microscopic unnaturalness in generative audio (AI phase shimmer $S_{\text{shimmer}} \approx 1.0$ and metallic grain kurtosis $S_{\text{metallic}} > 0.8$) without heavy pretrained models or corpus dependencies, we investigated **Conditional Microstructure Synthesis** across three distinct prototype paradigms:
+1. **Prototype Family A (Procedural Physical Priors)**:
+   - Orthogonal 2D directional filtering Harmonic-Transient-Stochastic (HTS) decomposition.
+   - Harmonic-conditioned breath/air excitation ($>6\text{ kHz}$) modulated by body energy $|H(t, k)|$.
+   - Transient pre-echo anti-smear suppression ($2\text{--}8\text{ ms}$ prior to onsets).
+   - Harmonic Lorentzian Q-skirt dispersion in $3\text{--}8\text{ kHz}$ to soften metallic overtones.
+   - Instantaneous frequency phase trajectory smoothing along physical partials ($>8\text{ kHz}$).
+2. **Prototype Family B (Neural Cellular Automata & Recurrent Spectral Dynamics)**:
+   - Microscopic 6-channel state per cell $(t, k)$ with spatio-temporal gradient perception ($\nabla_t, \nabla_k, \nabla^2$).
+   - 2-layer MLP (308 parameters) evolving stochastic fields via bounded reaction-diffusion steps.
+3. **Prototype Family C (Per-Track Self-Supervised Adaptation)**:
+   - Mines cleanest reference frames of the user's song ($\mathcal{T}_{\text{clean}}$ with lowest phase jitter variance).
+   - Applies synthetic vocoder flutter damage to form paired $(X_{\text{clean}}, X_{\text{deg}})$.
+   - Solves closed-form optimal $3 \times 3$ Wiener ridge regression across 8 sub-bands in $<1\text{ ms}$.
+
+#### Empirical Results (Evaluated at Matched Loudness on Generative & Clean Audio)
+- **Generative Audio (`runs/sample_source.wav`, 20.0s Suno raw)**:
+  - Identity (Bypass): CDI = 0.478, Metallic Grain = 0.801, Shimmer = 1.000
+  - **Prototype A (Procedural HTS)**: **CDI = 0.476 (-0.002)**, **Metallic Grain = 0.792 (-0.009)**, Shimmer = 1.000, Speed = **27.7× real-time**
+  - Prototype B (NCA Dynamics): CDI = 0.484 (+0.006), Metallic Grain = 0.846 (+0.045), Speed = 13.4× real-time
+  - Prototype C (Self-Supervised): CDI = 0.479 (+0.001), Metallic Grain = 0.809 (+0.008), Speed = 24.8× real-time
+  - Baseline 1 (Static Exciter): CDI = 0.477, Metallic Grain = 0.799 (-0.002)
+  - Baseline 2 (Unconditioned Dither -32dB): CDI = 0.473, Metallic Grain = 0.769* (*adds audible static noise floor)
+  - Baseline 3 (High-Shelf EQ +2.5dB): CDI = 0.478, Metallic Grain = 0.804 (+0.003)
+
+- **Full Mastered Track (`runs/chasing-horizons-auto/mastered.wav`, 216.4s stereo)**:
+  - Identity: Metallic Grain = 0.952, CDI = 0.507
+  - **Prototype A**: **Metallic Grain = 0.942 (-0.010)**, **CDI = 0.505 (-0.002)**, Mono Guard = 0.726 (PASS), Transient Timing = 1.000 (PASS)
+  - Prototype B: Metallic Grain = 1.000 (+0.048), CDI = 0.514 (+0.007)
+  - Prototype C: Metallic Grain = 0.968 (+0.016), CDI = 0.509 (+0.002)
+
+#### Epistemic Insights & Negative Results
+1. **Procedural Physical Priors (Family A) Outperform Trainable/Dynamic Models Without Weights**:
+   Family A is the only prototype that consistently reduces metallic overtone kurtosis across both short excerpts and full songs without injecting unconditioned noise. It runs at $>25\times$ real-time on CPU with 0 parameters.
+2. **Untrained NCA Dynamics (Family B) Increase Kurtosis**:
+   Local recurrent cellular dynamics naturally cluster spectral energy into sharper localized peaks, increasing measured metallic kurtosis.
+3. **STFT Consistency Barrier on Generative Vocoder Shimmer**:
+   Phase jitter in generative models (Suno/diffusion) is embedded into the multi-component time waveform. Independent spectral phase adjustments are largely projected out during overlap-add synthesis roundtrips ($X \to \text{iSTFT} \to \text{STFT}$). Eliminating vocoder flutter entirely requires generative vocal resynthesis rather than linear spectral de-jittering.
+4. **Preservation Invariants**:
+   All prototypes achieved 100% bitwise passband lock below 3 kHz, transient correlation $>0.9999$, and exact identity under bypass or zero strength. Prototype A remains an experimental opt-in specialist (`highband microstructure`).
+
+

@@ -151,6 +151,19 @@ The rich sprint additionally uses these primary sources, checked 2026-10-05:
   [Natural Sounding Artificial Reverberation](https://doi.org/10.1121/1.1908906) (Journal of the Audio Engineering Society, 1962).**
   Foundation for early reflection delay networks (ERDN) using prime delay lines, feedback comb filters, and all-pass diffusers to reconstruct acoustic depth without flutter echoes.
 
+## Conditional microstructure synthesis and decomposition references
+
+- **R22 — Serra, X. and Smith, J. O. (1990),
+  [Spectral Modeling Synthesis: A tool for the analysis and synthesis of musical signals](https://doi.org/10.2307/3680788).**
+  Computer Music Journal 14(4):12-24. Foundational formulation of Harmonic + Stochastic decomposition. Deterministic sinusoids represent steady-state acoustic partials, while subtraction residuals model stochastic physical excitations (breath turbulence, bow friction, pick scrape) shaped by time-varying spectral envelopes.
+- **R23 — Daudet, L. (2006),
+  [A review on techniques for harmonic+transient+noise separation](https://www.dafx.de/paper-archive/2006/papers/p_219.pdf).**
+  Proc. 9th Int. Conference on Digital Audio Effects (DAFx-06). Mathematical foundations for three-way (HTS) orthogonal decomposition: separating audio into sinusoidal lines, percussive transient attacks, and stochastic noise via directional filtering and median thresholds in the time-frequency plane.
+- **R24 — Mordvintsev, A., Randazzo, E., Niklasson, E. and Levin, M. (2020),
+  [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/).**
+  Distill, 5(2):e23. Local, recurrent dynamical update rules operating on spatial lattices. Motivates Prototype Family B's microscopic recurrent spectral dynamics on local complex STFT patches.
+
 Scope notes come from the original papers and standards organizations, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown and official ITU/EBU PDFs supplied the standards text. Full copyrighted text is
 not redistributed in this repository.
+
