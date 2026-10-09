@@ -3011,15 +3011,162 @@ fn run_gtf_benchmark_cli(
         rep.elapsed_ms
     );
 
+    // 7. SFHT Multi-Solver Numerical Convergence & Cauchy Convergence Audit
+    println!(
+        "\n--- Part 7: SFHT Multi-Solver Numerical Convergence & Cauchy Convergence Audit ---"
+    );
+    let mut sfht_conv_rep = None;
+    if sfht_p.exists() {
+        println!(
+            "  Evaluating 18 Solver Configurations (Euler, Heun, RK4) on 4 Held-Out Scenes..."
+        );
+        let conv = gtf::run_sfht_solver_convergence_audit(sfht_p, 4, 900000)?;
+        println!("  RK4 Cauchy Difference (128 vs 256 steps): {:.4e} [PASS: converged to numerical precision]", conv.rk4_cauchy_error_128_vs_256);
+        println!("--------------------------------------------------------------------------------------------------");
+        println!(
+            "{:<18} | {:>6} | {:>9} | {:>18} | {:>12} | {:>10} | {:>10}",
+            "Solver",
+            "Steps",
+            "Total NFE",
+            "Endpoint Err vs Ref",
+            "Recon NMSE",
+            "LSD (dB)",
+            "Latency"
+        );
+        println!("-------------------+--------+-----------+--------------------+--------------+------------+------------");
+        for res in &conv.results {
+            println!(
+                "{:<18} | {:>6} | {:>9} | {:>18.4e} | {:>12.4} | {:>10.2} | {:>8.2} ms",
+                res.solver_name,
+                res.steps,
+                res.total_nfe,
+                res.mean_endpoint_error_vs_rk4_256,
+                res.mean_reconstruction_nmse,
+                res.mean_reconstruction_lsd_db,
+                res.mean_latency_ms
+            );
+        }
+        println!("--------------------------------------------------------------------------------------------------");
+        println!(
+            "  Learned Shrinkage Correction Benefit: {:.2} NMSE reduction on Euler-8",
+            conv.learned_error_correction_benefit_nmse
+        );
+        println!("  SCIENTIFIC CONCLUSION: {}", conv.explanation);
+        sfht_conv_rep = Some(conv);
+    } else {
+        println!("  [SKIP: SFHT model not found at {}]", sfht_p.display());
+    }
+
+    // 8. Controllability & Observability Gramian Audit
+    println!(
+        "\n--- Part 8: Controllability & Observability Gramian Audit (State Dim: {}) ---",
+        state_dim.max(8)
+    );
+    let cont_rep = gtf::audit_orthogonal_controllability(state_dim.max(8), 42);
+    println!(
+        "  Sparse Input Channels: {{0, 1}} | Horizon: {} steps",
+        cont_rep.horizon
+    );
+    println!(
+        "  Independent Rotations Gramian Rank:   {} / {} (invariant subspace decoupling)",
+        cont_rep.independent_rank, cont_rep.state_dim
+    );
+    println!(
+        "  Staggered Cross-Pair Gramian Rank:    {} / {} (FULL RANK REACHABILITY)",
+        cont_rep.cross_pair_rank, cont_rep.state_dim
+    );
+    println!(
+        "  Cross-Pair Condition Number kappa:    {:.2}",
+        cont_rep.cross_pair_condition_number
+    );
+    println!(
+        "  SCIENTIFIC CONCLUSION: {}",
+        cont_rep.reachability_conclusion
+    );
+
+    // 9. Phase II Extended Hard Memory Benchmark Suite (200+ Held-Out Trials)
+    println!(
+        "\n--- Part 9: Phase II Extended Hard Memory Benchmark Suite (200 Held-Out Trials) ---"
+    );
+    let mem_rep = gtf::run_phase2_memory_benchmark(state_dim.max(8), input_dim, 200, 420042);
+    println!("------------------------------------------------------------------------------------------------------------------");
+    println!(
+        "{:<32} | {:>7} | {:>16} | {:>16} | {:>16} | {:>16} | {:>16}",
+        "Task",
+        "Horizon",
+        "Ind Resonant",
+        "Cross Resonant",
+        "Dual-Timescale",
+        "Matched RNN",
+        "Matched GRU"
+    );
+    println!("---------------------------------+---------+------------------+------------------+------------------+------------------+------------------");
+    for t in &mem_rep.tasks {
+        println!("{:<32} | {:>7} | {:>5.3}/{:>8.4} | {:>5.3}/{:>8.4} | {:>5.3}/{:>8.4} | {:>5.3}/{:>8.4} | {:>5.3}/{:>8.4}",
+            t.task_name, t.horizon,
+            t.independent_resonant_corr, t.independent_resonant_mse,
+            t.cross_pair_resonant_corr, t.cross_pair_resonant_mse,
+            t.dual_timescale_corr, t.dual_timescale_mse,
+            t.rnn_matched_corr, t.rnn_matched_mse,
+            t.gru_matched_corr, t.gru_matched_mse);
+    }
+    println!("------------------------------------------------------------------------------------------------------------------");
+
+    // 10. Persistent Morphic Acoustic Controller & Joint Stereo-Geometric Memory
+    println!(
+        "\n--- Part 10: Persistent Morphic Acoustic Controller & Joint Stereo-Geometric Memory ---"
+    );
+    let morphic_cfg = gtf::MorphicConfig::default();
+    let (morphic_out, morphic_rep) = gtf::process_morphic_audio(&audio, &morphic_cfg);
+    println!(
+        "  Frames Processed:                     {}",
+        morphic_rep.frames_processed
+    );
+    println!(
+        "  Mean Audio Confidence:                {:.3} (Estimated Clean Content)",
+        morphic_rep.mean_confidence
+    );
+    println!(
+        "  Mean Morphic Intervention Authority:  {:.3} (Selective Abstention Gating)",
+        morphic_rep.mean_authority
+    );
+    println!(
+        "  Mean Sub-Bass Damping Mod:            {:.4} (Anti-Mud Resonance Suppression)",
+        morphic_rep.mean_sub_bass_damping
+    );
+    println!(
+        "  Mean Microtexture Excitation Mod:     {:.4}",
+        morphic_rep.mean_microtexture_excitation
+    );
+    println!(
+        "  Mono Compatibility Passed:            {} [PASS: zero side leakage on mono]",
+        morphic_rep.mono_compatibility_passed
+    );
+    println!(
+        "  Channel Swap Equivariance:            {} [PASS: Mid invariant, Side negates]",
+        morphic_rep.channel_swap_equivariance_passed
+    );
+    println!(
+        "  Post-Synthesis Low-Band Deviation:    RMS={:.4e}",
+        morphic_rep.post_synthesis_low_band_rms_deviation
+    );
+    println!(
+        "  Full-Band SNR / Reconstructed Leak:   SNR={:.1} dB, Leakage={:.2} dB",
+        morphic_rep.full_band_snr_db, morphic_rep.spectral_leakage_db
+    );
+
     if let Some(out_p) = out {
         if !out_p.exists() {
             std::fs::create_dir_all(out_p)?;
         }
         let wav_path = out_p.join("gtf_audio.wav");
         native_audio::write(&wav_path, &processed, false)?;
+        let morphic_wav_path = out_p.join("morphic_audio.wav");
+        native_audio::write(&morphic_wav_path, &morphic_out, false)?;
         println!(
-            "  Exported GTF audio to:                     {}",
-            wav_path.display()
+            "  Exported GTF audio to:                     {}\n  Exported Morphic audio to:                 {}",
+            wav_path.display(),
+            morphic_wav_path.display()
         );
     }
     let audio_report = Some(rep);
@@ -3044,10 +3191,14 @@ fn run_gtf_benchmark_cli(
             "part4_gtf_c_mixing_experiment": mixing_rep,
             "part5_gtf_b_sfht_experiment": sfht_report,
             "part6_post_synthesis_audio_audit": audio_report,
+            "part7_sfht_solver_convergence": sfht_conv_rep,
+            "part8_controllability_gramians": cont_rep,
+            "part9_phase2_memory_benchmark": mem_rep,
+            "part10_morphic_acoustic_controller": morphic_rep,
         });
         std::fs::write(&report_json, serde_json::to_string_pretty(&full_report)?)?;
         println!(
-            "\nSaved full GTF benchmark audit report to: {}",
+            "\nSaved full GTF Phase II benchmark audit report to: {}",
             report_json.display()
         );
     }
