@@ -1,0 +1,102 @@
+{
+  "pilot": "Pilot A: Lie-Bracket Commutator Engine",
+  "mathematical_family": "Family 376",
+  "scaling_law": {
+    "converged_to_lie_bracket": true,
+    "final_relative_error": 4.568335260137554e-05,
+    "cubic_remainder_ratio_stable": true,
+    "scaling_records": [
+      {
+        "eps": 0.1,
+        "disp_norm": 0.006384091510469101,
+        "ratio_disp_eps2": 0.63840915104691,
+        "rel_error_to_bracket": 0.04403547912113292,
+        "cubic_rem_norm": 0.0003049505327829571,
+        "ratio_cubic_eps3": 0.30495053278295703
+      },
+      {
+        "eps": 0.05,
+        "disp_norm": 0.001562993819979449,
+        "ratio_disp_eps2": 0.6251975279917795,
+        "rel_error_to_bracket": 0.022429580797602457,
+        "cubic_rem_norm": 3.8198493716171945e-05,
+        "ratio_cubic_eps3": 0.3055879497293755
+      },
+      {
+        "eps": 0.02,
+        "disp_norm": 0.0002468115754899886,
+        "ratio_disp_eps2": 0.6170289387249714,
+        "rel_error_to_bracket": 0.009070911055900929,
+        "cubic_rem_norm": 2.448972724128196e-06,
+        "ratio_cubic_eps3": 0.30612159051602444
+      },
+      {
+        "eps": 0.01,
+        "disp_norm": 6.142656790909501e-05,
+        "ratio_disp_eps2": 0.6142656790909501,
+        "rel_error_to_bracket": 0.00455195782471583,
+        "cubic_rem_norm": 3.0632238935212646e-07,
+        "ratio_cubic_eps3": 0.3063223893521264
+      },
+      {
+        "eps": 0.005,
+        "disp_norm": 1.5321911990145903e-05,
+        "ratio_disp_eps2": 0.612876479605836,
+        "rel_error_to_bracket": 0.0022801019973714563,
+        "cubic_rem_norm": 3.830335741409328e-08,
+        "ratio_cubic_eps3": 0.30642685931274616
+      },
+      {
+        "eps": 0.002,
+        "disp_norm": 2.448162157303605e-06,
+        "ratio_disp_eps2": 0.6120405393259013,
+        "rel_error_to_bracket": 0.000913029941391213,
+        "cubic_rem_norm": 2.4519264930184355e-09,
+        "ratio_cubic_eps3": 0.3064908116273044
+      },
+      {
+        "eps": 0.001,
+        "disp_norm": 6.117614892992192e-07,
+        "ratio_disp_eps2": 0.6117614892992193,
+        "rel_error_to_bracket": 0.00045667976560190965,
+        "cubic_rem_norm": 3.065123155991238e-10,
+        "ratio_cubic_eps3": 0.3065123155991238
+      },
+      {
+        "eps": 0.0005,
+        "disp_norm": 1.529054721353987e-07,
+        "ratio_disp_eps2": 0.6116218885415948,
+        "rel_error_to_bracket": 0.00022838080774223392,
+        "cubic_rem_norm": 3.831534821051567e-11,
+        "ratio_cubic_eps3": 0.30652278568412533
+      },
+      {
+        "eps": 0.0001,
+        "disp_norm": 6.115101722928969e-09,
+        "ratio_disp_eps2": 0.611510172292897,
+        "rel_error_to_bracket": 4.568335260137554e-05,
+        "cubic_rem_norm": 3.0655594639340513e-13,
+        "ratio_cubic_eps3": 0.30655594639340505
+      }
+    ]
+  },
+  "jacobian_determinant": {
+    "max_abs_det_err": 1.7645662708787313e-10,
+    "passed": true
+  },
+  "inversion_accuracy": {
+    "max_error_fp64": 1.5700924586837752e-16,
+    "max_error_fp32": 1.1920928955078125e-07,
+    "passed": true
+  },
+  "trajectory_expressivity": {
+    "variance_commutator": 0.31785217031601065,
+    "variance_givens": 0.3134889696973676,
+    "variance_commuting_null": 4.1464501330679433e-29
+  },
+  "sparse_16d": {
+    "mean_displacement": 0.006361414218907022,
+    "norm_stability_ratio": 1.0000699876557304
+  },
+  "falsification_status": "SURVIVED (All mathematical guarantees verified)"
+}

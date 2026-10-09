@@ -1,0 +1,25 @@
+{
+  "pilot": "Pilot D: Port-Hamiltonian Acoustic Material",
+  "mathematical_family": "Moonshot H / Port-Hamiltonian",
+  "explicit_euler_energy_injection_verified": true,
+  "unforced_passivity_certificate": {
+    "n_steps": 10000,
+    "violations_dH_gt_1e12": 0,
+    "final_energy": 1.9470832622166507e-238,
+    "passed": true
+  },
+  "conservative_modal_exchange": {
+    "energy_conservation_err": 1.432187701766452e-14,
+    "peak_mode_transfer": 0.09995494345633424,
+    "passed": true
+  },
+  "multiwell_hysteresis": {
+    "state_variance": 0.08121548218133491,
+    "passed": true
+  },
+  "iir_comparison": {
+    "rms_iir": 0.010368789877997896,
+    "rms_ph": 0.006264168280065013
+  },
+  "falsification_status": "SURVIVED (Passivity monotonicity and modal exchange strictly verified)"
+}

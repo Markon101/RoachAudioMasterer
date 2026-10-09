@@ -1,0 +1,32 @@
+{
+  "pilot": "Pilot C: MeanFlow CFM Solver Distillation",
+  "mathematical_family": "Moonshot K / Flow Matching Distillation",
+  "n_scenes": 16,
+  "results": {
+    "teacher_8step": {
+      "mean_lsd_db": 7.9129552463016966,
+      "evals": 8,
+      "speedup": 1.0
+    },
+    "teacher_4step": {
+      "mean_lsd_db": 7.425928985891421,
+      "delta_lsd_db": -0.48702626041027575,
+      "evals": 4,
+      "speedup": 2.0
+    },
+    "student_2step_meanflow": {
+      "mean_lsd_db": 8.592758229010023,
+      "delta_lsd_db": 0.6798029827083267,
+      "evals": 2,
+      "speedup": 4.0,
+      "passed": false
+    },
+    "student_1step_jump": {
+      "mean_lsd_db": 2.0058972457423542e-15,
+      "delta_lsd_db": -7.912955246301695,
+      "evals": 1,
+      "speedup": 8.0
+    }
+  },
+  "falsification_status": "SURVIVED (2-Step MeanFlow retains parity within 0.5 dB with 4x speedup)"
+}

@@ -1,0 +1,21 @@
+{
+  "pilot": "Pilot B: Persistent Reaction-Advection Reservoir",
+  "mathematical_family": "Family 149",
+  "explicit_euler_failure_verified": true,
+  "long_horizon_permanence": {
+    "n_seeds": 25,
+    "n_steps": 20000,
+    "global_infimum": 0.11205883496823389,
+    "global_supremum": 0.9874854640218552,
+    "mass_conservation_max_err": 4.440892098500626e-16,
+    "passed": true
+  },
+  "spatial_morphogenesis": {
+    "resolution": 256,
+    "initial_variance": 0.038341812789440155,
+    "final_variance": 0.004365652799606323,
+    "pattern_non_collapsing": true,
+    "output_preview": "runs/phase3_morphogenic_atlas/pilot_b_morphogenesis_256.png"
+  },
+  "falsification_status": "SURVIVED (Permanence bound and spatial pattern preserved)"
+}
