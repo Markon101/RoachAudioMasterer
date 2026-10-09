@@ -124,9 +124,11 @@ enum Commands {
         /// Force specialists to run unconditionally even if acoustic assessment advises abstention.
         #[arg(long, default_value_t = false)]
         force_specialists: bool,
-        /// Opt-in GTF Phase II persistent Morphic Acoustic Controller (dual-timescale M/S microtexture modulation & sub-bass damping).
-        #[arg(long, default_value_t = false)]
+        /// GTF Phase II persistent Morphic Acoustic Controller (dual-timescale M/S microtexture modulation & sub-bass damping).
+        #[arg(long, default_value_t = true, action = clap::ArgAction::Set)]
         morphic_gtf: bool,
+        #[arg(long)]
+        no_morphic_gtf: bool,
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
@@ -882,6 +884,7 @@ fn run() -> Result<()> {
             fractal_tendrils,
             force_specialists,
             morphic_gtf,
+            no_morphic_gtf,
             morphic_strength,
             morphic_mode,
             morphic_crossover,
@@ -915,7 +918,7 @@ fn run() -> Result<()> {
             export_sdcard && !no_export_sdcard,
             fractal_tendrils,
             force_specialists,
-            morphic_gtf,
+            morphic_gtf && !no_morphic_gtf,
             morphic_strength,
             &morphic_mode,
             morphic_crossover,
