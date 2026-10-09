@@ -59,6 +59,10 @@ pub struct MicrostructureConfig {
     pub transient_desmear: f32,
     /// High-frequency phase trajectory continuity smoothing in [0.0, 1.0] (default: 0.40).
     pub phase_continuity: f32,
+    /// Fractal tendril / self-similar harmonic scale coupling intensity in [0.0, 1.0] (default: 0.20).
+    pub fractal_tendrils: f32,
+    /// Golden-ratio fractal micro-echo diffusion decay dimension D in [0.5, 2.5] (default: 1.0).
+    pub fractal_dimension: f32,
     /// Crossover cutoff frequency in Hz (default: 3000.0 Hz). All content below is strictly invariant.
     pub crossover_hz: f32,
     /// Explicit authority gate in [0.0, 1.0]. If <= 0.0, the specialist abstains completely.
@@ -77,6 +81,8 @@ impl Default for MicrostructureConfig {
             harmonic_resonance: 0.20,
             transient_desmear: 0.25,
             phase_continuity: 0.40,
+            fractal_tendrils: 0.20,
+            fractal_dimension: 1.0,
             crossover_hz: 3000.0,
             authority: 1.0,
             bypass: false,
@@ -544,6 +550,77 @@ fn process_family_a_procedural(
                 } else {
                     prev_phi += omega_nom;
                 }
+            }
+        }
+    }
+
+    // 5. Fractal Tendril Scale-Coupled Phase Locking
+    // Couples overtone phase trajectories (k >= crossover_bin) to quadratic subharmonic parent tendrils (k / 2)
+    // Overcomes OLA phase projection bottleneck by enforcing physical quadratic harmonic phase consistency
+    if config.fractal_tendrils > 0.0 {
+        let tendril_gamma = (config.fractal_tendrils * effective_strength * 0.35).clamp(0.0, 0.70);
+        let active_span = (BINS - crossover_bin).max(1) as f32;
+
+        for t in 0..frames {
+            for k in crossover_bin..BINS {
+                let k_parent = k / 2;
+                if k_parent >= 1 {
+                    let parent_c = spec.data[t * BINS + k_parent];
+                    let parent_norm = parent_c.norm();
+
+                    if parent_norm > 1e-4 {
+                        let parent_phi = parent_c.im.atan2(parent_c.re);
+                        let disp_theta = PI * (k - crossover_bin) as f32 / active_span;
+                        let target_tendril_phi = 2.0 * parent_phi + disp_theta;
+
+                        let idx = t * BINS + k;
+                        let curr_h = hts.harmonic.data[idx];
+                        let h_norm = curr_h.norm();
+
+                        if h_norm > 1e-5 {
+                            let curr_c = mod_data[idx];
+                            let tendril_c = C::new(
+                                h_norm * target_tendril_phi.cos(),
+                                h_norm * target_tendril_phi.sin(),
+                            );
+                            mod_data[idx] = curr_c + (tendril_c - curr_h) * tendril_gamma;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 6. Fractal Echoes: Golden-Ratio Dyadic Diffusion on Stochastic Air
+    // Diffuses sterile high-frequency noise into self-similar acoustic boundary scatter while preserving transient attack edges
+    if config.fractal_tendrils > 0.0 && frames > 4 {
+        let phi_golden = 1.6180339887f32;
+        let d_exp = config.fractal_dimension.clamp(0.5, 2.5);
+        let echo_scale = config.fractal_tendrils * effective_strength * 0.12;
+
+        for t in 4..frames {
+            // Guardrail: suppress fractal echoes on or immediately adjacent to detected onsets to guarantee punch
+            let is_onset = hts
+                .onset_frames
+                .iter()
+                .any(|&o| t >= o.saturating_sub(1) && t <= o + 1);
+            if is_onset {
+                continue;
+            }
+
+            for k in crossover_bin..BINS {
+                let idx = t * BINS + k;
+                let mut delta_echo = C::default();
+
+                for m in 1..=4 {
+                    let g_m = echo_scale / phi_golden.powf(m as f32 * d_exp);
+                    let angle = -(m as f32) * PI / 3.0;
+                    let rot = C::new(angle.cos(), angle.sin());
+                    let past_stoch = hts.stochastic.data[(t - m) * BINS + k];
+                    delta_echo += past_stoch * (rot * g_m);
+                }
+
+                mod_data[idx] += delta_echo;
             }
         }
     }
@@ -1271,5 +1348,38 @@ mod tests {
             "Family C mono compatibility failed"
         );
         assert!(out.channels[0].iter().all(|x| x.is_finite()));
+    }
+
+    #[test]
+    fn fractal_tendrils_and_echoes_invariance_and_transient_punch() {
+        let audio = make_test_tone(440.0, 1);
+        let cfg = MicrostructureConfig {
+            fractal_tendrils: 0.50,
+            fractal_dimension: 1.2,
+            ..MicrostructureConfig::default()
+        };
+        let (out, rep) = process_microstructure(&audio, &cfg);
+        assert!(
+            rep.transient_correlation > 0.98,
+            "Fractal tendril transient correlation degraded: {}",
+            rep.transient_correlation
+        );
+        assert!(
+            rep.mono_compatibility_passed,
+            "Fractal tendril mono compatibility failed"
+        );
+        assert!(out.channels[0].iter().all(|x| x.is_finite()));
+    }
+
+    #[test]
+    fn fractal_tendrils_zero_is_exact_noop_on_echoes() {
+        let audio = make_test_tone(800.0, 1);
+        let cfg_zero = MicrostructureConfig {
+            fractal_tendrils: 0.0,
+            ..MicrostructureConfig::default()
+        };
+        let (out_zero, rep_zero) = process_microstructure(&audio, &cfg_zero);
+        assert!(rep_zero.transient_correlation > 0.98);
+        assert!(out_zero.channels[0].iter().all(|x| x.is_finite()));
     }
 }

@@ -117,8 +117,11 @@ enum Commands {
         export_sdcard: bool,
         #[arg(long)]
         no_export_sdcard: bool,
+        /// Opt-in fractal tendril / self-similar harmonic scale coupling intensity in [0.0, 1.0] (0.0 = bypass).
+        #[arg(long, default_value_t = 0.0)]
+        fractal_tendrils: f32,
     },
-    /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, and baseline comparisons.
+    /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
         #[arg(long)]
         input: PathBuf,
@@ -134,6 +137,10 @@ enum Commands {
         transient_desmear: f32,
         #[arg(long, default_value_t = 0.40)]
         phase_continuity: f32,
+        #[arg(long, default_value_t = 0.20)]
+        fractal_tendrils: f32,
+        #[arg(long, default_value_t = 1.0)]
+        fractal_dimension: f32,
         #[arg(long, default_value_t = 3000.0)]
         crossover_hz: f32,
         #[arg(long, default_value_t = 420042)]
@@ -814,6 +821,7 @@ fn run() -> Result<()> {
             backend,
             export_sdcard,
             no_export_sdcard,
+            fractal_tendrils,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -841,6 +849,7 @@ fn run() -> Result<()> {
             sidechain_hp_hz,
             &backend,
             export_sdcard && !no_export_sdcard,
+            fractal_tendrils,
         ),
         Commands::Microstructure {
             input,
@@ -850,6 +859,8 @@ fn run() -> Result<()> {
             harmonic_resonance,
             transient_desmear,
             phase_continuity,
+            fractal_tendrils,
+            fractal_dimension,
             crossover_hz,
             seed,
             compare_baselines,
@@ -862,6 +873,8 @@ fn run() -> Result<()> {
             harmonic_resonance,
             transient_desmear,
             phase_continuity,
+            fractal_tendrils,
+            fractal_dimension,
             crossover_hz,
             seed,
             compare_baselines,
@@ -1833,6 +1846,7 @@ fn auto_master_pipeline(
     sidechain_hp_hz: f32,
     backend: &str,
     export_sdcard: bool,
+    fractal_tendrils: f32,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
 
@@ -2054,6 +2068,39 @@ fn auto_master_pipeline(
         current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
         println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
         native_audio::write(&out_dir.join("stage3_clean.wav"), &current_audio, false)?;
+    }
+
+    // Stage 3.5: Conditional Microstructure & Fractal Tendril Synthesis (Opt-in)
+    if fractal_tendrils > 0.0 {
+        println!(
+            "\n--- Stage 3.5: Microstructure & Fractal Tendril Synthesis (intensity={:.2}) ---",
+            fractal_tendrils
+        );
+        let t0 = std::time::Instant::now();
+        let micro_cfg = microstructure::MicrostructureConfig {
+            family: microstructure::MicrostructureFamily::FamilyA,
+            fractal_tendrils,
+            fractal_dimension: 1.0,
+            strength: 1.0,
+            crossover_hz: 3000.0,
+            authority: 1.0,
+            bypass: false,
+            ..microstructure::MicrostructureConfig::default()
+        };
+        let (micro_audio, micro_rep) =
+            microstructure::process_microstructure(&current_audio, &micro_cfg);
+        println!(
+            "  Completed in {:.2}s | Metallic Grain: {:.3} -> {:.3}",
+            t0.elapsed().as_secs_f64(),
+            micro_rep.initial_artifacts.metallic_grain,
+            micro_rep.final_artifacts.metallic_grain
+        );
+        current_audio = micro_audio;
+        native_audio::write(
+            &out_dir.join("stage3_5_microstructure.wav"),
+            &current_audio,
+            false,
+        )?;
     }
 
     // Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth)
@@ -2333,6 +2380,8 @@ fn run_microstructure_cli(
     harmonic_resonance: f32,
     transient_desmear: f32,
     phase_continuity: f32,
+    fractal_tendrils: f32,
+    fractal_dimension: f32,
     crossover_hz: f32,
     seed: u64,
     compare_baselines: bool,
@@ -2361,8 +2410,8 @@ fn run_microstructure_cli(
         "Crossover:        {:.1} Hz (content below locked/invariant)",
         crossover_hz
     );
-    println!("Settings:         strength={:.2}, air={:.2}, resonance={:.2}, desmear={:.2}, phase_cont={:.2}, seed={}",
-        strength, air_coupling, harmonic_resonance, transient_desmear, phase_continuity, seed
+    println!("Settings:         strength={:.2}, air={:.2}, resonance={:.2}, desmear={:.2}, phase_cont={:.2}, fractal_tendrils={:.2}, fractal_dim={:.2}, seed={}",
+        strength, air_coupling, harmonic_resonance, transient_desmear, phase_continuity, fractal_tendrils, fractal_dimension, seed
     );
 
     let audio = native_audio::read_entire(input)?;
@@ -2449,6 +2498,8 @@ fn run_microstructure_cli(
         harmonic_resonance,
         transient_desmear,
         phase_continuity,
+        fractal_tendrils,
+        fractal_dimension,
         crossover_hz,
         authority: 1.0,
         bypass: false,
