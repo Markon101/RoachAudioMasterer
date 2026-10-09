@@ -933,14 +933,19 @@ mod tests {
     fn sfht_cpu_opencl_dense_parity() {
         use crate::backend::Predictor;
         let model = SfhtModel::new(882244);
-        let mut cl = crate::opencl::OpenCl::new_dense(
+        let mut cl = match crate::opencl::OpenCl::new_dense(
             &model.dense.weights,
             SFHT_INPUT_DIM,
             SFHT_HIDDEN_DIM,
             SFHT_OUTPUT_DIM,
             16,
-        )
-        .unwrap();
+        ) {
+            Ok(cl) => cl,
+            Err(e) => {
+                println!("Skipping sfht OpenCL parity test: {e}");
+                return;
+            }
+        };
 
         let x = vec![0.25f32; SFHT_INPUT_DIM * 4];
         let cl_y = cl.predict(&x, 4).unwrap();

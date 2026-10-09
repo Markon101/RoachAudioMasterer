@@ -3389,6 +3389,18 @@ impl DualTimescaleGtfCell {
 // 11. PERSISTENT MORPHIC ACOUSTIC CONTROLLER & JOINT STEREO-GEOMETRIC MEMORY
 // ============================================================================
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum MorphicModulationMode {
+    /// Mode 0: Transparent bypass (legacy identity mode)
+    Bypass,
+    /// Mode 1: Instantaneous memoryless modulation (flux-driven, no temporal state)
+    Memoryless,
+    /// Mode 2: Classical single-pole lowpass envelope smoother (DSP baseline)
+    DspSmoother,
+    /// Mode 3: Full Morphic Geometric Resonant Memory (staggered Givens + calibrated half-lives)
+    GeometricMemory,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MorphicConfig {
     pub crossover_hz: f32,
@@ -3396,16 +3408,18 @@ pub struct MorphicConfig {
     pub microtexture_authority: f32,
     pub enable_confidence_gating: bool,
     pub lock_passband: bool,
+    pub mode: MorphicModulationMode,
 }
 
 impl Default for MorphicConfig {
     fn default() -> Self {
         Self {
-            crossover_hz: 3000.0,
+            crossover_hz: 8000.0,
             sub_bass_damping_authority: 0.25,
             microtexture_authority: 0.15,
             enable_confidence_gating: true,
             lock_passband: true,
+            mode: MorphicModulationMode::GeometricMemory,
         }
     }
 }
@@ -3443,7 +3457,7 @@ impl MorphicAcousticController {
         }
     }
 
-    pub fn step(
+    pub fn step_full(
         &self,
         z_mid: &[f32],
         z_side: &[f32],
@@ -3453,7 +3467,7 @@ impl MorphicAcousticController {
         confidence: f32,
         out_mid_z: &mut [f32],
         out_side_z: &mut [f32],
-    ) -> (f32, f32) {
+    ) -> (f32, f32, f32, f32) {
         self.mid_cell.step_inplace(z_mid, u_mid, dt, out_mid_z);
         self.side_cell.step_inplace(z_side, u_side, dt, out_side_z);
 
@@ -3471,7 +3485,24 @@ impl MorphicAcousticController {
         let sub_bass_damping = (read_mid[0] * 0.1).tanh() * authority;
         let microtexture_exc = (read_side[0] * 0.1).tanh() * authority;
 
-        (sub_bass_damping, microtexture_exc)
+        (sub_bass_damping, microtexture_exc, read_mid[0], read_side[0])
+    }
+
+    pub fn step(
+        &self,
+        z_mid: &[f32],
+        z_side: &[f32],
+        u_mid: &[f32],
+        u_side: &[f32],
+        dt: f32,
+        confidence: f32,
+        out_mid_z: &mut [f32],
+        out_side_z: &mut [f32],
+    ) -> (f32, f32) {
+        let (damp, text, _, _) = self.step_full(
+            z_mid, z_side, u_mid, u_side, dt, confidence, out_mid_z, out_side_z,
+        );
+        (damp, text)
     }
 }
 
@@ -3482,7 +3513,7 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
     let ms = audio.mid_side();
 
     let mut spec_mid = stft.analyze(&ms[0]);
-    let spec_side = stft.analyze(&ms[1]);
+    let mut spec_side = stft.analyze(&ms[1]);
     let frames = spec_mid.frames;
     let num_bins = BINS;
     let dt = HOP as f32 / RATE as f32;
@@ -3496,7 +3527,11 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
     let mut damp_accum = 0.0f32;
     let mut text_accum = 0.0f32;
 
+    let crossover_bin = (config.crossover_hz / (RATE as f32 / FFT as f32)).round() as usize;
     let sub_cutoff_bin = (60.0f32 / (RATE as f32 / FFT as f32)).round() as usize;
+
+    let mut smoothed_flux_m = 0.0f32;
+    let mut smoothed_flux_s = 0.0f32;
 
     for t in 0..frames {
         let mut mid_energy = 0.0f32;
@@ -3539,7 +3574,7 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
         let mut next_z_mid = vec![0.0f32; 8];
         let mut next_z_side = vec![0.0f32; 8];
 
-        let (sub_damp, micro_exc) = controller.step(
+        let (sub_damp, micro_exc, r_mid, r_side) = controller.step_full(
             &z_mid,
             &z_side,
             &u_mid,
@@ -3559,11 +3594,51 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
         damp_accum += sub_damp.abs();
         text_accum += micro_exc.abs();
 
-        if sub_damp.abs() > 1e-5 {
-            let factor = (1.0 - sub_damp.abs() * 0.1).clamp(0.90, 1.0);
-            for k in 0..sub_cutoff_bin {
+        let (g_mid, g_side, eff_sub_damp) = match config.mode {
+            MorphicModulationMode::Bypass => (1.0f32, 1.0f32, 0.0f32),
+            MorphicModulationMode::Memoryless => {
+                let drive_m = (flux * 0.20).tanh() * config.microtexture_authority;
+                let drive_s = (flux * 0.20).tanh() * (1.0 - coherence) * config.microtexture_authority;
+                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
+                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
+                let sd = if sub_ratio > 0.25 { (sub_ratio - 0.25).min(1.0) * config.sub_bass_damping_authority } else { 0.0 };
+                (gm, gs, sd)
+            }
+            MorphicModulationMode::DspSmoother => {
+                let alpha = 0.90f32;
+                smoothed_flux_m = alpha * smoothed_flux_m + (1.0 - alpha) * flux;
+                smoothed_flux_s = alpha * smoothed_flux_s + (1.0 - alpha) * (flux * (1.0 - coherence));
+                let drive_m = (smoothed_flux_m * 0.20).tanh() * config.microtexture_authority;
+                let drive_s = (smoothed_flux_s * 0.20).tanh() * config.microtexture_authority;
+                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
+                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
+                let sd = if sub_ratio > 0.25 { (sub_ratio - 0.25).min(1.0) * config.sub_bass_damping_authority } else { 0.0 };
+                (gm, gs, sd)
+            }
+            MorphicModulationMode::GeometricMemory => {
+                let drive_m = (r_mid * 0.15).tanh() * config.microtexture_authority;
+                let drive_s = (r_side * 0.15).tanh() * config.microtexture_authority;
+                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
+                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
+                (gm, gs, sub_damp)
+            }
+        };
+
+        if config.mode != MorphicModulationMode::Bypass {
+            // 1. High-Frequency Air Microtexture Modulation (above crossover_hz, e.g. 8000 Hz)
+            for k in crossover_bin..num_bins {
                 let idx = t * num_bins + k;
-                spec_mid.data[idx] *= factor;
+                spec_mid.data[idx] *= g_mid;
+                spec_side.data[idx] *= g_side;
+            }
+
+            // 2. Selective Sub-Bass Mud Decay / Damping (< 60 Hz on side channel only)
+            if eff_sub_damp.abs() > 1e-5 && is_stereo {
+                let factor = (1.0 - eff_sub_damp.abs() * 0.15).clamp(0.80, 1.0);
+                for k in 0..sub_cutoff_bin {
+                    let idx = t * num_bins + k;
+                    spec_side.data[idx] *= factor;
+                }
             }
         }
     }
@@ -4380,4 +4455,77 @@ mod tests {
         assert!(ax.is_finite());
         assert!(ay.is_finite());
     }
+
+    #[test]
+    fn test_morphic_modulation_modes_comparative_control() {
+        let n = RATE as usize; // 1 second
+        let mut left = vec![0.0f32; n];
+        let mut right = vec![0.0f32; n];
+        for i in 0..n {
+            let t = i as f32 / RATE as f32;
+            let low = 0.3 * (2.0 * std::f32::consts::PI * 150.0 * t).sin();
+            let mid = 0.2 * (2.0 * std::f32::consts::PI * 1200.0 * t).sin();
+            let high = 0.05 * (2.0 * std::f32::consts::PI * 9000.0 * t).sin();
+            left[i] = low + mid + high;
+            right[i] = low + mid - high * 0.5;
+        }
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![left, right],
+        };
+
+        // 1. Bypass Mode
+        let cfg_bypass = MorphicConfig {
+            mode: MorphicModulationMode::Bypass,
+            crossover_hz: 8000.0,
+            ..MorphicConfig::default()
+        };
+        let (out_bypass, rep_bypass) = process_morphic_audio(&audio, &cfg_bypass);
+        assert!(rep_bypass.mono_compatibility_passed);
+        assert!(rep_bypass.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // 2. Memoryless Control
+        let cfg_mem = MorphicConfig {
+            mode: MorphicModulationMode::Memoryless,
+            crossover_hz: 8000.0,
+            microtexture_authority: 0.20,
+            ..MorphicConfig::default()
+        };
+        let (_out_mem, rep_mem) = process_morphic_audio(&audio, &cfg_mem);
+        assert!(rep_mem.mono_compatibility_passed);
+        assert!(rep_mem.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // 3. DSP Smoother
+        let cfg_dsp = MorphicConfig {
+            mode: MorphicModulationMode::DspSmoother,
+            crossover_hz: 8000.0,
+            microtexture_authority: 0.20,
+            ..MorphicConfig::default()
+        };
+        let (_out_dsp, rep_dsp) = process_morphic_audio(&audio, &cfg_dsp);
+        assert!(rep_dsp.mono_compatibility_passed);
+        assert!(rep_dsp.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // 4. Morphic Geometric Resonant Memory
+        let cfg_geom = MorphicConfig {
+            mode: MorphicModulationMode::GeometricMemory,
+            crossover_hz: 8000.0,
+            microtexture_authority: 0.20,
+            ..MorphicConfig::default()
+        };
+        let (out_geom, rep_geom) = process_morphic_audio(&audio, &cfg_geom);
+        assert!(rep_geom.mono_compatibility_passed);
+        assert!(rep_geom.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // Check that high-band actually has different spectral modulation between Bypass and Geometric
+        let diff_rms: f32 = out_geom.channels[0]
+            .iter()
+            .zip(&out_bypass.channels[0])
+            .map(|(a, b)| (a - b).powi(2))
+            .sum::<f32>()
+            .sqrt()
+            / n as f32;
+        assert!(diff_rms > 0.0, "Geometric memory must modulate audio");
+    }
 }
+

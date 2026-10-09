@@ -130,6 +130,12 @@ enum Commands {
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
+        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric.
+        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric"])]
+        morphic_mode: String,
+        /// Crossover frequency in Hz above which microtexture modulation applies.
+        #[arg(long, default_value_t = 8000.0)]
+        morphic_crossover: f32,
         /// Calibrated shrinkage error correction on SFHT Flow endpoint (e.g. 0.88).
         #[arg(long)]
         sfht_shrinkage: Option<f32>,
@@ -177,6 +183,30 @@ enum Commands {
         audio_input: Option<PathBuf>,
         #[arg(long)]
         out: Option<PathBuf>,
+    },
+    /// Comparative evaluation of Morphic Acoustic Controller modes: Bypass, Memoryless, DSP Smoother, and Geometric Memory.
+    MorphicCompare {
+        /// Input audio file (e.g. stage4_spatial.wav or raw audio).
+        #[arg(long)]
+        input: PathBuf,
+        /// Directory to store rendered audio and comparison artifacts.
+        #[arg(long, default_value = "runs/morphic-ab-comparison")]
+        out: PathBuf,
+        /// Crossover frequency in Hz above which microtexture modulation applies.
+        #[arg(long, default_value_t = 8000.0)]
+        crossover_hz: f32,
+        /// Controller strength in [0.0, 1.0].
+        #[arg(long, default_value_t = 1.0)]
+        strength: f32,
+        /// Target integrated loudness for level matching.
+        #[arg(long, default_value_t = -11.0, allow_hyphen_values = true)]
+        target_lufs: f32,
+        /// True peak ceiling in dBTP.
+        #[arg(long, default_value_t = -1.0, allow_hyphen_values = true)]
+        ceiling_db: f32,
+        /// Export level-matched WAVs to /sdcard/Download for listening.
+        #[arg(long, default_value_t = true)]
+        export_sdcard: bool,
     },
     RichOracle {
         #[arg(long)]
@@ -853,6 +883,8 @@ fn run() -> Result<()> {
             force_specialists,
             morphic_gtf,
             morphic_strength,
+            morphic_mode,
+            morphic_crossover,
             sfht_shrinkage,
         } => auto_master_pipeline(
             &input,
@@ -885,6 +917,8 @@ fn run() -> Result<()> {
             force_specialists,
             morphic_gtf,
             morphic_strength,
+            &morphic_mode,
+            morphic_crossover,
             sfht_shrinkage,
         ),
         Commands::Microstructure {
@@ -930,6 +964,23 @@ fn run() -> Result<()> {
             sfht_model.as_deref(),
             audio_input.as_deref(),
             out.as_deref(),
+        ),
+        Commands::MorphicCompare {
+            input,
+            out,
+            crossover_hz,
+            strength,
+            target_lufs,
+            ceiling_db,
+            export_sdcard,
+        } => run_morphic_compare_cli(
+            &input,
+            &out,
+            crossover_hz,
+            strength,
+            target_lufs,
+            ceiling_db,
+            export_sdcard,
         ),
         Commands::RichOracle {
             det,
@@ -1901,6 +1952,8 @@ fn auto_master_pipeline(
     force_specialists: bool,
     morphic_gtf: bool,
     morphic_strength: f32,
+    morphic_mode: &str,
+    morphic_crossover: f32,
     sfht_shrinkage: Option<f32>,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
@@ -2241,13 +2294,21 @@ fn auto_master_pipeline(
     // Stage 4.5: GTF Persistent Morphic Acoustic Controller (Opt-in)
     if morphic_gtf {
         println!(
-            "\n--- Stage 4.5: GTF Persistent Morphic Acoustic Controller (strength={:.2}) ---",
-            morphic_strength
+            "\n--- Stage 4.5: GTF Persistent Morphic Acoustic Controller (mode={}, strength={:.2}, crossover={:.1}Hz) ---",
+            morphic_mode, morphic_strength, morphic_crossover
         );
         let t0 = std::time::Instant::now();
+        let mode_enum = match morphic_mode {
+            "bypass" => gtf::MorphicModulationMode::Bypass,
+            "memoryless" => gtf::MorphicModulationMode::Memoryless,
+            "dsp-smoother" => gtf::MorphicModulationMode::DspSmoother,
+            _ => gtf::MorphicModulationMode::GeometricMemory,
+        };
         let morphic_cfg = gtf::MorphicConfig {
+            crossover_hz: morphic_crossover,
             sub_bass_damping_authority: 0.25 * morphic_strength,
             microtexture_authority: 0.15 * morphic_strength,
+            mode: mode_enum,
             ..gtf::MorphicConfig::default()
         };
         let (morphic_audio, morphic_rep) = gtf::process_morphic_audio(&current_audio, &morphic_cfg);
@@ -3266,6 +3327,280 @@ fn run_gtf_benchmark_cli(
     }
 
     println!("================================================================================");
+    Ok(())
+}
+
+fn run_morphic_compare_cli(
+    input: &std::path::Path,
+    out: &std::path::Path,
+    crossover_hz: f32,
+    strength: f32,
+    target_lufs: f32,
+    ceiling_db: f32,
+    export_sdcard: bool,
+) -> Result<()> {
+    println!("================================================================================");
+    println!("    MORPHIC GTF ACOUSTIC CONTROLLER: COMPARATIVE ABLATION & LISTENING SUITE");
+    println!("================================================================================");
+    println!("Input Audio:       {}", input.display());
+    println!("Output Directory:  {}", out.display());
+    println!("Crossover Freq:    {:.1} Hz (microtexture air modulation applied above this band)", crossover_hz);
+    println!("Morphic Strength:  {:.2}", strength);
+    println!("Target Loudness:   {:.1} LUFS (level-matched across all modes)", target_lufs);
+    println!("Ceiling True Peak: {:.1} dBTP", ceiling_db);
+
+    let in_audio = native_audio::read_entire(input)?;
+    let frames = in_audio.frames();
+    let channels = in_audio.channels.len();
+    let duration_sec = frames as f64 / in_audio.rate as f64;
+    println!("Audio Stats:       {} ch, {} Hz, {:.2}s ({} frames)", channels, in_audio.rate, duration_sec, frames);
+
+    std::fs::create_dir_all(out)?;
+
+    let compute_snr = |signal: &native_audio::Audio, baseline: &native_audio::Audio| -> f64 {
+        let mut sig_pow = 0.0f64;
+        let mut noise_pow = 0.0f64;
+        for (cs, cb) in signal.channels.iter().zip(&baseline.channels) {
+            for (&s, &b) in cs.iter().zip(cb) {
+                sig_pow += (b as f64).powi(2);
+                noise_pow += ((s - b) as f64).powi(2);
+            }
+        }
+        if noise_pow <= 1e-18 {
+            160.0
+        } else {
+            10.0 * (sig_pow / noise_pow).log10()
+        }
+    };
+
+    let sub_bass_side_rms = |a: &native_audio::Audio| -> f32 {
+        if a.channels.len() < 2 {
+            return 0.0;
+        }
+        let dt = 1.0 / a.rate as f32;
+        let rc = 1.0 / (2.0 * std::f32::consts::PI * 60.0);
+        let alpha = dt / (rc + dt);
+        let mut y = 0.0f32;
+        let mut sum_sq = 0.0f64;
+        let s_inv = 1.0 / 2.0f32.sqrt();
+        for i in 0..a.frames() {
+            let side = (a.channels[0][i] - a.channels[1][i]) * s_inv;
+            y += alpha * (side - y);
+            sum_sq += (y as f64).powi(2);
+        }
+        (sum_sq / a.frames() as f64).sqrt() as f32
+    };
+
+    let air_band_metrics = |a: &native_audio::Audio, xover: f32| -> (f32, f32) {
+        let dt = 1.0 / a.rate as f32;
+        let rc = 1.0 / (2.0 * std::f32::consts::PI * xover);
+        let alpha = rc / (rc + dt);
+        let mut y = 0.0f32;
+        let mut prev_x = 0.0f32;
+        let mut sum_sq = 0.0f64;
+        let mut hop_energies = Vec::with_capacity(a.frames() / 1024 + 1);
+        let mut hop_e = 0.0f64;
+        for (i, (&l, &r)) in a.channels[0].iter().zip(&a.channels[1]).enumerate() {
+            let mid = (l + r) * 0.5;
+            y = alpha * (y + mid - prev_x);
+            prev_x = mid;
+            sum_sq += (y as f64).powi(2);
+            hop_e += (y as f64).powi(2);
+            if (i + 1) % 1024 == 0 {
+                hop_energies.push(hop_e);
+                hop_e = 0.0;
+            }
+        }
+        let air_rms = (sum_sq / a.frames() as f64).sqrt() as f32;
+        let n = hop_energies.len().max(1) as f64;
+        let mean = hop_energies.iter().sum::<f64>() / n;
+        let var = (hop_energies.iter().map(|&v| (v - mean).powi(2)).sum::<f64>() / n).sqrt() as f32;
+        (air_rms, var)
+    };
+
+    let diff_audio = |a: &native_audio::Audio, b: &native_audio::Audio, gain_db: f32| -> native_audio::Audio {
+        let lin_gain = 10.0f32.powf(gain_db / 20.0);
+        let channels = a.channels.iter().zip(&b.channels).map(|(ca, cb)| {
+            ca.iter().zip(cb).map(|(&x, &y)| (x - y) * lin_gain).collect()
+        }).collect();
+        native_audio::Audio { rate: a.rate, channels }
+    };
+
+    let modes = [
+        ("m0_bypass", "Bypass (STFT Roundtrip Control)", gtf::MorphicModulationMode::Bypass),
+        ("m1_memoryless", "Memoryless Instantaneous Flux Modulator", gtf::MorphicModulationMode::Memoryless),
+        ("m2_dsp_smoother", "First-Order One-Pole DSP Smoother", gtf::MorphicModulationMode::DspSmoother),
+        ("m3_geometric", "GTF Phase II Symplectic Geometric Memory", gtf::MorphicModulationMode::GeometricMemory),
+    ];
+
+    struct ModeResult {
+        id: String,
+        label: String,
+        unmastered: native_audio::Audio,
+        mastered: native_audio::Audio,
+        audit: gtf::MorphicAuditReport,
+        elapsed_ms: f64,
+        unmastered_snr_vs_bypass: f64,
+        mastered_snr_vs_bypass: f64,
+        air_rms_dbfs: f32,
+        air_flux_var: f32,
+        sub_side_rms_dbfs: f32,
+        lufs: f64,
+        true_peak_dbtp: f64,
+        limiter_gr_db: f32,
+    }
+
+    let mut results: Vec<ModeResult> = Vec::new();
+
+    for (id, label, mode_enum) in &modes {
+        println!("\n--- Processing Mode: {} ({}) ---", id, label);
+        let t0 = std::time::Instant::now();
+        let cfg = gtf::MorphicConfig {
+            crossover_hz,
+            sub_bass_damping_authority: 0.25 * strength,
+            microtexture_authority: 0.15 * strength,
+            mode: *mode_enum,
+            ..gtf::MorphicConfig::default()
+        };
+        let (processed_audio, audit_rep) = gtf::process_morphic_audio(&in_audio, &cfg);
+        let elapsed_morphic = t0.elapsed().as_secs_f64() * 1000.0;
+        println!("  Morphic elapsed: {:.2} ms", elapsed_morphic);
+
+        // Master to target LUFS
+        let master_res = master::master_audio(&processed_audio, target_lufs, ceiling_db, -20.0, 1.6, 90.0)?;
+        let mastered_audio = master_res.mastered;
+
+        // Save pre-master WAV & mastered WAV
+        let pre_path = out.join(format!("{}_unmastered.wav", id));
+        native_audio::write(&pre_path, &processed_audio, false)?;
+        let master_path = out.join(format!("{}_mastered.wav", id));
+        native_audio::write(&master_path, &mastered_audio, false)?;
+        let listen_path = out.join(format!("{}_listen.wav", id));
+        native_audio::write(&listen_path, &mastered_audio, true)?;
+
+        let (air_rms, air_var) = air_band_metrics(&mastered_audio, crossover_hz);
+        let air_rms_db = if air_rms > 1e-12 { 20.0 * air_rms.log10() } else { -160.0 };
+        let sub_side = sub_bass_side_rms(&mastered_audio);
+        let sub_side_db = if sub_side > 1e-12 { 20.0 * sub_side.log10() } else { -160.0 };
+
+        let lufs_val = master_res.after_metrics["lufs_integrated"].as_f64().unwrap_or(0.0);
+        let tp_val = master_res.after_metrics["true_peak_dbtp"].as_f64().unwrap_or(0.0);
+
+        results.push(ModeResult {
+            id: id.to_string(),
+            label: label.to_string(),
+            unmastered: processed_audio,
+            mastered: mastered_audio,
+            audit: audit_rep,
+            elapsed_ms: elapsed_morphic,
+            unmastered_snr_vs_bypass: 0.0,
+            mastered_snr_vs_bypass: 0.0,
+            air_rms_dbfs: air_rms_db,
+            air_flux_var: air_var,
+            sub_side_rms_dbfs: sub_side_db,
+            lufs: lufs_val,
+            true_peak_dbtp: tp_val,
+            limiter_gr_db: master_res.limiter_gr,
+        });
+    }
+
+    // Compute SNRs relative to Mode 0 (Bypass)
+    let bypass_unmastered = results[0].unmastered.clone();
+    let bypass_mastered = results[0].mastered.clone();
+    for r in results.iter_mut() {
+        r.unmastered_snr_vs_bypass = compute_snr(&r.unmastered, &bypass_unmastered);
+        r.mastered_snr_vs_bypass = compute_snr(&r.mastered, &bypass_mastered);
+    }
+
+    // Generate Null & Difference WAVs
+    println!("\n--- Generating Null & Difference WAVs ---");
+    let diff_m3_m0_30db = diff_audio(&results[3].mastered, &results[0].mastered, 30.0);
+    let diff_m3_m0_60db = diff_audio(&results[3].mastered, &results[0].mastered, 60.0);
+    let diff_m3_m1_30db = diff_audio(&results[3].mastered, &results[1].mastered, 30.0);
+
+    let path_diff_m3_m0_30 = out.join("diff_m3_vs_m0_gain30db.wav");
+    native_audio::write(&path_diff_m3_m0_30, &diff_m3_m0_30db, true)?;
+    let path_diff_m3_m0_60 = out.join("diff_m3_vs_m0_gain60db.wav");
+    native_audio::write(&path_diff_m3_m0_60, &diff_m3_m0_60db, true)?;
+    let path_diff_m3_m1_30 = out.join("diff_m3_vs_m1_dynamics_gain30db.wav");
+    native_audio::write(&path_diff_m3_m1_30, &diff_m3_m1_30db, true)?;
+
+    // SDCard Export
+    if export_sdcard {
+        let sdcard_dir = std::path::Path::new("/sdcard/Download");
+        if sdcard_dir.exists() {
+            println!("\n--- Exporting Matched-Level Listening Deliverables to /sdcard/Download ---");
+            let exports = [
+                ("Chasing Horizons - Morphic M0 [Bypass Mastered].wav", out.join("m0_bypass_listen.wav")),
+                ("Chasing Horizons - Morphic M1 [Memoryless Mastered].wav", out.join("m1_memoryless_listen.wav")),
+                ("Chasing Horizons - Morphic M2 [DSP Smoother Mastered].wav", out.join("m2_dsp_smoother_listen.wav")),
+                ("Chasing Horizons - Morphic M3 [Geometric Memory Mastered].wav", out.join("m3_geometric_listen.wav")),
+                ("Chasing Horizons - Morphic M3 vs M0 [Geometric Delta +30dB].wav", path_diff_m3_m0_30.clone()),
+                ("Chasing Horizons - Morphic M3 vs M1 [Memory Dynamics Delta +30dB].wav", path_diff_m3_m1_30.clone()),
+            ];
+            for (dst_name, src_path) in &exports {
+                let dst_path = sdcard_dir.join(dst_name);
+                if let Err(e) = std::fs::copy(src_path, &dst_path) {
+                    eprintln!("  Failed to copy {}: {e}", src_path.display());
+                } else {
+                    println!("  Exported -> {}", dst_path.display());
+                }
+            }
+        }
+    }
+
+    // Print Comparative Evaluation Table
+    println!("\n=========================================================================================================");
+    println!("                    MORPHIC CONTROLLER MODULATION COMPARISON SUMMARY TABLE");
+    println!("=========================================================================================================");
+    println!(
+        "{:<16} | {:>10} | {:>10} | {:>12} | {:>12} | {:>12} | {:>10} | {:>10}",
+        "Mode", "Pre SNR", "Post SNR", "Air RMS", "Flux Var", "SubSide RMS", "LUFS", "True Peak"
+    );
+    println!("-----------------+------------+------------+--------------+--------------+--------------+------------+------------");
+    for r in &results {
+        println!(
+            "{:<16} | {:>9.2} dB| {:>9.2} dB| {:>9.2} dBFS| {:>12.4e}| {:>9.2} dBFS| {:>9.2} | {:>7.2} dBTP",
+            r.id,
+            r.unmastered_snr_vs_bypass,
+            r.mastered_snr_vs_bypass,
+            r.air_rms_dbfs,
+            r.air_flux_var,
+            r.sub_side_rms_dbfs,
+            r.lufs,
+            r.true_peak_dbtp
+        );
+    }
+    println!("=========================================================================================================");
+
+    // Save JSON report
+    let report_json = out.join("morphic_comparison.json");
+    let report_data = serde_json::json!({
+        "input": input.display().to_string(),
+        "crossover_hz": crossover_hz,
+        "strength": strength,
+        "target_lufs": target_lufs,
+        "modes": results.iter().map(|r| {
+            serde_json::json!({
+                "id": r.id,
+                "label": r.label,
+                "elapsed_ms": r.elapsed_ms,
+                "unmastered_snr_vs_bypass_db": r.unmastered_snr_vs_bypass,
+                "mastered_snr_vs_bypass_db": r.mastered_snr_vs_bypass,
+                "air_band_rms_dbfs": r.air_rms_dbfs,
+                "air_band_flux_variance": r.air_flux_var,
+                "sub_bass_side_rms_dbfs": r.sub_side_rms_dbfs,
+                "lufs": r.lufs,
+                "true_peak_dbtp": r.true_peak_dbtp,
+                "limiter_gr_db": r.limiter_gr_db,
+                "mono_compatibility_passed": r.audit.mono_compatibility_passed,
+                "channel_swap_equivariance_passed": r.audit.channel_swap_equivariance_passed,
+                "post_synthesis_low_band_rms_deviation": r.audit.post_synthesis_low_band_rms_deviation,
+            })
+        }).collect::<Vec<_>>(),
+    });
+    std::fs::write(&report_json, serde_json::to_string_pretty(&report_data)?)?;
+    println!("\nWrote comparison metrics to: {}", report_json.display());
     Ok(())
 }
 
