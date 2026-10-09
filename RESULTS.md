@@ -478,39 +478,91 @@ To overcome the STFT consistency projection barrier—where frame-by-frame phase
   - Controlled via `--fractal-tendrils <val>` (default: `0.0`, strict bypass to preserve frozen production champions).
   - Standalone CLI: `roach-audio-masterer microstructure --input <file> --fractal-tendrils 0.25 --out <dir>`.
 
-### 6. Geometric Transport Flow (GTF) Mathematical & Recurrent Benchmarks (Family 376)
+### 6. Geometric Transport Flow (GTF) Mathematical & Recurrent Benchmarks (Family 376 Audit)
 
-Inspired by OpenAI mathematical result Family 376 (*Universal computation in forced Navier–Stokes flows*, Lean 4 formalization), we extracted structure-preserving geometric operators (solenoidal shear maps, volume-preserving preconditioning, and transport–dissipation recurrence) and evaluated them under empirical benchmark `roach-audio-masterer gtf-benchmark`.
+Inspired by OpenAI mathematical result Family 376 (*Universal computation in forced Navier–Stokes flows*, Lean 4 formalization), we conducted a mathematical audit and empirical benchmark of structure-preserving geometric operators (solenoidal shear maps, volume-preserving preconditioning, and transport–dissipation recurrence) via `roach-audio-masterer gtf-benchmark --out runs/gtf_audit_output`.
 
-#### 1. Mathematical Invariants & Solenoidal Shears
-- **Invertibility Roundtrip Error**: Strictly `0.00e+00` (exact machine zero; zero Newton/iterative overhead).
-- **Jacobian Determinant**: `1.00000000` identically (algebraically unit measure preserving: $\det J = 1 \cdot (1 + \gamma_1 \gamma_2 f_1' f_2') - (\gamma_1 f_1')(\gamma_2 f_2') \equiv 1.0$).
-- **Condition Number $\kappa(J)$**: `1.0490` (near-isometric numerical conditioning; guaranteed non-exploding).
+#### 1. Mathematical Invariants & GTF-A Taper
+- **Invertibility Roundtrip Error**: Strictly `0.00e+00` (exact machine zero; zero iterative overhead).
+- **Jacobian Determinant**: `1.00000000` identically (algebraically unit volume preserving: $\det J = 1 \cdot (1 + s^2 \gamma_1 \gamma_2 f_1' f_2') - (s \gamma_1 f_1')(s \gamma_2 f_2') \equiv 1.0$).
+- **Condition Number $\kappa(J)$**: `1.0490` (near-unitary isometric numerical conditioning).
+- **GTF-A Endpoint Taper ($\tau = 1.0$)**: Displacement `= 0.00e+00` (**PASS**: displacement-scaled taper guarantees exact bitwise identity at target endpoint).
 
-#### 2. GTF-B Invertible Coordinate Preconditioner & Trajectory Curvature
-- Evaluated non-linear coordinate diffeomorphisms $T$ and inverse $T^{-1}$ with exact Jacobian velocity mapping $\mathbf{v}_y = J_T \mathbf{v}_x$.
-- **Curvature Transformation Ratio ($\kappa_y / \kappa_x$)**: `0.377x` (volume-preserving warping flattens velocity direction changes along trajectory manifolds).
-- *Scientific Assessment*: While preconditioning reduces curvature, altering velocity fields in frozen pre-trained CFM models shifts endpoint distributions; preconditioning requires end-to-end co-training to be beneficial.
+#### 2. GTF-B Preconditioner & Trajectory Curvature on Numerical ODE Trajectories
+- Evaluated acceleration transformation on numerical ODE trajectories via complete chain rule including directional Hessian:
+  $$\mathbf{a}_y = J_T \mathbf{a}_x + H_T[\mathbf{v}_x, \mathbf{v}_x]$$
+- **Original ODE Mean Curvature $\kappa_x$**: `0.000000`
+- **Transformed ODE Mean Curvature $\kappa_y$**: `0.003567` (Curvature ratio: `73252.6x`)
+- **Trajectory Endpoint Divergence**: `1.8156e-4`
+- *Scientific Assessment*: Non-linear coordinate transformation around a linear flow introduces extrinsic curvature via directional Hessian terms $H_T[\mathbf{v}_x, \mathbf{v}_x]$.
 
-#### 3. Recurrent Architectures (10,000-Step Parameter-Matched Horizon)
-Evaluated continuous-discrete transport–dissipation dynamics $\dot{\mathbf{z}} = (\mathbf{\Omega} - \mathbf{D})\mathbf{z} + \mathbf{F}$ with skew-symmetric transport ($\mathbf{\Omega} = -\mathbf{\Omega}^T$), positive dissipation ($\mathbf{D} \ge \delta > 0$), and Cayley orthogonal rotation:
+#### 3. Fair Multi-Dimensional Recurrent Benchmarks (10,000 Steps, 5 Trials, Zero Allocations)
+Evaluated across state dimensions $D \in [8, 16, 32]$ using in-place zero-allocation execution (`step_inplace`):
 
-| Architecture | State Norm ($\|z\|$) | Lyapunov Energy Bound | Throughput (steps/sec) | Runtime (10k steps) | Stability Guarantee |
-|---|---|---|---|---|---|
-| **GTF-C (Lyapunov)** | **1.4122** | **20.0000** | **1,761,920 /s** | **5.7 ms** | **Provable Lyapunov Bound** ($\|z\| \le F_{\max}/\delta$) |
-| **Vanilla RNN** | 1.7284 | N/A (heuristic tanh) | 2,778,180 /s | 3.6 ms | None (gradient failure prone) |
-| **GRU** | 0.8246 | N/A (gate saturation) | 1,223,125 /s | 8.2 ms | Gate bounded, transcendental cost |
+| Architecture | Dim ($D$) | Params | FLOPs/step | Max State Norm | Mean Runtime | Throughput | Stability Guarantee |
+|---|---|---|---|---|---|---|---|
+| **D = 8** | | | | | | | |
+| **GTF-C (Cross-Pair Mixing)** | **8** | **104** | **408** | **1.4113** | **15.89 ms** | **629,351 /s** | **Provable Lyapunov Bound** ($\le 56.6388$) |
+| GTF-C (Independent Pairs) | 8 | 88 | 336 | 1.4075 | 12.59 ms | 794,175 /s | Provable Lyapunov Bound ($\le 56.6388$) |
+| Vanilla RNN (Param-Matched) | 7 | 84 | 168 | 1.6814 | 13.10 ms | 763,426 /s | None |
+| Vanilla RNN (Dim-Matched) | 8 | 104 | 208 | 1.7349 | 15.69 ms | 637,151 /s | None |
+| Vanilla RNN (Compute-Matched) | 11 | 176 | 352 | 1.8829 | 25.29 ms | 395,398 /s | None |
+| GRU (Param-Matched) | 3 | 63 | 162 | 0.6295 | 9.62 ms | 1,039,247 /s | Gate bounded |
+| GRU (Dim-Matched) | 8 | 288 | 672 | 0.8942 | 34.53 ms | 289,566 /s | Gate bounded |
+| **D = 16** | | | | | | | |
+| **GTF-C (Cross-Pair Mixing)** | **16** | **208** | **816** | **1.9909** | **30.92 ms** | **323,440 /s** | **Provable Lyapunov Bound** ($\le 80.1000$) |
+| GTF-C (Independent Pairs) | 16 | 176 | 672 | 1.9930 | 25.04 ms | 399,378 /s | Provable Lyapunov Bound ($\le 80.1000$) |
+| Vanilla RNN (Param-Matched) | 11 | 176 | 352 | 2.2563 | 31.61 ms | 316,357 /s | None |
+| Vanilla RNN (Dim-Matched) | 16 | 336 | 672 | 2.3573 | 49.26 ms | 202,985 /s | None |
+| Vanilla RNN (Compute-Matched) | 16 | 336 | 672 | 2.3692 | 59.33 ms | 168,558 /s | None |
+| GRU (Param-Matched) | 6 | 180 | 432 | 0.8074 | 24.35 ms | 410,671 /s | Gate bounded |
+| GRU (Dim-Matched) | 16 | 960 | 2112 | 1.3349 | 115.48 ms | 86,594 /s | Gate bounded |
+| **D = 32** | | | | | | | |
+| **GTF-C (Cross-Pair Mixing)** | **32** | **416** | **1632** | **2.8241** | **61.63 ms** | **162,265 /s** | **Provable Lyapunov Bound** ($\le 113.2776$) |
+| GTF-C (Independent Pairs) | 32 | 352 | 1344 | 2.8267 | 50.46 ms | 198,189 /s | Provable Lyapunov Bound ($\le 113.2776$) |
+| Vanilla RNN (Param-Matched) | 16 | 336 | 672 | 2.1044 | 47.04 ms | 212,598 /s | None |
+| Vanilla RNN (Dim-Matched) | 32 | 1184 | 2368 | 2.8174 | 157.43 ms | 63,522 /s | None |
+| Vanilla RNN (Compute-Matched) | 24 | 696 | 1392 | 2.6175 | 94.21 ms | 106,146 /s | None |
+| GRU (Param-Matched) | 9 | 351 | 810 | 0.8647 | 42.91 ms | 233,057 /s | Gate bounded |
+| GRU (Dim-Matched) | 32 | 3456 | 7296 | 1.4841 | 360.07 ms | 27,772 /s | Gate bounded |
 
-- **Finding**: GTF-C is **44% faster than GRU** while providing provable energy stability bounds and exact $L_2$ norm preservation via Cayley orthogonal transforms.
+- *Fairness Note*: GTF-C throughput advantage over dimension-matched GRU (e.g. 162k vs 28k steps/s at $D=32$) is due to $O(D)$ sparse block-diagonal Givens rotations rather than $O(D^2)$ dense matrix operations.
 
-#### 4. Fiber-Constrained Audio Invariants (Real Music Evaluation)
-Evaluated on musical audio (`runs/sample_triband/restored.wav` and native 48 kHz reference):
-- **Base-Space Passband (<3 kHz)**: `0.00e+00` (**100% bitwise invariant**; trusted base signal untouched).
-- **Max Recurrent State Norm**: `4.6326 <= 20.0000` (**PASS**: strictly respects theoretical Lyapunov bound).
-- **Mono Compatibility**: `0.848` (**PASS**: well above $0.20$ safety threshold).
-- **Transient Timing Punch**: `1.000` (**PASS**: exact envelope alignment).
-- **Total Latency**: **72.12 ms** on mobile CPU.
-- **Production Champions Intact**: Production Flow models and mastering chains remain fully preserved.
+#### 4. GTF-C Recurrence Experiment: Sparse Orthogonal Cross-Pair Mixing
+Evaluated on a multi-channel delayed association memory task ($D=8$, input dim $4$, $100$ trials):
+
+| Horizon ($T$) | Independent Pairs ($r$ / MSE) | Cross-Pair Mixing ($r$ / MSE) | Param-Matched RNN ($r$ / MSE) | Analytical Bound ($\|z\| \le B$) |
+|---|---|---|---|---|
+| **20** | **0.721** / 0.0662 | **0.722** / 0.0662 | 0.305 / 0.1262 | 56.6388 [PASS] |
+| **50** | **0.386** / 0.0623 | **0.384** / 0.0624 | 0.008 / 0.0636 | 56.6388 [PASS] |
+| **100** | **0.531** / 0.0555 | **0.531** / 0.0555 | -0.117 / 0.0746 | 56.6388 [PASS] |
+
+- *Theoretical Reality on Gradients*: Discrete finite-step Lyapunov bound is verified ($\|z_n\|_2 \le \alpha^n \|z_0\|_2 + \frac{1 - \alpha^n}{1 - \alpha} dt \sqrt{D} F_{\max}$). However, positive dissipation $\delta > 0$ provably induces exponential gradient decay ($\|\partial z_n / \partial z_0\|_2 \le e^{-n \delta dt} \to 0$); forward state stability does NOT imply training/optimization gradient stability.
+
+#### 5. GTF-B Frozen SFHT Flow Experiment (8-Step vs 128-Step Reference)
+Tested on 16 held-out synthetic test scenes using frozen production SFHT model (`artifacts/rich-low-sfht/state-sfht.json`):
+- **Mean Endpoint Error**: Unchanged = `3.0549` | GTF-B = `3.0591` (Ratio: **1.00x**)
+- **Mean Reconstruction NMSE**: Unchanged = `739.27` | GTF-B = `739.03` | Reference (128-step) = `1006.85`
+- **Mean Reconstruction LSD**: Unchanged = `55.68 dB` | GTF-B = `55.67 dB` | Reference (128-step) = `61.03 dB`
+- **Mean Trajectory Curvature ($\kappa$)**: Unchanged = `12.317` | GTF-B = `12.013` (Ratio: `0.98x`)
+- **Mean CPU Latency**: Unchanged = `584.61 ms` | GTF-B = `621.85 ms` (**1.064x, +6.4% slower**)
+- *Transparent Negative Finding*: Non-linear coordinate transformation around frozen velocity fields shifts trajectory manifolds without co-adaptation, yielding identical error while increasing CPU latency.
+
+#### 6. Fiber-Constrained Audio Evaluation & Post-Synthesis Audit
+Evaluated on full audio track (`runs/chasing-horizons-auto/listen.wav`, 48 kHz stereo):
+- **In-Memory STFT Passband Deviation (<3 kHz)**: Strictly `0.00e+00` (**100% bitwise untouched STFT bins**).
+- **Max Recurrent State Norm**: `5.6977 <= 56.5685` (**PASS**: strictly respects analytical Lyapunov bound).
+- **Post-Synthesis Time-Domain Waveform Deviation (<3 kHz)**:
+  - Waveform RMS Deviation: `3.9567e-08`
+  - Waveform Peak Deviation: `3.7804e-06`
+  - Low-Band Waveform NMSE: `3.9845e-14`
+- **Reconstructed Spectral Leakage (<3 kHz)**: `-125.34 dB` (synthesis window overlap-add spectral sideband convolution).
+- **Transient Attack Timing Shift**: `0.00 samples` (exact temporal sample alignment).
+- **Attack Envelope Correlation**: `1.000` (100% transient envelope fidelity).
+- **Band-Specific Stereo Coherence**: Low (<3 kHz) = `0.736`, High ($\ge$ 3 kHz) = `0.621`.
+- **Audio Reconstruction Fidelity**: Full-Band SNR = `52.0 dB`, Full-Band LSD = `0.04 dB`.
+- **Production Champions Intact**: Production Flow models (`artifacts/rich-low-sfht/state-sfht.json`, `artifacts/rich-mid-v1`, `spatial`, `master`) and default auto-mastering pipeline remain 100% frozen.
+
 
 
 
