@@ -120,6 +120,9 @@ enum Commands {
         /// Opt-in fractal tendril / self-similar harmonic scale coupling intensity in [0.0, 1.0] (0.0 = bypass).
         #[arg(long, default_value_t = 0.0)]
         fractal_tendrils: f32,
+        /// Force specialists to run unconditionally even if acoustic assessment advises abstention.
+        #[arg(long, default_value_t = false)]
+        force_specialists: bool,
     },
     /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
@@ -822,6 +825,7 @@ fn run() -> Result<()> {
             export_sdcard,
             no_export_sdcard,
             fractal_tendrils,
+            force_specialists,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -850,6 +854,7 @@ fn run() -> Result<()> {
             &backend,
             export_sdcard && !no_export_sdcard,
             fractal_tendrils,
+            force_specialists,
         ),
         Commands::Microstructure {
             input,
@@ -1847,6 +1852,7 @@ fn auto_master_pipeline(
     backend: &str,
     export_sdcard: bool,
     fractal_tendrils: f32,
+    force_specialists: bool,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
 
@@ -2011,49 +2017,79 @@ fn auto_master_pipeline(
     };
 
     // Stage 1: High-Resolution SFHT Sub-Bass Restoration
+    let sub_auth = pre_profile.authorities.sub_bass_authority;
     if let Some(ref m_path) = resolved_sfht {
-        println!("\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin) ---", low_cutoff);
-        let t0 = std::time::Instant::now();
-        current_audio = sfht::restore_sfht(m_path, &current_audio, low_cutoff, steps, strength)?;
-        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
-        let stage1_wav = out_dir.join("stage1_sfht.wav");
-        native_audio::write(&stage1_wav, &current_audio, false)?;
+        if !force_specialists && sub_auth <= 0.0 {
+            println!(
+                "\n--- Stage 1: Sub-Bass Restoration ABSTAINED (sub_authority={:.2}: low-end is healthy & focused) ---",
+                sub_auth
+            );
+        } else {
+            let eff_strength = if force_specialists {
+                strength
+            } else {
+                strength * sub_auth
+            };
+            println!(
+                "\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin, auth={:.2}, strength={:.2}) ---",
+                low_cutoff, sub_auth, eff_strength
+            );
+            let t0 = std::time::Instant::now();
+            current_audio =
+                sfht::restore_sfht(m_path, &current_audio, low_cutoff, steps, eff_strength)?;
+            println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+            let stage1_wav = out_dir.join("stage1_sfht.wav");
+            native_audio::write(&stage1_wav, &current_audio, false)?;
+        }
     } else {
         println!("\n--- Stage 1: Sub-bass restoration skipped (disabled or model not found) ---");
     }
 
     // Stage 2: Mid-Band CFM Restoration
+    let mid_auth = pre_profile.authorities.mid_flow_authority;
     if let Some(ref m_path) = resolved_mid {
-        println!(
-            "\n--- Stage 2: Mid-Band CFM Restoration (cutoff={:.1}Hz, ceiling={:.1}Hz) ---",
-            mid_cutoff, mid_ceiling
-        );
-        let t0 = std::time::Instant::now();
-        let stage2_dir = out_dir.join("stage2_mid");
-        let stage2_in = out_dir.join("stage2_in.wav");
-        native_audio::write(&stage2_in, &current_audio, false)?;
-        rich_mid::restore(
-            m_path,
-            &stage2_in,
-            mid_cutoff,
-            mid_ceiling,
-            false,
-            steps,
-            strength,
-            chunk_seconds,
-            overlap_seconds,
-            false,
-            false,
-            backend,
-            &stage2_dir,
-        )?;
-        let mid_wav = if stage2_dir.join("restored.wav").exists() {
-            stage2_dir.join("restored.wav")
+        if !force_specialists && mid_auth <= 0.0 {
+            println!(
+                "\n--- Stage 2: Mid-Band CFM Restoration ABSTAINED (mid_authority={:.2}: midrange body is balanced) ---",
+                mid_auth
+            );
         } else {
-            stage2_dir.join("reconstructed.wav")
-        };
-        current_audio = native_audio::read_entire(&mid_wav)?;
-        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+            let eff_strength = if force_specialists {
+                strength
+            } else {
+                strength * mid_auth
+            };
+            println!(
+                "\n--- Stage 2: Mid-Band CFM Restoration (cutoff={:.1}Hz, ceiling={:.1}Hz, auth={:.2}, strength={:.2}) ---",
+                mid_cutoff, mid_ceiling, mid_auth, eff_strength
+            );
+            let t0 = std::time::Instant::now();
+            let stage2_dir = out_dir.join("stage2_mid");
+            let stage2_in = out_dir.join("stage2_in.wav");
+            native_audio::write(&stage2_in, &current_audio, false)?;
+            rich_mid::restore(
+                m_path,
+                &stage2_in,
+                mid_cutoff,
+                mid_ceiling,
+                false,
+                steps,
+                eff_strength,
+                chunk_seconds,
+                overlap_seconds,
+                false,
+                false,
+                backend,
+                &stage2_dir,
+            )?;
+            let mid_wav = if stage2_dir.join("restored.wav").exists() {
+                stage2_dir.join("restored.wav")
+            } else {
+                stage2_dir.join("reconstructed.wav")
+            };
+            current_audio = native_audio::read_entire(&mid_wav)?;
+            println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+        }
     } else {
         println!("\n--- Stage 2: Mid-band restoration skipped (disabled or model not found) ---");
     }
@@ -2104,32 +2140,59 @@ fn auto_master_pipeline(
     }
 
     // Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth)
+    let spat_auth = pre_profile.authorities.spatial_cleanup_authority;
     if spatial && current_audio.channels.len() == 2 {
-        println!("\n--- Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ---");
-        let t0 = std::time::Instant::now();
-        let spatial_cfg = spatial::SpatialConfig {
-            mono_bass_hz,
-            width_factor,
-            room_depth,
-            min_correlation: 0.20,
-        };
-        let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial_cfg);
-        println!(
-            "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz | Sub Side Leak: {:.1} dB",
-            spat_metrics.initial_correlation,
-            spat_metrics.final_correlation,
-            spat_metrics.mono_bass_hz,
-            spat_metrics.side_energy_below_cutoff_db
-        );
-        current_audio = spat_audio;
-        println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
-        native_audio::write(&out_dir.join("stage4_spatial.wav"), &current_audio, false)?;
+        if !force_specialists && spat_auth <= 0.0 {
+            println!(
+                "\n--- Stage 4: 3D Spatial Acoustics ABSTAINED (spatial_authority={:.2}: audio is pure mono or narrow) ---",
+                spat_auth
+            );
+        } else {
+            let eff_width = if force_specialists {
+                width_factor
+            } else {
+                1.0 + (width_factor - 1.0) * spat_auth
+            };
+            let eff_room_depth = if force_specialists {
+                room_depth
+            } else {
+                room_depth * spat_auth
+            };
+            println!(
+                "\n--- Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth, auth={:.2}, width={:.2}x, depth={:.2}) ---",
+                spat_auth, eff_width, eff_room_depth
+            );
+            let t0 = std::time::Instant::now();
+            let spatial_cfg = spatial::SpatialConfig {
+                mono_bass_hz,
+                width_factor: eff_width,
+                room_depth: eff_room_depth,
+                min_correlation: 0.20,
+            };
+            let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial_cfg);
+            println!(
+                "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz | Sub Side Leak: {:.1} dB",
+                spat_metrics.initial_correlation,
+                spat_metrics.final_correlation,
+                spat_metrics.mono_bass_hz,
+                spat_metrics.side_energy_below_cutoff_db
+            );
+            current_audio = spat_audio;
+            println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
+            native_audio::write(&out_dir.join("stage4_spatial.wav"), &current_audio, false)?;
+        }
     }
 
     // Stage 5: Dynamic Post-Mastering
+    let glue_auth = pre_profile.authorities.master_glue_authority;
+    let eff_glue_ratio = if force_specialists {
+        glue_ratio
+    } else {
+        1.0 + (glue_ratio - 1.0) * glue_auth
+    };
     println!(
-        "\n--- Stage 5: Dynamic Post-Mastering (Target: {:.1} LUFS, Ceiling: {:.1} dBTP) ---",
-        target_lufs, ceiling_db
+        "\n--- Stage 5: Dynamic Post-Mastering (Target: {:.1} LUFS, Ceiling: {:.1} dBTP, Glue Ratio: {:.2}) ---",
+        target_lufs, ceiling_db, eff_glue_ratio
     );
     let t0 = std::time::Instant::now();
     let master_res = master::master_audio(
@@ -2137,7 +2200,7 @@ fn auto_master_pipeline(
         target_lufs,
         ceiling_db,
         glue_threshold_db,
-        glue_ratio,
+        eff_glue_ratio,
         sidechain_hp_hz,
     )?;
     current_audio = master_res.mastered;
@@ -2350,6 +2413,8 @@ fn auto_master_pipeline(
             "glue_ratio": glue_ratio,
             "sidechain_hp_hz": sidechain_hp_hz,
             "backend": backend,
+            "fractal_tendrils": fractal_tendrils,
+            "force_specialists": force_specialists,
         },
         "pre_assessment": pre_profile,
         "post_assessment": post_profile,
