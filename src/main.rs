@@ -124,6 +124,15 @@ enum Commands {
         /// Force specialists to run unconditionally even if acoustic assessment advises abstention.
         #[arg(long, default_value_t = false)]
         force_specialists: bool,
+        /// Opt-in GTF Phase II persistent Morphic Acoustic Controller (dual-timescale M/S microtexture modulation & sub-bass damping).
+        #[arg(long, default_value_t = false)]
+        morphic_gtf: bool,
+        /// Morphic controller modulation intensity in [0.0, 1.0].
+        #[arg(long, default_value_t = 1.0)]
+        morphic_strength: f32,
+        /// Calibrated shrinkage error correction on SFHT Flow endpoint (e.g. 0.88).
+        #[arg(long)]
+        sfht_shrinkage: Option<f32>,
     },
     /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
@@ -842,6 +851,9 @@ fn run() -> Result<()> {
             no_export_sdcard,
             fractal_tendrils,
             force_specialists,
+            morphic_gtf,
+            morphic_strength,
+            sfht_shrinkage,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -871,6 +883,9 @@ fn run() -> Result<()> {
             export_sdcard && !no_export_sdcard,
             fractal_tendrils,
             force_specialists,
+            morphic_gtf,
+            morphic_strength,
+            sfht_shrinkage,
         ),
         Commands::Microstructure {
             input,
@@ -1884,6 +1899,9 @@ fn auto_master_pipeline(
     export_sdcard: bool,
     fractal_tendrils: f32,
     force_specialists: bool,
+    morphic_gtf: bool,
+    morphic_strength: f32,
+    sfht_shrinkage: Option<f32>,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
 
@@ -2056,14 +2074,20 @@ fn auto_master_pipeline(
                 sub_auth
             );
         } else {
+            let shrink = sfht_shrinkage.unwrap_or(1.0);
             let eff_strength = if force_specialists {
                 strength
             } else {
                 strength * sub_auth
+            } * shrink;
+            let shrink_label = if let Some(s) = sfht_shrinkage {
+                format!(", shrinkage={:.2}x", s)
+            } else {
+                String::new()
             };
             println!(
-                "\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin, auth={:.2}, strength={:.2}) ---",
-                low_cutoff, sub_auth, eff_strength
+                "\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin, auth={:.2}, strength={:.2}{}) ---",
+                low_cutoff, sub_auth, eff_strength, shrink_label
             );
             let t0 = std::time::Instant::now();
             current_audio =
@@ -2212,6 +2236,40 @@ fn auto_master_pipeline(
             println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
             native_audio::write(&out_dir.join("stage4_spatial.wav"), &current_audio, false)?;
         }
+    }
+
+    // Stage 4.5: GTF Persistent Morphic Acoustic Controller (Opt-in)
+    if morphic_gtf {
+        println!(
+            "\n--- Stage 4.5: GTF Persistent Morphic Acoustic Controller (strength={:.2}) ---",
+            morphic_strength
+        );
+        let t0 = std::time::Instant::now();
+        let morphic_cfg = gtf::MorphicConfig {
+            sub_bass_damping_authority: 0.25 * morphic_strength,
+            microtexture_authority: 0.15 * morphic_strength,
+            ..gtf::MorphicConfig::default()
+        };
+        let (morphic_audio, morphic_rep) = gtf::process_morphic_audio(&current_audio, &morphic_cfg);
+        println!(
+            "  Completed in {:.2}s | Mean Confidence: {:.3} | Mean Authority: {:.3} | Low RMS Delta: {:.4e}",
+            t0.elapsed().as_secs_f64(),
+            morphic_rep.mean_confidence,
+            morphic_rep.mean_authority,
+            morphic_rep.post_synthesis_low_band_rms_deviation
+        );
+        println!(
+            "  Full-Band SNR: {:.1} dB | Spectral Leakage: {:.2} dB | Mono Guard: [{}]",
+            morphic_rep.full_band_snr_db,
+            morphic_rep.spectral_leakage_db,
+            if morphic_rep.mono_compatibility_passed {
+                "PASS"
+            } else {
+                "FAIL"
+            }
+        );
+        current_audio = morphic_audio;
+        native_audio::write(&out_dir.join("stage4_5_morphic.wav"), &current_audio, false)?;
     }
 
     // Stage 5: Dynamic Post-Mastering
@@ -2391,7 +2449,11 @@ fn auto_master_pipeline(
                 .file_stem()
                 .and_then(|s| s.to_str())
                 .unwrap_or("Mastered");
-            let sanitized_stem = format!("{} [Highband Mastered]", base_stem);
+            let sanitized_stem = if morphic_gtf {
+                format!("{} [Highband Morphic Mastered]", base_stem)
+            } else {
+                format!("{} [Highband Mastered]", base_stem)
+            };
             let target_wav = sd_download.join(format!("{}.wav", sanitized_stem));
             if let Err(e) = std::fs::copy(&listen_wav, &target_wav) {
                 eprintln!("Warning: failed copying to {}: {}", target_wav.display(), e);
