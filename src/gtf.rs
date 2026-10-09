@@ -3399,6 +3399,8 @@ pub enum MorphicModulationMode {
     DspSmoother,
     /// Mode 3: Full Morphic Geometric Resonant Memory (staggered Givens + calibrated half-lives)
     GeometricMemory,
+    /// Mode 4: Port-Hamiltonian Passive Resonant Material (unconditionally passive modal exchange)
+    PortHamiltonian,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3506,6 +3508,49 @@ impl MorphicAcousticController {
     }
 }
 
+/// Discrete-time implicit midpoint step for 4D Port-Hamiltonian acoustic material.
+/// dz/dt = (J - R) grad H(z) + G u.
+/// Strictly energy-dissipative (passive): H(z_{k+1}) <= H(z_k) unconditionally when u=0.
+#[inline]
+pub fn step_port_hamiltonian_4d(z: &mut [f32; 4], dt: f32, u: f32) {
+    // Block 1 (modes 0 & 1): Air texture modal resonance pair
+    // omega_1 = 16.0 rad/s (shimmer exchange), gamma_0 = 0.5 (attack decay), gamma_1 = 2.0 (high-frequency dissipation)
+    let w1 = 16.0f32;
+    let g0 = 0.5f32;
+    let g1 = 2.0f32;
+    let half_dt = 0.5f32 * dt;
+
+    let a1 = 1.0f32 + half_dt * g0;
+    let b1 = half_dt * w1;
+    let c1 = 1.0f32 + half_dt * g1;
+    let det1 = a1 * c1 + b1 * b1;
+    if det1 > 1e-12 {
+        let inv_det1 = 1.0f32 / det1;
+        let rhs0 = (2.0f32 - a1) * z[0] - b1 * z[1] + dt * u;
+        let rhs1 = b1 * z[0] + (2.0f32 - c1) * z[1];
+        z[0] = inv_det1 * (c1 * rhs0 - b1 * rhs1);
+        z[1] = inv_det1 * (b1 * rhs0 + a1 * rhs1);
+    }
+
+    // Block 2 (modes 2 & 3): Sub-bass damping / mud resonance pair
+    // omega_2 = 32.0 rad/s, gamma_2 = 1.0, gamma_3 = 4.0
+    let w2 = 32.0f32;
+    let g2 = 1.0f32;
+    let g3 = 4.0f32;
+
+    let a2 = 1.0f32 + half_dt * g2;
+    let b2 = half_dt * w2;
+    let c2 = 1.0f32 + half_dt * g3;
+    let det2 = a2 * c2 + b2 * b2;
+    if det2 > 1e-12 {
+        let inv_det2 = 1.0f32 / det2;
+        let rhs2 = (2.0f32 - a2) * z[2] - b2 * z[3] + dt * (0.5f32 * u);
+        let rhs3 = b2 * z[2] + (2.0f32 - c2) * z[3];
+        z[2] = inv_det2 * (c2 * rhs2 - b2 * rhs3);
+        z[3] = inv_det2 * (b2 * rhs2 + a2 * rhs3);
+    }
+}
+
 /// Processes stereo audio through the Morphic Acoustic Controller with bit-exact passband locking.
 pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, MorphicAuditReport) {
     let stft = Stft::default();
@@ -3521,6 +3566,8 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
     let controller = MorphicAcousticController::new(config.sub_bass_damping_authority, 420042);
     let mut z_mid = vec![0.0f32; 8];
     let mut z_side = vec![0.0f32; 8];
+    let mut ph_z_mid = [0.0f32; 4];
+    let mut ph_z_side = [0.0f32; 4];
 
     let mut conf_accum = 0.0f32;
     let mut auth_accum = 0.0f32;
@@ -3621,6 +3668,19 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
                 let gm = (1.0 + drive_m).clamp(0.85, 1.15);
                 let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
                 (gm, gs, sub_damp)
+            }
+            MorphicModulationMode::PortHamiltonian => {
+                let dt_hop = dt.min(0.05);
+                let u_m = flux;
+                let u_s = flux * (1.0 - coherence);
+                step_port_hamiltonian_4d(&mut ph_z_mid, dt_hop, u_m);
+                step_port_hamiltonian_4d(&mut ph_z_side, dt_hop, u_s);
+                let drive_m = (ph_z_mid[1] * 0.15).tanh() * config.microtexture_authority;
+                let drive_s = if is_stereo { (ph_z_side[1] * 0.15).tanh() * config.microtexture_authority } else { 0.0 };
+                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
+                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
+                let sd = if sub_ratio > 0.25 { (sub_ratio - 0.25).min(1.0) * config.sub_bass_damping_authority } else { 0.0 };
+                (gm, gs, sd)
             }
         };
 
@@ -4507,6 +4567,7 @@ mod tests {
         assert!(rep_dsp.post_synthesis_low_band_rms_deviation < 1e-4);
 
         // 4. Morphic Geometric Resonant Memory
+        // 4. Morphic Geometric Resonant Memory
         let cfg_geom = MorphicConfig {
             mode: MorphicModulationMode::GeometricMemory,
             crossover_hz: 8000.0,
@@ -4517,6 +4578,17 @@ mod tests {
         assert!(rep_geom.mono_compatibility_passed);
         assert!(rep_geom.post_synthesis_low_band_rms_deviation < 1e-4);
 
+        // 5. Port-Hamiltonian Passive Resonant Material
+        let cfg_ph = MorphicConfig {
+            mode: MorphicModulationMode::PortHamiltonian,
+            crossover_hz: 8000.0,
+            microtexture_authority: 0.20,
+            ..MorphicConfig::default()
+        };
+        let (out_ph, rep_ph) = process_morphic_audio(&audio, &cfg_ph);
+        assert!(rep_ph.mono_compatibility_passed);
+        assert!(rep_ph.post_synthesis_low_band_rms_deviation < 1e-4);
+
         // Check that high-band actually has different spectral modulation between Bypass and Geometric
         let diff_rms: f32 = out_geom.channels[0]
             .iter()
@@ -4526,6 +4598,15 @@ mod tests {
             .sqrt()
             / n as f32;
         assert!(diff_rms > 0.0, "Geometric memory must modulate audio");
+
+        let diff_ph_rms: f32 = out_ph.channels[0]
+            .iter()
+            .zip(&out_bypass.channels[0])
+            .map(|(a, b)| (a - b).powi(2))
+            .sum::<f32>()
+            .sqrt()
+            / n as f32;
+        assert!(diff_ph_rms > 0.0, "Port-Hamiltonian material must modulate audio");
     }
 }
 

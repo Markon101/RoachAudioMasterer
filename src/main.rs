@@ -132,8 +132,8 @@ enum Commands {
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
-        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric.
-        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric"])]
+        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian.
+        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian"])]
         morphic_mode: String,
         /// Crossover frequency in Hz above which microtexture modulation applies.
         #[arg(long, default_value_t = 8000.0)]
@@ -2305,6 +2305,7 @@ fn auto_master_pipeline(
             "bypass" => gtf::MorphicModulationMode::Bypass,
             "memoryless" => gtf::MorphicModulationMode::Memoryless,
             "dsp-smoother" => gtf::MorphicModulationMode::DspSmoother,
+            "port-hamiltonian" => gtf::MorphicModulationMode::PortHamiltonian,
             _ => gtf::MorphicModulationMode::GeometricMemory,
         };
         let morphic_cfg = gtf::MorphicConfig {
@@ -2514,7 +2515,11 @@ fn auto_master_pipeline(
                 .and_then(|s| s.to_str())
                 .unwrap_or("Mastered");
             let sanitized_stem = if morphic_gtf {
-                format!("{} [Highband Morphic Mastered]", base_stem)
+                if morphic_mode == "port-hamiltonian" {
+                    format!("{} [Highband Morphic M4 Mastered]", base_stem)
+                } else {
+                    format!("{} [Highband Morphic Mastered]", base_stem)
+                }
             } else {
                 format!("{} [Highband Mastered]", base_stem)
             };
@@ -3434,6 +3439,7 @@ fn run_morphic_compare_cli(
         ("m1_memoryless", "Memoryless Instantaneous Flux Modulator", gtf::MorphicModulationMode::Memoryless),
         ("m2_dsp_smoother", "First-Order One-Pole DSP Smoother", gtf::MorphicModulationMode::DspSmoother),
         ("m3_geometric", "GTF Phase II Symplectic Geometric Memory", gtf::MorphicModulationMode::GeometricMemory),
+        ("m4_port_hamiltonian", "Port-Hamiltonian Passive Resonant Material", gtf::MorphicModulationMode::PortHamiltonian),
     ];
 
     struct ModeResult {
@@ -3520,6 +3526,8 @@ fn run_morphic_compare_cli(
     let diff_m3_m0_30db = diff_audio(&results[3].mastered, &results[0].mastered, 30.0);
     let diff_m3_m0_60db = diff_audio(&results[3].mastered, &results[0].mastered, 60.0);
     let diff_m3_m1_30db = diff_audio(&results[3].mastered, &results[1].mastered, 30.0);
+    let diff_m4_m0_30db = diff_audio(&results[4].mastered, &results[0].mastered, 30.0);
+    let diff_m4_m3_30db = diff_audio(&results[4].mastered, &results[3].mastered, 30.0);
 
     let path_diff_m3_m0_30 = out.join("diff_m3_vs_m0_gain30db.wav");
     native_audio::write(&path_diff_m3_m0_30, &diff_m3_m0_30db, true)?;
@@ -3527,6 +3535,10 @@ fn run_morphic_compare_cli(
     native_audio::write(&path_diff_m3_m0_60, &diff_m3_m0_60db, true)?;
     let path_diff_m3_m1_30 = out.join("diff_m3_vs_m1_dynamics_gain30db.wav");
     native_audio::write(&path_diff_m3_m1_30, &diff_m3_m1_30db, true)?;
+    let path_diff_m4_m0_30 = out.join("diff_m4_vs_m0_gain30db.wav");
+    native_audio::write(&path_diff_m4_m0_30, &diff_m4_m0_30db, true)?;
+    let path_diff_m4_m3_30 = out.join("diff_m4_vs_m3_gain30db.wav");
+    native_audio::write(&path_diff_m4_m3_30, &diff_m4_m3_30db, true)?;
 
     // SDCard Export
     if export_sdcard {
@@ -3538,8 +3550,11 @@ fn run_morphic_compare_cli(
                 ("Chasing Horizons - Morphic M1 [Memoryless Mastered].wav", out.join("m1_memoryless_listen.wav")),
                 ("Chasing Horizons - Morphic M2 [DSP Smoother Mastered].wav", out.join("m2_dsp_smoother_listen.wav")),
                 ("Chasing Horizons - Morphic M3 [Geometric Memory Mastered].wav", out.join("m3_geometric_listen.wav")),
+                ("Chasing Horizons - Morphic M4 [Port-Hamiltonian Material Mastered].wav", out.join("m4_port_hamiltonian_listen.wav")),
                 ("Chasing Horizons - Morphic M3 vs M0 [Geometric Delta +30dB].wav", path_diff_m3_m0_30.clone()),
                 ("Chasing Horizons - Morphic M3 vs M1 [Memory Dynamics Delta +30dB].wav", path_diff_m3_m1_30.clone()),
+                ("Chasing Horizons - Morphic M4 vs M0 [Port-Hamiltonian Delta +30dB].wav", path_diff_m4_m0_30.clone()),
+                ("Chasing Horizons - Morphic M4 vs M3 [PH vs Geometric Delta +30dB].wav", path_diff_m4_m3_30.clone()),
             ];
             for (dst_name, src_path) in &exports {
                 let dst_path = sdcard_dir.join(dst_name);
