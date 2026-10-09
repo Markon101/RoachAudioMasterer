@@ -665,6 +665,43 @@ Auditioned and verified end-to-end autonomous mastering with the integrated GTF 
 - [`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20Mastered%5D.flac) (18 MB, Lossless FLAC)
 - Baseline champion for A/B comparison: [`/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Mastered%5D.wav)
 
+#### 7. Full-Track Song Test on `Chasing Horizons (1).wav` (OpenCL GPU on Adreno 830 + Morphic GTF)
+Auditioned and verified the full 3m 36s track with OpenCL hardware acceleration on Qualcomm Adreno 830 GPU:
+- **Input**: `/sdcard/Download/OLD_WAVS/Chasing Horizons (1).wav` (216.40s / 3m 36s, 10,387,200 frames @ 48 kHz stereo).
+- **Execution Run**: `runs/chasing-horizons-1-morphic-opencl`
+- **Configuration**: `auto-master --input "/sdcard/Download/OLD_WAVS/Chasing Horizons (1).wav" --backend opencl --morphic-gtf --morphic-strength 1.0 --sfht-shrinkage 0.88`
+- **Hardware Acceleration**: Qualcomm Adreno 830 GPU (`OCL_ICD_ASSUME_ICD_EXTENSION=1` auto-configured in binary entry point).
+
+| Processing Stage | Latency | Actions & Numerical Diagnostics |
+|---|---|---|
+| **Stage 0: Pre-Assessment** | 0.82s | Sub: 29.7 dBFS (authority 0.00 $\to$ **ABSTAIN**); Mid: 12.1 dBFS (auth 0.60); Spatial: 0.90; Glue: 0.85 |
+| **Stage 1: SFHT Sub-Bass** | 0.00s | Low-end healthy; specialist cleanly abstained |
+| **Stage 2: Mid-Band CFM (OpenCL)** | **140.70s** | **27 WOLA streaming chunks @ ~5.2s/chunk** (**~7x GPU speedup** vs ~36s/chunk on CPU). Total mid restoration faster than real-time playback |
+| **Stage 3: Clean Polish** | 1.76s | High-frequency adaptive de-fizz & bounded auto-EQ |
+| **Stage 4: 3D Spatial Acoustics** | 0.76s | Mono sub-bass guard cleaned sub-side leak to -34.8 dB; stereo width 1.13x |
+| **Stage 4.5: Morphic Controller** | **4.75s** | Mean confidence: 0.907; authority: 0.023; Low-band RMS delta: **$1.1152 \times 10^{-8}$**; Full-band SNR: **138.8 dB**; Leakage: **-141.27 dB**; Mono Guard: **PASS** |
+| **Stage 5: Dynamic Post-Master** | 4.99s | Pre-gain: +6.05 dB; Glue GR: 2.74 dB; Limiter GR: 3.09 dB; Target: **-11.01 LUFS**; Ceiling: **-1.00 dBTP** |
+| **Total End-to-End Runtime** | **173.8s** | **0.80x of real-time playback** (faster than real-time for full 3m 36s track) |
+
+**Before vs After Mastering Comparison**:
+| Metric | Original Input | Highband Morphic Master (OpenCL) | Delta | Perceptual & Structural Meaning |
+|---|---|---|---|---|
+| **Integrated Loudness** | -16.23 LUFS | **-11.01 LUFS** | **+5.21 LU** | Exact hit on -11.0 LUFS streaming target |
+| **True Peak** | -4.66 dBTP | **-1.00 dBTP** | +3.66 dBTP | Ceiling strictly held at -1.00 dBTP |
+| **Crest Factor** | 14.05 dB | 12.52 dB | -1.53 dB | Dynamic transient body preserved |
+| **Inter-Channel Correlation** | 0.740 | 0.731 | -0.010 | Balanced stereo field expansion |
+| **Sub-Bass Side Leak Ratio** | 0.215 | **0.086** | **-59.8%** | Center mono focus on sub-bass frequencies |
+| **Sub Instability Critic** | 0.353 | **0.098** | **-0.255** | Sub-bass muddiness and phase drift resolved |
+| **Composite Defect Index** | 0.510 | **0.495** | -0.015 | Net defect reduction across full 3.6 min |
+| **Mono Compatibility** | — | **PASS** | Exact | Zero phase cancellation on mono sum |
+| **Transient Timing** | — | **PASS** | Exact | Zero attack smearing or onset shift |
+
+**Audition Deliverables (Direct on Phone Storage)**:
+- [`/sdcard/Download/Chasing Horizons (1) [Highband Morphic Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20Mastered%5D.wav) (40 MB, 16-bit PCM)
+- [`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20Mastered%5D.flac) (27 MB, Lossless FLAC)
+- Baseline champion for direct A/B switching: [`/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Mastered%5D.wav) (40 MB)
+
+
 
 
 

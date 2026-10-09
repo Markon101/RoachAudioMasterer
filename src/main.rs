@@ -3270,6 +3270,11 @@ fn run_gtf_benchmark_cli(
 }
 
 fn main() {
+    #[cfg(feature = "opencl")]
+    if std::env::var("OCL_ICD_ASSUME_ICD_EXTENSION").is_err() {
+        std::env::set_var("OCL_ICD_ASSUME_ICD_EXTENSION", "1");
+    }
+
     if let Err(e) = run() {
         let prog = std::env::args()
             .next()
