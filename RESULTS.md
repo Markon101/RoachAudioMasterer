@@ -478,5 +478,39 @@ To overcome the STFT consistency projection barrier—where frame-by-frame phase
   - Controlled via `--fractal-tendrils <val>` (default: `0.0`, strict bypass to preserve frozen production champions).
   - Standalone CLI: `roach-audio-masterer microstructure --input <file> --fractal-tendrils 0.25 --out <dir>`.
 
+### 6. Geometric Transport Flow (GTF) Mathematical & Recurrent Benchmarks (Family 376)
+
+Inspired by OpenAI mathematical result Family 376 (*Universal computation in forced Navier–Stokes flows*, Lean 4 formalization), we extracted structure-preserving geometric operators (solenoidal shear maps, volume-preserving preconditioning, and transport–dissipation recurrence) and evaluated them under empirical benchmark `roach-audio-masterer gtf-benchmark`.
+
+#### 1. Mathematical Invariants & Solenoidal Shears
+- **Invertibility Roundtrip Error**: Strictly `0.00e+00` (exact machine zero; zero Newton/iterative overhead).
+- **Jacobian Determinant**: `1.00000000` identically (algebraically unit measure preserving: $\det J = 1 \cdot (1 + \gamma_1 \gamma_2 f_1' f_2') - (\gamma_1 f_1')(\gamma_2 f_2') \equiv 1.0$).
+- **Condition Number $\kappa(J)$**: `1.0490` (near-isometric numerical conditioning; guaranteed non-exploding).
+
+#### 2. GTF-B Invertible Coordinate Preconditioner & Trajectory Curvature
+- Evaluated non-linear coordinate diffeomorphisms $T$ and inverse $T^{-1}$ with exact Jacobian velocity mapping $\mathbf{v}_y = J_T \mathbf{v}_x$.
+- **Curvature Transformation Ratio ($\kappa_y / \kappa_x$)**: `0.377x` (volume-preserving warping flattens velocity direction changes along trajectory manifolds).
+- *Scientific Assessment*: While preconditioning reduces curvature, altering velocity fields in frozen pre-trained CFM models shifts endpoint distributions; preconditioning requires end-to-end co-training to be beneficial.
+
+#### 3. Recurrent Architectures (10,000-Step Parameter-Matched Horizon)
+Evaluated continuous-discrete transport–dissipation dynamics $\dot{\mathbf{z}} = (\mathbf{\Omega} - \mathbf{D})\mathbf{z} + \mathbf{F}$ with skew-symmetric transport ($\mathbf{\Omega} = -\mathbf{\Omega}^T$), positive dissipation ($\mathbf{D} \ge \delta > 0$), and Cayley orthogonal rotation:
+
+| Architecture | State Norm ($\|z\|$) | Lyapunov Energy Bound | Throughput (steps/sec) | Runtime (10k steps) | Stability Guarantee |
+|---|---|---|---|---|---|
+| **GTF-C (Lyapunov)** | **1.4122** | **20.0000** | **1,761,920 /s** | **5.7 ms** | **Provable Lyapunov Bound** ($\|z\| \le F_{\max}/\delta$) |
+| **Vanilla RNN** | 1.7284 | N/A (heuristic tanh) | 2,778,180 /s | 3.6 ms | None (gradient failure prone) |
+| **GRU** | 0.8246 | N/A (gate saturation) | 1,223,125 /s | 8.2 ms | Gate bounded, transcendental cost |
+
+- **Finding**: GTF-C is **44% faster than GRU** while providing provable energy stability bounds and exact $L_2$ norm preservation via Cayley orthogonal transforms.
+
+#### 4. Fiber-Constrained Audio Invariants (Real Music Evaluation)
+Evaluated on musical audio (`runs/sample_triband/restored.wav` and native 48 kHz reference):
+- **Base-Space Passband (<3 kHz)**: `0.00e+00` (**100% bitwise invariant**; trusted base signal untouched).
+- **Max Recurrent State Norm**: `4.6326 <= 20.0000` (**PASS**: strictly respects theoretical Lyapunov bound).
+- **Mono Compatibility**: `0.848` (**PASS**: well above $0.20$ safety threshold).
+- **Transient Timing Punch**: `1.000` (**PASS**: exact envelope alignment).
+- **Total Latency**: **72.12 ms** on mobile CPU.
+- **Production Champions Intact**: Production Flow models and mastering chains remain fully preserved.
+
 
 

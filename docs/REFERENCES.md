@@ -163,6 +163,17 @@ The rich sprint additionally uses these primary sources, checked 2026-10-05:
   [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/).**
   Distill, 5(2):e23. Local, recurrent dynamical update rules operating on spatial lattices. Motivates Prototype Family B's microscopic recurrent spectral dynamics on local complex STFT patches.
 
+## Geometric transport flow and fluid computation references
+
+- **R25 — OpenAI (2025/2026),
+  [Universal computation in forced Navier–Stokes flows (Family 376)](https://github.com/openai/math/blob/main/lean/docs/376.md).**
+  Lean 4 mathematical formalization of universal computation embedded into forced Navier–Stokes equations, supported by manuscripts:
+  - *Finite Instructions and Solenoidal Shear Flows*
+  - *Incompressible Box Transport and Finite Computation*
+  - *Geometric Programs for Solenoidal Forcing*
+  - *Computation under Rapidly Vanishing Navier–Stokes Forcing*
+  Source for constructive solenoidal shear flows, alternating coordinate permutations, and volume-preserving box transport. We extracted finite-precision structure-preserving operators: closed-form solenoidal shears ($\det J \equiv 1.0$), invertible coordinate preconditioning with exact velocity chain rule, and continuous-discrete transport–dissipation recurrence with Cayley orthogonal preservation and analytical Lyapunov energy bounds. Code: `src/gtf.rs`, `docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md`. Paper results demonstrate asymptotic universality of forced fluid PDE solutions; they do not imply automated superiority for generative music modeling. Empirical audio and recurrent performance are evaluated directly in `RESULTS.md`.
+
 Scope notes come from the original papers and standards organizations, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown and official ITU/EBU PDFs supplied the standards text. Full copyrighted text is
 not redistributed in this repository.
