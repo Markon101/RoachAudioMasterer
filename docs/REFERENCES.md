@@ -174,6 +174,9 @@ The rich sprint additionally uses these primary sources, checked 2026-10-05:
   - *Computation under Rapidly Vanishing Navier–Stokes Forcing*
   Source for constructive solenoidal shear flows, alternating coordinate permutations, and volume-preserving box transport. We extracted finite-precision structure-preserving operators: closed-form solenoidal shears ($\det J \equiv 1.0$), invertible coordinate preconditioning with exact velocity chain rule, and continuous-discrete transport–dissipation recurrence with Cayley orthogonal preservation and analytical Lyapunov energy bounds. Code: `src/gtf.rs`, `docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md`. Paper results demonstrate asymptotic universality of forced fluid PDE solutions; they do not imply automated superiority for generative music modeling. Empirical audio and recurrent performance are evaluated directly in `RESULTS.md`.
 
+- **R26 — Fant, G. (1960), Acoustic Theory of Speech Production (Mouton & Co); Fletcher, N. H. and Rossing, T. D. (1998), The Physics of Musical Instruments (Springer).**
+  Physical acoustic foundations for procedural multi-track stem synthesis in `src/rich_synth.rs`: Liljencrants-Fant glottal flow pulses and formant resonance clusters ($F_1$--$F_4$) for vocal bite, frequency-dependent stiff-string inharmonicity dispersion ($f_k = k f_0 \sqrt{1 + B k^2}$) for plucked acoustic chords, and resonant modal shell damping with high-band ($2\text{--}8\text{ kHz}$) wire rattle for transient snare snaps. Used to train the expanded Continuous Flow Matching mid-band vector field (`artifacts/rich-mid-v2/`) up to the 8.0 kHz crossover.
+
 Scope notes come from the original papers and standards organizations, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown and official ITU/EBU PDFs supplied the standards text. Full copyrighted text is
 not redistributed in this repository.

@@ -203,6 +203,7 @@ pub fn generate(seed: u64) -> (Audio, Recipe) {
         },
     )
 }
+#[allow(dead_code)]
 pub fn generate_mid(seed: u64) -> (Audio, Recipe) {
     let family = seed as usize % 12;
     let damage = Damage::mid_range(seed ^ 0x91884730);
@@ -669,6 +670,334 @@ pub fn apply_ai_codec_degradation(audio: &mut Audio, seed: u64) {
     }
 }
 
+/// Generates a transient snare / percussion snap with fundamental pop (180-260 Hz),
+/// shell resonance (450-680 Hz), and snare wire high-band snap (2.0-8.0 kHz).
+pub fn synthesize_snare_snap(seed: u64) -> Audio {
+    let mut rng = Rng(seed ^ 0x61a7c519);
+    let n = SAMPLES;
+    let rate = RATE as f32;
+    let mut channels = vec![vec![0.0f32; n]; 2];
+
+    let pan = rng.range(-0.4, 0.4);
+    let (gl, gr) = (
+        ((pan + 1.0) * PI / 4.0).cos(),
+        ((pan + 1.0) * PI / 4.0).sin(),
+    );
+
+    let pop_f0 = rng.range(220.0, 310.0);
+    let pop_f_end = rng.range(150.0, 190.0);
+    let shell_f1 = rng.range(440.0, 520.0);
+    let shell_f2 = rng.range(600.0, 720.0);
+
+    let mut phase_pop = rng.range(0.0, TAU);
+    let mut phase_shell1 = rng.range(0.0, TAU);
+    let mut phase_shell2 = rng.range(0.0, TAU);
+
+    let mut noise_color = 0.0f32;
+
+    for i in 0..n {
+        let t = i as f32 / rate;
+        // 1. Drum head pitch drop (exponential sweep over 30 ms)
+        let decay_pop = (-t / 0.028).exp();
+        let instant_pop_f = pop_f_end + (pop_f0 - pop_f_end) * decay_pop;
+        phase_pop = (phase_pop + TAU * instant_pop_f / rate).rem_euclid(TAU);
+        let pop = phase_pop.sin() * (-t / 0.065).exp();
+
+        // 2. Shell modal resonance
+        phase_shell1 = (phase_shell1 + TAU * shell_f1 / rate).rem_euclid(TAU);
+        phase_shell2 = (phase_shell2 + TAU * shell_f2 / rate).rem_euclid(TAU);
+        let shell = (0.6 * phase_shell1.sin() + 0.4 * phase_shell2.sin()) * (-t / 0.090).exp();
+
+        // 3. Snare wire rattle in 2 kHz - 8 kHz (shaped high noise + fast attack transient crack)
+        let w = rng.signed();
+        noise_color = 0.6 * noise_color + 0.4 * w;
+        let high_noise = (w - noise_color) * 1.5; // High-pass filtered noise
+        let wire_env = env(t, 0.0005, 0.22, 0.001, 0.065);
+        let wire = high_noise * wire_env;
+
+        // 4. Initial transient impulse crack (0.5 - 1.2 ms)
+        let crack_env = (-t / 0.0018).exp();
+        let crack = w * crack_env * 0.8;
+
+        let total = 0.5 * pop + 0.4 * shell + 0.7 * wire + crack;
+        let s = total.tanh() * 0.75;
+        channels[0][i] = s * gl;
+        channels[1][i] = s * gr;
+    }
+
+    Audio {
+        rate: RATE,
+        channels,
+    }
+}
+
+/// Generates polyphonic plucked acoustic/electric chord textures with stiff-string
+/// harmonic ladders and frequency-dependent overtone damping extending to 8 kHz.
+pub fn synthesize_plucked_chords(seed: u64) -> Audio {
+    let mut rng = Rng(seed ^ 0x3d82a17f);
+    let n = SAMPLES;
+    let rate = RATE as f32;
+    let mut channels = vec![vec![0.0f32; n]; 2];
+
+    let root = rng.range(110.0, 330.0);
+    let chord_ratios = [1.0f32, 1.4983, 2.0];
+    let num_notes = chord_ratios.len();
+    let inharmonicity = rng.range(0.0001, 0.0003);
+
+    for &ratio in &chord_ratios {
+        let f0 = root * ratio;
+        let pan = rng.range(-0.6, 0.6);
+        let (gl, gr) = (
+            ((pan + 1.0) * PI / 4.0).cos(),
+            ((pan + 1.0) * PI / 4.0).sin(),
+        );
+        let note_start = rng.range(0.0, 0.025);
+
+        let max_k = (8000.0 / f0).floor().min(32.0) as usize;
+        let phases: Vec<f32> = (0..max_k).map(|_| rng.range(0.0, TAU)).collect();
+
+        for i in 0..n {
+            let t = i as f32 / rate;
+            if t < note_start {
+                continue;
+            }
+            let u = t - note_start;
+
+            let mut note_val = 0.0f32;
+            for k in 1..=max_k {
+                let k_f = k as f32;
+                let fk = k_f * f0 * (1.0 + inharmonicity * k_f * k_f).sqrt();
+                if fk > 8200.0 {
+                    break;
+                }
+                let amp = k_f.powf(-1.1);
+                let tau_k = 0.35 / (1.0 + (fk / 2800.0).powi(2));
+                let decay = (-u / tau_k).exp();
+                let phase = phases[k - 1] + TAU * fk * u;
+                note_val += amp * phase.sin() * decay;
+            }
+
+            let s = (note_val * 0.35).tanh() / (num_notes as f32).sqrt();
+            channels[0][i] += s * gl;
+            channels[1][i] += s * gr;
+        }
+    }
+
+    Audio {
+        rate: RATE,
+        channels,
+    }
+}
+
+/// Generates solid physical sub-bass and bass fundamental anchors (45-140 Hz)
+/// with 2nd and 3rd harmonics to guide subharmonic peak routing.
+pub fn synthesize_bass_anchor(seed: u64) -> Audio {
+    let mut rng = Rng(seed ^ 0x9f182c44);
+    let n = SAMPLES;
+    let rate = RATE as f32;
+    let mut channels = vec![vec![0.0f32; n]; 2];
+
+    let f0 = rng.range(45.0, 130.0);
+    let pan = rng.range(-0.15, 0.15);
+    let (gl, gr) = (
+        ((pan + 1.0) * PI / 4.0).cos(),
+        ((pan + 1.0) * PI / 4.0).sin(),
+    );
+
+    let phase0 = rng.range(0.0, TAU);
+
+    for i in 0..n {
+        let t = i as f32 / rate;
+        let p1 = phase0 + TAU * f0 * t;
+        let p2 = 2.0 * phase0 + TAU * 2.0 * f0 * t + 0.3;
+        let p3 = 3.0 * phase0 + TAU * 3.0 * f0 * t + 0.7;
+
+        let raw = p1.sin() + 0.45 * p2.sin() + 0.20 * p3.sin();
+        let envelope = env(t, 0.002, n as f32 / rate, 0.015, 1.2);
+        let s = (raw * 1.3).tanh() * envelope * 0.75;
+        channels[0][i] = s * gl;
+        channels[1][i] = s * gr;
+    }
+
+    Audio {
+        rate: RATE,
+        channels,
+    }
+}
+
+pub const MID_MULTITRACK_FAMILIES: [&str; 12] = [
+    "silence",
+    "near_silence",
+    "vocal_formant_solo",
+    "vocal_with_aspiration",
+    "snare_transient_snap",
+    "percussion_modal_cluster",
+    "plucked_acoustic_chords",
+    "guitar_harmonic_ladder",
+    "multitrack_full_band",
+    "multitrack_vocal_and_beat",
+    "multitrack_ambient_dense",
+    "stopped_mid_abstention",
+];
+
+/// Generates a rich multi-track acoustic scene composed of speech formants,
+/// percussive transient snaps, plucked guitar/keys harmonics, and solid bass anchors.
+pub fn generate_mid_multitrack(seed: u64) -> (Audio, Recipe) {
+    let family = (seed % 12) as usize;
+    let damage = Damage::mid_range(seed ^ 0x91884730);
+    let mut rng = Rng(seed ^ 0x28bcc815);
+    let mono = rng.unit() < 0.15;
+    let mut no_upper = false;
+    let gap = None;
+
+    let mut channels = vec![vec![0.0f32; SAMPLES]; 2];
+
+    if family != 0 {
+        match family {
+            1 => {
+                let amp = rng.range(0.0005, 0.002);
+                for i in 0..SAMPLES {
+                    channels[0][i] = rng.signed() * amp;
+                    channels[1][i] = rng.signed() * amp;
+                }
+            }
+            2 => {
+                let vocal = generate_speech_vocal(seed ^ 0x1111);
+                for c in 0..2 {
+                    channels[c].copy_from_slice(&vocal.channels[c]);
+                }
+            }
+            3 => {
+                let mut vocal = generate_speech_vocal(seed ^ 0x2222);
+                apply_room_acoustics(&mut vocal, rng.range(0.15, 0.45), seed ^ 0x3333);
+                for c in 0..2 {
+                    channels[c].copy_from_slice(&vocal.channels[c]);
+                }
+            }
+            4 => {
+                let snare = synthesize_snare_snap(seed ^ 0x4444);
+                for c in 0..2 {
+                    channels[c].copy_from_slice(&snare.channels[c]);
+                }
+            }
+            5 => {
+                let snare = synthesize_snare_snap(seed ^ 0x5555);
+                let bass = synthesize_bass_anchor(seed ^ 0x6666);
+                for c in 0..2 {
+                    for i in 0..SAMPLES {
+                        channels[c][i] = 0.8 * snare.channels[c][i] + 0.5 * bass.channels[c][i];
+                    }
+                }
+            }
+            6 => {
+                let pluck = synthesize_plucked_chords(seed ^ 0x7777);
+                for c in 0..2 {
+                    channels[c].copy_from_slice(&pluck.channels[c]);
+                }
+            }
+            7 => {
+                let pluck = synthesize_plucked_chords(seed ^ 0x8888);
+                let bass = synthesize_bass_anchor(seed ^ 0x9999);
+                for c in 0..2 {
+                    for i in 0..SAMPLES {
+                        channels[c][i] = 0.7 * pluck.channels[c][i] + 0.6 * bass.channels[c][i];
+                    }
+                }
+            }
+            8 => {
+                let bass = synthesize_bass_anchor(seed ^ 0xaaaa);
+                let snare = synthesize_snare_snap(seed ^ 0xbbbb);
+                let pluck = synthesize_plucked_chords(seed ^ 0xcccc);
+                let vocal = generate_speech_vocal(seed ^ 0xdddd);
+                for c in 0..2 {
+                    for i in 0..SAMPLES {
+                        channels[c][i] = 0.55 * bass.channels[c][i]
+                            + 0.65 * snare.channels[c][i]
+                            + 0.50 * pluck.channels[c][i]
+                            + 0.60 * vocal.channels[c][i];
+                    }
+                }
+            }
+            9 => {
+                let vocal = generate_speech_vocal(seed ^ 0xeeee);
+                let snare = synthesize_snare_snap(seed ^ 0xffff);
+                let bass = synthesize_bass_anchor(seed ^ 0x1234);
+                for c in 0..2 {
+                    for i in 0..SAMPLES {
+                        channels[c][i] = 0.70 * vocal.channels[c][i]
+                            + 0.65 * snare.channels[c][i]
+                            + 0.55 * bass.channels[c][i];
+                    }
+                }
+            }
+            10 => {
+                let mut mix = synthesize_plucked_chords(seed ^ 0x2345);
+                let vocal = generate_speech_vocal(seed ^ 0x3456);
+                for c in 0..2 {
+                    for i in 0..SAMPLES {
+                        mix.channels[c][i] = 0.6 * mix.channels[c][i] + 0.6 * vocal.channels[c][i];
+                    }
+                }
+                apply_room_acoustics(&mut mix, rng.range(0.2, 0.6), seed ^ 0x4567);
+                for c in 0..2 {
+                    channels[c].copy_from_slice(&mix.channels[c]);
+                }
+            }
+            11 => {
+                no_upper = true;
+                let full = synthesize_plucked_chords(seed ^ 0x5678);
+                let cutoff = damage.cutoff * 0.8;
+                for c in 0..2 {
+                    channels[c] = crate::dsp::lowpass(&full.channels[c], RATE, cutoff, 100.0, 3.0);
+                }
+            }
+            _ => unreachable!(),
+        }
+
+        let peak = channels
+            .iter()
+            .flatten()
+            .fold(0.0f32, |p, x| p.max(x.abs()))
+            .max(1e-8);
+        let target_peak = if family == 1 {
+            rng.range(0.0005, 0.003)
+        } else {
+            rng.range(0.25, 0.75)
+        };
+        let gain = target_peak / peak;
+        for x in channels.iter_mut().flatten() {
+            *x *= gain;
+        }
+    }
+
+    if mono {
+        let avg: Vec<f32> = channels[0]
+            .iter()
+            .zip(&channels[1])
+            .map(|(a, b)| 0.5 * (a + b))
+            .collect();
+        channels[0] = avg.clone();
+        channels[1] = avg;
+    }
+
+    (
+        Audio {
+            rate: RATE,
+            channels,
+        },
+        Recipe {
+            version: 6,
+            seed,
+            family: MID_MULTITRACK_FAMILIES[family].into(),
+            no_upper,
+            no_lower: false,
+            mono,
+            gap,
+            damage,
+        },
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -761,4 +1090,28 @@ mod tests {
         apply_ai_codec_degradation(&mut degraded, 445566);
         assert!(degraded.channels.iter().flatten().all(|x| x.is_finite()));
     }
+
+    #[test]
+    fn mid_multitrack_families_are_reproducible_and_bounded() {
+        for i in 0..12 {
+            let (a, r) = generate_mid_multitrack(700008 + i);
+            let (b, _) = generate_mid_multitrack(700008 + i);
+            assert_eq!(a.channels, b.channels);
+            assert_eq!(a.frames(), SAMPLES);
+            assert!(a.channels.iter().flatten().all(|x| x.is_finite()));
+            assert!(r.damage.cutoff >= 500.0 && r.damage.cutoff <= 3500.0);
+            if r.no_upper {
+                let filtered = r.damage.apply(&a);
+                let diff = a
+                    .channels
+                    .iter()
+                    .flatten()
+                    .zip(filtered.channels.iter().flatten())
+                    .map(|(a, b)| (a - b).abs())
+                    .fold(0.0f32, f32::max);
+                assert!(diff < 2e-6, "stopped mid target has high energy {diff}");
+            }
+        }
+    }
 }
+

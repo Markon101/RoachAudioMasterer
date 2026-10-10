@@ -227,7 +227,7 @@ pub fn gradient(
         hs.push(h);
         ys.push(y);
     }
-    let waveform = mid_waveform(p, d, 6000.0, &field, 1.0);
+    let waveform = mid_waveform(p, d, MID_CEILING_HZ, &field, 1.0);
     let (loss, wg) = scene_loss::loss_and_gradient(&waveform, target, p.scale, point.region);
     let mut loss = 0.02 * loss;
     let s = Stft::default();
@@ -259,9 +259,11 @@ pub fn gradient(
     (loss, eg, hg)
 }
 
+pub const MID_CEILING_HZ: f32 = 8000.0;
+
 fn choose_mid_rows(p: &Prepared, d: Damage, r: &mut Rng) -> (Vec<Row>, Region) {
     let first = d.first_missing();
-    let last = ((6000.0 * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+    let last = ((MID_CEILING_HZ * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
     let last = last.max(first + 16).min(BINS);
     let width = 16.min(last.saturating_sub(first));
     let k = first + (r.next_u64() as usize % (last.saturating_sub(first + width) + 1));
@@ -338,7 +340,7 @@ pub fn train(
     for step in start_step..steps {
         let scene_seed = seed + (step / 4) as u64;
         if cached.as_ref().map(|x| x.0) != Some(scene_seed) {
-            let (target, recipe) = rich_synth::generate_mid(scene_seed);
+            let (target, recipe) = rich_synth::generate_mid_multitrack(scene_seed);
             let d = recipe.damage;
             let input = d.apply(&target);
             let p = scene_features::prepare(&input, d, scene_seed ^ 0x55821333);
@@ -816,11 +818,11 @@ mod tests {
         let initial = scene_features::prior_state(&p, "harmonic");
 
         // When strength is 0, waveform is exact degraded input
-        let zero_wave = mid_waveform(&p, d, 6000.0, &initial, 0.0);
+        let zero_wave = mid_waveform(&p, d, MID_CEILING_HZ, &initial, 0.0);
         assert_eq!(zero_wave.channels, degraded.channels);
 
         // When reconstructed with strength 1.0, lock_known_bands guarantees low band is preserved
-        let wave = mid_waveform(&p, d, 6000.0, &initial, 1.0);
+        let wave = mid_waveform(&p, d, MID_CEILING_HZ, &initial, 1.0);
         for c in 0..2 {
             let err = native_dsp::low_error(&degraded.channels[c], &wave.channels[c], d.cutoff);
             assert!(err < 2e-6, "known band low error {err} exceeds tolerance");

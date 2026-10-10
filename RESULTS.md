@@ -817,6 +817,50 @@ All tracks rendered end-to-end via OpenCL GPU streaming, CFM mid restoration, 3D
 ##### 5. Release Tag & Freeze
 Frozen as milestone `v1.0.0-alpha.2` on branch `experiment/phase3-geometric-moonshot`. All frozen baselines preserved intact.
 
+#### 10. Phase IV Milestone: Procedural Multi-Track Continuous Flow Matching (CFM-v2) Mid-Band Expansion (2 kHz – 8 kHz) (2026-10-10)
+
+Following device owner directive (*Option B: Self-Supervised CFM Mid-Band Flow Expansion*), the Continuous Flow Matching neural vector field was expanded from its legacy 6.0 kHz ceiling to 8.0 kHz and retrained on a procedural multi-track stem curriculum:
+
+##### 1. Mathematical Architecture & Multi-Track Procedural Curriculum
+- **The Gap Problem in v1**: In `rich-mid-v1`, mid-band flow matching terminated abruptly at 6000.0 Hz, while the Stage 4 Port-Hamiltonian material began at 8000.0 Hz, leaving a 2 kHz unmodeled dead zone in the critical upper-mid presence band (vocal consonants, snare wire crack, and acoustic string bite).
+- **Physical Multi-Track Stem Synthesis (`src/rich_synth.rs`)**:
+  - **Vocal Formant Engine**: Liljencrants-Fant glottal pulse excitation filtered through 4 parallel formant resonators ($F_1$--$F_4 \in [280, 4100]\text{ Hz}$), $4.8\text{--}6.0\text{ Hz}$ natural pitch vibrato, and shaped high-frequency aspiration noise ($3.5\text{--}7.5\text{ kHz}$).
+  - **Snare / Percussion Transient Snap**: Fast onset ($< 1.0\text{ ms}$), exponential body drop ($240 \to 160\text{ Hz}$), dual shell modal rings ($480\text{ Hz}, 620\text{ Hz}$), and high-frequency snare wire rattle in $2.0\text{--}7.8\text{ kHz}$.
+  - **Stiff-String Acoustic Pluck**: Inharmonic dispersion $f_k = k f_0 \sqrt{1 + B k^2}$ ($B \in [10^{-4}, 3 \times 10^{-4}]$) with frequency-dependent overtone damping $\tau_k = \frac{\tau_0}{1 + (f_k / 2800)^2}$ extending cleanly up to 8.0 kHz.
+  - **Bass Anchor Engine**: Sub-bass fundamentals ($45\text{--}130\text{ Hz}$) with strong 2nd and 3rd harmonics to anchor the physical subharmonic feature extractor in `src/scene_features.rs`.
+  - **Abstention Discipline (`stopped_mid_abstention`)**: High frequencies intentionally extinguished via steep brickwall low-pass filter ($no\_upper = true$), ensuring the model learns strict abstention rather than fabricating spurious high-frequency energy.
+- **Continuous Flow Matching Ceiling Handover**:
+  `MID_CEILING_HZ = 8000.0` locks the top of the CFM vector field exactly at the 8.0 kHz boundary where Stage 4 Port-Hamiltonian material takes over, establishing an unbroken, multi-scale acoustic restoration continuum from sub-bass to air shimmer.
+- **Frozen Model Checkpoint**: Saved and verified with SHA256 checksums in [`artifacts/rich-mid-v2/`](file:///data/data/com.termux/files/home/projects/highband/artifacts/rich-mid-v2/) (`basis.json`: `883b1bf94...`).
+
+##### 2. Empirical Spectral Band Comparison: CFM-v2 vs Milestone v1.0.0-alpha.2
+
+###### *Feelin’ Catchy ext v1.2.2.2.2.2* (179.9s, -11.04 LUFS, -1.00 dBTP)
+| Frequency Band | Original Audio | M4 Calibrated (v1) | CFM-v2 Expanded | v2 vs v1 Delta | Acoustic Effect |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Sub (<120 Hz)** | +7.19 dBFS | +9.09 dBFS | +9.07 dBFS | **-0.02 dB** | Sub-bass punch strictly preserved |
+| **Low-Mid (120–1500 Hz)** | -4.40 dBFS | -2.18 dBFS | -2.22 dBFS | **-0.05 dB** | Warm instrumental body intact |
+| **CFM Core (1500–6000 Hz)** | -14.78 dBFS | -11.80 dBFS | -11.78 dBFS | **+0.03 dB** | Vocal presence & articulation |
+| **CFM Handover (6000–8000 Hz)** | -21.46 dBFS | -18.28 dBFS | -17.88 dBFS | **+0.40 dB** | **Audible snare snap & vocal crispness** |
+| **Morphic Air (>8000 Hz)** | -27.09 dBFS | -22.68 dBFS | -22.86 dBFS | **-0.17 dB** | Controlled silky Port-Hamiltonian air |
+| **Full Spectrum** | -12.94 dBFS | -10.66 dBFS | -10.68 dBFS | **-0.02 dB** | **Exact loudness parity, zero volume bias** |
+- **Isolated CFM-v2 vs v1 Difference Track**: **-29.29 dBFS RMS** (Peak **-10.58 dBFS**), vividly audible in isolation.
+
+###### *Chasing Horizons (1)* (216.4s, -11.03 LUFS, -1.00 dBTP)
+| Frequency Band | M4 Calibrated (v1) | CFM-v2 Expanded | Delta (dB) | Acoustic Effect |
+| :--- | :---: | :---: | :---: | :--- |
+| **Sub (<120 Hz)** | +8.77 dBFS | +8.79 dBFS | **+0.02 dB** | Foundation anchor preserved |
+| **Low-Mid (120–1500 Hz)** | -1.68 dBFS | -1.76 dBFS | **-0.08 dB** | Natural acoustic warmth |
+| **CFM Core (1500–6000 Hz)** | -12.46 dBFS | -12.39 dBFS | **+0.07 dB** | Restored lead harmonic drive |
+| **CFM Handover (6000–8000 Hz)** | -20.07 dBFS | -19.52 dBFS | **+0.55 dB** | **Restored transient bite & cymbal bell body** |
+| **Morphic Air (>8000 Hz)** | -23.41 dBFS | -23.52 dBFS | **-0.10 dB** | Dynamic Port-Hamiltonian 4D breathing |
+| **Full Spectrum** | -10.70 dBFS | -10.72 dBFS | **-0.02 dB** | **Zero volume bias (-11.03 LUFS)** |
+- **Isolated CFM-v2 vs v1 Difference Track**: **-28.98 dBFS RMS** (Peak **-9.74 dBFS**).
+
+##### 3. Delivered Production Masters in `/sdcard/Download/FLAC/`
+- [`/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (23.8 MB, 24-bit 48 kHz FLAC)
+- [`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (47.1 MB, 24-bit 48 kHz FLAC)
+
 
 
 

@@ -74,7 +74,7 @@ enum Commands {
         low_cutoff: f32,
         #[arg(long, default_value_t = 1500.0)]
         mid_cutoff: f32,
-        #[arg(long, default_value_t = 6000.0)]
+        #[arg(long, default_value_t = 8000.0)]
         mid_ceiling: f32,
         #[arg(long, default_value_t = 8)]
         steps: usize,
@@ -383,7 +383,7 @@ enum Commands {
         input: PathBuf,
         #[arg(long, default_value_t = 1500.0)]
         mid_cutoff: f32,
-        #[arg(long, default_value_t = 6000.0)]
+        #[arg(long, default_value_t = 8000.0)]
         mid_ceiling: f32,
         #[arg(long)]
         controlled: bool,
@@ -519,7 +519,7 @@ enum Commands {
         low_cutoff: f32,
         #[arg(long, default_value_t = 1500.0)]
         mid_cutoff: f32,
-        #[arg(long, default_value_t = 6000.0)]
+        #[arg(long, default_value_t = 8000.0)]
         mid_ceiling: f32,
         #[arg(long, default_value_t = 8)]
         steps: usize,
@@ -2154,11 +2154,16 @@ fn auto_master_pipeline(
 
     let resolved_mid = if !no_mid {
         mid_model.map(|p| p.to_path_buf()).or_else(|| {
-            let default_p = std::path::PathBuf::from("artifacts/rich-mid-v1/basis.json");
-            if default_p.exists() {
-                Some(default_p)
+            let v2_p = std::path::PathBuf::from("artifacts/rich-mid-v2/basis.json");
+            if v2_p.exists() {
+                Some(v2_p)
             } else {
-                None
+                let default_p = std::path::PathBuf::from("artifacts/rich-mid-v1/basis.json");
+                if default_p.exists() {
+                    Some(default_p)
+                } else {
+                    None
+                }
             }
         })
     } else {
@@ -2621,7 +2626,13 @@ fn auto_master_pipeline(
                     "port-hamiltonian-a1" => format!("{} [Highband Morphic M4 A1 Mastered]", base_stem),
                     "port-hamiltonian-a3" => format!("{} [Highband Morphic M4 A3 Mastered]", base_stem),
                     "port-hamiltonian-a4" => format!("{} [Highband Morphic M4 A4 Mastered]", base_stem),
-                    "port-hamiltonian-calibrated" => format!("{} [Highband Morphic M4 Calibrated Mastered]", base_stem),
+                    "port-hamiltonian-calibrated" => {
+                        if resolved_mid.as_ref().map(|p| p.to_string_lossy().contains("rich-mid-v2")).unwrap_or(false) {
+                            format!("{} [Highband Morphic M4 Calibrated CFM-v2 Mastered]", base_stem)
+                        } else {
+                            format!("{} [Highband Morphic M4 Calibrated Mastered]", base_stem)
+                        }
+                    }
                     "static-shelf" => format!("{} [Highband Static Shelf Mastered]", base_stem),
                     _ => format!("{} [Highband Morphic Mastered]", base_stem),
                 }
