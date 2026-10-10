@@ -2556,16 +2556,55 @@ fn auto_master_pipeline(
 
     // Stage 7: Lossless Export & Phone Storage Sync
     println!("\n--- Stage 7: Lossless Audio Export & Phone Storage Sync ---");
-    let flac_path = out_dir.join("mastered.flac");
-    let flac_st = std::process::Command::new("ffmpeg")
+    let cover_path = out_dir.join("cover.jpg");
+    let _ = std::process::Command::new("ffmpeg")
         .args(["-y", "-v", "error", "-i"])
-        .arg(&listen_wav)
-        .args(["-c:a", "flac"])
-        .arg(&flac_path)
+        .arg(input)
+        .args(["-an", "-vcodec", "copy"])
+        .arg(&cover_path)
         .status();
+
+    let has_cover = cover_path.exists()
+        && std::fs::metadata(&cover_path)
+            .map(|m| m.len() > 100)
+            .unwrap_or(false);
+
+    let flac_path = out_dir.join("mastered.flac");
+    let flac_st = if has_cover {
+        std::process::Command::new("ffmpeg")
+            .args(["-y", "-v", "error", "-i"])
+            .arg(&listen_wav)
+            .args(["-i"])
+            .arg(&cover_path)
+            .args([
+                "-map",
+                "0:a",
+                "-map",
+                "1:v",
+                "-c:a",
+                "flac",
+                "-c:v",
+                "copy",
+                "-disposition:v:0",
+                "attached_pic",
+            ])
+            .arg(&flac_path)
+            .status()
+    } else {
+        std::process::Command::new("ffmpeg")
+            .args(["-y", "-v", "error", "-i"])
+            .arg(&listen_wav)
+            .args(["-c:a", "flac"])
+            .arg(&flac_path)
+            .status()
+    };
     let flac_created = flac_st.map(|s| s.success()).unwrap_or(false);
     if flac_created {
-        println!("Rendered FLAC:        {}", flac_path.display());
+        if has_cover {
+            println!("Rendered FLAC (w/ Art): {}", flac_path.display());
+        } else {
+            println!("Rendered FLAC:        {}", flac_path.display());
+        }
     }
 
     if export_sdcard {
