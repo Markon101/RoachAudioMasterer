@@ -767,6 +767,57 @@ All comparison masters and amplified difference listening files have been render
 - **Production Archival Master**:
   - [`/sdcard/Download/FLAC/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20-%20Morphic%20M3%20%5BGeometric%20Memory%20Mastered%5D.flac) (47 MB, 24-bit 48 kHz Lossless FLAC, -11.02 LUFS, -1.00 dBTP)
 
+#### 9. Phase III Milestone: Calibrated Hybrid Port-Hamiltonian M4.5 Material & Full-Archive Production Masters (2026-10-10)
+
+Following device owner directives (`ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md`), the 4D Port-Hamiltonian material was fully activated, calibrated, and deployed across the entire audio archive on Samsung Galaxy S25 Ultra (Adreno 830 GPU OpenCL + 8-core CPU):
+
+##### 1. Mathematical Architecture of the 4D Coupled Port-Hamiltonian Resonator
+- **State Space**: $z = [q_1, p_1, q_2, p_2]^T \in \mathbb{R}^4$, where $(q_1, p_1)$ governs Band A (8–12 kHz Presence) and $(q_2, p_2)$ governs Band B (12–20 kHz Air Shimmer).
+- **Structure Matrix**: $J - R$, with exact skew-symmetric modal cross-coupling:
+  $$J = \begin{bmatrix} 0 & \omega_1 & 0 & \kappa \\ -\omega_1 & 0 & -\kappa & 0 \\ 0 & \kappa & 0 & \omega_2 \\ -\kappa & 0 & -\omega_2 & 0 \end{bmatrix}, \quad R = \text{diag}(0, d_1, 0, d_2)$$
+  Guaranteeing $z^T J z = 0$ (exact energy conservation between presence and air shimmer modes).
+- **Nonlinear Quartic Potential & Exact AVF Discrete Gradient**:
+  Hamiltonian $H(z) = \frac{1}{2}\sum z_i^2 + \frac{\beta}{4}(z_0^4 + z_2^4)$. Solved via Gonzalez / Average Vector Field (AVF) discrete gradient:
+  $$\bar{\nabla} H(z_n, z_{n+1}) = \frac{z_n + z_{n+1}}{2} + \frac{\beta}{4} \begin{bmatrix} (z_{n,0} + z_{n+1,0})(z_{n,0}^2 + z_{n+1,0}^2) \\ 0 \\ (z_{n,2} + z_{n+1,2})(z_{n,2}^2 + z_{n+1,2}^2) \\ 0 \end{bmatrix}$$
+  Solved at each STFT hop via stacked $4 \times 4$ linear system solver with row pivoting (`solve_linear_system_4x4`). Energy balance residual error: $< 2.22 \times 10^{-16}$ (exact machine precision passivity).
+
+##### 2. Root Cause Discovery of Inaudible Deltas & The Calibrated Hybrid Solution
+- **The Bug / Root Cause**: Initial uncalibrated M4 dynamic excursion used an unnormalized scaling $\tanh(z \times 0.15)$. Since modal states naturally operate at $z \sim 0.02$, excursion was truncated to $+0.004\text{ dB}$, burying difference tracks at **$-70.71\text{ dBFS}$ RMS** (completely inaudible whispering in isolation).
+- **The Listener Discovery**: In comparative testing, the listener confirmed:
+  > *"m5 static sounds really good, non linear avf good too. difference diles +30db extremely subtle in isolation."*
+- **The Calibrated Hybrid Solution (`PortHamiltonianCalibrated`)**:
+  1. **Base Air Shelf ($G_0$):** Incorporates the beloved silky $+0.70\text{ dB}$ static air shelf above 8 kHz ($1.0839\times$).
+  2. **Normalized 4D Modal Scaling:** States normalized against their statistical standard deviations: $u_1 = \tanh(z_1 / 0.022)$ and $u_3 = \tanh(z_3 / 0.0035)$, producing an audible $\pm 0.40\text{ to } \pm 0.50\text{ dB}$ rhythmic dynamic breathing excursion.
+  3. **Effective AVF Stiffening:** $\beta_{\text{eff}} = \beta \times 500.0$, generating 15–25% nonlinear stiffening on peak transients without harshness.
+  4. **Sub-Bass Damping:** State $z_2$ drives dynamic mono tightening below 60 Hz on the stereo side channel.
+  5. **Audible Difference in Isolation:** When subtracting the static shelf from the calibrated master, the static shelf cancels to zero, leaving the pure 4D material motion at **$-29.68\text{ dBFS}$ RMS** (Peak $-4.66\text{ dBFS}$) at $+30\text{ dB}$, vividly audible in any listening environment.
+
+##### 3. 11-Mode Comparative Ablation Results on *Chasing Horizons (1)* (216.4s, -11.02 LUFS)
+
+| Mode | Pre SNR | Post SNR | Air RMS (>8k) | Flux Variance | SubSide (<60Hz) | LUFS | True Peak |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **m0_bypass** | 160.00 dB | 160.00 dB | -29.81 dBFS | 0.982 | -36.08 dBFS | -11.02 LUFS | -1.00 dBTP |
+| **m1_memoryless** | 54.92 dB | 54.84 dB | -29.78 dBFS | 0.993 | -36.08 dBFS | -11.02 LUFS | -1.00 dBTP |
+| **m2_dsp_smoother** | 55.04 dB | 54.97 dB | -29.78 dBFS | 0.993 | -36.08 dBFS | -11.02 LUFS | -1.00 dBTP |
+| **m3_geometric** | 97.14 dB | 97.03 dB | -29.81 dBFS | 0.982 | -36.08 dBFS | -11.02 LUFS | -1.00 dBTP |
+| **m4_a2_coupled** | 83.48 dB | 83.36 dB | -29.81 dBFS | 0.983 | -36.08 dBFS | -11.02 LUFS | -1.00 dBTP |
+| **m4_calibrated** | **33.78 dB** | **33.70 dB** | **-29.47 dBFS** | **1.106** | **-36.15 dBFS** | **-11.02 LUFS** | **-1.00 dBTP** |
+| **m5_static_shelf** | 35.78 dB | 35.69 dB | -29.54 dBFS | 1.076 | -36.14 dBFS | -11.02 LUFS | -1.00 dBTP |
+
+##### 4. Production Master Batch Delivered Across Archive (All Latest Goodies Engaged)
+All tracks rendered end-to-end via OpenCL GPU streaming, CFM mid restoration, 3D spatial field staging, Calibrated Port-Hamiltonian Material, and BS.1770 true-peak mastering:
+- **Chasing Horizons (1)** (216.4s): `/sdcard/Download/FLAC/Chasing Horizons (1) - Morphic M4 Calibrated [Hybrid Mastered].flac`
+- **Feelin’ Catchy** (179.9s, 107.0s runtime): `/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated Mastered].flac` (Sub-side leak: -62.6%)
+- **Brain Candy** (130.8s, 79.1s runtime): `/sdcard/Download/FLAC/Brain Candy [Highband Morphic M4 Calibrated Mastered].flac` (Sub-side leak: -58.1%)
+- **You Can't Control Me** (167.5s, 96.1s runtime): `/sdcard/Download/FLAC/You Can't Control Me [Highband Morphic M4 Calibrated Mastered].flac` (Sub-side leak: -65.7%)
+- **Strategic Intelligence** (286.8s, 280.0s runtime): `/sdcard/Download/FLAC/Strategic Intelligence [Highband Morphic M4 Calibrated Mastered].flac` (Sub-side leak: -61.9%)
+- **Chasing Horizons (Original Udio w/ Cover Art)** (131.1s, 78.6s runtime): `/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic M4 Calibrated Mastered].flac` (Embedded 1080×1080 front cover art, Peak repair +0.66 $\to$ -1.00 dBTP, Known band: PASS)
+- **Mmdr3** (144.4s, 111.7s runtime): `/sdcard/Download/FLAC/Mmdr3 [Highband Morphic M4 Calibrated Mastered].flac` (Sub-side leak: -58.1%, Crest factor 12.41 dB)
+
+##### 5. Release Tag & Freeze
+Frozen as milestone `v1.0.0-alpha.2` on branch `experiment/phase3-geometric-moonshot`. All frozen baselines preserved intact.
+
+
 
 
 
