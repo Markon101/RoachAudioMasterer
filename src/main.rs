@@ -132,8 +132,8 @@ enum Commands {
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
-        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, static-shelf.
-        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "static-shelf"])]
+        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, port-hamiltonian-calibrated, static-shelf.
+        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "port-hamiltonian-calibrated", "static-shelf"])]
         morphic_mode: String,
         /// Crossover frequency in Hz above which microtexture modulation applies.
         #[arg(long, default_value_t = 8000.0)]
@@ -147,6 +147,9 @@ enum Commands {
         /// Port-Hamiltonian quartic potential beta parameter (default: 0.0).
         #[arg(long, default_value_t = 0.0)]
         morphic_quartic: f32,
+        /// Port-Hamiltonian static base air shelf gain in dB (default: 0.70).
+        #[arg(long, default_value_t = 0.70)]
+        morphic_shelf_db: f32,
         /// Calibrated shrinkage error correction on SFHT Flow endpoint (e.g. 0.88).
         #[arg(long)]
         sfht_shrinkage: Option<f32>,
@@ -224,6 +227,9 @@ enum Commands {
         /// Port-Hamiltonian quartic potential beta parameter (default: 0.0).
         #[arg(long, default_value_t = 0.0)]
         quartic_beta: f32,
+        /// Port-Hamiltonian static base air shelf gain in dB (default: 0.70).
+        #[arg(long, default_value_t = 0.70)]
+        shelf_db: f32,
         /// Export level-matched WAVs to /sdcard/Download for listening.
         #[arg(long, default_value_t = true)]
         export_sdcard: bool,
@@ -909,6 +915,7 @@ fn run() -> Result<()> {
             morphic_coupling,
             morphic_split_hz,
             morphic_quartic,
+            morphic_shelf_db,
             sfht_shrinkage,
         } => auto_master_pipeline(
             &input,
@@ -946,6 +953,7 @@ fn run() -> Result<()> {
             morphic_coupling,
             morphic_split_hz,
             morphic_quartic,
+            morphic_shelf_db,
             sfht_shrinkage,
         ),
         Commands::Microstructure {
@@ -1002,6 +1010,7 @@ fn run() -> Result<()> {
             coupling_kappa,
             split_hz,
             quartic_beta,
+            shelf_db,
             export_sdcard,
         } => run_morphic_compare_cli(
             &input,
@@ -1013,6 +1022,7 @@ fn run() -> Result<()> {
             coupling_kappa,
             split_hz,
             quartic_beta,
+            shelf_db,
             export_sdcard,
         ),
         Commands::RichOracle {
@@ -1990,6 +2000,7 @@ fn auto_master_pipeline(
     morphic_coupling: f32,
     morphic_split_hz: f32,
     morphic_quartic: f32,
+    morphic_shelf_db: f32,
     sfht_shrinkage: Option<f32>,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
@@ -2343,6 +2354,7 @@ fn auto_master_pipeline(
             "port-hamiltonian-a1" => gtf::MorphicModulationMode::PortHamiltonianA1,
             "port-hamiltonian-a3" => gtf::MorphicModulationMode::PortHamiltonianA3,
             "port-hamiltonian-a4" => gtf::MorphicModulationMode::PortHamiltonianA4,
+            "port-hamiltonian-calibrated" => gtf::MorphicModulationMode::PortHamiltonianCalibrated,
             "static-shelf" => gtf::MorphicModulationMode::StaticHighShelf,
             _ => gtf::MorphicModulationMode::GeometricMemory,
         };
@@ -2351,6 +2363,7 @@ fn auto_master_pipeline(
             ph_split_hz: morphic_split_hz,
             ph_coupling_kappa: morphic_coupling,
             ph_quartic_beta: morphic_quartic,
+            ph_shelf_db: morphic_shelf_db,
             sub_bass_damping_authority: 0.25 * morphic_strength,
             microtexture_authority: 0.15 * morphic_strength,
             mode: mode_enum,
@@ -2569,6 +2582,7 @@ fn auto_master_pipeline(
                     "port-hamiltonian-a1" => format!("{} [Highband Morphic M4 A1 Mastered]", base_stem),
                     "port-hamiltonian-a3" => format!("{} [Highband Morphic M4 A3 Mastered]", base_stem),
                     "port-hamiltonian-a4" => format!("{} [Highband Morphic M4 A4 Mastered]", base_stem),
+                    "port-hamiltonian-calibrated" => format!("{} [Highband Morphic M4 Calibrated Mastered]", base_stem),
                     "static-shelf" => format!("{} [Highband Static Shelf Mastered]", base_stem),
                     _ => format!("{} [Highband Morphic Mastered]", base_stem),
                 }
@@ -3400,6 +3414,7 @@ fn run_morphic_compare_cli(
     coupling_kappa: f32,
     split_hz: f32,
     quartic_beta: f32,
+    shelf_db: f32,
     export_sdcard: bool,
 ) -> Result<()> {
     println!("================================================================================");
@@ -3411,6 +3426,7 @@ fn run_morphic_compare_cli(
     println!("Multiband Split:   {:.1} Hz (Presence / Air transition)", split_hz);
     println!("Coupling Kappa:    {:.2} (Port-Hamiltonian cross-modal skew exchange)", coupling_kappa);
     println!("Quartic Beta:      {:.2} (Nonlinear Hamiltonian potential)", quartic_beta);
+    println!("Base Air Shelf:    {:.2} dB (Calibrated hybrid mode)", shelf_db);
     println!("Morphic Strength:  {:.2}", strength);
     println!("Target Loudness:   {:.1} LUFS (level-matched across all modes)", target_lufs);
     println!("Ceiling True Peak: {:.1} dBTP", ceiling_db);
@@ -3502,6 +3518,7 @@ fn run_morphic_compare_cli(
         ("m4_a2_coupled", "Port-Hamiltonian A2 Fully Coupled Multiband Material", gtf::MorphicModulationMode::PortHamiltonian),
         ("m4_a3_adaptive", "Port-Hamiltonian A3 Flux-Adaptive Skew Coupling", gtf::MorphicModulationMode::PortHamiltonianA3),
         ("m4_a4_quartic", "Port-Hamiltonian A4 Quartic AVF Discrete Gradient", gtf::MorphicModulationMode::PortHamiltonianA4),
+        ("m4_calibrated", "Port-Hamiltonian Calibrated Hybrid Material (Air Shelf + 4D Dynamics)", gtf::MorphicModulationMode::PortHamiltonianCalibrated),
         ("m5_static_shelf", "Static +0.8dB High-Shelf EQ Baseline Control", gtf::MorphicModulationMode::StaticHighShelf),
     ];
 
@@ -3532,6 +3549,7 @@ fn run_morphic_compare_cli(
             ph_split_hz: split_hz,
             ph_coupling_kappa: coupling_kappa,
             ph_quartic_beta: quartic_beta,
+            ph_shelf_db: shelf_db,
             sub_bass_damping_authority: 0.25 * strength,
             microtexture_authority: 0.15 * strength,
             mode: *mode_enum,
@@ -3597,13 +3615,20 @@ fn run_morphic_compare_cli(
     println!("\n--- Generating Null & Difference WAVs ---");
     // Mode Indices:
     // 0: m0_bypass, 1: m1_memoryless, 2: m2_dsp_smoother, 3: m3_geometric, 4: m4_a0_frozen,
-    // 5: m4_a1_uncoupled, 6: m4_a2_coupled, 7: m4_a3_adaptive, 8: m4_a4_quartic, 9: m5_static_shelf
+    // 5: m4_a1_uncoupled, 6: m4_a2_coupled, 7: m4_a3_adaptive, 8: m4_a4_quartic,
+    // 9: m4_calibrated, 10: m5_static_shelf
+    let diff_m4cal_m5_30db = diff_audio(&results[9].mastered, &results[10].mastered, 30.0);
+    let diff_m4cal_m0_30db = diff_audio(&results[9].mastered, &results[0].mastered, 30.0);
     let diff_m4a2_m0_30db = diff_audio(&results[6].mastered, &results[0].mastered, 30.0);
     let diff_m4a2_m4a0_30db = diff_audio(&results[6].mastered, &results[4].mastered, 30.0);
     let diff_m4a2_m3_30db = diff_audio(&results[6].mastered, &results[3].mastered, 30.0);
-    let diff_m4a2_m5_30db = diff_audio(&results[6].mastered, &results[9].mastered, 30.0);
+    let diff_m4a2_m5_30db = diff_audio(&results[6].mastered, &results[10].mastered, 30.0);
     let diff_m4a4_m4a2_30db = diff_audio(&results[8].mastered, &results[6].mastered, 30.0);
 
+    let path_diff_m4cal_m5_30 = out.join("diff_m4cal_vs_m5_gain30db.wav");
+    native_audio::write(&path_diff_m4cal_m5_30, &diff_m4cal_m5_30db, true)?;
+    let path_diff_m4cal_m0_30 = out.join("diff_m4cal_vs_m0_gain30db.wav");
+    native_audio::write(&path_diff_m4cal_m0_30, &diff_m4cal_m0_30db, true)?;
     let path_diff_m4a2_m0_30 = out.join("diff_m4a2_vs_m0_gain30db.wav");
     native_audio::write(&path_diff_m4a2_m0_30, &diff_m4a2_m0_30db, true)?;
     let path_diff_m4a2_m4a0_30 = out.join("diff_m4a2_vs_m4a0_gain30db.wav");
@@ -3644,7 +3669,10 @@ fn run_morphic_compare_cli(
                 (format!("{} - Morphic M4 A2 [Coupled Mastered].wav", base_title), out.join("m4_a2_coupled_listen.wav")),
                 (format!("{} - Morphic M4 A3 [Adaptive Mastered].wav", base_title), out.join("m4_a3_adaptive_listen.wav")),
                 (format!("{} - Morphic M4 A4 [Nonlinear AVF Mastered].wav", base_title), out.join("m4_a4_quartic_listen.wav")),
+                (format!("{} - Morphic M4 Calibrated [Hybrid Mastered].wav", base_title), out.join("m4_calibrated_listen.wav")),
                 (format!("{} - Morphic M5 [Static High-Shelf Control].wav", base_title), out.join("m5_static_shelf_listen.wav")),
+                (format!("{} - Delta M4 Calibrated vs Static Shelf [+30dB].wav", base_title), path_diff_m4cal_m5_30.clone()),
+                (format!("{} - Delta M4 Calibrated vs Bypass [+30dB].wav", base_title), path_diff_m4cal_m0_30.clone()),
                 (format!("{} - Delta M4 A2 vs Frozen M4 [+30dB].wav", base_title), path_diff_m4a2_m4a0_30.clone()),
                 (format!("{} - Delta M4 A2 vs Static Shelf [+30dB].wav", base_title), path_diff_m4a2_m5_30.clone()),
                 (format!("{} - Delta M4 A2 vs M3 Geometric [+30dB].wav", base_title), path_diff_m4a2_m3_30.clone()),

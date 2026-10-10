@@ -3409,6 +3409,8 @@ pub enum MorphicModulationMode {
     PortHamiltonianA3,
     /// Mode 4 (A4): Nonlinear quartic Hamiltonian material (AVF discrete gradient + multiband)
     PortHamiltonianA4,
+    /// Mode 4 (Calibrated): Full 4D Port-Hamiltonian Material + Base Air Shelf + Normalized Excursion
+    PortHamiltonianCalibrated,
     /// Mode 5: Matched static high-shelf DSP baseline (+0.8 dB above crossover)
     StaticHighShelf,
 }
@@ -3419,6 +3421,7 @@ pub struct MorphicConfig {
     pub ph_split_hz: f32,
     pub ph_coupling_kappa: f32,
     pub ph_quartic_beta: f32,
+    pub ph_shelf_db: f32,
     pub ph_adaptive_coupling: bool,
     pub sub_bass_damping_authority: f32,
     pub microtexture_authority: f32,
@@ -3434,6 +3437,7 @@ impl Default for MorphicConfig {
             ph_split_hz: 12000.0,
             ph_coupling_kappa: 6.0,
             ph_quartic_beta: 0.0,
+            ph_shelf_db: 0.70,
             ph_adaptive_coupling: false,
             sub_bass_damping_authority: 0.25,
             microtexture_authority: 0.15,
@@ -3838,6 +3842,7 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
                 | MorphicModulationMode::PortHamiltonianA1
                 | MorphicModulationMode::PortHamiltonianA3
                 | MorphicModulationMode::PortHamiltonianA4
+                | MorphicModulationMode::PortHamiltonianCalibrated
         );
 
         if is_ph_multiband {
@@ -3856,6 +3861,9 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
             };
 
             let beta = match config.mode {
+                MorphicModulationMode::PortHamiltonianCalibrated => {
+                    if config.ph_quartic_beta > 0.0 { config.ph_quartic_beta * 500.0f32 } else { 250.0f32 }
+                }
                 MorphicModulationMode::PortHamiltonianA4 => {
                     if config.ph_quartic_beta > 0.0 { config.ph_quartic_beta } else { 1.5f32 }
                 }
@@ -3869,21 +3877,44 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
                 ph_sq_sum[i] += ph_z_mid[i].powi(2);
             }
 
-            // Band A (8-12 kHz Presence): Fast Mode z_1
-            let drive_m_a = (ph_z_mid[1] * 0.15f32).tanh() * config.microtexture_authority;
-            let drive_s_a = if is_stereo { (ph_z_side[1] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 };
-            let g_mid_a = (1.0f32 + drive_m_a).clamp(0.85, 1.15);
-            let g_side_a = if is_stereo { (1.0f32 + drive_s_a).clamp(0.85, 1.15) } else { 1.0f32 };
+            let is_calibrated = config.mode == MorphicModulationMode::PortHamiltonianCalibrated;
+            let base_shelf = if is_calibrated {
+                10.0f32.powf(config.ph_shelf_db / 20.0f32)
+            } else {
+                1.0f32
+            };
 
+            // Band A (8-12 kHz Presence): Fast Mode z_1
             // Band B (12-20 kHz Air): Shimmer Mode z_3
-            let drive_m_b = (ph_z_mid[3] * 0.15f32).tanh() * config.microtexture_authority;
-            let drive_s_b = if is_stereo { (ph_z_side[3] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 };
-            let g_mid_b = (1.0f32 + drive_m_b).clamp(0.85, 1.15);
-            let g_side_b = if is_stereo { (1.0f32 + drive_s_b).clamp(0.85, 1.15) } else { 1.0f32 };
+            let (drive_m_a, drive_s_a, drive_m_b, drive_s_b) = if is_calibrated {
+                let swing = 0.06f32 * (config.microtexture_authority / 0.15f32);
+                (
+                    (ph_z_mid[1] / 0.022f32).tanh() * swing,
+                    if is_stereo { (ph_z_side[1] / 0.022f32).tanh() * swing } else { 0.0f32 },
+                    (ph_z_mid[3] / 0.0035f32).tanh() * swing,
+                    if is_stereo { (ph_z_side[3] / 0.0035f32).tanh() * swing } else { 0.0f32 },
+                )
+            } else {
+                (
+                    (ph_z_mid[1] * 0.15f32).tanh() * config.microtexture_authority,
+                    if is_stereo { (ph_z_side[1] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 },
+                    (ph_z_mid[3] * 0.15f32).tanh() * config.microtexture_authority,
+                    if is_stereo { (ph_z_side[3] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 },
+                )
+            };
+
+            let g_mid_a = (base_shelf * (1.0f32 + drive_m_a)).clamp(0.85, 1.30);
+            let g_side_a = if is_stereo { (base_shelf * (1.0f32 + drive_s_a)).clamp(0.85, 1.30) } else { 1.0f32 };
+            let g_mid_b = (base_shelf * (1.0f32 + drive_m_b)).clamp(0.85, 1.30);
+            let g_side_b = if is_stereo { (base_shelf * (1.0f32 + drive_s_b)).clamp(0.85, 1.30) } else { 1.0f32 };
 
             // Selective Sub-Bass Damping (< 60 Hz side channel) driven by modal energy of Pair 2 (z_2)
             let eff_sub_damp = if is_stereo {
-                (ph_z_mid[2].abs() * 0.50f32).tanh() * config.sub_bass_damping_authority
+                if is_calibrated {
+                    (ph_z_mid[2].abs() / 0.0030f32).tanh() * config.sub_bass_damping_authority
+                } else {
+                    (ph_z_mid[2].abs() * 0.50f32).tanh() * config.sub_bass_damping_authority
+                }
             } else {
                 0.0f32
             };
@@ -4949,6 +4980,36 @@ mod tests {
         let (_out_shelf, rep_shelf) = process_morphic_audio(&audio, &cfg_shelf);
         assert!(rep_shelf.mono_compatibility_passed);
         assert!(rep_shelf.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // 9. Calibrated Hybrid Port-Hamiltonian Material
+        let cfg_cal = MorphicConfig {
+            mode: MorphicModulationMode::PortHamiltonianCalibrated,
+            crossover_hz: 8000.0,
+            ph_shelf_db: 0.70,
+            ph_coupling_kappa: 6.0,
+            ph_quartic_beta: 0.5,
+            microtexture_authority: 0.15,
+            ..MorphicConfig::default()
+        };
+        let (out_cal, rep_cal) = process_morphic_audio(&audio, &cfg_cal);
+        assert!(rep_cal.mono_compatibility_passed);
+        assert!(rep_cal.post_synthesis_low_band_rms_deviation < 1e-4);
+        for i in 0..4 {
+            assert!(
+                rep_cal.ph_modal_rms[i] > 1e-6,
+                "Calibrated modal coordinate z_{} must be active",
+                i
+            );
+        }
+        // Verify that Calibrated mode modulates high-band differently than pure static shelf
+        let diff_cal_shelf_rms: f32 = out_cal.channels[0]
+            .iter()
+            .zip(&_out_shelf.channels[0])
+            .map(|(a, b)| (a - b).powi(2))
+            .sum::<f32>()
+            .sqrt()
+            / n as f32;
+        assert!(diff_cal_shelf_rms > 0.0, "Calibrated material must modulate dynamic motion relative to static shelf");
     }
 
     #[test]
