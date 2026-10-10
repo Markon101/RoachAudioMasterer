@@ -860,6 +860,7 @@ Following device owner directive (*Option B: Self-Supervised CFM Mid-Band Flow E
 ##### 3. Delivered Production Masters in `/sdcard/Download/FLAC/`
 - [`/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (23.8 MB, 24-bit 48 kHz FLAC)
 - [`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (47.1 MB, 24-bit 48 kHz FLAC)
+- [`/sdcard/Download/FLAC/Fourier Longing - Normed - remixv5.5bc-cust-neg-77-93-45 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20-%20remixv5.5bc-cust-neg-77-93-45%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (39.0 MB, 329.9s, -11.02 LUFS, -1.00 dBTP, -59.4% sub-side leak, 0.7015 upper-mid flatness)
 
 
 
