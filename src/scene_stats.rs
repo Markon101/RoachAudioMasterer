@@ -747,11 +747,7 @@ impl TuningCard {
         // Sub-bass damping (R matrix): higher dissipation if sub angular variance is high
         let morphic_sub_damping = (0.20 + 0.35 * sub_ang_var).clamp(0.15, 0.60);
         let morphic_microtexture = (0.12 + 0.10 * high_ang_var).clamp(0.08, 0.25);
-        let morphic_mode = if morphic_quartic_beta > 0.0 {
-            "port-hamiltonian-a4".to_string()
-        } else {
-            "port-hamiltonian-calibrated".to_string()
-        };
+        let morphic_mode = "port-hamiltonian-calibrated".to_string();
 
         // 5. Mastering Glue Compression Parameter Mapping
         // Threshold: set relative to median RMS (L50)

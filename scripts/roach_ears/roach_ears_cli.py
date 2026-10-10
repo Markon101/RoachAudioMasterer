@@ -67,7 +67,8 @@ def compare_audio_pair(
     cand_path: Path,
     out_dir: Path,
     run_multimodal: bool = True,
-    excerpt_duration_sec: float = 10.0
+    excerpt_duration_sec: float = 10.0,
+    model_name: str = "google/gemini-3.8-flash"
 ) -> Dict[str, Any]:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -78,6 +79,7 @@ def compare_audio_pair(
     print(f"Reference Audio:   {ref_path}")
     print(f"Candidate Audio:   {cand_path}")
     print(f"Output Directory:  {out_dir}")
+    print(f"Audition Model:    {model_name}")
 
     # 1. Read files
     ref_raw = read_wav(ref_path)
@@ -113,7 +115,7 @@ def compare_audio_pair(
     # 5. Multimodal Audio Review
     reviewer_results = []
     if run_multimodal:
-        reviewer = MultimodalAudioReviewer()
+        reviewer = MultimodalAudioReviewer(model_name=model_name)
         if reviewer.is_available():
             print(f"\n[Step 4/5] Dispatching blind A/B audio listening to Multimodal Reviewer ({reviewer.model_name})...")
             # Review top 2 most informative excerpts (max_delta and dense_air or transient_punch)
@@ -121,13 +123,17 @@ def compare_audio_pair(
                 exc_id = entry["excerpt_id"]
                 ref_wav = Path(entry["files"]["reference_wav"])
                 cand_wav = Path(entry["files"]["candidate_wav"])
-                print(f"  Auditioning excerpt '{exc_id}'...")
-                rev_res = reviewer.review_excerpt_pair(ref_wav, cand_wav, entry)
+                delta_wav = Path(entry["files"]["delta_wav_24db"])
+                print(f"  Auditioning excerpt '{exc_id}' (including +24dB difference residual)...")
+                rev_res = reviewer.review_excerpt_pair(ref_wav, cand_wav, entry, delta_wav_path=delta_wav)
                 rev_res["excerpt_id"] = exc_id
                 reviewer_results.append(rev_res)
                 if rev_res.get("status") == "success":
                     print(f"    Verdict: {rev_res['overall_verdict']} (Confidence: {rev_res['confidence']:.2f}) | Diff: {rev_res['magnitude_of_difference']}")
                     print(f"    Observation: {rev_res['supporting_observation']}")
+                    if rev_res.get("residual_analysis"):
+                        res_info = rev_res["residual_analysis"]
+                        print(f"    Residual Delta (+24dB): [{res_info.get('residual_nature')}] {res_info.get('audible_content_description')}")
         else:
             print("\n[Step 4/5] Multimodal Reviewer skipped (OpenRouter API key not configured).")
 
@@ -258,6 +264,12 @@ def generate_markdown_report(data: Dict[str, Any], out_path: Path) -> None:
                 for attr, info in r.get("dimensions", {}).items():
                     lines.append(f"| **{attr.replace('_', ' ').title()}** | `{info['winner']}` | {info['observation']} |")
                 lines.append(f"")
+                if r.get("residual_analysis"):
+                    res = r["residual_analysis"]
+                    lines.append(f"- **Isolated Difference Residual (+24dB Delta Analysis)**:")
+                    lines.append(f"  * **Residual Classification**: `{res.get('residual_nature', 'Unknown')}`")
+                    lines.append(f"  * **Audible Content Details**: {res.get('audible_content_description', '')}")
+                    lines.append(f"")
     else:
         lines.append(f"> *Multimodal listening review was bypassed or unavailable for this run.*")
 
@@ -277,6 +289,7 @@ def main():
     p_comp.add_argument("--multimodal", action="store_true", default=True, help="Enable multimodal listening reviewer")
     p_comp.add_argument("--no-multimodal", dest="multimodal", action="store_false", help="Disable multimodal listening reviewer")
     p_comp.add_argument("--excerpt-duration", type=float, default=10.0, help="Duration of mined excerpts in seconds")
+    p_comp.add_argument("--model", type=str, default="google/gemini-3.8-flash", help="Multimodal audio reviewer model ID")
 
     # Grade
     p_grade = subparsers.add_parser("grade", help="Extract single-file acoustic profile")
@@ -300,7 +313,8 @@ def main():
             cand_path=args.candidate,
             out_dir=args.out,
             run_multimodal=args.multimodal,
-            excerpt_duration_sec=args.excerpt_duration
+            excerpt_duration_sec=args.excerpt_duration,
+            model_name=args.model
         )
     elif args.command == "grade":
         prof = grade_single_audio(args.input)

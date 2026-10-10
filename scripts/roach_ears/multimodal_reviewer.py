@@ -45,10 +45,12 @@ class MultimodalAudioReviewer:
         self,
         ref_wav_path: Path,
         cand_wav_path: Path,
-        excerpt_context: Dict[str, Any]
+        excerpt_context: Dict[str, Any],
+        delta_wav_path: Optional[Path] = None,
     ) -> Dict[str, Any]:
         """
-        Conducts a randomized blind comparative listening review between reference and candidate clips.
+        Conducts a randomized blind comparative listening review between reference and candidate clips,
+        with optional direct acoustic inspection of the +24dB amplified difference residual track.
         """
         key = self._get_api_key()
         if not key:
@@ -74,6 +76,26 @@ class MultimodalAudioReviewer:
 
         clip1_b64 = base64.b64encode(clip1_bytes).decode("utf-8")
         clip2_b64 = base64.b64encode(clip2_bytes).decode("utf-8")
+
+        has_delta = delta_wav_path is not None and os.path.exists(delta_wav_path)
+        delta_b64 = None
+        if has_delta:
+            with open(delta_wav_path, "rb") as f:
+                delta_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+        delta_section_prompt = """
+8. Isolated Difference Residual (+24dB Boosted Delta Track):
+   Listen carefully to the third audio input: "CLIP DELTA RESIDUAL".
+   This is the exact mathematical difference between the two versions, amplified by +24dB so micro-acoustic changes can be heard.
+   - Describe in vivid detail what sounds you hear inside this residual (percussion clicks, kick transients, vocal sibilance, air flutter, synths, or pure silence/noise).
+   - Is this residual adding beneficial clarity/punch/air, or unwanted distortion/grain?
+""" if has_delta else ""
+
+        delta_schema_field = """
+  "residual_delta_analysis": {
+    "audible_content_description": "...",
+    "residual_nature": "Beneficial Expansion|Harmful Distortion|Neutral Ambience|Silent"
+  },""" if has_delta else ""
 
         prompt = f"""You are an elite mastering acoustician and audio perception evaluator at the Roach Research Institute.
 You are performing a rigorous blind A/B listening comparison between two time-aligned audio excerpts: Clip 1 and Clip 2.
@@ -104,14 +126,14 @@ LISTEN TO BOTH CLIPS CAREFULLY. Answer these explicit acoustic questions with co
 
 7. Crucial Audio Observation & Timestamps:
    Provide specific timestamps (in seconds from clip start) and audible details supporting your judgment. If no difference is heard, explicitly state so.
-
+{delta_section_prompt}
 Format your output as valid JSON matching this schema:
 {{
   "magnitude_of_difference": "Significant|Moderate|Subtle|Nearly Indistinguishable|No Reliable Audible Difference",
   "high_frequency_texture": {{"preferred_clip": "Clip 1|Clip 2|Identical", "observation": "..."}},
   "transient_attack": {{"preferred_clip": "Clip 1|Clip 2|Identical", "observation": "..."}},
   "low_frequency_control": {{"preferred_clip": "Clip 1|Clip 2|Identical", "observation": "..."}},
-  "stereo_imaging": {{"preferred_clip": "Clip 1|Clip 2|Identical", "observation": "..."}},
+  "stereo_imaging": {{"preferred_clip": "Clip 1|Clip 2|Identical", "observation": "..."}},{delta_schema_field}
   "overall_preferred_clip": "Clip 1|Clip 2|Indistinguishable|Different but Equal",
   "confidence": 0.85,
   "supporting_observation": "...",
@@ -120,18 +142,25 @@ Format your output as valid JSON matching this schema:
 Return ONLY the raw JSON object.
 """
 
+        content_list = [
+            {"type": "text", "text": prompt},
+            {"type": "text", "text": "=== AUDIO EXCERPT: CLIP 1 ==="},
+            {"type": "input_audio", "input_audio": {"data": clip1_b64, "format": "wav"}},
+            {"type": "text", "text": "=== AUDIO EXCERPT: CLIP 2 ==="},
+            {"type": "input_audio", "input_audio": {"data": clip2_b64, "format": "wav"}}
+        ]
+        if has_delta and delta_b64:
+            content_list.extend([
+                {"type": "text", "text": "=== AUDIO EXCERPT: CLIP DELTA RESIDUAL (+24dB BOOSTED) ==="},
+                {"type": "input_audio", "input_audio": {"data": delta_b64, "format": "wav"}}
+            ])
+
         payload = {
             "model": self.model_name,
             "messages": [
                 {
                     "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                        {"type": "text", "text": "=== AUDIO EXCERPT: CLIP 1 ==="},
-                        {"type": "input_audio", "input_audio": {"data": clip1_b64, "format": "wav"}},
-                        {"type": "text", "text": "=== AUDIO EXCERPT: CLIP 2 ==="},
-                        {"type": "input_audio", "input_audio": {"data": clip2_b64, "format": "wav"}}
-                    ]
+                    "content": content_list
                 }
             ],
             "temperature": 0.2
@@ -198,7 +227,8 @@ Return ONLY the raw JSON object.
                         "winner": unblind(parsed.get("stereo_imaging", {}).get("preferred_clip", "Identical")),
                         "observation": parsed.get("stereo_imaging", {}).get("observation", "")
                     },
-                }
+                },
+                "residual_analysis": parsed.get("residual_delta_analysis", None)
             }
             return result
 
