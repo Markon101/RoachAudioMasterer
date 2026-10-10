@@ -3399,13 +3399,27 @@ pub enum MorphicModulationMode {
     DspSmoother,
     /// Mode 3: Full Morphic Geometric Resonant Memory (staggered Givens + calibrated half-lives)
     GeometricMemory,
-    /// Mode 4: Port-Hamiltonian Passive Resonant Material (unconditionally passive modal exchange)
+    /// Mode 4: Port-Hamiltonian Passive Resonant Material (fully coupled multiband A2)
     PortHamiltonian,
+    /// Mode 4 (A0): Frozen M4 baseline (uncoupled, single-band >8kHz, legacy heuristic sub)
+    PortHamiltonianA0,
+    /// Mode 4 (A1): Uncoupled multiband (kappa=0, Presence 8-12k via z1, Air 12-20k via z3, sub via z2)
+    PortHamiltonianA1,
+    /// Mode 4 (A3): Adaptive coupled multiband (kappa modulated by flux)
+    PortHamiltonianA3,
+    /// Mode 4 (A4): Nonlinear quartic Hamiltonian material (AVF discrete gradient + multiband)
+    PortHamiltonianA4,
+    /// Mode 5: Matched static high-shelf DSP baseline (+0.8 dB above crossover)
+    StaticHighShelf,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MorphicConfig {
     pub crossover_hz: f32,
+    pub ph_split_hz: f32,
+    pub ph_coupling_kappa: f32,
+    pub ph_quartic_beta: f32,
+    pub ph_adaptive_coupling: bool,
     pub sub_bass_damping_authority: f32,
     pub microtexture_authority: f32,
     pub enable_confidence_gating: bool,
@@ -3417,6 +3431,10 @@ impl Default for MorphicConfig {
     fn default() -> Self {
         Self {
             crossover_hz: 8000.0,
+            ph_split_hz: 12000.0,
+            ph_coupling_kappa: 6.0,
+            ph_quartic_beta: 0.0,
+            ph_adaptive_coupling: false,
             sub_bass_damping_authority: 0.25,
             microtexture_authority: 0.15,
             enable_confidence_gating: true,
@@ -3438,6 +3456,7 @@ pub struct MorphicAuditReport {
     pub post_synthesis_low_band_rms_deviation: f32,
     pub full_band_snr_db: f32,
     pub spectral_leakage_db: f32,
+    pub ph_modal_rms: [f32; 4],
 }
 
 /// Joint Mid/Side Stereo-Geometric Recurrent Controller.
@@ -3508,7 +3527,53 @@ impl MorphicAcousticController {
     }
 }
 
-/// Discrete-time implicit midpoint step for 4D Port-Hamiltonian acoustic material.
+/// Solves a 4x4 linear system A * x = b via Gaussian elimination with partial pivoting.
+/// Completely allocation-free, stack-only execution.
+#[inline]
+pub fn solve_linear_system_4x4(mut a: [[f32; 4]; 4], mut b: [f32; 4]) -> Option<[f32; 4]> {
+    for col in 0..3 {
+        let mut max_row = col;
+        let mut max_val = a[col][col].abs();
+        for row in (col + 1)..4 {
+            let val = a[row][col].abs();
+            if val > max_val {
+                max_val = val;
+                max_row = row;
+            }
+        }
+        if max_val < 1e-12 {
+            return None;
+        }
+        if max_row != col {
+            a.swap(col, max_row);
+            b.swap(col, max_row);
+        }
+        let pivot = a[col][col];
+        for row in (col + 1)..4 {
+            let factor = a[row][col] / pivot;
+            a[row][col] = 0.0;
+            for j in (col + 1)..4 {
+                a[row][j] -= factor * a[col][j];
+            }
+            b[row] -= factor * b[col];
+        }
+    }
+    if a[3][3].abs() < 1e-12 {
+        return None;
+    }
+    let mut x = [0.0f32; 4];
+    x[3] = b[3] / a[3][3];
+    for i in (0..3).rev() {
+        let mut sum = b[i];
+        for j in (i + 1)..4 {
+            sum -= a[i][j] * x[j];
+        }
+        x[i] = sum / a[i][i];
+    }
+    Some(x)
+}
+
+/// Discrete-time implicit midpoint step for 4D Port-Hamiltonian acoustic material (uncoupled frozen baseline).
 /// dz/dt = (J - R) grad H(z) + G u.
 /// Strictly energy-dissipative (passive): H(z_{k+1}) <= H(z_k) unconditionally when u=0.
 #[inline]
@@ -3551,6 +3616,129 @@ pub fn step_port_hamiltonian_4d(z: &mut [f32; 4], dt: f32, u: f32) {
     }
 }
 
+/// Discrete-time implicit midpoint step for fully coupled 4D Port-Hamiltonian acoustic material.
+///   dz/dt = (J(kappa) - R) * grad_H(z) + G * u
+///   Pair 1 (modes 0 & 1): Air texture modal resonance (omega_1 = 16.0 rad/s)
+///   Pair 2 (modes 2 & 3): Sub-bass / shimmer modal resonance (omega_2 = 32.0 rad/s)
+///   Skew-symmetric cross-coupling: J_03 = -kappa, J_30 = kappa, J_12 = kappa, J_21 = -kappa.
+///   Exact continuous & discrete energy conservation across cross-modal exchange: z^T J z == 0.
+///   When beta > 0.0, integrates quartic Hamiltonian via exact AVF discrete gradient.
+#[inline]
+pub fn step_port_hamiltonian_coupled_4d(
+    z: &mut [f32; 4],
+    dt: f32,
+    u: f32,
+    kappa: f32,
+    beta: f32,
+) {
+    let w1 = 16.0f32;
+    let w2 = 32.0f32;
+    let g0 = 0.5f32;
+    let g1 = 2.0f32;
+    let g2 = 1.0f32;
+    let g3 = 4.0f32;
+    let half_dt = 0.5f32 * dt;
+
+    // Continuous system matrix A = J - R:
+    // Row 0: [-g0,  -w1,    0, -kappa]
+    // Row 1: [ w1,  -g1, kappa,     0]
+    // Row 2: [  0, -kappa, -g2,   -w2]
+    // Row 3: [ kappa, 0,    w2,   -g3]
+    let a_mat: [[f32; 4]; 4] = [
+        [-g0, -w1, 0.0, -kappa],
+        [w1, -g1, kappa, 0.0],
+        [0.0, -kappa, -g2, -w2],
+        [kappa, 0.0, w2, -g3],
+    ];
+
+    // LHS matrix M = I - half_dt * A
+    let m_mat: [[f32; 4]; 4] = [
+        [1.0 + half_dt * g0, half_dt * w1, 0.0, half_dt * kappa],
+        [-half_dt * w1, 1.0 + half_dt * g1, -half_dt * kappa, 0.0],
+        [0.0, half_dt * kappa, 1.0 + half_dt * g2, half_dt * w2],
+        [-half_dt * kappa, 0.0, -half_dt * w2, 1.0 + half_dt * g3],
+    ];
+
+    // RHS matrix N = I + half_dt * A
+    let n_mat: [[f32; 4]; 4] = [
+        [1.0 - half_dt * g0, -half_dt * w1, 0.0, -half_dt * kappa],
+        [half_dt * w1, 1.0 - half_dt * g1, half_dt * kappa, 0.0],
+        [0.0, -half_dt * kappa, 1.0 - half_dt * g2, -half_dt * w2],
+        [half_dt * kappa, 0.0, half_dt * w2, 1.0 - half_dt * g3],
+    ];
+
+    // G * u: Mode 0 excited by 1.0 * u, Mode 2 excited by 0.5 * u
+    let gu = [dt * u, 0.0f32, dt * 0.5f32 * u, 0.0f32];
+
+    let mut rhs = [0.0f32; 4];
+    for i in 0..4 {
+        let mut sum = gu[i];
+        for j in 0..4 {
+            sum += n_mat[i][j] * z[j];
+        }
+        rhs[i] = sum;
+    }
+
+    let z_linear = match solve_linear_system_4x4(m_mat, rhs) {
+        Some(sol) => sol,
+        None => return,
+    };
+
+    if beta <= 1e-6 {
+        *z = z_linear;
+        return;
+    }
+
+    // Nonlinear Quartic Potential via Exact AVF Discrete Gradient
+    // H(z) = 0.5 * ||z||^2 + sum_i (beta/4) * z_i^4
+    // Discrete residual: F(y) = y - z - dt * (A * grad_bar_H(z, y) + G * u) = 0
+    let mut y = z_linear;
+    for _ in 0..4 {
+        let mut grad_bar = [0.0f32; 4];
+        let mut d_grad = [0.0f32; 4];
+        for i in 0..4 {
+            let zi = z[i];
+            let yi = y[i];
+            let z_mid = 0.5f32 * (yi + zi);
+            let quartic = 0.25f32 * beta * (yi + zi) * (yi * yi + zi * zi);
+            grad_bar[i] = z_mid + quartic;
+            d_grad[i] = 0.5f32 + 0.25f32 * beta * (3.0 * yi * yi + 2.0 * yi * zi + zi * zi);
+        }
+
+        let mut f_res = [0.0f32; 4];
+        for i in 0..4 {
+            let mut a_grad = 0.0f32;
+            for j in 0..4 {
+                a_grad += a_mat[i][j] * grad_bar[j];
+            }
+            f_res[i] = y[i] - z[i] - dt * a_grad - gu[i];
+        }
+
+        let max_res = f_res.iter().map(|v| v.abs()).fold(0.0f32, f32::max);
+        if max_res < 1e-6 {
+            break;
+        }
+
+        let mut j_mat = [[0.0f32; 4]; 4];
+        for i in 0..4 {
+            for j in 0..4 {
+                let delta_ij = if i == j { 1.0f32 } else { 0.0f32 };
+                j_mat[i][j] = delta_ij - dt * a_mat[i][j] * d_grad[j];
+            }
+        }
+
+        if let Some(delta_y) = solve_linear_system_4x4(j_mat, f_res) {
+            for i in 0..4 {
+                y[i] -= delta_y[i];
+            }
+        } else {
+            break;
+        }
+    }
+
+    *z = y;
+}
+
 /// Processes stereo audio through the Morphic Acoustic Controller with bit-exact passband locking.
 pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, MorphicAuditReport) {
     let stft = Stft::default();
@@ -3568,6 +3756,7 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
     let mut z_side = vec![0.0f32; 8];
     let mut ph_z_mid = [0.0f32; 4];
     let mut ph_z_side = [0.0f32; 4];
+    let mut ph_sq_sum = [0.0f32; 4];
 
     let mut conf_accum = 0.0f32;
     let mut auth_accum = 0.0f32;
@@ -3621,83 +3810,184 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
         let mut next_z_mid = vec![0.0f32; 8];
         let mut next_z_side = vec![0.0f32; 8];
 
-        let (sub_damp, micro_exc, r_mid, r_side) = controller.step_full(
-            &z_mid,
-            &z_side,
-            &u_mid,
-            &u_side,
-            dt,
-            confidence,
-            &mut next_z_mid,
-            &mut next_z_side,
-        );
-
-        z_mid = next_z_mid;
-        z_side = next_z_side;
+        let (sub_damp, micro_exc, r_mid, r_side) = if config.mode == MorphicModulationMode::GeometricMemory {
+            let (sd, me, rm, rs) = controller.step_full(
+                &z_mid,
+                &z_side,
+                &u_mid,
+                &u_side,
+                dt,
+                confidence,
+                &mut next_z_mid,
+                &mut next_z_side,
+            );
+            z_mid = next_z_mid;
+            z_side = next_z_side;
+            (sd, me, rm, rs)
+        } else {
+            (0.0f32, 0.0f32, 0.0f32, 0.0f32)
+        };
 
         conf_accum += confidence;
         let auth = (1.0 - confidence).clamp(0.0, 1.0) * config.sub_bass_damping_authority;
         auth_accum += auth;
-        damp_accum += sub_damp.abs();
-        text_accum += micro_exc.abs();
 
-        let (g_mid, g_side, eff_sub_damp) = match config.mode {
-            MorphicModulationMode::Bypass => (1.0f32, 1.0f32, 0.0f32),
-            MorphicModulationMode::Memoryless => {
-                let drive_m = (flux * 0.20).tanh() * config.microtexture_authority;
-                let drive_s = (flux * 0.20).tanh() * (1.0 - coherence) * config.microtexture_authority;
-                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
-                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
-                let sd = if sub_ratio > 0.25 { (sub_ratio - 0.25).min(1.0) * config.sub_bass_damping_authority } else { 0.0 };
-                (gm, gs, sd)
-            }
-            MorphicModulationMode::DspSmoother => {
-                let alpha = 0.90f32;
-                smoothed_flux_m = alpha * smoothed_flux_m + (1.0 - alpha) * flux;
-                smoothed_flux_s = alpha * smoothed_flux_s + (1.0 - alpha) * (flux * (1.0 - coherence));
-                let drive_m = (smoothed_flux_m * 0.20).tanh() * config.microtexture_authority;
-                let drive_s = (smoothed_flux_s * 0.20).tanh() * config.microtexture_authority;
-                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
-                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
-                let sd = if sub_ratio > 0.25 { (sub_ratio - 0.25).min(1.0) * config.sub_bass_damping_authority } else { 0.0 };
-                (gm, gs, sd)
-            }
-            MorphicModulationMode::GeometricMemory => {
-                let drive_m = (r_mid * 0.15).tanh() * config.microtexture_authority;
-                let drive_s = (r_side * 0.15).tanh() * config.microtexture_authority;
-                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
-                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
-                (gm, gs, sub_damp)
-            }
-            MorphicModulationMode::PortHamiltonian => {
-                let dt_hop = dt.min(0.05);
-                let u_m = flux;
-                let u_s = flux * (1.0 - coherence);
-                step_port_hamiltonian_4d(&mut ph_z_mid, dt_hop, u_m);
-                step_port_hamiltonian_4d(&mut ph_z_side, dt_hop, u_s);
-                let drive_m = (ph_z_mid[1] * 0.15).tanh() * config.microtexture_authority;
-                let drive_s = if is_stereo { (ph_z_side[1] * 0.15).tanh() * config.microtexture_authority } else { 0.0 };
-                let gm = (1.0 + drive_m).clamp(0.85, 1.15);
-                let gs = if is_stereo { (1.0 + drive_s).clamp(0.85, 1.15) } else { 1.0 };
-                let sd = if sub_ratio > 0.25 { (sub_ratio - 0.25).min(1.0) * config.sub_bass_damping_authority } else { 0.0 };
-                (gm, gs, sd)
-            }
-        };
+        let is_ph_multiband = matches!(
+            config.mode,
+            MorphicModulationMode::PortHamiltonian
+                | MorphicModulationMode::PortHamiltonianA1
+                | MorphicModulationMode::PortHamiltonianA3
+                | MorphicModulationMode::PortHamiltonianA4
+        );
 
-        if config.mode != MorphicModulationMode::Bypass {
-            // 1. High-Frequency Air Microtexture Modulation (above crossover_hz, e.g. 8000 Hz)
+        if is_ph_multiband {
+            let dt_hop = dt.min(0.05);
+            let u_m = flux;
+            let u_s = flux * (1.0 - coherence);
+
+            let (kap_m, kap_s) = match config.mode {
+                MorphicModulationMode::PortHamiltonianA1 => (0.0f32, 0.0f32),
+                MorphicModulationMode::PortHamiltonianA3 => {
+                    let km = (3.0f32 + 6.0f32 * (u_m * 0.20f32).tanh()).clamp(1.0, 12.0);
+                    let ks = (3.0f32 + 6.0f32 * (u_s * 0.20f32).tanh()).clamp(1.0, 12.0);
+                    (km, ks)
+                }
+                _ => (config.ph_coupling_kappa, config.ph_coupling_kappa),
+            };
+
+            let beta = match config.mode {
+                MorphicModulationMode::PortHamiltonianA4 => {
+                    if config.ph_quartic_beta > 0.0 { config.ph_quartic_beta } else { 1.5f32 }
+                }
+                _ => config.ph_quartic_beta,
+            };
+
+            step_port_hamiltonian_coupled_4d(&mut ph_z_mid, dt_hop, u_m, kap_m, beta);
+            step_port_hamiltonian_coupled_4d(&mut ph_z_side, dt_hop, u_s, kap_s, beta);
+
+            for i in 0..4 {
+                ph_sq_sum[i] += ph_z_mid[i].powi(2);
+            }
+
+            // Band A (8-12 kHz Presence): Fast Mode z_1
+            let drive_m_a = (ph_z_mid[1] * 0.15f32).tanh() * config.microtexture_authority;
+            let drive_s_a = if is_stereo { (ph_z_side[1] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 };
+            let g_mid_a = (1.0f32 + drive_m_a).clamp(0.85, 1.15);
+            let g_side_a = if is_stereo { (1.0f32 + drive_s_a).clamp(0.85, 1.15) } else { 1.0f32 };
+
+            // Band B (12-20 kHz Air): Shimmer Mode z_3
+            let drive_m_b = (ph_z_mid[3] * 0.15f32).tanh() * config.microtexture_authority;
+            let drive_s_b = if is_stereo { (ph_z_side[3] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 };
+            let g_mid_b = (1.0f32 + drive_m_b).clamp(0.85, 1.15);
+            let g_side_b = if is_stereo { (1.0f32 + drive_s_b).clamp(0.85, 1.15) } else { 1.0f32 };
+
+            // Selective Sub-Bass Damping (< 60 Hz side channel) driven by modal energy of Pair 2 (z_2)
+            let eff_sub_damp = if is_stereo {
+                (ph_z_mid[2].abs() * 0.50f32).tanh() * config.sub_bass_damping_authority
+            } else {
+                0.0f32
+            };
+
+            damp_accum += eff_sub_damp.abs();
+            text_accum += (drive_m_a.abs() + drive_m_b.abs()) * 0.5f32;
+
+            // Apply Multiband Split with Cosine Crossover
+            let split_bin = (config.ph_split_hz / (RATE as f32 / FFT as f32)).round() as usize;
+            let half_w = 8usize;
+            let win_start = split_bin.saturating_sub(half_w).max(crossover_bin);
+            let win_end = (split_bin + half_w).min(num_bins);
+
             for k in crossover_bin..num_bins {
+                let (gm, gs) = if k < win_start {
+                    (g_mid_a, g_side_a)
+                } else if k >= win_end {
+                    (g_mid_b, g_side_b)
+                } else {
+                    let frac = (k - win_start) as f32 / (win_end - win_start) as f32;
+                    let wb = 0.5f32 * (1.0f32 - (std::f32::consts::PI * frac).cos());
+                    let wa = 1.0f32 - wb;
+                    (wa * g_mid_a + wb * g_mid_b, wa * g_side_a + wb * g_side_b)
+                };
                 let idx = t * num_bins + k;
-                spec_mid.data[idx] *= g_mid;
-                spec_side.data[idx] *= g_side;
+                spec_mid.data[idx] *= gm;
+                spec_side.data[idx] *= gs;
             }
 
-            // 2. Selective Sub-Bass Mud Decay / Damping (< 60 Hz on side channel only)
             if eff_sub_damp.abs() > 1e-5 && is_stereo {
-                let factor = (1.0 - eff_sub_damp.abs() * 0.15).clamp(0.80, 1.0);
+                let factor = (1.0f32 - eff_sub_damp.abs() * 0.15f32).clamp(0.80, 1.0);
                 for k in 0..sub_cutoff_bin {
                     let idx = t * num_bins + k;
                     spec_side.data[idx] *= factor;
+                }
+            }
+        } else {
+            let (g_mid, g_side, eff_sub_damp) = match config.mode {
+                MorphicModulationMode::Bypass => (1.0f32, 1.0f32, 0.0f32),
+                MorphicModulationMode::Memoryless => {
+                    let drive_m = (flux * 0.20f32).tanh() * config.microtexture_authority;
+                    let drive_s = (flux * 0.20f32).tanh() * (1.0f32 - coherence) * config.microtexture_authority;
+                    let gm = (1.0f32 + drive_m).clamp(0.85, 1.15);
+                    let gs = if is_stereo { (1.0f32 + drive_s).clamp(0.85, 1.15) } else { 1.0f32 };
+                    let sd = if sub_ratio > 0.25f32 { (sub_ratio - 0.25f32).min(1.0) * config.sub_bass_damping_authority } else { 0.0f32 };
+                    (gm, gs, sd)
+                }
+                MorphicModulationMode::DspSmoother => {
+                    let alpha = 0.90f32;
+                    smoothed_flux_m = alpha * smoothed_flux_m + (1.0f32 - alpha) * flux;
+                    smoothed_flux_s = alpha * smoothed_flux_s + (1.0f32 - alpha) * (flux * (1.0f32 - coherence));
+                    let drive_m = (smoothed_flux_m * 0.20f32).tanh() * config.microtexture_authority;
+                    let drive_s = (smoothed_flux_s * 0.20f32).tanh() * config.microtexture_authority;
+                    let gm = (1.0f32 + drive_m).clamp(0.85, 1.15);
+                    let gs = if is_stereo { (1.0f32 + drive_s).clamp(0.85, 1.15) } else { 1.0f32 };
+                    let sd = if sub_ratio > 0.25f32 { (sub_ratio - 0.25f32).min(1.0) * config.sub_bass_damping_authority } else { 0.0f32 };
+                    (gm, gs, sd)
+                }
+                MorphicModulationMode::GeometricMemory => {
+                    let drive_m = (r_mid * 0.15f32).tanh() * config.microtexture_authority;
+                    let drive_s = (r_side * 0.15f32).tanh() * config.microtexture_authority;
+                    let gm = (1.0f32 + drive_m).clamp(0.85, 1.15);
+                    let gs = if is_stereo { (1.0f32 + drive_s).clamp(0.85, 1.15) } else { 1.0f32 };
+                    (gm, gs, sub_damp)
+                }
+                MorphicModulationMode::PortHamiltonianA0 => {
+                    let dt_hop = dt.min(0.05);
+                    let u_m = flux;
+                    let u_s = flux * (1.0f32 - coherence);
+                    step_port_hamiltonian_4d(&mut ph_z_mid, dt_hop, u_m);
+                    step_port_hamiltonian_4d(&mut ph_z_side, dt_hop, u_s);
+                    for i in 0..4 {
+                        ph_sq_sum[i] += ph_z_mid[i].powi(2);
+                    }
+                    let drive_m = (ph_z_mid[1] * 0.15f32).tanh() * config.microtexture_authority;
+                    let drive_s = if is_stereo { (ph_z_side[1] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 };
+                    let gm = (1.0f32 + drive_m).clamp(0.85, 1.15);
+                    let gs = if is_stereo { (1.0f32 + drive_s).clamp(0.85, 1.15) } else { 1.0f32 };
+                    let sd = if sub_ratio > 0.25f32 { (sub_ratio - 0.25f32).min(1.0) * config.sub_bass_damping_authority } else { 0.0f32 };
+                    (gm, gs, sd)
+                }
+                MorphicModulationMode::StaticHighShelf => {
+                    // Static +0.8 dB shelf control (10^(0.8/20) ~ 1.096478)
+                    (1.096478f32, 1.096478f32, 0.0f32)
+                }
+                _ => (1.0f32, 1.0f32, 0.0f32),
+            };
+
+            damp_accum += eff_sub_damp.abs();
+            text_accum += micro_exc.abs();
+
+            if config.mode != MorphicModulationMode::Bypass {
+                for k in crossover_bin..num_bins {
+                    let idx = t * num_bins + k;
+                    spec_mid.data[idx] *= g_mid;
+                    spec_side.data[idx] *= g_side;
+                }
+
+                if eff_sub_damp.abs() > 1e-5 && is_stereo {
+                    let factor = (1.0f32 - eff_sub_damp.abs() * 0.15f32).clamp(0.80, 1.0);
+                    for k in 0..sub_cutoff_bin {
+                        let idx = t * num_bins + k;
+                        spec_side.data[idx] *= factor;
+                    }
                 }
             }
         }
@@ -3731,6 +4021,13 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
     };
     let mono_passed = mono_corr >= 0.20;
 
+    let ph_modal_rms = [
+        (ph_sq_sum[0] / n_frames).sqrt(),
+        (ph_sq_sum[1] / n_frames).sqrt(),
+        (ph_sq_sum[2] / n_frames).sqrt(),
+        (ph_sq_sum[3] / n_frames).sqrt(),
+    ];
+
     let report = MorphicAuditReport {
         frames_processed: frames,
         mean_confidence: conf_accum / n_frames,
@@ -3742,7 +4039,9 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
         post_synthesis_low_band_rms_deviation: post_audit.post_synthesis_low_band_rms_deviation,
         full_band_snr_db: post_audit.full_band_snr_db,
         spectral_leakage_db: post_audit.reconstructed_spectral_leakage_db,
+        ph_modal_rms,
     };
+
 
     (out_audio, report)
 }
@@ -4607,6 +4906,125 @@ mod tests {
             .sqrt()
             / n as f32;
         assert!(diff_ph_rms > 0.0, "Port-Hamiltonian material must modulate audio");
+
+        // Verify that all 4 Port-Hamiltonian coordinates were active
+        for i in 0..4 {
+            assert!(
+                rep_ph.ph_modal_rms[i] > 1e-6,
+                "Port-Hamiltonian coordinate z_{} must be active (RMS={:.6e})",
+                i,
+                rep_ph.ph_modal_rms[i]
+            );
+        }
+
+        // 6. Frozen Baseline A0
+        let cfg_a0 = MorphicConfig {
+            mode: MorphicModulationMode::PortHamiltonianA0,
+            crossover_hz: 8000.0,
+            microtexture_authority: 0.20,
+            ..MorphicConfig::default()
+        };
+        let (_out_a0, rep_a0) = process_morphic_audio(&audio, &cfg_a0);
+        assert!(rep_a0.mono_compatibility_passed);
+        assert!(rep_a0.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // 7. Nonlinear Quartic AVF A4
+        let cfg_a4 = MorphicConfig {
+            mode: MorphicModulationMode::PortHamiltonianA4,
+            crossover_hz: 8000.0,
+            ph_quartic_beta: 1.5,
+            microtexture_authority: 0.20,
+            ..MorphicConfig::default()
+        };
+        let (_out_a4, rep_a4) = process_morphic_audio(&audio, &cfg_a4);
+        assert!(rep_a4.mono_compatibility_passed);
+        assert!(rep_a4.post_synthesis_low_band_rms_deviation < 1e-4);
+
+        // 8. Static High Shelf Control
+        let cfg_shelf = MorphicConfig {
+            mode: MorphicModulationMode::StaticHighShelf,
+            crossover_hz: 8000.0,
+            ..MorphicConfig::default()
+        };
+        let (_out_shelf, rep_shelf) = process_morphic_audio(&audio, &cfg_shelf);
+        assert!(rep_shelf.mono_compatibility_passed);
+        assert!(rep_shelf.post_synthesis_low_band_rms_deviation < 1e-4);
+    }
+
+    #[test]
+    fn test_solve_linear_system_4x4_known_solution() {
+        // [ 2,  1, -1,  2 ] [x0]   [ 3 ]
+        // [ 4,  5, -3,  6 ] [x1] = [ 3 ]
+        // [-2,  5, -2,  6 ] [x2]   [-2 ]
+        // [ 4, 11, -4,  8 ] [x3]   [-6 ]
+        // Exact solution: x = [1.0, -2.0, 1.0, 2.0]
+        let a = [
+            [2.0f32, 1.0, -1.0, 2.0],
+            [4.0, 5.0, -3.0, 6.0],
+            [-2.0, 5.0, -2.0, 6.0],
+            [4.0, 11.0, -4.0, 8.0],
+        ];
+        let expected = [1.0f32, -2.0, 1.0, 2.0];
+        let mut b = [0.0f32; 4];
+        for i in 0..4 {
+            for j in 0..4 {
+                b[i] += a[i][j] * expected[j];
+            }
+        }
+        let sol = solve_linear_system_4x4(a, b).expect("System must be solvable");
+        for i in 0..4 {
+            assert!(
+                (sol[i] - expected[i]).abs() < 1e-4,
+                "Coord {} mismatch: got {} vs expected {}",
+                i,
+                sol[i],
+                expected[i]
+            );
+        }
+    }
+
+    #[test]
+    fn test_port_hamiltonian_coupled_4d_unforced_passivity() {
+        let mut z = [1.5f32, -1.0, 0.8, -0.6];
+        let dt = 0.01f32;
+        let mut h_prev = 0.5f32 * (z[0].powi(2) + z[1].powi(2) + z[2].powi(2) + z[3].powi(2));
+
+        for step in 0..10_000 {
+            step_port_hamiltonian_coupled_4d(&mut z, dt, 0.0, 6.0, 0.0);
+            let h_curr = 0.5f32 * (z[0].powi(2) + z[1].powi(2) + z[2].powi(2) + z[3].powi(2));
+            assert!(
+                h_curr <= h_prev + 1e-6,
+                "Passivity violation at step {}: h_curr={:.6} > h_prev={:.6}",
+                step,
+                h_curr,
+                h_prev
+            );
+            h_prev = h_curr;
+        }
+        assert!(h_prev < 1e-6, "Energy must dissipate to near zero");
+    }
+
+    #[test]
+    fn test_port_hamiltonian_coupled_4d_cross_modal_energy_transfer() {
+        // Excite only Pair 1 (z[0] = 1.0, others 0), verify that with kappa > 0, Pair 2 gains energy
+        let mut z = [1.0f32, 0.0, 0.0, 0.0];
+        let dt = 0.01f32;
+        let kappa = 8.0f32;
+        let mut max_e_pair2 = 0.0f32;
+
+        for _ in 0..500 {
+            step_port_hamiltonian_coupled_4d(&mut z, dt, 0.0, kappa, 0.0);
+            let e_pair2 = 0.5f32 * (z[2].powi(2) + z[3].powi(2));
+            if e_pair2 > max_e_pair2 {
+                max_e_pair2 = e_pair2;
+            }
+        }
+
+        assert!(
+            max_e_pair2 > 0.05,
+            "Coupled material must transfer energy to Pair 2 (max_e2={:.4})",
+            max_e_pair2
+        );
     }
 }
 

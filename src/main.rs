@@ -132,12 +132,21 @@ enum Commands {
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
-        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian.
-        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian"])]
+        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, static-shelf.
+        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "static-shelf"])]
         morphic_mode: String,
         /// Crossover frequency in Hz above which microtexture modulation applies.
         #[arg(long, default_value_t = 8000.0)]
         morphic_crossover: f32,
+        /// Port-Hamiltonian cross-coupling kappa (default: 6.0).
+        #[arg(long, default_value_t = 6.0)]
+        morphic_coupling: f32,
+        /// Port-Hamiltonian presence/air multiband split frequency in Hz (default: 12000.0).
+        #[arg(long, default_value_t = 12000.0)]
+        morphic_split_hz: f32,
+        /// Port-Hamiltonian quartic potential beta parameter (default: 0.0).
+        #[arg(long, default_value_t = 0.0)]
+        morphic_quartic: f32,
         /// Calibrated shrinkage error correction on SFHT Flow endpoint (e.g. 0.88).
         #[arg(long)]
         sfht_shrinkage: Option<f32>,
@@ -206,6 +215,15 @@ enum Commands {
         /// True peak ceiling in dBTP.
         #[arg(long, default_value_t = -1.0, allow_hyphen_values = true)]
         ceiling_db: f32,
+        /// Port-Hamiltonian cross-coupling kappa (default: 6.0).
+        #[arg(long, default_value_t = 6.0)]
+        coupling_kappa: f32,
+        /// Port-Hamiltonian presence/air multiband split in Hz (default: 12000.0).
+        #[arg(long, default_value_t = 12000.0)]
+        split_hz: f32,
+        /// Port-Hamiltonian quartic potential beta parameter (default: 0.0).
+        #[arg(long, default_value_t = 0.0)]
+        quartic_beta: f32,
         /// Export level-matched WAVs to /sdcard/Download for listening.
         #[arg(long, default_value_t = true)]
         export_sdcard: bool,
@@ -888,6 +906,9 @@ fn run() -> Result<()> {
             morphic_strength,
             morphic_mode,
             morphic_crossover,
+            morphic_coupling,
+            morphic_split_hz,
+            morphic_quartic,
             sfht_shrinkage,
         } => auto_master_pipeline(
             &input,
@@ -922,6 +943,9 @@ fn run() -> Result<()> {
             morphic_strength,
             &morphic_mode,
             morphic_crossover,
+            morphic_coupling,
+            morphic_split_hz,
+            morphic_quartic,
             sfht_shrinkage,
         ),
         Commands::Microstructure {
@@ -975,6 +999,9 @@ fn run() -> Result<()> {
             strength,
             target_lufs,
             ceiling_db,
+            coupling_kappa,
+            split_hz,
+            quartic_beta,
             export_sdcard,
         } => run_morphic_compare_cli(
             &input,
@@ -983,6 +1010,9 @@ fn run() -> Result<()> {
             strength,
             target_lufs,
             ceiling_db,
+            coupling_kappa,
+            split_hz,
+            quartic_beta,
             export_sdcard,
         ),
         Commands::RichOracle {
@@ -1957,6 +1987,9 @@ fn auto_master_pipeline(
     morphic_strength: f32,
     morphic_mode: &str,
     morphic_crossover: f32,
+    morphic_coupling: f32,
+    morphic_split_hz: f32,
+    morphic_quartic: f32,
     sfht_shrinkage: Option<f32>,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
@@ -2306,10 +2339,18 @@ fn auto_master_pipeline(
             "memoryless" => gtf::MorphicModulationMode::Memoryless,
             "dsp-smoother" => gtf::MorphicModulationMode::DspSmoother,
             "port-hamiltonian" => gtf::MorphicModulationMode::PortHamiltonian,
+            "port-hamiltonian-a0" => gtf::MorphicModulationMode::PortHamiltonianA0,
+            "port-hamiltonian-a1" => gtf::MorphicModulationMode::PortHamiltonianA1,
+            "port-hamiltonian-a3" => gtf::MorphicModulationMode::PortHamiltonianA3,
+            "port-hamiltonian-a4" => gtf::MorphicModulationMode::PortHamiltonianA4,
+            "static-shelf" => gtf::MorphicModulationMode::StaticHighShelf,
             _ => gtf::MorphicModulationMode::GeometricMemory,
         };
         let morphic_cfg = gtf::MorphicConfig {
             crossover_hz: morphic_crossover,
+            ph_split_hz: morphic_split_hz,
+            ph_coupling_kappa: morphic_coupling,
+            ph_quartic_beta: morphic_quartic,
             sub_bass_damping_authority: 0.25 * morphic_strength,
             microtexture_authority: 0.15 * morphic_strength,
             mode: mode_enum,
@@ -2332,6 +2373,13 @@ fn auto_master_pipeline(
             } else {
                 "FAIL"
             }
+        );
+        println!(
+            "  Port-Hamiltonian Modal RMS: [z0={:.4e}, z1={:.4e}, z2={:.4e}, z3={:.4e}]",
+            morphic_rep.ph_modal_rms[0],
+            morphic_rep.ph_modal_rms[1],
+            morphic_rep.ph_modal_rms[2],
+            morphic_rep.ph_modal_rms[3]
         );
         current_audio = morphic_audio;
         native_audio::write(&out_dir.join("stage4_5_morphic.wav"), &current_audio, false)?;
@@ -2515,10 +2563,14 @@ fn auto_master_pipeline(
                 .and_then(|s| s.to_str())
                 .unwrap_or("Mastered");
             let sanitized_stem = if morphic_gtf {
-                if morphic_mode == "port-hamiltonian" {
-                    format!("{} [Highband Morphic M4 Mastered]", base_stem)
-                } else {
-                    format!("{} [Highband Morphic Mastered]", base_stem)
+                match morphic_mode {
+                    "port-hamiltonian" => format!("{} [Highband Morphic M4 A2 Mastered]", base_stem),
+                    "port-hamiltonian-a0" => format!("{} [Highband Morphic M4 A0 Mastered]", base_stem),
+                    "port-hamiltonian-a1" => format!("{} [Highband Morphic M4 A1 Mastered]", base_stem),
+                    "port-hamiltonian-a3" => format!("{} [Highband Morphic M4 A3 Mastered]", base_stem),
+                    "port-hamiltonian-a4" => format!("{} [Highband Morphic M4 A4 Mastered]", base_stem),
+                    "static-shelf" => format!("{} [Highband Static Shelf Mastered]", base_stem),
+                    _ => format!("{} [Highband Morphic Mastered]", base_stem),
                 }
             } else {
                 format!("{} [Highband Mastered]", base_stem)
@@ -3345,6 +3397,9 @@ fn run_morphic_compare_cli(
     strength: f32,
     target_lufs: f32,
     ceiling_db: f32,
+    coupling_kappa: f32,
+    split_hz: f32,
+    quartic_beta: f32,
     export_sdcard: bool,
 ) -> Result<()> {
     println!("================================================================================");
@@ -3353,6 +3408,9 @@ fn run_morphic_compare_cli(
     println!("Input Audio:       {}", input.display());
     println!("Output Directory:  {}", out.display());
     println!("Crossover Freq:    {:.1} Hz (microtexture air modulation applied above this band)", crossover_hz);
+    println!("Multiband Split:   {:.1} Hz (Presence / Air transition)", split_hz);
+    println!("Coupling Kappa:    {:.2} (Port-Hamiltonian cross-modal skew exchange)", coupling_kappa);
+    println!("Quartic Beta:      {:.2} (Nonlinear Hamiltonian potential)", quartic_beta);
     println!("Morphic Strength:  {:.2}", strength);
     println!("Target Loudness:   {:.1} LUFS (level-matched across all modes)", target_lufs);
     println!("Ceiling True Peak: {:.1} dBTP", ceiling_db);
@@ -3439,7 +3497,12 @@ fn run_morphic_compare_cli(
         ("m1_memoryless", "Memoryless Instantaneous Flux Modulator", gtf::MorphicModulationMode::Memoryless),
         ("m2_dsp_smoother", "First-Order One-Pole DSP Smoother", gtf::MorphicModulationMode::DspSmoother),
         ("m3_geometric", "GTF Phase II Symplectic Geometric Memory", gtf::MorphicModulationMode::GeometricMemory),
-        ("m4_port_hamiltonian", "Port-Hamiltonian Passive Resonant Material", gtf::MorphicModulationMode::PortHamiltonian),
+        ("m4_a0_frozen", "Port-Hamiltonian A0 Frozen Baseline (Uncoupled Broadband)", gtf::MorphicModulationMode::PortHamiltonianA0),
+        ("m4_a1_uncoupled", "Port-Hamiltonian A1 Uncoupled Multiband Material", gtf::MorphicModulationMode::PortHamiltonianA1),
+        ("m4_a2_coupled", "Port-Hamiltonian A2 Fully Coupled Multiband Material", gtf::MorphicModulationMode::PortHamiltonian),
+        ("m4_a3_adaptive", "Port-Hamiltonian A3 Flux-Adaptive Skew Coupling", gtf::MorphicModulationMode::PortHamiltonianA3),
+        ("m4_a4_quartic", "Port-Hamiltonian A4 Quartic AVF Discrete Gradient", gtf::MorphicModulationMode::PortHamiltonianA4),
+        ("m5_static_shelf", "Static +0.8dB High-Shelf EQ Baseline Control", gtf::MorphicModulationMode::StaticHighShelf),
     ];
 
     struct ModeResult {
@@ -3466,6 +3529,9 @@ fn run_morphic_compare_cli(
         let t0 = std::time::Instant::now();
         let cfg = gtf::MorphicConfig {
             crossover_hz,
+            ph_split_hz: split_hz,
+            ph_coupling_kappa: coupling_kappa,
+            ph_quartic_beta: quartic_beta,
             sub_bass_damping_authority: 0.25 * strength,
             microtexture_authority: 0.15 * strength,
             mode: *mode_enum,
@@ -3473,7 +3539,13 @@ fn run_morphic_compare_cli(
         };
         let (processed_audio, audit_rep) = gtf::process_morphic_audio(&in_audio, &cfg);
         let elapsed_morphic = t0.elapsed().as_secs_f64() * 1000.0;
-        println!("  Morphic elapsed: {:.2} ms", elapsed_morphic);
+        println!("  Morphic elapsed: {:.2} ms | Modal RMS: [z0={:.4e}, z1={:.4e}, z2={:.4e}, z3={:.4e}]",
+            elapsed_morphic,
+            audit_rep.ph_modal_rms[0],
+            audit_rep.ph_modal_rms[1],
+            audit_rep.ph_modal_rms[2],
+            audit_rep.ph_modal_rms[3]
+        );
 
         // Master to target LUFS
         let master_res = master::master_audio(&processed_audio, target_lufs, ceiling_db, -20.0, 1.6, 90.0)?;
@@ -3521,64 +3593,102 @@ fn run_morphic_compare_cli(
         r.mastered_snr_vs_bypass = compute_snr(&r.mastered, &bypass_mastered);
     }
 
-    // Generate Null & Difference WAVs
+    // Generate Key Null & Difference WAVs
     println!("\n--- Generating Null & Difference WAVs ---");
-    let diff_m3_m0_30db = diff_audio(&results[3].mastered, &results[0].mastered, 30.0);
-    let diff_m3_m0_60db = diff_audio(&results[3].mastered, &results[0].mastered, 60.0);
-    let diff_m3_m1_30db = diff_audio(&results[3].mastered, &results[1].mastered, 30.0);
-    let diff_m4_m0_30db = diff_audio(&results[4].mastered, &results[0].mastered, 30.0);
-    let diff_m4_m3_30db = diff_audio(&results[4].mastered, &results[3].mastered, 30.0);
+    // Mode Indices:
+    // 0: m0_bypass, 1: m1_memoryless, 2: m2_dsp_smoother, 3: m3_geometric, 4: m4_a0_frozen,
+    // 5: m4_a1_uncoupled, 6: m4_a2_coupled, 7: m4_a3_adaptive, 8: m4_a4_quartic, 9: m5_static_shelf
+    let diff_m4a2_m0_30db = diff_audio(&results[6].mastered, &results[0].mastered, 30.0);
+    let diff_m4a2_m4a0_30db = diff_audio(&results[6].mastered, &results[4].mastered, 30.0);
+    let diff_m4a2_m3_30db = diff_audio(&results[6].mastered, &results[3].mastered, 30.0);
+    let diff_m4a2_m5_30db = diff_audio(&results[6].mastered, &results[9].mastered, 30.0);
+    let diff_m4a4_m4a2_30db = diff_audio(&results[8].mastered, &results[6].mastered, 30.0);
 
-    let path_diff_m3_m0_30 = out.join("diff_m3_vs_m0_gain30db.wav");
-    native_audio::write(&path_diff_m3_m0_30, &diff_m3_m0_30db, true)?;
-    let path_diff_m3_m0_60 = out.join("diff_m3_vs_m0_gain60db.wav");
-    native_audio::write(&path_diff_m3_m0_60, &diff_m3_m0_60db, true)?;
-    let path_diff_m3_m1_30 = out.join("diff_m3_vs_m1_dynamics_gain30db.wav");
-    native_audio::write(&path_diff_m3_m1_30, &diff_m3_m1_30db, true)?;
-    let path_diff_m4_m0_30 = out.join("diff_m4_vs_m0_gain30db.wav");
-    native_audio::write(&path_diff_m4_m0_30, &diff_m4_m0_30db, true)?;
-    let path_diff_m4_m3_30 = out.join("diff_m4_vs_m3_gain30db.wav");
-    native_audio::write(&path_diff_m4_m3_30, &diff_m4_m3_30db, true)?;
+    let path_diff_m4a2_m0_30 = out.join("diff_m4a2_vs_m0_gain30db.wav");
+    native_audio::write(&path_diff_m4a2_m0_30, &diff_m4a2_m0_30db, true)?;
+    let path_diff_m4a2_m4a0_30 = out.join("diff_m4a2_vs_m4a0_gain30db.wav");
+    native_audio::write(&path_diff_m4a2_m4a0_30, &diff_m4a2_m4a0_30db, true)?;
+    let path_diff_m4a2_m3_30 = out.join("diff_m4a2_vs_m3_gain30db.wav");
+    native_audio::write(&path_diff_m4a2_m3_30, &diff_m4a2_m3_30db, true)?;
+    let path_diff_m4a2_m5_30 = out.join("diff_m4a2_vs_m5_gain30db.wav");
+    native_audio::write(&path_diff_m4a2_m5_30, &diff_m4a2_m5_30db, true)?;
+    let path_diff_m4a4_m4a2_30 = out.join("diff_m4a4_vs_m4a2_gain30db.wav");
+    native_audio::write(&path_diff_m4a4_m4a2_30, &diff_m4a4_m4a2_30db, true)?;
 
     // SDCard Export
     if export_sdcard {
         let sdcard_dir = std::path::Path::new("/sdcard/Download");
         if sdcard_dir.exists() {
-            println!("\n--- Exporting Matched-Level Listening Deliverables to /sdcard/Download ---");
+            let parent_name = input.parent().and_then(|p| p.file_name()).and_then(|s| s.to_str()).unwrap_or("");
+            let base_title = if parent_name.contains("chasing-horizons-1") || input.display().to_string().contains("chasing-horizons-1") {
+                "Chasing Horizons (1)"
+            } else if parent_name.contains("chasing-horizons") || input.display().to_string().contains("chasing-horizons") {
+                "Chasing Horizons"
+            } else {
+                input.file_stem().and_then(|s| s.to_str()).unwrap_or("Audio")
+            };
+
+            let flac_dir = sdcard_dir.join("FLAC");
+            if !flac_dir.exists() {
+                let _ = std::fs::create_dir_all(&flac_dir);
+            }
+
+            println!("\n--- Exporting Matched-Level Listening Deliverables to /sdcard/Download (Track: {}) ---", base_title);
             let exports = [
-                ("Chasing Horizons - Morphic M0 [Bypass Mastered].wav", out.join("m0_bypass_listen.wav")),
-                ("Chasing Horizons - Morphic M1 [Memoryless Mastered].wav", out.join("m1_memoryless_listen.wav")),
-                ("Chasing Horizons - Morphic M2 [DSP Smoother Mastered].wav", out.join("m2_dsp_smoother_listen.wav")),
-                ("Chasing Horizons - Morphic M3 [Geometric Memory Mastered].wav", out.join("m3_geometric_listen.wav")),
-                ("Chasing Horizons - Morphic M4 [Port-Hamiltonian Material Mastered].wav", out.join("m4_port_hamiltonian_listen.wav")),
-                ("Chasing Horizons - Morphic M3 vs M0 [Geometric Delta +30dB].wav", path_diff_m3_m0_30.clone()),
-                ("Chasing Horizons - Morphic M3 vs M1 [Memory Dynamics Delta +30dB].wav", path_diff_m3_m1_30.clone()),
-                ("Chasing Horizons - Morphic M4 vs M0 [Port-Hamiltonian Delta +30dB].wav", path_diff_m4_m0_30.clone()),
-                ("Chasing Horizons - Morphic M4 vs M3 [PH vs Geometric Delta +30dB].wav", path_diff_m4_m3_30.clone()),
+                (format!("{} - Morphic M0 [Bypass Mastered].wav", base_title), out.join("m0_bypass_listen.wav")),
+                (format!("{} - Morphic M1 [Memoryless Mastered].wav", base_title), out.join("m1_memoryless_listen.wav")),
+                (format!("{} - Morphic M2 [DSP Smoother Mastered].wav", base_title), out.join("m2_dsp_smoother_listen.wav")),
+                (format!("{} - Morphic M3 [Geometric Memory Mastered].wav", base_title), out.join("m3_geometric_listen.wav")),
+                (format!("{} - Morphic M4 A0 [Frozen Baseline Mastered].wav", base_title), out.join("m4_a0_frozen_listen.wav")),
+                (format!("{} - Morphic M4 A1 [Uncoupled Multiband Mastered].wav", base_title), out.join("m4_a1_uncoupled_listen.wav")),
+                (format!("{} - Morphic M4 A2 [Coupled Mastered].wav", base_title), out.join("m4_a2_coupled_listen.wav")),
+                (format!("{} - Morphic M4 A3 [Adaptive Mastered].wav", base_title), out.join("m4_a3_adaptive_listen.wav")),
+                (format!("{} - Morphic M4 A4 [Nonlinear AVF Mastered].wav", base_title), out.join("m4_a4_quartic_listen.wav")),
+                (format!("{} - Morphic M5 [Static High-Shelf Control].wav", base_title), out.join("m5_static_shelf_listen.wav")),
+                (format!("{} - Delta M4 A2 vs Frozen M4 [+30dB].wav", base_title), path_diff_m4a2_m4a0_30.clone()),
+                (format!("{} - Delta M4 A2 vs Static Shelf [+30dB].wav", base_title), path_diff_m4a2_m5_30.clone()),
+                (format!("{} - Delta M4 A2 vs M3 Geometric [+30dB].wav", base_title), path_diff_m4a2_m3_30.clone()),
+                (format!("{} - Delta M4 A4 vs M4 A2 [+30dB].wav", base_title), path_diff_m4a4_m4a2_30.clone()),
             ];
-            for (dst_name, src_path) in &exports {
-                let dst_path = sdcard_dir.join(dst_name);
-                if let Err(e) = std::fs::copy(src_path, &dst_path) {
+
+            for (dst_wav_name, src_path) in &exports {
+                let dst_wav_path = sdcard_dir.join(dst_wav_name);
+                if let Err(e) = std::fs::copy(src_path, &dst_wav_path) {
                     eprintln!("  Failed to copy {}: {e}", src_path.display());
                 } else {
-                    println!("  Exported -> {}", dst_path.display());
+                    println!("  Exported WAV  -> {}", dst_wav_path.display());
+                }
+
+                // Also render 24-bit FLAC if flac_dir exists
+                if flac_dir.exists() {
+                    let flac_name = dst_wav_name.strip_suffix(".wav").unwrap_or(dst_wav_name).to_string() + ".flac";
+                    let dst_flac_path = flac_dir.join(flac_name);
+                    let _ = std::process::Command::new("ffmpeg")
+                        .args(["-y", "-i"])
+                        .arg(src_path)
+                        .args(["-c:a", "flac"])
+                        .arg(&dst_flac_path)
+                        .output();
+                    if dst_flac_path.exists() {
+                        println!("  Exported FLAC -> {}", dst_flac_path.display());
+                    }
                 }
             }
         }
     }
 
     // Print Comparative Evaluation Table
-    println!("\n=========================================================================================================");
-    println!("                    MORPHIC CONTROLLER MODULATION COMPARISON SUMMARY TABLE");
-    println!("=========================================================================================================");
+    println!("\n=================================================================================================================================");
+    println!("                                   MORPHIC CONTROLLER FULL ACTIVATION COMPARISON TABLE");
+    println!("=================================================================================================================================");
     println!(
-        "{:<16} | {:>10} | {:>10} | {:>12} | {:>12} | {:>12} | {:>10} | {:>10}",
-        "Mode", "Pre SNR", "Post SNR", "Air RMS", "Flux Var", "SubSide RMS", "LUFS", "True Peak"
+        "{:<18} | {:>9} | {:>9} | {:>11} | {:>11} | {:>11} | {:>8} | {:>9} | {:>15}",
+        "Mode", "Pre SNR", "Post SNR", "Air RMS", "Flux Var", "SubSide RMS", "LUFS", "True Peak", "PH Modal RMS (0,1,2,3)"
     );
-    println!("-----------------+------------+------------+--------------+--------------+--------------+------------+------------");
+    println!("-------------------+-----------+-----------+-------------+-------------+-------------+----------+-----------+-------------------------");
     for r in &results {
         println!(
-            "{:<16} | {:>9.2} dB| {:>9.2} dB| {:>9.2} dBFS| {:>12.4e}| {:>9.2} dBFS| {:>9.2} | {:>7.2} dBTP",
+            "{:<18} | {:>8.2}dB | {:>8.2}dB | {:>8.2}dBFS | {:>11.4e} | {:>8.2}dBFS | {:>8.2} | {:>6.2}dBTP | [{:.2e},{:.2e},{:.2e},{:.2e}]",
             r.id,
             r.unmastered_snr_vs_bypass,
             r.mastered_snr_vs_bypass,
@@ -3586,16 +3696,23 @@ fn run_morphic_compare_cli(
             r.air_flux_var,
             r.sub_side_rms_dbfs,
             r.lufs,
-            r.true_peak_dbtp
+            r.true_peak_dbtp,
+            r.audit.ph_modal_rms[0],
+            r.audit.ph_modal_rms[1],
+            r.audit.ph_modal_rms[2],
+            r.audit.ph_modal_rms[3]
         );
     }
-    println!("=========================================================================================================");
+    println!("=================================================================================================================================");
 
     // Save JSON report
     let report_json = out.join("morphic_comparison.json");
     let report_data = serde_json::json!({
         "input": input.display().to_string(),
         "crossover_hz": crossover_hz,
+        "split_hz": split_hz,
+        "coupling_kappa": coupling_kappa,
+        "quartic_beta": quartic_beta,
         "strength": strength,
         "target_lufs": target_lufs,
         "modes": results.iter().map(|r| {
@@ -3611,6 +3728,7 @@ fn run_morphic_compare_cli(
                 "lufs": r.lufs,
                 "true_peak_dbtp": r.true_peak_dbtp,
                 "limiter_gr_db": r.limiter_gr_db,
+                "ph_modal_rms": r.audit.ph_modal_rms,
                 "mono_compatibility_passed": r.audit.mono_compatibility_passed,
                 "channel_swap_equivariance_passed": r.audit.channel_swap_equivariance_passed,
                 "post_synthesis_low_band_rms_deviation": r.audit.post_synthesis_low_band_rms_deviation,

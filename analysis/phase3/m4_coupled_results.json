@@ -1,0 +1,66 @@
+{
+  "lab": "M4 Coupled Port-Hamiltonian Material Lab",
+  "linear_midpoint_balance": {
+    "error": 6.591949208711867e-17,
+    "passed": true
+  },
+  "unforced_passivity": {
+    "violations_10k": 0,
+    "passed": true
+  },
+  "quartic_avf_discrete_gradient": {
+    "error": 2.220446049250313e-16,
+    "passed": true
+  },
+  "cross_modal_coupling": {
+    "transfer_records": [
+      {
+        "kappa": 0.0,
+        "mean_energy_pair1": 0.0019436641548005048,
+        "mean_energy_pair2": 0.00018466416881268428,
+        "cross_pair_ratio": 0.09500827000209713
+      },
+      {
+        "kappa": 1.0,
+        "mean_energy_pair1": 0.001821837126231109,
+        "mean_energy_pair2": 0.0002368227528977473,
+        "cross_pair_ratio": 0.12999117730555304
+      },
+      {
+        "kappa": 3.0,
+        "mean_energy_pair1": 0.0014590914580113101,
+        "mean_energy_pair2": 0.0003662299693398623,
+        "cross_pair_ratio": 0.2509986384534255
+      },
+      {
+        "kappa": 6.0,
+        "mean_energy_pair1": 0.0008647335131281656,
+        "mean_energy_pair2": 0.0005054686668581911,
+        "cross_pair_ratio": 0.5845369228603883
+      },
+      {
+        "kappa": 12.0,
+        "mean_energy_pair1": 0.0006598156219440497,
+        "mean_energy_pair2": 0.0006500020564133772,
+        "cross_pair_ratio": 0.9851268063315048
+      }
+    ],
+    "coupling_transfers_energy": true
+  },
+  "coordinate_observability": {
+    "variances": [
+      0.0008397486446842686,
+      0.0008742749052865947,
+      0.0005012315101719517,
+      0.0005096276278010414
+    ],
+    "peaks": [
+      0.15515244334296802,
+      0.1332741699287153,
+      0.11656592603232899,
+      0.12721818017112052
+    ],
+    "all_active": true
+  },
+  "verdict": "ALL MATHEMATICAL & DYNAMICAL INVARIANTS VERIFIED"
+}
