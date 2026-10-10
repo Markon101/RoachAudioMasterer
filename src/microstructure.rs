@@ -526,6 +526,7 @@ fn process_family_a_procedural(
         for k in shimmer_bin..BINS {
             let omega_nom = 2.0 * PI * k as f32 * HOP as f32 / FFT as f32;
             let mut prev_phi = mod_data[k].im.atan2(mod_data[k].re);
+            let mut prev_omega = omega_nom;
 
             for t in 1..frames {
                 let idx = t * BINS + k;
@@ -534,21 +535,25 @@ fn process_family_a_procedural(
                 if curr_mag > 1e-5 {
                     let curr_phi = mod_data[idx].im.atan2(mod_data[idx].re);
                     let raw_diff = curr_phi - prev_phi;
-                    let delta_omega = ((raw_diff - omega_nom + PI).rem_euclid(2.0 * PI)) - PI;
-                    let omega_inst = omega_nom + delta_omega;
-                    let target_phi = prev_phi + omega_inst;
+                    let target_phi = prev_phi + prev_omega;
 
                     let is_transient = hts.transient.data[idx].norm() > curr_mag * 0.35;
                     if !is_transient {
                         let phi_err = ((curr_phi - target_phi + PI).rem_euclid(2.0 * PI)) - PI;
                         let new_phi = curr_phi - smooth_factor * phi_err;
                         mod_data[idx] = C::new(curr_mag * new_phi.cos(), curr_mag * new_phi.sin());
+                        let actual_diff = new_phi - prev_phi;
+                        let delta_omega = ((actual_diff - omega_nom + PI).rem_euclid(2.0 * PI)) - PI;
+                        prev_omega = omega_nom + delta_omega;
                         prev_phi = new_phi;
                     } else {
+                        let delta_omega = ((raw_diff - omega_nom + PI).rem_euclid(2.0 * PI)) - PI;
+                        prev_omega = omega_nom + delta_omega;
                         prev_phi = curr_phi;
                     }
                 } else {
                     prev_phi += omega_nom;
+                    prev_omega = omega_nom;
                 }
             }
         }
@@ -1381,5 +1386,41 @@ mod tests {
         let (out_zero, rep_zero) = process_microstructure(&audio, &cfg_zero);
         assert!(rep_zero.transient_correlation > 0.98);
         assert!(out_zero.channels[0].iter().all(|x| x.is_finite()));
+    }
+
+    #[test]
+    fn phase_continuity_smooths_jittery_highs() {
+        let n = RATE as usize;
+        let mut samples = vec![0.0f32; n];
+        for (i, x) in samples.iter_mut().enumerate() {
+            let t = i as f32 / RATE as f32;
+            let phase = 2.0 * PI * 10000.0 * t + 0.4 * (2.0 * PI * 15.0 * t).sin();
+            *x = 0.3 * phase.sin();
+        }
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![samples.clone(), samples],
+        };
+        let cfg = MicrostructureConfig {
+            phase_continuity: 0.8,
+            air_coupling: 0.0,
+            harmonic_resonance: 0.0,
+            transient_desmear: 0.0,
+            fractal_tendrils: 0.0,
+            crossover_hz: 3000.0,
+            strength: 1.0,
+            authority: 1.0,
+            ..MicrostructureConfig::default()
+        };
+        let (out, rep) = process_microstructure(&audio, &cfg);
+        assert!(rep.mono_compatibility_passed);
+        assert!(rep.transient_correlation > 0.95);
+        assert!(out.channels[0].iter().all(|x| x.is_finite()));
+        let diff: f32 = out.channels[0]
+            .iter()
+            .zip(&audio.channels[0])
+            .map(|(a, b)| (a - b).abs())
+            .sum();
+        assert!(diff > 0.1, "Phase continuity must actively smooth phase jitter");
     }
 }

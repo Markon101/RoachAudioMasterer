@@ -28,6 +28,7 @@ mod rich_synth;
 mod scene;
 mod scene_adapter;
 pub mod scene_clean;
+pub mod scene_stats;
 mod scene_engine;
 mod scene_experiment;
 mod scene_features;
@@ -153,6 +154,9 @@ enum Commands {
         /// Calibrated shrinkage error correction on SFHT Flow endpoint (e.g. 0.88).
         #[arg(long)]
         sfht_shrinkage: Option<f32>,
+        /// Opt-in self-tuning parameter engine: maps deep acoustic scene statistics directly into stage parameters.
+        #[arg(long, default_value_t = false)]
+        auto_tune: bool,
     },
     /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
@@ -917,6 +921,7 @@ fn run() -> Result<()> {
             morphic_quartic,
             morphic_shelf_db,
             sfht_shrinkage,
+            auto_tune,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -955,6 +960,7 @@ fn run() -> Result<()> {
             morphic_quartic,
             morphic_shelf_db,
             sfht_shrinkage,
+            auto_tune,
         ),
         Commands::Microstructure {
             input,
@@ -1338,6 +1344,13 @@ fn run() -> Result<()> {
                 profile.integrated_lufs, profile.crest_factor_db, profile.dynamic_range_lra_lu
             );
             println!("=======================================================");
+            let tuning_card = scene_stats::TuningCard::generate(
+                &profile.stats,
+                &profile.authorities,
+                profile.sub_energy_dbfs,
+                profile.integrated_lufs,
+            );
+            tuning_card.print_summary_table();
             if let Some(ref out_path) = out {
                 if !out_path.exists() {
                     let _ = std::fs::create_dir_all(out_path);
@@ -1347,8 +1360,15 @@ fn run() -> Result<()> {
                 } else {
                     out_path.clone()
                 };
+                let card_path = if out_path.is_dir() {
+                    out_path.join("tuning_card.json")
+                } else {
+                    out_path.with_file_name("tuning_card.json")
+                };
                 std::fs::write(&json_path, serde_json::to_string_pretty(&profile)?)?;
+                std::fs::write(&card_path, serde_json::to_string_pretty(&tuning_card)?)?;
                 println!("Assessment saved to {}", json_path.display());
+                println!("Tuning card saved to {}", card_path.display());
             }
             Ok(())
         }
@@ -2002,6 +2022,7 @@ fn auto_master_pipeline(
     morphic_quartic: f32,
     morphic_shelf_db: f32,
     sfht_shrinkage: Option<f32>,
+    auto_tune: bool,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
 
@@ -2138,6 +2159,41 @@ fn auto_master_pipeline(
         serde_json::to_string_pretty(&pre_profile)?,
     )?;
 
+    let tuning_card = scene_stats::TuningCard::generate(
+        &pre_profile.stats,
+        &pre_profile.authorities,
+        pre_profile.sub_energy_dbfs,
+        pre_profile.integrated_lufs,
+    );
+    tuning_card.print_summary_table();
+    std::fs::write(
+        out_dir.join("tuning_card.json"),
+        serde_json::to_string_pretty(&tuning_card)?,
+    )?;
+
+    let mut morphic_coupling = morphic_coupling;
+    let mut morphic_quartic = morphic_quartic;
+    let mut morphic_shelf_db = morphic_shelf_db;
+    let mut glue_threshold_db = glue_threshold_db;
+    let mut glue_ratio = glue_ratio;
+    let mut morphic_mode_string = morphic_mode.to_string();
+
+    if auto_tune {
+        println!("\n*** Autonomous Self-Tuning Parameter Engine Active ***");
+        println!("  Overriding stage parameters using measured acoustic scene statistics:");
+        println!("  - Port-Hamiltonian Kappa:   {:.2} -> {:.2}", morphic_coupling, tuning_card.recommended_parameters.morphic_coupling_kappa);
+        println!("  - Port-Hamiltonian Beta:    {:.2} -> {:.2}", morphic_quartic, tuning_card.recommended_parameters.morphic_quartic_beta);
+        println!("  - Port-Hamiltonian Shelf:   {:+.2} -> {:+.2} dB", morphic_shelf_db, tuning_card.recommended_parameters.morphic_shelf_db);
+        println!("  - Glue Comp Threshold:      {:+.1} -> {:+.1} dBFS", glue_threshold_db, tuning_card.recommended_parameters.glue_threshold_db);
+        println!("  - Glue Comp Ratio:          {:.2}:1 -> {:.2}:1", glue_ratio, tuning_card.recommended_parameters.glue_ratio);
+        morphic_coupling = tuning_card.recommended_parameters.morphic_coupling_kappa;
+        morphic_quartic = tuning_card.recommended_parameters.morphic_quartic_beta;
+        morphic_shelf_db = tuning_card.recommended_parameters.morphic_shelf_db;
+        glue_threshold_db = tuning_card.recommended_parameters.glue_threshold_db;
+        glue_ratio = tuning_card.recommended_parameters.glue_ratio;
+        morphic_mode_string = tuning_card.recommended_parameters.morphic_mode.clone();
+    }
+
     // Model Resolution
     let resolved_sfht = if !no_sfht {
         sfht_model.map(|p| p.to_path_buf()).or_else(|| {
@@ -2266,11 +2322,21 @@ fn auto_master_pipeline(
         native_audio::write(&out_dir.join("stage3_clean.wav"), &current_audio, false)?;
     }
 
-    // Stage 3.5: Conditional Microstructure & Fractal Tendril Synthesis (Opt-in)
-    if fractal_tendrils > 0.0 {
+    // Stage 3.5: Microstructure De-Fizz, Anti-Smear & Phase Continuity Synthesis
+    let defizz_auth = pre_profile.authorities.conservative_defizz_authority;
+    let run_microstructure = fractal_tendrils > 0.0
+        || defizz_auth > 0.0
+        || (force_specialists && (pre_profile.artifacts.ai_shimmer > 0.10 || pre_profile.artifacts.metallic_grain > 0.10));
+
+    if run_microstructure {
+        let eff_defizz_auth = if force_specialists && defizz_auth <= 0.0 {
+            0.50
+        } else {
+            defizz_auth
+        };
         println!(
-            "\n--- Stage 3.5: Microstructure & Fractal Tendril Synthesis (intensity={:.2}) ---",
-            fractal_tendrils
+            "\n--- Stage 3.5: Microstructure De-Fizz & Phase Restoration (defizz_auth={:.2}, fractal={:.2}) ---",
+            eff_defizz_auth, fractal_tendrils
         );
         let t0 = std::time::Instant::now();
         let micro_cfg = microstructure::MicrostructureConfig {
@@ -2278,16 +2344,22 @@ fn auto_master_pipeline(
             fractal_tendrils,
             fractal_dimension: 1.0,
             strength: 1.0,
+            transient_desmear: if eff_defizz_auth > 0.0 { (0.25 * eff_defizz_auth).clamp(0.10, 0.50) } else { 0.0 },
+            phase_continuity: if eff_defizz_auth > 0.0 { (0.40 * eff_defizz_auth).clamp(0.15, 0.70) } else { 0.0 },
+            harmonic_resonance: if eff_defizz_auth > 0.0 { (0.20 * eff_defizz_auth).clamp(0.10, 0.40) } else { 0.0 },
+            air_coupling: if eff_defizz_auth > 0.0 { (0.15 * eff_defizz_auth).clamp(0.05, 0.30) } else { 0.0 },
             crossover_hz: 3000.0,
-            authority: 1.0,
+            authority: if eff_defizz_auth > 0.0 { eff_defizz_auth.max(fractal_tendrils) } else { 1.0 },
             bypass: false,
             ..microstructure::MicrostructureConfig::default()
         };
         let (micro_audio, micro_rep) =
             microstructure::process_microstructure(&current_audio, &micro_cfg);
         println!(
-            "  Completed in {:.2}s | Metallic Grain: {:.3} -> {:.3}",
+            "  Completed in {:.2}s | AI Shimmer: {:.3} -> {:.3} | Metallic Grain: {:.3} -> {:.3}",
             t0.elapsed().as_secs_f64(),
+            micro_rep.initial_artifacts.ai_shimmer,
+            micro_rep.final_artifacts.ai_shimmer,
             micro_rep.initial_artifacts.metallic_grain,
             micro_rep.final_artifacts.metallic_grain
         );
@@ -2297,6 +2369,11 @@ fn auto_master_pipeline(
             &current_audio,
             false,
         )?;
+    } else {
+        println!(
+            "\n--- Stage 3.5: Microstructure De-Fizz ABSTAINED (defizz_auth={:.2}: shimmer & metallic grain within pristine bounds) ---",
+            defizz_auth
+        );
     }
 
     // Stage 4: 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth)
@@ -2347,10 +2424,10 @@ fn auto_master_pipeline(
     if morphic_gtf {
         println!(
             "\n--- Stage 4.5: GTF Persistent Morphic Acoustic Controller (mode={}, strength={:.2}, crossover={:.1}Hz) ---",
-            morphic_mode, morphic_strength, morphic_crossover
+            morphic_mode_string, morphic_strength, morphic_crossover
         );
         let t0 = std::time::Instant::now();
-        let mode_enum = match morphic_mode {
+        let mode_enum = match morphic_mode_string.as_str() {
             "bypass" => gtf::MorphicModulationMode::Bypass,
             "memoryless" => gtf::MorphicModulationMode::Memoryless,
             "dsp-smoother" => gtf::MorphicModulationMode::DspSmoother,
@@ -2369,8 +2446,16 @@ fn auto_master_pipeline(
             ph_coupling_kappa: morphic_coupling,
             ph_quartic_beta: morphic_quartic,
             ph_shelf_db: morphic_shelf_db,
-            sub_bass_damping_authority: 0.25 * morphic_strength,
-            microtexture_authority: 0.15 * morphic_strength,
+            sub_bass_damping_authority: if auto_tune {
+                tuning_card.recommended_parameters.morphic_sub_damping * morphic_strength
+            } else {
+                0.25 * morphic_strength
+            },
+            microtexture_authority: if auto_tune {
+                tuning_card.recommended_parameters.morphic_microtexture * morphic_strength
+            } else {
+                0.15 * morphic_strength
+            },
             mode: mode_enum,
             ..gtf::MorphicConfig::default()
         };

@@ -61,6 +61,8 @@ pub struct AcousticProfile {
     pub artifacts: ArtifactReport,
     // Computed specialist authorities
     pub authorities: SpecialistAuthorities,
+    // Deep autonomous acoustic scene statistics
+    pub stats: crate::scene_stats::SceneStats,
 }
 
 /// Verification result from automatic preservation guardrails.
@@ -307,6 +309,8 @@ impl SceneAssessor {
             master_glue_authority,
         };
 
+        let stats = crate::scene_stats::SceneStats::compute(audio, &mid_spec);
+
         AcousticProfile {
             peak_sample_dbfs,
             clipping_sample_count: clipping_count,
@@ -325,6 +329,7 @@ impl SceneAssessor {
             dynamic_range_lra_lu,
             artifacts,
             authorities,
+            stats,
         }
     }
 
