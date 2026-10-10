@@ -571,7 +571,7 @@ pub fn generate_speech_vocal(seed: u64) -> Audio {
         } else {
             -0.1 * (phase - PI).sin()
         };
-        let aspiration = rng.signed() * 0.08;
+        let aspiration = rng.signed() * 0.02;
         let excitation = glottal + aspiration;
 
         // Parallel 2nd-order bandpass resonators for F1, F2, F3
@@ -694,6 +694,8 @@ pub fn synthesize_snare_snap(seed: u64) -> Audio {
     let mut phase_shell2 = rng.range(0.0, TAU);
 
     let mut noise_color = 0.0f32;
+    let wire_modes = [2400.0f32, 3100.0, 3850.0, 4600.0, 5350.0, 6100.0, 6900.0, 7650.0];
+    let wire_phases: [f32; 8] = std::array::from_fn(|_| rng.range(0.0, TAU));
 
     for i in 0..n {
         let t = i as f32 / rate;
@@ -708,18 +710,24 @@ pub fn synthesize_snare_snap(seed: u64) -> Audio {
         phase_shell2 = (phase_shell2 + TAU * shell_f2 / rate).rem_euclid(TAU);
         let shell = (0.6 * phase_shell1.sin() + 0.4 * phase_shell2.sin()) * (-t / 0.090).exp();
 
-        // 3. Snare wire rattle in 2 kHz - 8 kHz (shaped high noise + fast attack transient crack)
+        // 3. Snare wire rattle in 2 kHz - 8 kHz (8 physical modal wire resonators + gentle soft noise)
+        let mut wire_modal = 0.0f32;
+        for (m, &f_wire) in wire_modes.iter().enumerate() {
+            let m_decay = (-t / (0.045 + 0.005 * m as f32)).exp();
+            let phase = wire_phases[m] + TAU * f_wire * t;
+            wire_modal += (1.0 / (m + 1) as f32).sqrt() * phase.sin() * m_decay;
+        }
         let w = rng.signed();
-        noise_color = 0.6 * noise_color + 0.4 * w;
-        let high_noise = (w - noise_color) * 1.5; // High-pass filtered noise
-        let wire_env = env(t, 0.0005, 0.22, 0.001, 0.065);
-        let wire = high_noise * wire_env;
+        noise_color = 0.75 * noise_color + 0.25 * w;
+        let soft_noise = (w - noise_color) * 0.25;
+        let wire_env = env(t, 0.0005, 0.18, 0.001, 0.055);
+        let wire = (0.6 * wire_modal + 0.4 * soft_noise) * wire_env;
 
         // 4. Initial transient impulse crack (0.5 - 1.2 ms)
         let crack_env = (-t / 0.0018).exp();
-        let crack = w * crack_env * 0.8;
+        let crack = (w * crack_env * 0.35).tanh();
 
-        let total = 0.5 * pop + 0.4 * shell + 0.7 * wire + crack;
+        let total = 0.5 * pop + 0.4 * shell + 0.6 * wire + crack;
         let s = total.tanh() * 0.75;
         channels[0][i] = s * gl;
         channels[1][i] = s * gr;

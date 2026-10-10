@@ -82,7 +82,7 @@ pub fn velocity(kind: Kind, y: &[f32], t: Terms) -> C {
         return C::new(y[0] + a * t.z.re, y[1] + b * t.z.im);
     }
     let mut v = if kind == Kind::Basis {
-        t.h * (0.75 * y[0].tanh()) + t.n * (0.75 * y[1].tanh())
+        t.h * (0.85 * y[0].tanh()) + t.n * (0.25 * y[1].tanh())
     } else {
         C::new(y[0], y[1])
     };
@@ -103,8 +103,8 @@ pub fn derivative(kind: Kind, y: &[f32], t: Terms, g: C) -> [f32; 6] {
         return d;
     }
     if kind == Kind::Basis {
-        d[0] = dot(t.h) * 0.75 * (1.0 - y[0].tanh().powi(2));
-        d[1] = dot(t.n) * 0.75 * (1.0 - y[1].tanh().powi(2));
+        d[0] = dot(t.h) * 0.85 * (1.0 - y[0].tanh().powi(2));
+        d[1] = dot(t.n) * 0.25 * (1.0 - y[1].tanh().powi(2));
     } else {
         d[0] = g.re;
         d[1] = g.im;
