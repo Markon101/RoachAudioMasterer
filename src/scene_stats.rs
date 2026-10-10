@@ -150,6 +150,9 @@ pub struct TuningCard {
 impl SceneStats {
     /// Computes full deep autonomous acoustic scene statistics.
     pub fn compute(audio: &Audio, spec_mid: &Spectrum) -> Self {
+        if audio.channels.is_empty() || audio.channels[0].is_empty() {
+            return Self::silent_default();
+        }
         let total_samples = audio.channels[0].len();
         let num_bins = FFT / 2 + 1;
         let frames = spec_mid.frames;
@@ -172,6 +175,14 @@ impl SceneStats {
             }
         }
 
+        let mut max_power = 0.0f64;
+        for &p in &avg_power {
+            let pf = p as f64;
+            if pf > max_power {
+                max_power = pf;
+            }
+        }
+
         let bands = [
             ("sub", 20.0f32, 120.0f32),
             ("low_mid", 120.0f32, 500.0f32),
@@ -187,6 +198,30 @@ impl SceneStats {
         for &(b_name, f_min, f_max) in &bands {
             let k_min = ((f_min * bins_per_hz).round() as usize).max(1);
             let k_max = (((f_max * bins_per_hz).round() as usize).min(num_bins - 1)).max(k_min);
+            let count = (k_max - k_min + 1) as f64;
+
+            let raw_p_sum: f64 = (k_min..=k_max).map(|k| avg_power[k] as f64).sum();
+            let raw_mean_p = raw_p_sum / count;
+
+            // If the band is essentially silent or below the spectral sidelobe leakage floor (-43 dB from peak):
+            let is_band_silent =
+                raw_mean_p < 1e-9 || (max_power > 1e-9 && raw_mean_p < max_power * 5e-5);
+            if is_band_silent {
+                let slope = if b_name == "high" { -24.0 } else { 0.0 };
+                let wiener = 0.0f32;
+                if b_name == "global" {
+                    global_slope_db_per_octave = slope;
+                    global_wiener_flatness = wiener;
+                }
+                band_slopes.push(SpectralBandSlopeFlatness {
+                    name: b_name.to_string(),
+                    f_low_hz: f_min,
+                    f_high_hz: f_max,
+                    slope_db_per_octave: slope,
+                    wiener_flatness: wiener,
+                });
+                continue;
+            }
 
             let mut sum_x = 0.0f64;
             let mut sum_y = 0.0f64;
@@ -194,12 +229,15 @@ impl SceneStats {
             let mut sum_xy = 0.0f64;
             let mut log_p_sum = 0.0f64;
             let mut p_sum = 0.0f64;
-            let count = (k_max - k_min + 1) as f64;
+
+            // Dynamic floor relative to band mean (-60 dB dynamic range floor for geometric mean)
+            let p_floor = (raw_mean_p * 1e-6).max(1e-12);
 
             for k in k_min..=k_max {
                 let freq = (k as f32) / bins_per_hz;
                 let x = freq.log2() as f64;
-                let p = avg_power[k].max(1e-12) as f64;
+                let raw_p = avg_power[k] as f64;
+                let p = raw_p.max(p_floor);
                 let y = 10.0 * p.log10();
 
                 sum_x += x;
@@ -378,40 +416,78 @@ impl SceneStats {
         let mid_entropy = calc_entropy(&avg_power[k_sub_max..=k_mid_max]);
         let high_entropy = calc_entropy(&avg_power[k_mid_max..=k_high_max]);
 
-        // Autocorrelation HNR calculation on mid channel
+        // Autocorrelation HNR calculation on mid channel across representative active windows
         let (hnr_db, harmonic_fraction) = {
             let search_min = (RATE as f32 / 1000.0).round() as usize; // 1 kHz max pitch = 48 samples
             let search_max = ((RATE as f32 / 50.0).round() as usize).min(total_samples / 2); // 50 Hz min pitch = 960 samples
+            let eval_len = (2048usize).min(total_samples.saturating_sub(search_max));
 
-            if search_max > search_min && total_samples >= search_max * 2 {
-                let eval_len = (2048usize).min(total_samples - search_max);
-                let mut r0 = 0.0f64;
-                for i in 0..eval_len {
-                    r0 += (mid_samples[i] as f64).powi(2);
+            if search_max > search_min && total_samples >= search_max + eval_len && eval_len > 0 {
+                // Find candidate windows with healthy energy, skipping silence / pre-roll
+                let mut candidate_starts = Vec::new();
+
+                if total_samples >= win_size + search_max {
+                    let mut active_starts = Vec::new();
+                    for start in (0..=(total_samples - win_size - search_max)).step_by(hop_size) {
+                        let slice = &mid_samples[start..start + win_size];
+                        let mut sq = 0.0f32;
+                        for &s in slice {
+                            sq += s * s;
+                        }
+                        let rms = (sq / win_size as f32).sqrt();
+                        if rms > 1e-4 {
+                            active_starts.push((start, rms));
+                        }
+                    }
+
+                    if !active_starts.is_empty() {
+                        // Pick blocks near median RMS (L50)
+                        let target_rms = 10.0f32.powf(l50_dbfs / 20.0);
+                        active_starts.sort_by(|a, b| {
+                            (a.1 - target_rms)
+                                .abs()
+                                .partial_cmp(&(b.1 - target_rms).abs())
+                                .unwrap_or(std::cmp::Ordering::Equal)
+                        });
+                        for &(st, _) in active_starts.iter().take(3) {
+                            candidate_starts.push(st);
+                        }
+                    }
                 }
 
-                let mut best_r = 0.0f64;
-                if r0 > 1e-9 {
-                    for tau in search_min..=search_max {
-                        let mut r_tau = 0.0f64;
-                        let mut r_tau_sq = 0.0f64;
-                        for i in 0..eval_len {
-                            let x0 = mid_samples[i] as f64;
-                            let x_tau = mid_samples[i + tau] as f64;
-                            r_tau += x0 * x_tau;
-                            r_tau_sq += x_tau * x_tau;
-                        }
-                        let norm = (r0 * r_tau_sq).sqrt();
-                        if norm > 1e-9 {
-                            let coeff = r_tau / norm;
-                            if coeff > best_r {
-                                best_r = coeff;
+                if candidate_starts.is_empty() {
+                    candidate_starts.push(0);
+                }
+
+                let mut best_overall_r = 0.0f64;
+                for &start in &candidate_starts {
+                    let mut r0 = 0.0f64;
+                    for i in 0..eval_len {
+                        r0 += (mid_samples[start + i] as f64).powi(2);
+                    }
+
+                    if r0 > 1e-9 {
+                        for tau in search_min..=search_max {
+                            let mut r_tau = 0.0f64;
+                            let mut r_tau_sq = 0.0f64;
+                            for i in 0..eval_len {
+                                let x0 = mid_samples[start + i] as f64;
+                                let x_tau = mid_samples[start + i + tau] as f64;
+                                r_tau += x0 * x_tau;
+                                r_tau_sq += x_tau * x_tau;
+                            }
+                            let norm = (r0 * r_tau_sq).sqrt();
+                            if norm > 1e-9 {
+                                let coeff = r_tau / norm;
+                                if coeff > best_overall_r {
+                                    best_overall_r = coeff;
+                                }
                             }
                         }
                     }
                 }
 
-                let r_clamped = (best_r as f32).clamp(0.0, 0.999);
+                let r_clamped = (best_overall_r as f32).clamp(0.0, 0.999);
                 let hnr = if r_clamped > 1e-4 {
                     10.0 * (r_clamped / (1.0 - r_clamped + 1e-6)).log10()
                 } else {
@@ -522,8 +598,68 @@ impl SceneStats {
         }
     }
 
+    /// Provides safe zero/silent baseline statistics when audio input is empty or degenerate.
+    pub fn silent_default() -> Self {
+        let bands = [
+            ("sub", 20.0f32, 120.0f32),
+            ("low_mid", 120.0f32, 500.0f32),
+            ("mid", 500.0f32, 6000.0f32),
+            ("high", 6000.0f32, 20000.0f32),
+            ("global", 20.0f32, 20000.0f32),
+        ];
+        let band_slopes = bands
+            .iter()
+            .map(|&(name, f_low, f_high)| SpectralBandSlopeFlatness {
+                name: name.to_string(),
+                f_low_hz: f_low,
+                f_high_hz: f_high,
+                slope_db_per_octave: 0.0,
+                wiener_flatness: 0.0,
+            })
+            .collect();
+        let phase_jitter = bands
+            .iter()
+            .map(|&(name, f_low, f_high)| BandPhaseJitterStats {
+                band_name: name.to_string(),
+                f_low_hz: f_low,
+                f_high_hz: f_high,
+                angular_variance: 0.0,
+                phase_jitter_rad: 0.0,
+            })
+            .collect();
+        Self {
+            band_slopes,
+            global_slope_db_per_octave: 0.0,
+            global_wiener_flatness: 0.0,
+            dynamics: DynamicHeadroomStats {
+                peak_dbfs: -96.0,
+                peak_headroom_db: 96.0,
+                l10_dbfs: -96.0,
+                l50_dbfs: -96.0,
+                l90_dbfs: -96.0,
+                dynamic_spread_db: 0.0,
+                crest_l10_db: 0.0,
+                crest_l50_db: 0.0,
+                crest_l90_db: 0.0,
+                transient_crest_db: 0.0,
+            },
+            entropy_hnr: SpectralEntropyHnrStats {
+                spectral_entropy: 0.0,
+                sub_entropy: 0.0,
+                mid_entropy: 0.0,
+                high_entropy: 0.0,
+                hnr_db: -40.0,
+                harmonic_fraction: 0.0,
+            },
+            phase_jitter,
+        }
+    }
+
     /// Helper that computes SceneStats directly from an Audio struct.
     pub fn compute_from_audio(audio: &Audio) -> Self {
+        if audio.channels.is_empty() || audio.channels[0].is_empty() {
+            return Self::silent_default();
+        }
         let stft = Stft::new(FFT, HOP);
         let ms = audio.mid_side();
         let mid_spec = stft.analyze(&ms[0]);
@@ -560,6 +696,7 @@ impl TuningCard {
         let (_sub_slope, _sub_flatness) = find_band_slope("sub");
         let (high_slope, _high_flatness) = find_band_slope("high");
         let (sub_ang_var, _sub_jit) = find_phase_jit("sub");
+        let (mid_ang_var, _mid_jit) = find_phase_jit("mid");
         let (high_ang_var, _high_jit) = find_phase_jit("high");
 
         // 1. Sub-Bass Parameter Mapping
@@ -573,7 +710,18 @@ impl TuningCard {
         };
 
         // 2. Mid-Flow Parameter Mapping
-        let mid_flow_authority = authorities.mid_flow_authority;
+        let mid_flow_authority = if authorities.mid_flow_authority > 0.0 {
+            let boost = if mid_ang_var > 0.35 || stats.entropy_hnr.mid_entropy > 0.85 {
+                0.15
+            } else {
+                0.0
+            };
+            (authorities.mid_flow_authority + boost).min(1.0)
+        } else if mid_ang_var > 0.50 && stats.entropy_hnr.mid_entropy > 0.88 {
+            0.35
+        } else {
+            0.0
+        };
         let mid_flow_strength = if mid_flow_authority > 0.0 {
             (0.80 + 0.40 * (1.0 - stats.entropy_hnr.harmonic_fraction)).clamp(0.5, 1.2)
         } else {
@@ -895,6 +1043,9 @@ mod tests {
         assert_eq!(card.recommended_parameters.defizz_authority, 0.5);
         assert!(card.recommended_parameters.phase_continuity > 0.0);
         assert!(card.recommended_parameters.glue_ratio >= 1.2);
+        assert!(card.recommended_parameters.sub_bass_gain_db.is_finite());
+        assert!(card.recommended_parameters.morphic_coupling_kappa >= 3.0);
+        assert!(card.recommended_parameters.glue_threshold_db <= -14.0);
 
         let table = card.format_summary_table();
         assert!(table.contains("AUTONOMOUS TUNING CARD"));
@@ -903,6 +1054,33 @@ mod tests {
         let json = serde_json::to_string_pretty(&card).expect("Must serialize to JSON");
         assert!(json.contains("recommended_parameters"));
         assert!(json.contains("stage_actions"));
+    }
+
+    #[test]
+    fn test_tuning_card_maps_mid_flow_authority_on_incoherent_scene() {
+        let audio = make_synthetic_sine(100.0, 1.0);
+        let mut stats = SceneStats::compute_from_audio(&audio);
+        // Simulate high mid angular variance and entropy
+        if let Some(mid_pj) = stats.phase_jitter.iter_mut().find(|b| b.band_name == "mid") {
+            mid_pj.angular_variance = 0.65;
+        }
+        stats.entropy_hnr.mid_entropy = 0.92;
+
+        let authorities = SpecialistAuthorities {
+            sub_bass_authority: 0.0,
+            mid_flow_authority: 0.0,
+            high_field_authority: 0.0,
+            spatial_cleanup_authority: 0.0,
+            conservative_defizz_authority: 0.0,
+            master_glue_authority: 0.5,
+        };
+        let card = TuningCard::generate(&stats, &authorities, -35.0, -14.0);
+        assert!(
+            card.recommended_parameters.mid_flow_authority > 0.0,
+            "Incoherent mid band must activate mid-flow authority: got {}",
+            card.recommended_parameters.mid_flow_authority
+        );
+        assert!(card.recommended_parameters.mid_flow_strength > 0.0);
     }
 
     #[test]
@@ -915,7 +1093,7 @@ mod tests {
         let stats = SceneStats::compute_from_audio(&silent_audio);
 
         assert!(stats.global_slope_db_per_octave.is_finite());
-        assert!(stats.global_wiener_flatness.is_finite());
+        assert_eq!(stats.global_wiener_flatness, 0.0, "Silence must have zero Wiener flatness");
         assert!(stats.dynamics.peak_dbfs.is_finite());
         assert!(stats.entropy_hnr.spectral_entropy.is_finite());
         assert!(stats.entropy_hnr.hnr_db.is_finite());
@@ -923,5 +1101,60 @@ mod tests {
             assert!(pj.angular_variance.is_finite());
             assert!(pj.phase_jitter_rad.is_finite());
         }
+    }
+
+    #[test]
+    fn test_scene_stats_lead_in_silence_hnr() {
+        let n_lead = (RATE as f32 * 0.10).round() as usize; // 4800 samples of lead-in silence
+        let n_tone = (RATE as f32 * 1.0).round() as usize;
+        let mut samples = vec![0.0f32; n_lead + n_tone];
+        for (i, x) in samples[n_lead..].iter_mut().enumerate() {
+            let t = i as f32 / RATE as f32;
+            *x = 0.5 * (2.0 * PI * 440.0 * t).sin();
+        }
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![samples.clone(), samples],
+        };
+        let stats = SceneStats::compute_from_audio(&audio);
+
+        assert!(
+            stats.entropy_hnr.harmonic_fraction > 0.80,
+            "HNR must skip lead-in silence and measure true harmonic content: got {}",
+            stats.entropy_hnr.harmonic_fraction
+        );
+        assert!(
+            stats.entropy_hnr.hnr_db > 5.0,
+            "HNR must be positive for harmonic audio with lead-in silence: got {}",
+            stats.entropy_hnr.hnr_db
+        );
+    }
+
+    #[test]
+    fn test_scene_stats_empty_channels_no_panic() {
+        let empty_audio = Audio {
+            rate: RATE,
+            channels: vec![],
+        };
+        let stats = SceneStats::compute_from_audio(&empty_audio);
+        assert_eq!(stats.global_wiener_flatness, 0.0);
+        assert_eq!(stats.dynamics.peak_dbfs, -96.0);
+    }
+
+    #[test]
+    fn test_scene_stats_bandlimited_audio_high_flatness() {
+        // Audio containing only low frequencies (300 Hz) with zero high frequencies
+        let audio = make_synthetic_sine(300.0, 1.0);
+        let stats = SceneStats::compute_from_audio(&audio);
+        let high_band = stats.band_slopes.iter().find(|b| b.name == "high").unwrap();
+        assert_eq!(
+            high_band.wiener_flatness, 0.0,
+            "Absent high frequencies must report 0.0 Wiener flatness, not 1.0 white noise"
+        );
+        assert!(
+            high_band.slope_db_per_octave <= -18.0,
+            "Absent high frequencies must report steep rolloff slope: got {}",
+            high_band.slope_db_per_octave
+        );
     }
 }

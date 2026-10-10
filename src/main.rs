@@ -2177,20 +2177,36 @@ fn auto_master_pipeline(
     let mut glue_threshold_db = glue_threshold_db;
     let mut glue_ratio = glue_ratio;
     let mut morphic_mode_string = morphic_mode.to_string();
+    let mut sub_auth = pre_profile.authorities.sub_bass_authority;
+    let mut sub_bass_gain_db = 0.0f32;
+    let mut mid_auth = pre_profile.authorities.mid_flow_authority;
+    let mut mid_flow_strength_val = strength;
+    let mut glue_auth = pre_profile.authorities.master_glue_authority;
 
     if auto_tune {
         println!("\n*** Autonomous Self-Tuning Parameter Engine Active ***");
         println!("  Overriding stage parameters using measured acoustic scene statistics:");
+        println!("  - Sub-Bass Authority:       {:.2} -> {:.2}", sub_auth, tuning_card.recommended_parameters.sub_bass_authority);
+        println!("  - Sub-Bass Gain:            {:+.2} -> {:+.2} dB", sub_bass_gain_db, tuning_card.recommended_parameters.sub_bass_gain_db);
+        println!("  - Mid-Flow CFM Authority:   {:.2} -> {:.2}", mid_auth, tuning_card.recommended_parameters.mid_flow_authority);
+        println!("  - Mid-Flow CFM Strength:    {:.2} -> {:.2}", mid_flow_strength_val, tuning_card.recommended_parameters.mid_flow_strength);
         println!("  - Port-Hamiltonian Kappa:   {:.2} -> {:.2}", morphic_coupling, tuning_card.recommended_parameters.morphic_coupling_kappa);
         println!("  - Port-Hamiltonian Beta:    {:.2} -> {:.2}", morphic_quartic, tuning_card.recommended_parameters.morphic_quartic_beta);
         println!("  - Port-Hamiltonian Shelf:   {:+.2} -> {:+.2} dB", morphic_shelf_db, tuning_card.recommended_parameters.morphic_shelf_db);
         println!("  - Glue Comp Threshold:      {:+.1} -> {:+.1} dBFS", glue_threshold_db, tuning_card.recommended_parameters.glue_threshold_db);
         println!("  - Glue Comp Ratio:          {:.2}:1 -> {:.2}:1", glue_ratio, tuning_card.recommended_parameters.glue_ratio);
+        println!("  - Glue Comp Authority:      {:.2} -> {:.2}", glue_auth, tuning_card.recommended_parameters.glue_authority);
+
+        sub_auth = tuning_card.recommended_parameters.sub_bass_authority;
+        sub_bass_gain_db = tuning_card.recommended_parameters.sub_bass_gain_db;
+        mid_auth = tuning_card.recommended_parameters.mid_flow_authority;
+        mid_flow_strength_val = tuning_card.recommended_parameters.mid_flow_strength;
         morphic_coupling = tuning_card.recommended_parameters.morphic_coupling_kappa;
         morphic_quartic = tuning_card.recommended_parameters.morphic_quartic_beta;
         morphic_shelf_db = tuning_card.recommended_parameters.morphic_shelf_db;
         glue_threshold_db = tuning_card.recommended_parameters.glue_threshold_db;
         glue_ratio = tuning_card.recommended_parameters.glue_ratio;
+        glue_auth = tuning_card.recommended_parameters.glue_authority;
         morphic_mode_string = tuning_card.recommended_parameters.morphic_mode.clone();
     }
 
@@ -2227,7 +2243,6 @@ fn auto_master_pipeline(
     };
 
     // Stage 1: High-Resolution SFHT Sub-Bass Restoration
-    let sub_auth = pre_profile.authorities.sub_bass_authority;
     if let Some(ref m_path) = resolved_sfht {
         if !force_specialists && sub_auth <= 0.0 {
             println!(
@@ -2236,19 +2251,29 @@ fn auto_master_pipeline(
             );
         } else {
             let shrink = sfht_shrinkage.unwrap_or(1.0);
-            let eff_strength = if force_specialists {
+            let sub_gain_factor = if auto_tune {
+                10.0f32.powf(sub_bass_gain_db / 20.0)
+            } else {
+                1.0
+            };
+            let eff_strength = (if force_specialists {
                 strength
             } else {
                 strength * sub_auth
-            } * shrink;
+            } * shrink * sub_gain_factor).clamp(0.0, 2.5);
             let shrink_label = if let Some(s) = sfht_shrinkage {
                 format!(", shrinkage={:.2}x", s)
             } else {
                 String::new()
             };
+            let gain_label = if auto_tune && sub_bass_gain_db.abs() > 0.01 {
+                format!(", gain={:+.2}dB", sub_bass_gain_db)
+            } else {
+                String::new()
+            };
             println!(
-                "\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin, auth={:.2}, strength={:.2}{}) ---",
-                low_cutoff, sub_auth, eff_strength, shrink_label
+                "\n--- Stage 1: High-Resolution SFHT Sub-Bass Restoration (cutoff={:.1}Hz, 5.86 Hz/bin, auth={:.2}, strength={:.2}{}{}) ---",
+                low_cutoff, sub_auth, eff_strength, shrink_label, gain_label
             );
             let t0 = std::time::Instant::now();
             current_audio =
@@ -2262,7 +2287,6 @@ fn auto_master_pipeline(
     }
 
     // Stage 2: Mid-Band CFM Restoration
-    let mid_auth = pre_profile.authorities.mid_flow_authority;
     if let Some(ref m_path) = resolved_mid {
         if !force_specialists && mid_auth <= 0.0 {
             println!(
@@ -2270,10 +2294,15 @@ fn auto_master_pipeline(
                 mid_auth
             );
         } else {
-            let eff_strength = if force_specialists {
-                strength
+            let base_strength = if auto_tune && mid_flow_strength_val > 0.0 {
+                mid_flow_strength_val
             } else {
-                strength * mid_auth
+                strength
+            };
+            let eff_strength = if force_specialists {
+                base_strength
+            } else {
+                base_strength * mid_auth
             };
             println!(
                 "\n--- Stage 2: Mid-Band CFM Restoration (cutoff={:.1}Hz, ceiling={:.1}Hz, auth={:.2}, strength={:.2}) ---",
@@ -2344,8 +2373,20 @@ fn auto_master_pipeline(
             fractal_tendrils,
             fractal_dimension: 1.0,
             strength: 1.0,
-            transient_desmear: if eff_defizz_auth > 0.0 { (0.25 * eff_defizz_auth).clamp(0.10, 0.50) } else { 0.0 },
-            phase_continuity: if eff_defizz_auth > 0.0 { (0.40 * eff_defizz_auth).clamp(0.15, 0.70) } else { 0.0 },
+            transient_desmear: if auto_tune && tuning_card.recommended_parameters.transient_desmear > 0.0 {
+                tuning_card.recommended_parameters.transient_desmear
+            } else if eff_defizz_auth > 0.0 {
+                (0.25 * eff_defizz_auth).clamp(0.10, 0.50)
+            } else {
+                0.0
+            },
+            phase_continuity: if auto_tune && tuning_card.recommended_parameters.phase_continuity > 0.0 {
+                tuning_card.recommended_parameters.phase_continuity
+            } else if eff_defizz_auth > 0.0 {
+                (0.40 * eff_defizz_auth).clamp(0.15, 0.70)
+            } else {
+                0.0
+            },
             harmonic_resonance: if eff_defizz_auth > 0.0 { (0.20 * eff_defizz_auth).clamp(0.10, 0.40) } else { 0.0 },
             air_coupling: if eff_defizz_auth > 0.0 { (0.15 * eff_defizz_auth).clamp(0.05, 0.30) } else { 0.0 },
             crossover_hz: 3000.0,
@@ -2489,7 +2530,6 @@ fn auto_master_pipeline(
     }
 
     // Stage 5: Dynamic Post-Mastering
-    let glue_auth = pre_profile.authorities.master_glue_authority;
     let eff_glue_ratio = if force_specialists {
         glue_ratio
     } else {
