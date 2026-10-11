@@ -955,7 +955,27 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Inter-Channel Correlation: 0.855 -> 0.929 (+0.074 mono focus)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
   - Lossless FLAC: [`/sdcard/Download/FLAC/War Crimes Trending [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/War%20Crimes%20Trending%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- **VextorDreamsDigital** (278.9s / 4m 39s, Qualcomm Adreno 830 OpenCL GPU acceleration):
+  - Hardware Acceleration: Adreno 830 GPU streaming across 35 WOLA chunks @ ~6.3s/chunk. Total pipeline runtime **317.2s**.
+  - Loudness: **-11.02 LUFS** (Before: -12.83 LUFS, +1.81 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-66.5%** reduction (0.219 -> 0.073)
+  - Sub Instability: 0.373 -> 0.086 (**-0.288 defect reduction**)
+  - Inter-Channel Correlation: 0.826 -> 0.850 (+0.024)
+  - Embedded Art: Front cover art preserved and embedded into FLAC
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/VextorDreamsDigital_normmaster [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/VextorDreamsDigital_normmaster%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- **Fourier Longing - Normed** (275.0s / 4m 35s, Qualcomm Adreno 830 OpenCL GPU acceleration):
+  - Hardware Acceleration: Adreno 830 GPU streaming across 35 WOLA chunks @ ~6.6s/chunk. Stage 1 SFHT sub-bass activated (auth=0.85). Total pipeline runtime **376.9s**.
+  - Loudness: **-11.02 LUFS** (Before: -12.65 LUFS, +1.63 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-57.8%** reduction (0.289 -> 0.122)
+  - Sub Instability: 0.763 -> 0.265 (**-0.498 defect reduction**)
+  - Inter-Channel Correlation: 0.786 -> 0.828 (+0.042)
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/Fourier Longing - Normed [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
 - Storage Discipline: Phone storage strictly audited—all short 20s test samples, heavy interim test WAVs, and +30dB difference tracks discarded. Only complete full-song production masters delivered to user storage.
+
 
 
 
