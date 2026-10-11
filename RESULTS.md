@@ -930,6 +930,32 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub Instability: 0.305 -> 0.072 (**-0.233 defect reduction**)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
   - Lossless FLAC: [`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- **Path to Connection** (164.4s, Qualcomm Adreno 830 OpenCL GPU acceleration):
+  - Hardware Acceleration: Adreno 830 GPU streaming across 21 WOLA chunks @ ~5.3s/chunk. Total pipeline runtime **160.8s** (faster than real-time playback).
+  - Loudness: **-11.15 LUFS** (Before: -14.95 LUFS, +3.80 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-55.9%** reduction (0.172 -> 0.076)
+  - Sub Instability: 0.274 -> 0.099 (**-0.175 defect reduction**)
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/Path to Connection [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Path%20to%20Connection%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- **Verse 1 v 77** (285.0s / 4m 45s, Qualcomm Adreno 830 OpenCL GPU acceleration):
+  - Hardware Acceleration: Adreno 830 GPU streaming across 36 WOLA chunks @ ~7.2s/chunk. Total pipeline runtime **351.4s**.
+  - Loudness: **-11.02 LUFS** (Before: -15.49 LUFS, +4.47 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-62.7%** reduction (0.067 -> 0.025)
+  - Sub Instability: 0.038 -> 0.010
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/Verse 1 v 77 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Verse%201%20v%2077%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- **War Crimes Trending** (262.0s / 4m 22s, Qualcomm Adreno 830 OpenCL GPU acceleration):
+  - Hardware Acceleration: Adreno 830 GPU streaming across 33 WOLA chunks @ ~7.4s/chunk. Stage 1 SFHT sub-bass activated (auth=0.85). Total pipeline runtime **352.0s**.
+  - Loudness: **-11.14 LUFS** (Before: -14.00 LUFS, +2.86 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-83.0%** reduction (0.287 -> 0.049)
+  - Sub Instability: 0.496 -> 0.036 (**-0.460 defect reduction**)
+  - Inter-Channel Correlation: 0.855 -> 0.929 (+0.074 mono focus)
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/War Crimes Trending [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/War%20Crimes%20Trending%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
 - Storage Discipline: Phone storage strictly audited—all short 20s test samples, heavy interim test WAVs, and +30dB difference tracks discarded. Only complete full-song production masters delivered to user storage.
+
 
 
