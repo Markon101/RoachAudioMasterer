@@ -1,0 +1,608 @@
+{
+  "claim": "measured change; no perceptual or reconstruction benefit established",
+  "controls": "fixed seeds, all samples, common mastering target and ceiling, no speed measurement",
+  "rows": [
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.033106803894043,
+        "lufs_integrated": -10.99999991215012,
+        "rms_dbfs": -17.851545333862305,
+        "sample_peak_dbfs": -3.8184385299682617,
+        "true_peak_dbtp": -3.8184385299682617
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -240.0,
+      "delta_rms_vs_static_parent": 0.0,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.148440879631317e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 3.111832029389916e-6,
+      "seed": 950021,
+      "variant": "static_champion_settings"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.018926620483398,
+        "lufs_integrated": -11.000000091639006,
+        "rms_dbfs": -17.85045051574707,
+        "sample_peak_dbfs": -3.8315236568450928,
+        "true_peak_dbtp": -3.8315236568450928
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -79.14357245609735,
+      "delta_rms_vs_static_parent": 0.00011036246121325823,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.162592666244423e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 3.3793710372265195e-6,
+      "seed": 950021,
+      "variant": "clocks_only"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 13.663480758666992,
+        "lufs_integrated": -10.999999528483078,
+        "rms_dbfs": -17.85500717163086,
+        "sample_peak_dbfs": -4.191525936126709,
+        "true_peak_dbtp": -4.191525936126709
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -51.09185653603356,
+      "delta_rms_vs_static_parent": 0.002788734524026713,
+      "family": "tones",
+      "loud_spatial_fraction": 0.9999131560325623,
+      "protected_60_8000_hz_rms_deviation": 5.130937209055412e-9,
+      "quiet_spatial_fraction": 0.00014770582492928952,
+      "reported_low_band_rms_deviation": 2.927492005255772e-6,
+      "seed": 950021,
+      "variant": "budget_only_dsp"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 13.663762092590332,
+        "lufs_integrated": -10.99999972492492,
+        "rms_dbfs": -17.854204177856445,
+        "sample_peak_dbfs": -4.190442085266113,
+        "true_peak_dbtp": -4.190442085266113
+      },
+      "delta_dbfs_vs_budget_only": -84.9149101982397,
+      "delta_dbfs_vs_static_parent": -51.086375043003905,
+      "delta_rms_vs_static_parent": 0.0027904949946276946,
+      "family": "tones",
+      "loud_spatial_fraction": 0.9999131560325623,
+      "protected_60_8000_hz_rms_deviation": 5.143147108387509e-9,
+      "quiet_spatial_fraction": 0.00014770582492928952,
+      "reported_low_band_rms_deviation": 3.185824652973679e-6,
+      "seed": 950021,
+      "variant": "clocks_and_budget"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.008485794067383,
+        "lufs_integrated": -11.00000006265988,
+        "rms_dbfs": -17.842424392700195,
+        "sample_peak_dbfs": -3.8339381217956543,
+        "true_peak_dbtp": -3.8339381217956543
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -65.33956954390109,
+      "delta_rms_vs_static_parent": 0.0005407811223609498,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.159230481540134e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 5.231865429777827e-7,
+      "seed": 950021,
+      "variant": "matched_static_shelf"
+    },
+    {
+      "active_spread_db": 20.029604286776745,
+      "after_master": {
+        "crest_factor_db": 12.822183609008789,
+        "lufs_integrated": -10.99999998613872,
+        "rms_dbfs": -21.56978988647461,
+        "sample_peak_dbfs": -8.74760627746582,
+        "true_peak_dbtp": -5.78102970123291
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -240.0,
+      "delta_rms_vs_static_parent": 0.0,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 4.067846048388203e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.00006850243516964838,
+      "seed": 950021,
+      "variant": "static_champion_settings"
+    },
+    {
+      "active_spread_db": 20.029604286776745,
+      "after_master": {
+        "crest_factor_db": 12.82087230682373,
+        "lufs_integrated": -10.999999963643056,
+        "rms_dbfs": -21.56954002380371,
+        "sample_peak_dbfs": -8.74866771697998,
+        "true_peak_dbtp": -5.765256404876709
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -56.211291050929326,
+      "delta_rms_vs_static_parent": 0.001546804573337759,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 4.005390904499426e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.00006367955211317167,
+      "seed": 950021,
+      "variant": "clocks_only"
+    },
+    {
+      "active_spread_db": 20.029604286776745,
+      "after_master": {
+        "crest_factor_db": 12.871644020080566,
+        "lufs_integrated": -10.999999859059372,
+        "rms_dbfs": -21.584430694580078,
+        "sample_peak_dbfs": -8.712786674499512,
+        "true_peak_dbtp": -5.7412614822387695
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -53.28311544471817,
+      "delta_rms_vs_static_parent": 0.0021669267346727064,
+      "family": "noise",
+      "loud_spatial_fraction": 0.9991277456283569,
+      "protected_60_8000_hz_rms_deviation": 4.024051041400022e-9,
+      "quiet_spatial_fraction": 0.0005571221699938178,
+      "reported_low_band_rms_deviation": 0.00006556712469318882,
+      "seed": 950021,
+      "variant": "budget_only_dsp"
+    },
+    {
+      "active_spread_db": 20.029604286776745,
+      "after_master": {
+        "crest_factor_db": 12.865630149841309,
+        "lufs_integrated": -11.000000488751262,
+        "rms_dbfs": -21.582069396972656,
+        "sample_peak_dbfs": -8.716439247131348,
+        "true_peak_dbtp": -5.748019695281982
+      },
+      "delta_dbfs_vs_budget_only": -58.94704234663638,
+      "delta_dbfs_vs_static_parent": -52.14938207665378,
+      "delta_rms_vs_static_parent": 0.0024690557498874745,
+      "family": "noise",
+      "loud_spatial_fraction": 0.9991277456283569,
+      "protected_60_8000_hz_rms_deviation": 3.980393589824188e-9,
+      "quiet_spatial_fraction": 0.0005571221699938178,
+      "reported_low_band_rms_deviation": 0.0000618288540863432,
+      "seed": 950021,
+      "variant": "clocks_and_budget"
+    },
+    {
+      "active_spread_db": 20.029604286776745,
+      "after_master": {
+        "crest_factor_db": 12.733177185058594,
+        "lufs_integrated": -11.000000216104242,
+        "rms_dbfs": -21.553096771240234,
+        "sample_peak_dbfs": -8.81991958618164,
+        "true_peak_dbtp": -5.847545146942139
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -49.77576026458322,
+      "delta_rms_vs_static_parent": 0.003244979718626306,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 3.77330060380194e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.000030193587008398026,
+      "seed": 950021,
+      "variant": "matched_static_shelf"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.033106803894043,
+        "lufs_integrated": -10.99999991215012,
+        "rms_dbfs": -17.851545333862305,
+        "sample_peak_dbfs": -3.8184385299682617,
+        "true_peak_dbtp": -3.8184385299682617
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -240.0,
+      "delta_rms_vs_static_parent": 0.0,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.148440879631317e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 3.111832029389916e-6,
+      "seed": 950089,
+      "variant": "static_champion_settings"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.018926620483398,
+        "lufs_integrated": -11.000000091639006,
+        "rms_dbfs": -17.85045051574707,
+        "sample_peak_dbfs": -3.8315236568450928,
+        "true_peak_dbtp": -3.8315236568450928
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -79.14357245609735,
+      "delta_rms_vs_static_parent": 0.00011036246121325823,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.162592666244423e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 3.3793710372265195e-6,
+      "seed": 950089,
+      "variant": "clocks_only"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 13.663480758666992,
+        "lufs_integrated": -10.999999528483078,
+        "rms_dbfs": -17.85500717163086,
+        "sample_peak_dbfs": -4.191525936126709,
+        "true_peak_dbtp": -4.191525936126709
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -51.09185653603356,
+      "delta_rms_vs_static_parent": 0.002788734524026713,
+      "family": "tones",
+      "loud_spatial_fraction": 0.9999131560325623,
+      "protected_60_8000_hz_rms_deviation": 5.130937209055412e-9,
+      "quiet_spatial_fraction": 0.00014770582492928952,
+      "reported_low_band_rms_deviation": 2.927492005255772e-6,
+      "seed": 950089,
+      "variant": "budget_only_dsp"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 13.663762092590332,
+        "lufs_integrated": -10.99999972492492,
+        "rms_dbfs": -17.854204177856445,
+        "sample_peak_dbfs": -4.190442085266113,
+        "true_peak_dbtp": -4.190442085266113
+      },
+      "delta_dbfs_vs_budget_only": -84.9149101982397,
+      "delta_dbfs_vs_static_parent": -51.086375043003905,
+      "delta_rms_vs_static_parent": 0.0027904949946276946,
+      "family": "tones",
+      "loud_spatial_fraction": 0.9999131560325623,
+      "protected_60_8000_hz_rms_deviation": 5.143147108387509e-9,
+      "quiet_spatial_fraction": 0.00014770582492928952,
+      "reported_low_band_rms_deviation": 3.185824652973679e-6,
+      "seed": 950089,
+      "variant": "clocks_and_budget"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.008485794067383,
+        "lufs_integrated": -11.00000006265988,
+        "rms_dbfs": -17.842424392700195,
+        "sample_peak_dbfs": -3.8339381217956543,
+        "true_peak_dbtp": -3.8339381217956543
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -65.33956954390109,
+      "delta_rms_vs_static_parent": 0.0005407811223609498,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.159230481540134e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 5.231865429777827e-7,
+      "seed": 950089,
+      "variant": "matched_static_shelf"
+    },
+    {
+      "active_spread_db": 20.02807981717286,
+      "after_master": {
+        "crest_factor_db": 13.000885963439941,
+        "lufs_integrated": -11.000000342193534,
+        "rms_dbfs": -21.574005126953125,
+        "sample_peak_dbfs": -8.573119163513184,
+        "true_peak_dbtp": -5.99911642074585
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -240.0,
+      "delta_rms_vs_static_parent": 0.0,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 4.059243500872883e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.00007117482891771942,
+      "seed": 950089,
+      "variant": "static_champion_settings"
+    },
+    {
+      "active_spread_db": 20.02807981717286,
+      "after_master": {
+        "crest_factor_db": 12.9213285446167,
+        "lufs_integrated": -10.999999804164606,
+        "rms_dbfs": -21.573963165283203,
+        "sample_peak_dbfs": -8.652634620666504,
+        "true_peak_dbtp": -5.854585647583008
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -55.99659862756021,
+      "delta_rms_vs_static_parent": 0.001585513954167915,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 4.017640281819375e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.0000667875719955191,
+      "seed": 950089,
+      "variant": "clocks_only"
+    },
+    {
+      "active_spread_db": 20.02807981717286,
+      "after_master": {
+        "crest_factor_db": 12.834671020507812,
+        "lufs_integrated": -10.999999760749178,
+        "rms_dbfs": -21.58880043029785,
+        "sample_peak_dbfs": -8.754129409790039,
+        "true_peak_dbtp": -6.178183078765869
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -53.37524875631196,
+      "delta_rms_vs_static_parent": 0.002144063098241589,
+      "family": "noise",
+      "loud_spatial_fraction": 0.9990634918212891,
+      "protected_60_8000_hz_rms_deviation": 3.999417639898763e-9,
+      "quiet_spatial_fraction": 0.001323317177593708,
+      "reported_low_band_rms_deviation": 0.00006883763853693381,
+      "seed": 950089,
+      "variant": "budget_only_dsp"
+    },
+    {
+      "active_spread_db": 20.02807981717286,
+      "after_master": {
+        "crest_factor_db": 12.885772705078125,
+        "lufs_integrated": -11.000000470506382,
+        "rms_dbfs": -21.586570739746094,
+        "sample_peak_dbfs": -8.700798034667969,
+        "true_peak_dbtp": -6.220839500427246
+      },
+      "delta_dbfs_vs_budget_only": -58.54978113904741,
+      "delta_dbfs_vs_static_parent": -52.20543400180858,
+      "delta_rms_vs_static_parent": 0.0024531736991875303,
+      "family": "noise",
+      "loud_spatial_fraction": 0.9990634918212891,
+      "protected_60_8000_hz_rms_deviation": 3.981903169285639e-9,
+      "quiet_spatial_fraction": 0.001323317177593708,
+      "reported_low_band_rms_deviation": 0.0000654247633065097,
+      "seed": 950089,
+      "variant": "clocks_and_budget"
+    },
+    {
+      "active_spread_db": 20.02807981717286,
+      "after_master": {
+        "crest_factor_db": 12.912213325500488,
+        "lufs_integrated": -10.999999956518925,
+        "rms_dbfs": -21.557828903198242,
+        "sample_peak_dbfs": -8.645615577697754,
+        "true_peak_dbtp": -5.937529563903809
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -49.77058769257223,
+      "delta_rms_vs_static_parent": 0.003246912726157204,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 3.757739585437559e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.000030367547878995538,
+      "seed": 950089,
+      "variant": "matched_static_shelf"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.033106803894043,
+        "lufs_integrated": -10.99999991215012,
+        "rms_dbfs": -17.851545333862305,
+        "sample_peak_dbfs": -3.8184385299682617,
+        "true_peak_dbtp": -3.8184385299682617
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -240.0,
+      "delta_rms_vs_static_parent": 0.0,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.148440879631317e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 3.111832029389916e-6,
+      "seed": 960031,
+      "variant": "static_champion_settings"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.018926620483398,
+        "lufs_integrated": -11.000000091639006,
+        "rms_dbfs": -17.85045051574707,
+        "sample_peak_dbfs": -3.8315236568450928,
+        "true_peak_dbtp": -3.8315236568450928
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -79.14357245609735,
+      "delta_rms_vs_static_parent": 0.00011036246121325823,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.162592666244423e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 3.3793710372265195e-6,
+      "seed": 960031,
+      "variant": "clocks_only"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 13.663480758666992,
+        "lufs_integrated": -10.999999528483078,
+        "rms_dbfs": -17.85500717163086,
+        "sample_peak_dbfs": -4.191525936126709,
+        "true_peak_dbtp": -4.191525936126709
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -51.09185653603356,
+      "delta_rms_vs_static_parent": 0.002788734524026713,
+      "family": "tones",
+      "loud_spatial_fraction": 0.9999131560325623,
+      "protected_60_8000_hz_rms_deviation": 5.130937209055412e-9,
+      "quiet_spatial_fraction": 0.00014770582492928952,
+      "reported_low_band_rms_deviation": 2.927492005255772e-6,
+      "seed": 960031,
+      "variant": "budget_only_dsp"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 13.663762092590332,
+        "lufs_integrated": -10.99999972492492,
+        "rms_dbfs": -17.854204177856445,
+        "sample_peak_dbfs": -4.190442085266113,
+        "true_peak_dbtp": -4.190442085266113
+      },
+      "delta_dbfs_vs_budget_only": -84.9149101982397,
+      "delta_dbfs_vs_static_parent": -51.086375043003905,
+      "delta_rms_vs_static_parent": 0.0027904949946276946,
+      "family": "tones",
+      "loud_spatial_fraction": 0.9999131560325623,
+      "protected_60_8000_hz_rms_deviation": 5.143147108387509e-9,
+      "quiet_spatial_fraction": 0.00014770582492928952,
+      "reported_low_band_rms_deviation": 3.185824652973679e-6,
+      "seed": 960031,
+      "variant": "clocks_and_budget"
+    },
+    {
+      "active_spread_db": 20.003435189568414,
+      "after_master": {
+        "crest_factor_db": 14.008485794067383,
+        "lufs_integrated": -11.00000006265988,
+        "rms_dbfs": -17.842424392700195,
+        "sample_peak_dbfs": -3.8339381217956543,
+        "true_peak_dbtp": -3.8339381217956543
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -65.33956954390109,
+      "delta_rms_vs_static_parent": 0.0005407811223609498,
+      "family": "tones",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 5.159230481540134e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 5.231865429777827e-7,
+      "seed": 960031,
+      "variant": "matched_static_shelf"
+    },
+    {
+      "active_spread_db": 20.027031843000884,
+      "after_master": {
+        "crest_factor_db": 13.127079010009766,
+        "lufs_integrated": -10.999999869778241,
+        "rms_dbfs": -21.572351455688477,
+        "sample_peak_dbfs": -8.445272445678711,
+        "true_peak_dbtp": -5.867015838623047
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -240.0,
+      "delta_rms_vs_static_parent": 0.0,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 4.062203062688693e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.00007441015623044223,
+      "seed": 960031,
+      "variant": "static_champion_settings"
+    },
+    {
+      "active_spread_db": 20.027031843000884,
+      "after_master": {
+        "crest_factor_db": 13.15521240234375,
+        "lufs_integrated": -10.999999802567826,
+        "rms_dbfs": -21.572134017944336,
+        "sample_peak_dbfs": -8.416921615600586,
+        "true_peak_dbtp": -5.801295757293701
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -55.77663536573873,
+      "delta_rms_vs_static_parent": 0.001626178563027813,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 4.023787411190284e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.00006888597272336483,
+      "seed": 960031,
+      "variant": "clocks_only"
+    },
+    {
+      "active_spread_db": 20.027031843000884,
+      "after_master": {
+        "crest_factor_db": 13.059457778930664,
+        "lufs_integrated": -10.999999845653287,
+        "rms_dbfs": -21.587055206298828,
+        "sample_peak_dbfs": -8.527597427368164,
+        "true_peak_dbtp": -5.827085494995117
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -53.355153861293374,
+      "delta_rms_vs_static_parent": 0.002149029152566561,
+      "family": "noise",
+      "loud_spatial_fraction": 0.9998974800109863,
+      "protected_60_8000_hz_rms_deviation": 4.0093057048796e-9,
+      "quiet_spatial_fraction": 0.00045966653851792216,
+      "reported_low_band_rms_deviation": 0.00007064608507789671,
+      "seed": 960031,
+      "variant": "budget_only_dsp"
+    },
+    {
+      "active_spread_db": 20.027031843000884,
+      "after_master": {
+        "crest_factor_db": 13.08450984954834,
+        "lufs_integrated": -11.000000522722795,
+        "rms_dbfs": -21.584716796875,
+        "sample_peak_dbfs": -8.50020694732666,
+        "true_peak_dbtp": -5.772118091583252
+      },
+      "delta_dbfs_vs_budget_only": -58.19024972888269,
+      "delta_dbfs_vs_static_parent": -52.13521996076244,
+      "delta_rms_vs_static_parent": 0.0024730847644228783,
+      "family": "noise",
+      "loud_spatial_fraction": 0.9998974800109863,
+      "protected_60_8000_hz_rms_deviation": 3.994130075574797e-9,
+      "quiet_spatial_fraction": 0.00045966653851792216,
+      "reported_low_band_rms_deviation": 0.00006661454972345382,
+      "seed": 960031,
+      "variant": "clocks_and_budget"
+    },
+    {
+      "active_spread_db": 20.027031843000884,
+      "after_master": {
+        "crest_factor_db": 13.030789375305176,
+        "lufs_integrated": -10.999999397286174,
+        "rms_dbfs": -21.5560245513916,
+        "sample_peak_dbfs": -8.525235176086426,
+        "true_peak_dbtp": -5.907417297363281
+      },
+      "delta_dbfs_vs_budget_only": null,
+      "delta_dbfs_vs_static_parent": -49.77954965569396,
+      "delta_rms_vs_static_parent": 0.0032435643408230447,
+      "family": "noise",
+      "loud_spatial_fraction": 1.0,
+      "protected_60_8000_hz_rms_deviation": 3.759416988645632e-9,
+      "quiet_spatial_fraction": 1.0,
+      "reported_low_band_rms_deviation": 0.00003192360600223765,
+      "seed": 960031,
+      "variant": "matched_static_shelf"
+    }
+  ],
+  "schema": "roach-next-evolution-audit-v1",
+  "tier": 3
+}

@@ -1,0 +1,145 @@
+{
+  "champion-full": {
+    "duration_seconds": 274.9599914550781,
+    "after_master": {
+      "crest_factor_db": 12.12983512878418,
+      "lufs_integrated": -11.016647141093598,
+      "rms_dbfs": -13.379339218139648,
+      "sample_peak_dbfs": -1.2495040893554688,
+      "true_peak_dbtp": -0.9999358057975769
+    },
+    "preservation": {
+      "correlation_value": 0.8282693028450012,
+      "known_band_preserved": false,
+      "max_passband_deviation_db": 1.7686376571655273,
+      "mono_compatibility_passed": true,
+      "transient_correlation": 0.9542050361633301,
+      "transient_timing_passed": true
+    }
+  },
+  "priority-a-handover": {
+    "duration_seconds": 274.9599914550781,
+    "after_master": {
+      "crest_factor_db": 12.128778457641602,
+      "lufs_integrated": -11.015898725803455,
+      "rms_dbfs": -13.377918243408203,
+      "sample_peak_dbfs": -1.249139428138733,
+      "true_peak_dbtp": -0.9999369978904724
+    },
+    "preservation": {
+      "correlation_value": 0.8282931447029114,
+      "known_band_preserved": true,
+      "max_passband_deviation_db": 0.17942480742931366,
+      "mono_compatibility_passed": true,
+      "transient_correlation": 0.9541392922401428,
+      "transient_timing_passed": true
+    }
+  },
+  "candidate-full": {
+    "duration_seconds": 274.9599914550781,
+    "after_master": {
+      "crest_factor_db": 12.125669479370117,
+      "lufs_integrated": -11.01496782782901,
+      "rms_dbfs": -13.364300727844238,
+      "sample_peak_dbfs": -1.238631248474121,
+      "true_peak_dbtp": -0.9999741315841675
+    },
+    "preservation": {
+      "correlation_value": 0.8378034830093384,
+      "known_band_preserved": true,
+      "max_passband_deviation_db": 0.14661216735839844,
+      "mono_compatibility_passed": true,
+      "transient_correlation": 0.9552482962608337,
+      "transient_timing_passed": true
+    }
+  },
+  "candidate_effective_settings": {
+    "applied_morphic": {
+      "crossover_hz": 8000.0,
+      "enable_confidence_gating": true,
+      "lock_passband": true,
+      "microtexture_authority": 0.15650862455368042,
+      "mode": "PortHamiltonianCalibrated",
+      "ph_adaptive_coupling": false,
+      "ph_coupling_kappa": 6.199999809265137,
+      "ph_quartic_beta": 2.200000047683716,
+      "ph_shelf_db": 1.5,
+      "ph_split_hz": 12000.0,
+      "sub_bass_damping_authority": 0.3198333978652954
+    },
+    "applied_spatial": {
+      "authority": 0.8999999761581421,
+      "contrast_budget": true,
+      "room_depth": 0.10799999535083771,
+      "width_factor": 1.1349999904632568
+    },
+    "auto_eq": true,
+    "auto_tune": true,
+    "ceiling_db": -1.0,
+    "contrast_budget": true,
+    "coupled_clocks": true,
+    "denoise": true,
+    "effective_glue_ratio": 1.212499976158142,
+    "force_specialists": false,
+    "fractal_tendrils": 0.0,
+    "glue_ratio": 1.25,
+    "glue_threshold_db": -14.0,
+    "low_cutoff": 200.0,
+    "mid_ceiling": 8000.0,
+    "mid_cutoff": 1500.0,
+    "mono_bass_hz": 120.0,
+    "room_depth": 0.11999999731779099,
+    "sidechain_hp_hz": 90.0,
+    "spatial": true,
+    "steps": 8,
+    "strength": 1.0,
+    "target_lufs": -11.0,
+    "width_factor": 1.149999976158142,
+    "backend": "opencl"
+  },
+  "candidate_intent": {
+    "regime": "Restore",
+    "intent_scores": {
+      "intimacy_score": 0.51405525,
+      "dynamic_contrast_budget": 0.3201486,
+      "tonal_deliberation_index": 0.85773915,
+      "organic_warmth_factor": 0.9,
+      "intentional_saturation_confidence": 0.95
+    },
+    "directives": {
+      "regime": "Restore",
+      "sub_bass_authority_scale": 1.0,
+      "mid_flow_authority_scale": 1.0,
+      "defizz_desmear_scale": 1.0,
+      "spatial_width_scale": 1.0,
+      "room_depth_scale": 1.0,
+      "port_hamiltonian_shelf_db": 1.5,
+      "port_hamiltonian_kappa": 6.2,
+      "port_hamiltonian_beta": 2.2,
+      "glue_compressor_ratio": 1.25,
+      "glue_compressor_threshold_db": -14.0,
+      "summary_rationale": "Physical degradation detected (out-of-phase sub mud or steep band-limit loss). Engaging full restoration specialists."
+    }
+  },
+  "candidate_timeline": {
+    "points": 54992,
+    "active_spread_db": 3.724872471201472,
+    "clock_seconds": [
+      0.005,
+      0.15,
+      2.5
+    ],
+    "spatial_fraction_range": [
+      0.0,
+      0.9999961
+    ]
+  },
+  "format_verification": {
+    "rate": 48000,
+    "channels": 2,
+    "bits_per_raw_sample": 24,
+    "duration_seconds": 274.959979,
+    "ffmpeg_full_decode": "passed"
+  },
+  "claim": "Technical change only; perceptual advantage and recovery unestablished"
+}

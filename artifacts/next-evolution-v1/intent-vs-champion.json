@@ -1,0 +1,40 @@
+{
+  "alignment": "same native rate, channel count, frame count; no time shift search",
+  "band_delta_db": [
+    0.0027058512695904667,
+    0.001298358772748589,
+    0.0033144015436218136,
+    -0.020652277514299523
+  ],
+  "band_edges_hz": [
+    0,
+    120,
+    1500,
+    8000,
+    24000
+  ],
+  "band_power_method": "4096-point periodic Hann, hop 2048, normalized one-sided Parseval power",
+  "candidate_band_power": [
+    0.013182842229375416,
+    0.028466147401558627,
+    0.0033836308755392287,
+    0.0008985804959957462
+  ],
+  "candidate_rms_dbfs": -13.377917855769653,
+  "claim": "change relative to frozen reference; quality and preference unestablished",
+  "delta_peak_dbfs": -37.028910374221155,
+  "delta_rms_dbfs": -64.08536296088361,
+  "frames": 13198079,
+  "gain_removed_delta_rms_dbfs": -64.0997960778699,
+  "least_squares_candidate_gain": 0.999832088704265,
+  "rate": 48000,
+  "reference_band_power": [
+    0.013174631279913354,
+    0.028457638486604007,
+    0.003381049577919399,
+    0.0009028637482473745
+  ],
+  "reference_rms_dbfs": -13.379339646304855,
+  "schema": "roach-aligned-master-change-v1",
+  "tier": 3
+}

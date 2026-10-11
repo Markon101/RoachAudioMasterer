@@ -1,0 +1,39 @@
+{
+  "schema": "roach-next-evolution-provenance-v1",
+  "implementation_commit": "14243bf2e37c9478e45cd4f5ecf08b38016b559f",
+  "champion_commit": "8570929829d5b6d826f5cab445d4391afd083c54",
+  "candidate_binary_sha256": "a777bf2a946d31e1e04b8b8d2a9276e5a6a653247b761243feb8ff25b63ef29e",
+  "champion_binary_sha256": "46a0dd4ca6713c580c0906e577ccee4bb4345fe7b1f1eed0a1ac088730f3c3bc",
+  "installed_handover_binary_sha256": "10827cf5cc8eb084cf8b9267749f57209b6dfb369a2d6576177851099196142b",
+  "installed_handover_build_identity": "not independently reproduced",
+  "champion_binary_matches_frozen_manifest": true,
+  "cargo_features": [
+    "opencl"
+  ],
+  "cargo_compilation_jobs": 2,
+  "models": {
+    "sfht": "c3ccc202eba42de9e9ef8b94f681d6e5c92f98461e2c7b453b240a92cea55a4d",
+    "cfm_v2": "0efd3c58017580fd27fc24df0f85c629a5794d6f6994ae31c87a4cda4be86a70"
+  },
+  "audio_publication": "No natural audio; metrics and provenance only",
+  "training": "No new training or adaptation outside existing procedural unit tests",
+  "speed_experiment": false,
+  "verification": {
+    "ordinary_tests_passed": 111,
+    "manual_native_gpu_parity_passed": true,
+    "comparison_tool_tests_passed": 2,
+    "procedural_variants_passed": 30,
+    "disabled_cli_master_byte_parity": true,
+    "upstream_stage3_5_byte_parity_with_intent_binary": true,
+    "full_song_flac_decode_passed": true,
+    "mono_cli_channels_preserved": true,
+    "legacy_alias_exposes_flags": true
+  },
+  "source_file_sha256": {
+    "src/acoustic_dynamics.rs": "78845ec079bf16ff1946959c37aae1d02be35ced6e3894526b939e9141fccb21",
+    "src/gtf.rs": "df900699aadeb4fdf25bc7132b76d1baa4a461d2a3de4b612ddd8512c82dcaed",
+    "src/main.rs": "02759fc570c8e2d8b22bfe0d2f9e9a03710701a44d1439bc00968a16f50278c1",
+    "src/spatial.rs": "020b5a3b8c7669ab0bb507568cc937c7ae8b75a2a82648c01bf2f981c0741f36",
+    "examples/compare_evolution.rs": "05a7a894318cafd6a2bef0b2402009992bf426a9517529ec2b37e297fbcbde6b"
+  }
+}

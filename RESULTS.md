@@ -976,6 +976,43 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Lossless FLAC: [`/sdcard/Download/FLAC/Fourier Longing - Normed [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
 - Storage Discipline: Phone storage strictly audited—all short 20s test samples, heavy interim test WAVs, and +30dB difference tracks discarded. Only complete full-song production masters delivered to user storage.
 
+#### 13. Next Evolution: Intent Validation, Coupled Clocks and Contrast Allocation (2026-10-11)
 
+Implementation `14243bf` adds disabled-by-default `--coupled-clocks` and
+`--contrast-budget` controls. They share an input-only 5 ms / 150 ms / 2.5 s
+envelope timeline, continuously allocating requested spatial width, reflection
+depth and calibrated PH excursion. These are implemented DSP control experiments,
+not semantic section detection, an amplitude-expansion head or lost-information
+recovery. Existing solver/defaults/checkpoints remain; the new controls leave
+compression settings unchanged relative to the handover intent path.
+
+**Tier 2:** 111 ordinary tests, the named native GPU parity check, two comparison
+tool tests and all 30 fixed procedural variants passed. Disabled controls yield
+a byte-identical float master against the exact frozen champion executable on
+the procedural CLI fixture. Protected PH band RMS deviation was at most 5.163e-9.
+
+**Tier 3:** The complete 274.96-second Fourier Longing candidate measured
+**-11.01497 LUFS / -0.999974 dBTP**, with all three current preservation checks
+passing and a fully decoded **24-bit / 48 kHz stereo FLAC**. Waveform delta versus
+the frozen champion is **-44.899 dBFS RMS**; the handover intent version alone
+differs by **-64.085 dBFS RMS**. The candidate's air-band power is 0.335 dB lower
+than the champion. These quantify change, not better texture or sound quality.
+
+The intent card selects Restore on this source; its effective parameters are now
+saved after modulation and agree with applied settings. The historical champion
+uses an unnormalized band-energy guard, so its FAIL is not compared as a quality
+loss against the current normalized PASS. The inspected handover rerender was
+16-bit FLAC; export now encodes from the float master and reserves fresh FLAC
+names without WAV copying or overwriting prior exports. Research audio stayed local.
+
+**Negative/limited evidence (Tiers 3–7):** Extra clock contribution over the
+simpler budget-only DSP ranges from -84.91 to -58.19 dBFS RMS on the procedural
+controls. Intent's waveform contribution on this Restore song is near-null.
+No listening preference, generalization or crescendo-clamping benefit has been
+established, and no new champion is declared. Read the
+[complete validation and limitations](docs/NEXT_EVOLUTION_RESULTS.md),
+[frozen plan](docs/NEXT_EVOLUTION_PLAN.md),
+[metrics/provenance](artifacts/next-evolution-v1/README.md), and
+[primary method references](docs/REFERENCES.md#port-hamiltonian-and-next-evolution-provenance-checked-2026-10-11).
 
 
