@@ -235,7 +235,7 @@ enum Commands {
         #[arg(long, default_value_t = 0.70)]
         shelf_db: f32,
         /// Export level-matched WAVs to /sdcard/Download for listening.
-        #[arg(long, default_value_t = true)]
+        #[arg(long, default_value_t = false)]
         export_sdcard: bool,
     },
     RichOracle {
@@ -3827,7 +3827,7 @@ fn run_morphic_compare_cli(
     // SDCard Export
     if export_sdcard {
         let sdcard_dir = std::path::Path::new("/sdcard/Download");
-        if sdcard_dir.exists() {
+        if export_sdcard && sdcard_dir.exists() {
             let parent_name = input.parent().and_then(|p| p.file_name()).and_then(|s| s.to_str()).unwrap_or("");
             let base_title = if parent_name.contains("chasing-horizons-1") || input.display().to_string().contains("chasing-horizons-1") {
                 "Chasing Horizons (1)"

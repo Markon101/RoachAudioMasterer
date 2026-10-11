@@ -354,7 +354,13 @@ impl SceneAssessor {
         };
         let mono_compatibility_passed = correlation_value >= 0.20;
 
-        // 2. Known-Band Invariance (check mid frequencies 1-3 kHz are within 1.0 dB)
+        // 2. Known-Band Invariance (check mid frequencies 1-2.5 kHz relative to broadband gain)
+        // Level-normalize processed audio by broadband RMS ratio to isolate true spectral shape distortion
+        // from downstream mastering makeup gain / loudness adjustments.
+        let orig_full_rms = (original.channels[0][..n_samples].iter().map(|x| x * x).sum::<f32>() / n_samples as f32).sqrt().max(1e-8);
+        let proc_full_rms = (processed.channels[0][..n_samples].iter().map(|x| x * x).sum::<f32>() / n_samples as f32).sqrt().max(1e-8);
+        let broadband_gain_scale = orig_full_rms / proc_full_rms;
+
         let orig_lp =
             crate::dsp::lowpass(&original.channels[0][..n_samples], RATE, 2500.0, 500.0, 2.0);
         let orig_mid = crate::dsp::highpass(&orig_lp, RATE, 1000.0, 300.0, 2.0);
@@ -372,7 +378,8 @@ impl SceneAssessor {
         let proc_rms = (proc_mid.iter().map(|x| x * x).sum::<f32>() / n_samples as f32)
             .sqrt()
             .max(1e-8);
-        let diff_db = 20.0 * (proc_rms / orig_rms).log10().abs();
+        let proc_norm_rms = proc_rms * broadband_gain_scale;
+        let diff_db = 20.0 * (proc_norm_rms / orig_rms).log10().abs();
         let known_band_preserved = diff_db < 1.0;
 
         // 3. Transient Timing Correlation
