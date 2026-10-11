@@ -10,6 +10,7 @@ pub mod gtf;
 mod master;
 mod metrics;
 pub mod microstructure;
+pub mod musical_intent;
 mod model;
 mod native_audio;
 mod native_dsp;
@@ -2159,7 +2160,7 @@ fn auto_master_pipeline(
         serde_json::to_string_pretty(&pre_profile)?,
     )?;
 
-    let tuning_card = scene_stats::TuningCard::generate(
+    let mut tuning_card = scene_stats::TuningCard::generate(
         &pre_profile.stats,
         &pre_profile.authorities,
         pre_profile.sub_energy_dbfs,
@@ -2170,6 +2171,30 @@ fn auto_master_pipeline(
         out_dir.join("tuning_card.json"),
         serde_json::to_string_pretty(&tuning_card)?,
     )?;
+
+    // Musical Intent Engine (Phase 3 Evolution)
+    let musical_intent = musical_intent::MusicalIntentCard::analyze(&pre_profile, &pre_profile.stats);
+    println!("\n================================================================================");
+    println!("                   ROACH AUDIO - MUSICAL INTENT DIRECTIVE                       ");
+    println!("================================================================================");
+    println!("Operational Regime: {}", musical_intent.regime);
+    println!("Intent Scores:      Intimacy: {:.2} | Dynamic Budget: {:.2} | Tonal Deliberation: {:.2} | Warmth: {:.2}",
+        musical_intent.intent_scores.intimacy_score,
+        musical_intent.intent_scores.dynamic_contrast_budget,
+        musical_intent.intent_scores.tonal_deliberation_index,
+        musical_intent.intent_scores.organic_warmth_factor
+    );
+    println!("Rationale:          {}", musical_intent.directives.summary_rationale);
+    println!("================================================================================");
+
+    std::fs::write(
+        out_dir.join("musical_intent.json"),
+        serde_json::to_string_pretty(&musical_intent)?,
+    )?;
+
+    if auto_tune {
+        musical_intent.modulate_tuning_card(&mut tuning_card);
+    }
 
     let mut morphic_coupling = morphic_coupling;
     let mut morphic_quartic = morphic_quartic;
@@ -2428,11 +2453,15 @@ fn auto_master_pipeline(
         } else {
             let eff_width = if force_specialists {
                 width_factor
+            } else if auto_tune {
+                1.0 + (width_factor - 1.0) * spat_auth * musical_intent.directives.spatial_width_scale
             } else {
                 1.0 + (width_factor - 1.0) * spat_auth
             };
             let eff_room_depth = if force_specialists {
                 room_depth
+            } else if auto_tune {
+                room_depth * spat_auth * musical_intent.directives.room_depth_scale
             } else {
                 room_depth * spat_auth
             };
