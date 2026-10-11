@@ -219,11 +219,18 @@ pub fn process_spatial(audio: &Audio, config: &SpatialConfig) -> (Audio, Spatial
         -120.0
     };
 
-    // Zero out sub-bass in the side channel (<120 Hz) so bass is 100% focused and mono
-    // Scale high side energy by width_factor
+    // Zero out sub-bass in the side channel (<120 Hz) so bass is 100% focused and mono.
+    // Scale high side energy by width_factor, modulated by Titan correlation-aware incoherence:
+    // incoherence = sqrt((1 - rho) / 2). Preserves focused phantom center for highly coherent content.
+    let incoherence = ((1.0f32 - initial_corr.clamp(-1.0f32, 1.0f32)) * 0.5f32).sqrt();
+    let eff_width = if initial_corr > 0.999f32 {
+        1.0f32
+    } else {
+        1.0f32 + (config.width_factor - 1.0f32) * (2.0f32 * incoherence).clamp(0.2f32, 1.2f32)
+    };
     let mut shaped_side = vec![0.0f32; n];
     for i in 0..n {
-        shaped_side[i] = side_high[i] * config.width_factor;
+        shaped_side[i] = side_high[i] * eff_width;
     }
 
     // 3. Early Reflection Depth Network (ERDN)
@@ -387,5 +394,33 @@ mod tests {
             "Correlation guard failed: {}",
             metrics.final_correlation
         );
+    }
+
+    #[test]
+    fn correlation_aware_incoherence_scaling_protects_mono() {
+        let samples = RATE as usize;
+        // Pure mono signal: identical left and right
+        let mono: Vec<f32> = (0..samples)
+            .map(|i| (i as f32 * 0.1).sin() * 0.5)
+            .collect();
+
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![mono.clone(), mono],
+        };
+
+        let config = SpatialConfig {
+            mono_bass_hz: 120.0,
+            width_factor: 1.5, // requested wide expansion
+            room_depth: 0.0,
+            min_correlation: 0.5,
+        };
+
+        let (processed, metrics) = process_spatial(&audio, &config);
+        assert!(metrics.initial_correlation > 0.999);
+        // Ensure channels remain identical (no side leakage injected into pure mono)
+        for i in 0..samples {
+            assert!((processed.channels[0][i] - processed.channels[1][i]).abs() < 1e-6);
+        }
     }
 }

@@ -3533,6 +3533,15 @@ impl MorphicAcousticController {
     }
 }
 
+/// Algebraic soft-clipping squashing function (ported from Titan Audio Ecosystem).
+/// f(x) = x / sqrt(1 + x^2).
+/// Strictly bounded in (-1.0, 1.0) with polynomial derivative decay (1 + x^2)^(-1.5)
+/// avoiding the exponential saturation plateau and dead gradient of tanh(x).
+#[inline]
+pub fn algebraic_soft_clip(x: f32) -> f32 {
+    x / (1.0f32 + x * x).sqrt()
+}
+
 /// Solves a 4x4 linear system A * x = b via Gaussian elimination with partial pivoting.
 /// Completely allocation-free, stack-only execution.
 #[inline]
@@ -3896,33 +3905,35 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
             // Band A (8-12 kHz Presence): Fast Mode z_1
             // Band B (12-20 kHz Air): Shimmer Mode z_3
             let (drive_m_a, drive_s_a, drive_m_b, drive_s_b) = if is_calibrated {
-                let swing = 0.06f32 * (config.microtexture_authority / 0.15f32);
+                // Calibrated dynamic swing: magnitude-scaled to 0.16 (±16% excursion)
+                // using algebraic soft-clipping with polynomial derivative decay.
+                let swing = 0.16f32 * (config.microtexture_authority / 0.15f32);
                 (
-                    (ph_z_mid[1] / 0.022f32).tanh() * swing,
-                    if is_stereo { (ph_z_side[1] / 0.022f32).tanh() * swing } else { 0.0f32 },
-                    (ph_z_mid[3] / 0.0035f32).tanh() * swing,
-                    if is_stereo { (ph_z_side[3] / 0.0035f32).tanh() * swing } else { 0.0f32 },
+                    algebraic_soft_clip(ph_z_mid[1] / 0.022f32) * swing,
+                    if is_stereo { algebraic_soft_clip(ph_z_side[1] / 0.022f32) * swing } else { 0.0f32 },
+                    algebraic_soft_clip(ph_z_mid[3] / 0.0035f32) * swing,
+                    if is_stereo { algebraic_soft_clip(ph_z_side[3] / 0.0035f32) * swing } else { 0.0f32 },
                 )
             } else {
                 (
-                    (ph_z_mid[1] * 0.15f32).tanh() * config.microtexture_authority,
-                    if is_stereo { (ph_z_side[1] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 },
-                    (ph_z_mid[3] * 0.15f32).tanh() * config.microtexture_authority,
-                    if is_stereo { (ph_z_side[3] * 0.15f32).tanh() * config.microtexture_authority } else { 0.0f32 },
+                    algebraic_soft_clip(ph_z_mid[1] * 0.15f32) * config.microtexture_authority,
+                    if is_stereo { algebraic_soft_clip(ph_z_side[1] * 0.15f32) * config.microtexture_authority } else { 0.0f32 },
+                    algebraic_soft_clip(ph_z_mid[3] * 0.15f32) * config.microtexture_authority,
+                    if is_stereo { algebraic_soft_clip(ph_z_side[3] * 0.15f32) * config.microtexture_authority } else { 0.0f32 },
                 )
             };
 
-            let g_mid_a = (base_shelf * (1.0f32 + drive_m_a)).clamp(0.85, 1.30);
-            let g_side_a = if is_stereo { (base_shelf * (1.0f32 + drive_s_a)).clamp(0.85, 1.30) } else { 1.0f32 };
-            let g_mid_b = (base_shelf * (1.0f32 + drive_m_b)).clamp(0.85, 1.30);
-            let g_side_b = if is_stereo { (base_shelf * (1.0f32 + drive_s_b)).clamp(0.85, 1.30) } else { 1.0f32 };
+            let g_mid_a = (base_shelf * (1.0f32 + drive_m_a)).clamp(0.80, 1.35);
+            let g_side_a = if is_stereo { (base_shelf * (1.0f32 + drive_s_a)).clamp(0.80, 1.35) } else { 1.0f32 };
+            let g_mid_b = (base_shelf * (1.0f32 + drive_m_b)).clamp(0.80, 1.35);
+            let g_side_b = if is_stereo { (base_shelf * (1.0f32 + drive_s_b)).clamp(0.80, 1.35) } else { 1.0f32 };
 
             // Selective Sub-Bass Damping (< 60 Hz side channel) driven by modal energy of Pair 2 (z_2)
             let eff_sub_damp = if is_stereo {
                 if is_calibrated {
-                    (ph_z_mid[2].abs() / 0.0030f32).tanh() * config.sub_bass_damping_authority
+                    algebraic_soft_clip(ph_z_mid[2].abs() / 0.0030f32) * config.sub_bass_damping_authority
                 } else {
-                    (ph_z_mid[2].abs() * 0.50f32).tanh() * config.sub_bass_damping_authority
+                    algebraic_soft_clip(ph_z_mid[2].abs() * 0.50f32) * config.sub_bass_damping_authority
                 }
             } else {
                 0.0f32
