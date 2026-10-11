@@ -133,8 +133,8 @@ enum Commands {
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
-        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, port-hamiltonian-calibrated, static-shelf.
-        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "port-hamiltonian-calibrated", "static-shelf"])]
+        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, port-hamiltonian-calibrated, port-hamiltonian-calibrated-uncoupled, static-shelf.
+        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "port-hamiltonian-calibrated", "port-hamiltonian-calibrated-uncoupled", "static-shelf"])]
         morphic_mode: String,
         /// Crossover frequency in Hz above which microtexture modulation applies.
         #[arg(long, default_value_t = 8000.0)]
@@ -2478,6 +2478,7 @@ fn auto_master_pipeline(
             "port-hamiltonian-a3" => gtf::MorphicModulationMode::PortHamiltonianA3,
             "port-hamiltonian-a4" => gtf::MorphicModulationMode::PortHamiltonianA4,
             "port-hamiltonian-calibrated" => gtf::MorphicModulationMode::PortHamiltonianCalibrated,
+            "port-hamiltonian-calibrated-uncoupled" => gtf::MorphicModulationMode::PortHamiltonianCalibratedUncoupled,
             "static-shelf" => gtf::MorphicModulationMode::StaticHighShelf,
             _ => gtf::MorphicModulationMode::GeometricMemory,
         };
@@ -2758,6 +2759,7 @@ fn auto_master_pipeline(
                             format!("{} [Highband Morphic M4 Calibrated Mastered]", base_stem)
                         }
                     }
+                    "port-hamiltonian-calibrated-uncoupled" => format!("{} [Highband Morphic M4 Calibrated Uncoupled Mastered]", base_stem),
                     "static-shelf" => format!("{} [Highband Static Shelf Mastered]", base_stem),
                     _ => format!("{} [Highband Morphic Mastered]", base_stem),
                 }
@@ -3694,7 +3696,8 @@ fn run_morphic_compare_cli(
         ("m4_a3_adaptive", "Port-Hamiltonian A3 Flux-Adaptive Skew Coupling", gtf::MorphicModulationMode::PortHamiltonianA3),
         ("m4_a4_quartic", "Port-Hamiltonian A4 Quartic AVF Discrete Gradient", gtf::MorphicModulationMode::PortHamiltonianA4),
         ("m4_calibrated", "Port-Hamiltonian Calibrated Hybrid Material (Air Shelf + 4D Dynamics)", gtf::MorphicModulationMode::PortHamiltonianCalibrated),
-        ("m5_static_shelf", "Static +0.8dB High-Shelf EQ Baseline Control", gtf::MorphicModulationMode::StaticHighShelf),
+        ("m4_cal_uncoupled", "Port-Hamiltonian Calibrated Uncoupled (Air Shelf + 4D Decoupled kappa=0)", gtf::MorphicModulationMode::PortHamiltonianCalibratedUncoupled),
+        ("m5_static_shelf", "Static Matched High-Shelf EQ Baseline Control", gtf::MorphicModulationMode::StaticHighShelf),
     ];
 
     struct ModeResult {
@@ -3791,15 +3794,21 @@ fn run_morphic_compare_cli(
     // Mode Indices:
     // 0: m0_bypass, 1: m1_memoryless, 2: m2_dsp_smoother, 3: m3_geometric, 4: m4_a0_frozen,
     // 5: m4_a1_uncoupled, 6: m4_a2_coupled, 7: m4_a3_adaptive, 8: m4_a4_quartic,
-    // 9: m4_calibrated, 10: m5_static_shelf
-    let diff_m4cal_m5_30db = diff_audio(&results[9].mastered, &results[10].mastered, 30.0);
+    // 9: m4_calibrated, 10: m4_cal_uncoupled, 11: m5_static_shelf
+    let diff_m4cal_m4uncoup_30db = diff_audio(&results[9].mastered, &results[10].mastered, 30.0);
+    let diff_m4uncoup_m5_30db = diff_audio(&results[10].mastered, &results[11].mastered, 30.0);
+    let diff_m4cal_m5_30db = diff_audio(&results[9].mastered, &results[11].mastered, 30.0);
     let diff_m4cal_m0_30db = diff_audio(&results[9].mastered, &results[0].mastered, 30.0);
     let diff_m4a2_m0_30db = diff_audio(&results[6].mastered, &results[0].mastered, 30.0);
     let diff_m4a2_m4a0_30db = diff_audio(&results[6].mastered, &results[4].mastered, 30.0);
     let diff_m4a2_m3_30db = diff_audio(&results[6].mastered, &results[3].mastered, 30.0);
-    let diff_m4a2_m5_30db = diff_audio(&results[6].mastered, &results[10].mastered, 30.0);
+    let diff_m4a2_m5_30db = diff_audio(&results[6].mastered, &results[11].mastered, 30.0);
     let diff_m4a4_m4a2_30db = diff_audio(&results[8].mastered, &results[6].mastered, 30.0);
 
+    let path_diff_m4cal_m4uncoup_30 = out.join("diff_m4cal_vs_m4uncoupled_gain30db.wav");
+    native_audio::write(&path_diff_m4cal_m4uncoup_30, &diff_m4cal_m4uncoup_30db, true)?;
+    let path_diff_m4uncoup_m5_30 = out.join("diff_m4uncoupled_vs_m5_gain30db.wav");
+    native_audio::write(&path_diff_m4uncoup_m5_30, &diff_m4uncoup_m5_30db, true)?;
     let path_diff_m4cal_m5_30 = out.join("diff_m4cal_vs_m5_gain30db.wav");
     native_audio::write(&path_diff_m4cal_m5_30, &diff_m4cal_m5_30db, true)?;
     let path_diff_m4cal_m0_30 = out.join("diff_m4cal_vs_m0_gain30db.wav");
@@ -3845,7 +3854,10 @@ fn run_morphic_compare_cli(
                 (format!("{} - Morphic M4 A3 [Adaptive Mastered].wav", base_title), out.join("m4_a3_adaptive_listen.wav")),
                 (format!("{} - Morphic M4 A4 [Nonlinear AVF Mastered].wav", base_title), out.join("m4_a4_quartic_listen.wav")),
                 (format!("{} - Morphic M4 Calibrated [Hybrid Mastered].wav", base_title), out.join("m4_calibrated_listen.wav")),
+                (format!("{} - Morphic M4 Calibrated Uncoupled [Hybrid Mastered].wav", base_title), out.join("m4_cal_uncoupled_listen.wav")),
                 (format!("{} - Morphic M5 [Static High-Shelf Control].wav", base_title), out.join("m5_static_shelf_listen.wav")),
+                (format!("{} - Delta M4 Calibrated vs Uncoupled [+30dB].wav", base_title), path_diff_m4cal_m4uncoup_30.clone()),
+                (format!("{} - Delta M4 Uncoupled vs Static Shelf [+30dB].wav", base_title), path_diff_m4uncoup_m5_30.clone()),
                 (format!("{} - Delta M4 Calibrated vs Static Shelf [+30dB].wav", base_title), path_diff_m4cal_m5_30.clone()),
                 (format!("{} - Delta M4 Calibrated vs Bypass [+30dB].wav", base_title), path_diff_m4cal_m0_30.clone()),
                 (format!("{} - Delta M4 A2 vs Frozen M4 [+30dB].wav", base_title), path_diff_m4a2_m4a0_30.clone()),

@@ -3411,6 +3411,8 @@ pub enum MorphicModulationMode {
     PortHamiltonianA4,
     /// Mode 4 (Calibrated): Full 4D Port-Hamiltonian Material + Base Air Shelf + Normalized Excursion
     PortHamiltonianCalibrated,
+    /// Mode 4 (Calibrated Uncoupled): Calibrated Material + Base Air Shelf with Cross-Modal Coupling Disabled (kappa=0)
+    PortHamiltonianCalibratedUncoupled,
     /// Mode 5: Matched static high-shelf DSP baseline (+0.8 dB above crossover)
     StaticHighShelf,
 }
@@ -3843,6 +3845,7 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
                 | MorphicModulationMode::PortHamiltonianA3
                 | MorphicModulationMode::PortHamiltonianA4
                 | MorphicModulationMode::PortHamiltonianCalibrated
+                | MorphicModulationMode::PortHamiltonianCalibratedUncoupled
         );
 
         if is_ph_multiband {
@@ -3851,7 +3854,8 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
             let u_s = flux * (1.0 - coherence);
 
             let (kap_m, kap_s) = match config.mode {
-                MorphicModulationMode::PortHamiltonianA1 => (0.0f32, 0.0f32),
+                MorphicModulationMode::PortHamiltonianA1
+                | MorphicModulationMode::PortHamiltonianCalibratedUncoupled => (0.0f32, 0.0f32),
                 MorphicModulationMode::PortHamiltonianA3 => {
                     let km = (3.0f32 + 6.0f32 * (u_m * 0.20f32).tanh()).clamp(1.0, 12.0);
                     let ks = (3.0f32 + 6.0f32 * (u_s * 0.20f32).tanh()).clamp(1.0, 12.0);
@@ -3861,7 +3865,8 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
             };
 
             let beta = match config.mode {
-                MorphicModulationMode::PortHamiltonianCalibrated => {
+                MorphicModulationMode::PortHamiltonianCalibrated
+                | MorphicModulationMode::PortHamiltonianCalibratedUncoupled => {
                     if config.ph_quartic_beta > 0.0 { config.ph_quartic_beta * 500.0f32 } else { 250.0f32 }
                 }
                 MorphicModulationMode::PortHamiltonianA4 => {
@@ -3877,7 +3882,11 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
                 ph_sq_sum[i] += ph_z_mid[i].powi(2);
             }
 
-            let is_calibrated = config.mode == MorphicModulationMode::PortHamiltonianCalibrated;
+            let is_calibrated = matches!(
+                config.mode,
+                MorphicModulationMode::PortHamiltonianCalibrated
+                    | MorphicModulationMode::PortHamiltonianCalibratedUncoupled
+            );
             let base_shelf = if is_calibrated {
                 10.0f32.powf(config.ph_shelf_db / 20.0f32)
             } else {
@@ -3997,8 +4006,8 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
                     (gm, gs, sd)
                 }
                 MorphicModulationMode::StaticHighShelf => {
-                    // Static +0.8 dB shelf control (10^(0.8/20) ~ 1.096478)
-                    (1.096478f32, 1.096478f32, 0.0f32)
+                    let shelf_gain = 10.0f32.powf(config.ph_shelf_db / 20.0f32);
+                    (shelf_gain, shelf_gain, 0.0f32)
                 }
                 _ => (1.0f32, 1.0f32, 0.0f32),
             };
@@ -5010,6 +5019,36 @@ mod tests {
             .sqrt()
             / n as f32;
         assert!(diff_cal_shelf_rms > 0.0, "Calibrated material must modulate dynamic motion relative to static shelf");
+
+        // 10. Calibrated Uncoupled Port-Hamiltonian Material (kappa=0)
+        let cfg_cal_uncoupled = MorphicConfig {
+            mode: MorphicModulationMode::PortHamiltonianCalibratedUncoupled,
+            crossover_hz: 8000.0,
+            ph_shelf_db: 0.70,
+            ph_coupling_kappa: 0.0,
+            ph_quartic_beta: 0.5,
+            microtexture_authority: 0.15,
+            ..MorphicConfig::default()
+        };
+        let (out_uncoupled, rep_uncoupled) = process_morphic_audio(&audio, &cfg_cal_uncoupled);
+        assert!(rep_uncoupled.mono_compatibility_passed);
+        assert!(rep_uncoupled.post_synthesis_low_band_rms_deviation < 1e-4);
+        for i in 0..4 {
+            assert!(
+                rep_uncoupled.ph_modal_rms[i] > 1e-6,
+                "Calibrated uncoupled modal coordinate z_{} must be active",
+                i
+            );
+        }
+        // Verify that coupled vs uncoupled produces finite non-identical delta
+        let diff_coupled_uncoupled_rms: f32 = out_cal.channels[0]
+            .iter()
+            .zip(&out_uncoupled.channels[0])
+            .map(|(a, b)| (a - b).powi(2))
+            .sum::<f32>()
+            .sqrt()
+            / n as f32;
+        assert!(diff_coupled_uncoupled_rms > 0.0, "Coupled (kappa=6) vs Uncoupled (kappa=0) must produce non-zero modal divergence");
     }
 
     #[test]
