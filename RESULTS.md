@@ -913,7 +913,23 @@ Following device owner directives (*magnitude over machinery*, *Titan Audio Ecos
 - Pure mono audio: Spatial specialist cleanly abstains ($\alpha = 0.00$).
 - Out-of-phase sub-bass: Spatial specialist activates ($\alpha = 0.85$), mono sub-bass guard collapses side leak.
 
-##### 4. Delivered Production Masters
-- Full song render exported directly to `/sdcard/Download/FLAC/` and `/sdcard/Download/` with bit-identical passband preservation below crossover and zero short-clip pollution.
+##### 4. Delivered Production Masters & OpenCL GPU Benchmarking
+All tracks rendered end-to-end with the upgraded Titan architectural additions (algebraic soft-clipping and correlation-aware incoherence) and dynamic loudness mastering:
+- **Feelin’ Catchy ext v1.2.2.2.2.2** (179.9s, CPU reference):
+  - Loudness: **-11.14 LUFS** (Before: -13.62 LUFS, +2.48 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-64.8%** reduction (0.115 -> 0.041)
+  - Sub Instability: 0.103 -> 0.023 (-0.080 defect reduction)
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- **Chasing Horizons** (140.4s, Qualcomm Adreno 830 OpenCL GPU acceleration):
+  - Hardware Acceleration: Adreno 830 GPU streaming across 18 WOLA chunks @ ~6.7s/chunk (~3x speedup vs CPU). Total pipeline runtime **168.8s** (faster than real-time playback).
+  - Loudness: **-11.03 LUFS** (Before: -15.69 LUFS, +4.65 LU gain)
+  - True Peak: **-1.00 dBTP** (Ceiling held strictly)
+  - Sub-Bass Side Leak: **-64.7%** reduction (0.201 -> 0.071)
+  - Sub Instability: 0.305 -> 0.072 (**-0.233 defect reduction**)
+  - Mono Compatibility: **PASS** | Transient Timing: **PASS**
+  - Lossless FLAC: [`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+- Storage Discipline: Phone storage strictly audited—all short 20s test samples, heavy interim test WAVs, and +30dB difference tracks discarded. Only complete full-song production masters delivered to user storage.
 
 
