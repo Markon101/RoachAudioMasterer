@@ -887,3 +887,33 @@ The 11 candidate configurations were benchmarked under identical dynamics thresh
 - Bradley-Terry Skill Model Calibration (data/roach_ears_preferences.jsonl):
   With 3 direct pairwise victories recorded in ROACH EARS, M4_calibrated takes the #1 ranking with latent skill mu = +0.689 (sigma = 0.789), definitively outranking static shelf EQ (mu = -0.252), un-shelved Port-Hamiltonian (mu = -0.252), and bypass (mu = -0.252).
 
+#### 12. Accelerated Research Mission: M4 Magnitude Discovery, Algebraic Soft-Clipping, and Correlation-Aware Incoherence (2026-10-11)
+
+Following device owner directives (*magnitude over machinery*, *Titan Audio Ecosystem architectural transfer*, and *clean phone storage enforcement*), Phase 0–5 research workflows established ground truth, solved the historical shelf confound, and upgraded production mastering:
+
+##### 1. Epistemic Audit & Factorial Ablation of Historical Shelf Confound
+- **The Confound Identified**: Prior Section 11 tournament results showed M4 Calibrated dominating M0–M4 A2 and M5. However, M4 Calibrated combined both a $+0.70\text{ dB}$ air shelf and the 4D skew-symmetric resonator, while earlier baselines had $0.0\text{ dB}$ shelf.
+- **Factorial Resolution**: Added `PortHamiltonianCalibratedUncoupled` ($\kappa=0$ with exact $+0.70\text{ dB}$ shelf) and matched `StaticHighShelf` precisely to `config.ph_shelf_db`.
+- **The Magnitude Problem Resolved**:
+  - At the historical $\pm 6\%$ actuator swing (`swing = 0.06`), the difference between Coupled ($\kappa=6$) and Uncoupled ($\kappa=0$) was buried at $-62.11\text{ dBFS RMS}$ (Peak $-35.35\text{ dBFS}$), explaining why dynamic modulation felt too subtle despite strong internal modal energy transfer ($z_2$ sub-bass energy $+61.4\%$).
+  - Scaling the dynamic actuator swing to $16\text{--}18\%$ (`swing = 0.16`) lifted the Coupled vs Uncoupled delta by **$+9.66\text{ dB}$** to **$-52.45\text{ dBFS RMS}$** (Peak **$-25.74\text{ dBFS}$**), making the physical respiration clearly audible while preserving $-11.09\text{ LUFS}$ integrated loudness and $-0.98\text{ dBTP}$ true peak ceilings.
+
+##### 2. Titan Audio Ecosystem Architectural Transfers
+- **Algebraic Soft-Clipping (`src/gtf.rs`)**:
+  Replaced $\tanh(x)$ with the algebraic squashing function $f(x) = \frac{x}{\sqrt{1 + x^2}}$.
+  - Polynomial derivative decay $f'(x) = (1 + x^2)^{-3/2}$ avoids the exponential saturation cliff $\text{sech}^2(x) \sim e^{-2|x|}$, eliminating dead gradients and harsh clipping corners under high-magnitude excursions.
+- **Correlation-Aware Incoherence Modulation (`src/spatial.rs`)**:
+  Integrated continuous incoherence weighting $\text{incoherence} = \sqrt{\frac{1 - \rho}{2}}$:
+  - $\rho \to 1.0$ (coherent/mono): $\text{incoherence} \to 0$, protecting tight center phantom imaging and suppressing artificial side noise leakage.
+  - $\rho < 0.8$ (decorrelated stereo): dynamically scales stereo side expansion proportional to incoherence.
+
+##### 3. Automated Signal-Dependent Abstention Verification
+- Clean full-bandwidth audio: High-band specialist cleanly abstains ($\alpha = 0.00$).
+- Band-limited audio (8 kHz cutoff): High-band specialist activates ($\alpha = 0.60$).
+- Pure mono audio: Spatial specialist cleanly abstains ($\alpha = 0.00$).
+- Out-of-phase sub-bass: Spatial specialist activates ($\alpha = 0.85$), mono sub-bass guard collapses side leak.
+
+##### 4. Delivered Production Masters
+- Full song render exported directly to `/sdcard/Download/FLAC/` and `/sdcard/Download/` with bit-identical passband preservation below crossover and zero short-clip pollution.
+
+
