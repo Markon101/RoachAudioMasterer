@@ -110,6 +110,15 @@ counts, losses, fluid-inspired hypotheses and proposed versions, and
 
 ## Tri-band restoration and autonomous mastering milestone
 
+The optional next-evolution allocator shares one input-only control timeline
+between spatial and calibrated Port-Hamiltonian stages. Three cascaded DSP
+energy trackers (5 ms, 150 ms, 2.5 s) condition forcing/excursion; input-relative
+section energy continuously allocates width, reflection depth and excursion.
+These are implemented control experiments, not dedicated amplitude expansion,
+semantic section detection or evidence of perceptual recovery. Legacy calls and
+settings bypass the timeline. See [NEXT_EVOLUTION_PLAN.md](NEXT_EVOLUTION_PLAN.md)
+and the [method provenance](REFERENCES.md#port-hamiltonian-and-next-evolution-provenance-checked-2026-10-11).
+
 The full-spectrum tri-band pipeline is now implemented and operational across the entire audio frequency range:
 1. **Low-Band Completion ($20\text{--}500\text{ Hz}$)**: `src/rich_low.rs` reconstructs sub-bass fundamentals from surviving low-mid superharmonics ($m \in \{2, 3, 4, 5, 6\}$) paired with a clean zero-noise sub-bass prior.
 2. **Mid-Band Completion ($500\text{--}6000\text{ Hz}$)**: `src/rich_mid.rs` reconstructs vocal and instrument bodies conditioned on surviving low fundamentals ($m \in \{1, 2, 3, 4, 6\}$).

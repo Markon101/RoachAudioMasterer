@@ -3756,6 +3756,14 @@ pub fn step_port_hamiltonian_coupled_4d(
 
 /// Processes stereo audio through the Morphic Acoustic Controller with bit-exact passband locking.
 pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, MorphicAuditReport) {
+    process_morphic_audio_with_contrast(audio, config, None)
+}
+
+pub fn process_morphic_audio_with_contrast(
+    audio: &Audio,
+    config: &MorphicConfig,
+    contrast: Option<&crate::acoustic_dynamics::ContrastTimeline>,
+) -> (Audio, MorphicAuditReport) {
     let stft = Stft::default();
     let is_stereo = audio.channels.len() == 2;
     let ms = audio.mid_side();
@@ -3859,8 +3867,11 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
 
         if is_ph_multiband {
             let dt_hop = dt.min(0.05);
-            let u_m = flux;
-            let u_s = flux * (1.0 - coherence);
+            let (_, actuator_fraction, transient_factor) = contrast
+                .map(|timeline| timeline.controls_at(t * HOP))
+                .unwrap_or((1.0, 1.0, 1.0));
+            let u_m = flux * transient_factor;
+            let u_s = flux * (1.0 - coherence) * transient_factor;
 
             let (kap_m, kap_s) = match config.mode {
                 MorphicModulationMode::PortHamiltonianA1
@@ -3907,7 +3918,7 @@ pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, M
             let (drive_m_a, drive_s_a, drive_m_b, drive_s_b) = if is_calibrated {
                 // Calibrated dynamic swing: magnitude-scaled to 0.16 (±16% excursion)
                 // using algebraic soft-clipping with polynomial derivative decay.
-                let swing = 0.16f32 * (config.microtexture_authority / 0.15f32);
+                let swing = 0.16f32 * (config.microtexture_authority / 0.15f32) * actuator_fraction;
                 (
                     algebraic_soft_clip(ph_z_mid[1] / 0.022f32) * swing,
                     if is_stereo { algebraic_soft_clip(ph_z_side[1] / 0.022f32) * swing } else { 0.0f32 },
@@ -5138,4 +5149,3 @@ mod tests {
         );
     }
 }
-

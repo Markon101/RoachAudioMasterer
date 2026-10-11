@@ -181,6 +181,14 @@ pub fn correlation_coefficient(left: &[f32], right: &[f32]) -> f32 {
 
 /// Applies 3D spatial acoustic processing, mono sub-bass locking, and psychoacoustic depth expansion.
 pub fn process_spatial(audio: &Audio, config: &SpatialConfig) -> (Audio, SpatialMetrics) {
+    process_spatial_with_contrast(audio, config, None)
+}
+
+pub fn process_spatial_with_contrast(
+    audio: &Audio,
+    config: &SpatialConfig,
+    contrast: Option<&crate::acoustic_dynamics::ContrastTimeline>,
+) -> (Audio, SpatialMetrics) {
     if audio.channels.len() < 2 {
         let corr = 1.0;
         return (
@@ -230,7 +238,10 @@ pub fn process_spatial(audio: &Audio, config: &SpatialConfig) -> (Audio, Spatial
     };
     let mut shaped_side = vec![0.0f32; n];
     for i in 0..n {
-        shaped_side[i] = side_high[i] * eff_width;
+        let width = contrast.map(|timeline| {
+            1.0 + (eff_width - 1.0) * timeline.controls_at(i).0
+        }).unwrap_or(eff_width);
+        shaped_side[i] = side_high[i] * width;
     }
 
     // 3. Early Reflection Depth Network (ERDN)
@@ -247,8 +258,15 @@ pub fn process_spatial(audio: &Audio, config: &SpatialConfig) -> (Audio, Spatial
     for i in 0..n {
         let l = (mid[i] + shaped_side[i]) * inv_sqrt2;
         let r = (mid[i] - shaped_side[i]) * inv_sqrt2;
-        out_left[i] = l + er_left[i] * config.room_depth;
-        out_right[i] = r + er_right[i] * config.room_depth;
+        if let Some(timeline) = contrast {
+            let fraction = timeline.controls_at(i).0;
+            // Allocate only the requested expansion residual; the bass guard remains active.
+            out_left[i] = l + er_left[i] * config.room_depth * fraction;
+            out_right[i] = r + er_right[i] * config.room_depth * fraction;
+        } else {
+            out_left[i] = l + er_left[i] * config.room_depth;
+            out_right[i] = r + er_right[i] * config.room_depth;
+        }
     }
 
     // 5. Phase Coherence Guard: Check correlation and protect mono compatibility

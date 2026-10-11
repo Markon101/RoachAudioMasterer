@@ -11,6 +11,7 @@ mod master;
 mod metrics;
 pub mod microstructure;
 pub mod musical_intent;
+pub mod acoustic_dynamics;
 mod model;
 mod native_audio;
 mod native_dsp;
@@ -158,6 +159,12 @@ enum Commands {
         /// Opt-in self-tuning parameter engine: maps deep acoustic scene statistics directly into stage parameters.
         #[arg(long, default_value_t = false)]
         auto_tune: bool,
+        /// Experimental 5 ms / 150 ms / 2.5 s envelope clocks for calibrated PH actuators.
+        #[arg(long)]
+        coupled_clocks: bool,
+        /// Experimental section-relative allocation of width, depth and calibrated PH excursion.
+        #[arg(long)]
+        contrast_budget: bool,
     },
     /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
@@ -923,6 +930,8 @@ fn run() -> Result<()> {
             morphic_shelf_db,
             sfht_shrinkage,
             auto_tune,
+            coupled_clocks,
+            contrast_budget,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -962,6 +971,8 @@ fn run() -> Result<()> {
             morphic_shelf_db,
             sfht_shrinkage,
             auto_tune,
+            coupled_clocks,
+            contrast_budget,
         ),
         Commands::Microstructure {
             input,
@@ -2024,6 +2035,8 @@ fn auto_master_pipeline(
     morphic_shelf_db: f32,
     sfht_shrinkage: Option<f32>,
     auto_tune: bool,
+    coupled_clocks: bool,
+    contrast_budget: bool,
 ) -> Result<()> {
     let pipeline_start = std::time::Instant::now();
 
@@ -2168,7 +2181,7 @@ fn auto_master_pipeline(
     );
     tuning_card.print_summary_table();
     std::fs::write(
-        out_dir.join("tuning_card.json"),
+        out_dir.join("base_tuning_card.json"),
         serde_json::to_string_pretty(&tuning_card)?,
     )?;
 
@@ -2195,6 +2208,10 @@ fn auto_master_pipeline(
     if auto_tune {
         musical_intent.modulate_tuning_card(&mut tuning_card);
     }
+    std::fs::write(
+        out_dir.join("tuning_card.json"),
+        serde_json::to_string_pretty(&tuning_card)?,
+    )?;
 
     let mut morphic_coupling = morphic_coupling;
     let mut morphic_quartic = morphic_quartic;
@@ -2234,6 +2251,18 @@ fn auto_master_pipeline(
         glue_auth = tuning_card.recommended_parameters.glue_authority;
         morphic_mode_string = tuning_card.recommended_parameters.morphic_mode.clone();
     }
+
+    ensure!(!coupled_clocks || (morphic_gtf && matches!(morphic_mode_string.as_str(),
+        "port-hamiltonian-calibrated" | "port-hamiltonian-calibrated-uncoupled")),
+        "--coupled-clocks requires enabled calibrated Port-Hamiltonian mode (or --auto-tune)");
+    let contrast_timeline = if coupled_clocks || contrast_budget {
+        let timeline = acoustic_dynamics::ContrastTimeline::analyze(
+            &original_input_audio, coupled_clocks, contrast_budget);
+        experiment::write_json(&out_dir.join("contrast_timeline.json"), &timeline)?;
+        Some(timeline)
+    } else { None };
+    let mut applied_spatial = None;
+    let mut applied_morphic = None;
 
     // Model Resolution
     let resolved_sfht = if !no_sfht {
@@ -2476,7 +2505,11 @@ fn auto_master_pipeline(
                 room_depth: eff_room_depth,
                 min_correlation: 0.20,
             };
-            let (spat_audio, spat_metrics) = spatial::process_spatial(&current_audio, &spatial_cfg);
+            applied_spatial = Some(serde_json::json!({"width_factor": eff_width,
+                "room_depth": eff_room_depth, "authority": spat_auth,
+                "contrast_budget": contrast_budget}));
+            let (spat_audio, spat_metrics) = spatial::process_spatial_with_contrast(
+                &current_audio, &spatial_cfg, contrast_timeline.as_ref().filter(|_| contrast_budget));
             println!(
                 "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz | Sub Side Leak: {:.1} dB",
                 spat_metrics.initial_correlation,
@@ -2530,7 +2563,10 @@ fn auto_master_pipeline(
             mode: mode_enum,
             ..gtf::MorphicConfig::default()
         };
-        let (morphic_audio, morphic_rep) = gtf::process_morphic_audio(&current_audio, &morphic_cfg);
+        applied_morphic = Some(morphic_cfg.clone());
+        let (morphic_audio, morphic_rep) = gtf::process_morphic_audio_with_contrast(
+            &current_audio, &morphic_cfg, contrast_timeline.as_ref());
+        experiment::write_json(&out_dir.join("morphic_audit.json"), &morphic_rep)?;
         println!(
             "  Completed in {:.2}s | Mean Confidence: {:.3} | Mean Authority: {:.3} | Low RMS Delta: {:.4e}",
             t0.elapsed().as_secs_f64(),
@@ -2733,7 +2769,7 @@ fn auto_master_pipeline(
     let flac_st = if has_cover {
         std::process::Command::new("ffmpeg")
             .args(["-y", "-v", "error", "-i"])
-            .arg(&listen_wav)
+            .arg(&mastered_wav)
             .args(["-i"])
             .arg(&cover_path)
             .args([
@@ -2743,6 +2779,8 @@ fn auto_master_pipeline(
                 "1:v",
                 "-c:a",
                 "flac",
+                "-sample_fmt",
+                "s32",
                 "-c:v",
                 "copy",
                 "-disposition:v:0",
@@ -2753,8 +2791,8 @@ fn auto_master_pipeline(
     } else {
         std::process::Command::new("ffmpeg")
             .args(["-y", "-v", "error", "-i"])
-            .arg(&listen_wav)
-            .args(["-c:a", "flac"])
+            .arg(&mastered_wav)
+            .args(["-c:a", "flac", "-sample_fmt", "s32"])
             .arg(&flac_path)
             .status()
     };
@@ -2767,7 +2805,7 @@ fn auto_master_pipeline(
         }
     }
 
-    if export_sdcard {
+    if export_sdcard && flac_created && duration_s >= 60.0 {
         let sd_download = std::path::Path::new("/sdcard/Download");
         if sd_download.exists() {
             let base_stem = input
@@ -2775,7 +2813,7 @@ fn auto_master_pipeline(
                 .and_then(|s| s.to_str())
                 .unwrap_or("Mastered");
             let sanitized_stem = if morphic_gtf {
-                match morphic_mode {
+                match morphic_mode_string.as_str() {
                     "port-hamiltonian" => format!("{} [Highband Morphic M4 A2 Mastered]", base_stem),
                     "port-hamiltonian-a0" => format!("{} [Highband Morphic M4 A0 Mastered]", base_stem),
                     "port-hamiltonian-a1" => format!("{} [Highband Morphic M4 A1 Mastered]", base_stem),
@@ -2795,21 +2833,11 @@ fn auto_master_pipeline(
             } else {
                 format!("{} [Highband Mastered]", base_stem)
             };
-            let target_wav = sd_download.join(format!("{}.wav", sanitized_stem));
-            if let Err(e) = std::fs::copy(&listen_wav, &target_wav) {
-                eprintln!("Warning: failed copying to {}: {}", target_wav.display(), e);
-            } else {
-                println!("Exported to Android:  {}", target_wav.display());
-            }
-
-            if flac_created {
-                let flac_dir = sd_download.join("FLAC");
-                let target_flac = if flac_dir.exists() {
-                    flac_dir.join(format!("{}.flac", sanitized_stem))
-                } else {
-                    sd_download.join(format!("{}.flac", sanitized_stem))
-                };
-                if let Err(e) = std::fs::copy(&flac_path, &target_flac) {
+            let flac_dir = sd_download.join("FLAC");
+            if flac_dir.exists() {
+                let run_name = out_dir.file_name().and_then(|s| s.to_str()).unwrap_or("new-run");
+                let target_flac = flac_dir.join(format!("{} [{}].flac", sanitized_stem, run_name));
+                if let Err(e) = copy_fresh_file(&flac_path, &target_flac) {
                     eprintln!(
                         "Warning: failed copying to {}: {}",
                         target_flac.display(),
@@ -2818,12 +2846,23 @@ fn auto_master_pipeline(
                 } else {
                     println!("Exported to Android:  {}", target_flac.display());
                 }
+            } else {
+                eprintln!("Phone export skipped: /sdcard/Download/FLAC must exist; master retained locally.");
             }
         }
+    } else if export_sdcard && duration_s < 60.0 {
+        eprintln!("Phone export skipped for input shorter than 60s; research audio retained locally.");
     }
 
+    let runtime_provenance = experiment::provenance();
     let summary_meta = serde_json::json!({
         "schema": "highband-auto-master-v1",
+        "runtime_checkout": {
+            "git_commit": runtime_provenance["git_commit"],
+            "git_dirty": runtime_provenance["git_dirty"],
+            "note": "Runtime checkout identity; executable build identity must be verified separately",
+        },
+        "executable_path": std::env::current_exe().ok().map(|p| p.display().to_string()),
         "input": input.display().to_string(),
         "duration_seconds": duration_s,
         "elapsed_seconds": pipeline_start.elapsed().as_secs_f64(),
@@ -2849,6 +2888,12 @@ fn auto_master_pipeline(
             "backend": backend,
             "fractal_tendrils": fractal_tendrils,
             "force_specialists": force_specialists,
+            "auto_tune": auto_tune,
+            "coupled_clocks": coupled_clocks,
+            "contrast_budget": contrast_budget,
+            "applied_spatial": applied_spatial,
+            "applied_morphic": applied_morphic,
+            "effective_glue_ratio": eff_glue_ratio,
         },
         "pre_assessment": pre_profile,
         "post_assessment": post_profile,
@@ -2869,6 +2914,38 @@ fn auto_master_pipeline(
         out_dir.display()
     );
     Ok(())
+}
+
+/// Atomically reserves a new name; never truncates a previous export.
+fn copy_fresh_file(source: &std::path::Path, target: &std::path::Path) -> Result<()> {
+    let mut input = std::fs::File::open(source)?;
+    let mut output = std::fs::OpenOptions::new().write(true).create_new(true).open(target)?;
+    if let Err(error) = std::io::copy(&mut input, &mut output).and_then(|_| output.sync_all()) {
+        drop(output);
+        let _ = std::fs::remove_file(target);
+        return Err(error.into());
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod export_tests {
+    #[test]
+    fn fresh_export_preserves_existing_destination_and_copies_exactly() {
+        let dir = std::env::temp_dir().join(format!("roach-export-test-{}-{}", std::process::id(),
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        std::fs::create_dir(&dir).unwrap();
+        let source = dir.join("source.flac");
+        let target = dir.join("target.flac");
+        std::fs::write(&source, b"new master").unwrap();
+        std::fs::write(&target, b"frozen master").unwrap();
+        assert!(super::copy_fresh_file(&source, &target).is_err());
+        assert_eq!(std::fs::read(&target).unwrap(), b"frozen master");
+        let fresh = dir.join("fresh.flac");
+        super::copy_fresh_file(&source, &fresh).unwrap();
+        assert_eq!(std::fs::read(&fresh).unwrap(), b"new master");
+        std::fs::remove_dir_all(dir).unwrap();
+    }
 }
 
 fn run_microstructure_cli(

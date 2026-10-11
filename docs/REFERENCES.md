@@ -1,5 +1,29 @@
 # Method references and implementation status
 
+## Port-Hamiltonian and next-evolution provenance (checked 2026-10-11)
+
+- **Adapted framework:** A. J. van der Schaft and B. M. Maschke,
+  [Port-Hamiltonian systems on graphs](https://arxiv.org/abs/1107.2006)
+  (2011 preprint; 2013 journal, DOI
+  [10.1137/110840091](https://doi.org/10.1137/110840091)). Source for the
+  energy-storage, skew interconnection and dissipation framework. The four-state
+  acoustic resonator, spectral readouts and settings in `src/gtf.rs` are project
+  adaptations, not a reproduction of the graph models or evidence of better sound.
+- **Adapted integrator:** E. Celledoni, V. Grimm, R. I. McLachlan, D. I. McLaren,
+  D. O'Neale, B. Owren and G. R. W. Quispel,
+  [Preserving energy resp. dissipation in numerical PDEs using the Average Vector
+  Field method](https://arxiv.org/abs/1202.4555) (2012), DOI
+  [10.1016/j.jcp.2012.06.022](https://doi.org/10.1016/j.jcp.2012.06.022).
+  The closed-form quartic AVF discrete gradient is adapted to the finite-dimensional
+  resonator. Its approximate Newton solve needs numerical checks; the paper does
+  not establish passivity for every floating-point solve or perceptual superiority.
+- **Implemented project DSP:** `src/acoustic_dynamics.rs` uses three cascaded
+  exponential energy trackers, track-relative quantiles, a silence gate and
+  interpolated allocation. This is neither a learned Titan transfer nor a new
+  Port-Hamiltonian integrator. It modifies bounded forcing/readout budgets around
+  the existing material. Musical section labels and perceptual benefit remain
+  unestablished; no natural-audio training or adaptation was performed.
+
 Primary papers checked 2026-10-05. Citations document method provenance and
 scope; published performance is not evidence for highband. External model
 weights, training audio, vocoders and frameworks were not imported. A proposed
@@ -180,4 +204,3 @@ The rich sprint additionally uses these primary sources, checked 2026-10-05:
 Scope notes come from the original papers and standards organizations, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown and official ITU/EBU PDFs supplied the standards text. Full copyrighted text is
 not redistributed in this repository.
-

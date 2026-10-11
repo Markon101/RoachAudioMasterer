@@ -13,6 +13,31 @@ The core direction is a unified autonomous mastering and scene restoration engin
 
 ## Build and run
 
+The next-evolution experiment adds separate, disabled-by-default
+`--coupled-clocks` and `--contrast-budget` flags to `auto-master`:
+
+```sh
+./target/release/roach-audio-masterer auto-master --input song.wav \
+  --auto-tune --coupled-clocks --contrast-budget --no-export-sdcard \
+  --out runs/new-contrast-experiment
+```
+
+The input-only 5 ms / 150 ms / 2.5 s envelope cascade controls calibrated
+Port-Hamiltonian forcing/excursion. The contrast allocator continuously reduces
+requested width, room depth and excursion in quieter passages. It does not
+identify verses/choruses or reconstruct lost dynamics; existing compression and
+limiting remain in effect. `--coupled-clocks` requires calibrated PH processing,
+selected explicitly or by `--auto-tune`. CPU remains the numerical reference;
+OpenCL is optional. See the [frozen plan](docs/NEXT_EVOLUTION_PLAN.md).
+
+Runs retain both `base_tuning_card.json` and the intent-adjusted `tuning_card.json`,
+plus actual stage settings in `summary.json`. Experimental runs also export
+`contrast_timeline.json`; `morphic_audit.json` records Stage 4.5 measurements.
+Phone export writes only a fresh FLAC name under `/sdcard/Download/FLAC/`, with
+the run-directory name appended, and skips inputs shorter than 60 seconds.
+Research runs should use `--no-export-sdcard`. Local FLAC is encoded at 24 bits
+from the float master; the separate listening WAV remains PCM16.
+
 Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
 ML framework, service, dataset download, or GPU is required.
 
