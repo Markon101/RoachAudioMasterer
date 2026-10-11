@@ -1,0 +1,104 @@
+{
+  "tag": "v1.1.0-alpha.1-champion",
+  "commit": "8570929",
+  "date": "2026-10-11",
+  "binary": {
+    "path": "target/release/roach-audio-masterer",
+    "sha256": "46a0dd4ca6713c580c0906e577ccee4bb4345fe7b1f1eed0a1ac088730f3c3bc",
+    "cargo_features": [
+      "opencl"
+    ],
+    "cargo_flags": "-j 4"
+  },
+  "model_checkpoints": {
+    "sfht": {
+      "path": "artifacts/rich-low-sfht/basis.json",
+      "sha256": "c3ccc202eba42de9e9ef8b94f681d6e5c92f98461e2c7b453b240a92cea55a4d"
+    },
+    "cfm_v2": {
+      "path": "artifacts/rich-mid-v2/basis.json",
+      "sha256": "0efd3c58017580fd27fc24df0f85c629a5794d6f6994ae31c87a4cda4be86a70"
+    }
+  },
+  "architectural_champion_settings": {
+    "morphic_mode": "port-hamiltonian-calibrated",
+    "actuator_swing": 0.16,
+    "actuator_squash": "algebraic_soft_clip: x / sqrt(1 + x^2)",
+    "spatial_mode": "correlation_aware_incoherence: sqrt((1 - rho) / 2)",
+    "target_lufs": -11.0,
+    "ceiling_dbtp": -1.0,
+    "backend": "opencl (Qualcomm Adreno 830 GPU)"
+  },
+  "per_song_auto_tune_decisions": {
+    "feelin_catchy": {
+      "sub_auth": 0.0,
+      "mid_auth": 0.75,
+      "mid_strength": 0.66,
+      "kappa": 6.2,
+      "beta": 2.08,
+      "shelf_db": 1.5,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.2
+    },
+    "chasing_horizons": {
+      "sub_auth": 0.0,
+      "mid_auth": 0.6,
+      "mid_strength": 0.54,
+      "kappa": 6.17,
+      "beta": 2.21,
+      "shelf_db": 1.5,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.26
+    },
+    "path_to_connection": {
+      "sub_auth": 0.0,
+      "mid_auth": 0.75,
+      "mid_strength": 0.68,
+      "kappa": 6.22,
+      "beta": 1.52,
+      "shelf_db": 1.5,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.3
+    },
+    "verse_1_v_77": {
+      "sub_auth": 0.0,
+      "mid_auth": 0.75,
+      "mid_strength": 0.65,
+      "kappa": 6.18,
+      "beta": 2.42,
+      "shelf_db": 1.5,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.36
+    },
+    "war_crimes_trending": {
+      "sub_auth": 0.85,
+      "mid_auth": 0.75,
+      "mid_strength": 0.62,
+      "kappa": 6.19,
+      "beta": 1.75,
+      "shelf_db": 0.06,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.28
+    },
+    "vextordreamsdigital": {
+      "sub_auth": 0.0,
+      "mid_auth": 0.75,
+      "mid_strength": 0.65,
+      "kappa": 6.17,
+      "beta": 1.9,
+      "shelf_db": 1.5,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.2
+    },
+    "fourier_longing_normed": {
+      "sub_auth": 0.85,
+      "mid_auth": 0.75,
+      "mid_strength": 0.63,
+      "kappa": 6.19,
+      "beta": 1.4,
+      "shelf_db": 1.5,
+      "spatial_auth": 0.9,
+      "glue_ratio": 1.2
+    }
+  }
+}
