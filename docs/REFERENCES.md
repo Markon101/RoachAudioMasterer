@@ -238,3 +238,32 @@ not redistributed in this repository.
 The SFHT soft-clamp chain rule and mid-band Fourier-projection adjoint repairs
 are direct calculus/linear algebra, not new paper-derived ML architectures.
 See [the frozen plan](PUNCH_CONTROL_PLAN.md) and checkpoint report for evidence.
+
+## Dynamics and evolving associative geometry provenance
+
+- **Adapted concept / background:** Hubert Ramsauer, Bernhard Schäfl, Johannes
+  Lehner, Philipp Seidl et al. (2020/2021), *Hopfield Networks is All You Need*,
+  [arXiv:2008.02217](https://arxiv.org/abs/2008.02217).
+  Relevant idea: energy-based continuous soft association and retrieval. Our
+  eight-prototype Gaussian-distance potential, time-varying variance/masses,
+  convex prototype updates and transition graph are a separate project observer.
+  It is not a modern-Hopfield reproduction, trained attention architecture,
+  exponential-capacity result or semantic-memory demonstration. No natural-audio
+  learned component from the paper is imported.
+- **Background, unimplemented:** Ricky T. Q. Chen, Yulia Rubanova, Jesse
+  Bettencourt and David Duvenaud (2018), *Neural Ordinary Differential Equations*,
+  [arXiv:1806.07366](https://arxiv.org/abs/1806.07366).
+  Relevant distinction: a time-dependent state equation has an explicit vector
+  field and integration semantics. Our elapsed-signal-time relaxations do not
+  implement an adaptive Neural ODE solver or continuous adjoint training.
+- **Implemented/adapted conventional optimization and DSP:** Kingma/Ba's Adam
+  (R1) trains the new readout. The compressor/attack-coefficient mathematics
+  follows the Giannoulis/Massberg/Reiss reference above. Procedural scenes,
+  RMS-conserving linked gain, tridiagonal waveform Gram/VJP, exact rational signal
+  clock, and weight-space anchor diagnostics are project-specific calculations.
+
+The input-history map resets per clip; inference does not fit model weights on a
+song. Its potential is dimensionless. Nanosecond timestamp precision does not
+create nanosecond acoustic observations. Graph components at fixed thresholds
+describe this observer only. Compare evolving versus frozen context before
+attributing reconstruction gains to the map; see [DYNAMICS_V1_PLAN.md](DYNAMICS_V1_PLAN.md).
