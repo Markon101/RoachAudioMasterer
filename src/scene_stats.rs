@@ -700,13 +700,23 @@ impl TuningCard {
         let (high_ang_var, _high_jit) = find_phase_jit("high");
 
         // 1. Sub-Bass Parameter Mapping
-        // Target natural sub energy is ~ -35 dBFS; adjust gain to achieve smooth low-end body
-        let sub_deficit = (-35.0 - profile_sub_energy_dbfs).clamp(-3.0, 4.0);
-        let sub_bass_gain_db = (sub_deficit * 0.5).clamp(-2.0, 3.5);
         let sub_bass_authority = if sub_ang_var > 0.40 && authorities.sub_bass_authority > 0.0 {
             (authorities.sub_bass_authority + 0.15).min(1.0)
         } else {
             authorities.sub_bass_authority
+        };
+        // If Stage 1 abstains, assign zero sub gain (neutrality principle).
+        // Otherwise normalize unnormalized STFT power (+20..+35 dB -> -40..-25 dBFS) and calculate deficit.
+        let sub_bass_gain_db = if sub_bass_authority <= 0.0 {
+            0.0
+        } else {
+            let eff_sub_energy_dbfs = if profile_sub_energy_dbfs > 0.0 {
+                profile_sub_energy_dbfs - 60.2
+            } else {
+                profile_sub_energy_dbfs
+            };
+            let sub_deficit = (-35.0 - eff_sub_energy_dbfs).clamp(-3.0, 4.0);
+            (sub_deficit * 0.5 * sub_bass_authority).clamp(-2.0, 3.5)
         };
 
         // 2. Mid-Flow Parameter Mapping
@@ -730,7 +740,7 @@ impl TuningCard {
 
         // 3. De-Fizz / Microstructure Parameter Mapping
         let defizz_authority = authorities.conservative_defizz_authority;
-        let phase_continuity = (0.40 * defizz_authority).clamp(0.0, 0.70);
+        let phase_continuity = (0.25 * defizz_authority).clamp(0.0, 0.50);
         let transient_desmear = (0.25 * defizz_authority).clamp(0.0, 0.50);
 
         // 4. Dynamic Port-Hamiltonian Material Parameter Mapping (J/R/beta/shelf)
@@ -744,8 +754,10 @@ impl TuningCard {
         };
         // Air shelf gain: compensates excessive high-band tilt
         let morphic_shelf_db = (-0.4 * (high_slope + 6.0)).clamp(-1.0, 1.5);
-        // Sub-bass damping (R matrix): higher dissipation if sub angular variance is high
-        let morphic_sub_damping = (0.20 + 0.35 * sub_ang_var).clamp(0.15, 0.60);
+        // Sub-bass damping (R matrix): higher dissipation if sub angular variance is high.
+        // Relaxed intercept (0.10 rather than 0.20) preserves natural acoustic sub-bass respiration
+        // when phase variance is clean (sub_ang_var < 0.20), preventing over-reduction of bass variance.
+        let morphic_sub_damping = (0.10 + 0.35 * sub_ang_var).clamp(0.08, 0.60);
         let morphic_microtexture = (0.12 + 0.10 * high_ang_var).clamp(0.08, 0.25);
         let morphic_mode = "port-hamiltonian-calibrated".to_string();
 

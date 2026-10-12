@@ -14,8 +14,10 @@ const RATE: u32 = 48000;
 
 #[derive(Clone, Debug)]
 pub struct SpatialConfig {
-    /// Mono sub-bass crossover frequency in Hz (typically 100.0 - 120.0 Hz).
+    /// Mono sub-bass crossover frequency in Hz (typically 60.0 - 120.0 Hz, default 80.0 Hz).
     pub mono_bass_hz: f32,
+    /// Mono bass attenuation strength in [0.0, 1.0] (default: 0.85; 1.0 = strict mono, 0.85 = retains 15% side sub for stereo warmth & room depth).
+    pub mono_bass_strength: f32,
     /// Stereo width expansion factor (1.0 = untouched, 1.25 = expanded width).
     pub width_factor: f32,
     /// Early reflection room depth mix (0.0 = completely dry, 0.15 = natural acoustic room depth).
@@ -27,7 +29,8 @@ pub struct SpatialConfig {
 impl Default for SpatialConfig {
     fn default() -> Self {
         Self {
-            mono_bass_hz: 120.0,
+            mono_bass_hz: 80.0,
+            mono_bass_strength: 0.85,
             width_factor: 1.15,
             room_depth: 0.12,
             min_correlation: 0.20,
@@ -227,7 +230,10 @@ pub fn process_spatial_with_contrast(
         -120.0
     };
 
-    // Zero out sub-bass in the side channel (<120 Hz) so bass is 100% focused and mono.
+    // Sub-bass side shaping: attenuate side sub-bass (<80 Hz) by mono_bass_strength.
+    // At default 0.85, retains 15% (-16.5 dB) of natural side sub energy to allow synth bass stereo warmth,
+    // chorus, and room depth variance to breathe without causing phase cancellation.
+    let mono_leak = (1.0f32 - config.mono_bass_strength.clamp(0.0f32, 1.0f32)).max(0.0f32);
     // Scale high side energy by width_factor, modulated by Titan correlation-aware incoherence:
     // incoherence = sqrt((1 - rho) / 2). Preserves focused phantom center for highly coherent content.
     let incoherence = ((1.0f32 - initial_corr.clamp(-1.0f32, 1.0f32)) * 0.5f32).sqrt();
@@ -241,7 +247,7 @@ pub fn process_spatial_with_contrast(
         let width = contrast.map(|timeline| {
             1.0 + (eff_width - 1.0) * timeline.controls_at(i).0
         }).unwrap_or(eff_width);
-        shaped_side[i] = side_high[i] * width;
+        shaped_side[i] = side_high[i] * width + side_sub[i] * mono_leak;
     }
 
     // 3. Early Reflection Depth Network (ERDN)
@@ -358,6 +364,7 @@ mod tests {
 
         let config = SpatialConfig {
             mono_bass_hz: 120.0,
+            mono_bass_strength: 1.0,
             width_factor: 1.0,
             room_depth: 0.0, // dry
             min_correlation: 0.0,
@@ -401,6 +408,7 @@ mod tests {
 
         let config = SpatialConfig {
             mono_bass_hz: 120.0,
+            mono_bass_strength: 1.0,
             width_factor: 1.0,
             room_depth: 0.0,
             min_correlation: 0.20,
@@ -429,6 +437,7 @@ mod tests {
 
         let config = SpatialConfig {
             mono_bass_hz: 120.0,
+            mono_bass_strength: 1.0,
             width_factor: 1.5, // requested wide expansion
             room_depth: 0.0,
             min_correlation: 0.5,

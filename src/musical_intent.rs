@@ -235,6 +235,7 @@ impl MusicalIntentCard {
         base_card.recommended_parameters.sub_bass_authority *= d.sub_bass_authority_scale;
         base_card.recommended_parameters.mid_flow_authority *= d.mid_flow_authority_scale;
         base_card.recommended_parameters.transient_desmear *= d.defizz_desmear_scale;
+        base_card.recommended_parameters.phase_continuity *= d.defizz_desmear_scale;
         base_card.recommended_parameters.morphic_shelf_db = base_card.recommended_parameters.morphic_shelf_db.min(d.port_hamiltonian_shelf_db);
         base_card.recommended_parameters.morphic_coupling_kappa = d.port_hamiltonian_kappa;
         base_card.recommended_parameters.morphic_quartic_beta = d.port_hamiltonian_beta;

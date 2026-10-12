@@ -41,6 +41,18 @@ This repository is **Highband**, an offline, Rust-first unified acoustic-scene r
    - Streaming chunk caching (8.0s window, 2.0s equal-power crossfades): Restored entire 3m24s track in **3.2 seconds**.
    - Autonomous mastering module in `src/master.rs` (`highband master`): ITU-R BS.1770-4 K-weighting, soft-knee glue compression, 4x polyphase FIR oversampled true-peak detection, lookahead brickwall limiter (-1.0 dBTP ceiling).
    - Audition result on *Feelin' Catchy*: Pre-master -13.78 LUFS $\to$ Post-master -11.02 LUFS, True-Peak -1.00 dBTP. User confirmed: *"Okay, that actually sounded really super good."*
+7. **Phase 3 (Geometric Moonshot & Morphic M4 Calibrated Architecture)**:
+   - 4D Port-Hamiltonian Material Controller with AVF discrete gradients and coupled multi-scale clocks (5 ms / 150 ms / 2.5 s).
+   - Dynamic contrast budgeting and Musical Intent engine (`ENHANCE`, `PRESERVE`, `RESTORE`, `EXPLORE`).
+   - OpenCL Qualcomm Adreno 830 GPU accelerated execution for mid-flow CFM and full-song streaming mastering.
+   - Mastered 4 full songs, establishing user-confirmed benchmark: *"so far it seems to me these are all the best versions yet overall, but this is fantastic restoration."*
+8. **Perceptual Calibration & Acoustic Variance Optimization (Current)**:
+   - Audited with multi-agent research team (`adversarial-reviewer`, `code-reviewer`, `dynamical-systems-critic`).
+   - Clamped Band 2 low-mid Auto-EQ boost ($\le +0.25\text{ dB}$) to eliminate perceived vocal boxiness.
+   - Replaced rigid 120 Hz mono sub kill with 80 Hz crossover and `mono_bass_strength = 0.85`, preserving 15% side sub energy for stereo synth warmth and bass respiration.
+   - Fixed unnormalized STFT calculation, setting sub gain strictly neutral ($0.0\text{ dB}$) when Stage 1 abstains.
+   - Scaled microstructure phase continuity by intent directive ($0.10$ in `PRESERVE` regime) to protect delicate transient microtexture and acoustic grit.
+   - Remastered all 4 tracks to 24-bit lossless FLAC in `/sdcard/Download/FLAC/`. See [`docs/PERCEPTUAL_CALIBRATION_RESULTS.md`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/docs/PERCEPTUAL_CALIBRATION_RESULTS.md).
 
 ---
 

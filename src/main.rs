@@ -137,8 +137,23 @@ enum Commands {
         spatial: bool,
         #[arg(long)]
         no_spatial: bool,
-        #[arg(long, default_value_t = 120.0)]
+        #[arg(long, default_value_t = 80.0)]
         mono_bass_hz: f32,
+        /// Mono sub-bass attenuation strength (default: 0.85; 1.0 = strict mono, 0.0 = untouched side sub).
+        #[arg(long, default_value_t = 0.85)]
+        mono_bass_strength: f32,
+        /// Maximum allowed Auto-EQ adjustment in dB (default: 1.0 dB).
+        #[arg(long, default_value_t = 1.0)]
+        auto_eq_max_db: f32,
+        /// Microstructure de-fizz multiplier in [0.0, 1.0] (default: 1.0).
+        #[arg(long, default_value_t = 1.0)]
+        defizz_strength: f32,
+        /// Explicit flag to completely bypass Stage 3.5 Microstructure De-Fizz.
+        #[arg(long)]
+        no_defizz: bool,
+        /// Optional explicit override for Stage 3.5 phase continuity in [0.0, 1.0].
+        #[arg(long)]
+        phase_continuity: Option<f32>,
         #[arg(long, default_value_t = 1.15)]
         width_factor: f32,
         #[arg(long, default_value_t = 0.12)]
@@ -1028,6 +1043,11 @@ fn run() -> Result<()> {
             spatial,
             no_spatial,
             mono_bass_hz,
+            mono_bass_strength,
+            auto_eq_max_db,
+            defizz_strength,
+            no_defizz,
+            phase_continuity,
             width_factor,
             room_depth,
             target_lufs,
@@ -1072,8 +1092,10 @@ fn run() -> Result<()> {
             overlap_seconds,
             denoise && !no_denoise,
             auto_eq && !no_auto_eq,
+            auto_eq_max_db,
             spatial && !no_spatial,
             mono_bass_hz,
+            mono_bass_strength,
             width_factor,
             room_depth,
             target_lufs,
@@ -1084,6 +1106,9 @@ fn run() -> Result<()> {
             &backend,
             export_sdcard && !no_export_sdcard,
             fractal_tendrils,
+            defizz_strength,
+            no_defizz,
+            phase_continuity,
             force_specialists,
             morphic_gtf && !no_morphic_gtf,
             morphic_strength,
@@ -2142,8 +2167,10 @@ fn auto_master_pipeline(
     overlap_seconds: f64,
     denoise: bool,
     auto_eq: bool,
+    auto_eq_max_db: f32,
     spatial: bool,
     mono_bass_hz: f32,
+    mono_bass_strength: f32,
     width_factor: f32,
     room_depth: f32,
     target_lufs: f32,
@@ -2154,6 +2181,9 @@ fn auto_master_pipeline(
     backend: &str,
     export_sdcard: bool,
     fractal_tendrils: f32,
+    defizz_strength: f32,
+    no_defizz: bool,
+    explicit_phase_continuity: Option<f32>,
     force_specialists: bool,
     morphic_gtf: bool,
     morphic_strength: f32,
@@ -2539,51 +2569,54 @@ fn auto_master_pipeline(
     // Stage 3: Clean Polish (Adaptive High-Band Denoise & Auto-EQ)
     if denoise || auto_eq {
         println!(
-            "\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}) ---",
-            denoise, auto_eq
+            "\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}, max_eq_db={:.2}) ---",
+            denoise, auto_eq, auto_eq_max_db
         );
         let t0 = std::time::Instant::now();
-        current_audio = scene_clean::clean_audio(&current_audio, denoise, auto_eq);
+        current_audio = scene_clean::clean_audio_with_bounds(&current_audio, denoise, auto_eq, auto_eq_max_db);
         println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
         native_audio::write(&out_dir.join("stage3_clean.wav"), &current_audio, false)?;
     }
 
     // Stage 3.5: Microstructure De-Fizz, Anti-Smear & Phase Continuity Synthesis
     let defizz_auth = pre_profile.authorities.conservative_defizz_authority;
-    let run_microstructure = fractal_tendrils > 0.0
-        || defizz_auth > 0.0
-        || (force_specialists && (pre_profile.artifacts.ai_shimmer > 0.10 || pre_profile.artifacts.metallic_grain > 0.10));
+    let run_microstructure = !no_defizz && (fractal_tendrils > 0.0
+        || (defizz_auth > 0.0 && defizz_strength > 0.0)
+        || (force_specialists && (pre_profile.artifacts.ai_shimmer > 0.10 || pre_profile.artifacts.metallic_grain > 0.10)));
 
     if run_microstructure {
         let eff_defizz_auth = if force_specialists && defizz_auth <= 0.0 {
             0.50
         } else {
-            defizz_auth
+            defizz_auth * defizz_strength
+        };
+        let eff_phase_cont = if let Some(pc) = explicit_phase_continuity {
+            pc
+        } else if auto_tune && tuning_card.recommended_parameters.phase_continuity > 0.0 {
+            tuning_card.recommended_parameters.phase_continuity * defizz_strength
+        } else if eff_defizz_auth > 0.0 {
+            (0.25 * eff_defizz_auth).clamp(0.10, 0.50)
+        } else {
+            0.0
         };
         println!(
-            "\n--- Stage 3.5: Microstructure De-Fizz & Phase Restoration (defizz_auth={:.2}, fractal={:.2}) ---",
-            eff_defizz_auth, fractal_tendrils
+            "\n--- Stage 3.5: Microstructure De-Fizz & Phase Restoration (defizz_auth={:.2}, fractal={:.2}, phase_cont={:.2}) ---",
+            eff_defizz_auth, fractal_tendrils, eff_phase_cont
         );
         let t0 = std::time::Instant::now();
         let micro_cfg = microstructure::MicrostructureConfig {
             family: microstructure::MicrostructureFamily::FamilyA,
             fractal_tendrils,
             fractal_dimension: 1.0,
-            strength: 1.0,
+            strength: defizz_strength,
             transient_desmear: if auto_tune && tuning_card.recommended_parameters.transient_desmear > 0.0 {
-                tuning_card.recommended_parameters.transient_desmear
+                tuning_card.recommended_parameters.transient_desmear * defizz_strength
             } else if eff_defizz_auth > 0.0 {
                 (0.25 * eff_defizz_auth).clamp(0.10, 0.50)
             } else {
                 0.0
             },
-            phase_continuity: if auto_tune && tuning_card.recommended_parameters.phase_continuity > 0.0 {
-                tuning_card.recommended_parameters.phase_continuity
-            } else if eff_defizz_auth > 0.0 {
-                (0.40 * eff_defizz_auth).clamp(0.15, 0.70)
-            } else {
-                0.0
-            },
+            phase_continuity: eff_phase_cont,
             harmonic_resonance: if eff_defizz_auth > 0.0 { (0.20 * eff_defizz_auth).clamp(0.10, 0.40) } else { 0.0 },
             air_coupling: if eff_defizz_auth > 0.0 { (0.15 * eff_defizz_auth).clamp(0.05, 0.30) } else { 0.0 },
             crossover_hz: 3000.0,
@@ -2644,20 +2677,23 @@ fn auto_master_pipeline(
             let t0 = std::time::Instant::now();
             let spatial_cfg = spatial::SpatialConfig {
                 mono_bass_hz,
+                mono_bass_strength,
                 width_factor: eff_width,
                 room_depth: eff_room_depth,
                 min_correlation: 0.20,
             };
             applied_spatial = Some(serde_json::json!({"width_factor": eff_width,
                 "room_depth": eff_room_depth, "authority": spat_auth,
+                "mono_bass_hz": mono_bass_hz, "mono_bass_strength": mono_bass_strength,
                 "contrast_budget": contrast_budget}));
             let (spat_audio, spat_metrics) = spatial::process_spatial_with_contrast(
                 &current_audio, &spatial_cfg, contrast_timeline.as_ref().filter(|_| contrast_budget));
             println!(
-                "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz | Sub Side Leak: {:.1} dB",
+                "  Correlation: {:.3} -> {:.3} | Mono Bass Guard: {:.1} Hz (strength: {:.2}) | Sub Side Leak: {:.1} dB",
                 spat_metrics.initial_correlation,
                 spat_metrics.final_correlation,
                 spat_metrics.mono_bass_hz,
+                mono_bass_strength,
                 spat_metrics.side_energy_below_cutoff_db
             );
             current_audio = spat_audio;

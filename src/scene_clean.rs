@@ -146,8 +146,16 @@ pub fn bounded_auto_eq(audio: &Audio, max_adjust_db: f32) -> Audio {
         let expected_rel_db = -3.8 * octaves;
         let actual_rel_db = 10.0 * (band_energy[i] / ref_energy).log10();
         let diff = expected_rel_db - actual_rel_db;
-        // Mild nudging: 40% of measured diff, clamped strictly to [-max_adj, +max_adj]
-        deltas_db[i] = (diff * 0.40).clamp(-max_adj, max_adj);
+        // Mild nudging: 40% of measured diff
+        let mut d = diff * 0.40;
+        // Low-Mid vocal guard: Band 2 (400 Hz: 250-600 Hz Low-Mid / Mud / Chest Resonance).
+        // Modern sculpted mixes deliberately scoop this band for vocal clarity and separation.
+        // Cap positive boost to <= +0.25 dB to prevent artificial vocal boxiness,
+        // while preserving downward mud cuts down to -max_adj.
+        if i == 2 && d > 0.25 {
+            d = 0.25;
+        }
+        deltas_db[i] = d.clamp(-max_adj, max_adj);
     }
 
     // Build smooth gain curve per FFT bin using raised-cosine interpolation
@@ -199,12 +207,22 @@ pub fn bounded_auto_eq(audio: &Audio, max_adjust_db: f32) -> Audio {
 
 /// Unified post-processing clean pass combining high-band denoise and bounded auto-EQ.
 pub fn clean_audio(audio: &Audio, denoise: bool, auto_eq: bool) -> Audio {
+    clean_audio_with_bounds(audio, denoise, auto_eq, 1.0)
+}
+
+/// Unified post-processing clean pass with configurable auto-EQ bounds.
+pub fn clean_audio_with_bounds(
+    audio: &Audio,
+    denoise: bool,
+    auto_eq: bool,
+    max_adjust_db: f32,
+) -> Audio {
     let mut out = audio.clone();
     if denoise {
         out = high_band_denoise(&out, -6.0);
     }
     if auto_eq {
-        out = bounded_auto_eq(&out, 1.5);
+        out = bounded_auto_eq(&out, max_adjust_db);
     }
     // Peak headroom protection: ensure output stays under 0.99 to prevent clipping
     let max_peak = out
