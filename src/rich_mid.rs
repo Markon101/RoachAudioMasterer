@@ -6,7 +6,7 @@ use crate::{
     dsp::{SpectralTransform, Spectrum},
     experiment::{new_run, write_json},
     native_audio::{self, Audio},
-    native_dsp::{self, Stft, BINS, FFT, HOP, RATE},
+    native_dsp::{Stft, BINS, FFT, HOP, RATE},
     rich_dynamics::{self, Kind},
     rich_synth, scene_clean,
     scene_engine::{self, Engine},
@@ -201,6 +201,14 @@ pub fn mid_waveform(
     Audio::from_mid_side(RATE, ms, p.input.channels.len() == 2)
 }
 
+fn mid_waveform_gradient(g: &[f32], cutoff: f32, ceiling: f32) -> Vec<f32> {
+    // The exact forward Fourier projection is self-adjoint: protect both boundaries.
+    crate::dsp::lock_known_bands(&vec![0.0; g.len()], g, RATE, &[
+        crate::scene::TrustedBand { min_hz: 0.0, max_hz: cutoff },
+        crate::scene::TrustedBand { min_hz: ceiling, max_hz: RATE as f32 / 2.0 },
+    ])
+}
+
 pub fn gradient(
     m: &MidField,
     p: &Prepared,
@@ -232,7 +240,7 @@ pub fn gradient(
     let mut loss = 0.02 * loss;
     let s = Stft::default();
     let sg: [Vec<C>; 2] = std::array::from_fn(|c| {
-        s.synthesis_vjp(&p.base[c], &native_dsp::highpass_gradient(&wg[c], d.cutoff))
+        s.synthesis_vjp(&p.base[c], &mid_waveform_gradient(&wg[c], d.cutoff, MID_CEILING_HZ))
     });
     let mut de = vec![0.0; e.values.len()];
     let mut eg = vec![0.0; m.core.encoder.weights.len()];
@@ -423,6 +431,8 @@ pub fn train(
         &json!({
             "kind": kind.name(),
             "schema": "rich-mid-field-v1",
+            "gradient_rule": "mid-dual-band-adjoint-v2",
+            "provenance": crate::experiment::provenance(),
             "seed": seed,
             "start_step": start_step,
             "steps": steps,
@@ -690,6 +700,39 @@ pub fn restore(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::native_dsp;
+
+    #[test]
+    fn upper_protected_band_has_zero_waveform_adjoint() {
+        let n = 3840;
+        let g: Vec<f32> = (0..n).map(|i|
+            (std::f32::consts::TAU * 8050.0 * i as f32 / 48000.0).cos()).collect();
+        let projected = mid_waveform_gradient(&g, 1500.0, MID_CEILING_HZ);
+        let rms = (projected.iter().map(|x| (x*x) as f64).sum::<f64>() / n as f64).sqrt();
+        assert!(rms < 1e-4, "protected upper-band adjoint rms {rms}");
+        // Independent finite difference of the actual waveform map at its upper edge.
+        let a = Audio { rate: 48000, channels: vec![(0..n).map(|i|
+            0.2*(std::f32::consts::TAU*1000.0*i as f32/48000.0).sin()).collect()] };
+        let d = Damage { cutoff: 1500.0, transition: 300.0, power: 2.0 };
+        let p = scene_features::prepare(&a, d, 17);
+        let mut state: [Vec<C>; 2] = std::array::from_fn(|_| vec![C::default(); p.frames * BINS]);
+        let row = Row { channel: 0, time: 5, bin: (8000.0 * FFT as f32 / RATE as f32).floor() as usize };
+        let index = row.time * BINS + row.bin;
+        state[0][index] = C::new(0.1, 0.0);
+        let eps = 0.05;
+        let evaluate = |state: &[Vec<C>; 2]| {
+            let y = mid_waveform(&p, d, MID_CEILING_HZ, state, 1.0).mid_side();
+            y[0].iter().zip(&g).map(|(y,g)| *y as f64 * *g as f64).sum::<f64>()
+        };
+        state[0][index].re += eps;
+        let plus = evaluate(&state);
+        state[0][index].re -= 2.0 * eps;
+        let minus = evaluate(&state);
+        let fd = (plus-minus)/(2.0*eps as f64);
+        let adjoint = Stft::default().synthesis_vjp(&p.base[0], &projected)[index].re
+            * p.scale[0] * d.missing(row.bin) * if row.bin.is_multiple_of(2) {1.0} else {-1.0};
+        assert!((fd-adjoint as f64).abs() < 1e-4, "fd={fd}, adjoint={adjoint}");
+    }
 
     #[test]
     fn mid_gradient_matches_finite_difference() {

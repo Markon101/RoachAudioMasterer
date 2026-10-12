@@ -44,7 +44,8 @@ pub mod spatial;
 pub mod stft_hires;
 mod synth;
 use anyhow::{ensure, Result};
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, CommandFactory, FromArgMatches};
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 #[derive(Parser)]
 #[command(
@@ -165,6 +166,8 @@ enum Commands {
         /// Experimental section-relative allocation of width, depth and calibrated PH excursion.
         #[arg(long)]
         contrast_budget: bool,
+        #[command(flatten)]
+        master_controls: master::MasterControls,
     },
     /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
@@ -429,6 +432,8 @@ enum Commands {
         glue_ratio: f32,
         #[arg(long, default_value_t = 90.0)]
         sidechain_hp_hz: f32,
+        #[command(flatten)]
+        master_controls: master::MasterControls,
         #[arg(long)]
         spatial: bool,
         #[arg(long)]
@@ -884,8 +889,75 @@ fn validate_samples(n: usize) -> Result<()> {
     );
     Ok(())
 }
+
+const TUNED_CLI_PARAMETERS: [&str; 8] = ["strength", "glue_threshold_db", "glue_ratio",
+    "morphic_mode", "morphic_coupling", "morphic_quartic", "morphic_shelf_db", "glue_attack_ms"];
+
+fn explicit_auto_parameters(matches: &clap::ArgMatches) -> BTreeSet<String> {
+    matches.subcommand_matches("auto-master").map(|m| {
+        TUNED_CLI_PARAMETERS.iter().filter(|id|
+            m.value_source(id) == Some(clap::parser::ValueSource::CommandLine))
+            .map(|id| (*id).to_string()).collect()
+    }).unwrap_or_default()
+}
+
+#[allow(clippy::too_many_arguments)]
+fn apply_manual_tuning(p: &mut scene_stats::RecommendedParameters, explicit: &BTreeSet<String>,
+    strength: f32, threshold: f32, ratio: f32, mode: &str, coupling: f32, quartic: f32, shelf: f32) {
+    if explicit.contains("strength") { p.mid_flow_strength = strength; }
+    if explicit.contains("glue_threshold_db") { p.glue_threshold_db = threshold; }
+    if explicit.contains("glue_ratio") { p.glue_ratio = ratio; p.glue_authority = 1.0; }
+    if explicit.contains("morphic_mode") { p.morphic_mode = mode.to_string(); }
+    if explicit.contains("morphic_coupling") { p.morphic_coupling_kappa = coupling; }
+    if explicit.contains("morphic_quartic") { p.morphic_quartic_beta = quartic; }
+    if explicit.contains("morphic_shelf_db") { p.morphic_shelf_db = shelf; }
+}
+
+fn tuning_parameter_sources(explicit: &BTreeSet<String>, auto: bool, no_glue: bool) -> serde_json::Value {
+    let mut sources = serde_json::Map::new();
+    for id in TUNED_CLI_PARAMETERS {
+        let source = if no_glue && id == "glue_ratio" { "no-glue" }
+            else if explicit.contains(id) { "cli" }
+            else if auto && id != "glue_attack_ms" { "auto-tune-and-intent" }
+            else { "legacy-default" };
+        sources.insert(id.to_string(), serde_json::json!(source));
+    }
+    serde_json::Value::Object(sources)
+}
+
+#[cfg(test)]
+mod manual_control_tests {
+    use super::*;
+    #[test]
+    fn explicit_defaults_remain_manual_and_refresh_advisory_actions() {
+        // This large legacy clap command tree exceeds Android's default test-thread
+        // stack in a debug build; the actual CLI runs on the larger main-thread stack.
+        std::thread::Builder::new().stack_size(8 * 1024 * 1024).spawn(|| {
+        let matches = Cli::command().try_get_matches_from(["roach-audio-masterer", "auto-master",
+            "--input", "unused.wav", "--auto-tune", "--glue-ratio", "1.6",
+            "--glue-threshold-db", "-20", "--morphic-mode", "geometric", "--strength", "1"]).unwrap();
+        let ids = explicit_auto_parameters(&matches);
+        assert!(ids.contains("glue_ratio") && ids.contains("morphic_mode"));
+        assert!(!ids.contains("morphic_quartic"));
+        let a = native_audio::Audio { rate: 48000, channels: vec![vec![0.0; 48000]] };
+        let p = assess::SceneAssessor::default().assess(&a);
+        let mut card = scene_stats::TuningCard::generate(&p.stats, &p.authorities, p.sub_energy_dbfs, p.integrated_lufs);
+        apply_manual_tuning(&mut card.recommended_parameters, &ids, 1.0, -20.0, 1.6,
+            "geometric", 6.0, 0.0, 0.7);
+        card.refresh_actions();
+        assert_eq!(card.recommended_parameters.glue_ratio, 1.6);
+        assert_eq!(card.recommended_parameters.glue_authority, 1.0);
+        assert_eq!(card.recommended_parameters.glue_threshold_db, -20.0);
+        assert_eq!(card.recommended_parameters.morphic_mode, "geometric");
+        assert!(card.stage_actions.stage5_mastering_action.contains("eff_ratio=1.60"));
+        assert_eq!(tuning_parameter_sources(&ids, true, true)["glue_ratio"], "no-glue");
+        }).unwrap().join().unwrap();
+    }
+}
 fn run() -> Result<()> {
-    match Cli::parse().command {
+    let matches = Cli::command().get_matches();
+    let explicit = explicit_auto_parameters(&matches);
+    match Cli::from_arg_matches(&matches)?.command {
         Commands::AutoMaster {
             input,
             out,
@@ -932,6 +1004,7 @@ fn run() -> Result<()> {
             auto_tune,
             coupled_clocks,
             contrast_budget,
+            master_controls,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -973,6 +1046,8 @@ fn run() -> Result<()> {
             auto_tune,
             coupled_clocks,
             contrast_budget,
+            &master_controls,
+            &explicit,
         ),
         Commands::Microstructure {
             input,
@@ -1216,6 +1291,7 @@ fn run() -> Result<()> {
             glue_threshold_db,
             glue_ratio,
             sidechain_hp_hz,
+            master_controls,
             spatial,
             out,
         } => master::run(
@@ -1226,6 +1302,7 @@ fn run() -> Result<()> {
             glue_ratio,
             sidechain_hp_hz,
             spatial,
+            &master_controls,
             &out,
         ),
         Commands::Assess { input, out } => {
@@ -2037,7 +2114,10 @@ fn auto_master_pipeline(
     auto_tune: bool,
     coupled_clocks: bool,
     contrast_budget: bool,
+    master_controls: &master::MasterControls,
+    explicit: &BTreeSet<String>,
 ) -> Result<()> {
+    master_controls.validate()?;
     let pipeline_start = std::time::Instant::now();
 
     // 1. Determine run directory
@@ -2207,6 +2287,13 @@ fn auto_master_pipeline(
 
     if auto_tune {
         musical_intent.modulate_tuning_card(&mut tuning_card);
+    }
+    if auto_tune {
+        apply_manual_tuning(&mut tuning_card.recommended_parameters, explicit,
+            strength, glue_threshold_db, glue_ratio, morphic_mode, morphic_coupling,
+            morphic_quartic, morphic_shelf_db);
+        if master_controls.no_glue { tuning_card.recommended_parameters.glue_ratio = 1.0; }
+        tuning_card.refresh_actions();
     }
     std::fs::write(
         out_dir.join("tuning_card.json"),
@@ -2596,7 +2683,7 @@ fn auto_master_pipeline(
     }
 
     // Stage 5: Dynamic Post-Mastering
-    let eff_glue_ratio = if force_specialists {
+    let eff_glue_ratio = if master_controls.no_glue { 1.0 } else if force_specialists || explicit.contains("glue_ratio") {
         glue_ratio
     } else {
         1.0 + (glue_ratio - 1.0) * glue_auth
@@ -2606,13 +2693,14 @@ fn auto_master_pipeline(
         target_lufs, ceiling_db, eff_glue_ratio
     );
     let t0 = std::time::Instant::now();
-    let master_res = master::master_audio(
+    let master_res = master::master_audio_with_controls(
         &current_audio,
         target_lufs,
         ceiling_db,
         glue_threshold_db,
         eff_glue_ratio,
         sidechain_hp_hz,
+        master_controls,
     )?;
     current_audio = master_res.mastered;
     println!(
@@ -2633,8 +2721,10 @@ fn auto_master_pipeline(
             "input": input.display().to_string(),
             "target_lufs": target_lufs,
             "ceiling_dbtp": ceiling_db,
-            "glue": {"threshold_db": glue_threshold_db, "ratio": glue_ratio, "sidechain_hp_hz": sidechain_hp_hz, "max_gain_reduction_db": master_res.glue_gr},
-            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": master_res.limiter_gr},
+            "controls": master_controls,
+            "glue": {"threshold_db": glue_threshold_db, "ratio": eff_glue_ratio, "requested_ratio": glue_ratio, "attack_ms": master_controls.glue_attack_ms, "release_ms": 160.0, "sidechain_hp_hz": sidechain_hp_hz, "max_gain_reduction_db": master_res.glue_gr},
+            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": master_res.limiter_gr, "budget_db": master_controls.max_limiter_gr_db},
+            "target_shortfall_lu": target_lufs as f64 - master_res.after_metrics["lufs_integrated"].as_f64().unwrap_or(-70.0),
             "pre_gain_db": master_res.pre_gain_db,
             "before": master_res.before_metrics,
             "after": master_res.after_metrics,
@@ -2894,6 +2984,9 @@ fn auto_master_pipeline(
             "applied_spatial": applied_spatial,
             "applied_morphic": applied_morphic,
             "effective_glue_ratio": eff_glue_ratio,
+            "master_controls": master_controls,
+            "explicit_cli_parameters": explicit,
+            "parameter_sources": tuning_parameter_sources(explicit, auto_tune, master_controls.no_glue),
         },
         "pre_assessment": pre_profile,
         "post_assessment": post_profile,

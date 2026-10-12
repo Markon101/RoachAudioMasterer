@@ -13,6 +13,28 @@ The core direction is a unified autonomous mastering and scene restoration engin
 
 ## Build and run
 
+Both `auto-master` and `master` accept `--no-glue`, `--glue-attack-ms` (default
+20 ms, range 0.1–200 ms), and `--max-limiter-gr-db` (optional 0–12 dB).
+The budget reduces loudness drive to retain the true-peak ceiling; achieved
+LUFS can be lower than requested. Zero budget uses gain-only finalization after
+optional glue. It controls new compression, not recovery of previous dynamics.
+Omitting these flags preserves the previous audio path.
+
+```sh
+cargo build --release --locked --features opencl -j 8
+./target/release/roach-audio-masterer auto-master --input song.wav \
+  --auto-tune --no-glue --max-limiter-gr-db 2 --no-export-sdcard \
+  --out runs/fresh-punch-control
+```
+
+Explicit strength, glue ratio/threshold and morphic mode/coupling/quartic/shelf
+choices override auto-tune/intent, even when equal to a legacy default. Explicit
+glue ratio is applied directly; `--no-glue` wins over it. Run JSON records applied
+ratio, timing, budget, achieved loudness shortfall and parameter sources. These
+are optional controls, not a new neutral preset or champion. See the
+[checkpoint plan](docs/PUNCH_CONTROL_PLAN.md) and
+[method provenance](docs/REFERENCES.md#punch-control-checkpoint-provenance).
+
 The next-evolution experiment adds separate, disabled-by-default
 `--coupled-clocks` and `--contrast-budget` flags to `auto-master`:
 

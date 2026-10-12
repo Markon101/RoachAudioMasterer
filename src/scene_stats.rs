@@ -849,6 +849,27 @@ impl TuningCard {
         }
     }
 
+    /// Refresh advisory actions after intent/manual parameter overrides.
+    pub fn refresh_actions(&mut self) {
+        let p = &self.recommended_parameters;
+        self.stage_actions.stage1_sfht_action = if p.sub_bass_authority > 0.0 {
+            format!("ACTIVE (auth={:.2}, gain={:+.2} dB)", p.sub_bass_authority, p.sub_bass_gain_db)
+        } else { "ABSTAIN (sub-bass balanced & focused)".to_string() };
+        self.stage_actions.stage2_mid_flow_action = if p.mid_flow_authority > 0.0 {
+            format!("ACTIVE (auth={:.2}, strength={:.2})", p.mid_flow_authority, p.mid_flow_strength)
+        } else { "ABSTAIN (mid-band balanced)".to_string() };
+        self.stage_actions.stage3_5_microstructure_action = if p.defizz_authority > 0.0 {
+            format!("ACTIVE (defizz_auth={:.2}, phase_cont={:.2}, desmear={:.2})",
+                p.defizz_authority, p.phase_continuity, p.transient_desmear)
+        } else { "ABSTAIN (shimmer & metallic grain within pristine bounds)".to_string() };
+        self.stage_actions.stage4_5_gtf_morphic_action = format!(
+            "ACTIVE (mode={}, kappa={:.2}, beta={:.2}, shelf={:+.2} dB)", p.morphic_mode,
+            p.morphic_coupling_kappa, p.morphic_quartic_beta, p.morphic_shelf_db);
+        self.stage_actions.stage5_mastering_action = format!(
+            "ACTIVE (thresh={:+.1} dB, ratio={:.2}:1, eff_ratio={:.2}:1)", p.glue_threshold_db,
+            p.glue_ratio, 1.0 + (p.glue_ratio - 1.0) * p.glue_authority);
+    }
+
     /// Formats the Tuning Card into an inspectable human-readable ASCII summary table.
     pub fn format_summary_table(&self) -> String {
         let mut out = String::new();

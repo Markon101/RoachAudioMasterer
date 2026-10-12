@@ -18,9 +18,8 @@ fn main() {
 
     match status {
         Ok(code) => {
-            if let Some(c) = code.code() {
-                std::process::exit(c);
-            }
+            // A signalled canonical process has no exit code; never report success.
+            std::process::exit(code.code().unwrap_or(1));
         }
         Err(e) => {
             eprintln!(

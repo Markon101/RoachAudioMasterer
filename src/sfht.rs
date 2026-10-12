@@ -51,7 +51,8 @@ impl SfhtModel {
         );
         let m: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(
-            m.schema == "sfht-flow-v1" && m.dense.validate(),
+            m.schema == "sfht-flow-v1" && m.dense.validate()
+                && m.dense.input == SFHT_INPUT_DIM && m.dense.output == SFHT_OUTPUT_DIM,
             "invalid SFHT model checkpoint"
         );
         Ok(m)
@@ -75,6 +76,10 @@ impl SfhtState {
     pub fn load(p: &Path) -> Result<Self> {
         let s: Self = serde_json::from_slice(&fs::read(p)?)?;
         ensure!(s.schema == "sfht-state-v1", "invalid SFHT state");
+        ensure!(s.model.schema == "sfht-flow-v1" && s.model.dense.validate()
+            && s.model.dense.input == SFHT_INPUT_DIM && s.model.dense.output == SFHT_OUTPUT_DIM
+            && s.opt.validate(s.model.dense.weights.len(), s.model.optimizer_steps),
+            "invalid SFHT model dimensions or optimizer state");
         Ok(s)
     }
 
@@ -250,12 +255,20 @@ pub fn sfht_velocity(
     let v_re = y[0] + y[2] * state_z.re;
     let v_im = y[1] + y[3] * state_z.im;
 
-    // Stability guard: Soft velocity clamping (|v| <= 16.0) prevents Euler explosion
+    // Each velocity component is bounded by 16; complex norm is <=16*sqrt(2).
     let max_v = 16.0f32;
     let clamped_re = max_v * (v_re / max_v).tanh();
     let clamped_im = max_v * (v_im / max_v).tanh();
 
     (C::new(clamped_re, clamped_im), y, h)
+}
+
+fn velocity_output_adjoint(velocity: C, state: C, gradient: C) -> [f32; 4] {
+    // v=16*tanh(raw/16): the derivative is 1-(v/16)^2, including saturation.
+    // Per-output optimizer clipping remains downstream of this exact chain rule.
+    let re = gradient.re * (1.0 - (velocity.re / 16.0).powi(2)).max(0.0);
+    let im = gradient.im * (1.0 - (velocity.im / 16.0).powi(2)).max(0.0);
+    [re, im, re * state.re, im * state.im]
 }
 
 /// Trains the high-resolution SFHT conditional flow matching model.
@@ -372,12 +385,8 @@ pub fn train_sfht(
                     count += 1;
 
                     // Backpropagation
-                    let dy = [
-                        (err.re * 2.0).clamp(-10.0, 10.0),
-                        (err.im * 2.0).clamp(-10.0, 10.0),
-                        (err.re * state_z.re * 2.0).clamp(-10.0, 10.0),
-                        (err.im * state_z.im * 2.0).clamp(-10.0, 10.0),
-                    ];
+                    let dy = velocity_output_adjoint(v_pred, state_z, err * 2.0)
+                        .map(|g| g.clamp(-10.0, 10.0));
                     let mut dx = [0.0f32; SFHT_INPUT_DIM];
                     model.dense.backward(&x, &h, &dy, &mut grad, &mut dx);
                 }
@@ -444,6 +453,8 @@ pub fn train_sfht(
         &out.join("training.json"),
         &json!({
             "schema": "sfht-training-v1",
+            "gradient_rule": "sfht-soft-clamp-chain-v2",
+            "provenance": crate::experiment::provenance(),
             "steps": steps,
             "seed": seed,
             "backend": backend,
@@ -764,6 +775,38 @@ mod tests {
     use super::*;
 
     #[test]
+    fn saturated_velocity_adjoint_matches_finite_difference() {
+        let y = [28.0f64, -19.0, 4.0, -3.0];
+        let state = C::new(0.7, -0.4);
+        let upstream = C::new(0.3, -0.8);
+        let velocity = C::new((16.0*((y[0]+y[2]*state.re as f64)/16.0).tanh()) as f32,
+            (16.0*((y[1]+y[3]*state.im as f64)/16.0).tanh()) as f32);
+        let adjoint = velocity_output_adjoint(velocity, state, upstream);
+        let objective = |v: &[f64; 4]| 16.0*((v[0]+v[2]*state.re as f64)/16.0).tanh()*upstream.re as f64
+            + 16.0*((v[1]+v[3]*state.im as f64)/16.0).tanh()*upstream.im as f64;
+        for i in 0..4 {
+            let mut plus = y; let mut minus = y;
+            plus[i] += 1e-4; minus[i] -= 1e-4;
+            let fd = (objective(&plus)-objective(&minus))/2e-4;
+            assert!((fd-adjoint[i] as f64).abs() < 1e-5, "coordinate{i}: fd={fd}, adjoint={}", adjoint[i]);
+        }
+    }
+
+    #[test]
+    fn malformed_resume_optimizer_is_rejected_before_propagation() {
+        let model = SfhtModel::new(17);
+        let opt = Adam::new(model.dense.weights.len());
+        let state = SfhtState { schema: "sfht-state-v1".into(), model, opt };
+        let mut state = serde_json::to_value(&state).unwrap();
+        state["opt"]["m"].as_array_mut().unwrap().pop();
+        let path = std::env::temp_dir().join(format!("sfht-invalid-state-{}-{}.json",
+            std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        std::fs::write(&path, serde_json::to_vec(&state).unwrap()).unwrap();
+        assert!(SfhtState::load(&path).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
     fn sfht_model_initialization_and_forward() {
         let model = SfhtModel::new(998811);
         let x = [0.1f32; SFHT_INPUT_DIM];
@@ -772,8 +815,8 @@ mod tests {
 
         assert!(v.re.is_finite() && v.im.is_finite());
         assert!(
-            v.norm() <= 16.0,
-            "Velocity exceeded stability clamp: {}",
+            v.re.abs() <= 16.0 && v.im.abs() <= 16.0,
+            "Velocity component exceeded stability clamp: {}",
             v.norm()
         );
         assert_eq!(y.len(), SFHT_OUTPUT_DIM);

@@ -204,3 +204,37 @@ The rich sprint additionally uses these primary sources, checked 2026-10-05:
 Scope notes come from the original papers and standards organizations, including method/experiment sections,
 not Hugging Face's generated summaries. Public HF markdown and official ITU/EBU PDFs supplied the standards text. Full copyrighted text is
 not redistributed in this repository.
+
+## Punch control checkpoint provenance
+
+- **Implemented conventional DSP / background reference:** Dimitrios Giannoulis,
+  Michael Massberg and Joshua D. Reiss (2012), *Digital Dynamic Range Compressor
+  Design—A Tutorial and Analysis*, JAES 60(6), 399–408.
+  [Primary author PDF](https://joshreiss.github.io/documents/2012/GiannoulisMassbergReiss-dynamicrangecompression-JAES2012.pdf),
+  [AES catalogue, paper 16354](https://aes.org/publications/elibrary-page/?id=16354).
+  The catalogue exposes no DOI; none is invented here. Relevant mathematics are
+  soft-knee gain curves and exponential attack/release coefficients
+  `alpha = exp(-1/(tau*sample_rate))`. Our existing linked feed-forward glue is
+  conventional DSP. This checkpoint exposes its attack and bypass; it does not
+  reproduce the paper's comparison or infer preferred timing from its results.
+  The peak-reduction budget and lower-loudness policy are project-specific DSP.
+- **Proposed, unimplemented:** Markus Zaunschirm, Joshua D. Reiss and Anssi
+  Klapuri (2012), *A Sub-Band Approach to Modification of Musical Transients*,
+  Computer Music Journal 36(2), 23–36,
+  [DOI: 10.1162/COMJ_a_00117](https://doi.org/10.1162/COMJ_a_00117),
+  [primary author PDF](https://joshreiss.github.io/documents/2012/ZaunschirmKlapuriReiss-CMJ2012.pdf).
+  Frequency-specific phase/energy onset detection suggests measuring bass body
+  separately from attack harmonics before a transient-expansion experiment.
+  No detector, transient modifier or listening result from that paper is imported.
+- **Proposed, unimplemented:** Stanislaw Gorlow and Joshua D. Reiss (2013),
+  *Model-Based Inversion of Dynamic Range Compression*, IEEE TASLP 21(7),
+  [DOI: 10.1109/TASL.2013.2253099](https://doi.org/10.1109/TASL.2013.2253099),
+  [primary author PDF](https://joshreiss.github.io/documents/2013/Gorlow%20Reiss%20-%20IEEE%20TASLP%202013.pdf).
+  Inversion assumes a specified compressor model and known parameters. This
+  motivates a procedural known-operator control; it cannot establish inversion
+  of arbitrary mastered/clipped music with unknown processing. No inverse or
+  learned model from the paper is implemented in this checkpoint.
+
+The SFHT soft-clamp chain rule and mid-band Fourier-projection adjoint repairs
+are direct calculus/linear algebra, not new paper-derived ML architectures.
+See [the frozen plan](PUNCH_CONTROL_PLAN.md) and checkpoint report for evidence.

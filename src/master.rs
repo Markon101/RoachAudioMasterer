@@ -13,6 +13,46 @@ use std::{f32::consts::PI, path::Path};
 
 const RATE: u32 = 48000;
 
+/// Optional finalization controls. Omitted flags retain the historical signal path.
+#[derive(clap::Args, Clone, Debug, serde::Serialize)]
+pub struct MasterControls {
+    /// Bypass glue compression, including under auto-tune.
+    #[arg(long)]
+    pub no_glue: bool,
+    /// Glue attack time in milliseconds (0.1..200); release remains 160 ms.
+    #[arg(long, default_value_t = 20.0)]
+    pub glue_attack_ms: f32,
+    /// Maximum limiter envelope reduction (0..12 dB); may lower achieved LUFS.
+    #[arg(long)]
+    pub max_limiter_gr_db: Option<f32>,
+}
+
+impl Default for MasterControls {
+    fn default() -> Self {
+        Self {
+            no_glue: false,
+            glue_attack_ms: 20.0,
+            max_limiter_gr_db: None,
+        }
+    }
+}
+
+impl MasterControls {
+    pub fn validate(&self) -> Result<()> {
+        ensure!(
+            (0.1..=200.0).contains(&self.glue_attack_ms),
+            "glue attack must be finite and 0.1..200 ms"
+        );
+        if let Some(budget) = self.max_limiter_gr_db {
+            ensure!(
+                (0.0..=12.0).contains(&budget),
+                "limiter budget must be finite and 0..12 dB"
+            );
+        }
+        Ok(())
+    }
+}
+
 struct Biquad {
     b: [f64; 3],
     a: [f64; 3],
@@ -302,6 +342,35 @@ pub fn master_audio(
     glue_ratio: f32,
     sidechain_hp_hz: f32,
 ) -> Result<MasterResult> {
+    master_audio_with_controls(
+        input_audio,
+        target_lufs,
+        ceiling_db,
+        glue_threshold_db,
+        glue_ratio,
+        sidechain_hp_hz,
+        &MasterControls::default(),
+    )
+}
+
+pub fn master_audio_with_controls(
+    input_audio: &Audio,
+    target_lufs: f32,
+    ceiling_db: f32,
+    glue_threshold_db: f32,
+    glue_ratio: f32,
+    sidechain_hp_hz: f32,
+    controls: &MasterControls,
+) -> Result<MasterResult> {
+    controls.validate()?;
+    ensure!(
+        glue_threshold_db.is_finite(),
+        "glue threshold must be finite"
+    );
+    ensure!(
+        sidechain_hp_hz.is_finite() && (0.0..=24000.0).contains(&sidechain_hp_hz),
+        "glue sidechain must be finite and 0..24000 Hz"
+    );
     ensure!(
         (-24.0..=-6.0).contains(&target_lufs),
         "target LUFS must be -24..-6"
@@ -316,16 +385,24 @@ pub fn master_audio(
         (1..=2).contains(&input_audio.channels.len()),
         "mastering supports mono/stereo"
     );
+    ensure!(
+        input_audio.frames() > 0
+            && input_audio
+                .channels
+                .iter()
+                .all(|c| c.len() == input_audio.frames() && c.iter().all(|x| x.is_finite())),
+        "mastering requires nonempty aligned finite channels"
+    );
 
     let before = metrics(input_audio);
 
-    let (compressed, glue_gr) = if glue_ratio > 1.0 {
+    let (compressed, glue_gr) = if glue_ratio > 1.0 && !controls.no_glue {
         glue(
             input_audio,
             glue_threshold_db,
             glue_ratio,
             8.0,
-            20.0,
+            controls.glue_attack_ms,
             160.0,
             sidechain_hp_hz,
         )
@@ -338,7 +415,22 @@ pub fn master_audio(
     let mut effective_ceiling = ceiling_lin;
     let mut mastered = compressed.clone();
     let mut limiter_gr = 0.0;
+    let compressed_peak = sample_peak(&compressed);
+    let mut last_applied_drive = pre_gain_db;
     for it in 0..6 {
+        let mut budget_exhausted = false;
+        if let Some(budget) = controls.max_limiter_gr_db {
+            // All limiter needs are >= 10^(-budget/20). Minima, averages and
+            // one-sided release preserve that bound. Lower drive, never clamp gains.
+            let max_drive = if budget == 0.0 {
+                ceiling_db - db(true_peak(&compressed))
+            } else {
+                db(effective_ceiling) - db(compressed_peak) + (budget - 1e-4).max(0.0)
+            };
+            pre_gain_db = pre_gain_db.min(max_drive);
+            budget_exhausted = pre_gain_db >= max_drive - 1e-5;
+        }
+        last_applied_drive = pre_gain_db;
         let g = 10.0f32.powf(pre_gain_db / 20.0);
         let scaled = Audio {
             rate: compressed.rate,
@@ -348,7 +440,11 @@ pub fn master_audio(
                 .map(|c| c.iter().map(|x| x * g).collect())
                 .collect(),
         };
-        let (l, gr) = limit(&scaled, effective_ceiling, 96, 60.0);
+        let (l, gr) = if controls.max_limiter_gr_db == Some(0.0) {
+            (scaled, 0.0)
+        } else {
+            limit(&scaled, effective_ceiling, 96, 60.0)
+        };
         limiter_gr = gr;
         let loud = lufs(&l) as f32;
         let tp = true_peak(&l);
@@ -362,12 +458,26 @@ pub fn master_audio(
             effective_ceiling *= ceiling_lin / tp;
             done = false;
         }
-        if (target_lufs - loud).abs() > 0.15 {
+        if (target_lufs - loud).abs() > 0.15 && !(budget_exhausted && loud < target_lufs) {
             pre_gain_db += target_lufs - loud;
             done = false;
         }
         if done {
             break;
+        }
+    }
+    if controls.max_limiter_gr_db.is_some() {
+        pre_gain_db = last_applied_drive;
+        // Gain-only ceiling correction cannot add compression or exceed the budget.
+        let peak = true_peak(&mastered);
+        if peak > ceiling_lin {
+            let correction = ceiling_lin / peak * (1.0 - 1e-6);
+            for c in &mut mastered.channels {
+                for x in c {
+                    *x *= correction;
+                }
+            }
+            pre_gain_db += db(correction);
         }
     }
     let after = metrics(&mastered);
@@ -389,6 +499,7 @@ pub fn run(
     glue_ratio: f32,
     sidechain_hp_hz: f32,
     apply_spatial: bool,
+    controls: &MasterControls,
     out: &Path,
 ) -> Result<()> {
     new_run(out)?;
@@ -412,13 +523,14 @@ pub fn run(
         input_audio = spat_audio;
     }
 
-    let result = master_audio(
+    let result = master_audio_with_controls(
         &input_audio,
         target_lufs,
         ceiling_db,
         glue_threshold_db,
         glue_ratio,
         sidechain_hp_hz,
+        controls,
     )?;
 
     println!("Before: {}", result.before_metrics);
@@ -434,8 +546,10 @@ pub fn run(
             "input": input.display().to_string(),
             "target_lufs": target_lufs,
             "ceiling_dbtp": ceiling_db,
-            "glue": {"threshold_db": glue_threshold_db, "ratio": glue_ratio, "knee_db": 8.0, "attack_ms": 20.0, "release_ms": 160.0, "max_gain_reduction_db": result.glue_gr},
-            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": result.limiter_gr},
+            "controls": controls,
+            "glue": {"threshold_db": glue_threshold_db, "ratio": if controls.no_glue {1.0} else {glue_ratio}, "knee_db": 8.0, "attack_ms": controls.glue_attack_ms, "release_ms": 160.0, "max_gain_reduction_db": result.glue_gr},
+            "limiter": {"lookahead_samples": 96, "release_ms": 60.0, "max_gain_reduction_db": result.limiter_gr, "budget_db": controls.max_limiter_gr_db},
+            "target_shortfall_lu": target_lufs as f64 - result.after_metrics["lufs_integrated"].as_f64().unwrap_or(-70.0),
             "pre_gain_db": result.pre_gain_db,
             "before": result.before_metrics,
             "after": result.after_metrics,
@@ -470,6 +584,145 @@ mod tests {
             (d - 6.02).abs() < 0.05,
             "6 dB amplitude step must be 6 dB LUFS, got {d}"
         );
+    }
+
+    #[test]
+    fn optional_controls_preserve_default_and_bypass_glue_exactly() {
+        let audio = tone(0.4, 997.0, 1);
+        let parent = master_audio(&audio, -14.0, -1.0, -20.0, 1.6, 90.0).unwrap();
+        let default = master_audio_with_controls(
+            &audio,
+            -14.0,
+            -1.0,
+            -20.0,
+            1.6,
+            90.0,
+            &MasterControls::default(),
+        )
+        .unwrap();
+        assert_eq!(parent.mastered.channels, default.mastered.channels);
+        let bypass = master_audio_with_controls(
+            &audio,
+            -14.0,
+            -1.0,
+            -20.0,
+            1.6,
+            90.0,
+            &MasterControls {
+                no_glue: true,
+                ..MasterControls::default()
+            },
+        )
+        .unwrap();
+        let ratio_one = master_audio(&audio, -14.0, -1.0, -20.0, 1.0, 90.0).unwrap();
+        assert_eq!(bypass.mastered.channels, ratio_one.mastered.channels);
+        assert_eq!(bypass.glue_gr, 0.0);
+    }
+
+    #[test]
+    fn slower_glue_attack_preserves_more_burst_front_energy() {
+        let mut a = tone(0.6, 997.0, 1);
+        for c in &mut a.channels {
+            for (i, x) in c.iter_mut().enumerate() {
+                if !(4800..7200).contains(&i) {
+                    *x = 0.0;
+                }
+            }
+        }
+        let (fast, _) = glue(&a, -24.0, 3.0, 8.0, 2.0, 160.0, 0.0);
+        let (slow, _) = glue(&a, -24.0, 3.0, 8.0, 80.0, 160.0, 0.0);
+        let energy = |a: &Audio| a.channels[0][4800..5760].iter().map(|x| x * x).sum::<f32>();
+        assert!(energy(&slow) > energy(&fast) * 1.2);
+    }
+
+    #[test]
+    fn limiter_budget_prioritizes_peak_and_reports_lower_loudness() {
+        let mut audio = tone(0.03, 83.0, 2);
+        for c in &mut audio.channels {
+            for i in [4800, 19200, 48000, 72000] {
+                c[i] = 1.8;
+            }
+        }
+        for budget in [0.0, 0.5, 2.0, 6.0] {
+            let out = master_audio_with_controls(
+                &audio,
+                -8.0,
+                -1.0,
+                -20.0,
+                1.0,
+                90.0,
+                &MasterControls {
+                    max_limiter_gr_db: Some(budget),
+                    ..MasterControls::default()
+                },
+            )
+            .unwrap();
+            assert!(
+                out.limiter_gr <= budget + 1e-4,
+                "{} > {budget}",
+                out.limiter_gr
+            );
+            assert!(true_peak(&out.mastered) <= 10.0f32.powf(-1.0 / 20.0) + 2e-6);
+            assert!(lufs(&out.mastered) < -8.15);
+            if budget == 0.0 {
+                assert_eq!(out.limiter_gr, 0.0);
+                let gain = out.mastered.channels[0][4800] / audio.channels[0][4800];
+                assert!(audio.channels[0]
+                    .iter()
+                    .zip(&out.mastered.channels[0])
+                    .all(|(a, b)| (a * gain - b).abs() < 1e-6));
+            }
+        }
+        for channels in [1, 2] {
+            let silent = Audio {
+                rate: RATE,
+                channels: vec![vec![0.0; RATE as usize]; channels],
+            };
+            let out = master_audio_with_controls(
+                &silent,
+                -11.0,
+                -1.0,
+                -20.0,
+                1.6,
+                90.0,
+                &MasterControls {
+                    max_limiter_gr_db: Some(2.0),
+                    ..MasterControls::default()
+                },
+            )
+            .unwrap();
+            assert_eq!(out.mastered.channels, silent.channels);
+        }
+    }
+
+    #[test]
+    fn rejects_nonfinite_controls_before_processing() {
+        let a = tone(0.1, 440.0, 1);
+        for v in [f32::NAN, f32::INFINITY, -1.0, 201.0] {
+            assert!(master_audio_with_controls(
+                &a,
+                -11.0,
+                -1.0,
+                -20.0,
+                1.0,
+                90.0,
+                &MasterControls {
+                    glue_attack_ms: v,
+                    ..MasterControls::default()
+                }
+            )
+            .is_err());
+        }
+        assert!(master_audio_with_controls(
+            &a,
+            -11.0,
+            -1.0,
+            f32::NAN,
+            1.0,
+            90.0,
+            &MasterControls::default()
+        )
+        .is_err());
     }
 
     #[test]

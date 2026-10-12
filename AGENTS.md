@@ -13,9 +13,15 @@ planned heads at once or label placeholders as working features. Preserve the
 conservative-to-creative continuum without claiming lost information is recovered.
 
 Android/Termux on S25 Ultra/Adreno 830 is the primary environment. Check resources
-and active work before costly runs; prefer bounded sequential jobs and at most
-two compilation jobs. Ask the owner before every new speed experiment and wait
-for explicit foreground confirmation. Four-core background limits are expected.
+and active work before costly runs; prefer bounded sequential runs and use all
+eight cores for Cargo compilation (`-j 8`), including in background Termux. Do not
+impose an additional four-core compilation limit; Android may restrict effective
+CPU affinity itself. Ask the owner before every new speed experiment and wait
+for explicit foreground confirmation.
+
+Monitor free phone storage before large builds/renders. Under storage pressure,
+clear only expendable package/download or compilation caches while preserving
+frozen binaries, checkpoints, training state and run evidence.
 
 CPU is the numerical reference; GPU paths are optional, parity-gated, memory
 bounded and backend neutral. Keep v0 defaults/checkpoints/frozen results intact
