@@ -12,6 +12,10 @@ mod metrics;
 pub mod microstructure;
 pub mod musical_intent;
 pub mod acoustic_dynamics;
+mod dynamics;
+mod dynamics_synth;
+mod signal_time;
+mod associative_landscape;
 mod model;
 mod native_audio;
 mod native_dsp;
@@ -60,6 +64,39 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
+    /// Test associative forecasting on a declared latent cycle and matched controls.
+    LandscapeCheck {
+        #[arg(long)] out: PathBuf,
+    },
+    /// Inspect an evolving associative field, gradients, curvature and graph in signal time.
+    LandscapeAnalyze {
+        #[arg(long)] input: PathBuf,
+        #[arg(long)] out: PathBuf,
+    },
+    /// Train the procedural-only linked envelope dynamics pilot on CPU.
+    DynamicsTrain {
+        #[arg(long, default_value_t=7301)] model_seed: u64,
+        #[arg(long, default_value_t=2100000)] data_seed: u64,
+        #[arg(long, default_value_t=1800)] steps: usize,
+        #[arg(long)] shuffled: bool,
+        #[arg(long)] frozen_landscape: bool,
+        #[arg(long)] resume: Option<PathBuf>,
+        #[arg(long)] out: PathBuf,
+    },
+    /// Evaluate dynamics correction against identity, DSP and temporal controls.
+    DynamicsEvaluate {
+        #[arg(long)] model: PathBuf,
+        #[arg(long, default_value_t=2300000)] seed: u64,
+        #[arg(long, default_value_t=24)] count: usize,
+        #[arg(long)] out: PathBuf,
+    },
+    /// Apply an explicitly requested bounded dynamics interpretation at unchanged RMS.
+    DynamicsRestore {
+        #[arg(long)] model: PathBuf,
+        #[arg(long)] input: PathBuf,
+        #[arg(long, default_value_t=1.0)] strength: f32,
+        #[arg(long)] out: PathBuf,
+    },
     /// Unified autonomous mastering pipeline: Pre-Assessment, SFHT low-end, CFM mid-range, clean polish, 3D spatial acoustics, dynamic mastering, preservation verification, and lossless export.
     AutoMaster {
         #[arg(long)]
@@ -168,6 +205,9 @@ enum Commands {
         contrast_budget: bool,
         #[command(flatten)]
         master_controls: master::MasterControls,
+        /// Optional learned dynamics pilot before final mastering (CPU reference).
+        #[arg(long)] dynamics_model: Option<PathBuf>,
+        #[arg(long, default_value_t=1.0)] dynamics_strength: f32,
     },
     /// Experimental Conditional Microstructure Synthesis: Prototype Family A HTS physical priors, harmonic-conditioned air excitation, fractal tendril diffusion, and baseline comparisons.
     Microstructure {
@@ -958,6 +998,15 @@ fn run() -> Result<()> {
     let matches = Cli::command().get_matches();
     let explicit = explicit_auto_parameters(&matches);
     match Cli::from_arg_matches(&matches)?.command {
+        Commands::LandscapeCheck {out}=>{
+            experiment::new_run(&out)?;
+            experiment::write_json(&out.join("associative-check.json"),&associative_landscape::Landscape::associative_check())
+        },
+        Commands::LandscapeAnalyze {input,out}=>dynamics::analyze_landscape(&input,&out),
+        Commands::DynamicsTrain {model_seed,data_seed,steps,shuffled,frozen_landscape,resume,out} =>
+            dynamics::train(model_seed,data_seed,steps,shuffled,frozen_landscape,resume.as_deref(),&out),
+        Commands::DynamicsEvaluate {model,seed,count,out} => dynamics::evaluate(&model,seed,count,&out),
+        Commands::DynamicsRestore {model,input,strength,out} => dynamics::restore_cli(&model,&input,strength,&out),
         Commands::AutoMaster {
             input,
             out,
@@ -1005,6 +1054,8 @@ fn run() -> Result<()> {
             coupled_clocks,
             contrast_budget,
             master_controls,
+            dynamics_model,
+            dynamics_strength,
         } => auto_master_pipeline(
             &input,
             out.as_deref(),
@@ -1048,6 +1099,8 @@ fn run() -> Result<()> {
             contrast_budget,
             &master_controls,
             &explicit,
+            dynamics_model.as_deref(),
+            dynamics_strength,
         ),
         Commands::Microstructure {
             input,
@@ -2116,8 +2169,11 @@ fn auto_master_pipeline(
     contrast_budget: bool,
     master_controls: &master::MasterControls,
     explicit: &BTreeSet<String>,
+    dynamics_model: Option<&std::path::Path>,
+    dynamics_strength: f32,
 ) -> Result<()> {
     master_controls.validate()?;
+    ensure!((0.0..=1.0).contains(&dynamics_strength),"dynamics strength must be finite and0..1");
     let pipeline_start = std::time::Instant::now();
 
     // 1. Determine run directory
@@ -2683,6 +2739,15 @@ fn auto_master_pipeline(
     }
 
     // Stage 5: Dynamic Post-Mastering
+    let applied_dynamics = if let Some(path)=dynamics_model {
+        println!("\n--- Stage 4.75: Requested learned dynamics correction (strength={dynamics_strength}) ---");
+        let model=dynamics::Model::load(path)?;
+        let (output,report)=dynamics::restore(&model,&current_audio,dynamics_strength)?;
+        current_audio=output;
+        experiment::write_json(&out_dir.join("dynamics.json"),&report)?;
+        native_audio::write(&out_dir.join("stage4_75_dynamics.wav"),&current_audio,false)?;
+        Some(report)
+    } else {None};
     let eff_glue_ratio = if master_controls.no_glue { 1.0 } else if force_specialists || explicit.contains("glue_ratio") {
         glue_ratio
     } else {
@@ -2945,7 +3010,7 @@ fn auto_master_pipeline(
     }
 
     let runtime_provenance = experiment::provenance();
-    let summary_meta = serde_json::json!({
+    let mut summary_meta = serde_json::json!({
         "schema": "highband-auto-master-v1",
         "runtime_checkout": {
             "git_commit": runtime_provenance["git_commit"],
@@ -2999,6 +3064,13 @@ fn auto_master_pipeline(
             "after": master_res.after_metrics,
         }
     });
+    let signal_clock=signal_time::SignalClock {sample_rate:original_input_audio.rate};
+    summary_meta["signal_clock"]=serde_json::to_value(signal_clock)?;
+    summary_meta["signal_duration"]=serde_json::to_value(signal_clock.at(num_frames as u64))?;
+    summary_meta["settings"]["dynamics_model"]=serde_json::to_value(dynamics_model.map(|p|p.display().to_string()))?;
+    summary_meta["settings"]["dynamics_strength"]=serde_json::to_value(dynamics_strength)?;
+    summary_meta["settings"]["applied_dynamics"]=serde_json::to_value(applied_dynamics)?;
+    summary_meta["settings"]["dynamics_preservation_note"]=serde_json::json!("When dynamics is requested, full-band amplitude changes are authorized; the legacy band-energy proxy is advisory for that task");
     experiment::write_json(&out_dir.join("summary.json"), &summary_meta)?;
 
     println!(
