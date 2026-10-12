@@ -110,6 +110,14 @@ counts, losses, fluid-inspired hypotheses and proposed versions, and
 
 ## Tri-band restoration and autonomous mastering milestone
 
+Final mastering now has optional glue bypass/attack and limiter-reduction-budget
+controls shared by `master` and `auto-master`. Manual CLI settings take priority
+over auto-tune/intent; run metadata records applied values and their sources.
+A reduction budget may accept lower LUFS while retaining the measured peak
+ceiling. This is a finalization policy, not a dynamics-reconstruction head.
+SFHT and mid-band training adjoints were repaired without changing frozen model
+weights, sizes or inference. See [the checkpoint report](PUNCH_CONTROL_RESULTS.md).
+
 The optional next-evolution allocator shares one input-only control timeline
 between spatial and calibrated Port-Hamiltonian stages. Three cascaded DSP
 energy trackers (5 ms, 150 ms, 2.5 s) condition forcing/excursion; input-relative

@@ -1015,4 +1015,24 @@ established, and no new champion is declared. Read the
 [metrics/provenance](artifacts/next-evolution-v1/README.md), and
 [primary method references](docs/REFERENCES.md#port-hamiltonian-and-next-evolution-provenance-checked-2026-10-11).
 
+#### 14. Punch controls and propagation audit checkpoint
+
+Optional `--no-glue`, `--glue-attack-ms` and `--max-limiter-gr-db` controls share
+the unified finalizer. Explicit CLI choices now survive auto-tune, and reports
+distinguish requested/applied settings. Omitted-option procedural masters match
+the retained parent bytes on three CLI routes. The limiter budget can accept
+lower LUFS to preserve its reduction bound and the measured true-peak ceiling.
+
+Two focused regressions failed against the old SFHT soft-clamp derivative and
+mid-band upper-protected-band adjoint, then passed after repair. Resume loading
+also rejects malformed model/optimizer state. Frozen model sizes, weights,
+schemas and inference remain. No new training or perceptual improvement is claimed.
+
+The fixed Chasing Horizons and Feelin' Catchy excerpts have less than 2 dB
+limiter reduction already. The new 2 dB budget does not bind there, and glue
+bypass does not improve their crest score. This is integration evidence and a
+negative/limited quality finding, not a new champion. Read the
+[full checkpoint report](docs/PUNCH_CONTROL_RESULTS.md),
+[frozen plan](docs/PUNCH_CONTROL_PLAN.md) and
+[primary method provenance](docs/REFERENCES.md#punch-control-checkpoint-provenance).
 

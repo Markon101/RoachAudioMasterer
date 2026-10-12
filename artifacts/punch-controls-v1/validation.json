@@ -1,0 +1,91 @@
+{
+  "schema": "roach-punch-control-validation-v1",
+  "claim": "Implementation and integration; listening benefit and improved learning unestablished",
+  "ordinary_full_suite": {
+    "passed": 118,
+    "ignored": 7,
+    "failed": 0
+  },
+  "final_focused_sfht_tests": 8,
+  "extra_resume_regression_passed": true,
+  "unique_ordinary_tests_passed_across_runs": 119,
+  "native_gpu_parity_max_abs": 5.9604645e-08,
+  "sfht_gpu_parity_passed": true,
+  "gradient_regressions_failed_before_fix": true,
+  "gradient_regressions_passed_after_fix": true,
+  "limiter_budget_test_db": [
+    0,
+    0.5,
+    2,
+    6
+  ],
+  "alias_signal_error_propagated": true,
+  "fixture_seed": 20261011,
+  "fixture_sha256": "1abd7e3bfe85454b819228643c4f5d0f236c987b162ae83a57bcd218735223d0",
+  "cli_parity": [
+    {
+      "route": "auto-forced",
+      "float_master_byte_identical": true
+    },
+    {
+      "route": "legacy",
+      "float_master_byte_identical": true
+    },
+    {
+      "route": "standalone",
+      "float_master_byte_identical": true
+    }
+  ],
+  "explicit_default_override": true,
+  "local_excerpt_metrics": [
+    {
+      "track": "chasing",
+      "input_start_seconds": 30,
+      "seconds": 12,
+      "input_sha256": "fb0cb0f58c3dc93969647388c80a90fe0bb3147fbbf65a9fa8e64bd9430c401e",
+      "parent": {
+        "crest_factor_db": 12.790999412536621,
+        "lufs_integrated": -11.012514184208156,
+        "rms_dbfs": -13.790999412536621,
+        "sample_peak_dbfs": -1.0000003576278687,
+        "true_peak_dbtp": -1.0000003576278687,
+        "glue_gr_db": 0.5858743190765381,
+        "limiter_gr_db": 0.787353515625
+      },
+      "budget": {
+        "crest_factor_db": 12.771733283996582,
+        "lufs_integrated": -11.01211973468342,
+        "rms_dbfs": -13.771733283996582,
+        "sample_peak_dbfs": -1.0000003576278687,
+        "true_peak_dbtp": -1.0000003576278687,
+        "glue_gr_db": 0.0,
+        "limiter_gr_db": 0.7853782773017883
+      }
+    },
+    {
+      "track": "feelin",
+      "input_start_seconds": 30,
+      "seconds": 12,
+      "input_sha256": "cb529c930532bbd9e066f255158885a4d1091998eeb62f7c1e1577407b3f1212",
+      "parent": {
+        "crest_factor_db": 12.037928581237793,
+        "lufs_integrated": -11.089408338158817,
+        "rms_dbfs": -13.49075698852539,
+        "sample_peak_dbfs": -1.4528281688690186,
+        "true_peak_dbtp": -0.9998237490653992,
+        "glue_gr_db": 0.5063838958740234,
+        "limiter_gr_db": 1.4839718341827393
+      },
+      "budget": {
+        "crest_factor_db": 12.017802238464355,
+        "lufs_integrated": -11.084740975102122,
+        "rms_dbfs": -13.471522331237793,
+        "sample_peak_dbfs": -1.4537198543548584,
+        "true_peak_dbtp": -1.0000101327896118,
+        "glue_gr_db": 0.0,
+        "limiter_gr_db": 1.4486457109451294
+      }
+    }
+  ],
+  "limits": "Fixed excerpts do not bind the 2 dB budget; glue bypass changes crest by about -0.02 dB. No new full-song listening result."
+}

@@ -44,7 +44,7 @@ All delivered masters are 24-bit 48 kHz lossless FLAC files with embedded cover 
 
 ## 3. Strict Operating Rules for Codex / GPT
 
-1. **Compilation Threads**: Always use at least four threads for Cargo: `cargo test -j 4`, `cargo build --release --features opencl -j 4`.
+1. **Compilation Jobs (owner update, 2026-10-11)**: Use all eight cores for Cargo compilation, including in background Termux: `cargo test -j 8`, `cargo build --release --features opencl -j 8`. Do not impose an additional four-core compilation limit. This supersedes the earlier compilation limits; historical run records retain their actual job counts.
 2. **GPU Hardware Acceleration**: Always prefer `--backend opencl` on Qualcomm Adreno 830 GPU (`OCL_ICD_ASSUME_ICD_EXTENSION=1` is auto-set in `main()`). It delivers a ~3x speedup on mid-band flow restoration (~6.5s/chunk vs 19s on CPU).
 3. **Storage Cleanliness**: **NEVER** write short 20s test samples, interim stage WAVs, or $+30\text{ dB}$ delta tracks to `/sdcard/Download/`. Keep all research scratch files in scratch storage. Export **ONLY** final full-song FLAC masters to `/sdcard/Download/FLAC/`.
 4. **Preserve the Champion**: The champion is frozen at tag `v1.1.0-alpha.1-champion` and documented in `artifacts/champion_manifest_v1_1.json`. Compare any new experimental candidate directly against the champion, not merely against unprocessed audio.
@@ -67,3 +67,16 @@ Formulate a coupled dynamical system where slow modal energy modulates fast actu
 
 ### Priority C: Perceptual Contrast Budget
 Implement a dynamic contrast allocator that allows quiet verses to remain dry and intimate while choruses naturally expand in 3D width and Port-Hamiltonian respiration, without noticeable transition seams.
+
+## Checkpoint continuation: punch controls and propagation audit
+
+The A/B/C implementation and measurements are recorded in
+`docs/NEXT_EVOLUTION_RESULTS.md`. The subsequent checkpoint adds optional glue
+bypass/attack and limiter-reduction-budget controls, repairs explicit CLI
+precedence and two training adjoints, and hardens corrupt resume/error handling.
+Read `docs/PUNCH_CONTROL_RESULTS.md`, its frozen plan and metrics-only provenance
+before continuing. Model sizes and frozen weights remain matched; no new training
+or champion promotion is claimed. The fixed song excerpts did not demonstrate
+improved crest or a binding 2 dB limiter budget. Next work is onset-specific
+diagnostics and controlled listening; longer training needs a separate frozen
+plan with corrected gradient provenance and resume-schedule checks.

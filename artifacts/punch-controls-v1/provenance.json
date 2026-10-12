@@ -1,0 +1,30 @@
+{
+  "schema": "roach-punch-control-provenance-v1",
+  "implementation_commit": "9dcfae336b31062e7d9b69bc25b7c5c0123ce6d2",
+  "parent_commit": "40a76b1595315c90d085a8acf121d28886c7d6d2",
+  "parent_binary_sha256": "a777bf2a946d31e1e04b8b8d2a9276e5a6a653247b761243feb8ff25b63ef29e",
+  "candidate_binary_sha256": "357bd4fe634441af50e111c094b12079fdd59fdd7d6ecf5e672b72d0307dee95",
+  "legacy_launcher_sha256": "0dfc8a35084cf174f605e9c0456dd56e0297719adcd0efe2fa905aad642c6992",
+  "source_file_sha256": {
+    "src/main.rs": "7ec8ecb1b4090c281cb6559955ca876f20b3a272fca2a4d2e4d4920d695a7bb5",
+    "src/master.rs": "7571adb4f0255e8e26774baa3089fbf8de7476ef199eb3166a449ffca89dcdce",
+    "src/rich_mid.rs": "6bb07862b1d4e5f25d9aa343d0b0d1d79469f0dc865983f959f528c14c712936",
+    "src/sfht.rs": "c92fc8f39e0a808b91390b1f64738b161cb0d32c08d64785ea845e4af771ae73",
+    "src/scene_stats.rs": "213cdc6e0c31e97c0a7b34e91e571fc1493e8ef4d6285d35850d3f1f166ec7cf",
+    "src/bin/highband.rs": "c5a4ef7da14d3b070e450f705a95b14aa16183404a0a9823767d52189e5250e1"
+  },
+  "models": {
+    "sfht": "c3ccc202eba42de9e9ef8b94f681d6e5c92f98461e2c7b453b240a92cea55a4d",
+    "cfm_v2": "0efd3c58017580fd27fc24df0f85c629a5794d6f6994ae31c87a4cda4be86a70"
+  },
+  "canonical_cargo_features": [
+    "opencl"
+  ],
+  "compilation_jobs": 8,
+  "build_identity": "Committed source contents verified by hashes; CLI renders ran before implementation commit in dirty parent checkout. Runtime checkout metadata is not executable identity.",
+  "training": "No new training or song adaptation outside existing procedural unit tests",
+  "model_size_change": false,
+  "speed_experiment": false,
+  "phone_export": false,
+  "audio_publication": false
+}
