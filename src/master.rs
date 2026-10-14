@@ -25,6 +25,9 @@ pub struct MasterControls {
     /// Maximum limiter envelope reduction (0..12 dB); may lower achieved LUFS.
     #[arg(long)]
     pub max_limiter_gr_db: Option<f32>,
+    /// Coupled-clock transient punch: dynamic glue release and bounded attack transient contour.
+    #[arg(long)]
+    pub clock_transient_punch: bool,
 }
 
 impl Default for MasterControls {
@@ -33,6 +36,7 @@ impl Default for MasterControls {
             no_glue: false,
             glue_attack_ms: 20.0,
             max_limiter_gr_db: None,
+            clock_transient_punch: false,
         }
     }
 }
@@ -162,6 +166,7 @@ fn db(x: f32) -> f32 {
 }
 
 /// Gentle stereo-linked feed-forward glue compressor with soft knee and high-pass sidechain filter.
+/// When clock_transient_punch is enabled, release time dynamically scales with fast-to-medium contrast clock ratio.
 fn glue(
     a: &Audio,
     threshold_db: f32,
@@ -170,13 +175,20 @@ fn glue(
     attack_ms: f32,
     release_ms: f32,
     sidechain_hp_hz: f32,
+    clock_transient_punch: bool,
 ) -> (Audio, f32) {
     let n = a.channels[0].len();
     let att = (-1.0 / (attack_ms * 0.001 * RATE as f32)).exp();
-    let rel = (-1.0 / (release_ms * 0.001 * RATE as f32)).exp();
+    let base_rel = (-1.0 / (release_ms * 0.001 * RATE as f32)).exp();
     let mut gain_db = vec![0.0f32; n];
     let mut env = 0.0f32;
     let mut max_gr = 0.0f32;
+
+    let timeline = if clock_transient_punch {
+        Some(crate::acoustic_dynamics::ContrastTimeline::analyze(a, true, true))
+    } else {
+        None
+    };
 
     // Filter detector sidechain if sidechain_hp_hz > 20 Hz (preserves bass dynamics from over-compression)
     let sidechain_channels: Vec<Vec<f32>> = if sidechain_hp_hz > 20.0 {
@@ -209,6 +221,20 @@ fn glue(
         } else {
             (1.0 - 1.0 / ratio) * over
         };
+
+        let rel = if let Some(ref tl) = timeline {
+            let (fast_e, med_e, _) = tl.clocks_at(i);
+            let r = (fast_e / (med_e + 1e-12)) as f32;
+            let eff_rel_ms = if r > 1.0 {
+                release_ms / r.min(3.0)
+            } else {
+                release_ms
+            };
+            (-1.0 / (eff_rel_ms * 0.001 * RATE as f32)).exp()
+        } else {
+            base_rel
+        };
+
         let coef = if target_gr > env { att } else { rel };
         env = coef * env + (1.0 - coef) * target_gr;
         gain_db[i] = -env;
@@ -231,6 +257,63 @@ fn glue(
         },
         max_gr,
     )
+}
+
+/// Pre-limiter transient punch shaping:
+/// When fast acoustic clock energy exceeds medium clock energy (r > 1.25) and macro headroom exists,
+/// applies a smooth upward attack transient contour bounded strictly to <= +1.5 dB,
+/// preserving attack punch before the lookahead ceiling limiter.
+pub fn apply_transient_punch_shaping(a: &Audio) -> Audio {
+    let n = a.frames();
+    if n == 0 {
+        return a.clone();
+    }
+    let timeline = crate::acoustic_dynamics::ContrastTimeline::analyze(a, true, true);
+    if timeline.points.is_empty() {
+        return a.clone();
+    }
+    let max_med = timeline
+        .points
+        .iter()
+        .map(|p| p.medium_energy)
+        .fold(1e-12f64, f64::max);
+
+    let att = (-1.0 / (0.001 * RATE as f32)).exp(); // ~1 ms smooth upward attack
+    let rel = (-1.0 / (0.015 * RATE as f32)).exp(); // ~15 ms transient sustain decay
+    let mut env = 0.0f32;
+    let mut gains = Vec::with_capacity(n);
+
+    for i in 0..n {
+        let (fast_e, med_e, _slow_e) = timeline.clocks_at(i);
+        let r = (fast_e / (med_e + 1e-12)) as f32;
+        let target_db = if r > 1.25 {
+            let macro_headroom = (1.0 - (med_e / max_med).clamp(0.0, 1.0) * 0.8) as f32;
+            let excess = ((r - 1.25) / 1.75).clamp(0.0, 1.0);
+            (1.5 * excess * macro_headroom).clamp(0.0, 1.5)
+        } else {
+            0.0
+        };
+
+        if target_db > env {
+            env = att * env + (1.0 - att) * target_db;
+        } else {
+            env = rel * env + (1.0 - rel) * target_db;
+        }
+        let env_clamped = env.clamp(0.0, 1.5);
+        let lin_gain = 10.0f32.powf(env_clamped / 20.0);
+        gains.push(lin_gain);
+    }
+
+    let channels = a
+        .channels
+        .iter()
+        .map(|c| c.iter().zip(&gains).map(|(&x, &g)| x * g).collect())
+        .collect();
+
+    Audio {
+        rate: a.rate,
+        channels,
+    }
 }
 
 /// Lookahead limiter: sliding-minimum then boxcar smoothing (never exceeds ceiling),
@@ -312,6 +395,7 @@ pub struct MasterResult {
     pub glue_gr: f32,
     pub limiter_gr: f32,
     pub pre_gain_db: f32,
+    pub onset_audit: crate::assess::OnsetAuditReport,
 }
 
 pub fn metrics(a: &Audio) -> serde_json::Value {
@@ -405,17 +489,24 @@ pub fn master_audio_with_controls(
             controls.glue_attack_ms,
             160.0,
             sidechain_hp_hz,
+            controls.clock_transient_punch,
         )
     } else {
         (input_audio.clone(), 0.0)
     };
 
+    let pre_shaped = if controls.clock_transient_punch {
+        apply_transient_punch_shaping(&compressed)
+    } else {
+        compressed.clone()
+    };
+
     let ceiling_lin = 10.0f32.powf(ceiling_db / 20.0);
-    let mut pre_gain_db = target_lufs - lufs(&compressed) as f32;
+    let mut pre_gain_db = target_lufs - lufs(&pre_shaped) as f32;
     let mut effective_ceiling = ceiling_lin;
-    let mut mastered = compressed.clone();
+    let mut mastered = pre_shaped.clone();
     let mut limiter_gr = 0.0;
-    let compressed_peak = sample_peak(&compressed);
+    let shaped_peak = sample_peak(&pre_shaped);
     let mut last_applied_drive = pre_gain_db;
     for it in 0..6 {
         let mut budget_exhausted = false;
@@ -423,9 +514,9 @@ pub fn master_audio_with_controls(
             // All limiter needs are >= 10^(-budget/20). Minima, averages and
             // one-sided release preserve that bound. Lower drive, never clamp gains.
             let max_drive = if budget == 0.0 {
-                ceiling_db - db(true_peak(&compressed))
+                ceiling_db - db(true_peak(&pre_shaped))
             } else {
-                db(effective_ceiling) - db(compressed_peak) + (budget - 1e-4).max(0.0)
+                db(effective_ceiling) - db(shaped_peak) + (budget - 1e-4).max(0.0)
             };
             pre_gain_db = pre_gain_db.min(max_drive);
             budget_exhausted = pre_gain_db >= max_drive - 1e-5;
@@ -433,8 +524,8 @@ pub fn master_audio_with_controls(
         last_applied_drive = pre_gain_db;
         let g = 10.0f32.powf(pre_gain_db / 20.0);
         let scaled = Audio {
-            rate: compressed.rate,
-            channels: compressed
+            rate: pre_shaped.rate,
+            channels: pre_shaped
                 .channels
                 .iter()
                 .map(|c| c.iter().map(|x| x * g).collect())
@@ -481,6 +572,7 @@ pub fn master_audio_with_controls(
         }
     }
     let after = metrics(&mastered);
+    let onset_audit = crate::assess::scan_onset_diagnostics(&mastered);
     Ok(MasterResult {
         mastered,
         before_metrics: before,
@@ -488,6 +580,7 @@ pub fn master_audio_with_controls(
         glue_gr,
         limiter_gr,
         pre_gain_db,
+        onset_audit,
     })
 }
 
@@ -539,6 +632,10 @@ pub fn run(
     native_audio::write(&out.join("mastered.wav"), &result.mastered, false)?;
     native_audio::write(&out.join("listen.wav"), &result.mastered, true)?;
     write_json(
+        &out.join("onset_audit.json"),
+        &serde_json::to_value(&result.onset_audit)?,
+    )?;
+    write_json(
         &out.join("master.json"),
         &json!({
             "schema": "highband-post-master-v1",
@@ -553,6 +650,7 @@ pub fn run(
             "pre_gain_db": result.pre_gain_db,
             "before": result.before_metrics,
             "after": result.after_metrics,
+            "onset_audit": &result.onset_audit,
         }),
     )?;
     println!("Mastered to {}", out.display());
@@ -629,8 +727,8 @@ mod tests {
                 }
             }
         }
-        let (fast, _) = glue(&a, -24.0, 3.0, 8.0, 2.0, 160.0, 0.0);
-        let (slow, _) = glue(&a, -24.0, 3.0, 8.0, 80.0, 160.0, 0.0);
+        let (fast, _) = glue(&a, -24.0, 3.0, 8.0, 2.0, 160.0, 0.0, false);
+        let (slow, _) = glue(&a, -24.0, 3.0, 8.0, 80.0, 160.0, 0.0, false);
         let energy = |a: &Audio| a.channels[0][4800..5760].iter().map(|x| x * x).sum::<f32>();
         assert!(energy(&slow) > energy(&fast) * 1.2);
     }
@@ -741,7 +839,7 @@ mod tests {
     #[test]
     fn glue_is_identity_below_threshold() {
         let quiet = tone(0.01, 440.0, 1);
-        let (g, gr) = glue(&quiet, -20.0, 2.0, 8.0, 20.0, 160.0, 0.0);
+        let (g, gr) = glue(&quiet, -20.0, 2.0, 8.0, 20.0, 160.0, 0.0, false);
         assert!(gr < 1e-6);
         let diff = g.channels[0]
             .iter()
@@ -757,7 +855,7 @@ mod tests {
         let sub = tone(0.6, 40.0, 1);
 
         // Without sidechain HPF: 40 Hz triggers compressor (>3 dB GR)
-        let (_g_raw, gr_raw) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 0.0);
+        let (_g_raw, gr_raw) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 0.0, false);
         assert!(
             gr_raw > 2.0,
             "Raw detector did not compress sub: {}",
@@ -765,11 +863,69 @@ mod tests {
         );
 
         // With 100 Hz sidechain HPF: 40 Hz is filtered from detector (GR < 0.5 dB)
-        let (_g_hp, gr_hp) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 100.0);
+        let (_g_hp, gr_hp) = glue(&sub, -12.0, 2.5, 6.0, 10.0, 100.0, 100.0, false);
         assert!(
             gr_hp < 0.5,
             "Sidechain HPF failed to preserve sub-bass punch: GR = {}",
             gr_hp
+        );
+    }
+
+    #[test]
+    fn test_clock_transient_punch_audit_and_shaping() {
+        let mut audio = tone(0.05, 440.0, 2);
+        for c in &mut audio.channels {
+            for kick_idx in [4800, 24000, 48000, 72000] {
+                for t in 0..480 {
+                    let env = (1.0 - t as f32 / 480.0).powi(2);
+                    c[kick_idx + t] += 0.8 * env * (2.0 * PI * 180.0 * t as f32 / RATE as f32).sin();
+                }
+            }
+        }
+
+        let parent = master_audio(&audio, -14.0, -1.0, -18.0, 1.8, 90.0).unwrap();
+        let default_res = master_audio_with_controls(
+            &audio,
+            -14.0,
+            -1.0,
+            -18.0,
+            1.8,
+            90.0,
+            &MasterControls::default(),
+        )
+        .unwrap();
+        assert_eq!(parent.mastered.channels, default_res.mastered.channels);
+
+        let punch_res = master_audio_with_controls(
+            &audio,
+            -14.0,
+            -1.0,
+            -18.0,
+            1.8,
+            90.0,
+            &MasterControls {
+                clock_transient_punch: true,
+                ..MasterControls::default()
+            },
+        )
+        .unwrap();
+
+        let ceiling_lin = 10.0f32.powf(-1.0 / 20.0);
+        assert!(true_peak(&punch_res.mastered) <= ceiling_lin * 1.001);
+        assert!(punch_res.onset_audit.num_onsets_detected > 0);
+        assert!(default_res.onset_audit.num_onsets_detected > 0);
+
+        assert!(
+            punch_res.onset_audit.mean_attack_crest_db >= default_res.onset_audit.mean_attack_crest_db - 0.1,
+            "Punch attack crest ({}) should be >= default ({})",
+            punch_res.onset_audit.mean_attack_crest_db,
+            default_res.onset_audit.mean_attack_crest_db
+        );
+        assert!(
+            punch_res.onset_audit.snare_transient_to_sustain_ratio_db >= default_res.onset_audit.snare_transient_to_sustain_ratio_db - 0.1,
+            "Punch snare ratio ({}) should be >= default ({})",
+            punch_res.onset_audit.snare_transient_to_sustain_ratio_db,
+            default_res.onset_audit.snare_transient_to_sustain_ratio_db
         );
     }
 }

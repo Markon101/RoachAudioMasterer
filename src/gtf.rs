@@ -3413,6 +3413,8 @@ pub enum MorphicModulationMode {
     PortHamiltonianCalibrated,
     /// Mode 4 (Calibrated Uncoupled): Calibrated Material + Base Air Shelf with Cross-Modal Coupling Disabled (kappa=0)
     PortHamiltonianCalibratedUncoupled,
+    /// Mode 4 (Lie-Algebra v2 so(4)): Team A 6-Generator Lie-Algebra Port-Hamiltonian with Dedicated Side Sub-Band Bank & Quartic AVF Acceptance Gate
+    PortHamiltonianLieV2,
     /// Mode 5: Matched static high-shelf DSP baseline (+0.8 dB above crossover)
     StaticHighShelf,
 }
@@ -3754,6 +3756,315 @@ pub fn step_port_hamiltonian_coupled_4d(
     *z = y;
 }
 
+// ============================================================================
+// TEAM A: so(4) LIE-ALGEBRA PORT-HAMILTONIAN WITH ACCEPTANCE GATE & DEDICATED SIDE BANK
+// ============================================================================
+
+pub type Matrix4x4 = [[f64; 4]; 4];
+
+/// theta order: 01, 02, 03, 12, 13, 23. Positive theta rotates i toward j.
+pub const LIE_PAIRS: [(usize, usize); 6] = [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)];
+
+/// Each entry is assigned with its negative counterpart, never independently.
+/// Mathematical guarantee holds for every real theta. IEEE NaN/Inf are rejected.
+pub fn skew_generator(theta: [f64; 6]) -> Option<Matrix4x4> {
+    if !theta.iter().all(|v| v.is_finite()) {
+        return None;
+    }
+    let mut j = [[0.0; 4]; 4];
+    for (k, &(i, l)) in LIE_PAIRS.iter().enumerate() {
+        j[i][l] = -theta[k];
+        j[l][i] = theta[k];
+    }
+    Some(j)
+}
+
+pub fn legacy_theta(kappa: f64) -> [f64; 6] {
+    [16.0, 0.0, kappa, -kappa, 0.0, 32.0]
+}
+
+/// Rolling input measurements; caller must supply stereo sub-band measurements.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct HopFeatures {
+    pub high_slope_db_oct: f64,
+    pub high_flatness: f64,
+    pub sample_headroom_db: f64,
+    pub high_jitter_rad: f64,
+    pub onset: f64,
+    pub active: bool,
+    pub side_sub_fraction: f64,
+    pub sub_lr_correlation: f64,
+    pub air_authority: f64,
+    pub rumble_authority: f64,
+}
+
+/// Illustrative controls, not fitted thresholds or a validated damage estimator.
+/// Arrays describe separate mid and side 4D banks, with fixed storage functions.
+pub fn hop_targets(f: HopFeatures) -> Option<([f64; 6], [f64; 6], [f64; 4])> {
+    let values = [
+        f.high_slope_db_oct,
+        f.high_flatness,
+        f.sample_headroom_db,
+        f.high_jitter_rad,
+        f.onset,
+        f.side_sub_fraction,
+        f.sub_lr_correlation,
+        f.air_authority,
+        f.rumble_authority,
+    ];
+    if !values.iter().all(|v| v.is_finite()) {
+        return None;
+    }
+    let c = |v: f64| v.clamp(0.0, 1.0);
+    let dull = c((-f.high_slope_db_oct - 6.0) / 6.0);
+    let tonal = 1.0 - c(f.high_flatness);
+    let headroom = c((f.sample_headroom_db - 1.0) / 5.0);
+    let reliable_phase = (-f.high_jitter_rad.max(0.0).powi(2)).exp();
+    let air = if f.active {
+        c(f.air_authority) * c(f.onset) * dull * tonal * headroom * reliable_phase
+    } else {
+        0.0
+    };
+    let rumble = if f.active {
+        c(f.rumble_authority)
+            * c((f.side_sub_fraction - 0.10) / 0.40)
+            * c((0.90 - f.sub_lr_correlation) / 0.90)
+    } else {
+        0.0
+    };
+    // Untie legacy 03 and 12: transient->air in mid; sub->sink in side.
+    let mid = [16.0, 0.0, 12.0 * air, 0.0, 0.0, 32.0];
+    let side = [16.0, 0.0, 0.0, 0.0, 0.0, 32.0 + 12.0 * rumble];
+    let side_r = [0.5, 2.0, 1.0 + 8.0 * rumble, 4.0 + 16.0 * rumble];
+    Some((mid, side, side_r))
+}
+
+pub fn energy(z: [f64; 4]) -> f64 {
+    0.5 * z.iter().map(|v| v * v).sum::<f64>()
+}
+
+/// Fixed-quartic-H continuous certificate as well as the quadratic special case.
+pub fn unforced_storage_rate(z: [f64; 4], theta: [f64; 6], r: [f64; 4], beta: f64) -> Option<f64> {
+    if !z.iter().chain(r.iter()).all(|v| v.is_finite())
+        || r.iter().any(|v| *v < 0.0)
+        || !beta.is_finite()
+        || beta < 0.0
+    {
+        return None;
+    }
+    let j = skew_generator(theta)?;
+    let g = z.map(|v| v + beta * v.powi(3));
+    let mut rate = 0.0;
+    for i in 0..4 {
+        let dz = (0..4).map(|l| j[i][l] * g[l]).sum::<f64>() - r[i] * g[i];
+        rate += g[i] * dz;
+    }
+    rate.is_finite().then_some(rate)
+}
+
+pub fn solve_linear_system_4x4_f64(mut a: Matrix4x4, mut b: [f64; 4]) -> Option<[f64; 4]> {
+    for k in 0..4 {
+        let pivot = (k..4).max_by(|&i, &l| a[i][k].abs().total_cmp(&a[l][k].abs()))?;
+        if a[pivot][k].abs() < 1e-14 {
+            return None;
+        }
+        a.swap(k, pivot);
+        b.swap(k, pivot);
+        for i in k + 1..4 {
+            let scale = a[i][k] / a[k][k];
+            for l in k..4 {
+                a[i][l] -= scale * a[k][l];
+            }
+            b[i] -= scale * b[k];
+        }
+    }
+    let mut y = [0.0; 4];
+    for i in (0..4).rev() {
+        y[i] = (b[i] - (i + 1..4).map(|l| a[i][l] * y[l]).sum::<f64>()) / a[i][i];
+    }
+    y.iter().all(|v| v.is_finite()).then_some(y)
+}
+
+/// Unforced quadratic midpoint step, theta and r frozen for one hop.
+pub fn midpoint_unforced(z: [f64; 4], h: f64, theta: [f64; 6], r: [f64; 4]) -> Option<[f64; 4]> {
+    if !h.is_finite()
+        || h <= 0.0
+        || !z.iter().chain(r.iter()).all(|v| v.is_finite())
+        || r.iter().any(|v| *v < 0.0)
+    {
+        return None;
+    }
+    let mut a = skew_generator(theta)?;
+    for i in 0..4 {
+        a[i][i] -= r[i];
+    }
+    let mut lhs = [[0.0; 4]; 4];
+    let mut rhs = z;
+    for i in 0..4 {
+        for l in 0..4 {
+            lhs[i][l] = if i == l { 1.0 } else { 0.0 };
+            lhs[i][l] -= 0.5 * h * a[i][l];
+            rhs[i] += 0.5 * h * a[i][l] * z[l];
+        }
+    }
+    if !lhs
+        .iter()
+        .flatten()
+        .chain(rhs.iter())
+        .all(|v| v.is_finite())
+    {
+        return None;
+    }
+    solve_linear_system_4x4_f64(lhs, rhs)
+}
+
+/// Quadratic split-flow route: finite donor->receiver transfer without
+/// reversal in this isolated conservative substep (not in the full midpoint map).
+pub fn directed_pair_exchange(z: &mut [f64; 4], donor: usize, receiver: usize, angle_budget: f64) {
+    assert!(donor < 4 && receiver < 4 && donor != receiver);
+    assert!(angle_budget.is_finite() && angle_budget >= 0.0);
+    assert!(z.iter().all(|v| v.is_finite()));
+    let x = z[donor];
+    let y = z[receiver];
+    let sign = if x * y < 0.0 { -1.0 } else { 1.0 };
+    let angle = sign * angle_budget.min(x.abs().atan2(y.abs()));
+    let (s, c) = angle.sin_cos();
+    z[donor] = c * x - s * y;
+    z[receiver] = s * x + c * y;
+}
+
+/// Quartic AVF Discrete-Gradient Solver with Discrete Energy-Balance Residual Acceptance Gate.
+/// dz/dt = (J(theta) - R) * grad_H(z) + G * u
+/// If Newton fails or discrete energy balance residual r_E > 1e-9 * max(H(z), 1.0),
+/// falls back cleanly to the unconditionally passive quadratic midpoint step.
+pub fn step_port_hamiltonian_lie_v2(
+    z: &mut [f64; 4],
+    dt: f64,
+    u: f64,
+    g_vec: [f64; 4],
+    theta: [f64; 6],
+    r: [f64; 4],
+    beta: f64,
+) {
+    let j_mat = match skew_generator(theta) {
+        Some(j) => j,
+        None => return,
+    };
+    let mut a_mat = j_mat;
+    for i in 0..4 {
+        a_mat[i][i] -= r[i];
+    }
+    let half_h = 0.5 * dt;
+
+    let mut lhs = [[0.0; 4]; 4];
+    let mut rhs = [0.0; 4];
+    for i in 0..4 {
+        for l in 0..4 {
+            let delta = if i == l { 1.0 } else { 0.0 };
+            lhs[i][l] = delta - half_h * a_mat[i][l];
+            rhs[i] += (delta + half_h * a_mat[i][l]) * z[l];
+        }
+        rhs[i] += dt * g_vec[i] * u;
+    }
+
+    let z_linear = match solve_linear_system_4x4_f64(lhs, rhs) {
+        Some(sol) => sol,
+        None => return,
+    };
+
+    if beta <= 1e-9 {
+        *z = z_linear;
+        return;
+    }
+
+    let mut y = z_linear;
+    for _ in 0..4 {
+        let mut g_bar = [0.0; 4];
+        let mut dg_bar = [0.0; 4];
+        for i in 0..4 {
+            let zi = z[i];
+            let yi = y[i];
+            let sum_zy = yi + zi;
+            let sum_sq = yi * yi + zi * zi;
+            g_bar[i] = 0.5 * sum_zy + 0.25 * beta * sum_zy * sum_sq;
+            dg_bar[i] = 0.5 + 0.25 * beta * (3.0 * yi * yi + 2.0 * yi * zi + zi * zi);
+        }
+
+        let mut f_res = [0.0; 4];
+        for i in 0..4 {
+            let mut a_gbar = 0.0;
+            for l in 0..4 {
+                a_gbar += a_mat[i][l] * g_bar[l];
+            }
+            f_res[i] = y[i] - z[i] - dt * (a_gbar + g_vec[i] * u);
+        }
+
+        let max_res = f_res.iter().map(|v| v.abs()).fold(0.0f64, f64::max);
+        if max_res < 1e-9 {
+            break;
+        }
+
+        let mut jac = [[0.0; 4]; 4];
+        for i in 0..4 {
+            for l in 0..4 {
+                let delta = if i == l { 1.0 } else { 0.0 };
+                jac[i][l] = delta - dt * a_mat[i][l] * dg_bar[l];
+            }
+        }
+
+        if let Some(delta_y) = solve_linear_system_4x4_f64(jac, f_res) {
+            for i in 0..4 {
+                y[i] -= delta_y[i];
+            }
+        } else {
+            break;
+        }
+    }
+
+    // Discrete energy-balance residual acceptance gate:
+    // r_E = | H(y) - H(z) + h * \bar{g}^T R \bar{g} - h * \bar{g}^T G u |
+    let mut g_bar = [0.0; 4];
+    for i in 0..4 {
+        let zi = z[i];
+        let yi = y[i];
+        let sum_zy = yi + zi;
+        let sum_sq = yi * yi + zi * zi;
+        g_bar[i] = 0.5 * sum_zy + 0.25 * beta * sum_zy * sum_sq;
+    }
+
+    let mut final_res = [0.0; 4];
+    for i in 0..4 {
+        let mut a_gbar = 0.0;
+        for l in 0..4 {
+            a_gbar += a_mat[i][l] * g_bar[l];
+        }
+        final_res[i] = y[i] - z[i] - dt * (a_gbar + g_vec[i] * u);
+    }
+    let norm_inf_e = final_res.iter().map(|v| v.abs()).fold(0.0f64, f64::max);
+
+    let h_y = 0.5 * y.iter().map(|v| v * v).sum::<f64>()
+        + 0.25 * beta * y.iter().map(|v| v.powi(4)).sum::<f64>();
+    let h_z = 0.5 * z.iter().map(|v| v * v).sum::<f64>()
+        + 0.25 * beta * z.iter().map(|v| v.powi(4)).sum::<f64>();
+
+    let dissipation = dt * (0..4).map(|i| r[i] * g_bar[i].powi(2)).sum::<f64>();
+    let work = dt * u * (0..4).map(|i| g_vec[i] * g_bar[i]).sum::<f64>();
+    let r_e = (h_y - h_z + dissipation - work).abs();
+
+    let tol = 1e-9 * h_z.max(1.0);
+    if norm_inf_e <= 1e-9 && r_e <= tol {
+        *z = y;
+    } else {
+        // Fall back cleanly to unconditionally passive quadratic midpoint step
+        let h_lin = 0.5 * z_linear.iter().map(|v| v * v).sum::<f64>()
+            + 0.25 * beta * z_linear.iter().map(|v| v.powi(4)).sum::<f64>();
+        if h_lin <= h_z + tol {
+            *z = z_linear;
+        }
+        // otherwise retain old state *z = z (unconditionally passive rejection)
+    }
+}
+
 /// Processes stereo audio through the Morphic Acoustic Controller with bit-exact passband locking.
 pub fn process_morphic_audio(audio: &Audio, config: &MorphicConfig) -> (Audio, MorphicAuditReport) {
     process_morphic_audio_with_contrast(audio, config, None)
@@ -3779,6 +4090,8 @@ pub fn process_morphic_audio_with_contrast(
     let mut z_side = vec![0.0f32; 8];
     let mut ph_z_mid = [0.0f32; 4];
     let mut ph_z_side = [0.0f32; 4];
+    let mut ph_lie_z_mid = [0.0f64; 4];
+    let mut ph_lie_z_side = [0.0f64; 4];
     let mut ph_sq_sum = [0.0f32; 4];
 
     let mut conf_accum = 0.0f32;
@@ -3855,99 +4168,323 @@ pub fn process_morphic_audio_with_contrast(
         let auth = (1.0 - confidence).clamp(0.0, 1.0) * config.sub_bass_damping_authority;
         auth_accum += auth;
 
-        let is_ph_multiband = matches!(
-            config.mode,
-            MorphicModulationMode::PortHamiltonian
-                | MorphicModulationMode::PortHamiltonianA1
-                | MorphicModulationMode::PortHamiltonianA3
-                | MorphicModulationMode::PortHamiltonianA4
-                | MorphicModulationMode::PortHamiltonianCalibrated
-                | MorphicModulationMode::PortHamiltonianCalibratedUncoupled
-        );
+        let is_ph_lie = config.mode == MorphicModulationMode::PortHamiltonianLieV2;
+        let is_ph_multiband = is_ph_lie
+            || matches!(
+                config.mode,
+                MorphicModulationMode::PortHamiltonian
+                    | MorphicModulationMode::PortHamiltonianA1
+                    | MorphicModulationMode::PortHamiltonianA3
+                    | MorphicModulationMode::PortHamiltonianA4
+                    | MorphicModulationMode::PortHamiltonianCalibrated
+                    | MorphicModulationMode::PortHamiltonianCalibratedUncoupled
+            );
 
         if is_ph_multiband {
             let dt_hop = dt.min(0.05);
             let (_, actuator_fraction, transient_factor) = contrast
                 .map(|timeline| timeline.controls_at(t * HOP))
                 .unwrap_or((1.0, 1.0, 1.0));
-            let u_m = flux * transient_factor;
-            let u_s = flux * (1.0 - coherence) * transient_factor;
 
-            let (kap_m, kap_s) = match config.mode {
-                MorphicModulationMode::PortHamiltonianA1
-                | MorphicModulationMode::PortHamiltonianCalibratedUncoupled => (0.0f32, 0.0f32),
-                MorphicModulationMode::PortHamiltonianA3 => {
-                    let km = (3.0f32 + 6.0f32 * (u_m * 0.20f32).tanh()).clamp(1.0, 12.0);
-                    let ks = (3.0f32 + 6.0f32 * (u_s * 0.20f32).tanh()).clamp(1.0, 12.0);
-                    (km, ks)
+            let (g_mid_a, g_side_a, g_mid_b, g_side_b, eff_sub_damp, drive_m_a, drive_m_b) = if is_ph_lie {
+                let dt_hop_f64 = dt_hop as f64;
+
+                // Sub-band stereo statistics below 80-120 Hz:
+                // With 46.875 Hz bins, sub_cutoff_bin covers up to ~94 Hz (bins 1 and 2)
+                let mut e_m_sub = 0.0f64;
+                let mut e_s_sub = 0.0f64;
+                let mut sub_s_sum = 0.0f64;
+                for k in 1..=sub_cutoff_bin {
+                    let idx = t * num_bins + k;
+                    let m = spec_mid.data[idx];
+                    let s = spec_side.data[idx];
+                    e_m_sub += (m.re * m.re + m.im * m.im) as f64;
+                    e_s_sub += (s.re * s.re + s.im * s.im) as f64;
+                    sub_s_sum += s.re as f64;
                 }
-                _ => (config.ph_coupling_kappa, config.ph_coupling_kappa),
-            };
-
-            let beta = match config.mode {
-                MorphicModulationMode::PortHamiltonianCalibrated
-                | MorphicModulationMode::PortHamiltonianCalibratedUncoupled => {
-                    if config.ph_quartic_beta > 0.0 { config.ph_quartic_beta * 500.0f32 } else { 250.0f32 }
-                }
-                MorphicModulationMode::PortHamiltonianA4 => {
-                    if config.ph_quartic_beta > 0.0 { config.ph_quartic_beta } else { 1.5f32 }
-                }
-                _ => config.ph_quartic_beta,
-            };
-
-            step_port_hamiltonian_coupled_4d(&mut ph_z_mid, dt_hop, u_m, kap_m, beta);
-            step_port_hamiltonian_coupled_4d(&mut ph_z_side, dt_hop, u_s, kap_s, beta);
-
-            for i in 0..4 {
-                ph_sq_sum[i] += ph_z_mid[i].powi(2);
-            }
-
-            let is_calibrated = matches!(
-                config.mode,
-                MorphicModulationMode::PortHamiltonianCalibrated
-                    | MorphicModulationMode::PortHamiltonianCalibratedUncoupled
-            );
-            let base_shelf = if is_calibrated {
-                10.0f32.powf(config.ph_shelf_db / 20.0f32)
-            } else {
-                1.0f32
-            };
-
-            // Band A (8-12 kHz Presence): Fast Mode z_1
-            // Band B (12-20 kHz Air): Shimmer Mode z_3
-            let (drive_m_a, drive_s_a, drive_m_b, drive_s_b) = if is_calibrated {
-                // Calibrated dynamic swing: magnitude-scaled to 0.16 (±16% excursion)
-                // using algebraic soft-clipping with polynomial derivative decay.
-                let swing = 0.16f32 * (config.microtexture_authority / 0.15f32) * actuator_fraction;
-                (
-                    algebraic_soft_clip(ph_z_mid[1] / 0.022f32) * swing,
-                    if is_stereo { algebraic_soft_clip(ph_z_side[1] / 0.022f32) * swing } else { 0.0f32 },
-                    algebraic_soft_clip(ph_z_mid[3] / 0.0035f32) * swing,
-                    if is_stereo { algebraic_soft_clip(ph_z_side[3] / 0.0035f32) * swing } else { 0.0f32 },
-                )
-            } else {
-                (
-                    algebraic_soft_clip(ph_z_mid[1] * 0.15f32) * config.microtexture_authority,
-                    if is_stereo { algebraic_soft_clip(ph_z_side[1] * 0.15f32) * config.microtexture_authority } else { 0.0f32 },
-                    algebraic_soft_clip(ph_z_mid[3] * 0.15f32) * config.microtexture_authority,
-                    if is_stereo { algebraic_soft_clip(ph_z_side[3] * 0.15f32) * config.microtexture_authority } else { 0.0f32 },
-                )
-            };
-
-            let g_mid_a = (base_shelf * (1.0f32 + drive_m_a)).clamp(0.80, 1.35);
-            let g_side_a = if is_stereo { (base_shelf * (1.0f32 + drive_s_a)).clamp(0.80, 1.35) } else { 1.0f32 };
-            let g_mid_b = (base_shelf * (1.0f32 + drive_m_b)).clamp(0.80, 1.35);
-            let g_side_b = if is_stereo { (base_shelf * (1.0f32 + drive_s_b)).clamp(0.80, 1.35) } else { 1.0f32 };
-
-            // Selective Sub-Bass Damping (< 60 Hz side channel) driven by modal energy of Pair 2 (z_2)
-            let eff_sub_damp = if is_stereo {
-                if is_calibrated {
-                    algebraic_soft_clip(ph_z_mid[2].abs() / 0.0030f32) * config.sub_bass_damping_authority
+                let rho_s = if is_stereo {
+                    e_s_sub / (e_m_sub + e_s_sub + 1e-12)
                 } else {
-                    algebraic_soft_clip(ph_z_mid[2].abs() * 0.50f32) * config.sub_bass_damping_authority
+                    0.0
+                };
+                let e_l = 0.5 * (e_m_sub + e_s_sub);
+                let e_r = 0.5 * (e_m_sub + e_s_sub);
+                let cov_lr = 0.5 * (e_m_sub - e_s_sub);
+                let c_lr = if is_stereo && (e_l * e_r) > 1e-12 {
+                    (cov_lr / (e_l * e_r).sqrt()).clamp(-1.0, 1.0)
+                } else {
+                    1.0
+                };
+
+                // High-band statistics for HopFeatures:
+                let mut high_p_sum = 0.0f64;
+                let mut high_log_p_sum = 0.0f64;
+                let mut sum_x = 0.0f64;
+                let mut sum_y = 0.0f64;
+                let mut sum_xx = 0.0f64;
+                let mut sum_xy = 0.0f64;
+                let mut high_count = 0.0f64;
+                let mut high_jit_accum = 0.0f64;
+
+                for k in crossover_bin..num_bins {
+                    let idx = t * num_bins + k;
+                    let p = (spec_mid.data[idx].norm_sqr() as f64).max(1e-12);
+                    let freq = (k as f64) * (RATE as f64 / FFT as f64);
+                    let x = freq.log2();
+                    let y = 10.0 * p.log10();
+                    sum_x += x;
+                    sum_y += y;
+                    sum_xx += x * x;
+                    sum_xy += x * y;
+                    high_p_sum += p;
+                    high_log_p_sum += p.ln();
+                    high_count += 1.0;
+
+                    if t > 0 {
+                        let prev_idx = (t - 1) * num_bins + k;
+                        let d_phi = spec_mid.data[idx].arg() - spec_mid.data[prev_idx].arg()
+                            - (2.0 * std::f32::consts::PI * k as f32 * HOP as f32 / FFT as f32);
+                        let wrapped = (d_phi + std::f32::consts::PI).rem_euclid(2.0 * std::f32::consts::PI)
+                            - std::f32::consts::PI;
+                        high_jit_accum += wrapped.abs() as f64;
+                    }
                 }
+
+                let high_slope = if high_count > 1.0 {
+                    let denom = high_count * sum_xx - sum_x * sum_x;
+                    if denom.abs() > 1e-12 {
+                        ((high_count * sum_xy - sum_x * sum_y) / denom).clamp(-36.0, 12.0)
+                    } else {
+                        -6.0
+                    }
+                } else {
+                    -6.0
+                };
+
+                let high_flatness = if high_count > 0.0 && high_p_sum > 1e-12 {
+                    let geo = (high_log_p_sum / high_count).exp();
+                    let arith = high_p_sum / high_count;
+                    (geo / arith).clamp(0.0, 1.0)
+                } else {
+                    0.0
+                };
+
+                let high_jitter = if high_count > 0.0 {
+                    (high_jit_accum / high_count).clamp(0.0, std::f64::consts::PI)
+                } else {
+                    0.0
+                };
+
+                let hop_feat = HopFeatures {
+                    high_slope_db_oct: high_slope,
+                    high_flatness,
+                    sample_headroom_db: 6.0,
+                    high_jitter_rad: high_jitter,
+                    onset: (flux as f64 / 1.5).clamp(0.0, 1.0),
+                    active: mid_energy > 1e-5,
+                    side_sub_fraction: rho_s,
+                    sub_lr_correlation: c_lr,
+                    air_authority: config.microtexture_authority as f64,
+                    rumble_authority: config.sub_bass_damping_authority as f64,
+                };
+
+                let (mid_theta, side_theta, side_r) = hop_targets(hop_feat).unwrap_or((
+                    [16.0, 0.0, 0.0, 0.0, 0.0, 32.0],
+                    [16.0, 0.0, 0.0, 0.0, 0.0, 32.0],
+                    [0.5, 2.0, 1.0, 4.0],
+                ));
+
+                let beta = if config.ph_quartic_beta > 0.0 {
+                    config.ph_quartic_beta as f64 * 500.0
+                } else {
+                    250.0
+                };
+
+                // 1. Mid bank update:
+                let u_m = (flux * transient_factor) as f64;
+                let g_m = [1.0, 0.0, 0.0, 0.0];
+                let r_m = [0.5, 2.0, 1.0, 4.0];
+                step_port_hamiltonian_lie_v2(
+                    &mut ph_lie_z_mid,
+                    dt_hop_f64,
+                    u_m,
+                    g_m,
+                    [16.0, 0.0, 0.0, 0.0, 0.0, 32.0],
+                    r_m,
+                    beta,
+                );
+                // Directed pair exchange mode 0 -> mode 3 (onset to air shimmer without reversal)
+                directed_pair_exchange(&mut ph_lie_z_mid, 0, 3, mid_theta[2] * dt_hop_f64);
+
+                for i in 0..4 {
+                    ph_sq_sum[i] += ph_lie_z_mid[i].powi(2) as f32;
+                }
+
+                // 2. Side bank update:
+                // Mode 2 side-sub excitation
+                let u_s = if is_stereo {
+                    (sub_s_sum / sub_cutoff_bin.max(1) as f64) * (transient_factor as f64)
+                } else {
+                    0.0
+                };
+                let g_s = [0.0, 0.0, 1.0, 0.0];
+                step_port_hamiltonian_lie_v2(
+                    &mut ph_lie_z_side,
+                    dt_hop_f64,
+                    u_s,
+                    g_s,
+                    side_theta,
+                    side_r,
+                    beta,
+                );
+                // Directed pair exchange mode 2 -> mode 3 (side rumble into damped sink mode 3)
+                directed_pair_exchange(&mut ph_lie_z_side, 2, 3, side_theta[5] * dt_hop_f64);
+
+                // 3. Audio Readout:
+                let swing = 0.16f32 * (config.microtexture_authority / 0.15f32) * actuator_fraction;
+                let base_shelf = 10.0f32.powf(config.ph_shelf_db / 20.0f32);
+
+                let d_m_a = algebraic_soft_clip(ph_lie_z_mid[1] as f32 / 0.022f32) * swing;
+                let d_m_b = algebraic_soft_clip(ph_lie_z_mid[3] as f32 / 0.0035f32) * swing;
+
+                let d_s_a = if is_stereo {
+                    algebraic_soft_clip(ph_lie_z_side[1].abs() as f32 / 0.022f32) * swing
+                } else {
+                    0.0f32
+                };
+                // Air readout DISABLED on Side mode 3: pure sink for rumble dissipation!
+                let d_s_b = 0.0f32;
+
+                let gm_a = (base_shelf * (1.0f32 + d_m_a)).clamp(0.80, 1.35);
+                let gs_a = if is_stereo {
+                    (base_shelf * (1.0f32 + d_s_a)).clamp(0.80, 1.35)
+                } else {
+                    1.0f32
+                };
+                let gm_b = (base_shelf * (1.0f32 + d_m_b)).clamp(0.80, 1.35);
+                let gs_b = if is_stereo {
+                    (base_shelf * (1.0f32 + d_s_b)).clamp(0.80, 1.35)
+                } else {
+                    1.0f32
+                };
+
+                let sd = if is_stereo {
+                    algebraic_soft_clip(ph_lie_z_side[2].abs() as f32 / 0.0030f32)
+                        * config.sub_bass_damping_authority
+                } else {
+                    0.0f32
+                };
+
+                (gm_a, gs_a, gm_b, gs_b, sd, d_m_a, d_m_b)
             } else {
-                0.0f32
+                let u_m = flux * transient_factor;
+                let u_s = flux * (1.0 - coherence) * transient_factor;
+
+                let (kap_m, kap_s) = match config.mode {
+                    MorphicModulationMode::PortHamiltonianA1
+                    | MorphicModulationMode::PortHamiltonianCalibratedUncoupled => (0.0f32, 0.0f32),
+                    MorphicModulationMode::PortHamiltonianA3 => {
+                        let km = (3.0f32 + 6.0f32 * (u_m * 0.20f32).tanh()).clamp(1.0, 12.0);
+                        let ks = (3.0f32 + 6.0f32 * (u_s * 0.20f32).tanh()).clamp(1.0, 12.0);
+                        (km, ks)
+                    }
+                    _ => (config.ph_coupling_kappa, config.ph_coupling_kappa),
+                };
+
+                let beta = match config.mode {
+                    MorphicModulationMode::PortHamiltonianCalibrated
+                    | MorphicModulationMode::PortHamiltonianCalibratedUncoupled => {
+                        if config.ph_quartic_beta > 0.0 {
+                            config.ph_quartic_beta * 500.0f32
+                        } else {
+                            250.0f32
+                        }
+                    }
+                    MorphicModulationMode::PortHamiltonianA4 => {
+                        if config.ph_quartic_beta > 0.0 {
+                            config.ph_quartic_beta
+                        } else {
+                            1.5f32
+                        }
+                    }
+                    _ => config.ph_quartic_beta,
+                };
+
+                step_port_hamiltonian_coupled_4d(&mut ph_z_mid, dt_hop, u_m, kap_m, beta);
+                step_port_hamiltonian_coupled_4d(&mut ph_z_side, dt_hop, u_s, kap_s, beta);
+
+                for i in 0..4 {
+                    ph_sq_sum[i] += ph_z_mid[i].powi(2);
+                }
+
+                let is_calibrated = matches!(
+                    config.mode,
+                    MorphicModulationMode::PortHamiltonianCalibrated
+                        | MorphicModulationMode::PortHamiltonianCalibratedUncoupled
+                );
+                let base_shelf = if is_calibrated {
+                    10.0f32.powf(config.ph_shelf_db / 20.0f32)
+                } else {
+                    1.0f32
+                };
+
+                let (d_m_a, d_s_a, d_m_b, d_s_b) = if is_calibrated {
+                    let swing = 0.16f32 * (config.microtexture_authority / 0.15f32) * actuator_fraction;
+                    (
+                        algebraic_soft_clip(ph_z_mid[1] / 0.022f32) * swing,
+                        if is_stereo {
+                            algebraic_soft_clip(ph_z_side[1] / 0.022f32) * swing
+                        } else {
+                            0.0f32
+                        },
+                        algebraic_soft_clip(ph_z_mid[3] / 0.0035f32) * swing,
+                        if is_stereo {
+                            algebraic_soft_clip(ph_z_side[3] / 0.0035f32) * swing
+                        } else {
+                            0.0f32
+                        },
+                    )
+                } else {
+                    (
+                        algebraic_soft_clip(ph_z_mid[1] * 0.15f32) * config.microtexture_authority,
+                        if is_stereo {
+                            algebraic_soft_clip(ph_z_side[1] * 0.15f32) * config.microtexture_authority
+                        } else {
+                            0.0f32
+                        },
+                        algebraic_soft_clip(ph_z_mid[3] * 0.15f32) * config.microtexture_authority,
+                        if is_stereo {
+                            algebraic_soft_clip(ph_z_side[3] * 0.15f32) * config.microtexture_authority
+                        } else {
+                            0.0f32
+                        },
+                    )
+                };
+
+                let gm_a = (base_shelf * (1.0f32 + d_m_a)).clamp(0.80, 1.35);
+                let gs_a = if is_stereo {
+                    (base_shelf * (1.0f32 + d_s_a)).clamp(0.80, 1.35)
+                } else {
+                    1.0f32
+                };
+                let gm_b = (base_shelf * (1.0f32 + d_m_b)).clamp(0.80, 1.35);
+                let gs_b = if is_stereo {
+                    (base_shelf * (1.0f32 + d_s_b)).clamp(0.80, 1.35)
+                } else {
+                    1.0f32
+                };
+
+                let sd = if is_stereo {
+                    if is_calibrated {
+                        algebraic_soft_clip(ph_z_mid[2].abs() / 0.0030f32) * config.sub_bass_damping_authority
+                    } else {
+                        algebraic_soft_clip(ph_z_mid[2].abs() * 0.50f32) * config.sub_bass_damping_authority
+                    }
+                } else {
+                    0.0f32
+                };
+
+                (gm_a, gs_a, gm_b, gs_b, sd, d_m_a, d_m_b)
             };
 
             damp_accum += eff_sub_damp.abs();
@@ -5146,6 +5683,270 @@ mod tests {
             max_e_pair2 > 0.05,
             "Coupled material must transfer energy to Pair 2 (max_e2={:.4})",
             max_e_pair2
+        );
+    }
+
+    fn random_f64(seed: &mut u64) -> f64 {
+        *seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
+        ((*seed >> 11) as f64 / ((1u64 << 53) as f64)) * 2.0 - 1.0
+    }
+
+    #[test]
+    fn test_team_a_independent_basis_and_legacy_mapping() {
+        for k in 0..6 {
+            let mut theta = [0.0; 6];
+            theta[k] = 1.0;
+            let j = skew_generator(theta).unwrap();
+            assert_eq!(j.iter().flatten().filter(|&&v| v != 0.0).count(), 2);
+            for i in 0..4 {
+                for l in 0..4 {
+                    assert_eq!(j[i][l], -j[l][i]);
+                }
+            }
+        }
+        assert_eq!(
+            skew_generator(legacy_theta(6.0)).unwrap(),
+            [
+                [0.0, -16.0, 0.0, -6.0],
+                [16.0, 0.0, 6.0, 0.0],
+                [0.0, -6.0, 0.0, -32.0],
+                [6.0, 0.0, 32.0, 0.0]
+            ]
+        );
+    }
+
+    #[test]
+    fn test_team_a_switched_controls_decay_and_satisfy_midpoint_balance() {
+        let mut seed = 400042;
+        let mut z = [1.5, -1.0, 0.8, -0.6];
+        for hop in 0..10_000 {
+            let theta = std::array::from_fn(|_| 100.0 * random_f64(&mut seed));
+            let r = std::array::from_fn(|_| 0.5 + 4.0 * random_f64(&mut seed).abs());
+            let h = [256.0 / 48_000.0, 0.001, 0.05, 0.2][hop % 4];
+            let y = midpoint_unforced(z, h, theta, r).unwrap();
+            let mid: [f64; 4] = std::array::from_fn(|i| 0.5 * (z[i] + y[i]));
+            let loss = h * (0..4).map(|i| r[i] * mid[i].powi(2)).sum::<f64>();
+            let scale = energy(z).max(1.0);
+            assert!(energy(y) <= energy(z) + 1e-12 * scale);
+            assert!((energy(y) - energy(z) + loss).abs() < 1e-12 * scale);
+            z = y;
+        }
+        assert!(energy(z) < 1e-20);
+    }
+
+    #[test]
+    fn test_team_a_continuous_quadratic_and_quartic_certificate() {
+        let mut seed = 7234001;
+        for _ in 0..256 {
+            let z = std::array::from_fn(|_| random_f64(&mut seed));
+            let theta = std::array::from_fn(|_| 100.0 * random_f64(&mut seed));
+            let r = std::array::from_fn(|_| random_f64(&mut seed).abs());
+            for beta in [0.0, 0.5, 250.0] {
+                let expected = -(0..4)
+                    .map(|i| r[i] * (z[i] + beta * z[i].powi(3)).powi(2))
+                    .sum::<f64>();
+                let actual = unforced_storage_rate(z, theta, r, beta).unwrap();
+                assert!(actual <= 1e-9);
+                assert!((actual - expected).abs() < 1e-9 * expected.abs().max(1.0));
+            }
+        }
+    }
+
+    #[test]
+    fn test_team_a_conservative_null_and_directed_empty_receiver() {
+        let z = [0.9, -0.7, 0.2, -0.1];
+        let y = midpoint_unforced(z, 0.1, [19.0; 6], [0.0; 4]).unwrap();
+        assert!((energy(y) - energy(z)).abs() < 1e-12);
+        let mut seed = 33422;
+        for case in 0..128 {
+            let mut z = [
+                random_f64(&mut seed),
+                0.0,
+                0.0,
+                if case % 2 == 0 {
+                    0.0
+                } else {
+                    random_f64(&mut seed)
+                },
+            ];
+            let old = z;
+            directed_pair_exchange(&mut z, 0, 3, 0.2);
+            assert!(z[3].powi(2) >= old[3].powi(2) - 1e-12);
+            assert!((energy(z) - energy(old)).abs() < 1e-12);
+        }
+    }
+
+    #[test]
+    fn test_team_a_schedule_nulls_and_invalid_controls() {
+        let f = HopFeatures {
+            high_slope_db_oct: -12.0,
+            high_flatness: 0.1,
+            sample_headroom_db: 6.0,
+            high_jitter_rad: 0.1,
+            onset: 1.0,
+            active: true,
+            side_sub_fraction: 0.6,
+            sub_lr_correlation: -1.0,
+            air_authority: 1.0,
+            rumble_authority: 1.0,
+        };
+        let (mid, side, r) = hop_targets(f).unwrap();
+        assert!(mid[2] > 0.0 && side[5] > 32.0 && r[3] > 4.0);
+        assert_eq!(side[2], 0.0);
+        let (mid, side, r) = hop_targets(HopFeatures { active: false, ..f }).unwrap();
+        assert_eq!(mid[2], 0.0);
+        assert_eq!(side[5], 32.0);
+        assert_eq!(r[3], 4.0);
+        let (mid, side, r) = hop_targets(HopFeatures {
+            air_authority: 0.0,
+            rumble_authority: 0.0,
+            ..f
+        })
+        .unwrap();
+        assert_eq!(mid[2], 0.0);
+        assert_eq!(side[5], 32.0);
+        assert_eq!(r[3], 4.0);
+        let (_, side, _) = hop_targets(HopFeatures {
+            side_sub_fraction: 0.0,
+            sub_lr_correlation: 1.0,
+            ..f
+        })
+        .unwrap();
+        assert_eq!(side[5], 32.0);
+        assert!(skew_generator([f64::NAN; 6]).is_none());
+        assert!(midpoint_unforced([1.0; 4], 0.01, [0.0; 6], [-1.0; 4]).is_none());
+    }
+
+    #[test]
+    fn test_port_hamiltonian_lie_v2_unforced_passivity_10000_hops() {
+        let mut seed = 880011;
+        let mut z = [1.2, -0.9, 0.7, -0.5];
+        let dt = 256.0 / 48000.0;
+        let g_zero = [0.0; 4];
+
+        for _ in 0..10_000 {
+            let theta = std::array::from_fn(|_| 50.0 * random_f64(&mut seed));
+            let r = std::array::from_fn(|_| 0.5 + 2.0 * random_f64(&mut seed).abs());
+            let beta = 0.5;
+
+            let h_before = 0.5 * z.iter().map(|v| v * v).sum::<f64>()
+                + 0.25 * beta * z.iter().map(|v| v.powi(4)).sum::<f64>();
+
+            step_port_hamiltonian_lie_v2(&mut z, dt, 0.0, g_zero, theta, r, beta);
+
+            let h_after = 0.5 * z.iter().map(|v| v * v).sum::<f64>()
+                + 0.25 * beta * z.iter().map(|v| v.powi(4)).sum::<f64>();
+
+            assert!(
+                h_after <= h_before + 1e-9 * h_before.max(1.0),
+                "Unforced passivity violation in step_port_hamiltonian_lie_v2: h_after={} > h_before={}",
+                h_after,
+                h_before
+            );
+        }
+    }
+
+    #[test]
+    fn test_port_hamiltonian_lie_v2_mono_and_channel_swap_and_passband_lock() {
+        let n = RATE as usize; // 1 second
+        // 1. Pure Mono Input
+        let mut mono_ch = vec![0.0f32; n];
+        for i in 0..n {
+            let t = i as f32 / RATE as f32;
+            mono_ch[i] = (2.0 * std::f32::consts::PI * 80.0 * t).sin() * 0.4
+                + (2.0 * std::f32::consts::PI * 1000.0 * t).sin() * 0.2
+                + (2.0 * std::f32::consts::PI * 10000.0 * t).sin() * 0.1;
+        }
+        let mono_audio = Audio {
+            rate: RATE,
+            channels: vec![mono_ch.clone(), mono_ch.clone()],
+        };
+        let cfg_lie = MorphicConfig {
+            mode: MorphicModulationMode::PortHamiltonianLieV2,
+            crossover_hz: 8000.0,
+            ph_shelf_db: 0.70,
+            microtexture_authority: 0.15,
+            sub_bass_damping_authority: 0.25,
+            lock_passband: true,
+            ..MorphicConfig::default()
+        };
+        let (out_mono, rep_mono) = process_morphic_audio(&mono_audio, &cfg_lie);
+        assert!(rep_mono.mono_compatibility_passed);
+        let mono_diff: f32 = out_mono.channels[0]
+            .iter()
+            .zip(&out_mono.channels[1])
+            .map(|(a, b)| (a - b).abs())
+            .fold(0.0f32, f32::max);
+        assert!(mono_diff < 1e-6, "Pure mono input must produce bitwise identical stereo channels, max diff={}", mono_diff);
+
+        // 2. Channel swap L <-> R leaves Mid invariant and negates Side symmetrically
+        let mut left = vec![0.0f32; n];
+        let mut right = vec![0.0f32; n];
+        for i in 0..n {
+            let t = i as f32 / RATE as f32;
+            left[i] = (2.0 * std::f32::consts::PI * 120.0 * t).sin() * 0.4
+                + (2.0 * std::f32::consts::PI * 9000.0 * t).sin() * 0.2;
+            right[i] = (2.0 * std::f32::consts::PI * 140.0 * t).sin() * 0.3
+                + (2.0 * std::f32::consts::PI * 9500.0 * t).sin() * 0.15;
+        }
+        let audio_lr = Audio {
+            rate: RATE,
+            channels: vec![left.clone(), right.clone()],
+        };
+        let audio_rl = Audio {
+            rate: RATE,
+            channels: vec![right.clone(), left.clone()],
+        };
+        let (out_lr, _) = process_morphic_audio(&audio_lr, &cfg_lie);
+        let (out_rl, _) = process_morphic_audio(&audio_rl, &cfg_lie);
+
+        let swap_err_l: f32 = out_rl.channels[0]
+            .iter()
+            .zip(&out_lr.channels[1])
+            .map(|(a, b)| (a - b).abs())
+            .fold(0.0f32, f32::max);
+        let swap_err_r: f32 = out_rl.channels[1]
+            .iter()
+            .zip(&out_lr.channels[0])
+            .map(|(a, b)| (a - b).abs())
+            .fold(0.0f32, f32::max);
+        assert!(swap_err_l < 1e-6, "Channel swap equivariance violated on L channel: max diff={}", swap_err_l);
+        assert!(swap_err_r < 1e-6, "Channel swap equivariance violated on R channel: max diff={}", swap_err_r);
+
+        // 3. Passband 60-8000 Hz locked to < 1e-7 RMS error
+        let mut pb_ch = vec![0.0f32; n];
+        for i in 0..n {
+            let t = i as f32 / RATE as f32;
+            pb_ch[i] = (2.0 * std::f32::consts::PI * 440.0 * t).sin() * 0.3
+                + (2.0 * std::f32::consts::PI * 1200.0 * t).sin() * 0.2;
+        }
+        let pb_audio = Audio {
+            rate: RATE,
+            channels: vec![pb_ch.clone(), pb_ch.clone()],
+        };
+        let (out_pb, _) = process_morphic_audio(&pb_audio, &cfg_lie);
+        let mut p = rustfft::FftPlanner::new();
+        let fft = p.plan_fft_forward(n);
+        let mut delta_fft: Vec<rustfft::num_complex::Complex<f32>> = out_pb.channels[0]
+            .iter()
+            .zip(&pb_ch)
+            .map(|(a, b)| rustfft::num_complex::Complex::new(a - b, 0.0))
+            .collect();
+        fft.process(&mut delta_fft);
+        let mut passband_energy = 0.0f64;
+        let mut passband_count = 0usize;
+        for (k, val) in delta_fft.iter().enumerate() {
+            let freq = k.min(n - k) as f32 * RATE as f32 / n as f32;
+            if freq >= 60.0 && freq <= 8000.0 {
+                passband_energy += (val.norm_sqr() as f64) / (n as f64 * n as f64);
+                passband_count += 1;
+            }
+        }
+        let passband_rms = (passband_energy / passband_count.max(1) as f64).sqrt();
+        assert!(
+            passband_rms < 1e-7,
+            "Passband 60-8000 Hz must be locked to < 1e-7 RMS error, got {}",
+            passband_rms
         );
     }
 }

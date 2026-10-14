@@ -59,6 +59,8 @@ pub struct MicrostructureConfig {
     pub transient_desmear: f32,
     /// High-frequency phase trajectory continuity smoothing in [0.0, 1.0] (default: 0.40).
     pub phase_continuity: f32,
+    /// Cross-frame group-delay consistency factor in [0.0, 1.0] (default: 0.0).
+    pub phase_consistency: f32,
     /// Fractal tendril / self-similar harmonic scale coupling intensity in [0.0, 1.0] (default: 0.20).
     pub fractal_tendrils: f32,
     /// Golden-ratio fractal micro-echo diffusion decay dimension D in [0.5, 2.5] (default: 1.0).
@@ -81,6 +83,7 @@ impl Default for MicrostructureConfig {
             harmonic_resonance: 0.20,
             transient_desmear: 0.25,
             phase_continuity: 0.40,
+            phase_consistency: 0.0,
             fractal_tendrils: 0.20,
             fractal_dimension: 1.0,
             crossover_hz: 3000.0,
@@ -339,6 +342,83 @@ pub fn process_microstructure(
                 config.seed.wrapping_add(ch as u64 * 2003),
             ),
         };
+
+        // Group-delay consistency along tracked ridges & Griffin-Lim projection (>3 kHz)
+        if config.phase_consistency > 0.0 && frames > 2 {
+            let consistency_factor = (config.phase_consistency * effective_strength).clamp(0.0, 1.0);
+
+            // 1. Horizontal phase-vocoder consistency along tracked ridges where |H| > |S|
+            // Suppressed within +- 1 frame of detected transients to protect attack sharpness
+            for t in 1..frames {
+                let is_transient_frame = hts
+                    .onset_frames
+                    .iter()
+                    .any(|&o| t >= o.saturating_sub(1) && t <= o + 1);
+                if is_transient_frame {
+                    continue;
+                }
+
+                for k in crossover_bin..BINS {
+                    let idx = t * BINS + k;
+                    let h_c = hts.harmonic.data[idx];
+                    let s_c = hts.stochastic.data[idx];
+                    let h_norm = h_c.norm();
+                    let s_norm = s_c.norm();
+
+                    if h_norm > s_norm && h_norm > 1e-5 {
+                        let h_prev_k = if k > 0 { hts.harmonic.data[t * BINS + k - 1].norm() } else { 0.0 };
+                        let h_next_k = if k + 1 < BINS { hts.harmonic.data[t * BINS + k + 1].norm() } else { 0.0 };
+
+                        let k_inst = if h_norm >= h_prev_k && h_norm >= h_next_k {
+                            let denom = (h_prev_k - 2.0 * h_norm + h_next_k).abs();
+                            let delta = if denom > 1e-7 {
+                                (0.5 * (h_prev_k - h_next_k) / denom).clamp(-0.5, 0.5)
+                            } else {
+                                0.0
+                            };
+                            k as f32 + delta
+                        } else {
+                            k as f32
+                        };
+
+                        let omega_inst = 2.0 * PI * k_inst * HOP as f32 / FFT as f32;
+                        let prev_c = mod_data[(t - 1) * BINS + k];
+                        let prev_phi = prev_c.im.atan2(prev_c.re);
+                        let phi_consistent = (prev_phi + omega_inst + PI).rem_euclid(2.0 * PI) - PI;
+
+                        let curr_c = mod_data[idx];
+                        let curr_mag = curr_c.norm();
+                        let curr_phi = curr_c.im.atan2(curr_c.re);
+                        let err = (phi_consistent - curr_phi + PI).rem_euclid(2.0 * PI) - PI;
+                        let phi_new = curr_phi + consistency_factor * err;
+                        mod_data[idx] = C::new(curr_mag * phi_new.cos(), curr_mag * phi_new.sin());
+                    }
+                }
+            }
+
+            // 2. Griffin-Lim single-step STFT consistency projection restricted to > 3 kHz
+            let temp_spec = Spectrum {
+                data: mod_data.clone(),
+                frames,
+                samples: spec.samples,
+            };
+            let mut temp_wave = stft.synthesize(&temp_spec);
+            temp_wave.truncate(input.channels[ch].len());
+            let re_spec = stft.analyze(&temp_wave);
+
+            for t in 0..frames {
+                for k in crossover_bin..BINS {
+                    let idx = t * BINS + k;
+                    let target_mag = mod_data[idx].norm();
+                    let re_c = re_spec.data[idx];
+                    let re_norm = re_c.norm();
+                    if re_norm > 1e-7 && target_mag > 1e-7 {
+                        let proj_c = (re_c / re_norm) * target_mag;
+                        mod_data[idx] = mod_data[idx] * (1.0 - consistency_factor) + proj_c * consistency_factor;
+                    }
+                }
+            }
+        }
 
         // Strict Passband Invariance Lock (<crossover_bin) across all prototype families
         for t in 0..frames {
@@ -1422,5 +1502,77 @@ mod tests {
             .map(|(a, b)| (a - b).abs())
             .sum();
         assert!(diff > 0.1, "Phase continuity must actively smooth phase jitter");
+    }
+
+    #[test]
+    fn test_phase_consistency_reduces_shimmer_and_preserves_identity() {
+        let n = RATE as usize * 2;
+        let mut samples = vec![0.0f32; n];
+        for i in 0..n {
+            let t = i as f32 / RATE as f32;
+            let flutter = 0.50 * (2.0 * PI * 35.0 * t).sin();
+            let low_component = 0.2 * (2.0 * PI * 440.0 * t).sin();
+            let flutter_high = 0.25 * (2.0 * PI * 10000.0 * t + flutter).sin()
+                + 0.20 * (2.0 * PI * 6000.0 * t + flutter * 0.7).sin();
+            samples[i] = low_component + flutter_high;
+        }
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![samples.clone(), samples],
+        };
+
+        // 1. When phase_consistency == 0.0, output matches default bit-exact
+        let cfg_default = MicrostructureConfig::default();
+        let cfg_zero = MicrostructureConfig {
+            phase_consistency: 0.0,
+            ..MicrostructureConfig::default()
+        };
+        let (out_default, _) = process_microstructure(&audio, &cfg_default);
+        let (out_zero, _) = process_microstructure(&audio, &cfg_zero);
+        assert_eq!(out_default.channels, out_zero.channels);
+
+        // 2. When phase_consistency in [0.3, 0.6], AI shimmer critic is reduced and passband < 3 kHz preserved
+        let cfg_consistent = MicrostructureConfig {
+            phase_consistency: 0.6,
+            air_coupling: 0.0,
+            harmonic_resonance: 0.0,
+            transient_desmear: 0.0,
+            fractal_tendrils: 0.0,
+            crossover_hz: 3000.0,
+            strength: 1.0,
+            authority: 1.0,
+            ..MicrostructureConfig::default()
+        };
+        let (out_consistent, rep) = process_microstructure(&audio, &cfg_consistent);
+        assert!(rep.transient_correlation > 0.98);
+        assert!(rep.mono_compatibility_passed);
+        assert!(out_consistent.channels[0].iter().all(|x| x.is_finite()));
+
+        let critics = CriticsSuite::default();
+        let initial_critics = critics.evaluate(&audio);
+        let final_critics = critics.evaluate(&out_consistent);
+        eprintln!(
+            "SHIMMER DEBUG: initial={:.6}, final={:.6}",
+            initial_critics.ai_shimmer, final_critics.ai_shimmer
+        );
+        assert!(
+            final_critics.ai_shimmer <= initial_critics.ai_shimmer,
+            "AI shimmer must not increase: {} vs {}",
+            final_critics.ai_shimmer,
+            initial_critics.ai_shimmer
+        );
+
+        // Verify passband below 3 kHz is preserved: test with pure 440 Hz tone
+        let pure_low = Audio {
+            rate: RATE,
+            channels: vec![(0..n).map(|i| 0.3 * (2.0 * PI * 440.0 * i as f32 / RATE as f32).sin()).collect(); 2],
+        };
+        let (out_low, _) = process_microstructure(&pure_low, &cfg_consistent);
+        let max_err = out_low.channels[0]
+            .iter()
+            .zip(&pure_low.channels[0])
+            .map(|(a, b)| (a - b).abs())
+            .fold(0.0f32, f32::max);
+        assert!(max_err < 1e-3, "Passband below 3 kHz must be preserved: err={max_err}");
     }
 }

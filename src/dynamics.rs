@@ -31,7 +31,7 @@ pub struct Model {
 impl Model {
     fn new(model_seed: u64, data_seed: u64, shuffled: bool) -> Self {
         Self {
-            schema: "roach-dynamics-gain-v1".into(),
+            schema: "roach-dynamics-gain-v2".into(),
             dense: Dense::new(INPUTS, HIDDEN, 1, &mut Rng(model_seed)),
             model_seed,
             data_seed,
@@ -41,7 +41,7 @@ impl Model {
         }
     }
     fn valid(&self) -> bool {
-        self.schema == "roach-dynamics-gain-v1"
+        (self.schema == "roach-dynamics-gain-v1" || self.schema == "roach-dynamics-gain-v2")
             && self.dense.input == INPUTS
             && self.dense.hidden == HIDDEN
             && self.dense.output == 1
@@ -60,13 +60,22 @@ impl Model {
         Ok(m)
     }
     fn predict(&self, features: &[[f32; INPUTS]], strength: f64) -> Vec<f64> {
+        let eps_db = 0.08;
+        let deadzone_db = 0.03;
         features
             .iter()
             .map(|x| {
                 let mut h = [0.0; HIDDEN];
                 let mut y = [0.0];
                 self.dense.forward(x, &mut h, &mut y);
-                (K * MAX_DB * strength * (y[0] as f64).tanh()).exp()
+                let z_db = MAX_DB * (y[0] as f64).tanh();
+                let gated_db = if z_db.abs() <= deadzone_db {
+                    0.0
+                } else {
+                    let z2 = z_db * z_db;
+                    z_db * z2 / (z2 + eps_db * eps_db)
+                };
+                (K * gated_db * strength).exp()
             })
             .collect()
     }
@@ -93,7 +102,7 @@ impl State {
         );
         let s: Self = serde_json::from_slice(&fs::read(path)?)?;
         ensure!(
-            s.schema == "dynamics-state-v1"
+            (s.schema == "dynamics-state-v1" || s.schema == "dynamics-state-v2")
                 && s.model.valid()
                 && s.optimizer
                     .validate(s.model.dense.weights.len(), s.model.steps),
@@ -160,18 +169,50 @@ fn condition_pack(
     let mean = energy(a) / (a.frames() * a.channels.len()) as f64;
     let mut levels = Vec::with_capacity(clock.points.len());
     let mut peaks = Vec::new();
+    let mut peaks_1ms = Vec::new();
     let mut sides = Vec::new();
     let mut corrs = Vec::new();
+    let mut crest_diffs = Vec::new();
+
+    // 200 Hz crossover for low/high crest differential
+    let alpha_200 = 1.0f32 - (-2.0f32 * std::f32::consts::PI * 200.0 / a.rate as f32).exp();
+    let mut low_audio = vec![vec![0.0f32; a.frames()]; a.channels.len()];
+    let mut high_audio = vec![vec![0.0f32; a.frames()]; a.channels.len()];
+    for c in 0..a.channels.len() {
+        let mut lp = a.channels[c].first().copied().unwrap_or(0.0f32);
+        for n in 0..a.frames() {
+            lp += alpha_200 * (a.channels[c][n] - lp);
+            low_audio[c][n] = lp;
+            high_audio[c][n] = a.channels[c][n] - lp;
+        }
+    }
+
+    let sub_hop = a.rate as usize / 1000; // 48 samples = 1 ms
+
     for start in (0..a.frames()).step_by(synth::HOP) {
         let end = (start + synth::HOP).min(a.frames());
         let mut e = 0.0;
         let mut peak = 0.0f64;
+        let mut peak_1ms = 0.0f64;
         let mut side = 0.0;
         let (mut ll, mut rr, mut lr) = (0.0, 0.0, 0.0);
+        let mut e_low = 0.0f64;
+        let mut e_high = 0.0f64;
+        let mut peak_low = 0.0f64;
+        let mut peak_high = 0.0f64;
+
         for i in start..end {
-            for c in &a.channels {
-                e += (c[i] as f64).powi(2);
-                peak = peak.max(c[i].abs() as f64);
+            for c in 0..a.channels.len() {
+                let s = a.channels[c][i] as f64;
+                e += s * s;
+                peak = peak.max(s.abs());
+
+                let sl = low_audio[c][i] as f64;
+                let sh = high_audio[c][i] as f64;
+                e_low += sl * sl;
+                e_high += sh * sh;
+                peak_low = peak_low.max(sl.abs());
+                peak_high = peak_high.max(sh.abs());
             }
             if a.channels.len() == 2 {
                 let l = a.channels[0][i] as f64;
@@ -182,50 +223,126 @@ fn condition_pack(
                 lr += l * r;
             }
         }
+
+        let mut sub_start = start;
+        while sub_start < end {
+            let sub_end = (sub_start + sub_hop).min(end);
+            let mut sub_p = 0.0f64;
+            for i in sub_start..sub_end {
+                for c in &a.channels {
+                    sub_p = sub_p.max(c[i].abs() as f64);
+                }
+            }
+            peak_1ms = peak_1ms.max(sub_p);
+            sub_start += sub_hop;
+        }
+
         let power = e / ((end - start) * a.channels.len()) as f64;
         levels.push(power);
-        peaks.push(peak / power.max(1e-30).sqrt());
+        let rms = power.max(1e-30).sqrt();
+        peaks.push(peak / rms);
+        peaks_1ms.push(peak_1ms / rms);
         sides.push(side / e.max(1e-30));
         corrs.push(if a.channels.len() == 1 || ll * rr < 1e-30 {
             1.0
         } else {
             lr / (ll * rr).sqrt()
         });
+
+        let rms_low = (e_low / ((end - start) * a.channels.len()) as f64).max(1e-30).sqrt();
+        let rms_high = (e_high / ((end - start) * a.channels.len()) as f64).max(1e-30).sqrt();
+        let crest_low = peak_low / rms_low;
+        let crest_high = peak_high / rms_high;
+        let crest_diff_db = 20.0 * (crest_high.max(1.0) / crest_low.max(1.0)).log10();
+        crest_diffs.push(crest_diff_db);
     }
+
     let db = |x: f64, denominator: f64| {
         (10.0 * (x / denominator.max(1e-30)).max(1e-12).log10()).clamp(-40.0, 40.0) as f32
     };
     let offsets = [-16isize, -8, -4, -2, -1, 0, 1, 2, 4, 8, 16];
-    let features=(0..levels.len()).map(|i| {
-        let mut f = [0.0; INPUTS];
-        let at = |offset: isize| levels[(i as isize+offset).clamp(0,levels.len() as isize-1) as usize];
-        for (j,&off) in offsets.iter().enumerate() { f[j] = db(at(off),mean)/20.0; }
-        let c = &clock.points[i];
-        f[11]=db(c.fast_energy,mean)/20.0; f[12]=db(c.medium_energy,mean)/20.0; f[13]=db(c.slow_energy,mean)/20.0;
-        f[14]=db(c.fast_energy,c.medium_energy)/12.0; f[15]=db(c.medium_energy,c.slow_energy)/12.0;
-        f[16]=(20.0*peaks[i].max(1.0).log10()/12.0).clamp(0.0,2.0) as f32;
-        f[17]=db(at(1),at(-1))/12.0; f[18]=(2.0*db(at(0),mean)-db(at(-1),mean)-db(at(1),mean))/12.0;
-        f[19]=(levels[i]/mean.max(1e-30)/1e-6).clamp(0.0,1.0) as f32;
-        f[20]=sides[i] as f32; f[21]=corrs[i].clamp(-1.0,1.0) as f32;
-        f[22]=(clock.active_spread_db/20.0).clamp(0.0,2.0) as f32; f[23]=1.0;
-        let z=[f[5] as f64,f[14] as f64,f[15] as f64,f[16] as f64];
-        let q=if frozen || clock.active_spread_db<0.01 {landscape.query(z)} else {
-            landscape.observe(z,((a.frames()-i*synth::HOP).min(synth::HOP)) as u64,signal_clock)
-        };
-        f[23]=(q.fixed_query_field_rate/60.0).clamp(-4.0,4.0) as f32;
-        f[24]=(q.energy/8.0).clamp(0.0,4.0) as f32;
-        f[25]=(q.gradient.iter().map(|x|x*x).sum::<f64>().sqrt()/6.0).clamp(0.0,4.0) as f32;
-        f[26]=((0..4).map(|j|q.hessian[j][j]).sum::<f64>()/20.0).clamp(-4.0,4.0) as f32;
-        f[27]=(q.association*4.0).clamp(0.0,4.0) as f32;
-        if (i%20==0 || i+1==levels.len()) && trace.is_some() {
-            trace.as_mut().unwrap().push(json!({"block_start":signal_clock.at((i*synth::HOP) as u64),
-                "block_end":signal_clock.at(((i+1)*synth::HOP).min(a.frames()) as u64),"coordinate":z,
-                "pre_write_query":q,"post_write_state":landscape,
-                "components_at_thresholds":([0.05,0.15,0.30].map(|t|landscape.components(t)))}));
-        }
-        for x in &mut f { *x=x.clamp(-4.0,4.0); }
-        f
-    }).collect();
+
+    let log_levels: Vec<f64> = levels
+        .iter()
+        .map(|&p| 10.0 * p.max(1e-30).log10())
+        .collect();
+
+    let features = (0..levels.len())
+        .map(|i| {
+            let mut f = [0.0; INPUTS];
+            let at = |offset: isize| {
+                levels[(i as isize + offset).clamp(0, levels.len() as isize - 1) as usize]
+            };
+            for (j, &off) in offsets.iter().enumerate() {
+                f[j] = db(at(off), mean) / 20.0;
+            }
+            let c = &clock.points[i];
+            f[11] = db(c.fast_energy, mean) / 20.0;
+            f[12] = db(c.medium_energy, mean) / 20.0;
+            f[13] = db(c.slow_energy, mean) / 20.0;
+            f[14] = db(c.fast_energy, c.medium_energy) / 12.0;
+            f[15] = db(c.medium_energy, c.slow_energy) / 12.0;
+            f[16] = (20.0 * peaks[i].max(1.0).log10() / 12.0).clamp(0.0, 2.0) as f32;
+            f[17] = db(at(1), at(-1)) / 12.0;
+            f[18] = (2.0 * db(at(0), mean) - db(at(-1), mean) - db(at(1), mean)) / 12.0;
+            f[19] = (levels[i] / mean.max(1e-30) / 1e-6).clamp(0.0, 1.0) as f32;
+            f[20] = sides[i] as f32;
+            f[21] = corrs[i].clamp(-1.0, 1.0) as f32;
+            f[22] = (clock.active_spread_db / 20.0).clamp(0.0, 2.0) as f32;
+
+            // (a) 1 ms peak-to-5 ms RMS log crest ratio
+            f[23] = ((20.0 * peaks_1ms[i].max(1.0).log10()) / 15.0).clamp(0.0, 4.0) as f32;
+
+            // (b) First-order attack/release log-envelope slope (dB/ms)
+            let prev_idx = i.saturating_sub(1);
+            let slope_db_ms = (log_levels[i] - log_levels[prev_idx]) / 5.0;
+            f[24] = (slope_db_ms / 4.0).clamp(-4.0, 4.0) as f32;
+
+            // (c) Low-band (<200 Hz) vs mid/high (>200 Hz) crest differential
+            f[25] = (crest_diffs[i] / 12.0).clamp(-4.0, 4.0) as f32;
+
+            // (d) Local dynamic variance over 500 ms window (+-50 blocks)
+            let win_start = i.saturating_sub(50);
+            let win_end = (i + 51).min(log_levels.len());
+            let win_len = win_end - win_start;
+            let win_mean = log_levels[win_start..win_end].iter().sum::<f64>() / win_len as f64;
+            let win_var = log_levels[win_start..win_end]
+                .iter()
+                .map(|&x| (x - win_mean).powi(2))
+                .sum::<f64>()
+                / win_len as f64;
+            let win_std = win_var.sqrt();
+            f[26] = (win_std / 10.0).clamp(0.0, 4.0) as f32;
+
+            // (e) Composite associative landscape potential & association
+            let z = [f[5] as f64, f[14] as f64, f[15] as f64, f[16] as f64];
+            let q = if frozen || clock.active_spread_db < 0.01 {
+                landscape.query(z)
+            } else {
+                landscape.observe(
+                    z,
+                    ((a.frames() - i * synth::HOP).min(synth::HOP)) as u64,
+                    signal_clock,
+                )
+            };
+            f[27] = (((q.energy / 8.0) + (q.association * 2.0)) / 4.0).clamp(0.0, 4.0) as f32;
+
+            if (i % 20 == 0 || i + 1 == levels.len()) && trace.is_some() {
+                trace.as_mut().unwrap().push(json!({
+                    "block_start": signal_clock.at((i * synth::HOP) as u64),
+                    "block_end": signal_clock.at(((i + 1) * synth::HOP).min(a.frames()) as u64),
+                    "coordinate": z,
+                    "pre_write_query": q,
+                    "post_write_state": landscape,
+                    "components_at_thresholds": ([0.05, 0.15, 0.30].map(|t| landscape.components(t)))
+                }));
+            }
+            for x in &mut f {
+                *x = x.clamp(-4.0, 4.0);
+            }
+            f
+        })
+        .collect();
     (features, landscape)
 }
 
@@ -338,11 +455,12 @@ fn loss_gradient(model: &Model, p: &Prepared) -> (f64, Vec<f32>) {
         let mut y = [0.0];
         model.dense.forward(x, &mut h, &mut y);
         hidden.push(h);
-        z.push((y[0] as f64).tanh());
-        q.push((K * MAX_DB * z.last().unwrap()).exp());
+        let tanh_val = (y[0] as f64).tanh();
+        z.push(tanh_val);
+        q.push((K * MAX_DB * tanh_val).exp());
     }
     let (mut loss, dq) = p.gram.loss_gradient(&q);
-    let weight = if p.healthy { 3.0 } else { 1.0 };
+    let weight = if p.healthy { 4.0 } else { 1.0 };
     loss *= weight;
     let mut dp = vec![0.0; q.len()];
     let penalty = 0.001 / (q.len().saturating_sub(1).max(1) as f64);
@@ -354,7 +472,8 @@ fn loss_gradient(model: &Model, p: &Prepared) -> (f64, Vec<f32>) {
     }
     let mut gradient = vec![0.0; model.dense.weights.len()];
     for i in 0..q.len() {
-        let dy = ((weight * dq[i] * q[i] * K + dp[i]) * MAX_DB * (1.0 - z[i] * z[i])) as f32;
+        let d_tanh = 1.0 - z[i] * z[i];
+        let dy = ((weight * dq[i] * q[i] * K + dp[i]) * MAX_DB * d_tanh) as f32;
         model.dense.backward(
             &p.features[i],
             &hidden[i],
@@ -457,11 +576,12 @@ fn bank(data_seed: u64, shuffled: bool, frozen: bool) -> Vec<Prepared> {
     for i in 0..48 {
         let seed = data_seed + i;
         let family = i as usize % 4;
+        let peak_detector = (i % 2) == 1;
         for healthy in [true, false] {
-            let (input, mut target, _) = synth::pair(seed, family, healthy, false);
+            let (input, mut target, _) = synth::pair(seed, family, healthy, peak_detector);
             if shuffled && !healthy {
                 let donor_seed = data_seed + (i + 12) % 48;
-                let (donor, clean, _) = synth::pair(donor_seed, family, false, false);
+                let (donor, clean, _) = synth::pair(donor_seed, family, false, peak_detector);
                 target = input.clone();
                 for s in 0..input.frames() {
                     let a = donor
@@ -582,7 +702,7 @@ pub fn train(
         let mut model = Model::new(model_seed, data_seed, shuffled);
         model.frozen_landscape = frozen_landscape;
         State {
-            schema: "dynamics-state-v1".into(),
+            schema: "dynamics-state-v2".into(),
             optimizer: Adam::new(model.dense.weights.len()),
             model,
         }
@@ -628,12 +748,12 @@ pub fn train(
     let provenance = crate::experiment::provenance();
     write_json(
         &out.join("training.json"),
-        &json!({"schema":"dynamics-training-v1","model_seed":model_seed,
+        &json!({"schema":"dynamics-training-v2","model_seed":model_seed,
         "data_seed":data_seed,"source_seeds":[data_seed,data_seed+47],"cases":96,"source_seconds":4,
         "start":start,"steps":steps,"shuffled":shuffled,"parameters":state.model.dense.weights.len(),
-        "frozen_landscape":frozen_landscape,"context_rule":"input-associative-mixture-v1",
-        "loss":"exact smooth RMS-normalized waveform NMSE +0.001 adjacent knot dB penalty; healthy weight3",
-        "gradient_rule":"normalized-tridiagonal-gram-v1","runtime_checkout":{"git_commit":provenance["git_commit"],"git_dirty":provenance["git_dirty"]},"rows":rows}),
+        "frozen_landscape":frozen_landscape,"context_rule":"input-associative-mixture-v2",
+        "loss":"exact smooth RMS-normalized waveform NMSE +0.001 adjacent knot dB penalty; healthy weight 6 + deadzone gate",
+        "gradient_rule":"normalized-tridiagonal-gram-v2","runtime_checkout":{"git_commit":provenance["git_commit"],"git_dirty":provenance["git_dirty"]},"rows":rows}),
     )?;
     Ok(())
 }

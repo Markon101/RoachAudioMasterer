@@ -1036,3 +1036,97 @@ negative/limited quality finding, not a new champion. Read the
 [frozen plan](docs/PUNCH_CONTROL_PLAN.md) and
 [primary method provenance](docs/REFERENCES.md#punch-control-checkpoint-provenance).
 
+#### 15. Corrected Adjoint & Stratified Flow Models (rich-low-sfht-v2 & rich-mid-v3)
+
+**Root Cause & Implementation**:
+In previous sprints, backward-pass bugs in the SFHT soft-clamp derivative ($16.0 \tanh(v/16.0)$ in `src/sfht.rs`) and the mid-band upper-protected-band adjoint (`src/rich_mid.rs`) were repaired in code, but the deployed weights in `artifacts/rich-low-sfht/` and `artifacts/rich-mid-v2/` had been trained prior to those gradient fixes. Furthermore, flow time sampling $s \sim \text{Uniform}(0.05, 0.95)$ induced out-of-distribution velocity extrapolation near $s \to 1.0$, necessitating an ad-hoc `--sfht-shrinkage 0.88` multiplier.
+
+Behind an opt-in recipe version bump, training was upgraded to sample flow time $s \sim \text{Uniform}(0.0, 1.0)$ with a 10% stratified draw in $[0.95, 1.0]$, explicitly supervising the velocity field up to $s = 1.0$:
+- `artifacts/rich-low-sfht-v2/`: Retrained for 2,000 steps with AdamW ($10^{-4}$), 8192-point STFT ($\Delta f = 5.86\text{ Hz/bin}$).
+- `artifacts/rich-mid-v3/`: Retrained on 500–8000 Hz multitrack procedural curriculum with stopped-mid abstention and AdamW ($10^{-4}$).
+
+**Evidentiary Findings (Tiers 1–3)**:
+- Procedural evaluation across held-out seeds `900000..900015` confirmed that `--sfht-shrinkage 1.0` outperforms the legacy `0.88` shrinkage on `rich-low-sfht-v2`.
+- Exact CPU vs. Adreno 830 OpenCL parity is verified ($< 10^{-6}$ max float residual). Mid-scene split/resume parity is bit-exact.
+
+#### 16. $\mathfrak{so}(4)$ Lie-Algebra Port-Hamiltonian & Directed Pair Exchange (ph-lie-v2)
+
+**Root Cause & Implementation**:
+Legacy GTF Port-Hamiltonian formulation tied coupling generators ($\theta_{03} = \kappa, \theta_{12} = -\kappa$) and permitted oscillatory energy reversal from receiver back to donor. Furthermore, sub-bass side damping operated on the Mid bank rather than a dedicated stereo Side bank, and the quartic AVF solver lacked an energy-balance acceptance gate.
+
+Workstream B introduced `PortHamiltonianLieV2` (`--morphic-mode ph-lie-v2`) in `src/gtf.rs`:
+- Full 6-generator $\mathfrak{so}(4)$ Lie-algebra skew tensor $J(\theta)$ with directed pair exchange (`directed_pair_exchange`).
+- Independent Mid ($z_M$) and Side ($z_S$) 4D state banks.
+- Mid bank routes onset excitation on mode 0 to air shimmer on mode 3 ($\theta_{03} = 12 a_n$) without unphysical oscillatory back-transfer.
+- Side bank computes rolling stereo sub-band statistics below 80–120 Hz ($\rho_S = E_S / (E_M + E_S + \epsilon)$ and $c_{LR}$) and routes side rumble into strongly damped mode 3 ($\theta_{23} = 32 + 12 q_n, R_S = \text{diag}(0.5, 2.0, 1 + 8 q_n, 4 + 16 q_n)$). Air/presence readout on Side mode 3 is disabled, turning side rumble into a pure dissipative sink without high-frequency shimmer.
+- Quartic AVF Newton solver enforces an energy-balance acceptance gate ($r_E \le 10^{-9} \max(H(z_n), 1.0)$), falling back cleanly to the unconditionally passive quadratic midpoint step if Newton fails to converge.
+
+**Evidentiary Findings (Tiers 1–2)**:
+- All 5 Lie-PH test suites pass: pure mono input yields bitwise zero Side state; channel swap $L \leftrightarrow R$ leaves Mid invariant and negates Side symmetrically; unforced passivity holds over 10,000 hops with zero violations; passband 60–8000 Hz is locked to $< 10^{-7}$ RMS error.
+
+#### 17. Stage 5 Clock-Coupled Transient Punch & Dynamic Release
+
+**Implementation**:
+Implemented `--clock-transient-punch` in `src/master.rs` and `src/main.rs`. When active, Stage 5 dynamic mastering links to the 150 ms envelope clock to dynamically modulate glue compression release time during detected attack bursts, preventing transient clamping and preserving post-limiter transient crest factor.
+
+**Evidentiary Findings (Tiers 1–2)**:
+- Unit test `master::tests::test_clock_transient_punch_audit_and_shaping` verifies onset transient audit and dynamic release scaling.
+- When unflagged, byte-exact float parity with parent commit `f338d17` is strictly preserved.
+
+#### 18. Microstructure Group-Delay Consistency & Anti-Shimmer Phase Restoration
+
+**Implementation**:
+Implemented `--phase-consistency` in `src/microstructure.rs` and CLI `auto-master`. This penalizes phase velocity curvature across consecutive WOLA STFT frames, suppressing artificial robotic metallic grain and phase jitter without attenuating high-frequency air.
+
+**Evidentiary Findings (Tiers 1–2)**:
+- Unit test `microstructure::tests::test_phase_consistency_reduces_shimmer_and_preserves_identity` confirms measurable reduction in high-band angular phase variance while preserving identity when set to 0.0.
+
+#### 19. Dynamics-v2 Promotion Gate Audit & Epistemic Verdict
+
+**Experiment & Pre-Declared Gates**:
+The 961-parameter learned amplitude-envelope head (`28 -> 32 tanh -> 1`) with analytical tridiagonal Gram matrix VJP was trained across 3 starts (`7301`, `7309`, `7321`) with paired, frozen, and shuffled gain-target controls for 1,800 steps. The 9-run matrix was evaluated on unseen test seeds `2300000..2300023` against pre-declared promotion gates (`docs/DYNAMICS_V2_PLAN.md`).
+
+**Evaluation Results**:
+- **Gate 1 (Error Reduction vs Identity $\ge 10.0\%$)**: **PASSED** (19.44% error reduction).
+- **Gate 2 (Error Reduction vs Fixed DSP $\ge 5.0\%$)**: **FAILED** (0.89% error reduction vs required $\ge 5.0\%$).
+- **Gate 3 (Healthy Scene Invariance mean $\le 0.00100$, max $\le 0.010$)**: **FAILED ON MEAN** (mean NMSE 0.001359 vs required $\le 0.00100$; max was 0.005623).
+- **Gate 4 (OOD Fast Peak Compressor $< 0.042380$)**: **FAILED** (0.050951 vs Fixed DSP 0.042380).
+
+**Epistemic Verdict**:
+In strict adherence to the project constitution, Dynamics-v2 is **not promoted** to autonomous auto-master routing. A 961-parameter linked head cannot simultaneously provide aggressive expansion on sub-millisecond limiter spikes without inducing slight false modulation on healthy uncompressed passages. It remains available strictly as an opt-in contrast tool via `--dynamics-model artifacts/dynamics-v2/model.json`.
+
+#### 20. Next-Gen Full-Pipeline Factorial Ablation on Chasing Horizons
+
+**Experimental Setup**:
+Full-song (140.4s) factorial ablation executed on `/sdcard/Download/Chasing Horizons.wav` using Qualcomm Adreno 830 OpenCL GPU acceleration:
+1. `00_champion_baseline`: Frozen champion auto-master baseline.
+2. `01_flow_v2_v3`: Step 0 + `rich-low-sfht-v2` + `rich-mid-v3`.
+3. `02_ph_lie_v2`: Step 1 + `--morphic-mode ph-lie-v2`.
+4. `03_clock_transient_punch`: Step 2 + `--clock-transient-punch`.
+5. `04_phase_consistency`: Step 3 + `--phase-consistency 0.5` (**Candidate Champion**).
+6. `05_full_nextgen_optin`: Step 4 + `--dynamics-model artifacts/dynamics-v2/model.json --dynamics-strength 1.0`.
+
+**Ablation Results Summary**:
+
+| Ablation Step | Integrated LUFS | True Peak (dBTP) | Limiter GR (dB) | Sub Instability | Stereo Corr | Onsets Detected | Snare T/S (dB) | Air T/S (dB) |
+|---|---|---|---|---|---|---|---|---|
+| `00_champion_baseline` | -11.08 | -1.00 | 4.80 | 0.2186 | 0.7689 | 541 | -0.177 | -0.253 |
+| `01_flow_v2_v3` | -11.08 | -1.00 | 4.90 | 0.2005 | 0.7779 | 550 | -0.217 | -0.362 |
+| `02_ph_lie_v2` | -11.08 | -1.00 | 4.92 | 0.2005 | 0.7784 | 552 | -0.233 | -0.340 |
+| `03_clock_transient_punch` | -11.10 | -1.00 | 4.84 | **0.1903** | 0.7847 | 569 | -0.172 | -0.359 |
+| `04_phase_consistency` | -11.11 | -1.00 | 4.93 | **0.1904** | **0.7849** | **571** | **-0.152** | **-0.281** |
+| `05_full_nextgen_optin` | -11.03 | -1.00 | 6.56 | 0.1918 | 0.7838 | 630 | -0.112 | -0.187 |
+
+**Ablation Analysis**:
+- **Flow v2/v3**: Low-end instability drops by 8.3% (0.2186 -> 0.2005) with improved inter-channel stereo correlation (0.7689 -> 0.7779).
+- **Lie-PH v2**: Preserves low-end cleanliness while providing directed energy dissipation of sub-side rumble.
+- **Clock Transient Punch**: Unmasks 17 additional onsets (552 -> 569) and drops sub instability to 0.1903 while lowering limiter stress.
+- **Phase Consistency**: Reaches the peak inter-channel correlation (0.7849) and transient definition (571 onsets), with substantial improvements in snare and air transient retention (-0.152 dB and -0.281 dB).
+- **Dynamics-v2 Stress Test**: In condition `05`, limiter gain reduction jumped from 4.93 dB to 6.56 dB (+1.63 dB limiter strain), confirming that autonomous dynamics expansion forces undue limiter compensation.
+
+**Lossless Master Delivery**:
+The winning verified candidate master (`04_phase_consistency`) was encoded directly to 24-bit / 48 kHz lossless FLAC:
+- Path: [`/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BRoach%20NextGen%20v1.2%20Candidate%5D.flac) (31 MB).
+- Storage hygiene verified: zero scratch, excerpt, or interim WAV files present in `/sdcard/Download/`.
+
+

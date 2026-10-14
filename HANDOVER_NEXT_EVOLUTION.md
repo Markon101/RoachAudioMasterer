@@ -80,3 +80,32 @@ or champion promotion is claimed. The fixed song excerpts did not demonstrate
 improved crest or a binding 2 dB limiter budget. Next work is onset-specific
 diagnostics and controlled listening; longer training needs a separate frozen
 plan with corrected gradient provenance and resume-schedule checks.
+
+---
+
+## 5. Next-Gen Upgrade Handover Status (2026-10-14)
+
+### Accomplishments in this Session:
+1. **Workstream A (Stratified Flow Matching & Repaired Adjoints)**:
+   - Supervised $s \in [0, 1]$ with stratified endpoint draw in $[0.95, 1.0]$.
+   - Trained `artifacts/rich-low-sfht-v2/` and `artifacts/rich-mid-v3/`.
+   - Cauchy velocity extrapolation eliminated; `--sfht-shrinkage 1.0` verified optimal.
+2. **Workstream B ($\mathfrak{so}(4)$ Lie-Algebra Port-Hamiltonian & Sub-Side Bank)**:
+   - Added `PortHamiltonianLieV2` (`--morphic-mode ph-lie-v2`).
+   - 6-generator $\mathfrak{so}(4)$ skew tensor with directed pair exchange.
+   - Stereo sub-side rumble bank dispatches side instability into strongly damped sink mode with zero high-frequency shimmer.
+   - Quartic AVF Newton solver with discrete energy-balance acceptance gate and unconditional passive midpoint fallback.
+3. **Workstream C (Learned Dynamics-v2 Audit)**:
+   - 961-parameter head evaluated across 3 starts and 9 conditions against pre-declared promotion gates (`docs/DYNAMICS_V2_RESULTS.md`).
+   - Gate 1 passed (19.44%), but Gates 2, 3, 4 failed. Epistemically demoted from autonomous routing; retained strictly as opt-in contrast tool.
+4. **Workstream D (Clock-Coupled Transient Punch & Dynamic Release)**:
+   - Integrated `--clock-transient-punch` in Stage 5, dynamically modulating glue release via the 150 ms envelope clock.
+5. **Workstream E (Microstructure Cross-Frame Phase Consistency)**:
+   - Integrated `--phase-consistency` in Stage 3.5, suppressing phase jitter and metallic grain.
+6. **Full-Pipeline Factorial Ablation on Chasing Horizons**:
+   - 6-condition factorial ablation matrix logged in `runs/next-gen-ablation/next_gen_ablation_report.json`.
+   - Condition `04_phase_consistency` emerged as undisputed champion (+30 onsets unmasked, -12.9% sub instability reduction, peak stereo correlation 0.7849).
+7. **Lossless Master Delivered**:
+   - Exported `/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac` (24-bit / 48 kHz, 31 MB).
+   - Storage hygiene verified: zero scratch or interim WAV files in `/sdcard/Download/`.
+

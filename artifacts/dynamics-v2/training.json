@@ -1,0 +1,97 @@
+{
+  "cases": 96,
+  "context_rule": "input-associative-mixture-v2",
+  "data_seed": 2100000,
+  "frozen_landscape": false,
+  "gradient_rule": "normalized-tridiagonal-gram-v2",
+  "loss": "exact smooth RMS-normalized waveform NMSE +0.001 adjacent knot dB penalty; healthy weight 6 + deadzone gate",
+  "model_seed": 7301,
+  "parameters": 961,
+  "rows": [
+    {
+      "loss": 0.0006784594816265057,
+      "step": 100
+    },
+    {
+      "loss": 0.0020450321434114737,
+      "step": 200
+    },
+    {
+      "loss": 0.06034610628926845,
+      "step": 300
+    },
+    {
+      "loss": 0.0032642920261008366,
+      "step": 400
+    },
+    {
+      "loss": 0.0007729367322446778,
+      "step": 500
+    },
+    {
+      "loss": 0.001422869937206947,
+      "step": 600
+    },
+    {
+      "loss": 0.0800667653534601,
+      "step": 700
+    },
+    {
+      "loss": 0.037963244375566245,
+      "step": 800
+    },
+    {
+      "loss": 0.0032047519567411408,
+      "step": 900
+    },
+    {
+      "loss": 0.0038348868603613456,
+      "step": 1000
+    },
+    {
+      "loss": 0.00010034805657156427,
+      "step": 1100
+    },
+    {
+      "loss": 0.018710473657294197,
+      "step": 1200
+    },
+    {
+      "loss": 0.042843632643352204,
+      "step": 1300
+    },
+    {
+      "loss": 0.06564875302407208,
+      "step": 1400
+    },
+    {
+      "loss": 0.07195380938828343,
+      "step": 1500
+    },
+    {
+      "loss": 0.006859743977447778,
+      "step": 1600
+    },
+    {
+      "loss": 0.06177032241802125,
+      "step": 1700
+    },
+    {
+      "loss": 0.010840036080744317,
+      "step": 1800
+    }
+  ],
+  "runtime_checkout": {
+    "git_commit": "f338d17a8ec74595fc527f8e6a34fa0c8fc40b48",
+    "git_dirty": true
+  },
+  "schema": "dynamics-training-v2",
+  "shuffled": false,
+  "source_seconds": 4,
+  "source_seeds": [
+    2100000,
+    2100047
+  ],
+  "start": 0,
+  "steps": 1800
+}

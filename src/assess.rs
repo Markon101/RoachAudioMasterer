@@ -417,6 +417,184 @@ impl SceneAssessor {
     }
 }
 
+/// Onset-specific transient diagnostic telemetry per HANDOVER_NEXT_EVOLUTION.md.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct OnsetAuditReport {
+    pub num_onsets_detected: usize,
+    pub mean_pre_onset_crest_db: f32,
+    pub mean_attack_crest_db: f32,
+    pub attack_crest_expansion_db: f32,
+    pub mean_attack_slew_db_per_ms: f32,
+    pub sub_transient_to_sustain_ratio_db: f32,
+    pub snare_transient_to_sustain_ratio_db: f32,
+    pub air_transient_to_sustain_ratio_db: f32,
+}
+
+/// Scans percussive onsets and evaluates 15 ms pre-onset vs 15 ms attack crest,
+/// attack slew rate (dB/ms), and band-split transient-to-sustain energy ratios.
+pub fn scan_onset_diagnostics(audio: &Audio) -> OnsetAuditReport {
+    let n = audio.frames();
+    if n < 4800 {
+        return OnsetAuditReport {
+            num_onsets_detected: 0,
+            mean_pre_onset_crest_db: 0.0,
+            mean_attack_crest_db: 0.0,
+            attack_crest_expansion_db: 0.0,
+            mean_attack_slew_db_per_ms: 0.0,
+            sub_transient_to_sustain_ratio_db: 0.0,
+            snare_transient_to_sustain_ratio_db: 0.0,
+            air_transient_to_sustain_ratio_db: 0.0,
+        };
+    }
+
+    let mut mono = vec![0.0f32; n];
+    for c in &audio.channels {
+        for (i, &s) in c.iter().enumerate() {
+            mono[i] += s;
+        }
+    }
+    let inv_c = 1.0f32 / audio.channels.len().max(1) as f32;
+    for x in &mut mono {
+        *x *= inv_c;
+    }
+
+    // FFT band separation
+    let mut planner = rustfft::FftPlanner::new();
+    let fft_forward = planner.plan_fft_forward(n);
+    let mut spec: Vec<rustfft::num_complex::Complex32> = mono
+        .iter()
+        .map(|&v| rustfft::num_complex::Complex32::new(v, 0.0))
+        .collect();
+    fft_forward.process(&mut spec);
+
+    let mut spec_sub = vec![rustfft::num_complex::Complex32::default(); n];
+    let mut spec_snare = vec![rustfft::num_complex::Complex32::default(); n];
+    let mut spec_air = vec![rustfft::num_complex::Complex32::default(); n];
+
+    for (k, &val) in spec.iter().enumerate() {
+        let freq = (k.min(n - k) as f32) * (RATE as f32 / n as f32);
+        if freq >= 40.0 && freq <= 120.0 {
+            spec_sub[k] = val;
+        }
+        if freq >= 150.0 && freq <= 4000.0 {
+            spec_snare[k] = val;
+        }
+        if freq >= 8000.0 {
+            spec_air[k] = val;
+        }
+    }
+
+    let fft_inverse = planner.plan_fft_inverse(n);
+    fft_inverse.process(&mut spec_sub);
+    fft_inverse.process(&mut spec_snare);
+    fft_inverse.process(&mut spec_air);
+
+    let inv_n = 1.0f32 / n as f32;
+    let wave_sub: Vec<f32> = spec_sub.into_iter().map(|c| c.re * inv_n).collect();
+    let wave_snare: Vec<f32> = spec_snare.into_iter().map(|c| c.re * inv_n).collect();
+    let wave_air: Vec<f32> = spec_air.into_iter().map(|c| c.re * inv_n).collect();
+
+    const HOP_5MS: usize = 240;
+    let num_blocks = n / HOP_5MS;
+    let mut block_rms = Vec::with_capacity(num_blocks);
+    for b in 0..num_blocks {
+        let s = b * HOP_5MS;
+        let e = s + HOP_5MS;
+        let rms = (mono[s..e].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / HOP_5MS as f64).sqrt() as f32;
+        block_rms.push(rms);
+    }
+
+    let mut onset_indices = Vec::new();
+    let mut last_onset_block = 0usize;
+    for b in 1..num_blocks {
+        if b >= last_onset_block + 10 && block_rms[b] > block_rms[b - 1] * 1.8 && block_rms[b] > 1e-3 {
+            let sample_idx = b * HOP_5MS;
+            if sample_idx >= 720 && sample_idx + 2160 <= n {
+                onset_indices.push(sample_idx);
+                last_onset_block = b;
+            }
+        }
+    }
+
+    if onset_indices.is_empty() {
+        return OnsetAuditReport {
+            num_onsets_detected: 0,
+            mean_pre_onset_crest_db: 0.0,
+            mean_attack_crest_db: 0.0,
+            attack_crest_expansion_db: 0.0,
+            mean_attack_slew_db_per_ms: 0.0,
+            sub_transient_to_sustain_ratio_db: 0.0,
+            snare_transient_to_sustain_ratio_db: 0.0,
+            air_transient_to_sustain_ratio_db: 0.0,
+        };
+    }
+
+    let mut pre_crest_sum = 0.0f32;
+    let mut att_crest_sum = 0.0f32;
+    let mut slew_sum = 0.0f32;
+    let mut sub_ratio_sum = 0.0f32;
+    let mut snare_ratio_sum = 0.0f32;
+    let mut air_ratio_sum = 0.0f32;
+
+    const WIN_15MS: usize = 720;
+    const SUSTAIN_LEN: usize = 1440;
+
+    for &idx in &onset_indices {
+        let pre_slice = &mono[idx - WIN_15MS..idx];
+        let pre_peak = pre_slice.iter().fold(0.0f32, |m, &x| m.max(x.abs()));
+        let pre_rms = (pre_slice.iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / WIN_15MS as f64).sqrt() as f32;
+        let pre_crest = 20.0 * (pre_peak / pre_rms.max(1e-9)).max(1.0).log10();
+        pre_crest_sum += pre_crest;
+
+        let att_slice = &mono[idx..idx + WIN_15MS];
+        let mut att_peak = 0.0f32;
+        let mut peak_pos = 0usize;
+        for (pos, &x) in att_slice.iter().enumerate() {
+            if x.abs() > att_peak {
+                att_peak = x.abs();
+                peak_pos = pos;
+            }
+        }
+        let att_rms = (att_slice.iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / WIN_15MS as f64).sqrt() as f32;
+        let att_crest = 20.0 * (att_peak / att_rms.max(1e-9)).max(1.0).log10();
+        att_crest_sum += att_crest;
+
+        let dt_ms = (peak_pos as f32 / 48.0).max(0.1);
+        let delta_db = 20.0 * (att_peak / pre_peak.max(1e-6)).max(1.0).log10();
+        let slew = delta_db / dt_ms;
+        slew_sum += slew;
+
+        let sub_trans = wave_sub[idx..idx + WIN_15MS].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / WIN_15MS as f64;
+        let sub_sust = wave_sub[idx + WIN_15MS..idx + WIN_15MS + SUSTAIN_LEN].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / SUSTAIN_LEN as f64;
+        let sub_ratio = 10.0 * (sub_trans / sub_sust.max(1e-12)).max(1e-12).log10() as f32;
+        sub_ratio_sum += sub_ratio;
+
+        let snare_trans = wave_snare[idx..idx + WIN_15MS].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / WIN_15MS as f64;
+        let snare_sust = wave_snare[idx + WIN_15MS..idx + WIN_15MS + SUSTAIN_LEN].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / SUSTAIN_LEN as f64;
+        let snare_ratio = 10.0 * (snare_trans / snare_sust.max(1e-12)).max(1e-12).log10() as f32;
+        snare_ratio_sum += snare_ratio;
+
+        let air_trans = wave_air[idx..idx + WIN_15MS].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / WIN_15MS as f64;
+        let air_sust = wave_air[idx + WIN_15MS..idx + WIN_15MS + SUSTAIN_LEN].iter().map(|&x| (x as f64).powi(2)).sum::<f64>() / SUSTAIN_LEN as f64;
+        let air_ratio = 10.0 * (air_trans / air_sust.max(1e-12)).max(1e-12).log10() as f32;
+        air_ratio_sum += air_ratio;
+    }
+
+    let count = onset_indices.len() as f32;
+    let mean_pre = pre_crest_sum / count;
+    let mean_att = att_crest_sum / count;
+    OnsetAuditReport {
+        num_onsets_detected: onset_indices.len(),
+        mean_pre_onset_crest_db: mean_pre,
+        mean_attack_crest_db: mean_att,
+        attack_crest_expansion_db: mean_att - mean_pre,
+        mean_attack_slew_db_per_ms: slew_sum / count,
+        sub_transient_to_sustain_ratio_db: sub_ratio_sum / count,
+        snare_transient_to_sustain_ratio_db: snare_ratio_sum / count,
+        air_transient_to_sustain_ratio_db: air_ratio_sum / count,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

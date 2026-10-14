@@ -1,0 +1,249 @@
+[
+  {
+    "fixed_anchor_mean_loss": 0.021184681418984247,
+    "gradient_norm": 0.009992447800458782,
+    "previous_gradient_cosine": null,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": null,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 0
+    },
+    "step": 0
+  },
+  {
+    "fixed_anchor_mean_loss": 0.020665768087768648,
+    "gradient_norm": 0.005644108266159701,
+    "previous_gradient_cosine": 0.5559498855992134,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0014291563246245592,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 400000000000
+    },
+    "step": 100
+  },
+  {
+    "fixed_anchor_mean_loss": 0.02042774895511246,
+    "gradient_norm": 0.00339788348386663,
+    "previous_gradient_cosine": 0.7806684996238078,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0004983571443693341,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 800000000000
+    },
+    "step": 200
+  },
+  {
+    "fixed_anchor_mean_loss": 0.02048331355863517,
+    "gradient_norm": 0.008151608877172804,
+    "previous_gradient_cosine": 0.2767300043892219,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.002000776872530934,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 1200000000000
+    },
+    "step": 300
+  },
+  {
+    "fixed_anchor_mean_loss": 0.020345232944295265,
+    "gradient_norm": 0.007532126543009556,
+    "previous_gradient_cosine": -0.18704718254358293,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.004592705333601563,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 1600000000000
+    },
+    "step": 400
+  },
+  {
+    "fixed_anchor_mean_loss": 0.020039773998714476,
+    "gradient_norm": 0.004165153951056955,
+    "previous_gradient_cosine": 0.4609643786378106,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0011313472432809008,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 2000000000000
+    },
+    "step": 500
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019816748140368996,
+    "gradient_norm": 0.003807983977138867,
+    "previous_gradient_cosine": 0.8256205524523803,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0003005109540855604,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 2400000000000
+    },
+    "step": 600
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019691889606625056,
+    "gradient_norm": 0.003064780130572561,
+    "previous_gradient_cosine": 0.004593971521350394,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.001930702401595993,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 2800000000000
+    },
+    "step": 700
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019580378777113848,
+    "gradient_norm": 0.0033291519818645756,
+    "previous_gradient_cosine": 0.33931778924110023,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0012992845659233014,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 3200000000000
+    },
+    "step": 800
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019573074592952468,
+    "gradient_norm": 0.004786940265639978,
+    "previous_gradient_cosine": 0.8813464798813123,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.000660462294445511,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 3600000000000
+    },
+    "step": 900
+  },
+  {
+    "fixed_anchor_mean_loss": 0.01958643911582761,
+    "gradient_norm": 0.006310481172345644,
+    "previous_gradient_cosine": -0.21221212489560248,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.006063540223954834,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 4000000000000
+    },
+    "step": 1000
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019342565478677885,
+    "gradient_norm": 0.003717943491581441,
+    "previous_gradient_cosine": 0.8471684089866074,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0011157452528378095,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 4400000000000
+    },
+    "step": 1100
+  },
+  {
+    "fixed_anchor_mean_loss": 0.01922127838965019,
+    "gradient_norm": 0.0035090313446427697,
+    "previous_gradient_cosine": 0.8652133797688218,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.001207873554318591,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 4800000000000
+    },
+    "step": 1200
+  },
+  {
+    "fixed_anchor_mean_loss": 0.01922115521322667,
+    "gradient_norm": 0.0037740539140410805,
+    "previous_gradient_cosine": 0.9726349386089024,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.00041368796868689674,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 5200000000000
+    },
+    "step": 1300
+  },
+  {
+    "fixed_anchor_mean_loss": 0.01918916992557653,
+    "gradient_norm": 0.0033368820422961585,
+    "previous_gradient_cosine": 0.5370187526252483,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0026541254070310168,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 5600000000000
+    },
+    "step": 1400
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019111306510748535,
+    "gradient_norm": 0.00438799734912531,
+    "previous_gradient_cosine": 0.8346459636570656,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0019556978388589955,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 6000000000000
+    },
+    "step": 1500
+  },
+  {
+    "fixed_anchor_mean_loss": 0.019023340899255378,
+    "gradient_norm": 0.0028345584335398148,
+    "previous_gradient_cosine": 0.35304232044286593,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0030108651465195688,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 6400000000000
+    },
+    "step": 1600
+  },
+  {
+    "fixed_anchor_mean_loss": 0.018971765203360736,
+    "gradient_norm": 0.0030201298596666494,
+    "previous_gradient_cosine": 0.8652605397853351,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0007908698176667987,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 6800000000000
+    },
+    "step": 1700
+  },
+  {
+    "fixed_anchor_mean_loss": 0.01916354427253502,
+    "gradient_norm": 0.011079758588627605,
+    "previous_gradient_cosine": -0.2284445711853184,
+    "scope": "fixed training anchors; local weight-space secant geometry, not global topology or test performance",
+    "secant_directional_curvature": 0.0069805712076603235,
+    "signal_exposure": {
+      "fractional_denominator": 48000,
+      "fractional_numerator": 0,
+      "nanoseconds": 7200000000000
+    },
+    "step": 1800
+  }
+]

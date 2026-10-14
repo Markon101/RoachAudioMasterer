@@ -314,6 +314,7 @@ pub fn train(
     resume: Option<&Path>,
     backend: &str,
     out: &Path,
+    endpoint_anchored: bool,
 ) -> Result<()> {
     let (mut m, mut ea, mut ha) = if let Some(dir) = resume {
         let s = MidState::load(&dir.join(format!("state-{}.json", kind.name())))?;
@@ -359,7 +360,15 @@ pub fn train(
 
         let (_, target, recipe, p, initial, actual) = cached.as_ref().unwrap();
         let mut random = Rng(scene_seed ^ (step as u64).wrapping_mul(0x829ab591));
-        let time = random.unit();
+        let time = if endpoint_anchored {
+            if random.unit() < 0.10 {
+                random.range(0.95, 1.0)
+            } else {
+                random.unit()
+            }
+        } else {
+            random.unit()
+        };
         let state = std::array::from_fn(|c| {
             initial[c]
                 .iter()
@@ -391,8 +400,13 @@ pub fn train(
             },
         );
 
-        ea.update(&mut m.core.encoder.weights, &eg, 0.001);
-        ha.update(&mut m.core.head.weights, &hg, 0.001);
+        if endpoint_anchored {
+            ea.update_with_decay(&mut m.core.encoder.weights, &eg, 0.001, 1e-4);
+            ha.update_with_decay(&mut m.core.head.weights, &hg, 0.001, 1e-4);
+        } else {
+            ea.update(&mut m.core.encoder.weights, &eg, 0.001);
+            ha.update(&mut m.core.head.weights, &hg, 0.001);
+        }
         m.core.optimizer_steps += 1;
 
         records.push(json!({
@@ -430,7 +444,8 @@ pub fn train(
         &out.join("training.json"),
         &json!({
             "kind": kind.name(),
-            "schema": "rich-mid-field-v1",
+            "schema": if endpoint_anchored { "rich-mid-field-v2" } else { "rich-mid-field-v1" },
+            "endpoint_anchored": endpoint_anchored,
             "gradient_rule": "mid-dual-band-adjoint-v2",
             "provenance": crate::experiment::provenance(),
             "seed": seed,
@@ -693,6 +708,188 @@ pub fn restore(
         peak,
         start_time.elapsed().as_secs_f64()
     );
+
+    Ok(())
+}
+
+/// Evaluates mid-flow model on held-out multi-track synthetic test scenes.
+pub fn evaluate_mid(
+    model_path: &Path,
+    seed: u64,
+    count: usize,
+    steps: usize,
+    mid_ceiling: f32,
+    backend: &str,
+    out: &Path,
+) -> Result<()> {
+    if !out.exists() {
+        new_run(out)?;
+    }
+
+    let field = MidField::load(model_path)?;
+    let mut engine = Engine::new(&field.core, backend)?;
+    let s = Stft::default();
+
+    let mut results = Vec::new();
+    let mut total_missing_nmse = 0.0f64;
+    let mut missing_count = 0usize;
+    let mut total_false_add_nmse = 0.0f64;
+    let mut abstention_count = 0usize;
+    let mut total_lsd = 0.0f64;
+    let mut max_passband_err = 0.0f32;
+
+    println!(
+        "=== Evaluating Mid-Flow Model [{}] on {} Held-Out Scenes (seeds {}..{}) ===",
+        field.kind.name(),
+        count,
+        seed,
+        seed + count as u64 - 1
+    );
+
+    for idx in 0..count {
+        let scene_seed = seed + idx as u64;
+        let (audio, recipe) = rich_synth::generate_mid_multitrack(scene_seed);
+        let degraded = recipe.damage.apply(&audio);
+
+        let t0 = Instant::now();
+        let p = scene_features::prepare(&degraded, recipe.damage, 11);
+        let initial = scene_features::prior_state(&p, "harmonic");
+        let ceil_bin = ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
+        let state = engine.refine_mode_bounded(
+            &p,
+            recipe.damage,
+            &initial,
+            steps,
+            field.kind.mode(),
+            Some(ceil_bin + 1),
+        )?;
+        let restored = mid_waveform(&p, recipe.damage, mid_ceiling, &state, 1.0);
+        let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
+
+        let orig_spec = s.analyze(&audio.channels[0]);
+        let recon_spec = s.analyze(&restored.channels[0]);
+        let deg_spec = s.analyze(&degraded.channels[0]);
+
+        let cut_bin = recipe.damage.cutoff_bin();
+
+        // 1. Passband lock error (< cutoff and >= mid_ceiling)
+        for t in 0..orig_spec.frames {
+            for k in 0..BINS {
+                let f_hz = k as f32 * RATE as f32 / FFT as f32;
+                if f_hz < recipe.damage.cutoff || f_hz >= mid_ceiling {
+                    let diff = (deg_spec.data[t * BINS + k] - recon_spec.data[t * BINS + k]).norm();
+                    if diff > max_passband_err {
+                        max_passband_err = diff;
+                    }
+                }
+            }
+        }
+
+        // 2. Missing-band metrics (cut_bin + 1 ..= ceil_bin)
+        let is_abstention = (scene_seed % 12) == 11; // stopped_mid_abstention
+        let mut diff_p = 0.0f64;
+        let mut target_p = 0.0f64;
+        let mut sum_lsd_sq = 0.0f64;
+        let mut lsd_bins = 0usize;
+
+        for t in 0..orig_spec.frames {
+            for k in cut_bin + 1..=ceil_bin {
+                let ot = orig_spec.data[t * BINS + k];
+                let rt = recon_spec.data[t * BINS + k];
+                diff_p += (ot - rt).norm_sqr() as f64;
+                target_p += ot.norm_sqr() as f64;
+
+                let p_orig = (ot.norm_sqr() as f64).max(1e-10);
+                let p_recon = (rt.norm_sqr() as f64).max(1e-10);
+                let log_diff = 10.0 * (p_orig / p_recon).log10();
+                sum_lsd_sq += log_diff * log_diff;
+                lsd_bins += 1;
+            }
+        }
+
+        let lsd = if lsd_bins > 0 {
+            (sum_lsd_sq / lsd_bins as f64).sqrt()
+        } else {
+            0.0
+        };
+
+        if is_abstention {
+            let full_p = orig_spec.data.iter().map(|z| z.norm_sqr() as f64).sum::<f64>().max(1e-12);
+            let recon_added_p = recon_spec.data.iter().enumerate().filter(|(i, _)| {
+                let k = i % BINS;
+                k > cut_bin && k <= ceil_bin
+            }).map(|(_, z)| z.norm_sqr() as f64).sum::<f64>();
+            let false_add_nmse = recon_added_p / full_p;
+
+            total_false_add_nmse += false_add_nmse;
+            abstention_count += 1;
+
+            println!(
+                "Scene {:02}/{} [abstention] seed {}: False-Add NMSE = {:.6} ({:.1} ms)",
+                idx + 1,
+                count,
+                scene_seed,
+                false_add_nmse,
+                elapsed_ms
+            );
+            results.push(json!({
+                "index": idx + 1,
+                "seed": scene_seed,
+                "family": "stopped_mid_abstention",
+                "false_add_nmse": false_add_nmse,
+                "lsd_db": lsd,
+                "elapsed_ms": elapsed_ms,
+            }));
+        } else {
+            let nmse = if target_p > 1e-12 { diff_p / target_p } else { 0.0 };
+            total_missing_nmse += nmse;
+            total_lsd += lsd;
+            missing_count += 1;
+
+            println!(
+                "Scene {:02}/{} [stem] seed {}: NMSE = {:.4}, LSD = {:.2} dB ({:.1} ms)",
+                idx + 1,
+                count,
+                scene_seed,
+                nmse,
+                lsd,
+                elapsed_ms
+            );
+            results.push(json!({
+                "index": idx + 1,
+                "seed": scene_seed,
+                "family": rich_synth::MID_MULTITRACK_FAMILIES[(scene_seed % 12) as usize],
+                "nmse": nmse,
+                "lsd_db": lsd,
+                "elapsed_ms": elapsed_ms,
+            }));
+        }
+    }
+
+    let mean_missing_nmse = if missing_count > 0 { total_missing_nmse / missing_count as f64 } else { 0.0 };
+    let mean_lsd = if missing_count > 0 { total_lsd / missing_count as f64 } else { 0.0 };
+    let mean_false_add = if abstention_count > 0 { total_false_add_nmse / abstention_count as f64 } else { 0.0 };
+
+    println!(
+        "\n--- Mid-Flow Summary --- \nMean NMSE: {:.4} | Mean LSD: {:.2} dB | Abstention False-Add: {:.6} | Max Passband Err: {:.2e}",
+        mean_missing_nmse, mean_lsd, mean_false_add, max_passband_err
+    );
+
+    write_json(
+        &out.join("evaluation.json"),
+        &json!({
+            "model": model_path.display().to_string(),
+            "count": count,
+            "seed": seed,
+            "steps": steps,
+            "mid_ceiling": mid_ceiling,
+            "mean_missing_nmse": mean_missing_nmse,
+            "mean_lsd_db": mean_lsd,
+            "abstention_false_add_nmse": mean_false_add,
+            "max_passband_err": max_passband_err,
+            "results": results,
+        }),
+    )?;
 
     Ok(())
 }

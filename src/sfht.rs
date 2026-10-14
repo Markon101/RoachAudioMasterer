@@ -278,6 +278,7 @@ pub fn train_sfht(
     resume: Option<&Path>,
     backend: &str,
     out: &Path,
+    endpoint_anchored: bool,
 ) -> Result<()> {
     if resume.is_some() {
         ensure!(out.exists(), "resume output directory must exist");
@@ -343,7 +344,15 @@ pub fn train_sfht(
         let (ref _recipe, ref target_spec, ref degraded_spec, cut_bin, scale, ref prior) =
             scenes[scene_idx];
 
-        let time_s = rng.range(0.05, 0.95);
+        let time_s = if endpoint_anchored {
+            if rng.unit() < 0.10 {
+                rng.range(0.95, 1.0)
+            } else {
+                rng.range(0.0, 1.0)
+            }
+        } else {
+            rng.range(0.05, 0.95)
+        };
         let frames = target_spec[0].frames;
         let num_bins = HIRES_BINS;
 
@@ -452,7 +461,8 @@ pub fn train_sfht(
     write_json(
         &out.join("training.json"),
         &json!({
-            "schema": "sfht-training-v1",
+            "schema": if endpoint_anchored { "sfht-training-v2" } else { "sfht-training-v1" },
+            "endpoint_anchored": endpoint_anchored,
             "gradient_rule": "sfht-soft-clamp-chain-v2",
             "provenance": crate::experiment::provenance(),
             "steps": steps,
@@ -646,6 +656,7 @@ pub fn evaluate_sfht(
     seed: u64,
     count: usize,
     solver_steps: usize,
+    shrinkage: f32,
     _backend: &str,
     out: &Path,
 ) -> Result<()> {
@@ -660,10 +671,11 @@ pub fn evaluate_sfht(
     let mut total_ms = 0.0f64;
 
     println!(
-        "=== Evaluating SFHT Model on {} Held-Out Scenes (seeds {}..{}) ===",
+        "=== Evaluating SFHT Model on {} Held-Out Scenes (seeds {}..{}) [shrinkage={:.2}] ===",
         count,
         seed,
-        seed + count as u64 - 1
+        seed + count as u64 - 1,
+        shrinkage
     );
 
     for idx in 0..count {
@@ -677,7 +689,7 @@ pub fn evaluate_sfht(
             &degraded,
             recipe.damage.cutoff_hz(),
             solver_steps,
-            1.0,
+            shrinkage,
         )?;
         let elapsed_ms = t0.elapsed().as_secs_f64() * 1000.0;
 

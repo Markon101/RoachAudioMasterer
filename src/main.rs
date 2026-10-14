@@ -154,6 +154,9 @@ enum Commands {
         /// Optional explicit override for Stage 3.5 phase continuity in [0.0, 1.0].
         #[arg(long)]
         phase_continuity: Option<f32>,
+        /// Optional explicit override for Stage 3.5 cross-frame phase consistency in [0.0, 1.0].
+        #[arg(long)]
+        phase_consistency: Option<f32>,
         #[arg(long, default_value_t = 1.15)]
         width_factor: f32,
         #[arg(long, default_value_t = 0.12)]
@@ -188,8 +191,8 @@ enum Commands {
         /// Morphic controller modulation intensity in [0.0, 1.0].
         #[arg(long, default_value_t = 1.0)]
         morphic_strength: f32,
-        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, port-hamiltonian-calibrated, port-hamiltonian-calibrated-uncoupled, static-shelf.
-        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "port-hamiltonian-calibrated", "port-hamiltonian-calibrated-uncoupled", "static-shelf"])]
+        /// Morphic modulation mode: bypass, memoryless, dsp-smoother, geometric, port-hamiltonian, port-hamiltonian-a0, port-hamiltonian-a1, port-hamiltonian-a3, port-hamiltonian-a4, port-hamiltonian-calibrated, port-hamiltonian-calibrated-uncoupled, ph-lie-v2, static-shelf.
+        #[arg(long, default_value = "geometric", value_parser = ["bypass", "memoryless", "dsp-smoother", "geometric", "port-hamiltonian", "port-hamiltonian-a0", "port-hamiltonian-a1", "port-hamiltonian-a3", "port-hamiltonian-a4", "port-hamiltonian-calibrated", "port-hamiltonian-calibrated-uncoupled", "ph-lie-v2", "port-hamiltonian-lie-v2", "static-shelf"])]
         morphic_mode: String,
         /// Crossover frequency in Hz above which microtexture modulation applies.
         #[arg(long, default_value_t = 8000.0)]
@@ -240,6 +243,8 @@ enum Commands {
         transient_desmear: f32,
         #[arg(long, default_value_t = 0.40)]
         phase_continuity: f32,
+        #[arg(long, default_value_t = 0.0)]
+        phase_consistency: f32,
         #[arg(long, default_value_t = 0.20)]
         fractal_tendrils: f32,
         #[arg(long, default_value_t = 1.0)]
@@ -441,6 +446,24 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
+        #[arg(long)]
+        endpoint_anchored: bool,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    RichMidEvaluate {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long, default_value_t = 850000)]
+        seed: u64,
+        #[arg(long, default_value_t = 16)]
+        count: usize,
+        #[arg(long, default_value_t = 8)]
+        steps: usize,
+        #[arg(long, default_value_t = 8000.0)]
+        mid_ceiling: f32,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -543,6 +566,8 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
+        #[arg(long)]
+        endpoint_anchored: bool,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -573,6 +598,8 @@ enum Commands {
         count: usize,
         #[arg(long, default_value_t = 8)]
         steps: usize,
+        #[arg(long, default_value_t = 1.0)]
+        shrinkage: f32,
         #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
         backend: String,
         #[arg(long)]
@@ -1048,6 +1075,7 @@ fn run() -> Result<()> {
             defizz_strength,
             no_defizz,
             phase_continuity,
+            phase_consistency,
             width_factor,
             room_depth,
             target_lufs,
@@ -1109,6 +1137,7 @@ fn run() -> Result<()> {
             defizz_strength,
             no_defizz,
             phase_continuity,
+            phase_consistency,
             force_specialists,
             morphic_gtf && !no_morphic_gtf,
             morphic_strength,
@@ -1135,6 +1164,7 @@ fn run() -> Result<()> {
             harmonic_resonance,
             transient_desmear,
             phase_continuity,
+            phase_consistency,
             fractal_tendrils,
             fractal_dimension,
             crossover_hz,
@@ -1149,6 +1179,7 @@ fn run() -> Result<()> {
             harmonic_resonance,
             transient_desmear,
             phase_continuity,
+            phase_consistency,
             fractal_tendrils,
             fractal_dimension,
             crossover_hz,
@@ -1322,6 +1353,7 @@ fn run() -> Result<()> {
             steps,
             seed,
             resume,
+            endpoint_anchored,
             backend,
             out,
         } => {
@@ -1331,8 +1363,17 @@ fn run() -> Result<()> {
                 "transport" => rich_dynamics::Kind::Transport,
                 _ => rich_dynamics::Kind::Basis,
             };
-            rich_mid::train(k, steps, seed, resume.as_deref(), &backend, &out)
+            rich_mid::train(k, steps, seed, resume.as_deref(), &backend, &out, endpoint_anchored)
         }
+        Commands::RichMidEvaluate {
+            model,
+            seed,
+            count,
+            steps,
+            mid_ceiling,
+            backend,
+            out,
+        } => rich_mid::evaluate_mid(&model, seed, count, steps, mid_ceiling, &backend, &out),
         Commands::RichMidRestore {
             model,
             input,
@@ -1582,9 +1623,10 @@ fn run() -> Result<()> {
             steps,
             seed,
             resume,
+            endpoint_anchored,
             backend,
             out,
-        } => sfht::train_sfht(steps, seed, resume.as_deref(), &backend, &out),
+        } => sfht::train_sfht(steps, seed, resume.as_deref(), &backend, &out, endpoint_anchored),
         Commands::RichLowSfhtRestore {
             model,
             input,
@@ -1609,9 +1651,10 @@ fn run() -> Result<()> {
             seed,
             count,
             steps,
+            shrinkage,
             backend,
             out,
-        } => sfht::evaluate_sfht(&model, seed, count, steps, &backend, &out),
+        } => sfht::evaluate_sfht(&model, seed, count, steps, shrinkage, &backend, &out),
         Commands::RichTribandRestore {
             low_model,
             sfht_model,
@@ -2184,6 +2227,7 @@ fn auto_master_pipeline(
     defizz_strength: f32,
     no_defizz: bool,
     explicit_phase_continuity: Option<f32>,
+    explicit_phase_consistency: Option<f32>,
     force_specialists: bool,
     morphic_gtf: bool,
     morphic_strength: f32,
@@ -2426,7 +2470,7 @@ fn auto_master_pipeline(
     }
 
     ensure!(!coupled_clocks || (morphic_gtf && matches!(morphic_mode_string.as_str(),
-        "port-hamiltonian-calibrated" | "port-hamiltonian-calibrated-uncoupled")),
+        "port-hamiltonian-calibrated" | "port-hamiltonian-calibrated-uncoupled" | "ph-lie-v2" | "port-hamiltonian-lie-v2")),
         "--coupled-clocks requires enabled calibrated Port-Hamiltonian mode (or --auto-tune)");
     let contrast_timeline = if coupled_clocks || contrast_budget {
         let timeline = acoustic_dynamics::ContrastTimeline::analyze(
@@ -2622,6 +2666,7 @@ fn auto_master_pipeline(
             crossover_hz: 3000.0,
             authority: if eff_defizz_auth > 0.0 { eff_defizz_auth.max(fractal_tendrils) } else { 1.0 },
             bypass: false,
+            phase_consistency: explicit_phase_consistency.unwrap_or(0.0),
             ..microstructure::MicrostructureConfig::default()
         };
         let (micro_audio, micro_rep) =
@@ -2720,6 +2765,7 @@ fn auto_master_pipeline(
             "port-hamiltonian-a4" => gtf::MorphicModulationMode::PortHamiltonianA4,
             "port-hamiltonian-calibrated" => gtf::MorphicModulationMode::PortHamiltonianCalibrated,
             "port-hamiltonian-calibrated-uncoupled" => gtf::MorphicModulationMode::PortHamiltonianCalibratedUncoupled,
+            "ph-lie-v2" | "port-hamiltonian-lie-v2" => gtf::MorphicModulationMode::PortHamiltonianLieV2,
             "static-shelf" => gtf::MorphicModulationMode::StaticHighShelf,
             _ => gtf::MorphicModulationMode::GeometricMemory,
         };
@@ -2829,7 +2875,12 @@ fn auto_master_pipeline(
             "pre_gain_db": master_res.pre_gain_db,
             "before": master_res.before_metrics,
             "after": master_res.after_metrics,
+            "onset_audit": &master_res.onset_audit,
         }),
+    )?;
+    experiment::write_json(
+        &out_dir.join("onset_audit.json"),
+        &serde_json::to_value(&master_res.onset_audit)?,
     )?;
 
     // Stage 6: Post-Assessment & Quality / Preservation Verification
@@ -3018,6 +3069,7 @@ fn auto_master_pipeline(
                         }
                     }
                     "port-hamiltonian-calibrated-uncoupled" => format!("{} [Highband Morphic M4 Calibrated Uncoupled Mastered]", base_stem),
+                    "ph-lie-v2" | "port-hamiltonian-lie-v2" => format!("{} [Highband Morphic Port-Hamiltonian Lie-v2 Mastered]", base_stem),
                     "static-shelf" => format!("{} [Highband Static Shelf Mastered]", base_stem),
                     _ => format!("{} [Highband Morphic Mastered]", base_stem),
                 }
@@ -3101,6 +3153,7 @@ fn auto_master_pipeline(
         }
     });
     let signal_clock=signal_time::SignalClock {sample_rate:original_input_audio.rate};
+    summary_meta["onset_audit"]=serde_json::to_value(&master_res.onset_audit)?;
     summary_meta["signal_clock"]=serde_json::to_value(signal_clock)?;
     summary_meta["signal_duration"]=serde_json::to_value(signal_clock.at(num_frames as u64))?;
     summary_meta["settings"]["dynamics_model"]=serde_json::to_value(dynamics_model.map(|p|p.display().to_string()))?;
@@ -3157,6 +3210,7 @@ fn run_microstructure_cli(
     harmonic_resonance: f32,
     transient_desmear: f32,
     phase_continuity: f32,
+    phase_consistency: f32,
     fractal_tendrils: f32,
     fractal_dimension: f32,
     crossover_hz: f32,
@@ -3187,8 +3241,8 @@ fn run_microstructure_cli(
         "Crossover:        {:.1} Hz (content below locked/invariant)",
         crossover_hz
     );
-    println!("Settings:         strength={:.2}, air={:.2}, resonance={:.2}, desmear={:.2}, phase_cont={:.2}, fractal_tendrils={:.2}, fractal_dim={:.2}, seed={}",
-        strength, air_coupling, harmonic_resonance, transient_desmear, phase_continuity, fractal_tendrils, fractal_dimension, seed
+    println!("Settings:         strength={:.2}, air={:.2}, resonance={:.2}, desmear={:.2}, phase_cont={:.2}, phase_cons={:.2}, fractal_tendrils={:.2}, fractal_dim={:.2}, seed={}",
+        strength, air_coupling, harmonic_resonance, transient_desmear, phase_continuity, phase_consistency, fractal_tendrils, fractal_dimension, seed
     );
 
     let audio = native_audio::read_entire(input)?;
@@ -3275,6 +3329,7 @@ fn run_microstructure_cli(
         harmonic_resonance,
         transient_desmear,
         phase_continuity,
+        phase_consistency,
         fractal_tendrils,
         fractal_dimension,
         crossover_hz,
@@ -4004,6 +4059,7 @@ fn run_morphic_compare_cli(
         ("m4_a4_quartic", "Port-Hamiltonian A4 Quartic AVF Discrete Gradient", gtf::MorphicModulationMode::PortHamiltonianA4),
         ("m4_calibrated", "Port-Hamiltonian Calibrated Hybrid Material (Air Shelf + 4D Dynamics)", gtf::MorphicModulationMode::PortHamiltonianCalibrated),
         ("m4_cal_uncoupled", "Port-Hamiltonian Calibrated Uncoupled (Air Shelf + 4D Decoupled kappa=0)", gtf::MorphicModulationMode::PortHamiltonianCalibratedUncoupled),
+        ("ph_lie_v2", "Port-Hamiltonian Lie-Algebra v2 so(4) (Directed Coupling + Sub-Side Bank)", gtf::MorphicModulationMode::PortHamiltonianLieV2),
         ("m5_static_shelf", "Static Matched High-Shelf EQ Baseline Control", gtf::MorphicModulationMode::StaticHighShelf),
     ];
 

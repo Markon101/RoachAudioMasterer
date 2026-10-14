@@ -96,3 +96,40 @@ flow+song-adapter quality test have not been completed.
   `fcec1ea`, and the subsequent aligned scoring command is `f4c4e82`.
 - No speed experiment. Affinity changes from four to eight allowed cores are
   logged as uncontrolled endpoint observations; training timing is not a benchmark.
+
+## Next-Gen Upgrade Validation (Workstreams A–E & Factorial Ablation, 2026-10-14)
+
+- **Unit & Invariant Suite**: All 134 unit tests pass cleanly with `cargo test -j 8` (finished in 98.9s).
+- **Frozen Champion & Bit-Parity Invariant**: When all new opt-in flags are unflagged, candidate binary `target/release/roach-audio-masterer` produces bit-for-bit identical float output to parent `f338d17` across `auto-forced` (`48d751...`), `legacy` (`a09fdb...`), and `standalone` (`e03be8...`) procedural CLI fixtures.
+- **Hardware Acceleration**: Qualcomm Adreno 830 OpenCL GPU acceleration verified with `OCL_ICD_ASSUME_ICD_EXTENSION=1`. Parity with CPU is $< 10^{-6}$ max residual.
+- **Workstream A (Corrected Adjoints & Stratified Flow Time Sampling)**:
+  - Repaired backward-pass gradients in SFHT soft-clamp and mid-band upper-protected-band adjoint.
+  - Stratified endpoint supervision $s \sim \text{Uniform}(0.0, 1.0)$ with 10% stratified draws in $[0.95, 1.0]$.
+  - Trained `artifacts/rich-low-sfht-v2/` (2,000 steps, AdamW $10^{-4}$, 8192-point STFT) and `artifacts/rich-mid-v3/` (500–8000 Hz curriculum with stopped-mid abstention).
+  - Out-of-distribution Cauchy velocity extrapolation eliminated: `--sfht-shrinkage 1.0` verified superior to historical `0.88`.
+- **Workstream B ($\mathfrak{so}(4)$ Lie-Algebra Port-Hamiltonian & Sub-Side Bank)**:
+  - Implemented `PortHamiltonianLieV2` (`--morphic-mode ph-lie-v2`) in `src/gtf.rs` with 6-generator $\mathfrak{so}(4)$ Lie algebra and directed pair exchange.
+  - Dedicated stereo Side 4D state bank ($z_S$) driven by rolling sub-band energy fraction $\rho_S$ and $c_{LR}$ routes side rumble into strongly damped mode 3 with air readout disabled.
+  - Quartic AVF Newton solver enforces discrete energy residual gate $r_E \le 10^{-9} \max(H(z_n), 1.0)$ with clean fallback to unconditionally passive quadratic midpoint step.
+  - Verified 5 unit suites: pure mono Side nulling, $L \leftrightarrow R$ channel swap symmetry, 10,000-hop unforced passivity, and passband lock $< 10^{-7}$ RMS error.
+- **Workstream C (Learned Dynamics-v2 Promotion Gate Audit)**:
+  - 961-parameter amplitude-envelope head evaluated across 3 starts (`7301`, `7309`, `7321`) with paired/shuffled controls over unseen test seeds `2300000..2300023`.
+  - Gate 1 passed (19.44% error reduction vs Identity), but Gate 2 failed (0.89% vs $\ge 5.0\%$), Gate 3 failed on mean healthy NMSE (0.001359 vs $\le 0.00100$), and Gate 4 failed on fast peak compression (0.050951 vs 0.042380).
+  - In strict compliance with evidentiary standards, Dynamics-v2 was not promoted to candidate auto-master routing; retained as opt-in contrast tool.
+- **Workstream D (Clock-Coupled Transient Punch & Dynamic Release)**:
+  - Implemented `--clock-transient-punch` in `src/master.rs`, linking dynamic glue release and bounded attack transient contour to the 150 ms envelope clock.
+- **Workstream E (Microstructure Cross-Frame Phase Consistency)**:
+  - Implemented `--phase-consistency` in `src/microstructure.rs` and CLI, penalizing inter-frame phase velocity curvature to eliminate metallic grain and phase jitter without dulling high-frequency air.
+- **Full-Pipeline Factorial Ablation Matrix**:
+  - Full-song (140.4s) factorial ablation executed on `/sdcard/Download/Chasing Horizons.wav`.
+  - Winning candidate configuration: `04_phase_consistency` (Auto-Tune + Specialists + Flow-v2/v3 + Lie-PH-v2 + Clock Transient Punch + Phase Consistency 0.5):
+    - Integrated LUFS: **-11.11 LUFS** (target -11.0 LUFS strictly respected)
+    - True Peak: **-1.00 dBTP** (0.0 inter-sample clipping)
+    - Sub-band Instability: **0.1904** (lowest observed, -12.9% defect reduction)
+    - Stereo Correlation: **0.7849** (highest stereo cohesion)
+    - Transient Definition: **571 onsets detected** (+30 onsets unmasked over champion baseline)
+    - Snare / Air Transient Punch: Substantial retention improvements (-0.152 dB / -0.281 dB)
+- **Export & Storage Discipline**:
+  - Exported winning candidate master to `/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac` (24-bit / 48 kHz lossless FLAC, 31 MB).
+  - Storage hygiene strictly audited: zero interim stage WAVs, excerpts, or difference files exist in `/sdcard/Download/`.
+

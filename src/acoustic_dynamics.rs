@@ -146,6 +146,25 @@ impl ContrastTimeline {
             lerp(a.transient_factor, b.transient_factor),
         )
     }
+
+    /// Linear interpolation of raw fast (5ms), medium (150ms) and slow (2.5s) clock energies.
+    pub fn clocks_at(&self, sample: usize) -> (f64, f64, f64) {
+        if self.points.is_empty() {
+            return (0.0, 0.0, 0.0);
+        }
+        let position = (sample as f64 / self.hop as f64 - 0.5).max(0.0);
+        let i = (position as usize).min(self.points.len() - 1);
+        let j = (i + 1).min(self.points.len() - 1);
+        let mix = (position - i as f64).clamp(0.0, 1.0);
+        let a = &self.points[i];
+        let b = &self.points[j];
+        let lerp64 = |x: f64, y: f64| x + (y - x) * mix;
+        (
+            lerp64(a.fast_energy, b.fast_energy),
+            lerp64(a.medium_energy, b.medium_energy),
+            lerp64(a.slow_energy, b.slow_energy),
+        )
+    }
 }
 
 #[cfg(test)]
