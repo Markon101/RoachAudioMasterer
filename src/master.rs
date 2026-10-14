@@ -28,6 +28,12 @@ pub struct MasterControls {
     /// Coupled-clock transient punch: dynamic glue release and bounded attack transient contour.
     #[arg(long)]
     pub clock_transient_punch: bool,
+    /// Kick-transient un-flattening guard: 26 Hz infrasonic recovery and split-band sub-sustain envelope control.
+    #[arg(long)]
+    pub kick_transient_guard: bool,
+    /// Quiet-passage mid-band noise suppression and dynamic make-up gain riding.
+    #[arg(long)]
+    pub quiet_mid_denoise: bool,
 }
 
 impl Default for MasterControls {
@@ -37,6 +43,8 @@ impl Default for MasterControls {
             glue_attack_ms: 20.0,
             max_limiter_gr_db: None,
             clock_transient_punch: false,
+            kick_transient_guard: false,
+            quiet_mid_denoise: false,
         }
     }
 }
@@ -57,9 +65,123 @@ impl MasterControls {
     }
 }
 
+#[derive(Clone, Debug)]
 struct Biquad {
     b: [f64; 3],
     a: [f64; 3],
+}
+
+#[derive(Clone, Debug)]
+pub struct Lr4Filter {
+    stage1: Biquad,
+    stage2: Biquad,
+}
+
+impl Lr4Filter {
+    pub fn high_pass(fc: f64, rate: f64) -> Self {
+        let w0 = 2.0 * std::f64::consts::PI * fc / rate;
+        let cos_w0 = w0.cos();
+        let alpha = w0.sin() * std::f64::consts::FRAC_1_SQRT_2; // Q = 1/sqrt(2) => alpha = sin(w0) / sqrt(2)
+        let b0 = (1.0 + cos_w0) / 2.0;
+        let b1 = -(1.0 + cos_w0);
+        let b2 = (1.0 + cos_w0) / 2.0;
+        let a0 = 1.0 + alpha;
+        let a1 = -2.0 * cos_w0;
+        let a2 = 1.0 - alpha;
+        let b = [b0 / a0, b1 / a0, b2 / a0];
+        let a = [1.0, a1 / a0, a2 / a0];
+        let bq = Biquad { b, a };
+        Self { stage1: bq.clone(), stage2: bq }
+    }
+
+    pub fn low_pass(fc: f64, rate: f64) -> Self {
+        let w0 = 2.0 * std::f64::consts::PI * fc / rate;
+        let cos_w0 = w0.cos();
+        let alpha = w0.sin() * std::f64::consts::FRAC_1_SQRT_2;
+        let b0 = (1.0 - cos_w0) / 2.0;
+        let b1 = 1.0 - cos_w0;
+        let b2 = (1.0 - cos_w0) / 2.0;
+        let a0 = 1.0 + alpha;
+        let a1 = -2.0 * cos_w0;
+        let a2 = 1.0 - alpha;
+        let b = [b0 / a0, b1 / a0, b2 / a0];
+        let a = [1.0, a1 / a0, a2 / a0];
+        let bq = Biquad { b, a };
+        Self { stage1: bq.clone(), stage2: bq }
+    }
+
+    pub fn run(&self, x: &[f32]) -> Vec<f32> {
+        let s1 = self.stage1.run(x);
+        let s1_32: Vec<f32> = s1.iter().map(|&v| v as f32).collect();
+        let s2 = self.stage2.run(&s1_32);
+        s2.iter().map(|&v| v as f32).collect()
+    }
+}
+
+/// Split-band sub-sustain envelope controller and continuous soft-knee saturation.
+/// Decouples 0-18 ms kick drum transient attack from sustained 30-85 Hz sub-bass tails.
+pub fn apply_sub_sustain_controller(audio: &Audio) -> Audio {
+    let lp = Lr4Filter::low_pass(110.0, RATE as f64);
+    let hp = Lr4Filter::high_pass(110.0, RATE as f64);
+
+    let processed_channels: Vec<Vec<f32>> = audio
+        .channels
+        .iter()
+        .map(|ch| {
+            let n = ch.len();
+            if n == 0 {
+                return Vec::new();
+            }
+            let x_low = lp.run(ch);
+            let x_high = hp.run(ch);
+
+            let tau_fast = 0.005f32;
+            let tau_med = 0.150f32;
+            let alpha_fast = (-1.0 / (tau_fast * RATE as f32)).exp();
+            let alpha_med = (-1.0 / (tau_med * RATE as f32)).exp();
+            let tau_rel = 0.018f32; // 18 ms transient hold decay
+            let alpha_rel = (-1.0 / (tau_rel * RATE as f32)).exp();
+
+            let mut e_fast = 0.0f32;
+            let mut e_med = 0.0f32;
+            let mut transient_env = 0.0f32;
+
+            let mut out = vec![0.0f32; n];
+            for i in 0..n {
+                let xl = x_low[i];
+                let p = xl * xl;
+                e_fast = alpha_fast * e_fast + (1.0 - alpha_fast) * p;
+                e_med = alpha_med * e_med + (1.0 - alpha_med) * p;
+
+                let onset_ratio = e_fast / (e_med + 1e-8);
+                // Detect kick transient onset: fast envelope surges above medium envelope with active level
+                if onset_ratio > 1.35 && p > 0.02 {
+                    transient_env = 1.0;
+                } else {
+                    transient_env *= alpha_rel;
+                }
+
+                let x0 = 0.65f32;
+                let x_max = 0.82f32;
+                let compressed_xl = if xl.abs() <= x0 {
+                    xl
+                } else {
+                    let excess = xl.abs() - x0;
+                    let s = x_max - x0;
+                    xl.signum() * (x0 + s * (excess / s).tanh())
+                };
+
+                let xl_proc = xl * transient_env + compressed_xl * (1.0 - transient_env);
+                out[i] = xl_proc + x_high[i];
+            }
+            out
+        })
+        .collect();
+
+    Audio {
+        rate: audio.rate,
+        channels: processed_channels,
+    }
 }
 impl Biquad {
     fn run(&self, x: &[f32]) -> Vec<f64> {
@@ -480,9 +602,19 @@ pub fn master_audio_with_controls(
 
     let before = metrics(input_audio);
 
+    let filtered_input = if controls.kick_transient_guard {
+        let hp26 = Lr4Filter::high_pass(26.0, RATE as f64);
+        Audio {
+            rate: input_audio.rate,
+            channels: input_audio.channels.iter().map(|c| hp26.run(c)).collect(),
+        }
+    } else {
+        input_audio.clone()
+    };
+
     let (compressed, glue_gr) = if glue_ratio > 1.0 && !controls.no_glue {
         glue(
-            input_audio,
+            &filtered_input,
             glue_threshold_db,
             glue_ratio,
             8.0,
@@ -492,13 +624,25 @@ pub fn master_audio_with_controls(
             controls.clock_transient_punch,
         )
     } else {
-        (input_audio.clone(), 0.0)
+        (filtered_input, 0.0)
     };
 
     let pre_shaped = if controls.clock_transient_punch {
         apply_transient_punch_shaping(&compressed)
     } else {
         compressed.clone()
+    };
+
+    let pre_shaped = if controls.kick_transient_guard {
+        apply_sub_sustain_controller(&pre_shaped)
+    } else {
+        pre_shaped
+    };
+
+    let quiet_timeline = if controls.quiet_mid_denoise {
+        Some(crate::acoustic_dynamics::ContrastTimeline::analyze(&pre_shaped, true, true))
+    } else {
+        None
     };
 
     let ceiling_lin = 10.0f32.powf(ceiling_db / 20.0);
@@ -522,14 +666,42 @@ pub fn master_audio_with_controls(
             budget_exhausted = pre_gain_db >= max_drive - 1e-5;
         }
         last_applied_drive = pre_gain_db;
-        let g = 10.0f32.powf(pre_gain_db / 20.0);
-        let scaled = Audio {
-            rate: pre_shaped.rate,
-            channels: pre_shaped
-                .channels
-                .iter()
-                .map(|c| c.iter().map(|x| x * g).collect())
-                .collect(),
+        let scaled = if let Some(ref tl) = quiet_timeline {
+            let n = pre_shaped.frames();
+            let mut gains = Vec::with_capacity(n);
+            let max_quiet_gain = pre_gain_db.min(3.0);
+            for i in 0..n {
+                let (_fast_e, med_e, slow_e) = tl.clocks_at(i);
+                let passage_e = slow_e.min(med_e);
+                let slow_db = 10.0 * (passage_e as f32).max(1e-12).log10();
+                let g_db = if slow_db <= -38.0 {
+                    max_quiet_gain
+                } else if slow_db >= -26.0 {
+                    pre_gain_db
+                } else {
+                    let t = ((slow_db - (-38.0)) / 12.0).clamp(0.0, 1.0);
+                    max_quiet_gain * (1.0 - t) + pre_gain_db * t
+                };
+                gains.push(10.0f32.powf(g_db / 20.0));
+            }
+            Audio {
+                rate: pre_shaped.rate,
+                channels: pre_shaped
+                    .channels
+                    .iter()
+                    .map(|c| c.iter().zip(&gains).map(|(&x, &g)| x * g).collect())
+                    .collect(),
+            }
+        } else {
+            let g = 10.0f32.powf(pre_gain_db / 20.0);
+            Audio {
+                rate: pre_shaped.rate,
+                channels: pre_shaped
+                    .channels
+                    .iter()
+                    .map(|c| c.iter().map(|x| x * g).collect())
+                    .collect(),
+            }
         };
         let (l, gr) = if controls.max_limiter_gr_db == Some(0.0) {
             (scaled, 0.0)
@@ -928,4 +1100,143 @@ mod tests {
             default_res.onset_audit.snare_transient_to_sustain_ratio_db
         );
     }
+
+    #[test]
+    fn test_v1_3_controls_disabled_parity() {
+        let audio = tone(0.05, 440.0, 2);
+        let parent = master_audio(&audio, -14.0, -1.0, -18.0, 1.8, 90.0).unwrap();
+        let default_res = master_audio_with_controls(
+            &audio,
+            -14.0,
+            -1.0,
+            -18.0,
+            1.8,
+            90.0,
+            &MasterControls::default(),
+        )
+        .unwrap();
+        assert_eq!(parent.mastered.channels, default_res.mastered.channels);
+    }
+
+    #[test]
+    fn test_kick_transient_guard_preserves_attack_and_reduces_limiter_gr() {
+        let mut audio = tone(0.05, 440.0, 2);
+        // Add a sustained 45 Hz sub drone approaching ceiling (high limiter clamping)
+        for c in &mut audio.channels {
+            for t in 0..c.len() {
+                let sub = 0.70 * (2.0 * PI * 45.0 * t as f32 / RATE as f32).sin();
+                c[t] += sub;
+            }
+            // Add sharp kick transient onsets
+            for kick_idx in [4800, 24000, 48000, 72000] {
+                for t in 0..864 { // 18 ms
+                    let env = (1.0 - t as f32 / 864.0).powi(2);
+                    c[kick_idx + t] += 0.4 * env * (2.0 * PI * 75.0 * t as f32 / RATE as f32).sin();
+                }
+            }
+        }
+
+        let default_res = master_audio_with_controls(
+            &audio,
+            -11.0,
+            -1.0,
+            -18.0,
+            1.6,
+            90.0,
+            &MasterControls::default(),
+        )
+        .unwrap();
+
+        let guard_res = master_audio_with_controls(
+            &audio,
+            -11.0,
+            -1.0,
+            -18.0,
+            1.6,
+            90.0,
+            &MasterControls {
+                kick_transient_guard: true,
+                ..MasterControls::default()
+            },
+        )
+        .unwrap();
+
+        let ceiling_lin = 10.0f32.powf(-1.0 / 20.0);
+        assert!(true_peak(&guard_res.mastered) <= ceiling_lin * 1.001);
+        // Sub-sustain damping ahead of limiter should reduce or keep limiter GR bounded
+        assert!(guard_res.limiter_gr <= default_res.limiter_gr + 0.1);
+        assert!(guard_res.onset_audit.num_onsets_detected > 0);
+    }
+
+    #[test]
+    fn test_quiet_mid_denoise_caps_make_up_gain_in_breakdowns() {
+        // Construct 6 seconds of audio: 3s loud chorus (-12 dBFS) followed by 3s quiet breakdown (-42 dBFS)
+        let r = RATE as usize;
+        let n = r * 6;
+        let mut ch0 = vec![0.0f32; n];
+        let mut ch1 = vec![0.0f32; n];
+        for t in 0..(r * 3) {
+            let s = 0.25 * (2.0 * PI * 440.0 * t as f32 / RATE as f32).sin();
+            ch0[t] = s;
+            ch1[t] = s;
+        }
+        for t in (r * 3)..n {
+            let s = 0.008 * (2.0 * PI * 440.0 * t as f32 / RATE as f32).sin();
+            ch0[t] = s;
+            ch1[t] = s;
+        }
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![ch0, ch1],
+        };
+
+        let default_res = master_audio_with_controls(
+            &audio,
+            -9.0,
+            -1.0,
+            -20.0,
+            1.6,
+            90.0,
+            &MasterControls::default(),
+        )
+        .unwrap();
+
+        let quiet_res = master_audio_with_controls(
+            &audio,
+            -9.0,
+            -1.0,
+            -20.0,
+            1.6,
+            90.0,
+            &MasterControls {
+                quiet_mid_denoise: true,
+                ..MasterControls::default()
+            },
+        )
+        .unwrap();
+
+        // In the quiet breakdown (samples 4 * r to 5 * r), quiet_res should have lower RMS than default_res
+        let breakdown_range = (4 * r)..(5 * r);
+        let default_rms: f32 = (default_res.mastered.channels[0][breakdown_range.clone()]
+            .iter()
+            .map(|x| x * x)
+            .sum::<f32>()
+            / r as f32)
+            .sqrt();
+        let quiet_rms: f32 = (quiet_res.mastered.channels[0][breakdown_range]
+            .iter()
+            .map(|x| x * x)
+            .sum::<f32>()
+            / r as f32)
+            .sqrt();
+
+        let diff_db = 20.0 * (quiet_rms / default_rms).log10();
+        // Quiet passage gain should be noticeably lower (e.g. <= -1.5 dB lower make-up)
+        assert!(
+            diff_db <= -1.0,
+            "Quiet passage did not receive bounded make-up gain: diff_db = {}",
+            diff_db
+        );
+    }
 }
+

@@ -146,12 +146,13 @@ fn centered(x: C, k: usize) -> C {
     x * if k.is_multiple_of(2) { 1.0 } else { -1.0 }
 }
 
-pub fn mid_waveform(
+pub fn mid_waveform_with_quiet_gate(
     p: &Prepared,
     d: Damage,
     ceiling_hz: f32,
     state: &[Vec<C>; 2],
     strength: f32,
+    quiet_abstention: bool,
 ) -> Audio {
     if strength == 0.0 || state.iter().flatten().all(|z| z.re == 0.0 && z.im == 0.0) {
         return p.input.clone();
@@ -161,10 +162,29 @@ pub fn mid_waveform(
     let ms = std::array::from_fn(|c| {
         let mut data = p.base[c].data.clone();
         for t in 0..p.frames {
+            // SNR / Envelope-Coupled Abstention Gate:
+            let gate = if quiet_abstention {
+                let frame_rms = p.low_rms[c][t] / (FFT as f32 / 2.0).sqrt();
+                let frame_db = 20.0 * (frame_rms + 1e-7).log10();
+                let ratio = p.low_rms[c][t] / (p.scale[c] + 1e-7);
+                let rel_db = 20.0 * (ratio + 1e-7).log10();
+
+                // Margin above -30 dBFS absolute and -12 dB relative to chunk active scale
+                let delta_abs = frame_db - (-30.0);
+                let delta_rel = rel_db - (-12.0);
+                let delta = delta_abs.min(delta_rel);
+
+                // Algebraic sigmoid transition centered at 0 dB margin, width ~3 dB
+                let z = delta / 3.0;
+                (0.5 * (1.0 + z / (1.0 + z * z).sqrt())).clamp(0.0, 1.0)
+            } else {
+                1.0f32
+            };
+
             for k in d.cutoff_bin() + 1..=ceil_bin {
                 if p.active[c] {
                     data[t * BINS + k] +=
-                        centered(state[c][t * BINS + k], k) * p.scale[c] * d.missing(k);
+                        centered(state[c][t * BINS + k], k) * p.scale[c] * d.missing(k) * gate;
                 }
             }
         }
@@ -199,6 +219,16 @@ pub fn mid_waveform(
         }
     });
     Audio::from_mid_side(RATE, ms, p.input.channels.len() == 2)
+}
+
+pub fn mid_waveform(
+    p: &Prepared,
+    d: Damage,
+    ceiling_hz: f32,
+    state: &[Vec<C>; 2],
+    strength: f32,
+) -> Audio {
+    mid_waveform_with_quiet_gate(p, d, ceiling_hz, state, strength, false)
 }
 
 fn mid_waveform_gradient(g: &[f32], cutoff: f32, ceiling: f32) -> Vec<f32> {
@@ -483,6 +513,40 @@ pub fn restore(
     backend: &str,
     out: &Path,
 ) -> Result<()> {
+    restore_with_quiet_gate(
+        model_path,
+        input_path,
+        mid_cutoff,
+        mid_ceiling,
+        controlled,
+        steps,
+        strength,
+        chunk_seconds,
+        overlap_seconds,
+        denoise,
+        auto_eq,
+        backend,
+        out,
+        false,
+    )
+}
+
+pub fn restore_with_quiet_gate(
+    model_path: &Path,
+    input_path: &Path,
+    mid_cutoff: f32,
+    mid_ceiling: f32,
+    controlled: bool,
+    steps: usize,
+    strength: f32,
+    chunk_seconds: f64,
+    overlap_seconds: f64,
+    denoise: bool,
+    auto_eq: bool,
+    backend: &str,
+    out: &Path,
+    quiet_abstention: bool,
+) -> Result<()> {
     if !out.exists() {
         new_run(out)?;
     }
@@ -525,7 +589,8 @@ pub fn restore(
 
     let num_chunks = chunk_starts.len();
     println!(
-        "Mid-flow restoration: {} samples ({:.2}s), {} channels, {} chunks (chunk={:.1}s, overlap={:.1}s), cutoff={:.1}Hz",
+        "Mid-flow restoration (quiet_gate={}): {} samples ({:.2}s), {} channels, {} chunks (chunk={:.1}s, overlap={:.1}s), cutoff={:.1}Hz",
+        quiet_abstention,
         total_samples,
         total_samples as f64 / audio.rate as f64,
         num_channels,
@@ -546,7 +611,11 @@ pub fn restore(
         let chunk_t0 = Instant::now();
         let c_end = (c_start + chunk_samples).min(total_samples);
         let actual_chunk_len = c_end - c_start;
-        let chunk_cache_file = chunk_dir.join(format!("chunk_{:04}.bin", idx));
+        let chunk_cache_file = if quiet_abstention {
+            chunk_dir.join(format!("chunk_q_{:04}.bin", idx))
+        } else {
+            chunk_dir.join(format!("chunk_{:04}.bin", idx))
+        };
 
         let y = if chunk_cache_file.exists() {
             println!(
@@ -603,7 +672,7 @@ pub fn restore(
                 field.kind.mode(),
                 Some(ceil_bin + 1),
             )?;
-            let y = mid_waveform(&p, d, mid_ceiling, &state, strength);
+            let y = mid_waveform_with_quiet_gate(&p, d, mid_ceiling, &state, strength, quiet_abstention);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);
             for c in 0..num_channels {

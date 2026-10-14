@@ -4496,8 +4496,13 @@ pub fn process_morphic_audio_with_contrast(
             let win_start = split_bin.saturating_sub(half_w).max(crossover_bin);
             let win_end = (split_bin + half_w).min(num_bins);
 
+            // Workstream 3: Raised-cosine spectral air window above 16.0 kHz (tapering to 0.0 at 19.5 kHz)
+            // for PortHamiltonianLieV2 to prevent amplifying generator cutoff phase-noise near 19.8 kHz.
+            let taper_start_bin = ((16000.0 * FFT as f32 / RATE as f32).round() as usize).min(num_bins);
+            let taper_end_bin = ((19500.0 * FFT as f32 / RATE as f32).round() as usize).min(num_bins);
+
             for k in crossover_bin..num_bins {
-                let (gm, gs) = if k < win_start {
+                let (mut gm, mut gs) = if k < win_start {
                     (g_mid_a, g_side_a)
                 } else if k >= win_end {
                     (g_mid_b, g_side_b)
@@ -4507,6 +4512,18 @@ pub fn process_morphic_audio_with_contrast(
                     let wa = 1.0f32 - wb;
                     (wa * g_mid_a + wb * g_mid_b, wa * g_side_a + wb * g_side_b)
                 };
+
+                if is_ph_lie && k >= taper_start_bin {
+                    let air_taper = if k >= taper_end_bin {
+                        0.0f32
+                    } else {
+                        let f_frac = (k - taper_start_bin) as f32 / (taper_end_bin - taper_start_bin) as f32;
+                        0.5f32 * (1.0f32 + (std::f32::consts::PI * f_frac).cos())
+                    };
+                    gm = 1.0f32 + (gm - 1.0f32) * air_taper;
+                    gs = 1.0f32 + (gs - 1.0f32) * air_taper;
+                }
+
                 let idx = t * num_bins + k;
                 spec_mid.data[idx] *= gm;
                 spec_side.data[idx] *= gs;

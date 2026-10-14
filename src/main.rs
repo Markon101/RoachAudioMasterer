@@ -2583,7 +2583,7 @@ fn auto_master_pipeline(
             let stage2_dir = out_dir.join("stage2_mid");
             let stage2_in = out_dir.join("stage2_in.wav");
             native_audio::write(&stage2_in, &current_audio, false)?;
-            rich_mid::restore(
+            rich_mid::restore_with_quiet_gate(
                 m_path,
                 &stage2_in,
                 mid_cutoff,
@@ -2597,6 +2597,7 @@ fn auto_master_pipeline(
                 false,
                 backend,
                 &stage2_dir,
+                master_controls.quiet_mid_denoise,
             )?;
             let mid_wav = if stage2_dir.join("restored.wav").exists() {
                 stage2_dir.join("restored.wav")
@@ -2613,11 +2614,17 @@ fn auto_master_pipeline(
     // Stage 3: Clean Polish (Adaptive High-Band Denoise & Auto-EQ)
     if denoise || auto_eq {
         println!(
-            "\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}, max_eq_db={:.2}) ---",
-            denoise, auto_eq, auto_eq_max_db
+            "\n--- Stage 3: Clean Polish (denoise={}, auto_eq={}, max_eq_db={:.2}, quiet_denoise={}) ---",
+            denoise, auto_eq, auto_eq_max_db, master_controls.quiet_mid_denoise
         );
         let t0 = std::time::Instant::now();
-        current_audio = scene_clean::clean_audio_with_bounds(&current_audio, denoise, auto_eq, auto_eq_max_db);
+        current_audio = scene_clean::clean_audio_v1_3(
+            &current_audio,
+            denoise,
+            auto_eq,
+            auto_eq_max_db,
+            master_controls.quiet_mid_denoise,
+        );
         println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
         native_audio::write(&out_dir.join("stage3_clean.wav"), &current_audio, false)?;
     }
