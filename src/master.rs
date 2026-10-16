@@ -74,7 +74,6 @@ struct Biquad {
 #[derive(Clone, Debug)]
 pub struct Lr4Filter {
     stage1: Biquad,
-    stage2: Biquad,
 }
 
 impl Lr4Filter {
@@ -90,8 +89,9 @@ impl Lr4Filter {
         let a2 = 1.0 - alpha;
         let b = [b0 / a0, b1 / a0, b2 / a0];
         let a = [1.0, a1 / a0, a2 / a0];
-        let bq = Biquad { b, a };
-        Self { stage1: bq.clone(), stage2: bq }
+        Self {
+            stage1: Biquad { b, a },
+        }
     }
 
     pub fn low_pass(fc: f64, rate: f64) -> Self {
@@ -106,75 +106,174 @@ impl Lr4Filter {
         let a2 = 1.0 - alpha;
         let b = [b0 / a0, b1 / a0, b2 / a0];
         let a = [1.0, a1 / a0, a2 / a0];
-        let bq = Biquad { b, a };
-        Self { stage1: bq.clone(), stage2: bq }
+        Self {
+            stage1: Biquad { b, a },
+        }
     }
 
+    #[allow(dead_code)]
     pub fn run(&self, x: &[f32]) -> Vec<f32> {
         let s1 = self.stage1.run(x);
         let s1_32: Vec<f32> = s1.iter().map(|&v| v as f32).collect();
-        let s2 = self.stage2.run(&s1_32);
+        let s2 = self.stage1.run(&s1_32);
         s2.iter().map(|&v| v as f32).collect()
+    }
+
+    /// Zero-phase forward-backward 4th-order Linkwitz-Riley filter:
+    /// Identical 24 dB/oct magnitude response to causal LR4, with strictly 0 deg phase shift
+    /// so low-frequency phase dispersion never inflates crest/peak levels on transient waveforms.
+    pub fn run_zero_phase(&self, x: &[f32]) -> Vec<f32> {
+        if x.is_empty() {
+            return Vec::new();
+        }
+        let s1 = self.stage1.run(x);
+        let s1_rev: Vec<f32> = s1.iter().rev().map(|&v| v as f32).collect();
+        let s2_rev = self.stage1.run(&s1_rev);
+        s2_rev.into_iter().rev().map(|v| v as f32).collect()
     }
 }
 
-/// Split-band sub-sustain envelope controller and continuous soft-knee saturation.
-/// Decouples 0-18 ms kick drum transient attack from sustained 30-85 Hz sub-bass tails.
+/// Split-band sub-sustain envelope controller with zero-phase crossover and smooth peak-held gain.
+/// Decouples 0-20 ms kick drum transient attack from sustained 30-110 Hz sub-bass tails
+/// without sample-by-sample waveshaping harmonics or zero-crossing step discontinuities.
+#[allow(dead_code)]
 pub fn apply_sub_sustain_controller(audio: &Audio) -> Audio {
+    apply_sub_sustain_controller_with_drive(audio, 0.0, -1.0)
+}
+
+pub fn apply_sub_sustain_controller_with_drive(
+    audio: &Audio,
+    expected_drive_db: f32,
+    ceiling_db: f32,
+) -> Audio {
+    let n = audio.frames();
+    if n == 0 || audio.channels.is_empty() {
+        return audio.clone();
+    }
     let lp = Lr4Filter::low_pass(110.0, RATE as f64);
-    let hp = Lr4Filter::high_pass(110.0, RATE as f64);
 
-    let processed_channels: Vec<Vec<f32>> = audio
-        .channels
-        .iter()
-        .map(|ch| {
-            let n = ch.len();
-            if n == 0 {
-                return Vec::new();
-            }
-            let x_low = lp.run(ch);
-            let x_high = hp.run(ch);
+    let mut low_bands: Vec<Vec<f32>> = Vec::with_capacity(audio.channels.len());
+    let mut high_bands: Vec<Vec<f32>> = Vec::with_capacity(audio.channels.len());
+    for ch in &audio.channels {
+        let x_low = lp.run_zero_phase(ch);
+        let x_high: Vec<f32> = ch.iter().zip(&x_low).map(|(&x, &xl)| x - xl).collect();
+        low_bands.push(x_low);
+        high_bands.push(x_high);
+    }
 
-            let tau_fast = 0.005f32;
-            let tau_med = 0.150f32;
-            let alpha_fast = (-1.0 / (tau_fast * RATE as f32)).exp();
-            let alpha_med = (-1.0 / (tau_med * RATE as f32)).exp();
-            let tau_rel = 0.018f32; // 18 ms transient hold decay
-            let alpha_rel = (-1.0 / (tau_rel * RATE as f32)).exp();
+    // Stereo-linked instantaneous low-band amplitude
+    let raw_low_peak: Vec<f32> = (0..n)
+        .map(|i| low_bands.iter().fold(0.0f32, |m, c| m.max(c[i].abs())))
+        .collect();
 
-            let mut e_fast = 0.0f32;
-            let mut e_med = 0.0f32;
-            let mut transient_env = 0.0f32;
-
-            let mut out = vec![0.0f32; n];
-            for i in 0..n {
-                let xl = x_low[i];
-                let p = xl * xl;
-                e_fast = alpha_fast * e_fast + (1.0 - alpha_fast) * p;
-                e_med = alpha_med * e_med + (1.0 - alpha_med) * p;
-
-                let onset_ratio = e_fast / (e_med + 1e-8);
-                // Detect kick transient onset: fast envelope surges above medium envelope with active level
-                if onset_ratio > 1.35 && p > 0.02 {
-                    transient_env = 1.0;
+    // Sliding maximum over +/- 6 ms (288 samples) to bridge zero-crossings of >= 40 Hz sub waves
+    // so envelope control never ripples at 2*f_bass (which would create harmonic buzz).
+    let hold_half = 288usize;
+    let mut held_peak = vec![0.0f32; n];
+    let mut deque: std::collections::VecDeque<usize> = std::collections::VecDeque::new();
+    let mut right = 0usize;
+    for i in 0..n {
+        let target_right = (i + hold_half).min(n - 1);
+        while right <= target_right {
+            while let Some(&b) = deque.back() {
+                if raw_low_peak[b] <= raw_low_peak[right] {
+                    deque.pop_back();
                 } else {
-                    transient_env *= alpha_rel;
+                    break;
                 }
-
-                let x0 = 0.65f32;
-                let x_max = 0.82f32;
-                let compressed_xl = if xl.abs() <= x0 {
-                    xl
-                } else {
-                    let excess = xl.abs() - x0;
-                    let s = x_max - x0;
-                    xl.signum() * (x0 + s * (excess / s).tanh())
-                };
-
-                let xl_proc = xl * transient_env + compressed_xl * (1.0 - transient_env);
-                out[i] = xl_proc + x_high[i];
             }
-            out
+            deque.push_back(right);
+            right += 1;
+        }
+        let left = i.saturating_sub(hold_half);
+        while let Some(&f) = deque.front() {
+            if f < left {
+                deque.pop_front();
+            } else {
+                break;
+            }
+        }
+        held_peak[i] = raw_low_peak[*deque.front().unwrap()];
+    }
+
+    let alpha_env_att = (-1.0 / (0.0035 * RATE as f32)).exp(); // 3.5 ms smooth envelope attack
+    let alpha_env_rel = (-1.0 / (0.0450 * RATE as f32)).exp(); // 45 ms smooth envelope release
+    let alpha_fast = (-1.0 / (0.005 * RATE as f32)).exp();
+    let alpha_med = (-1.0 / (0.150 * RATE as f32)).exp();
+    let alpha_tr_att = (-1.0 / (0.0015 * RATE as f32)).exp(); // 1.5 ms click-free transient gate attack
+    let alpha_tr_rel = (-1.0 / (0.0200 * RATE as f32)).exp(); // 20 ms kick punch hold decay
+
+    let drive_lin = 10.0f32.powf(expected_drive_db.clamp(0.0, 8.0) / 20.0);
+    let ceiling_lin = 10.0f32.powf(ceiling_db / 20.0);
+    let x0_sustain = 0.65 * ceiling_lin;
+    let x_max_sustain = 0.80 * ceiling_lin;
+    let x0_trans = 0.80 * ceiling_lin;
+    let x_max_trans = 0.92 * ceiling_lin;
+
+    let mut env_smooth = 0.0f32;
+    let mut e_fast = 0.0f32;
+    let mut e_med = 0.0f32;
+    let mut transient_env = 0.0f32;
+    let mut sub_gains = vec![1.0f32; n];
+
+    for i in 0..n {
+        let hp = held_peak[i];
+        if hp > env_smooth {
+            env_smooth = alpha_env_att * env_smooth + (1.0 - alpha_env_att) * hp;
+        } else {
+            env_smooth = alpha_env_rel * env_smooth + (1.0 - alpha_env_rel) * hp;
+        }
+
+        let p = env_smooth * env_smooth;
+        e_fast = alpha_fast * e_fast + (1.0 - alpha_fast) * p;
+        e_med = alpha_med * e_med + (1.0 - alpha_med) * p;
+
+        let onset_ratio = e_fast / (e_med + 1e-8);
+        let tr_target = if onset_ratio > 1.30 && env_smooth > 0.12 {
+            1.0f32
+        } else {
+            0.0f32
+        };
+        if tr_target > transient_env {
+            transient_env = alpha_tr_att * transient_env + (1.0 - alpha_tr_att) * tr_target;
+        } else {
+            transient_env = alpha_tr_rel * transient_env + (1.0 - alpha_tr_rel) * tr_target;
+        }
+
+        let proj = env_smooth * drive_lin;
+        let comp_sustain = if proj <= x0_sustain {
+            proj
+        } else {
+            let excess = proj - x0_sustain;
+            let s = (x_max_sustain - x0_sustain).max(1e-4);
+            x0_sustain + s * (excess / s).tanh()
+        };
+        let comp_trans = if proj <= x0_trans {
+            proj
+        } else {
+            let excess = proj - x0_trans;
+            let s = (x_max_trans - x0_trans).max(1e-4);
+            x0_trans + s * (excess / s).tanh()
+        };
+
+        let target_proj = transient_env * comp_trans + (1.0 - transient_env) * comp_sustain;
+        sub_gains[i] = if proj > 1e-6 {
+            (target_proj / proj).clamp(0.25, 1.0)
+        } else {
+            1.0
+        };
+    }
+
+    let processed_channels: Vec<Vec<f32>> = low_bands
+        .into_iter()
+        .zip(high_bands)
+        .map(|(x_low, x_high)| {
+            x_low
+                .into_iter()
+                .zip(x_high)
+                .zip(&sub_gains)
+                .map(|((xl, xh), &g)| xl * g + xh)
+                .collect()
         })
         .collect();
 
@@ -510,6 +609,108 @@ fn limit(a: &Audio, ceiling: f32, lookahead: usize, release_ms: f32) -> (Audio, 
     )
 }
 
+/// Scratch-free C1-smooth lookahead limiter with half-cycle bass peak hold and cascaded Bartlett smoothing:
+/// - Holds gain reduction across `hold` samples (11 ms = 528 samples, bridging >= 45 Hz sub-bass half-cycles)
+///   so bass notes never cause 90-200 Hz sawtooth AM intermodulation on midrange vocals/synths.
+/// - Cascades two `lookahead_half` boxcar passes (parabolic C1-continuous attack transitions, zero slope corners).
+fn limit_smooth(
+    a: &Audio,
+    ceiling: f32,
+    lookahead_half: usize,
+    hold: usize,
+    release_ms: f32,
+) -> (Audio, f32) {
+    let n = a.channels[0].len();
+    let lookahead = 2 * lookahead_half;
+    let need: Vec<f32> = (0..n)
+        .map(|i| {
+            let p = a.channels.iter().fold(0.0f32, |m, c| m.max(c[i].abs()));
+            if p > ceiling {
+                ceiling / p
+            } else {
+                1.0
+            }
+        })
+        .collect();
+
+    // Sliding minimum over [j - hold, j + 2 * lookahead_half]:
+    // Covers peaks up to 2 * lookahead_half ahead AND holds across `hold` samples after each peak.
+    let mut mn = vec![1.0f32; n];
+    let mut deque: std::collections::VecDeque<usize> = std::collections::VecDeque::new();
+    let mut right = 0usize;
+    for j in 0..n {
+        let target_right = (j + lookahead).min(n - 1);
+        while right <= target_right {
+            while let Some(&b) = deque.back() {
+                if need[b] >= need[right] {
+                    deque.pop_back();
+                } else {
+                    break;
+                }
+            }
+            deque.push_back(right);
+            right += 1;
+        }
+        let left = j.saturating_sub(hold);
+        while let Some(&f) = deque.front() {
+            if f < left {
+                deque.pop_front();
+            } else {
+                break;
+            }
+        }
+        mn[j] = need[*deque.front().unwrap()];
+    }
+
+    // Pass 1 boxcar over `lookahead_half` samples
+    let mut sm1 = vec![1.0f32; n];
+    let mut acc1 = 0.0f64;
+    for i in 0..n {
+        acc1 += mn[i] as f64;
+        if i >= lookahead_half {
+            acc1 -= mn[i - lookahead_half] as f64;
+        }
+        let len = (i + 1).min(lookahead_half) as f64;
+        sm1[i] = (acc1 / len) as f32;
+    }
+
+    // Pass 2 boxcar over `lookahead_half` samples -> triangular (Bartlett) kernel with C1 parabolic ramps
+    let mut sm2 = vec![1.0f32; n];
+    let mut acc2 = 0.0f64;
+    for i in 0..n {
+        acc2 += sm1[i] as f64;
+        if i >= lookahead_half {
+            acc2 -= sm1[i - lookahead_half] as f64;
+        }
+        let len = (i + 1).min(lookahead_half) as f64;
+        sm2[i] = (acc2 / len) as f32;
+    }
+
+    let rel = (-1.0 / (release_ms * 0.001 * RATE as f32)).exp();
+    let mut g = 1.0f32;
+    let mut max_gr = 0.0f32;
+    let mut gains = vec![1.0f32; n];
+    for i in 0..n {
+        let released = g * rel + (1.0 - rel);
+        g = sm2[i].min(released);
+        gains[i] = g;
+        max_gr = max_gr.max(-db(g));
+    }
+
+    let channels = a
+        .channels
+        .iter()
+        .map(|c| c.iter().zip(&gains).map(|(x, g)| x * g).collect())
+        .collect();
+    (
+        Audio {
+            rate: a.rate,
+            channels,
+        },
+        max_gr,
+    )
+}
+
 pub struct MasterResult {
     pub mastered: Audio,
     pub before_metrics: serde_json::Value,
@@ -606,7 +807,11 @@ pub fn master_audio_with_controls(
         let hp26 = Lr4Filter::high_pass(26.0, RATE as f64);
         Audio {
             rate: input_audio.rate,
-            channels: input_audio.channels.iter().map(|c| hp26.run(c)).collect(),
+            channels: input_audio
+                .channels
+                .iter()
+                .map(|c| hp26.run_zero_phase(c))
+                .collect(),
         }
     } else {
         input_audio.clone()
@@ -634,7 +839,8 @@ pub fn master_audio_with_controls(
     };
 
     let pre_shaped = if controls.kick_transient_guard {
-        apply_sub_sustain_controller(&pre_shaped)
+        let initial_drive_db = (target_lufs - lufs(&pre_shaped) as f32).max(0.0);
+        apply_sub_sustain_controller_with_drive(&pre_shaped, initial_drive_db, ceiling_db)
     } else {
         pre_shaped
     };
@@ -705,6 +911,8 @@ pub fn master_audio_with_controls(
         };
         let (l, gr) = if controls.max_limiter_gr_db == Some(0.0) {
             (scaled, 0.0)
+        } else if controls.kick_transient_guard {
+            limit_smooth(&scaled, effective_ceiling, 64, 528, 80.0)
         } else {
             limit(&scaled, effective_ceiling, 96, 60.0)
         };
@@ -729,7 +937,7 @@ pub fn master_audio_with_controls(
             break;
         }
     }
-    if controls.max_limiter_gr_db.is_some() {
+    if controls.max_limiter_gr_db.is_some() || controls.kick_transient_guard {
         pre_gain_db = last_applied_drive;
         // Gain-only ceiling correction cannot add compression or exceed the budget.
         let peak = true_peak(&mastered);
@@ -1236,6 +1444,66 @@ mod tests {
             diff_db <= -1.0,
             "Quiet passage did not receive bounded make-up gain: diff_db = {}",
             diff_db
+        );
+    }
+
+    #[test]
+    fn test_zero_phase_lr4_and_smooth_limiter_suppress_am_jitter() {
+        // 55 Hz sub wave + 3000 Hz vocal/synth probe tone exceeding ceiling
+        let n = RATE as usize * 2;
+        let ch: Vec<f32> = (0..n)
+            .map(|i| {
+                let t = i as f32 / RATE as f32;
+                1.10 * (2.0 * PI * 55.0 * t).sin() + 0.15 * (2.0 * PI * 3000.0 * t).sin()
+            })
+            .collect();
+        let audio = Audio {
+            rate: RATE,
+            channels: vec![ch.clone(), ch],
+        };
+
+        let (lim_legacy, _) = limit(&audio, 0.89, 96, 60.0);
+        let (lim_smooth, _) = limit_smooth(&audio, 0.89, 64, 528, 80.0);
+
+        assert!(sample_peak(&lim_smooth) <= 0.89 + 1e-4);
+
+        // Verify zero-phase complementary crossover identity when sub envelope is below threshold
+        let quiet_sub = tone(0.2, 55.0, 1);
+        let ctrl_out = apply_sub_sustain_controller(&quiet_sub);
+        let max_err = quiet_sub.channels[0]
+            .iter()
+            .zip(&ctrl_out.channels[0])
+            .map(|(a, b)| (a - b).abs())
+            .fold(0.0f32, f32::max);
+        assert!(
+            max_err < 1e-5,
+            "Zero-phase crossover must be exact identity below threshold, max_err = {}",
+            max_err
+        );
+
+        // High-pass above 1500 Hz to measure AM sideband distortion on the 3000 Hz tone
+        let hp = Lr4Filter::high_pass(1500.0, RATE as f64);
+        let h_leg = hp.run_zero_phase(&lim_legacy.channels[0]);
+        let h_sm = hp.run_zero_phase(&lim_smooth.channels[0]);
+
+        // Frame-to-frame (96-sample) RMS jitter in steady state (middle 1s)
+        let jitter = |x: &[f32]| -> f32 {
+            let start = RATE as usize / 2;
+            let end = start + RATE as usize;
+            let envs: Vec<f32> = x[start..end]
+                .chunks_exact(96)
+                .map(|w| (w.iter().map(|v| v * v).sum::<f32>() / 96.0).sqrt())
+                .collect();
+            envs.windows(2)
+                .map(|w| (w[1] - w[0]).powi(2))
+                .sum::<f32>()
+                .sqrt()
+        };
+        assert!(
+            jitter(&h_sm) < jitter(&h_leg) * 0.5,
+            "Smooth peak-hold limiter must cut half-cycle AM jitter by >50%: smooth={} vs legacy={}",
+            jitter(&h_sm),
+            jitter(&h_leg)
         );
     }
 }
