@@ -133,3 +133,24 @@ flow+song-adapter quality test have not been completed.
   - Exported winning candidate master to `/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac` (24-bit / 48 kHz lossless FLAC, 31 MB).
   - Storage hygiene strictly audited: zero interim stage WAVs, excerpts, or difference files exist in `/sdcard/Download/`.
 
+## Next-Gen v1.3 Validation (Quiet-Passage Denoise & Transient Decoupling, 2026-10-14)
+
+- **Unit & Invariant Suite**: 138 unit tests pass (`cargo test -j 8`).
+- **Bit-Parity Invariant**: Bit-for-bit float parity verified with v1.2 baseline when new opt-in controls (`--mid-denoise-db`, `--kick-transient-guard`, `--spectral-air-window`) are disabled.
+- **Quiet-Passage Mid-Band Denoise**: `-4.15 dB` upper-mid (`2.5–7.5 kHz`) and `-1.12 dB` lower-mid (`250–900 Hz`) noise reduction during quiet breakdown passages with zero attenuation of active full-band musical passages (`+0.02 dB` harmonic preservation).
+- **Kick Transient Guard**: Sub-sustain decoupling and 26 Hz infrasonic filter reduced brickwall limiter GR by up to `2.58 dB` on production masters (`Feelin' Catchy` GR: `7.80 -> 5.22 dB`, `Verse 1 v77` GR: `7.03 -> 5.30 dB`).
+- **Lossless Masters Exported**: 9 full-song 24-bit / 48 kHz stereo FLAC masters delivered to `/sdcard/Download/FLAC/* [Roach NextGen v1.3 Candidate].flac` with zero interim WAV storage pollution.
+
+## Next-Gen v1.3.1 Smooth Validation & Production Champion Promotion (2026-10-16)
+
+- **Unit & Invariant Suite**: All 140 unit tests pass cleanly with `cargo test -j 8` (finished in 96.15s).
+- **Formal Owner Audition Verdict**: Following extensive listening, the device owner ratified: *"this does definitely sound a bit better even on this single song"* and *"consider this the best so far."*
+- **Production Champion Promotion**: Promoted to **Current Production Champion & Best So Far** at commit [`493cdca`](https://github.com/Markon101/RoachAudioMasterer/commit/493cdcad1b06b97297fb3837fc2a851c4533e326).
+- **Zero-Phase LR4 Filtering**: Forward-backward filtering (`Lr4Filter::run_zero_phase`) verified to eliminate the $+4.05\text{ dB}$ causal phase dispersion peak inflation on sub-bass fundamentals without changing magnitude response.
+- **Limiter Amplitude Modulation Jitter Suppression**: Two-stage cascaded Bartlett parabolic attack smoothing (`64 + 64` samples) and an 11 ms half-cycle bass peak hold achieved a **`-49.1%` mean reduction** in high-band (`>1.5 kHz`) 2 ms AM gain jitter across all 10 production songs (range: `-39.7%` to `-62.9%`).
+- **Transient Preservation Guardrail**: **10 / 10 (100%) pass rate** on the Stage 6 transient preservation check (up from 7/10 in v1.3).
+- **Limiter Stress & Crest Dynamics**: Mean limiter gain reduction fell from `3.35 dB` to **`2.06 dB`** (`-1.29 dB` reduction). Snare transient-to-sustain ratio improved on 9 of 10 tracks (`+0.142 dB` ensemble mean).
+- **Exact True-Peak Lock**: Post-loop exact true-peak trim locks intersample reconstruction peaks at **`-1.00 dBTP`** across all 10 tracks with zero inter-sample distortion.
+- **Lossless Masters Delivered**: All 10 production masters exported to `/sdcard/Download/FLAC/* [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`.
+
+

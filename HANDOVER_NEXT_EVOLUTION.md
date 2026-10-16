@@ -1,7 +1,8 @@
 # ROACH AUDIO — RESEARCH HANDOVER & NEXT EVOLUTION ROADMAP
-**Timestamp**: 2026-10-11T06:05:00Z  
-**Branch**: `experiment/phase3-geometric-moonshot` (Clean, Commit `37c0887`)  
-**Frozen Champion Tag**: [`v1.1.0-alpha.1-champion`](https://github.com/Markon101/RoachAudioMasterer/releases/tag/v1.1.0-alpha.1-champion)  
+**Timestamp**: 2026-10-16T06:45:00Z  
+**Branch**: `experiment/phase3-geometric-moonshot` (Clean, Commit `493cdca`)  
+**Current Production Champion ("Best So Far")**: [`493cdca`](https://github.com/Markon101/RoachAudioMasterer/commit/493cdcad1b06b97297fb3837fc2a851c4533e326) (`Roach NextGen v1.3.1 Smooth`)  
+**Historical Baseline Champion Tag**: [`v1.1.0-alpha.1-champion`](https://github.com/Markon101/RoachAudioMasterer/releases/tag/v1.1.0-alpha.1-champion)  
 **Hardware Environment**: Android Termux on Snapdragon 8 Elite (Qualcomm Adreno 830 GPU OpenCL)
 
 ---
@@ -108,4 +109,43 @@ plan with corrected gradient provenance and resume-schedule checks.
 7. **Lossless Master Delivered**:
    - Exported `/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac` (24-bit / 48 kHz, 31 MB).
    - Storage hygiene verified: zero scratch or interim WAV files in `/sdcard/Download/`.
+
+---
+
+## 6. Next-Gen v1.3 & v1.3.1 Smooth Handover Status & Champion Promotion (2026-10-16)
+
+### Status: Promoted to Current Production Champion ("Best So Far")
+Following extensive listener audition across single tracks (`Singularity Moment Remix v2`, `Chasing Horizons (1)`) and unified batch testing across all 10 production songs, the device owner formally declared Roach NextGen v1.3.1 Smooth:
+> *"this does definitely sound a bit better even on this single song"*
+> *"consider this the best so far."*
+
+### Key Breakthroughs in v1.3 & v1.3.1:
+1. **Zero-Phase LR4 Filtering (`Lr4Filter::run_zero_phase`)**:
+   - Replaced causal LR4 infrasonic (`26 Hz`) and sub-split (`110 Hz`) filters with zero-phase bidirectional filtering.
+   - Completely eliminated the $+4.05\text{ dB}$ causal all-pass phase dispersion peak overshoot that inflated pre-limiter peaks on bass fundamentals.
+2. **Drive-Coupled Envelope Sub-Sustain Controller (`apply_sub_sustain_controller_with_drive`)**:
+   - Replaced memoryless sample-by-sample sub clipping with stereo-linked, peak-held ($\pm 6\text{ ms}$), smoothed envelope gain control.
+   - Eliminates odd-order harmonic buzz and midrange step discontinuities while taming sub boom.
+3. **Smooth $C^1$ Bartlett Limiter (`limit_smooth`)**:
+   - Integrated an 11 ms (`528` sample) half-cycle bass peak hold and two-stage cascaded Bartlett parabolic attack smoothing (`64 + 64` samples).
+   - Suppresses 90–200 Hz amplitude modulation of mid/high frequencies by 45–100 Hz bass half-cycles, achieving a **`-49.1%` mean reduction in $>1.5\text{ kHz}$ 2 ms AM gain jitter**.
+   - Brickwall limiter gain reduction fell by **`-1.29 dB`** across the 10-track ensemble (from `3.35 dB` to `2.06 dB`).
+4. **Transient Guardrail Pass Rate**:
+   - Increased from 7/10 to **10 / 10 (100%)** on the Stage 6 transient preservation check.
+5. **Exact True Peak Ceilings**:
+   - Unconditional post-loop exact ceiling trim ensures all delivered tracks are locked at **`-1.00 dBTP`** with zero intersample overshoot.
+
+### 10 Delivered Production Masters in `/sdcard/Download/FLAC/`:
+All mastered at `--backend opencl --target-lufs -13.0` as 24-bit 48 kHz lossless stereo FLAC:
+1. `Chasing Horizons (1) [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+2. `Chasing Horizons [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+3. `Feelin’ Catchy ext v1.2.2.2.2.2 [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+4. `Verse 1 v 77 [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+5. `Singularity Anthem ext v1 remix v1 ext v1.2.1 remix v1 [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+6. `Singularity Anthem ext v1 [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+7. `mmdr3 og [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+8. `Fourier of Longing - Sound Mastering [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+9. `Fourier of Longing - Equalizer [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+10. `Singularity Moment ext v1.1.2.1.1 remix v2 [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`
+
 
