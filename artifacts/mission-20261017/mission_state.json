@@ -1,0 +1,33 @@
+{
+  "schema": "roach-mission-checkpoint-v1",
+  "champion_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
+  "entry_commit": "ff136d90dd570f663632c9d840545dc8cea9291b",
+  "last_experiment_commit": "2a9d3f0",
+  "stages": {
+    "0": "evidence correction and toy-solver repair complete",
+    "1": "baseline + negativefullcachequalification complete; hostbatchnextunapplied/unmeasured",
+    "2": "3retainedversions ready; originalalpha/equal-target conditions pending; no judgments",
+    "3": "nativecomparison pending",
+    "4": "meter repaired; fullstageledger pending",
+    "5": "notstarted"
+  },
+  "next_action": "Read HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md; stage archived hostbatchpatch in isolatedworktree, update runner/docs, build/hash and get NEWforeground authorization beforetiming.",
+  "cpu_gpu_waveform_max_abs": 5.960464477539063e-08,
+  "cache_qualification_reduction": 0.09265923515130892,
+  "cache_qualification_required": 0.1,
+  "cache_qualification_passed": false,
+  "fulltrack_followups_executed": false,
+  "production_promoted": false,
+  "owner_listening": "pending",
+  "unapplied_candidate": "artifacts/mission-20261017/host_batch_candidate.patch",
+  "new_speed_authorization_required": true,
+  "tests": {
+    "listening": 9,
+    "offline_peak_regressions": 5,
+    "actual_rust_peak_fixtures": 7,
+    "main_cache_focused": 3,
+    "unapplied_hostbatch_fixture": "exact6arms over18492rows,2Eulersteps;OpenCLcompileonly"
+  },
+  "audio_and_keys": "ignoredlocalruns only",
+  "jobs_running": 0
+}

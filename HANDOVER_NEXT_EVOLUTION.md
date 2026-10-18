@@ -1,4 +1,10 @@
 # ROACH AUDIO — RESEARCH HANDOVER & NEXT EVOLUTION ROADMAP
+
+**Latest continuation checkpoint:** [2026-10-17 autonomous mission handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md).
+Read it first for measured cache results, listening packages, current repository
+state and the unapplied next candidate. Older sections below retain historical
+snapshot metadata.
+
 **Timestamp**: 2026-10-16T06:45:00Z  
 **Branch**: `experiment/phase3-geometric-moonshot` (Clean, Commit `493cdca`)  
 **Current Production Champion ("Best So Far")**: [`493cdca`](https://github.com/Markon101/RoachAudioMasterer/commit/493cdcad1b06b97297fb3837fc2a851c4533e326) (`Roach NextGen v1.3.1 Smooth`)  

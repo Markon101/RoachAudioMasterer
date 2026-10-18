@@ -1281,4 +1281,31 @@ This preserves the historical promotion decision. The available record does not 
 5. **Tier 2 — Recorded Implementation Verification**: The historical record reports 140 passing tests (`cargo test -j 8`). The v1.3 disabled-control parity receipt in [VALIDATION.md](VALIDATION.md) applies to its tested configuration; it is not blanket byte-parity evidence for every v1.3.1 input or historical release.
 6. **Delivered Lossless Masters**: All 10 mastered 24-bit / 48 kHz stereo FLAC files are exported to `/sdcard/Download/FLAC/* [Roach NextGen v1.3.1 Smooth -13 LUFS].flac` with zero short-clip pollution.
 
+### 25. Native cache baseline, negative RAM tradeoff and measurement repair (2026-10-17)
+
+Tier 2/3 checkpoint: [handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md)
+and [measured cache report](docs/MID_CACHE_BASELINE_RESULTS.md).
+Seven real Adreno chunks used the 64 MiB fallback; ten-second GPU materialization
+averaged 4676.0 ms, with 1741.9 ms in feature assembly including allocation/copy
+and thread joins. One CPU/GPU waveform comparison differed by at most 5.96e-8.
+
+After separately authorized foreground qualification, three balanced repeats per
+arm measured median 4701.1 ms fallback, 4450.1 ms serial384MiB and 4265.5 ms
+parallel384MiB. All nine output SHA256 hashes matched and state fingerprints
+agreed. Sampled process RSS rose from about 210 to 586 MiB. The best 9.27% time
+reduction **failed the predeclared10% gate**; conditional full-track/CPU runs were
+not executed and the larger cache was not promoted. A parity-checked, unapplied
+larger-host-batch prototype is archived for a separately authorized next test.
+
+The offline Python true-peak meter's Nyquist doubling and level bypass were
+repaired against actual Rust reference functions (five regressions, seven native
+fixtures, maximum peak-amplitude deviation about1.2e-7). Rust mastering audio and
+weights did not change. Pilot C's toy-only scope, incorrect NFE and contradictory
+gate status are corrected in the historical lab report without overwriting raw
+receipts. The complete stage ledger and native solver competition remain pending.
+
+Three local blind historical-master sessions are ready; original alpha files and
+equal-target rerenders remain missing conditions. No owner judgments, Tier4
+preference, subjective improvement or new production champion are claimed.
+
 

@@ -1,0 +1,33 @@
+{
+  "schema": "roach-host-batch-candidate-v1",
+  "status": "UNAPPLIED and UNBENCHMARKED candidate; no speedup claimed",
+  "base_commit": "2a9d3f0",
+  "patch_sha256": "0c536449087228bdbca4031ef9c35cb7df78c0a72264c79beb5e878b631ddabb",
+  "files": [
+    "src/scene_engine.rs",
+    "src/rich_mid.rs"
+  ],
+  "worktree": "/data/data/com.termux/files/usr/tmp/roach-mid-profile-20261017",
+  "verification": [
+    "Independent source review: no algorithmic blocker found.",
+    "Trained-v3 CPU18492-row fixture: exactstates/waveforms/FNV across6arms,2Eulersteps;host8192/32768/65536 with1MiBfallback/64MiBcached.",
+    "Three focused existing profile/config/guard tests passed.",
+    "OpenCL compile check passed; large host batches NOT validated on actual GPU."
+  ],
+  "remaining": [
+    "Integrate onlythiscandidatepatch intoanewresearchworktree; avoid copying stale worker documentation.",
+    "Update profiler docs and runner toexplicitlyset/recordROACH_MID_BATCH_ROWS.",
+    "Buildrelease-j8 and pinnewbinary/model/source hashes.",
+    "Freeze newbalanced benchmark plan andrequestfreshforegroundauthorization before any speedrun.",
+    "No GPUbenchmark, full-track test, solver change or productionpromotion is authorized by previous confirmations."
+  ],
+  "limits": {
+    "default_host_batch_rows": 8192,
+    "research_min_rows": 8192,
+    "research_max_rows": 65536,
+    "device_capacity_rows_unchanged": 8192,
+    "largest_feature_matrix_MiB": 46,
+    "extra_feature_matrix_vs_default_MiB": 40
+  },
+  "hypothesis": "LargerhostbatchesreducehostthreadsetupwhilepreservingGPUtileboundaries;thisisnotameasuredcostattribution."
+}

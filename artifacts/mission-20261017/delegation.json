@@ -1,0 +1,41 @@
+{
+  "schema": "roach-mission-delegation-v1",
+  "native_workers": [
+    {
+      "name": "epistemic_audit",
+      "model": "gpt-6-luna",
+      "tasks": "Evidence-tier audit, independent profiling/cache/batch reviews and interpretation",
+      "why": "Bounded read-only evidence independently checked against sources and receipts."
+    },
+    {
+      "name": "listening_review",
+      "model": "gpt-6-luna",
+      "tasks": "Adversarial listening protocol and compact-cache source review",
+      "why": "Small source packets; actionable checks verified by root."
+    },
+    {
+      "name": "listening_harness",
+      "model": "gpt-6.1-sol",
+      "tasks": "Isolated local audio packaging and nine procedural tests",
+      "why": "Workhorse implementation; privacy/parity gates independently reviewed."
+    },
+    {
+      "name": "mid_profile",
+      "model": "gpt-6.1-sol",
+      "tasks": "Isolated Rust/OpenCL profiling and cache/host-batch candidates",
+      "why": "Rust lifetimes, parallel layout and numerical correctness warranted stronger coding review."
+    }
+  ],
+  "external": [
+    {
+      "integration": "Existing orchestra MCP / Antigravity CLI",
+      "task_id": "6528f0eca5b949bebfc4b6ea1e1cd826",
+      "status": "completed",
+      "underlying_model": "unreported",
+      "tasks": "Read-only cache reconnaissance",
+      "qualification": "Root rejected universal fallback claims and verified actual explicit champion models."
+    }
+  ],
+  "controls": "No recursive delegation; no concurrent costly runs; native max4 slots and orchestra sequential; no direct paid OpenRouter requests/newcredits/cloudcompute. Hermes adapter presence was not treated as authentication.",
+  "active_jobs_at_handoff": 0
+}
