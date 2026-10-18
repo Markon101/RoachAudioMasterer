@@ -18,6 +18,7 @@ import numpy as np
 from .audio_io import read_wav, write_wav
 from .alignment import align_audio_pair
 from .dsp_metrics import (
+    TRUE_PEAK_ESTIMATOR,
     compute_bs1770_lufs,
     compute_true_peak,
     compute_spectral_metrics,
@@ -51,6 +52,8 @@ def grade_single_audio(audio_path: Path) -> Dict[str, Any]:
         "loudness": lufs_meta,
         "dynamics": {
             "true_peak_dbtp": round(tp_dbtp, 2),
+            "true_peak_estimator": TRUE_PEAK_ESTIMATOR,
+            "overs_count_definition": "evaluated_original_and_interpolated_grid_points_gt_unit",
             "intersample_overs": overs,
             "crest_factor_db": round(crest_db, 2),
             "dynamic_spread_db": lufs_meta.get("dynamic_spread_db", 0.0),

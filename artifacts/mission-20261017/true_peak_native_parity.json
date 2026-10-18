@@ -1,0 +1,60 @@
+{
+  "schema": "roach-ears-true-peak-native-parity-v1",
+  "native_functions_sha256": "97569dbb9731cee455e0aeebc347b62818ee18e668a49e57d3472250452725f7",
+  "python_source_sha256": "c03fed6774e4d240a2e6aead79c9074b582e8117af99e24355089bff57d6f63e",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+  "numpy": "2.5.4",
+  "amplitude_tolerance": 2e-06,
+  "fixtures": [
+    {
+      "fixture": "silence",
+      "native_peak": 0.0,
+      "python_peak": 0.0,
+      "absolute_deviation": 0.0,
+      "evaluated_points_over_unit": 0
+    },
+    {
+      "fixture": "nyquist_even",
+      "native_peak": 0.8000000119,
+      "python_peak": 0.800000011920929,
+      "absolute_deviation": 2.092892525951129e-11,
+      "evaluated_points_over_unit": 0
+    },
+    {
+      "fixture": "nyquist_odd",
+      "native_peak": 0.8000000119,
+      "python_peak": 0.800000011920929,
+      "absolute_deviation": 2.092892525951129e-11,
+      "evaluated_points_over_unit": 0
+    },
+    {
+      "fixture": "quiet_sine",
+      "native_peak": 0.4001918733,
+      "python_peak": 0.40019187331199646,
+      "absolute_deviation": 1.1996459381435898e-11,
+      "evaluated_points_over_unit": 0
+    },
+    {
+      "fixture": "random_stereo",
+      "native_peak": 1.6486002207,
+      "python_peak": 1.6486001014709473,
+      "absolute_deviation": 1.192290526308426e-07,
+      "evaluated_points_over_unit": 4272
+    },
+    {
+      "fixture": "short",
+      "native_peak": 1.2000000477,
+      "python_peak": 1.2000000476837158,
+      "absolute_deviation": 1.628408519138702e-11,
+      "evaluated_points_over_unit": 1
+    },
+    {
+      "fixture": "edges_and_seams",
+      "native_peak": 1.2895081043,
+      "python_peak": 1.2895081043243408,
+      "absolute_deviation": 2.4340751636486857e-11,
+      "evaluated_points_over_unit": 13
+    }
+  ],
+  "scope": "Finite fourfold native estimator parity on procedural fixtures; no continuous-time or perceptual guarantee."
+}

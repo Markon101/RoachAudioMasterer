@@ -10,49 +10,56 @@ import numpy as np
 from typing import Dict, Any, List, Tuple
 from .audio_io import AudioBuffer
 
+TRUE_PEAK_ESTIMATOR = 'native-fir-4x-24tap-v1'
+
+
+def _true_peak_linear(samples: np.ndarray, block_size: int = 8192) -> Tuple[float, int]:
+    """Same finite f32 estimator/support as src/master.rs::true_peak.
+
+    Three quarter-sample phases, 24 taps each. Full-support windows only;
+    original samples include clip edges. Interpolation arrays are block bounded;
+    dtype conversion, validation and sample-peak reduction inspect the full input.
+    """
+    x = np.asarray(samples, dtype=np.float32)
+    if x.ndim not in (1, 2) or block_size <= 0 or not np.all(np.isfinite(x)):
+        raise ValueError('true peak requires finite [samples] or [channels,samples]')
+    if x.size == 0:
+        return 0., 0
+    peak = float(np.max(np.abs(x)))
+    overs = int(np.count_nonzero(np.abs(x) > 1.))
+    pi, taps = np.float32(np.pi), 12
+    k = np.arange(2 * taps, dtype=np.float32)
+    phases = []
+    for p in range(3):
+        d = (k - np.float32(taps - 1)) - np.float32((p + 1) / 4.)
+        argument = pi * d
+        sinc = np.sin(argument) / argument  # All three phases are noninteger.
+        window = np.float32(.5) + np.float32(.5) * np.cos(argument / np.float32(taps))
+        phases.append(sinc * window)
+    windows = max(0, x.shape[-1] - 2 * taps + 1)
+    for start in range(0, windows, block_size):
+        count = min(block_size, windows - start)
+        for phase in phases:
+            y = np.zeros((*x.shape[:-1], count), dtype=np.float32)
+            # Preserve Rust's ordered f32 multiply/add, including across blocks.
+            for offset, coefficient in enumerate(phase):
+                y += x[..., start + offset:start + offset + count] * coefficient
+            peak = max(peak, float(np.max(np.abs(y))))
+            overs += int(np.count_nonzero(np.abs(y) > 1.))
+    return peak, overs
+
 
 def compute_true_peak(samples: np.ndarray, factor: int = 4) -> Tuple[float, int]:
+    """Fourfold finite FIR true-peak estimate, referenced to native Rust.
+
+    Count is evaluated original/interpolated grid points above unit amplitude,
+    not continuous crossings or audible events. Silence floors at -120 dBTP.
+    This is an estimate, not a continuous-time peak guarantee.
     """
-    Computes 4x bandlimited sinc-oversampled true peak (dBTP)
-    and counts intersample overshoots (> 0 dBFS).
-    """
-    # Using windowed sinc interpolation
-    n = samples.shape[-1]
-    if n == 0:
-        return -120.0, 0
-
-    # Max instantaneous sample peak
-    peak_linear = np.max(np.abs(samples))
-
-    # Evaluate 4x polyphase sinc filter around peaks to get accurate True Peak
-    # Polyphase 4x sinc filter of half-length 12
-    m = 12
-    t = np.arange(-m, m + 1)
-    sinc = np.sinc(t) * np.hanning(2 * m + 1)
-
-    # Upsample by factor 4 via FFT zero-padding on high-energy segments
-    # Find chunks with peak > -6 dBFS for efficient processing
-    threshold = 0.50
-    overshoot_count = 0
-    max_tp_linear = float(peak_linear)
-
-    chunk_size = 8192
-    for start in range(0, n, chunk_size):
-        end = min(n, start + chunk_size)
-        chunk = samples[..., start:end]
-        if np.max(np.abs(chunk)) > threshold:
-            # 4x FFT upsampling
-            c_len = chunk.shape[-1]
-            f = np.fft.rfft(chunk, axis=-1)
-            f_padded = np.zeros((*chunk.shape[:-1], c_len * factor // 2 + 1), dtype=complex)
-            f_padded[..., :f.shape[-1]] = f * factor
-            upsampled = np.fft.irfft(f_padded, n=c_len * factor, axis=-1)
-            chunk_tp = float(np.max(np.abs(upsampled)))
-            max_tp_linear = max(max_tp_linear, chunk_tp)
-            overshoot_count += int(np.sum(np.abs(upsampled) > 1.0))
-
-    tp_dbtp = 20.0 * np.log10(max(1e-6, max_tp_linear))
-    return tp_dbtp, overshoot_count
+    if factor != 4:
+        raise ValueError('the native reference estimator supports factor=4 only')
+    peak, overs = _true_peak_linear(samples)
+    return float(20. * np.log10(max(1e-6, peak))), overs
 
 
 def apply_biquad(b: np.ndarray, a: np.ndarray, x: np.ndarray) -> np.ndarray:

@@ -30,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scripts.roach_ears.audio_io import read_wav, write_wav, AudioBuffer
 from scripts.roach_ears.alignment import align_audio_pair
 from scripts.roach_ears.dsp_metrics import (
+    TRUE_PEAK_ESTIMATOR,
     compute_bs1770_lufs,
     compute_true_peak,
     compute_spectral_metrics,
@@ -98,6 +99,8 @@ def evaluate_audio_metrics(audio: AudioBuffer, reference: Optional[AudioBuffer] 
         "lufs_integrated": lufs_meta.get("integrated_lufs", -100.0),
         "dynamic_spread_db": lufs_meta.get("dynamic_spread_db", 0.0),
         "true_peak_dbtp": round(tp_dbtp, 2),
+        "true_peak_estimator": TRUE_PEAK_ESTIMATOR,
+        "overs_count_definition": "evaluated_original_and_interpolated_grid_points_gt_unit",
         "intersample_overs": overs,
         "crest_factor_db": round(crest_db, 2),
         "spectral_slope_db_oct": spec_meta.get("spectral_slope_db_oct", 0.0),
