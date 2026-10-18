@@ -115,7 +115,7 @@ plan with corrected gradient provenance and resume-schedule checks.
 ## 6. Next-Gen v1.3 & v1.3.1 Smooth Handover Status & Champion Promotion (2026-10-16)
 
 ### Status: Promoted to Current Production Champion ("Best So Far")
-Following extensive listener audition across single tracks (`Singularity Moment Remix v2`, `Chasing Horizons (1)`) and unified batch testing across all 10 production songs, the device owner formally declared Roach NextGen v1.3.1 Smooth:
+Following exploratory, unblinded listening and a separate numerical audit across ten production songs, the project promoted Roach NextGen v1.3.1 Smooth. This historical production decision remains; controlled/blinded preference testing is pending (see [RESULTS, Section 24](RESULTS.md#24-official-production-champion-promotion--best-so-far-status-roach-nextgen-v131-smooth)). The recorded owner feedback was:
 > *"this does definitely sound a bit better even on this single song"*
 > *"consider this the best so far."*
 

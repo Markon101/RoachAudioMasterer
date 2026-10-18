@@ -1264,21 +1264,21 @@ During audition of the `-13.0 LUFS` v1.3 masters, the listener noted that while 
 
 - **Promotion Date**: 2026-10-16
 - **Champion Commit**: [`493cdca`](https://github.com/Markon101/RoachAudioMasterer/commit/493cdcad1b06b97297fb3837fc2a851c4533e326) (`feat(nextgen-v1.3.1): zero-phase LR4, peak-held sub envelope, and C1 Bartlett peak-hold limiter`)
-- **Evidentiary Tier**: Tier 7 (Formal Owner Audition Verdict & Pre-Declared Multi-Track Unison Verification)
+- **Evidence classification**: Tier 2 implementation verification (the recorded 140-test suite); Tier 3 empirical measurements (the 10-track comparison in Section 23). Positive, unblinded owner feedback supported the production decision. Tier 4 controlled/blinded subjective preference remains pending under [the epistemic standards](docs/EPISTEMIC_STANDARDS.md). Tier 7 means Unestablished/Unknown, not a promotion tier.
 
-#### 24.1 Formal Listening Audition Verdict
-Following iterative testing on `Singularity Moment ext v1.1.2.1.1 remix v2` and comparative evaluation across the 10-track production suite, the device owner formally auditioned the masters and ratified the upgrade:
+#### 24.1 Informal Owner Listening Feedback and Production Decision
+Following iterative listening on `Singularity Moment ext v1.1.2.1.1 remix v2`, the owner gave positive feedback; the project recorded the production promotion:
 > *"this does definitely sound a bit better even on this single song"*
 > *"consider this the best so far."*
 
-The perceived scratchy/limiter distortion previously audible during sub-bass swells has been eliminated. The acoustic field exhibits clean, punchy low-frequency dynamics with zero inter-sample distortion and an open, silky midrange free of amplitude-modulation grain.
+This preserves the historical promotion decision. The available record does not document randomized identities, loudness-matched playback, recorded blind judgments, or a predeclared v1.3.1 listening protocol. Treat the feedback as positive but unblinded; neither it nor the numerical audit establishes general preference, eliminated distortion, or a causal acoustic mechanism.
 
-#### 24.2 Empirical & Scientific Justification for Promotion
-1. **10 / 10 (100%) Transient Preservation Pass Rate**: Up from 7/10 in v1.3. Zero-phase LR4 sub-filtering eliminated the $+4.05\text{ dB}$ artificial phase-dispersion peak inflation that previously triggered false-positive onset degradation flags.
-2. **`-49.1%` Mean Reduction in High-Band (`>1.5 kHz`) 2 ms AM Jitter**: Cascading two 64-sample Bartlett passes and holding limiter gain reduction over an 11 ms bass half-cycle window successfully decouples $45–100\text{ Hz}$ bass excursions from midrange vocals and synths.
-3. **`-38.5%` Mean Reduction in Limiter Gain Reduction (`3.35 dB` $\to$ `2.06 dB`)**: Limiter stress is dramatically lowered across the board, with the worst-case track (`Singularity Moment Remix v2`) dropping from `9.15 dB` to `5.27 dB` GR (`-3.88 dB` reduction).
-4. **Exact `-1.00 dBTP` Intersample Ceiling Lock**: Intersample reconstruction overshoots (such as the `-0.98 dBTP` stall on `Fourier of Longing – Equalizer`) are 100% resolved via the post-loop exact ceiling trim.
-5. **Bit-Parity Invariant Preserved**: All 140 unit tests pass cleanly (`cargo test -j 8`). When opt-in flags are unflagged, output remains bit-for-bit identical to historical baselines.
+#### 24.2 Recorded Implementation and Measurement Receipts
+1. **Tier 3 — 10 / 10 Transient Guardrail Passes**: Up from 7/10 in v1.3 on these renders. A diagnostic pass does not establish listener preference or prove which processing stage caused the change.
+2. **Tier 3 — `-49.1%` Mean Per-Track Reduction in High-Band (`>1.5 kHz`) 2 ms AM Jitter**: This averages the ten individual percentage reductions; the reduction in the ensemble mean (`0.0738` to `0.0385 dB`) is approximately 47.8%. It measures a modulation proxy, not perceived grain or independently isolated mechanism benefit.
+3. **Tier 3 — `-38.5%` Reduction in Mean Limiter Gain Reduction (`3.35 dB` $\to$ `2.06 dB`)**: The worst-case track (`Singularity Moment Remix v2`) dropped from `9.15 dB` to `5.27 dB` GR (`-3.88 dB`). This was not universal: Feelin' Catchy and Singularity Anthem ext v1 increased by `0.25` and `0.21 dB` respectively.
+4. **Tier 3 — Measured `-1.00 dBTP` Ceiling**: All ten v1.3.1 renders measured `-1.00 dBTP` using the project's oversampled estimator, including the former `-0.98 dBTP` case. This is not a continuous-time peak guarantee or evidence of zero distortion.
+5. **Tier 2 — Recorded Implementation Verification**: The historical record reports 140 passing tests (`cargo test -j 8`). The v1.3 disabled-control parity receipt in [VALIDATION.md](VALIDATION.md) applies to its tested configuration; it is not blanket byte-parity evidence for every v1.3.1 input or historical release.
 6. **Delivered Lossless Masters**: All 10 mastered 24-bit / 48 kHz stereo FLAC files are exported to `/sdcard/Download/FLAC/* [Roach NextGen v1.3.1 Smooth -13 LUFS].flac` with zero short-clip pollution.
 
 

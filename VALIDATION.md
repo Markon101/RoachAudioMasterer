@@ -144,13 +144,13 @@ flow+song-adapter quality test have not been completed.
 ## Next-Gen v1.3.1 Smooth Validation & Production Champion Promotion (2026-10-16)
 
 - **Unit & Invariant Suite**: All 140 unit tests pass cleanly with `cargo test -j 8` (finished in 96.15s).
-- **Formal Owner Audition Verdict**: Following extensive listening, the device owner ratified: *"this does definitely sound a bit better even on this single song"* and *"consider this the best so far."*
+- **Informal, Unblinded Owner Feedback**: The owner reported: *"this does definitely sound a bit better even on this single song"* and *"consider this the best so far."* This supported the historical promotion decision; Tier 4 controlled/blinded preference evidence remains pending. The test suite is Tier 2 and the numerical audit is Tier 3 under [the epistemic standards](docs/EPISTEMIC_STANDARDS.md).
 - **Production Champion Promotion**: Promoted to **Current Production Champion & Best So Far** at commit [`493cdca`](https://github.com/Markon101/RoachAudioMasterer/commit/493cdcad1b06b97297fb3837fc2a851c4533e326).
 - **Zero-Phase LR4 Filtering**: Forward-backward filtering (`Lr4Filter::run_zero_phase`) verified to eliminate the $+4.05\text{ dB}$ causal phase dispersion peak inflation on sub-bass fundamentals without changing magnitude response.
 - **Limiter Amplitude Modulation Jitter Suppression**: Two-stage cascaded Bartlett parabolic attack smoothing (`64 + 64` samples) and an 11 ms half-cycle bass peak hold achieved a **`-49.1%` mean reduction** in high-band (`>1.5 kHz`) 2 ms AM gain jitter across all 10 production songs (range: `-39.7%` to `-62.9%`).
 - **Transient Preservation Guardrail**: **10 / 10 (100%) pass rate** on the Stage 6 transient preservation check (up from 7/10 in v1.3).
 - **Limiter Stress & Crest Dynamics**: Mean limiter gain reduction fell from `3.35 dB` to **`2.06 dB`** (`-1.29 dB` reduction). Snare transient-to-sustain ratio improved on 9 of 10 tracks (`+0.142 dB` ensemble mean).
-- **Exact True-Peak Lock**: Post-loop exact true-peak trim locks intersample reconstruction peaks at **`-1.00 dBTP`** across all 10 tracks with zero inter-sample distortion.
+- **Measured True-Peak Ceiling**: All ten renders measured **`-1.00 dBTP`** with the project's oversampled estimator after final trim. This does not establish a continuous-time peak guarantee or absence of distortion.
 - **Lossless Masters Delivered**: All 10 production masters exported to `/sdcard/Download/FLAC/* [Roach NextGen v1.3.1 Smooth -13 LUFS].flac`.
 
 
