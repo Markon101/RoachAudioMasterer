@@ -1,0 +1,96 @@
+{
+  "schema": "roach-mid-training-metadata-audit-v1",
+  "training_json_sha256": "76a77217ebbc0140c2dde6dd39fd9f0b34d4b3a1d7eb6b7320fffcc7fcfe3b40",
+  "checkpoint_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "checkpoint_kind": "Basis",
+  "actual_checkpoint_dense_shapes": {
+    "encoder": {
+      "input": 3098,
+      "hidden": 32,
+      "output": 32
+    },
+    "head": {
+      "input": 184,
+      "hidden": 32,
+      "output": 6
+    }
+  },
+  "actual_parameters": 106342,
+  "record_count": 2000,
+  "unique_recorded_scene_seeds": 500,
+  "scene_seed_min": 84200,
+  "scene_seed_max": 84699,
+  "recorded_cutoff_hz_min": 501.5480041503906,
+  "recorded_cutoff_hz_max": 3489.481201171875,
+  "recorded_flow_time_min": 8.463859558105469e-06,
+  "recorded_flow_time_max": 0.9998081922531128,
+  "historical_generic_provenance": {
+    "architecture": {
+      "activation": "tanh",
+      "hidden": 32,
+      "inputs": 40,
+      "outputs": 257,
+      "parameters": 9793,
+      "prediction": "log1p normalized magnitude residual over DSP envelope"
+    },
+    "degradation_distribution": {
+      "cosine_power": [
+        1,
+        4
+      ],
+      "cutoff_hz": [
+        3000,
+        8000
+      ],
+      "method": "finite-clip Fourier lowpass",
+      "transition_hz": [
+        200,
+        1000
+      ]
+    },
+    "generator": {
+      "families": [
+        "harmonic",
+        "inharmonic",
+        "fm",
+        "pm_am",
+        "chirp_drift",
+        "colored_noise",
+        "modal_impulse",
+        "granular_clicks",
+        "wavefold",
+        "saturation",
+        "formant",
+        "chaotic"
+      ],
+      "natural_examples": 0,
+      "oversample": 2,
+      "version": 1
+    },
+    "git_commit": "f338d17a8ec74595fc527f8e6a34fa0c8fc40b48",
+    "git_dirty": true,
+    "package_version": "1.0.0-alpha.1",
+    "process_cpu_and_memory": [
+      "VmHWM:\t   19960 kB",
+      "VmRSS:\t   14608 kB",
+      "Cpus_allowed_list:\t0-7"
+    ],
+    "stft": {
+      "fft": 512,
+      "hop": 128,
+      "sample_rate": 24000,
+      "window": "sqrt periodic Hann, centered, zero padded"
+    },
+    "unix_time": 1791934575
+  },
+  "current_generator": {
+    "source": "src/rich_synth.rs",
+    "samples": 16384,
+    "rate": 48000,
+    "seconds": 0.3413333333333333,
+    "family_selector": "seed % 12",
+    "qualification": "Observed CURRENT source; exact historical dirty training source is not authenticated by this audit."
+  },
+  "verdict": "The generic provenance block describes legacy v0 (24kHz/512FFT/40->32->257/9793params), conflicting with the actual native checkpoint. Preserve history; repair future model-specific provenance before more training. Raw seed/time/cutoff records are observed receipts, not proof of complete historical source lineage.",
+  "no_checkpoint_or_history_modified": true
+}
