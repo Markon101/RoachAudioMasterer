@@ -1,0 +1,50 @@
+{
+  "schema": "roach-pilot-c-scope-audit-v1",
+  "source_sha256": "302897c4b82a6536613fc211501ba4e812c6f082ce93a19dff5928045e0f0cf5",
+  "historical_results_sha256": "e660eaa3c687da44967e6af010669622747b8ca90f35e09d83dbe3e149d8d417",
+  "observed": {
+    "solve_8step_euler": {
+      "actual_nfe": 8,
+      "times": [
+        0.0,
+        0.125,
+        0.25,
+        0.375,
+        0.5,
+        0.625,
+        0.75,
+        0.875
+      ]
+    },
+    "solve_4step_euler": {
+      "actual_nfe": 4,
+      "times": [
+        0.0,
+        0.25,
+        0.5,
+        0.75
+      ]
+    },
+    "solve_2step_meanflow": {
+      "actual_nfe": 4,
+      "times": [
+        0.0,
+        0.25,
+        0.5,
+        0.75
+      ]
+    },
+    "solve_1step_corrector": {
+      "actual_nfe": 1,
+      "times": [
+        0.5
+      ],
+      "max_abs_target_error": 1.1102230246251565e-16
+    }
+  },
+  "historical_midpoint_gate": "FAILED; +0.6798029827083267 dB exceeds +0.5 dB",
+  "historical_status_contradicts_gate": true,
+  "scope": "Handwritten 64-D toy field; no native model, training, audio, GPU or latency measurement.",
+  "interpretation": "Toy evidence cannot promote or reject a solver for frozen rich-mid-v3 or SFHT.",
+  "numpy_version": "2.5.4"
+}

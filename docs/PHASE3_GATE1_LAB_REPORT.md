@@ -19,7 +19,7 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
 ├─────────┼──────────────────────┼────────────────────────┼────────────────────────────────────────┤
 │ Pilot A │ Family 376 (Shears)  │ eps^2 scaling & det(J) │ PASSED (0.005% Lie bracket err, FP64)  │
 │ Pilot B │ Family 149 (CRN)     │ Positivity permanence  │ PASSED (Patankar solver, inf c > 0.11) │
-│ Pilot C │ Moonshot K (CFM)     │ 2-step delta LSD < 0.5 │ FALSIFIED zero-shot; 4-step PROMOTED   │
+│ Pilot C │ Moonshot K (toy ODE) │ 2-step delta LSD < 0.5 │ Toy gate FAILED; native verdict OPEN  │
 │ Pilot D │ Moonshot H (Port-Ham)│ Discrete passivity     │ PASSED (0 dH violations in 10k steps)  │
 └─────────┴──────────────────────┴────────────────────────┴────────────────────────────────────────┘
 ```
@@ -82,16 +82,18 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
 ### Implementation
 - **Script:** [`analysis/phase3/pilot_c_meanflow_distillation.py`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_c_meanflow_distillation.py)
 - **Results:** [`analysis/phase3/pilot_c_results.json`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_c_results.json)
-- **Evaluation:** 16 held-out test scenes comparing 8-step Euler, 4-step Euler, 2-step midpoint MeanFlow, and 1-step corrector.
+- **Evaluation:** 16 seeded random 64-dimensional vectors and a handwritten synthetic velocity field. These are not audio scenes or evaluations of frozen Mid/SFHT checkpoints. No student was trained; the historical "MeanFlow distillation" label does not describe an implemented distillation experiment.
+- **2026-10-17 scope correction:** The original script and raw JSON remain intact as historical evidence. The JSON incorrectly reports two rather than four velocity calls for the two-step midpoint routine, and its hardcoded `SURVIVED` status contradicts its own `passed: false` row. Reproduce the correction without overwriting those receipts with `python scripts/audit_pilot_c.py`; see [the audit receipt](../artifacts/mission-20261017/pilot_c_scope_audit.json). This is Tier 2 call-count verification and Tier 3 toy measurements; native solver performance and preference remain unestablished.
+  On this Termux installation NumPy needs `LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so` before that command. The audit counts calls and does not run a speed experiment.
 
 ### Empirical Findings & Falsification
 1. **Teacher 8-step Euler Baseline**: Mean LSD = $7.913\text{ dB}$ (8 evaluations).
-2. **Teacher 4-step Euler**: Mean LSD = $7.426\text{ dB}$ ($\Delta \text{LSD} = -0.487\text{ dB}$, 4 evaluations, **2.0x speedup**).
-   - *Surprise Finding*: 4-step Euler improves spectral distance over 8-step Euler due to reduced accumulation of velocity curvature noise.
-3. **Student 2-step Midpoint MeanFlow**: Mean LSD = $8.593\text{ dB}$ ($\Delta \text{LSD} = +0.680\text{ dB}$, 2 evaluations, 4.0x speedup).
+2. **Toy 4-step Euler**: Mean vector log-distance = $7.426\text{ dB}$ ($\Delta = -0.487\text{ dB}$, 4 evaluations). The 2:1 evaluation-count ratio is not a measured latency speedup or evidence about audio quality. The cause of the lower toy error was not independently isolated.
+3. **Toy 2-step Explicit Midpoint**: Mean vector log-distance = $8.593\text{ dB}$ ($\Delta = +0.680\text{ dB}$, **4 evaluations**, a 2:1 evaluation-count ratio relative to eight-step Euler).
    - *Falsifier Outcome*: Exceeds the $0.5\text{ dB}$ degradation threshold (+0.68 dB vs 0.5 dB).
-   - *Scientific Conclusion*: Zero-shot midpoint evaluation without dedicated student training is **rejected**. 2-step acceleration requires a trained mean-velocity neural head.
-4. **Immediate Production-Ready Promotion**: 4-step Euler is promoted as a safe, 2x faster alternative for Mid and SFHT CFM models.
+   - *Scientific Conclusion*: This particular toy midpoint result **failed its gate**. It does not establish that native acceleration requires training or reject a midpoint/Heun solver on the actual learned field.
+4. **Toy One-Step Degeneracy**: At time 0.5 the sinusoidal perturbation is approximately zero and `x0 + (target - x0)` directly equals the supplied target. Its near-zero error is built into the toy's target access, not evidence of learned reconstruction or distillation.
+5. **No Production Promotion**: The former claim of a safe, 2x faster native Mid/SFHT solver is withdrawn. Compare the same frozen native rich-mid-v3 model with eight/four-step Euler, two-step Heun (4 NFE), and one-step explicit midpoint (2 NFE) before drawing a deployment conclusion. The default remains eight-step Euler.
 
 ---
 
@@ -123,4 +125,4 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
 With the completion of Gate 1:
 1. **Pilot A & D** form the mathematical core of the Phase III experimental audio controller.
 2. **Pilot B** provides the foundation for the 1024² Morphogenic Structural Primer in Gate 2.
-3. **Pilot C** establishes that 4-step CFM execution is an immediate 2x speedup candidate, while 2-step requires trained student heads.
+3. **Pilot C** is a toy solver exercise. Its numerical gate and evaluation counts do not determine native CFM quality, latency, or the need for distillation. Native comparison remains pending.
