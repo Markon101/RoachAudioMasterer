@@ -27,12 +27,22 @@ cargo build --release --locked --features opencl -j 8
   --input song.wav \
   --auto-tune \
   --backend opencl \
+  --sfht-model artifacts/rich-low-sfht-v2/basis.json \
+  --mid-model artifacts/rich-mid-v3/basis.json \
+  --morphic-mode ph-lie-v2 \
+  --clock-transient-punch \
+  --phase-consistency 0.5 \
   --target-lufs -13.0 \
   --kick-transient-guard \
-  --mid-denoise-db 4.0 \
-  --spectral-air-window \
+  --quiet-mid-denoise \
   --out runs/master-output
 ```
+
+Select these checkpoints explicitly: automatic model resolution still prefers
+legacy weights. The accepted denoise flag is `--quiet-mid-denoise`; this CLI has
+no `--mid-denoise-db` or `--spectral-air-window` argument. Historical per-track
+settings and build qualifications remain in the run receipts; this invocation
+does not promise byte reproduction of an older dirty build.
 
 
 Both `auto-master` and `master` accept `--no-glue`, `--glue-attack-ms` (default
