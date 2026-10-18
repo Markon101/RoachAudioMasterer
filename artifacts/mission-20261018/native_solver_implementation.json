@@ -1,0 +1,68 @@
+{
+  "schema": "native-mid-solver-phase-a-implementation-checks-v1",
+  "base_head": "2575e89056f9c6712af209c16f645684f3949371",
+  "source_files": {
+    "src/main.rs": "39af3cd30ff0a70a91da4d8642c2d551cceb1b85e871462c3975160af211e27b",
+    "src/scene_engine.rs": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5",
+    "src/mid_solver_audit.rs": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+  },
+  "checks": [
+    {
+      "command": "CARGO_TARGET_DIR=/data/data/com.termux/files/usr/tmp/roach-native-solvers-target cargo test --locked --no-default-features --bin roach-audio-masterer -j 8 mid_solver_audit",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/data/data/com.termux/files/usr/tmp/roach-native-solvers-target cargo test --locked --no-default-features --bin roach-audio-masterer -j 8 scene_engine::tests -- --test-threads=1",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/data/data/com.termux/files/usr/tmp/roach-native-solvers-target cargo build --release --locked --features opencl -j 8 --bin roach-audio-masterer",
+      "success": true
+    },
+    {
+      "check": "preparation block and legacy Euler loop source text byte identical to base after extraction",
+      "success": true
+    },
+    {
+      "check": "git diff --check",
+      "success": true
+    },
+    {
+      "check": "release mid-solver-audit --help requires explicit model/out/foreground flag",
+      "success": true
+    }
+  ],
+  "unique_unit_tests_passed": 13,
+  "binary": {
+    "path": "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/roach-audio-masterer",
+    "sha256": "7b2b3586d2b7d1a36d15839a363def555711db0c0e64839ba01335907f001f10",
+    "features": [
+      "opencl"
+    ]
+  },
+  "patch": {
+    "path": "/data/data/com.termux/files/usr/tmp/roach-native-solvers-20261018.patch",
+    "sha256": "564f77db5a75bb7f592ca031909c0ed2322cfb7bc28fc6ec95d02f8b4f95aea6",
+    "includes_untracked_new_module": true
+  },
+  "executed": {
+    "timed_audit": false,
+    "gpu_inference": false,
+    "owner_audio": false,
+    "training": false,
+    "apis": false
+  },
+  "limits": [
+    "No solver speed or learned reconstruction-quality result yet.",
+    "No WOLA/seam, mastering or listening evidence.",
+    "Toy formula tests validate implementation only.",
+    "Final ProcessMemory after metric/export allocation is not in completion; per-field profiles retain memory.",
+    "Fresh owner foreground authorization is required before invoking the timed audit."
+  ],
+  "production_defaults_unchanged": true,
+  "committed": false
+}

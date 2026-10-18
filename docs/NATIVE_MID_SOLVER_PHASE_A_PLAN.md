@@ -1,8 +1,12 @@
-# Native frozen Mid solver Phase A — proposed, no execution yet
+# Native frozen Mid solver Phase A — harness prepared, comparison pending
 
-This is preparation for the next mission stage, not solver implementation or a
-performance result. First settle the cheaper host-batch investigation. Keep
-production Euler8 and all weights/defaults intact. No training is needed here.
+The cheaper full-cache and host-batch trials both failed their predeclared utility
+gates. A research-only native solver harness and the first bounded CPU/OpenCL
+development diagnostic are complete; the full Phase A comparison and solver
+qualification remain pending. Read the
+[development result](NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md), including the
+conflict between magnitude and complex reconstruction metrics. Production Euler8
+and all weights/defaults remain intact. No training is needed here.
 
 ## Source truth
 
@@ -79,4 +83,49 @@ seam regression. Better agreement with Euler8 alone is not better reconstruction
 prefer target-supported results and preserve unresolved tradeoffs. Timing requires
 fresh explicit foreground authorization and matched backend/host-batch settings.
 Any new solver listening package must conceal identity and match loudness; only
-the owner can establish preference. No new solver has passed this plan yet.
+the owner can establish preference. No new solver has passed this full plan yet.
+
+## Implemented diagnostic entry point
+
+`mid-solver-audit` accepts an explicit checkpoint, fresh output path, seed/count
+(1–48), CPU/OpenCL backend and required foreground-confirmation flag. The frozen
+SHA256, Basis kind and parameter count are checked before execution. Do not
+supply the flag until the owner explicitly confirms foreground for that session.
+For example, **after that confirmation**, a development command is:
+
+```sh
+runs/mission-20261018/native-solver-audit mid-solver-audit \
+  --model artifacts/rich-mid-v3/basis.json \
+  --seed 860000 --count 12 --backend cpu \
+  --foreground-confirmed --out runs/mission-20261018/native-dev-cpu-01
+```
+
+Use a bounded external monitor and a separate fresh directory for OpenCL. The
+first 12 development seeds cover all current family indices once; the
+[known-training overlap receipt](../artifacts/mission-20261018/native_solver_seed_split.json)
+checks the 500 recorded training scene seeds. It does not authenticate the dirty
+historical generator or establish unseen families. Final seeds remain untouched.
+
+Each backend produces a manifest, append-only `cases.jsonl`, canonical planar
+float32 procedural samples and a completion record. At count 12, expect 96 method
+rows and 48 identity/harmonic-prior control rows, about 12 MiB of sample files.
+Require the completion record, exact counts and inspected failures; partial files
+are not a completed experiment. Record source/binary hashes alongside the run.
+
+Definitions are fixed before the first run: normalized whole-clip float32 FFT;
+one-sided power weights of two except DC/Nyquist; missing band strictly above
+cutoff and below 8000 Hz; absolute amplitude floor 1e-7; null relative/LSD/phase
+when target band power is at most 1e-14. Phase requires target amplitude at least
+max(1e-7, 1e-4 times the band's target peak) and output amplitude at least 1e-7.
+Report target-mask/valid-bin counts and covered target-mask power alongside
+target-power-weighted absolute wrapped phase error. An erased output has null
+phase, not perfect phase. Weighted and unweighted RMS log-magnitude errors are
+separate fields. This whole-clip LSD is not a local STFT or seam measurement.
+
+The first audit uses fixed method order and records descriptive refinement plus
+synthesis times, excluding sample export/metrics. Shared preparation is repeated
+consistently; output metrics do not stand in for total command cost. A promising
+method still needs a balanced, repeated real-chunk/full-track timing experiment.
+Peak-memory enforcement belongs to the external monitor; profile snapshots do
+not cover every later metric/export allocation. Existing user-audio WOLA restore
+entry points continue to use Euler; this harness accepts procedural scenes only.

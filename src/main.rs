@@ -29,6 +29,7 @@ mod rich_field;
 mod rich_gate;
 pub mod rich_low;
 pub mod rich_mid;
+mod mid_solver_audit;
 mod rich_oracle;
 mod rich_synth;
 mod scene;
@@ -452,6 +453,21 @@ enum Commands {
         backend: String,
         #[arg(long)]
         out: PathBuf,
+    },
+    /// Research-only fixed-checkpoint paired native Mid solver audit (measures time).
+    MidSolverAudit {
+        #[arg(long)]
+        model: PathBuf,
+        #[arg(long)]
+        out: PathBuf,
+        #[arg(long, default_value_t = 860000)]
+        seed: u64,
+        #[arg(long, default_value_t = 12)]
+        count: usize,
+        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        backend: String,
+        #[arg(long, required = true)]
+        foreground_confirmed: bool,
     },
     RichMidEvaluate {
         #[arg(long)]
@@ -1365,6 +1381,14 @@ fn run() -> Result<()> {
             };
             rich_mid::train(k, steps, seed, resume.as_deref(), &backend, &out, endpoint_anchored)
         }
+        Commands::MidSolverAudit {
+            model,
+            out,
+            seed,
+            count,
+            backend,
+            foreground_confirmed,
+        } => mid_solver_audit::run(&model, &out, seed, count, &backend, foreground_confirmed),
         Commands::RichMidEvaluate {
             model,
             seed,

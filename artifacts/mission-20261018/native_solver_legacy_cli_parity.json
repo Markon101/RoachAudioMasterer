@@ -1,0 +1,37 @@
+{
+  "schema": "native-euler-refactor-cli-parity-v1",
+  "purpose": "functional numerical parity; no speed claim",
+  "source_sha256": {
+    "src/main.rs": "39af3cd30ff0a70a91da4d8642c2d551cceb1b85e871462c3975160af211e27b",
+    "src/scene_engine.rs": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5",
+    "src/mid_solver_audit.rs": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+  },
+  "prechange_binary_sha256": "6e405990730c8fd8aacd81057d865366e66ba33c0f6b9c82a736d2279851e3ab",
+  "refactored_binary_sha256": "7b2b3586d2b7d1a36d15839a363def555711db0c0e64839ba01335907f001f10",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "input_sha256": "0c6f244c53f0a137a46d1deb146c12a9f41c296d141325936af2debf985bef87",
+  "backend": "cpu",
+  "steps": 8,
+  "command": [
+    "runs/mission-20261018/native-solver-audit",
+    "rich-mid-restore",
+    "--input",
+    "runs/mission-20261018/euler-numerical-golden/procedural-stereo-f32.wav",
+    "--model",
+    "artifacts/rich-mid-v3/basis.json",
+    "--controlled",
+    "--backend",
+    "cpu",
+    "--steps",
+    "8",
+    "--out",
+    "runs/mission-20261018/euler-numerical-golden/refactored-euler8"
+  ],
+  "exact_audio_and_float_chunk_sha256": {
+    "chunks/chunk_0000.bin": "b504ec4812ca30161e087c983c1a4980f516863684917acd89ae7e8c6f75e14d",
+    "listen.wav": "c32447a0fcadef3c45013c061c45b817e35e6518c194e6780a3292d0a58141d6",
+    "reconstructed.wav": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc",
+    "restored.wav": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc"
+  },
+  "passed": true
+}

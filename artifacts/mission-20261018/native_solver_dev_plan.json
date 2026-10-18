@@ -1,0 +1,20 @@
+{
+  "schema": "native-mid-development-session-v1",
+  "binary": "runs/mission-20261018/native-solver-audit",
+  "model": "artifacts/rich-mid-v3/basis.json",
+  "source_sha256": {
+    "src/main.rs": "39af3cd30ff0a70a91da4d8642c2d551cceb1b85e871462c3975160af211e27b",
+    "src/scene_engine.rs": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5",
+    "src/mid_solver_audit.rs": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+  },
+  "seed": 860000,
+  "count": 12,
+  "out": "runs/mission-20261018/native-dev-01",
+  "method_order": "Euler8,Euler4,Heun2,Midpoint1; descriptive timings only",
+  "per_backend_seconds_ceiling": 180,
+  "per_backend_observed_rss_hwm_mib_ceiling": 384,
+  "foreground_confirmation": "Owner: forground available; acknowledged CPU then OpenCL development diagnostic, 2026-10-18",
+  "claim_scope": "short procedural diagnostic, not balanced speed qualification, WOLA evidence or promotion",
+  "binary_sha256": "7b2b3586d2b7d1a36d15839a363def555711db0c0e64839ba01335907f001f10",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3"
+}

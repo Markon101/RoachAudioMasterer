@@ -1,0 +1,142 @@
+{
+  "cpu": {
+    "manifest": {
+      "backend": "cpu-f32-shared-dense",
+      "cache_build": "serial",
+      "cache_mib": 64,
+      "checkpoint_path": "artifacts/rich-mid-v3/basis.json",
+      "checkpoint_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+      "command": [
+        "runs/mission-20261018/native-solver-audit",
+        "mid-solver-audit",
+        "--model",
+        "artifacts/rich-mid-v3/basis.json",
+        "--seed",
+        "860000",
+        "--count",
+        "12",
+        "--backend",
+        "cpu",
+        "--foreground-confirmed",
+        "--out",
+        "runs/mission-20261018/native-dev-01/cpu"
+      ],
+      "count": 12,
+      "host_batch_rows": 8192,
+      "metrics": {
+        "full_waveform_qualification": "Global-lowpass damage removes >8kHz: common unrecoverable component included only in full-waveform metric",
+        "healthy_control": "forced head modification of fullband input; does not test autonomous assessor activation",
+        "limitations": "Short procedural clips; no WOLA/seam, mastering, listening or quality promotion claim. Fixed method order is descriptive timing, not a robust speed experiment.",
+        "lsd": "RMS 20log10(max(target amplitude,1e-7)/max(output amplitude,1e-7)); weighted version uses target bin power",
+        "null_denominator": "target band power <=1e-14 gives null relative/LSD/phase; absolute error retained",
+        "phase_mask": "target amplitude >= max(1e-7,1e-4 * target peak within band); output amplitude >=1e-7; target-power weighted absolute wrapped phase error",
+        "primary_band": "cutoff < frequency < 8000Hz",
+        "transform": "whole_clip_fourier_f32_normalized_by_n",
+        "trusted_band": "frequency <= cutoff or >=8000Hz"
+      },
+      "model_fingerprint": "fnv1a64:03bb4a606f9a8827",
+      "model_parameters": 106342,
+      "noise_seed": 11,
+      "rate": 48000,
+      "run_state": "incomplete_until_completion_json",
+      "sample_artifacts": "waveforms/*.planar-f32le: canonical L then R samples, ~12MiB at count12; controls regenerated from recipe",
+      "scene_samples": 16384,
+      "scene_seconds": 0.3413333333333333,
+      "schema": "native-mid-solver-audit-v1",
+      "seed": 860000,
+      "solver_order": [
+        "euler8",
+        "euler4",
+        "heun2",
+        "midpoint1"
+      ],
+      "source_head": "301bf9da12e0cb2e95774957fb14d224b6c13c4b",
+      "source_status": "M HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md\n M RESULTS.md\n M docs/NATIVE_MID_SOLVER_PHASE_A_PLAN.md\n M src/main.rs\n M src/scene_engine.rs\n?? HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md\n?? artifacts/mission-20261018/native_solver_dev_plan.json\n?? artifacts/mission-20261018/native_solver_implementation.json\n?? artifacts/mission-20261018/native_solver_legacy_cli_parity.json\n?? artifacts/mission-20261018/native_solver_seed_split.json\n?? scripts/run_native_solver_dev.py\n?? src/mid_solver_audit.rs",
+      "started_unix_seconds": 1792313904,
+      "status": "research_only_no_promotion"
+    },
+    "completion": {
+      "actual_case_rows": 96,
+      "actual_control_rows": 48,
+      "completed_unix_seconds": 1792313933,
+      "expected_case_rows": 96,
+      "expected_control_rows": 48,
+      "schema": "native-mid-solver-completion-v1",
+      "solver_failures": 0,
+      "status": "complete"
+    },
+    "raw_jsonl_sha256": "7a8fc2fffe70ce273eaa2a65d5a1f90552dfdfd60d7b251a1571b32161dbe38a",
+    "compressed_jsonl_sha256": "9ac0a38675aa0f2dd69f760be2d6ca01a2a1ff98227f95543408fcd082ed4984",
+    "compressed_jsonl_path": "artifacts/mission-20261018/native_solver_cpu_cases.jsonl.gz"
+  },
+  "opencl": {
+    "manifest": {
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.8 Compiler E031.47.18.56 | fp16=true (v0 uses f32) | max WG=1024 | capacity=8192",
+      "cache_build": "serial",
+      "cache_mib": 64,
+      "checkpoint_path": "artifacts/rich-mid-v3/basis.json",
+      "checkpoint_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+      "command": [
+        "runs/mission-20261018/native-solver-audit",
+        "mid-solver-audit",
+        "--model",
+        "artifacts/rich-mid-v3/basis.json",
+        "--seed",
+        "860000",
+        "--count",
+        "12",
+        "--backend",
+        "opencl",
+        "--foreground-confirmed",
+        "--out",
+        "runs/mission-20261018/native-dev-01/opencl"
+      ],
+      "count": 12,
+      "host_batch_rows": 8192,
+      "metrics": {
+        "full_waveform_qualification": "Global-lowpass damage removes >8kHz: common unrecoverable component included only in full-waveform metric",
+        "healthy_control": "forced head modification of fullband input; does not test autonomous assessor activation",
+        "limitations": "Short procedural clips; no WOLA/seam, mastering, listening or quality promotion claim. Fixed method order is descriptive timing, not a robust speed experiment.",
+        "lsd": "RMS 20log10(max(target amplitude,1e-7)/max(output amplitude,1e-7)); weighted version uses target bin power",
+        "null_denominator": "target band power <=1e-14 gives null relative/LSD/phase; absolute error retained",
+        "phase_mask": "target amplitude >= max(1e-7,1e-4 * target peak within band); output amplitude >=1e-7; target-power weighted absolute wrapped phase error",
+        "primary_band": "cutoff < frequency < 8000Hz",
+        "transform": "whole_clip_fourier_f32_normalized_by_n",
+        "trusted_band": "frequency <= cutoff or >=8000Hz"
+      },
+      "model_fingerprint": "fnv1a64:03bb4a606f9a8827",
+      "model_parameters": 106342,
+      "noise_seed": 11,
+      "rate": 48000,
+      "run_state": "incomplete_until_completion_json",
+      "sample_artifacts": "waveforms/*.planar-f32le: canonical L then R samples, ~12MiB at count12; controls regenerated from recipe",
+      "scene_samples": 16384,
+      "scene_seconds": 0.3413333333333333,
+      "schema": "native-mid-solver-audit-v1",
+      "seed": 860000,
+      "solver_order": [
+        "euler8",
+        "euler4",
+        "heun2",
+        "midpoint1"
+      ],
+      "source_head": "301bf9da12e0cb2e95774957fb14d224b6c13c4b",
+      "source_status": "M HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md\n M RESULTS.md\n M docs/NATIVE_MID_SOLVER_PHASE_A_PLAN.md\n M src/main.rs\n M src/scene_engine.rs\n?? HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md\n?? artifacts/mission-20261018/native_solver_dev_plan.json\n?? artifacts/mission-20261018/native_solver_implementation.json\n?? artifacts/mission-20261018/native_solver_legacy_cli_parity.json\n?? artifacts/mission-20261018/native_solver_seed_split.json\n?? scripts/run_native_solver_dev.py\n?? src/mid_solver_audit.rs",
+      "started_unix_seconds": 1792313933,
+      "status": "research_only_no_promotion"
+    },
+    "completion": {
+      "actual_case_rows": 96,
+      "actual_control_rows": 48,
+      "completed_unix_seconds": 1792313944,
+      "expected_case_rows": 96,
+      "expected_control_rows": 48,
+      "schema": "native-mid-solver-completion-v1",
+      "solver_failures": 0,
+      "status": "complete"
+    },
+    "raw_jsonl_sha256": "ae3261c332698687fc47b154319b8ade084aa86e12f0307e83f38f425deccc5c",
+    "compressed_jsonl_sha256": "7202c250b34c78206cf9ea49ae0efaf019ac85260e0da7b0d48fe2099d3bb8a4",
+    "compressed_jsonl_path": "artifacts/mission-20261018/native_solver_opencl_cases.jsonl.gz"
+  }
+}

@@ -1,0 +1,3877 @@
+{
+  "backends": {
+    "cpu": {
+      "backend": "cpu-f32-shared-dense",
+      "by_condition_solver": {
+        "healthy_fullband_forced_head/euler4": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 245.229948,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "healthy_fullband_forced_head/euler8": {
+          "actual_nfe_values": [
+            8
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 470.591901,
+          "expected_nfe_values": [
+            8
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "16": 8,
+            "24": 3
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "healthy_fullband_forced_head/heun2": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 253.011614,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "healthy_fullband_forced_head/midpoint1": {
+          "actual_nfe_values": [
+            2
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 139.150052,
+          "expected_nfe_values": [
+            2
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "4": 8,
+            "6": 3
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "manufactured_mid_damage/euler4": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 247.163489,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "manufactured_mid_damage/euler8": {
+          "actual_nfe_values": [
+            8
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 463.157812,
+          "expected_nfe_values": [
+            8
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "16": 8,
+            "24": 3
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "manufactured_mid_damage/heun2": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 246.27638,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        },
+        "manufactured_mid_damage/midpoint1": {
+          "actual_nfe_values": [
+            2
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 137.598932,
+          "expected_nfe_values": [
+            2
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "4": 8,
+            "6": 3
+          },
+          "max_profile_hwm_mib": 36.7421875,
+          "rows": 12
+        }
+      },
+      "controls": {
+        "healthy_fullband_forced_head": {
+          "lr": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 5.22171183213e-05,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.00894612465969,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 0.385226463902,
+              "per_scene_pooled_nmse_median": 0.0148582826248,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.1308969508e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.06414246225,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.0,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 0.0,
+              "per_scene_pooled_nmse_median": 0.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 0.0,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 5.22171170736e-05,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.00894612475708,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 0.385226416465,
+              "per_scene_pooled_nmse_median": 0.0148582829917,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.13089695912e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.14045334459,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.0,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 0.0,
+              "per_scene_pooled_nmse_median": 0.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 0.0,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        },
+        "manufactured_mid_damage": {
+          "lr": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00524527844218,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.898650027558,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 1.2493483403,
+              "per_scene_pooled_nmse_median": 0.976189222306,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.13089556834e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 41.8456290714,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00515859149256,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.883798341319,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 0.895705536964,
+              "per_scene_pooled_nmse_median": 0.906095711193,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 2.03012467621e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 61.4863122958,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00524527824914,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.898650025741,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 1.24934794104,
+              "per_scene_pooled_nmse_median": 0.976189302292,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.13089365919e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 40.2307148902,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00515859105145,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.883798296485,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 0.895705564594,
+              "per_scene_pooled_nmse_median": 0.906095702876,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 2.35761256603e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 55.5659266018,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        }
+      },
+      "healthy_forced_head_modification": {
+        "lr": {
+          "forced_head_active_band_modification_rms_max": {
+            "family": "multitrack_ambient_dense",
+            "rms": 0.00866716925461,
+            "seed": 860002,
+            "solver": "heun2"
+          },
+          "forced_head_active_band_modification_rms_median": 0.00124998131866
+        },
+        "ms": {
+          "forced_head_active_band_modification_rms_max": {
+            "family": "multitrack_ambient_dense",
+            "rms": 0.00866716866428,
+            "seed": 860002,
+            "solver": "heun2"
+          },
+          "forced_head_active_band_modification_rms_median": 0.00124998140417
+        }
+      },
+      "manifest": {
+        "checkpoint_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+        "count": 12,
+        "limitations": "Short procedural clips; no WOLA/seam, mastering, listening or quality promotion claim. Fixed method order is descriptive timing, not a robust speed experiment.",
+        "rate": 48000,
+        "scene_samples": 16384,
+        "scene_seconds": 0.3413333333333333,
+        "seed": 860000,
+        "solver_order": [
+          "euler8",
+          "euler4",
+          "heun2",
+          "midpoint1"
+        ]
+      },
+      "paired_vs_controls_damaged": {
+        "lr": {
+          "euler4": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0241360901999,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211852371e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.924269394558,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0313572538674,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.924269394558,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0313572538674,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03511796115,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.329506713137,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211852371e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.7017979461,
+                "control_nmse": 0.790720755868,
+                "delta": 2.91107719023,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.7017979461,
+                "control_nmse": 0.790720755868,
+                "delta": 2.91107719023,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.68154897747,
+                "seed": 860007
+              }
+            }
+          },
+          "euler8": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0251136860582,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036160004e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.929013492002,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0361013513111,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.929013492002,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0361013513111,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04043102302,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328529117279,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036160004e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.68660914449,
+                "control_nmse": 0.790720755868,
+                "delta": 2.89588838863,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.68660914449,
+                "control_nmse": 0.790720755868,
+                "delta": 2.89588838863,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.66234017146,
+                "seed": 860007
+              }
+            }
+          },
+          "heun2": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0256836111359,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445977218e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.932263602851,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0393514621608,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.932263602851,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0393514621608,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04407092296,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.327959192201,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445977218e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.67706120983,
+                "control_nmse": 0.790720755868,
+                "delta": 2.88634045397,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.67706120983,
+                "control_nmse": 0.790720755868,
+                "delta": 2.88634045397,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.65026519482,
+                "seed": 860007
+              }
+            }
+          },
+          "midpoint1": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.024705636026,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553347244e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.927127268518,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0342151278277,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.927127268518,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0342151278277,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03831858284,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328937167311,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553347244e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.6928314701,
+                "control_nmse": 0.790720755868,
+                "delta": 2.90211071423,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.6928314701,
+                "control_nmse": 0.790720755868,
+                "delta": 2.90211071423,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.67020935354,
+                "seed": 860007
+              }
+            }
+          }
+        },
+        "ms": {
+          "euler4": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0241358885305,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211875678e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.924269379477,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0313572398693,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.924269379477,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0313572398693,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03511794552,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.329506487915,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211875678e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.70179605772,
+                "control_nmse": 0.790720797405,
+                "delta": 2.91107526032,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.70179605772,
+                "control_nmse": 0.790720797405,
+                "delta": 2.91107526032,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.68154634337,
+                "seed": 860007
+              }
+            }
+          },
+          "euler8": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.02511360427,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036162221e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.929013452795,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0361013131875,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.929013452795,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0361013131875,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04043098037,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328528772176,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036162221e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.68660651477,
+                "control_nmse": 0.790720797405,
+                "delta": 2.89588571737,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.68660651477,
+                "control_nmse": 0.790720797405,
+                "delta": 2.89588571737,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.66233660082,
+                "seed": 860007
+              }
+            }
+          },
+          "heun2": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0256832932534,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445947064e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.932263536806,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0393513971988,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.932263536806,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0393513971988,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04407085026,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.327959083193,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445947064e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.67706038371,
+                "control_nmse": 0.790720797405,
+                "delta": 2.88633958631,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.67706038371,
+                "control_nmse": 0.790720797405,
+                "delta": 2.88633958631,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.65026390577,
+                "seed": 860007
+              }
+            }
+          },
+          "midpoint1": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.024705451133,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553294851e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.927127197063,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0342150574556,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.927127197063,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0342150574556,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03831850407,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328936925313,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553294851e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.69282910831,
+                "control_nmse": 0.790720797405,
+                "delta": 2.90210831091,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.69282910831,
+                "control_nmse": 0.790720797405,
+                "delta": 2.90210831091,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.67020612134,
+                "seed": 860007
+              }
+            }
+          }
+        }
+      },
+      "paired_vs_euler8_damaged": {
+        "lr": {
+          "euler4": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000977595858373,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.7017979461,
+              "delta": 0.0151888016026,
+              "euler8_nmse": 3.68660914449,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.7017979461,
+              "delta": 0.0151888016026,
+              "euler8_nmse": 3.68660914449,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00411999239,
+              "seed": 860007
+            }
+          },
+          "heun2": {
+            "losses_vs_euler8": 8,
+            "mean_nmse_delta": -0.000569925077672,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 2,
+            "worst_absolute_regression": {
+              "candidate_nmse": 0.932263602851,
+              "delta": 0.00325011084966,
+              "euler8_nmse": 0.929013492002,
+              "family": "multitrack_ambient_dense",
+              "seed": 860002
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 0.932263602851,
+              "delta": 0.00325011084966,
+              "euler8_nmse": 0.929013492002,
+              "family": "multitrack_ambient_dense",
+              "ratio": 1.00349845387,
+              "seed": 860002
+            }
+          },
+          "midpoint1": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000408050032279,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.6928314701,
+              "delta": 0.00622232560179,
+              "euler8_nmse": 3.68660914449,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.6928314701,
+              "delta": 0.00622232560179,
+              "euler8_nmse": 3.68660914449,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00168781809,
+              "seed": 860007
+            }
+          }
+        },
+        "ms": {
+          "euler4": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000977715739419,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.70179605772,
+              "delta": 0.015189542951,
+              "euler8_nmse": 3.68660651477,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.70179605772,
+              "delta": 0.015189542951,
+              "euler8_nmse": 3.68660651477,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00412019642,
+              "seed": 860007
+            }
+          },
+          "heun2": {
+            "losses_vs_euler8": 8,
+            "mean_nmse_delta": -0.000569688983406,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 2,
+            "worst_absolute_regression": {
+              "candidate_nmse": 0.932263536806,
+              "delta": 0.00325008401132,
+              "euler8_nmse": 0.929013452795,
+              "family": "multitrack_ambient_dense",
+              "seed": 860002
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 0.932263536806,
+              "delta": 0.00325008401132,
+              "euler8_nmse": 0.929013452795,
+              "family": "multitrack_ambient_dense",
+              "ratio": 1.00349842513,
+              "seed": 860002
+            }
+          },
+          "midpoint1": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000408153136942,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.69282910831,
+              "delta": 0.00622259353782,
+              "euler8_nmse": 3.68660651477,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.69282910831,
+              "delta": 0.00622259353782,
+              "euler8_nmse": 3.68660651477,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00168789197,
+              "seed": 860007
+            }
+          }
+        }
+      },
+      "receipt_checks": {
+        "all_case_status_ok": true,
+        "case_count_exact": true,
+        "case_rows": 96,
+        "completion_status": "complete",
+        "control_count_exact": true,
+        "control_rows": 48,
+        "expected_case_rows": 96,
+        "expected_control_rows": 48,
+        "seed_coverage_exact": true,
+        "solver_failures": 0
+      },
+      "target_metrics": {
+        "healthy_fullband_forced_head": {
+          "lr": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000171758923803,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0294266859825,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.359095498956,
+                "right": 0.362990162702
+              },
+              "per_scene_pooled_nmse_mean": 0.360542673914,
+              "per_scene_pooled_nmse_median": 0.0203867867376,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0247944083078,
+              "phase_mae_radians_per_channel_row_p95": 0.252001829824,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.999997825652,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73212207778e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.17343492302,
+              "targetweighted_lsd_db_per_channel_row_median": 0.630898697793,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00018961012949,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0324850529805,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.357945224126,
+                "right": 0.362175111078
+              },
+              "per_scene_pooled_nmse_mean": 0.359530242788,
+              "per_scene_pooled_nmse_median": 0.021102173585,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0258031694594,
+              "phase_mae_radians_per_channel_row_p95": 0.254630560185,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 1.0,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036440338e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.18623918368,
+              "targetweighted_lsd_db_per_channel_row_median": 0.654526887085,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000201819348251,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0345768036658,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.357261120156,
+                "right": 0.361719465998
+              },
+              "per_scene_pooled_nmse_mean": 0.358940017277,
+              "per_scene_pooled_nmse_median": 0.0215963678465,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0264617521656,
+              "phase_mae_radians_per_channel_row_p95": 0.256345664681,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 1.0,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.7144627382e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.19482624485,
+              "targetweighted_lsd_db_per_channel_row_median": 0.669661748359,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000182488780757,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0312649842452,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.358420234027,
+                "right": 0.362515704977
+              },
+              "per_scene_pooled_nmse_mean": 0.359949914261,
+              "per_scene_pooled_nmse_median": 0.0208250054162,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0254148306265,
+              "phase_mae_radians_per_channel_row_p95": 0.253646221294,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.999997825652,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553575569e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.1812027524,
+              "targetweighted_lsd_db_per_channel_row_median": 0.645378473527,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00017175890243,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0294266833442,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.360221576249,
+                "side": 0.396124947531
+              },
+              "per_scene_pooled_nmse_mean": 0.360542270087,
+              "per_scene_pooled_nmse_median": 0.0203867830981,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0264150208234,
+              "phase_mae_radians_per_channel_row_p95": 0.254798753333,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998653562856,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73212059327e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.23821480776,
+              "targetweighted_lsd_db_per_channel_row_median": 0.633623914774,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000189610108893,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0324850505816,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.359223133363,
+                "side": 0.394316207672
+              },
+              "per_scene_pooled_nmse_mean": 0.359530064704,
+              "per_scene_pooled_nmse_median": 0.0211021721442,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0277121619177,
+              "phase_mae_radians_per_channel_row_p95": 0.257665936703,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998653562856,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036392168e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.25053058406,
+              "targetweighted_lsd_db_per_channel_row_median": 0.658122806719,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000201819325067,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0345768008963,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.358642055502,
+                "side": 0.393200600353
+              },
+              "per_scene_pooled_nmse_mean": 0.358939811735,
+              "per_scene_pooled_nmse_median": 0.0215963668743,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0285578256933,
+              "phase_mae_radians_per_channel_row_p95": 0.259543107892,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998631145233,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71446237517e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.25929574535,
+              "targetweighted_lsd_db_per_channel_row_median": 0.674893620011,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000182488761824,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0312649820889,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.359637034125,
+                "side": 0.395057728813
+              },
+              "per_scene_pooled_nmse_mean": 0.359949510658,
+              "per_scene_pooled_nmse_median": 0.0208250033777,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0272160286258,
+              "phase_mae_radians_per_channel_row_p95": 0.256592509242,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998653562856,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.7255350971e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.24566932534,
+              "targetweighted_lsd_db_per_channel_row_median": 0.648415307915,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        },
+        "manufactured_mid_damage": {
+          "lr": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00534665962706,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.916019211214,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22769651519,
+                "right": 1.22348132651
+              },
+              "per_scene_pooled_nmse_mean": 1.2252122501,
+              "per_scene_pooled_nmse_median": 0.976657423818,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.33467507836,
+              "phase_mae_radians_per_channel_row_p95": 1.76208054464,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.952020614226,
+              "phase_target_power_coverage_per_channel_row_median": 0.999958102941,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73211852371e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 32.3168613681,
+              "targetweighted_lsd_db_per_channel_row_median": 30.944668576,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00536307370156,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.918831360972,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22658897864,
+                "right": 1.22269847995
+              },
+              "per_scene_pooled_nmse_mean": 1.22423465424,
+              "per_scene_pooled_nmse_median": 0.977048121411,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.32732558021,
+              "phase_mae_radians_per_channel_row_p95": 1.7726892616,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.953668701431,
+              "phase_target_power_coverage_per_channel_row_median": 0.999990276956,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036160004e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 31.9436047028,
+              "targetweighted_lsd_db_per_channel_row_median": 30.5557954207,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00537435142573,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.920763522867,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22592963205,
+                "right": 1.22226230012
+              },
+              "per_scene_pooled_nmse_mean": 1.22366472916,
+              "per_scene_pooled_nmse_median": 0.977329922485,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.32396677808,
+              "phase_mae_radians_per_channel_row_p95": 1.77954114118,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.957132636681,
+              "phase_target_power_coverage_per_channel_row_median": 0.99998060131,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71445977218e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 31.7137754809,
+              "targetweighted_lsd_db_per_channel_row_median": 30.31632523,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.0053565323861,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.917710666735,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22704851593,
+                "right": 1.22302938815
+              },
+              "per_scene_pooled_nmse_mean": 1.22464270427,
+              "per_scene_pooled_nmse_median": 0.976891830942,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.32937583567,
+              "phase_mae_radians_per_channel_row_p95": 1.76847022434,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.952359348911,
+              "phase_target_power_coverage_per_channel_row_median": 0.999990276956,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553347244e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 32.0814341672,
+              "targetweighted_lsd_db_per_channel_row_median": 30.7050673462,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00534665939062,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.916019202567,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.22586164446,
+                "side": 1.20383269859
+              },
+              "per_scene_pooled_nmse_mean": 1.22521205251,
+              "per_scene_pooled_nmse_median": 0.976657401061,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.19018599458,
+              "phase_mae_radians_per_channel_row_p95": 1.52881268171,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.771840395388,
+              "phase_target_power_coverage_per_channel_row_median": 0.999870792516,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73211875678e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 30.6079608028,
+              "targetweighted_lsd_db_per_channel_row_median": 30.536035383,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00536307341626,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.918831344051,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.2248947748,
+                "side": 1.20192618611
+              },
+              "per_scene_pooled_nmse_mean": 1.22423433677,
+              "per_scene_pooled_nmse_median": 0.97704816417,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.20216032367,
+              "phase_mae_radians_per_channel_row_p95": 1.53156773112,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.78124826568,
+              "phase_target_power_coverage_per_channel_row_median": 0.999910592288,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036162221e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 30.2303797935,
+              "targetweighted_lsd_db_per_channel_row_median": 30.1332117903,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00537435103092,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.920763487251,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.22433237762,
+                "side": 1.20074360105
+              },
+              "per_scene_pooled_nmse_mean": 1.22366464779,
+              "per_scene_pooled_nmse_median": 0.97732991062,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.20784466641,
+              "phase_mae_radians_per_channel_row_p95": 1.5298807687,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.786850158245,
+              "phase_target_power_coverage_per_channel_row_median": 0.999821038709,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71445947064e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 29.9972449913,
+              "targetweighted_lsd_db_per_channel_row_median": 29.8887129479,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00535653194545,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.917710623161,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.22529857368,
+                "side": 1.20270411096
+              },
+              "per_scene_pooled_nmse_mean": 1.22464248991,
+              "per_scene_pooled_nmse_median": 0.976891839527,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.1918538402,
+              "phase_mae_radians_per_channel_row_p95": 1.53075418508,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.773388187526,
+              "phase_target_power_coverage_per_channel_row_median": 0.999910592288,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553294851e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 30.3706731417,
+              "targetweighted_lsd_db_per_channel_row_median": 30.2852145307,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        }
+      },
+      "trusted_fourier_deviation_vs_input": {
+        "max_absolute_error_power": {
+          "channel": "mid",
+          "condition": "healthy_fullband_forced_head",
+          "error_power": 3.61421443076e-15,
+          "seed": 860006,
+          "solver": "euler8"
+        },
+        "max_nmse": {
+          "channel": "side",
+          "condition": "healthy_fullband_forced_head",
+          "nmse": 3.6213939616e-12,
+          "seed": 860008,
+          "solver": "midpoint1"
+        }
+      }
+    },
+    "opencl": {
+      "backend": "QUALCOMM Adreno(TM) 830 | OpenCL 3.0 Adreno(TM) 830 | driver OpenCL 3.0 QUALCOMM build: 0800.64.8 Compiler E031.47.18.56 | fp16=true (v0 uses f32) | max WG=1024 | capacity=8192",
+      "by_condition_solver": {
+        "healthy_fullband_forced_head/euler4": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 81.5063025,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "healthy_fullband_forced_head/euler8": {
+          "actual_nfe_values": [
+            8
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 128.6050265,
+          "expected_nfe_values": [
+            8
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "16": 8,
+            "24": 3
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "healthy_fullband_forced_head/heun2": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 82.316589,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "healthy_fullband_forced_head/midpoint1": {
+          "actual_nfe_values": [
+            2
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 58.6952605,
+          "expected_nfe_values": [
+            2
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "4": 8,
+            "6": 3
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "manufactured_mid_damage/euler4": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 82.423646,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "manufactured_mid_damage/euler8": {
+          "actual_nfe_values": [
+            8
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 128.8892185,
+          "expected_nfe_values": [
+            8
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "16": 8,
+            "24": 3
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "manufactured_mid_damage/heun2": {
+          "actual_nfe_values": [
+            4
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 82.2078125,
+          "expected_nfe_values": [
+            4
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "12": 3,
+            "8": 8
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        },
+        "manufactured_mid_damage/midpoint1": {
+          "actual_nfe_values": [
+            2
+          ],
+          "cache_eligible_values": [
+            true
+          ],
+          "cache_used_values": [
+            true
+          ],
+          "descriptive_wall_ms_median": 58.4779165,
+          "expected_nfe_values": [
+            2
+          ],
+          "host_call_count_histogram": {
+            "0": 1,
+            "4": 8,
+            "6": 3
+          },
+          "max_profile_hwm_mib": 76.375,
+          "rows": 12
+        }
+      },
+      "controls": {
+        "healthy_fullband_forced_head": {
+          "lr": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 5.22171183213e-05,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.00894612465969,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 0.385226463902,
+              "per_scene_pooled_nmse_median": 0.0148582826248,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.1308969508e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.06414246225,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.0,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 0.0,
+              "per_scene_pooled_nmse_median": 0.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 0.0,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 5.22171170736e-05,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.00894612475708,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 0.385226416465,
+              "per_scene_pooled_nmse_median": 0.0148582829917,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.13089695912e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.14045334459,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.0,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 0.0,
+              "per_scene_pooled_nmse_median": 0.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 0.0,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        },
+        "manufactured_mid_damage": {
+          "lr": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00524527844218,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.898650027558,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 1.2493483403,
+              "per_scene_pooled_nmse_median": 0.976189222306,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.13089556834e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 41.8456290714,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00515859149256,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.883798341319,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_scene_pooled_nmse_mean": 0.895705536964,
+              "per_scene_pooled_nmse_median": 0.906095711193,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 2.03012467621e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 61.4863122958,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "dsp_harmonic_prior": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00524527824914,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.898650025741,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 1.24934794104,
+              "per_scene_pooled_nmse_median": 0.976189302292,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 6.13089365919e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 40.2307148902,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "identity_degraded_or_healthy": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00515859105145,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.883798296485,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_scene_pooled_nmse_mean": 0.895705564594,
+              "per_scene_pooled_nmse_median": 0.906095702876,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 2.35761256603e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "rows": 12,
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 55.5659266018,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        }
+      },
+      "healthy_forced_head_modification": {
+        "lr": {
+          "forced_head_active_band_modification_rms_max": {
+            "family": "multitrack_ambient_dense",
+            "rms": 0.00866716896169,
+            "seed": 860002,
+            "solver": "heun2"
+          },
+          "forced_head_active_band_modification_rms_median": 0.0012499813257
+        },
+        "ms": {
+          "forced_head_active_band_modification_rms_max": {
+            "family": "multitrack_ambient_dense",
+            "rms": 0.00866716861687,
+            "seed": 860002,
+            "solver": "heun2"
+          },
+          "forced_head_active_band_modification_rms_median": 0.00124998144711
+        }
+      },
+      "manifest": {
+        "checkpoint_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+        "count": 12,
+        "limitations": "Short procedural clips; no WOLA/seam, mastering, listening or quality promotion claim. Fixed method order is descriptive timing, not a robust speed experiment.",
+        "rate": 48000,
+        "scene_samples": 16384,
+        "scene_seconds": 0.3413333333333333,
+        "seed": 860000,
+        "solver_order": [
+          "euler8",
+          "euler4",
+          "heun2",
+          "midpoint1"
+        ]
+      },
+      "paired_vs_controls_damaged": {
+        "lr": {
+          "euler4": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0241361492407,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211896359e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.92426939205,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0313572513594,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.92426939205,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0313572513594,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03511795834,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.329506654096,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211896359e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.70179734205,
+                "control_nmse": 0.790720755868,
+                "delta": 2.91107658618,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.70179734205,
+                "control_nmse": 0.790720755868,
+                "delta": 2.91107658618,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.68154821355,
+                "seed": 860007
+              }
+            }
+          },
+          "euler8": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0251136874533,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036125131e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.929013493389,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0361013526983,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.929013493389,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0361013526983,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04043102457,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328529115884,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036125131e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.68660921373,
+                "control_nmse": 0.790720755868,
+                "delta": 2.89588845786,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.68660921373,
+                "control_nmse": 0.790720755868,
+                "delta": 2.89588845786,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.66234025902,
+                "seed": 860007
+              }
+            }
+          },
+          "heun2": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0256836043843,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445948918e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.932263601675,
+                "control_nmse": 0.892912140691,
+                "delta": 0.039351460984,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.932263601675,
+                "control_nmse": 0.892912140691,
+                "delta": 0.039351460984,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04407092164,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.327959198953,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445948918e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.67706112759,
+                "control_nmse": 0.790720755868,
+                "delta": 2.88634037172,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.67706112759,
+                "control_nmse": 0.790720755868,
+                "delta": 2.88634037172,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.65026509081,
+                "seed": 860007
+              }
+            }
+          },
+          "midpoint1": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0247056272298,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553272271e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 6.13089556834e-06,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.927127261163,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0342151204721,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.927127261163,
+                "control_nmse": 0.892912140691,
+                "delta": 0.0342151204721,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.0383185746,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328937176107,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553272271e-06,
+                  "candidate_target_power": 1.18526466526e-16,
+                  "control_absolute_error_power": 2.03012467621e-16,
+                  "control_target_power": 1.18526466526e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.69283169961,
+                "control_nmse": 0.790720755868,
+                "delta": 2.90211094374,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.69283169961,
+                "control_nmse": 0.790720755868,
+                "delta": 2.90211094374,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.6702096438,
+                "seed": 860007
+              }
+            }
+          }
+        },
+        "ms": {
+          "euler4": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0241359527876,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211868084e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.924269385992,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0313572463846,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.924269385992,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0313572463846,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03511795281,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.329506423658,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.73211868084e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.7017954878,
+                "control_nmse": 0.790720797405,
+                "delta": 2.91107469039,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.7017954878,
+                "control_nmse": 0.790720797405,
+                "delta": 2.91107469039,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.68154562261,
+                "seed": 860007
+              }
+            }
+          },
+          "euler8": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0251135598851,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036114735e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.929013450754,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0361013111466,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.929013450754,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0361013111466,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04043097808,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328528816561,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72036114735e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.68660690519,
+                "control_nmse": 0.790720797405,
+                "delta": 2.89588610778,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.68660690519,
+                "control_nmse": 0.790720797405,
+                "delta": 2.89588610778,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.66233709456,
+                "seed": 860007
+              }
+            }
+          },
+          "heun2": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.025683356181,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445978077e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.932263534654,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0393513950467,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.932263534654,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0393513950467,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.04407084785,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.327959020265,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.71445978077e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.6770597854,
+                "control_nmse": 0.790720797405,
+                "delta": 2.88633898799,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.6770597854,
+                "control_nmse": 0.790720797405,
+                "delta": 2.88633898799,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.6502631491,
+                "seed": 860007
+              }
+            }
+          },
+          "midpoint1": {
+            "dsp_harmonic_prior": {
+              "losses_vs_control": 5,
+              "mean_nmse_delta": -0.0247054978219,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553276018e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 6.13089365919e-06,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 5,
+              "worst_absolute_regression": {
+                "candidate_nmse": 0.927127197348,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0342150577408,
+                "family": "multitrack_ambient_dense",
+                "seed": 860002
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 0.927127197348,
+                "control_nmse": 0.892912139607,
+                "delta": 0.0342150577408,
+                "family": "multitrack_ambient_dense",
+                "ratio": 1.03831850439,
+                "seed": 860002
+              }
+            },
+            "identity_degraded_or_healthy": {
+              "losses_vs_control": 10,
+              "mean_nmse_delta": 0.328936878624,
+              "null_scene_count": 2,
+              "null_scenes": [
+                {
+                  "candidate_absolute_error_power": 5.72553276018e-06,
+                  "candidate_target_power": 1.40344764053e-16,
+                  "control_absolute_error_power": 2.35761256603e-16,
+                  "control_target_power": 1.40344764053e-16,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003
+                },
+                {
+                  "candidate_absolute_error_power": 0.0,
+                  "candidate_target_power": 0.0,
+                  "control_absolute_error_power": 0.0,
+                  "control_target_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004
+                }
+              ],
+              "paired_scored_scenes": 10,
+              "wins_vs_control": 0,
+              "worst_absolute_regression": {
+                "candidate_nmse": 3.69282879233,
+                "control_nmse": 0.790720797405,
+                "delta": 2.90210799493,
+                "family": "vocal_with_aspiration",
+                "seed": 860007
+              },
+              "worst_ratio_vs_control": {
+                "candidate_nmse": 3.69282879233,
+                "control_nmse": 0.790720797405,
+                "delta": 2.90210799493,
+                "family": "vocal_with_aspiration",
+                "ratio": 4.67020572173,
+                "seed": 860007
+              }
+            }
+          }
+        }
+      },
+      "paired_vs_euler8_damaged": {
+        "lr": {
+          "euler4": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000977538212515,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.70179734205,
+              "delta": 0.015188128323,
+              "euler8_nmse": 3.68660921373,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.70179734205,
+              "delta": 0.015188128323,
+              "euler8_nmse": 3.68660921373,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00411980968,
+              "seed": 860007
+            }
+          },
+          "heun2": {
+            "losses_vs_euler8": 8,
+            "mean_nmse_delta": -0.000569916931062,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 2,
+            "worst_absolute_regression": {
+              "candidate_nmse": 0.932263601675,
+              "delta": 0.0032501082857,
+              "euler8_nmse": 0.929013493389,
+              "family": "multitrack_ambient_dense",
+              "seed": 860002
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 0.932263601675,
+              "delta": 0.0032501082857,
+              "euler8_nmse": 0.929013493389,
+              "family": "multitrack_ambient_dense",
+              "ratio": 1.00349845111,
+              "seed": 860002
+            }
+          },
+          "midpoint1": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000408060223471,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.69283169961,
+              "delta": 0.00622248587935,
+              "euler8_nmse": 3.68660921373,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.69283169961,
+              "delta": 0.00622248587935,
+              "euler8_nmse": 3.68660921373,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00168786153,
+              "seed": 860007
+            }
+          }
+        },
+        "ms": {
+          "euler4": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.00097760709748,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.7017954878,
+              "delta": 0.0151885826109,
+              "euler8_nmse": 3.68660690519,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.7017954878,
+              "delta": 0.0151885826109,
+              "euler8_nmse": 3.68660690519,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00411993549,
+              "seed": 860007
+            }
+          },
+          "heun2": {
+            "losses_vs_euler8": 8,
+            "mean_nmse_delta": -0.000569796295974,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 2,
+            "worst_absolute_regression": {
+              "candidate_nmse": 0.932263534654,
+              "delta": 0.00325008390009,
+              "euler8_nmse": 0.929013450754,
+              "family": "multitrack_ambient_dense",
+              "seed": 860002
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 0.932263534654,
+              "delta": 0.00325008390009,
+              "euler8_nmse": 0.929013450754,
+              "family": "multitrack_ambient_dense",
+              "ratio": 1.00349842502,
+              "seed": 860002
+            }
+          },
+          "midpoint1": {
+            "losses_vs_euler8": 2,
+            "mean_nmse_delta": 0.000408062063171,
+            "paired_scored_scenes": 10,
+            "wins_vs_euler8": 8,
+            "worst_absolute_regression": {
+              "candidate_nmse": 3.69282879233,
+              "delta": 0.0062218871444,
+              "euler8_nmse": 3.68660690519,
+              "family": "vocal_with_aspiration",
+              "seed": 860007
+            },
+            "worst_ratio_vs_euler8": {
+              "candidate_nmse": 3.69282879233,
+              "delta": 0.0062218871444,
+              "euler8_nmse": 3.68660690519,
+              "family": "vocal_with_aspiration",
+              "ratio": 1.00168770018,
+              "seed": 860007
+            }
+          }
+        }
+      },
+      "receipt_checks": {
+        "all_case_status_ok": true,
+        "case_count_exact": true,
+        "case_rows": 96,
+        "completion_status": "complete",
+        "control_count_exact": true,
+        "control_rows": 48,
+        "expected_case_rows": 96,
+        "expected_control_rows": 48,
+        "seed_coverage_exact": true,
+        "solver_failures": 0
+      },
+      "target_metrics": {
+        "healthy_fullband_forced_head": {
+          "lr": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000171758921087,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0294266855173,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.359095442153,
+                "right": 0.362990169104
+              },
+              "per_scene_pooled_nmse_mean": 0.360542644418,
+              "per_scene_pooled_nmse_median": 0.0203867875625,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0247944047286,
+              "phase_mae_radians_per_channel_row_p95": 0.252001906474,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.999997825652,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73212154759e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.17343493126,
+              "targetweighted_lsd_db_per_channel_row_median": 0.630898743805,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00018961012613,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0324850524048,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.357945162089,
+                "right": 0.362175160871
+              },
+              "per_scene_pooled_nmse_mean": 0.359530228939,
+              "per_scene_pooled_nmse_median": 0.0211021724591,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0258031776021,
+              "phase_mae_radians_per_channel_row_p95": 0.254630597893,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 1.0,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036462868e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.18623917937,
+              "targetweighted_lsd_db_per_channel_row_median": 0.654526896861,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000201819336673,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0345768016821,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.357261140829,
+                "right": 0.361719467174
+              },
+              "per_scene_pooled_nmse_mean": 0.358940029542,
+              "per_scene_pooled_nmse_median": 0.0215963675642,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0264617504332,
+              "phase_mae_radians_per_channel_row_p95": 0.256345529903,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 1.0,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71446232802e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.19482622506,
+              "targetweighted_lsd_db_per_channel_row_median": 0.669661652558,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000182488775975,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.031264983426,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 0.358420227091,
+                "right": 0.362515727306
+              },
+              "per_scene_pooled_nmse_mean": 0.359949919991,
+              "per_scene_pooled_nmse_median": 0.0208250046307,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 0.0254148363879,
+              "phase_mae_radians_per_channel_row_p95": 0.253646170858,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.999997825652,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553653174e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.18120281098,
+              "targetweighted_lsd_db_per_channel_row_median": 0.645378412746,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000171758896095,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.029426682259,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.360221635669,
+                "side": 0.396124909698
+              },
+              "per_scene_pooled_nmse_mean": 0.360542329094,
+              "per_scene_pooled_nmse_median": 0.0203867849391,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0264150083929,
+              "phase_mae_radians_per_channel_row_p95": 0.254798493821,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998653562856,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73212029239e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.23821495829,
+              "targetweighted_lsd_db_per_channel_row_median": 0.633623797504,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000189610110109,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0324850507898,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.359223104149,
+                "side": 0.394316181471
+              },
+              "per_scene_pooled_nmse_mean": 0.359530035501,
+              "per_scene_pooled_nmse_median": 0.0211021700613,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0277121669251,
+              "phase_mae_radians_per_channel_row_p95": 0.257665963232,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998653562856,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036384716e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.25053078309,
+              "targetweighted_lsd_db_per_channel_row_median": 0.658122873469,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000201819321725,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0345768003237,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.358642052775,
+                "side": 0.393200635746
+              },
+              "per_scene_pooled_nmse_mean": 0.358939809225,
+              "per_scene_pooled_nmse_median": 0.021596365316,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0285578279505,
+              "phase_mae_radians_per_channel_row_p95": 0.259543138651,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998631145233,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71446237914e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.25929580122,
+              "targetweighted_lsd_db_per_channel_row_median": 0.67489361133,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.000182488756003,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.0312649810917,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 0.359637067792,
+                "side": 0.395057825367
+              },
+              "per_scene_pooled_nmse_mean": 0.359949544566,
+              "per_scene_pooled_nmse_median": 0.0208250034295,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 0.0272160186901,
+              "phase_mae_radians_per_channel_row_p95": 0.256592550251,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.998653562856,
+              "phase_target_power_coverage_per_channel_row_median": 1.0,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553448004e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 1.2456692228,
+              "targetweighted_lsd_db_per_channel_row_median": 0.648415183817,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        },
+        "manufactured_mid_damage": {
+          "lr": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00534665963168,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.916019212005,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22769640734,
+                "right": 1.22348133234
+              },
+              "per_scene_pooled_nmse_mean": 1.22521219106,
+              "per_scene_pooled_nmse_median": 0.976657396484,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.33467510248,
+              "phase_mae_radians_per_channel_row_p95": 1.76208156127,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.952020614226,
+              "phase_target_power_coverage_per_channel_row_median": 0.999958102941,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73211896359e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 32.3168732367,
+              "targetweighted_lsd_db_per_channel_row_median": 30.9446715347,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00536307371132,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.918831362643,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22658896352,
+                "right": 1.22269849704
+              },
+              "per_scene_pooled_nmse_mean": 1.22423465285,
+              "per_scene_pooled_nmse_median": 0.977048108897,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.32732604944,
+              "phase_mae_radians_per_channel_row_p95": 1.77268518449,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.953668701431,
+              "phase_target_power_coverage_per_channel_row_median": 0.999990276956,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036125131e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 31.9435991124,
+              "targetweighted_lsd_db_per_channel_row_median": 30.5557962735,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00537435142461,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.920763522676,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22592966408,
+                "right": 1.22226227301
+              },
+              "per_scene_pooled_nmse_mean": 1.22366473592,
+              "per_scene_pooled_nmse_median": 0.977329906556,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.32396650059,
+              "phase_mae_radians_per_channel_row_p95": 1.77954170523,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.957132636681,
+              "phase_target_power_coverage_per_channel_row_median": 0.99998060131,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71445948918e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 31.7137730479,
+              "targetweighted_lsd_db_per_channel_row_median": 30.3163280691,
+              "targetweighted_lsd_defined_channel_rows": 20
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00535653236548,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.917710663203,
+              "energy_pooled_target_power_all_scenes": 0.00583684224261,
+              "per_channel_nmse_defined_counts": {
+                "left": 10,
+                "right": 10
+              },
+              "per_channel_nmse_mean": {
+                "left": 1.22704856554,
+                "right": 1.22302934368
+              },
+              "per_scene_pooled_nmse_mean": 1.22464271307,
+              "per_scene_pooled_nmse_median": 0.976891816989,
+              "phase_coverage_defined_channel_rows": 20,
+              "phase_mae_defined_channel_rows": 20,
+              "phase_mae_radians_per_channel_row_median": 1.32937535355,
+              "phase_mae_radians_per_channel_row_p95": 1.76847247902,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.952359348911,
+              "phase_target_power_coverage_per_channel_row_median": 0.999990276956,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553272271e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.18526466526e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 32.0814318849,
+              "targetweighted_lsd_db_per_channel_row_median": 30.7050637395,
+              "targetweighted_lsd_defined_channel_rows": 20
+            }
+          },
+          "ms": {
+            "euler4": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00534665940853,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.916019205635,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.22586157981,
+                "side": 1.20383268552
+              },
+              "per_scene_pooled_nmse_mean": 1.22521198825,
+              "per_scene_pooled_nmse_median": 0.976657396558,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.19018717194,
+              "phase_mae_radians_per_channel_row_p95": 1.52881318911,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.771840395388,
+              "phase_target_power_coverage_per_channel_row_median": 0.999870792516,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.73211868084e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 30.6079539969,
+              "targetweighted_lsd_db_per_channel_row_median": 30.5360368584,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "euler8": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00536307339807,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.918831340935,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.22489481973,
+                "side": 1.2019262148
+              },
+              "per_scene_pooled_nmse_mean": 1.22423438115,
+              "per_scene_pooled_nmse_median": 0.977048173205,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.20216149183,
+              "phase_mae_radians_per_channel_row_p95": 1.53156848678,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.78124826568,
+              "phase_target_power_coverage_per_channel_row_median": 0.999910592288,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72036114735e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 30.2303762668,
+              "targetweighted_lsd_db_per_channel_row_median": 30.1332025466,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "heun2": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00537435102511,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.920763486257,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.22433231396,
+                "side": 1.20074374007
+              },
+              "per_scene_pooled_nmse_mean": 1.22366458486,
+              "per_scene_pooled_nmse_median": 0.977329916988,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.20784710645,
+              "phase_mae_radians_per_channel_row_p95": 1.52987818655,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.786850158245,
+              "phase_target_power_coverage_per_channel_row_median": 0.999821038709,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.71445978077e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 29.997246144,
+              "targetweighted_lsd_db_per_channel_row_median": 29.8887067369,
+              "targetweighted_lsd_defined_channel_rows": 19
+            },
+            "midpoint1": {
+              "energy_pooled_absolute_error_power_all_scenes": 0.00535653195264,
+              "energy_pooled_nmse_includes_null_scene_absolute_errors": 0.917710624393,
+              "energy_pooled_target_power_all_scenes": 0.0058368420396,
+              "per_channel_nmse_defined_counts": {
+                "mid": 10,
+                "side": 9
+              },
+              "per_channel_nmse_mean": {
+                "mid": 1.2252985266,
+                "side": 1.20270423444
+              },
+              "per_scene_pooled_nmse_mean": 1.22464244322,
+              "per_scene_pooled_nmse_median": 0.97689183391,
+              "phase_coverage_defined_channel_rows": 19,
+              "phase_mae_defined_channel_rows": 19,
+              "phase_mae_radians_per_channel_row_median": 1.19185086872,
+              "phase_mae_radians_per_channel_row_p95": 1.53075365742,
+              "phase_mae_total_channel_rows": 24,
+              "phase_target_power_coverage_min": 0.773388187526,
+              "phase_target_power_coverage_per_channel_row_median": 0.999910592288,
+              "relative_nmse_null_scene_count": 2,
+              "relative_nmse_null_scenes": [
+                {
+                  "absolute_error_power": 5.72553276018e-06,
+                  "family": "stopped_mid_abstention",
+                  "seed": 860003,
+                  "target_power": 1.40344764053e-16
+                },
+                {
+                  "absolute_error_power": 0.0,
+                  "family": "silence",
+                  "seed": 860004,
+                  "target_power": 0.0
+                }
+              ],
+              "scored_scenes": 10,
+              "targetweighted_lsd_db_per_channel_row_mean": 30.3706795115,
+              "targetweighted_lsd_db_per_channel_row_median": 30.2852168181,
+              "targetweighted_lsd_defined_channel_rows": 19
+            }
+          }
+        }
+      },
+      "trusted_fourier_deviation_vs_input": {
+        "max_absolute_error_power": {
+          "channel": "mid",
+          "condition": "healthy_fullband_forced_head",
+          "error_power": 3.62661535375e-15,
+          "seed": 860006,
+          "solver": "euler8"
+        },
+        "max_nmse": {
+          "channel": "side",
+          "condition": "healthy_fullband_forced_head",
+          "nmse": 3.56896079677e-12,
+          "seed": 860008,
+          "solver": "euler4"
+        }
+      }
+    }
+  },
+  "inputs": {
+    "cpu": {
+      "cases": "runs/mission-20261018/native-dev-01/cpu/cases.jsonl",
+      "completion": "runs/mission-20261018/native-dev-01/cpu/completion.json",
+      "manifest": "runs/mission-20261018/native-dev-01/cpu/manifest.json"
+    },
+    "opencl": {
+      "cases": "runs/mission-20261018/native-dev-01/opencl/cases.jsonl",
+      "completion": "runs/mission-20261018/native-dev-01/opencl/completion.json",
+      "manifest": "runs/mission-20261018/native-dev-01/opencl/manifest.json"
+    }
+  },
+  "schema": "native-mid-dev-independent-analysis-v1"
+}

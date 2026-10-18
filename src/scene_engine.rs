@@ -14,6 +14,27 @@ use std::{fs, path::Path, time::Instant};
 const FIELD_CACHE_CAP_BYTES: usize = 64 * 1024 * 1024;
 const DEFAULT_HOST_BATCH_ROWS: usize = 8192;
 
+/// Fixed-grid research alternatives. Production entry points retain Euler.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ResearchSolver {
+    Euler8,
+    Euler4,
+    Heun2,
+    Midpoint1,
+}
+
+impl ResearchSolver {
+    pub const ALL: [Self; 4] = [Self::Euler8, Self::Euler4, Self::Heun2, Self::Midpoint1];
+    pub fn nfe(self) -> usize {
+        match self {
+            Self::Euler8 => 8,
+            Self::Euler4 | Self::Heun2 => 4,
+            Self::Midpoint1 => 2,
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum CacheBuild {
@@ -24,7 +45,7 @@ pub enum CacheBuild {
 
 /// Noncryptographic FNV-1a over channel order, then real/imaginary f32 bits.
 /// Every component is encoded little endian, including signed zero.
-fn terminal_state_fingerprint(state: &[Vec<C>; 2]) -> String {
+pub(crate) fn terminal_state_fingerprint(state: &[Vec<C>; 2]) -> String {
     let mut hash = 0xcbf29ce484222325u64;
     for value in state.iter().flatten() {
         for component in [value.re, value.im] {
@@ -520,6 +541,48 @@ impl Engine {
             (1..=16).contains(&steps),
             "scene solver steps must be 1..16"
         );
+        let (e, cache, max_k) = self.prepare_refinement(p, d, ceil_bin, cache_cap)?;
+        let mut state = prior.clone();
+        for j in 0..steps {
+            let v = if let Some(cache) = &cache {
+                self.cached_field(p, &state, j as f32 / steps as f32, mode, cache)?
+            } else {
+                self.field_bounded(p, d, &e, &state, j as f32 / steps as f32, mode, max_k)?
+            };
+            let integration_start = self.profile.as_ref().map(|_| Instant::now());
+            if let Some(profile) = &mut self.profile {
+                profile.nfe += 1;
+            }
+            for c in 0..2 {
+                for (x, v) in state[c].iter_mut().zip(&v[c]) {
+                    *x += *v / steps as f32;
+                }
+            }
+            ensure!(
+                state
+                    .iter()
+                    .flatten()
+                    .all(|x| x.re.is_finite() && x.im.is_finite() && x.norm() < 64.0),
+                "scene integration exceeded declared finite-state bound"
+            );
+            if let (Some(start), Some(profile)) = (integration_start, &mut self.profile) {
+                profile.integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+            }
+        }
+        if let Some(profile) = &mut self.profile {
+            profile.memory_after = ProcessMemory::read();
+            profile.terminal_state_fingerprint = terminal_state_fingerprint(&state);
+        }
+        Ok(state)
+    }
+    /// Same encoding and invariant cache preparation for legacy and research solvers.
+    fn prepare_refinement(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        ceil_bin: Option<usize>,
+        cache_cap: usize,
+    ) -> Result<(Encoding, Option<CachedField>, usize)> {
         let (min_k, max_k) = if d.is_highpass() {
             (
                 1,
@@ -618,39 +681,45 @@ impl Engine {
             profile.cache_build_ms = start.elapsed().as_secs_f64() * 1000.0;
             profile.cache_used = cache.is_some();
         }
-        let mut state = prior.clone();
-        for j in 0..steps {
-            let v = if let Some(cache) = &cache {
-                self.cached_field(p, &state, j as f32 / steps as f32, mode, cache)?
+        Ok((e, cache, max_k))
+    }
+
+    /// Research only. The caller must explicitly choose the frozen Basis checkpoint.
+    /// Complete immutable M/S grids are passed to every native field evaluation.
+    pub fn refine_research_solver_bounded(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        prior: &[Vec<C>; 2],
+        solver: ResearchSolver,
+        mode: u8,
+        ceil_bin: Option<usize>,
+    ) -> Result<[Vec<C>; 2]> {
+        ensure!(mode == 6, "research Mid solvers require Basis mode 6");
+        ensure!(
+            prior.iter().all(|channel| channel.len() == p.frames * BINS),
+            "research solver requires the complete prepared M/S grid"
+        );
+        let (e, cache, max_k) = self.prepare_refinement(p, d, ceil_bin, self.cache_cap_bytes)?;
+        let (state, integration_ms) = integrate_research(prior, solver, |state, time| {
+            let field = if let Some(cache) = &cache {
+                self.cached_field(p, state, time, mode, cache)?
             } else {
-                self.field_bounded(p, d, &e, &state, j as f32 / steps as f32, mode, max_k)?
+                self.field_bounded(p, d, &e, state, time, mode, max_k)?
             };
-            let integration_start = self.profile.as_ref().map(|_| Instant::now());
             if let Some(profile) = &mut self.profile {
                 profile.nfe += 1;
             }
-            for c in 0..2 {
-                for (x, v) in state[c].iter_mut().zip(&v[c]) {
-                    *x += *v / steps as f32;
-                }
-            }
-            ensure!(
-                state
-                    .iter()
-                    .flatten()
-                    .all(|x| x.re.is_finite() && x.im.is_finite() && x.norm() < 64.0),
-                "scene integration exceeded declared finite-state bound"
-            );
-            if let (Some(start), Some(profile)) = (integration_start, &mut self.profile) {
-                profile.integration_ms += start.elapsed().as_secs_f64() * 1000.0;
-            }
-        }
+            Ok(field)
+        })?;
         if let Some(profile) = &mut self.profile {
+            profile.integration_ms = integration_ms;
             profile.memory_after = ProcessMemory::read();
             profile.terminal_state_fingerprint = terminal_state_fingerprint(&state);
         }
         Ok(state)
     }
+
     fn cached_field(
         &mut self,
         p: &Prepared,
@@ -697,6 +766,144 @@ impl Engine {
         Ok(result)
     }
 }
+/// A typed failure is retained through anyhow for audit records and unit checks.
+#[derive(Debug, PartialEq, Eq)]
+pub struct SolverStateError {
+    pub stage: &'static str,
+    pub channel: usize,
+    pub index: usize,
+}
+impl std::fmt::Display for SolverStateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "research solver invalid state at {} channel {} index {} (finite norm <64 required)",
+            self.stage, self.channel, self.index
+        )
+    }
+}
+impl std::error::Error for SolverStateError {}
+
+fn validate_solver_state(state: &[Vec<C>; 2], stage: &'static str) -> Result<()> {
+    for (channel, values) in state.iter().enumerate() {
+        for (index, x) in values.iter().enumerate() {
+            if !(x.re.is_finite() && x.im.is_finite() && x.norm() < 64.0) {
+                return Err(SolverStateError {
+                    stage,
+                    channel,
+                    index,
+                }
+                .into());
+            }
+        }
+    }
+    Ok(())
+}
+
+fn solver_field<F>(field: &mut F, state: &[Vec<C>; 2], time: f32) -> Result<[Vec<C>; 2]>
+where
+    F: FnMut(&[Vec<C>; 2], f32) -> Result<[Vec<C>; 2]>,
+{
+    let v = field(state, time)?;
+    ensure!(
+        (0..2).all(|c| v[c].len() == state[c].len()),
+        "solver field shape mismatch"
+    );
+    for (channel, values) in v.iter().enumerate() {
+        for (index, value) in values.iter().enumerate() {
+            if !(value.re.is_finite() && value.im.is_finite()) {
+                return Err(SolverStateError {
+                    stage: "velocity_nonfinite",
+                    channel,
+                    index,
+                }
+                .into());
+            }
+        }
+    }
+    Ok(v)
+}
+
+/// Fixed f32 formulas; timer encloses only state arithmetic and validation.
+/// Each closure call is one complete native neural field evaluation.
+fn integrate_research<F>(
+    prior: &[Vec<C>; 2],
+    solver: ResearchSolver,
+    mut field: F,
+) -> Result<([Vec<C>; 2], f64)>
+where
+    F: FnMut(&[Vec<C>; 2], f32) -> Result<[Vec<C>; 2]>,
+{
+    validate_solver_state(prior, "initial")?;
+    let mut state = prior.clone();
+    let mut integration_ms = 0.0;
+    match solver {
+        ResearchSolver::Euler8 | ResearchSolver::Euler4 => {
+            let steps = solver.nfe();
+            for j in 0..steps {
+                let v = solver_field(&mut field, &state, j as f32 / steps as f32)?;
+                let start = Instant::now();
+                for c in 0..2 {
+                    for (x, v) in state[c].iter_mut().zip(&v[c]) {
+                        // Keep the legacy division and addition order exactly.
+                        *x += *v / steps as f32;
+                    }
+                }
+                validate_solver_state(&state, "euler_terminal")?;
+                integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+            }
+        }
+        ResearchSolver::Heun2 => {
+            for j in 0..2 {
+                let t = j as f32 * 0.5;
+                let k1 = solver_field(&mut field, &state, t)?;
+                let start = Instant::now();
+                let stage: [Vec<C>; 2] = std::array::from_fn(|c| {
+                    state[c]
+                        .iter()
+                        .zip(&k1[c])
+                        .map(|(x, k)| *x + *k * 0.5)
+                        .collect()
+                });
+                validate_solver_state(&stage, "heun_predictor")?;
+                integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+                let k2 = solver_field(&mut field, &stage, t + 0.5)?;
+                let start = Instant::now();
+                for c in 0..2 {
+                    for ((x, a), b) in state[c].iter_mut().zip(&k1[c]).zip(&k2[c]) {
+                        *x += (*a + *b) * 0.25;
+                    }
+                }
+                validate_solver_state(&state, "heun_terminal")?;
+                integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+            }
+        }
+        ResearchSolver::Midpoint1 => {
+            let k1 = solver_field(&mut field, &state, 0.0)?;
+            let start = Instant::now();
+            let stage: [Vec<C>; 2] = std::array::from_fn(|c| {
+                state[c]
+                    .iter()
+                    .zip(&k1[c])
+                    .map(|(x, k)| *x + *k * 0.5)
+                    .collect()
+            });
+            validate_solver_state(&stage, "midpoint_stage")?;
+            integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+            let kmid = solver_field(&mut field, &stage, 0.5)?;
+            let start = Instant::now();
+            for c in 0..2 {
+                for (x, k) in state[c].iter_mut().zip(&kmid[c]) {
+                    *x += *k;
+                }
+            }
+            validate_solver_state(&state, "midpoint_terminal")?;
+            integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+        }
+    }
+    Ok((state, integration_ms))
+}
+
 pub struct Point {
     pub time: f32,
     pub flow: bool,
@@ -767,6 +974,221 @@ pub fn encoder_backward(d: &Dense, p: &Prepared, e: &Encoding, de: &[f32], g: &m
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn research_solver_native_formulas_times_and_nfe() -> Result<()> {
+        let zero = [vec![C::default(); 2], vec![C::default(); 2]];
+        for solver in ResearchSolver::ALL {
+            let mut times = Vec::new();
+            let (constant, _) = integrate_research(&zero, solver, |z, t| {
+                times.push(t);
+                Ok(std::array::from_fn(|c| {
+                    vec![C::new(0.25, -0.125); z[c].len()]
+                }))
+            })?;
+            assert_eq!(times.len(), solver.nfe());
+            assert!(constant
+                .iter()
+                .flatten()
+                .all(|z| *z == C::new(0.25, -0.125)));
+            let expected_times: Vec<f32> = match solver {
+                ResearchSolver::Euler8 => (0..8).map(|i| i as f32 / 8.0).collect(),
+                ResearchSolver::Euler4 => (0..4).map(|i| i as f32 / 4.0).collect(),
+                ResearchSolver::Heun2 => vec![0.0, 0.5, 0.5, 1.0],
+                ResearchSolver::Midpoint1 => vec![0.0, 0.5],
+            };
+            assert_eq!(times, expected_times);
+            let (timed, _) = integrate_research(&zero, solver, |z, t| {
+                Ok(std::array::from_fn(|c| vec![C::new(t, 0.0); z[c].len()]))
+            })?;
+            let expected = match solver {
+                ResearchSolver::Euler8 => 0.4375,
+                ResearchSolver::Euler4 => 0.375,
+                _ => 0.5,
+            };
+            assert_eq!(timed[0][0].re, expected);
+            let one = [vec![C::new(1.0, 0.0); 2], vec![C::new(1.0, 0.0); 2]];
+            let (linear, _) = integrate_research(&one, solver, |z, _| Ok(z.clone()))?;
+            let expected = match solver {
+                ResearchSolver::Euler8 => 1.125f32.powi(8),
+                ResearchSolver::Euler4 => 1.25f32.powi(4),
+                ResearchSolver::Heun2 => 1.625f32.powi(2),
+                ResearchSolver::Midpoint1 => 2.5,
+            };
+            assert!((linear[0][0].re - expected).abs() < 1e-6);
+        }
+        let coupled = [
+            vec![C::new(1.0, 0.0), C::new(2.0, 0.0)],
+            vec![C::new(3.0, 0.0), C::new(4.0, 0.0)],
+        ];
+        let (result, _) = integrate_research(&coupled, ResearchSolver::Midpoint1, |z, _| {
+            Ok([vec![z[0][1], z[0][0]], vec![z[1][1], z[1][0]]])
+        })?;
+        assert_eq!(result[0], vec![C::new(3.5, 0.0), C::new(4.0, 0.0)]);
+        assert_eq!(result[1], vec![C::new(8.5, 0.0), C::new(9.0, 0.0)]);
+        Ok(())
+    }
+
+    #[test]
+    fn research_solver_rejects_intermediate_terminal_and_nonfinite_state() {
+        let zero = [vec![C::default()], vec![C::default()]];
+        for solver in [ResearchSolver::Heun2, ResearchSolver::Midpoint1] {
+            let error = integrate_research(&zero, solver, |_, _| {
+                Ok([vec![C::new(128.0, 0.0)], vec![C::default()]])
+            })
+            .unwrap_err();
+            let typed = error.downcast_ref::<SolverStateError>().unwrap();
+            assert!(typed.stage == "heun_predictor" || typed.stage == "midpoint_stage");
+        }
+        let error = integrate_research(&zero, ResearchSolver::Midpoint1, |_, t| {
+            Ok([
+                vec![C::new(if t == 0.0 { 0.0 } else { 64.0 }, 0.0)],
+                vec![C::default()],
+            ])
+        })
+        .unwrap_err();
+        assert_eq!(
+            error.downcast_ref::<SolverStateError>().unwrap().stage,
+            "midpoint_terminal"
+        );
+        let error = integrate_research(&zero, ResearchSolver::Midpoint1, |_, _| {
+            Ok([vec![C::new(f32::NAN, 0.0)], vec![C::default()]])
+        })
+        .unwrap_err();
+        assert_eq!(
+            error.downcast_ref::<SolverStateError>().unwrap().stage,
+            "velocity_nonfinite"
+        );
+        let bad = [vec![C::new(f32::NAN, 0.0)], vec![C::default()]];
+        let error =
+            integrate_research(&bad, ResearchSolver::Euler8, |z, _| Ok(z.clone())).unwrap_err();
+        assert_eq!(
+            error.downcast_ref::<SolverStateError>().unwrap().stage,
+            "initial"
+        );
+    }
+
+    #[test]
+    fn research_solver_trained_euler_exact_cache_and_fallback() -> Result<()> {
+        let field = crate::rich_mid::MidField::load(
+            &Path::new(env!("CARGO_MANIFEST_DIR")).join("artifacts/rich-mid-v3/basis.json"),
+        )?;
+        let audio = crate::native_audio::Audio {
+            rate: crate::native_dsp::RATE,
+            channels: vec![
+                (0..512).map(|i| 0.12 * (i as f32 * 0.17).sin()).collect(),
+                (0..512).map(|i| 0.09 * (i as f32 * 0.23).cos()).collect(),
+            ],
+        };
+        let d = Damage {
+            cutoff: 1500.0,
+            transition: 225.0,
+            power: 2.0,
+        };
+        let p = crate::scene_features::prepare(&audio, d, 11);
+        let prior = crate::scene_features::prior_state(&p, "harmonic");
+        let ceil = Some(d.cutoff_bin() + 17);
+        for cap in [0, FIELD_CACHE_CAP_BYTES] {
+            let mut legacy = Engine::new(&field.core, "cpu")?;
+            let mut research = Engine::new(&field.core, "cpu")?;
+            research.set_profiling(true);
+            research.cache_cap_bytes = cap;
+            for (solver, steps) in [(ResearchSolver::Euler8, 8), (ResearchSolver::Euler4, 4)] {
+                let a = legacy.refine_with_cache_cap(&p, d, &prior, steps, 6, ceil, cap)?;
+                let b = research.refine_research_solver_bounded(&p, d, &prior, solver, 6, ceil)?;
+                assert_eq!(
+                    terminal_state_fingerprint(&a),
+                    terminal_state_fingerprint(&b)
+                );
+                assert!(
+                    a.iter()
+                        .flatten()
+                        .zip(b.iter().flatten())
+                        .all(|(x, y)| x.re.to_bits() == y.re.to_bits()
+                            && x.im.to_bits() == y.im.to_bits()),
+                    "full M/S state component bits changed"
+                );
+                let wa = crate::rich_mid::mid_waveform(&p, d, 8000.0, &a, 1.0);
+                let wb = crate::rich_mid::mid_waveform(&p, d, 8000.0, &b, 1.0);
+                assert!(wa
+                    .channels
+                    .iter()
+                    .flatten()
+                    .zip(wb.channels.iter().flatten())
+                    .all(|(x, y)| x.to_bits() == y.to_bits()));
+                let profile = research.take_profile().unwrap();
+                assert_eq!(profile.nfe, solver.nfe());
+                assert_eq!(profile.cache_used, cap > 0);
+            }
+            for solver in [ResearchSolver::Heun2, ResearchSolver::Midpoint1] {
+                let state =
+                    research.refine_research_solver_bounded(&p, d, &prior, solver, 6, ceil)?;
+                let profile = research.take_profile().unwrap();
+                assert_eq!(profile.nfe, solver.nfe());
+                assert_eq!(profile.cache_used, cap > 0);
+                let output = crate::rich_mid::mid_waveform(&p, d, 8000.0, &state, 1.0);
+                for c in 0..2 {
+                    let mut planner = rustfft::FftPlanner::<f32>::new();
+                    let mut a: Vec<C> = audio.channels[c].iter().map(|v| C::new(*v, 0.0)).collect();
+                    let mut b: Vec<C> =
+                        output.channels[c].iter().map(|v| C::new(*v, 0.0)).collect();
+                    let fft = planner.plan_fft_forward(a.len());
+                    fft.process(&mut a);
+                    fft.process(&mut b);
+                    for k in 0..=a.len() / 2 {
+                        let f = k as f32 * crate::native_dsp::RATE as f32 / a.len() as f32;
+                        if f <= d.cutoff || f >= 8000.0 {
+                            assert!(
+                                (a[k] - b[k]).norm() / (a.len() as f32) < 1e-6,
+                                "trusted whole-clip Fourier regression"
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn research_solver_silence_counts_field_calls_without_head_batches() -> Result<()> {
+        let field = crate::rich_mid::MidField::load(
+            &Path::new(env!("CARGO_MANIFEST_DIR")).join("artifacts/rich-mid-v3/basis.json"),
+        )?;
+        let audio = crate::native_audio::Audio {
+            rate: crate::native_dsp::RATE,
+            channels: vec![vec![0.0; 512]; 2],
+        };
+        let d = Damage {
+            cutoff: 1500.0,
+            transition: 225.0,
+            power: 2.0,
+        };
+        let p = crate::scene_features::prepare(&audio, d, 11);
+        assert_eq!(p.active, [false, false]);
+        let prior = crate::scene_features::prior_state(&p, "harmonic");
+        let mut engine = Engine::new(&field.core, "cpu")?;
+        engine.set_profiling(true);
+        for solver in ResearchSolver::ALL {
+            let state = engine.refine_research_solver_bounded(
+                &p,
+                d,
+                &prior,
+                solver,
+                6,
+                Some(d.cutoff_bin() + 17),
+            )?;
+            assert!(state.iter().flatten().all(|z| z.re == 0.0 && z.im == 0.0));
+            let profile = engine.take_profile().unwrap();
+            assert_eq!(profile.nfe, solver.nfe());
+            assert_eq!(profile.predictor_batch_count, 0);
+            assert_eq!(
+                crate::rich_mid::mid_waveform(&p, d, 8000.0, &state, 1.0).channels,
+                audio.channels
+            );
+        }
+        Ok(())
+    }
+
     #[test]
     fn refinement_profiling_is_exact_on_both_cache_paths() -> Result<()> {
         let field = crate::rich_mid::MidField::load(
