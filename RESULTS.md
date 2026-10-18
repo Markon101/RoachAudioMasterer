@@ -1273,6 +1273,11 @@ Following iterative listening on `Singularity Moment ext v1.1.2.1.1 remix v2`, t
 
 This preserves the historical promotion decision. The available record does not document randomized identities, loudness-matched playback, recorded blind judgments, or a predeclared v1.3.1 listening protocol. Treat the feedback as positive but unblinded; neither it nor the numerical audit establishes general preference, eliminated distortion, or a causal acoustic mechanism.
 
+The append-only [research ledger](data/research_ledger.jsonl) retains its original
+promotion receipt. The `EXP-2026-10-18-V1_3_1-EPISTEMIC-ERRATUM` entry supersedes
+that receipt's evidence classification and overbroad audition interpretation,
+while preserving its production decision and numerical receipts.
+
 #### 24.2 Recorded Implementation and Measurement Receipts
 1. **Tier 3 — 10 / 10 Transient Guardrail Passes**: Up from 7/10 in v1.3 on these renders. A diagnostic pass does not establish listener preference or prove which processing stage caused the change.
 2. **Tier 3 — `-49.1%` Mean Per-Track Reduction in High-Band (`>1.5 kHz`) 2 ms AM Jitter**: This averages the ten individual percentage reductions; the reduction in the ensemble mean (`0.0738` to `0.0385 dB`) is approximately 47.8%. It measures a modulation proxy, not perceived grain or independently isolated mechanism benefit.
