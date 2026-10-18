@@ -1,0 +1,40 @@
+{
+  "schema": "roach-listening-preparation-v1",
+  "sessions": [
+    {
+      "listener_directory": "runs/mission-20261017/listen/session1",
+      "trials": 8,
+      "audio_files": 16,
+      "ready": true,
+      "all_expected_hashes_verified": true,
+      "mode": "historical_playback",
+      "responses": "runs/mission-20261017/listen/session1/responses.csv"
+    },
+    {
+      "listener_directory": "runs/mission-20261017/listen/session2",
+      "trials": 8,
+      "audio_files": 16,
+      "ready": true,
+      "all_expected_hashes_verified": true,
+      "mode": "historical_playback",
+      "responses": "runs/mission-20261017/listen/session2/responses.csv"
+    },
+    {
+      "listener_directory": "runs/mission-20261017/listen/session3",
+      "trials": 8,
+      "audio_files": 16,
+      "ready": true,
+      "all_expected_hashes_verified": true,
+      "mode": "historical_playback",
+      "responses": "runs/mission-20261017/listen/session3/responses.csv"
+    }
+  ],
+  "automated_tests_passed": 9,
+  "judgments": "pending; no audition claimed",
+  "question": "Preference between retained completed historical masters under constant playback attenuation. Requested rendering targets remain confounded.",
+  "missing_conditions": [
+    "Documented original alpha M3 delivery files and comparison run are absent at inspected paths. No later M4 render was substituted.",
+    "Equal-target architecture renders are not yet prepared."
+  ],
+  "privacy": "Audio, keys, seeds, original source manifests and measurements remain in ignored local runs directories. Only listener folders are for audition."
+}
