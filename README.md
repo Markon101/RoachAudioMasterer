@@ -5,6 +5,10 @@ Generated content (sub-bass fundamentals, mid overtones, and high air) represent
 
 > **Project & Repository Identity**: The canonical project name and primary binary is **`roach-audio-masterer`** (repository: [`Markon101/RoachAudioMasterer`](https://github.com/Markon101/RoachAudioMasterer)). The legacy **`highband`** binary alias and CLI subcommands remain fully supported for backward compatibility with existing automation, scripts, and historical checkpoints.
 
+Research continuation: [2026-10-18 handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
+records the failed cache/host-batch gates, restored blind packages and mixed native
+solver diagnostic. The production champion and eight-step default are unchanged.
+
 The core direction is a unified autonomous mastering and scene restoration engine:
 - **Autonomous Mastering (`auto-master`)**: Single-command mastering with content-aware specialist routing, ITU-R BS.1770-4 LUFS target matching (-11.0 LUFS), soft-knee glue compression, 4x polyphase FIR true-peak limiting (-1.0 dBTP), and automated lossless export to device storage.
 - **Tri-Band Conditional Flow Matching**: Superharmonic sub-bass flow (`rich-low-sfht`), subharmonic mid overtones (`rich-mid`), and Basis high-band field completion (`rich-field`).

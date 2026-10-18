@@ -29,7 +29,7 @@ raw float chunk and three audio outputs on a separate procedural fixture. Across
 all 96 CPU/OpenCL method pairs, canonical sample max absolute difference was
 8.9406967e-8, maximum per-case RMS difference 4.2199775e-9; eight pairs were byte
 identical. Maximum observed trusted-band error RMS was approximately 5.15e-8 per
-L/R waveform channel (all L/R/M/S error powers remained below 3.6e-15). These
+L/R waveform channel (all L/R/M/S error powers were at most 3.63e-15). These
 are numerical observations, not perceptual results or
 continuous-time guarantees. See
 [legacy CLI parity](../artifacts/mission-20261018/native_solver_legacy_cli_parity.json)

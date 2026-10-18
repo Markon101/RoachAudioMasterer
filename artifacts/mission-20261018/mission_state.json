@@ -1,0 +1,104 @@
+{
+  "schema": "roach-mission-checkpoint-v2",
+  "date_utc": "2026-10-18T09:09:17.689718+00:00",
+  "research_branch": "experiment/phase3-geometric-moonshot",
+  "entry_commit": "55fddfe",
+  "verified_source_commit": "238193df474ad180be1aa92375d44eb703061911",
+  "published_through_source_commit": true,
+  "champion_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
+  "frozen_alpha_peeled_commit": "652088782f1d64f62ee84a7c1d7cdda4a990ef15",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "production_promoted": false,
+  "production_euler_steps": 8,
+  "default_host_rows": 8192,
+  "default_cache_mib": 64,
+  "stages": {
+    "0": "documentation repaired; append-only promotion-ledger erratum added",
+    "1": "fallback verified; full-cache9.27% and host-batch5.08% both failed10% gate; full-track followups not executed",
+    "2": "3 restored historical sessions,48files hash-verified; originalalpha/equaltarget conditions and owner judgments pending",
+    "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
+    "4": "truepeak meter repaired previously; full causal stage ledger and actual pre-limiter snapshots pending",
+    "5": "not started; dynamics-v2 remains demoted"
+  },
+  "native_development": {
+    "scene_seeds": [
+      860000,
+      860011
+    ],
+    "backends": [
+      "cpu",
+      "opencl"
+    ],
+    "method_rows_per_backend": 96,
+    "control_rows_per_backend": 48,
+    "solver_failures": 0,
+    "defined_lr_relative_scenes": 10,
+    "null_lr_relative_scenes": 2,
+    "neural_complex_error_losses_vs_identity_per_solver": 10,
+    "backend_sample_max_abs": 8.940696716308594e-08,
+    "backend_sample_max_case_rms": 4.219977498174659e-09,
+    "observed_process_peak_mib": {
+      "cpu": 37.0546875,
+      "opencl": 77.484375
+    },
+    "final_seeds_executed": false,
+    "final_scene_seeds": [
+      870000,
+      870047
+    ],
+    "fixed_method_order": "descriptive timings only; not balanced speed qualification"
+  },
+  "tests": {
+    "listening_harness": 13,
+    "profile_runner": 8,
+    "shared_scene_engine_cpu": 8,
+    "native_audit": 5,
+    "opencl_release_build": "passed",
+    "old_vs_refactored_cli": "exact SHA for raw float chunk and3WAVs",
+    "actual_native_cpu_opencl": "96 canonical sample pairs compared"
+  },
+  "listening_paths": [
+    "runs/mission-20261018/listen/session1",
+    "runs/mission-20261018/listen/session2",
+    "runs/mission-20261018/listen/session3"
+  ],
+  "owner_judgments_received": false,
+  "future_speed_experiment_requires_fresh_foreground_confirmation": true,
+  "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
+  "jobs_running_at_checkpoint": 0,
+  "next_action": "Resolve magnitude/complex-phase objective conflict and stopped-mid/aspiration adverse cases; regenerate procedural targets/controls and validate provenance, repeat development families before final seeds or WOLA promotion. No adaptive routing/training yet.",
+  "reports": [
+    "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
+    "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
+    "docs/HOST_BATCH_RESULTS_20261018.md",
+    "docs/LISTENING_RESTORATION_20261018.md"
+  ],
+  "delegation": [
+    {
+      "agent": "native_solver_audit",
+      "model": "gpt-6-luna",
+      "integration": "native collaboration",
+      "purpose": "independent architecture, epistemic and data falsification; cheap deterministic reproduction"
+    },
+    {
+      "agent": "restore_listening",
+      "model": "gpt-6-luna",
+      "integration": "native collaboration",
+      "purpose": "bounded restoration and integrity-tool implementation"
+    },
+    {
+      "agent": "host_runner",
+      "model": "gpt-6-luna",
+      "integration": "native collaboration",
+      "purpose": "profile runner preflight, memory gates and mocked checks"
+    },
+    {
+      "agent": "native_solvers",
+      "model": "gpt-6.1-sol",
+      "integration": "native collaboration",
+      "purpose": "critical Rust numerical solver, shared cache and harness implementation"
+    }
+  ],
+  "external_paid_api_calls_in_this_continuation": 0,
+  "raw_audio_policy": "owner audio and private listening keys stay ignored/local; committed raw cases are procedural metrics only"
+}

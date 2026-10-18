@@ -1,5 +1,9 @@
 # Mission handoff — 2026-10-17
 
+Continuation: [2026-10-18 checkpoint](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md).
+The host-batch candidate has since been tested and failed its utility gate;
+the old listening WAVs were removed by cleanup. Use the newer verified paths.
+
 Owner requested wrap-up near the current usage limit. No experiment remains
 running. This is a partial mission checkpoint, not a completed research roadmap.
 

@@ -1313,4 +1313,65 @@ Three local blind historical-master sessions are ready; original alpha files and
 equal-target rerenders remain missing conditions. No owner judgments, Tier4
 preference, subjective improvement or new production champion are claimed.
 
+### 26. Host batching fails qualification; listening integrity and native solver preparation (2026-10-18)
+
+The separately authorized nine-run Adreno experiment used one binary and frozen
+rich-mid-v3 weights on a matched native-rate ten-second input. Median chunk
+materialization was 4725.7 ms at 8192 host rows, 4890.0 ms at 32768, and
+4485.5 ms at 65536. The best **5.08% reduction failed the predeclared 10% gate**;
+32768 regressed by 3.48%. All output SHA256 hashes matched, full-state FNV
+fingerprints agreed, and observed RSS/HWM stayed below 254 MiB. Conditional
+held-out, CPU and full-track runs were not executed. Normal batching, cache
+limits, integration, weights and the production champion remain unchanged.
+The feature-assembly subspan improved more than whole-chunk time; that does not
+establish an end-to-end speedup qualification or a transfer-cost decomposition.
+See the [plan](docs/HOST_BATCH_PLAN_20261018.md),
+[report](docs/HOST_BATCH_RESULTS_20261018.md) and
+[receipt](artifacts/mission-20261018/host_batch_qualification.json).
+
+Cleanup had removed listening WAVs while leaving stale READY markers. Three
+historical listening sessions were restored from verified retained masters with
+their private assignments preserved. A new organizer verification command checks
+actual files and SHA256 values before handoff; 13 harness tests passed. Use the
+[current listening paths and instructions](docs/LISTENING_RESTORATION_20261018.md),
+not the old folders. Owner judgments, original alpha delivery and equal-target
+conditions remain pending. Readiness is not an audition result.
+
+The [native solver plan](docs/NATIVE_MID_SOLVER_PHASE_A_PLAN.md) now targets the
+actual frozen Basis network rather than the historical toy teacher. Its source
+audit found that rich-mid-v3's generic training provenance describes an obsolete
+v0 architecture, conflicting with the actual checkpoint and raw training records.
+The [metadata receipt](artifacts/mission-20261018/training_metadata_audit.json)
+preserves the discrepancy; no checkpoint or historical receipt was rewritten.
+The current generator produces 0.341-second scenes, and the old evaluator scores
+only the left waveform channel. Native comparisons need explicit stereo metrics
+and later WOLA/mastering checks. No solver quality, solver speed, adaptive routing,
+new dynamics benefit or Tier 4 preference is established by this preparation.
+
+### 27. Actual native solver diagnostic reveals an objective conflict (2026-10-18)
+
+The separately foreground-authorized CPU/OpenCL diagnostic used frozen Mid-v3
+and 12 development seeds, yielding 96 method rows and 48 controls per backend,
+zero solver failures, correct 8/4/4/2 field counts and maximum backend waveform
+delta 8.94e-8. The legacy Euler refactor passed exact CPU float-chunk/output
+parity; 13 focused Rust checks and the OpenCL release build passed. Observed
+CPU/OpenCL RSS/HWM was about 37/78 MiB. See the
+[complete measured report](docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md).
+
+Across the 10 scenes with defined target ratios, all neural methods lose to
+identity in paired missing-band complex NMSE: mean Euler8/Euler4/Heun2/midpoint
+1.224235/1.225212/1.223665/1.224643 versus identity 0.895706. Weighted whole-clip
+log-magnitude error instead improves from 61.49 dB to roughly 32 dB. Stopped-mid
+and silence relative metrics remain null; the former still receives about
+5.7e-6 summed L/R error power under forced processing, while silence stays zero.
+Healthy forced-head edits do not measure autonomous assessor activation.
+
+Lower-NFE runs have shorter descriptive refinement/synthesis times and similar
+target scores, but fixed method order, short scenes and the magnitude/phase
+conflict prevent a qualification claim. Final seeds remain untouched. Resolve
+these reconstruction questions and test longer WOLA inputs before adaptive NFE,
+training or promotion. The production champion/default are unchanged; owner
+blind listening, real-track solver validation and the remaining mission stages
+are still pending.
+
 
