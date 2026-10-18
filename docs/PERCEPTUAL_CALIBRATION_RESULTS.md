@@ -55,21 +55,21 @@ To ensure maximum epistemic rigor, the research team was consulted via specializ
 
 All five core modules were surgically updated and verified:
 
-1. **[`src/scene_clean.rs`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/scene_clean.rs)**:
+1. **[`src/scene_clean.rs`](../src/scene_clean.rs)**:
    - Added low-mid vocal boost clamp: `if i == 2 && d > 0.25 { d = 0.25; }`.
    - Exposed `clean_audio_with_bounds(audio, denoise, auto_eq, max_adjust_db)`. Default Auto-EQ limit set to $1.0\text{ dB}$.
-2. **[`src/spatial.rs`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/spatial.rs)**:
+2. **[`src/spatial.rs`](../src/spatial.rs)**:
    - Added `mono_bass_strength: f32` to `SpatialConfig` (default $0.85$). Default `mono_bass_hz` changed from $120\text{ Hz} \to 80\text{ Hz}$.
    - Shaped side channel now blends: `shaped_side[i] = side_high[i] * width + side_sub[i] * mono_leak`.
    - Unit tests updated to verify both partial and strict mono modes.
-3. **[`src/scene_stats.rs`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/scene_stats.rs)**:
+3. **[`src/scene_stats.rs`](../src/scene_stats.rs)**:
    - Neutral $0.0\text{ dB}$ sub-bass gain when `sub_bass_authority <= 0.0`.
    - Sub-deficit calculation normalized by $-60.2\text{ dB}$ STFT FFT power offset when active.
    - Microstructure phase continuity default factor reduced from $0.40 \to 0.25$.
    - Port-Hamiltonian sub damping intercept lowered to $0.10$.
-4. **[`src/musical_intent.rs`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/musical_intent.rs)**:
+4. **[`src/musical_intent.rs`](../src/musical_intent.rs)**:
    - Added `base_card.recommended_parameters.phase_continuity *= d.defizz_desmear_scale;` in `modulate_tuning_card`. On `PRESERVE` regime tracks, phase continuity drops to $0.10$, preserving delicate acoustic string transients and texture.
-5. **[`src/main.rs`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/main.rs)**:
+5. **[`src/main.rs`](../src/main.rs)**:
    - Added CLI controls: `--mono-bass-strength` (default 0.85), `--mono-bass-hz` (default 80.0), `--auto-eq-max-db` (default 1.0), `--defizz-strength` (default 1.0), `--no-defizz`, `--phase-continuity <val>`.
    - Connected flags into `auto_master_pipeline` and run metadata JSON.
 

@@ -362,9 +362,9 @@ Evaluated frame-by-frame on full reference track `listen.wav` (40,578 frames @ 4
   - On clean audio, mean authority is `0.023`, abstaining from waveform modification and preserving full-band SNR at **139.1 dB** and low-band RMS deviation at **$1.86 \times 10^{-8}$**.
   - When low-mid or sub-40 Hz mud accumulates, selective sub-bass damping accelerates decay without pumping.
 - **Audio Artifact Exports**:
-  - [`runs/gtf_phase2_audit/gtf_audio.wav`](file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_audio.wav)
-  - [`runs/gtf_phase2_audit/morphic_audio.wav`](file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/morphic_audio.wav)
-  - Full report: [`runs/gtf_phase2_audit/gtf_benchmark_report.json`](file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_benchmark_report.json).
+  - `runs/gtf_phase2_audit/gtf_audio.wav`
+  - `runs/gtf_phase2_audit/morphic_audio.wav`
+  - Full report: `runs/gtf_phase2_audit/gtf_benchmark_report.json`.
 
 ### 7.4 Stage IV: Creative Wildcard — Family 146 Controlled Nonlinear Texture Organism
 - Implemented Chirikov standard map dynamics with input-conditioned stochasticity $K \in [0.01, 3.0]$:

@@ -1,5 +1,11 @@
 # Research Plan: Conditional Microstructure Synthesis Specialist
 
+Historical proposal/pilot record. Family A's recommendation below is scoped to
+the compared prototypes and recorded informal feedback, not a new production
+promotion or proof that its proxies measure perceived naturalness. See the
+[current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) and
+[shimmer audit](MICROSTRUCTURE_SHIMMER_AUDIT.md) before extending this work.
+
 ## 1. Executive Summary & Problem Formulation
 
 ### 1.1 The Microstructure Problem in Generative & Restored Audio
@@ -202,8 +208,8 @@ To test whether microstructure synthesis provides real acoustic value rather tha
    Without extensive multi-step training, local recurrent neural cellular automata naturally concentrate spectral energy into tighter spatial clusters, which *increases* spectral kurtosis ($S_{\text{metallic}} \uparrow$). Local NCA dynamics cannot be dropped in as an zero-shot procedural operator without learned parameter optimization.
 
 3. **Negative Result: The STFT Consistency Inversion Barrier for Vocoder Shimmer**:
-   Frame-to-frame vocoder phase jitter ($S_{\text{shimmer}} = 1.000$) in generative music is tightly coupled across the multi-component time waveform. Local spectral phase adjustments are largely projected out during overlap-add synthesis. Resolving AI phase shimmer requires macro-scale vocal vocoder resynthesis rather than local spectral microstructure adjustment.
+   In this prototype, the reported shimmer proxy did not demonstrate useful improvement after synthesis. This does not establish that all local phase methods fail or that macro-scale vocoder resynthesis is necessary; those remain separate hypotheses.
 
 4. **Production Recommendation**:
-   Conditional Microstructure Synthesis is verified and stable as an **experimental opt-in specialist** via `highband microstructure`. Prototype Family A is the clear champion among the three prototypes. Production defaults for `roach-audio-masterer` should retain the frozen champions while exposing Microstructure Family A for user-guided generative track refinement.
+   The pilot retained Family A as an **experimental opt-in specialist** via `highband microstructure` among the compared prototypes. This historical research recommendation does not replace the current production champion or establish a broadly validated perceptual advantage.
 

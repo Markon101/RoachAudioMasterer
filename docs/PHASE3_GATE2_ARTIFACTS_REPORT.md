@@ -1,5 +1,10 @@
 # Phase III Gate 2 — Actual Artifacts Report
 
+Archive note: the paths below are dated local delivery locations, not a current
+file inventory or production recommendation. Some audio was removed by later
+cleanup. Use the [current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
+for verified listening packages and current evidence limits.
+
 **Project:** RoachAudioMasterer / GTF Moonshot Phase III  
 **Frozen Production Anchor:** `v1.0.0-alpha.1` (commit `6520887`, Mode 3 Geometric Memory champion)  
 **Date:** October 9, 2026  
@@ -20,13 +25,13 @@ Gate 2 moves beyond mathematical proofs and unit laboratories to deliver **actua
 ## 2. Visual Morphogenesis Atlas (1024x1024)
 
 ### Generated Channels (`/sdcard/Download/MorphicAtlas/`)
-- [`morphic_primer_1024.png`](file:///sdcard/Download/MorphicAtlas/morphic_primer_1024.png): Full 1024x1024 composite RGB structural primer combining reaction density, solenoidal vorticity, and FTLE filaments.
-- [`channel_density.png`](file:///sdcard/Download/MorphicAtlas/channel_density.png): Persistent species concentration field from weakly reversible mass-action network (Family 149).
-- [`channel_streamfunction.png`](file:///sdcard/Download/MorphicAtlas/channel_streamfunction.png): Divergence-free solenoidal streamfunction contours ($\nabla \cdot u \equiv 0$, Family 376).
-- [`channel_ftle_stretching.png`](file:///sdcard/Download/MorphicAtlas/channel_ftle_stretching.png): Finite-Time Lyapunov Exponent stretching field tracking vascular filaments (Family 146).
-- [`channel_topology_interface.png`](file:///sdcard/Download/MorphicAtlas/channel_topology_interface.png): Phase-boundary reaction mask highlighting topological feature birth/death.
-- [`baseline_curl_noise.png`](file:///sdcard/Download/MorphicAtlas/baseline_curl_noise.png): Matched-compute 4-octave fractional Brownian motion control.
-- [`sequence/frame_00.png`](file:///sdcard/Download/MorphicAtlas/sequence/frame_00.png) .. [`sequence/frame_09.png`](file:///sdcard/Download/MorphicAtlas/sequence/frame_09.png): 10-frame morphing animation sequence tracking non-collapsing spatial variance ($\mathrm{Var} = 0.0051$).
+- `morphic_primer_1024.png` (local historical path: `/sdcard/Download/MorphicAtlas/morphic_primer_1024.png`): Full 1024x1024 composite RGB structural primer combining reaction density, solenoidal vorticity, and FTLE filaments.
+- `channel_density.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_density.png`): Persistent species concentration field from weakly reversible mass-action network (Family 149).
+- `channel_streamfunction.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_streamfunction.png`): Divergence-free solenoidal streamfunction contours ($\nabla \cdot u \equiv 0$, Family 376).
+- `channel_ftle_stretching.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_ftle_stretching.png`): Finite-Time Lyapunov Exponent stretching field tracking vascular filaments (Family 146).
+- `channel_topology_interface.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_topology_interface.png`): Phase-boundary reaction mask highlighting topological feature birth/death.
+- `baseline_curl_noise.png` (local historical path: `/sdcard/Download/MorphicAtlas/baseline_curl_noise.png`): Matched-compute 4-octave fractional Brownian motion control.
+- `sequence/frame_00.png` (local historical path: `/sdcard/Download/MorphicAtlas/sequence/frame_00.png`) .. `sequence/frame_09.png` (local historical path: `/sdcard/Download/MorphicAtlas/sequence/frame_09.png`): 10-frame morphing animation sequence tracking non-collapsing spatial variance ($\mathrm{Var} = 0.0051$).
 
 ---
 

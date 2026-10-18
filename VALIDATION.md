@@ -1,5 +1,14 @@
 # Termux v0 delivery validation
 
+This is a versioned validation ledger: sections record their dated source,
+configuration and test count, not a fresh verification of current HEAD. Historical
+two-job build limits below are superseded by AGENTS.md's Cargo `-j 8` policy.
+Current production is v1.3.1 Smooth (`493cdca`); Dynamics-v2 remains demoted.
+Old candidate/promotion labels and device paths are archival. Numerical proxies,
+independent onset counts and finite true-peak estimates do not establish blinded
+preference, preserved events or continuous-time peak guarantees. Use the
+[current handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) for latest checks.
+
 Source and experiments are described in `RESULTS.md`. Rust 1.98.1 on ARM64
 Android/Termux; dependencies pinned by `Cargo.lock`. Builds/tests used
 `--locked --offline` and at most two build jobs. No package or Titan edits.
@@ -106,7 +115,7 @@ flow+song-adapter quality test have not been completed.
   - Repaired backward-pass gradients in SFHT soft-clamp and mid-band upper-protected-band adjoint.
   - Stratified endpoint supervision $s \sim \text{Uniform}(0.0, 1.0)$ with 10% stratified draws in $[0.95, 1.0]$.
   - Trained `artifacts/rich-low-sfht-v2/` (2,000 steps, AdamW $10^{-4}$, 8192-point STFT) and `artifacts/rich-mid-v3/` (500–8000 Hz curriculum with stopped-mid abstention).
-  - Out-of-distribution Cauchy velocity extrapolation eliminated: `--sfht-shrinkage 1.0` verified superior to historical `0.88`.
+  - Endpoint-region time sampling and `--sfht-shrinkage 1.0` were tested against historical `0.88`; this does not establish eliminated extrapolation error on arbitrary inputs.
 - **Workstream B ($\mathfrak{so}(4)$ Lie-Algebra Port-Hamiltonian & Sub-Side Bank)**:
   - Implemented `PortHamiltonianLieV2` (`--morphic-mode ph-lie-v2`) in `src/gtf.rs` with 6-generator $\mathfrak{so}(4)$ Lie algebra and directed pair exchange.
   - Dedicated stereo Side 4D state bank ($z_S$) driven by rolling sub-band energy fraction $\rho_S$ and $c_{LR}$ routes side rumble into strongly damped mode 3 with air readout disabled.
@@ -119,15 +128,15 @@ flow+song-adapter quality test have not been completed.
 - **Workstream D (Clock-Coupled Transient Punch & Dynamic Release)**:
   - Implemented `--clock-transient-punch` in `src/master.rs`, linking dynamic glue release and bounded attack transient contour to the 150 ms envelope clock.
 - **Workstream E (Microstructure Cross-Frame Phase Consistency)**:
-  - Implemented `--phase-consistency` in `src/microstructure.rs` and CLI, penalizing inter-frame phase velocity curvature to eliminate metallic grain and phase jitter without dulling high-frequency air.
+  - Implemented `--phase-consistency` in `src/microstructure.rs` and CLI to penalize inter-frame phase velocity curvature. Elimination of perceived grain/jitter without dulling is a listening hypothesis, not an implementation guarantee.
 - **Full-Pipeline Factorial Ablation Matrix**:
   - Full-song (140.4s) factorial ablation executed on `/sdcard/Download/Chasing Horizons.wav`.
   - Winning candidate configuration: `04_phase_consistency` (Auto-Tune + Specialists + Flow-v2/v3 + Lie-PH-v2 + Clock Transient Punch + Phase Consistency 0.5):
-    - Integrated LUFS: **-11.11 LUFS** (target -11.0 LUFS strictly respected)
-    - True Peak: **-1.00 dBTP** (0.0 inter-sample clipping)
+    - Integrated LUFS: **-11.11 LUFS** (requested target -11.0 LUFS)
+    - True Peak: **-1.00 dBTP** with the project's finite oversampled estimator
     - Sub-band Instability: **0.1904** (lowest observed, -12.9% defect reduction)
-    - Stereo Correlation: **0.7849** (highest stereo cohesion)
-    - Transient Definition: **571 onsets detected** (+30 onsets unmasked over champion baseline)
+    - Stereo Correlation: **0.7849** (highest measured broadband correlation in this matrix, not a general spatial-quality result)
+    - Transient Definition: **571 onsets detected** (+30 independently detected events versus the reference; not proof of additional preserved or unmasked onsets)
     - Snare / Air Transient Punch: Substantial retention improvements (-0.152 dB / -0.281 dB)
 - **Export & Storage Discipline**:
   - Exported winning candidate master to `/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac` (24-bit / 48 kHz lossless FLAC, 31 MB).

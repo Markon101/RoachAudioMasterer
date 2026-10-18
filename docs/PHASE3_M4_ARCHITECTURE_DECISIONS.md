@@ -9,7 +9,7 @@
 
 ## 1. Context & Motivation
 
-The listener identified Mode 4 (`m4_port_hamiltonian`) as their new favorite master, surpassing the Mode 3 Geometric Memory champion. However, an architectural audit of milestone `a24b5e2` revealed substantial dormancy:
+At this historical checkpoint, the listener informally preferred Mode 4 (`m4_port_hamiltonian`) to the then-Mode 3 reference. This is dated subjective feedback, not the current champion or a blinded result. An architectural audit of milestone `a24b5e2` revealed substantial dormancy:
 
 1. **Decoupled 2D Blocks:** The 4D state was split into two independent 2×2 blocks `(0,1)` and `(2,3)` with zero off-diagonal energy exchange ($\kappa = 0$).
 2. **Unused Coordinates:** Audio modulation only read $z_1$. Coordinates $z_0$, $z_2$, and $z_3$ were stepped but discarded.

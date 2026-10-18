@@ -29,8 +29,8 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
 ## 2. Pilot A: Lie-Bracket Geometric Commutator Engine (Family 376)
 
 ### Implementation
-- **Script:** [`analysis/phase3/pilot_a_commutator.py`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_a_commutator.py)
-- **Results:** [`analysis/phase3/pilot_a_results.json`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_a_results.json)
+- **Script:** [`analysis/phase3/pilot_a_commutator.py`](../analysis/phase3/pilot_a_commutator.py)
+- **Results:** [`analysis/phase3/pilot_a_results.json`](../analysis/phase3/pilot_a_results.json)
 - **Operator:** $C_\varepsilon = S_2(-\varepsilon) \circ S_1(-\varepsilon) \circ S_2(\varepsilon) \circ S_1(\varepsilon)$, with $S_1(x, y) = (x + \varepsilon \sin y, y)$ and $S_2(x, y) = (x, y + \varepsilon \tanh x)$.
 - **Analytical Bracket:** $[A, B](x, y) = (-\tanh x \cos y, \sin y (1 - \tanh^2 x))^\top$.
 
@@ -55,8 +55,8 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
 ## 3. Pilot B: Persistent Reaction-Advection Reservoir (Family 149)
 
 ### Implementation
-- **Script:** [`analysis/phase3/pilot_b_reaction_reservoir.py`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_b_reaction_reservoir.py)
-- **Results:** [`analysis/phase3/pilot_b_results.json`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_b_results.json)
+- **Script:** [`analysis/phase3/pilot_b_reaction_reservoir.py`](../analysis/phase3/pilot_b_reaction_reservoir.py)
+- **Results:** [`analysis/phase3/pilot_b_results.json`](../analysis/phase3/pilot_b_results.json)
 - **Network:** 4-species weakly reversible mass-action reaction network:
   $$c_1 + c_2 \rightleftharpoons c_3 + c_4, \quad c_2 + c_3 \rightleftharpoons c_1 + c_4, \quad c_1 \rightleftharpoons c_2, \quad c_3 \rightleftharpoons c_4$$
 - **Solvers:** Explicit Euler vs. Patankar positive fractional-step solver.
@@ -73,15 +73,15 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
    Coupled with incompressible streamfunction advection field $u = (\partial_y \psi, -\partial_x \psi)$:
    - Initial spatial variance: $0.038342$.
    - Final spatial variance after 100 steps: $0.004366 > 10^{-4}$.
-   - Visual morphogenesis preview generated: [`runs/phase3_morphogenic_atlas/pilot_b_morphogenesis_256.png`](file:///data/data/com.termux/files/home/projects/highband/runs/phase3_morphogenic_atlas/pilot_b_morphogenesis_256.png).
+   - Visual morphogenesis preview generated: `runs/phase3_morphogenic_atlas/pilot_b_morphogenesis_256.png`.
 
 ---
 
 ## 4. Pilot C: MeanFlow CFM Solver Distillation (Moonshot K)
 
 ### Implementation
-- **Script:** [`analysis/phase3/pilot_c_meanflow_distillation.py`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_c_meanflow_distillation.py)
-- **Results:** [`analysis/phase3/pilot_c_results.json`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_c_results.json)
+- **Script:** [`analysis/phase3/pilot_c_meanflow_distillation.py`](../analysis/phase3/pilot_c_meanflow_distillation.py)
+- **Results:** [`analysis/phase3/pilot_c_results.json`](../analysis/phase3/pilot_c_results.json)
 - **Evaluation:** 16 seeded random 64-dimensional vectors and a handwritten synthetic velocity field. These are not audio scenes or evaluations of frozen Mid/SFHT checkpoints. No student was trained; the historical "MeanFlow distillation" label does not describe an implemented distillation experiment.
 - **2026-10-17 scope correction:** The original script and raw JSON remain intact as historical evidence. The JSON incorrectly reports two rather than four velocity calls for the two-step midpoint routine, and its hardcoded `SURVIVED` status contradicts its own `passed: false` row. Reproduce the correction without overwriting those receipts with `python scripts/audit_pilot_c.py`; see [the audit receipt](../artifacts/mission-20261017/pilot_c_scope_audit.json). This is Tier 2 call-count verification and Tier 3 toy measurements; native solver performance and preference remain unestablished.
   On this Termux installation NumPy needs `LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so` before that command. The audit counts calls and does not run a speed experiment.
@@ -100,8 +100,8 @@ In accordance with the Phase III charter (`docs/ROACH_PHASE_III_MATHEMATICAL_MOO
 ## 5. Pilot D: Port-Hamiltonian Acoustic Material (Moonshot H)
 
 ### Implementation
-- **Script:** [`analysis/phase3/pilot_d_port_hamiltonian.py`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_d_port_hamiltonian.py)
-- **Results:** [`analysis/phase3/pilot_d_results.json`](file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_d_results.json)
+- **Script:** [`analysis/phase3/pilot_d_port_hamiltonian.py`](../analysis/phase3/pilot_d_port_hamiltonian.py)
+- **Results:** [`analysis/phase3/pilot_d_results.json`](../analysis/phase3/pilot_d_results.json)
 - **System:** $\dot z = (J - R)\nabla H(z) + G u$, with skew coupling $J = -J^\top$, modal damping $R \succeq 0$, and multi-well potential $H(z)$.
 - **Integrators:** Explicit Euler vs. Implicit Midpoint / Discrete Gradient.
 

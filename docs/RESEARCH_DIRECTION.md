@@ -1,5 +1,11 @@
 # Research-informed quick direction after the 10k-step comparison
 
+Historical literature/proposal snapshot: the body describes the earlier model
+and its proposed v2 extensions. Use [the current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
+for active work. The later [Mid-v3 solver diagnostic](NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md)
+found conflicting magnitude/complex reconstruction evidence; this proposal is
+not a present-day performance or promotion result.
+
 This is a proposal, not a new trained implementation. The owner's latest
 listening impression is that 10k training sounds mostly the same, with a small
 possibly favorable texture change but no clear better/worse judgment. Preserve

@@ -1,5 +1,11 @@
 # Frozen prototype evidence
 
+This is an archive catalog. Checkpoint families, timings, listening preferences
+and local delivery paths below belong to their dated experiments. Some WAVs were
+removed by later cleanup; metadata is not proof of current audio availability.
+The current production configuration and verified listening paths are in
+[the 2026-10-18 handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md).
+
 `initial/` contains the schema-1 400-step negative result and the only controlled
 foreground speed experiment. It requires source commit `3c0781a` for inference.
 `prior-correction/` isolates the bounded prior correction with the same seeds,
@@ -71,7 +77,9 @@ boost ($H \le 1.0$) achieved the project's lowest synthetic NMSE (0.6016).
 `rich-field-v1/` contains the 1,000-step coupled complex field operator models
 (`basis.json`, `transport.json`, `rotation.json`, `diagonal.json`), development receipts,
 full-song restoration receipt, and comparative metrics with the commercial TrackGleam master.
-`basis.json` is the winning operator favored in listening tests for full-length song restoration.
+`basis.json` was favored among that historical comparison's operators in informal
+owner listening. This does not establish controlled preference or identify the
+current production configuration.
 
 ```sh
 sha256sum -c artifacts/SHA256SUMS

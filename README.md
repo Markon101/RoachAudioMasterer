@@ -1,26 +1,28 @@
 # RoachAudioMasterer
 
 A Rust-first autonomous mastering, 3D spatial acoustics, and multi-band acoustic scene restoration engine, developed on a Samsung Galaxy S25 Ultra in Android/Termux.
-Generated content (sub-bass fundamentals, mid overtones, and high air) represents plausible spectral completion, microdynamic expansion, and transparent mastering conditioned on surviving physical acoustic relationships, not recovery of lost information.
+Generated content (sub-bass fundamentals, mid overtones, and high air) represents plausible spectral completion and microdynamic expansion conditioned on surviving acoustic relationships, not recovery of lost information. Mastering applies explicit loudness and peak controls; perceived transparency requires listening.
 
 > **Project & Repository Identity**: The canonical project name and primary binary is **`roach-audio-masterer`** (repository: [`Markon101/RoachAudioMasterer`](https://github.com/Markon101/RoachAudioMasterer)). The legacy **`highband`** binary alias and CLI subcommands remain fully supported for backward compatibility with existing automation, scripts, and historical checkpoints.
 
 Research continuation: [2026-10-18 handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
 records the failed cache/host-batch gates, restored blind packages and mixed native
 solver diagnostic. The production champion and eight-step default are unchanged.
+Use the [documentation index](docs/README.md) for dated evidence and
+[long-duration coherence plan](docs/LONG_COHERENCE_PLAN.md) for the next audio work.
 
 The core direction is a unified autonomous mastering and scene restoration engine:
 - **Autonomous Mastering (`auto-master`)**: Single-command mastering with content-aware specialist routing, ITU-R BS.1770-4 LUFS target matching (-11.0 LUFS), soft-knee glue compression, 4x polyphase FIR true-peak limiting (-1.0 dBTP), and automated lossless export to device storage.
-- **Tri-Band Conditional Flow Matching**: Superharmonic sub-bass flow (`rich-low-sfht`), subharmonic mid overtones (`rich-mid`), and Basis high-band field completion (`rich-field`).
-- **3D Spatial Acoustics**: Lord Rayleigh Duplex Theory spatial field dynamics, 120 Hz mono sub-bass guard, and 180 Hz bandpassed early reflection network (zero low-end smear).
+- **Band-specific Flow Models**: Separate sub-bass (`rich-low-sfht`), mid (`rich-mid`) and high-band (`rich-field`) research paths. The legacy `rich-triband-restore` coordinator runs low/SFHT and mid stages plus optional polish/spatial processing; it does not invoke the learned high-band field.
+- **Spatial Acoustics**: Mono sub-bass guard, correlation-aware stereo width and bounded early reflections. Actual settings depend on the selected pipeline and intent; nominal crossovers do not prove absence of transient smear.
 - **Conditional Microstructure Synthesis (`microstructure`)**: HTS orthogonal physical priors, harmonic-coupled air excitation, and Lorentzian Q-skirt dispersion softening metallic grain.
 
 ## Current Production Champion: Roach NextGen v1.3.1 Smooth ("Best So Far")
 
 The current champion configuration (commit [`493cdca`](https://github.com/Markon101/RoachAudioMasterer/commit/493cdcad1b06b97297fb3837fc2a851c4533e326)) implements the **NextGen v1.3.1 Smooth** mastering pipeline. The project recorded its promotion following positive, unblinded owner feedback. Implementation checks (Tier 2) and a 10-track numerical audit (Tier 3) are recorded in [RESULTS, Section 24](RESULTS.md#24-official-production-champion-promotion--best-so-far-status-roach-nextgen-v131-smooth); controlled/blinded preference evidence (Tier 4) remains pending.
-- **Zero-Phase LR4 Filtering**: Forward-backward (`filtfilt`) $0^\circ$ phase Linkwitz-Riley filtering at 26 Hz (infrasonic cut) and 110 Hz (sub split), eliminating $+4.05\text{ dB}$ causal all-pass phase dispersion peak inflation.
+- **Zero-Phase LR4 Filtering**: Forward-backward filtering at 26 Hz (infrasonic cut) and 110 Hz (sub split), addressing the reported causal-filter peak-inflation case. Zero phase does not imply zero temporal ringing.
 - **Drive-Coupled Envelope Sub-Sustain Controller**: Stereo-linked, peak-held envelope dynamics decouple kick drum onsets from sub-bass tails without memoryless waveform clipping.
-- **Smooth $C^1$ Bartlett Peak-Hold Limiter**: 11 ms half-cycle bass peak hold and two-stage cascaded Bartlett smoothing suppress 90–200 Hz inter-modulation roughness, reducing high-frequency 2 ms AM jitter by `-49.1%` and brickwall limiter stress by `-1.29 dB`.
+- **Bartlett Peak-Hold Limiter**: 11 ms bass peak hold and two-stage smoothing. The recorded ten-track comparison measured a mean per-track 49.1% reduction in the high-band 2 ms AM-jitter proxy and 1.29 dB lower mean limiter gain reduction; this does not establish eliminated audible distortion or waveform $C^1$ continuity.
 - **Quiet-Passage Mid-Band Denoise**: Dual-zone minimum-statistics Wiener denoise measured `-4.15 dB` upper-mid noise reduction on the reported quiet passage; perceived grain reduction requires listening confirmation.
 - **Measured True-Peak Ceiling**: All ten reported renders measured `-1.00 dBTP` with the project's oversampled estimator after final trim.
 
@@ -96,12 +98,13 @@ the run-directory name appended, and skips inputs shorter than 60 seconds.
 Research runs should use `--no-export-sdcard`. Local FLAC is encoded at 24 bits
 from the float master; the separate listening WAV remains PCM16.
 
-Rust stable, Cargo, and a C linker are sufficient for CPU operation. No Python,
-ML framework, service, dataset download, or GPU is required.
+Rust stable, Cargo and a C linker are sufficient for core WAV inference on CPU.
+No Python, ML framework, service, dataset download or GPU is required for that
+path. FFmpeg is required for the mastering CLI's FLAC/cover export.
 
 ```sh
-cargo test
-cargo build --release
+cargo test --locked -j 8
+cargo build --release --locked -j 8
 
 # Unified autonomous mastering (canonical binary)
 ./target/release/roach-audio-masterer auto-master --input song.wav
@@ -109,18 +112,21 @@ cargo build --release
 # Or via the legacy binary alias
 ./target/release/highband auto-master --input song.wav
 
-# Full-track tri-band restoration (sub-bass + mids + highs)
+# Full-track low + mid restoration (legacy command name)
 ./target/release/roach-audio-masterer rich-triband-restore \
   --input song.wav \
-  --low artifacts/rich-low-v1/basis.json \
-  --mid artifacts/rich-mid-v1/basis.json \
-  --high artifacts/rich-field-v1/basis.json \
-  --out runs/song-triband.wav
+  --sfht-model artifacts/rich-low-sfht-v2/basis.json \
+  --mid-model artifacts/rich-mid-v3/basis.json \
+  --out runs/song-restore
 ```
 
-For the generated evaluation clips, use the actual cutoff and transition from
-their `recipe.json`, rather than the illustrative 5000 Hz above. Every run needs
-a fresh output directory; existing runs and WAVs are rejected. Run metadata
+Use `rich-field-restore-song` separately for the learned high-band research path.
+The low/mid coordinator above is not the full `auto-master` champion pipeline.
+
+For generated evaluation clips, use the actual cutoff and transition from their
+recipe. Use fresh output directories for comparisons: many experiment commands
+reject existing paths, while some full-song restorers can reuse disk chunk caches.
+A cache hit is not fresh inference or proof of matching input/model settings. Run metadata
 includes seed ranges, source commit/dirty state, generator/degradation settings,
 checkpoint, loss, timing context, and metrics. Raw WAVs and run directories are
 ignored by Git. See `RESULTS.md` for recorded measurements when available.
@@ -128,8 +134,8 @@ ignored by Git. See `RESULTS.md` for recorded measurements when available.
 On Termux/Adreno, with the working OpenCL ICD installed:
 
 ```sh
-cargo build --release --locked --features opencl
-OCL_ICD_ASSUME_ICD_EXTENSION=1 cargo test --locked --features opencl \
+cargo build --release --locked --features opencl -j 8
+OCL_ICD_ASSUME_ICD_EXTENSION=1 cargo test --locked --features opencl -j 8 \
   gpu_matches_cpu_with_chunking -- --ignored --nocapture
 OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband evaluate \
   --model runs/train/model.json --backend opencl --out runs/eval-gpu
@@ -140,8 +146,8 @@ OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband benchmark \
 
 Use `HIGHBAND_OPENCL_DEVICE='Adreno'` (or another name substring) to choose a GPU.
 OpenCL is explicit opt-in; discovery/build errors fail visibly. CPU-only builds
-do not load OpenCL. `--help` lists options for each command. FFmpeg is useful
-for input conversion and WAV validation, but is not a runtime dependency:
+do not load OpenCL. `--help` lists options for each command. FFmpeg supports
+conversion/validation and is a runtime dependency for FLAC/cover export:
 
 ```sh
 ffmpeg -i input.wav -ar 24000 -ac 1 converted.wav
@@ -197,7 +203,7 @@ All are lower-is-better except high-energy fraction (a diagnostic). Near-silent
 target highs can make NMSE extremely large; inspect per-family and absolute/log
 errors too. Waveform error alone cannot establish perceptual restoration.
 
-## Compute boundaries and mobile limits
+## Legacy v0 compute boundaries and mobile limits
 
 `SpectralTransform` isolates analysis/synthesis. `Predictor` accepts contiguous
 row-major `[frames, 40]` and returns `[frames, 257]`; weights are `[output,input]`.
@@ -215,17 +221,18 @@ bounded buffers, frame-major activations, and CPU parity before optimization.
 See [GPU engineering notes](docs/OPENCL.md). New kernels and gradients are small
 independent implementations; Titan Image itself is unchanged.
 
-The CPU predictor and trainer are single-threaded. No giant autograd tape,
+The v0 CPU predictor and trainer are single-threaded. No giant autograd tape,
 tensor runtime or dataset cache is used. Synthetic clips are capped at 2 seconds
 per example and input restoration at 30 seconds. Restoration is whole-clip;
-long-file streaming is not implemented. This matters for memory and low-end
-deployment. GPU calls can lose to CPU for short clips because synchronization
+long-file streaming is not implemented in that v0 command path. Native rich
+paths support full-song chunked processing and use additional CPU threading.
+GPU calls can lose to CPU for short clips because synchronization
 dominates; benchmark reports separate event kernel time from end-to-end time.
-Background Android CPU affinity changes (four cores can be expected) and
-thermals make uncontrolled comparisons misleading. Benchmarks require explicit
+Android may change effective CPU affinity, and thermals make uncontrolled
+comparisons misleading. Cargo still uses `-j 8`. Benchmarks require explicit
 foreground confirmation and record affinity and process memory high-water mark.
 
-## Evaluate a local recording without training on it
+## Legacy v0: evaluate a local recording without training on it
 
 `evaluate-wav` creates a controlled degraded copy of a reference WAV, runs all
 four methods and scores the actual reconstructed waveforms. Convert/trim first
@@ -302,7 +309,7 @@ model, 256/1024/4096 analysis/loss scales, input-linked harmonic/continuous-nois
 priors, and a direct diagonal flow path. Legacy commands/checkpoints remain intact.
 
 ```sh
-cargo build --release --locked --features opencl
+cargo build --release --locked --features opencl -j 8
 ./target/release/highband scene-train --seed 40000 --steps 600 --out runs/native-det
 OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband scene-train \
   --seed 40000 --steps 600 --flow-prior runs/native-det/model.json \
@@ -422,4 +429,5 @@ OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband rich-train \
 Gate optimizer snapshots support paired evidence/frequency-control continuation.
 Inference tiles features to1024 rows and optionally uses the existing OpenCL dense
 backend. Richness0/0.5/1 changes intermediate authorization, not a treble gain or
-calibrated uncertainty claim. The sprint is in progress; its plan is not a result.
+calibrated uncertainty claim. This is an earlier research tool; see its
+[recorded results](docs/RICH_SPRINT_RESULTS.md) and the current handoff for priorities.

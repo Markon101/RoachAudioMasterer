@@ -1,0 +1,447 @@
+{
+  "checkout": "394fe30736f0dc9d77374663a658e30dd5bc147b",
+  "branch": "experiment/phase3-geometric-moonshot",
+  "review_scope": "all docs/*.md, artifacts/*/README.md, artifacts/README.md, VALIDATION.md, AGENTS.md; root-owned current summaries, handovers, and latest mission reports excluded as assigned",
+  "reviewed_files": 59,
+  "files_with_contextual_corrections": 8,
+  "files_with_broken_relative_markdown_links": 0,
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "VALIDATION.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 115,
+          "severity": "stale_current_status",
+          "note": "Historical Dynamics-v2 gate section is followed by older candidate/champion language at lines 130 and 144-148; current production is v1.3.1 Smooth 493cdca, Dynamics-v2 remains demoted. Make dated/as-of framing explicit."
+        },
+        {
+          "line": 130,
+          "severity": "historical_comparison",
+          "note": "“over champion baseline” is a historical baseline comparison; label the archived baseline/version."
+        },
+        {
+          "line": 144,
+          "severity": "archival_framing",
+          "note": "Explicitly scope this as the historical 2026-10-16 promotion at 493cdca; preserve its result."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "artifacts/README.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 40,
+          "severity": "scope_ambiguity",
+          "note": "“inference model remains native-v2/flow.json” is true only within the native-longer-v2 archive; qualify scope because current production is v1.3.1 Smooth."
+        },
+        {
+          "line": 74,
+          "severity": "evidence_qualification",
+          "note": "“winning operator favored in listening tests” should be identified as historical/informal preference, not current champion or objective quality evidence."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "artifacts/next-evolution-v1/README.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "artifacts/punch-controls-v1/README.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "artifacts/rich-field-v1/README.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/BLIND_LISTENING_PROTOCOL.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/CORRECTED_ADJOINT_FLOW_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/CORRECTED_ADJOINT_FLOW_RESULTS.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 6,
+          "severity": "stale_promotion_wording",
+          "note": "Top-level “Promoted” and section 5 say these checkpoints are candidates for default active routing. Reconcile with current production v1.3.1 Smooth and state these were historical experimental candidates, not current promoted defaults."
+        },
+        {
+          "line": 75,
+          "severity": "stale_promotion_wording",
+          "note": "Default-routing promotion claim is unsupported as current by supplied evidence; retain as a historical decision with dated scope."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/DYNAMICS_V1_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/DYNAMICS_V1_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/DYNAMICS_V2_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/DYNAMICS_V2_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/EPISTEMIC_STANDARDS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/FLOW_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/FLOW_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/HYPERSPACE_TEAM_A_LIE_COUPLING.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/LONGER_TRAINING_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/LONGER_TRAINING_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/MICROSTRUCTURE_SHIMMER_AUDIT.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/MID_BAND_FLOW_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/MID_CACHE_BASELINE_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/MID_REFINEMENT_PROFILING.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/NATIVE_LONGER_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/NATIVE_LONGER_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/NEXT_EVOLUTION_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/NEXT_EVOLUTION_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/OPENCL.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PHASE3_ARCHITECTURE_DECISIONS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 4,
+          "severity": "historical_context",
+          "note": "Frozen v1.0.0 alpha anchor and M3 champion are date-stamped historical context; retain. Device deliverable paths later in the report are archival, not evidence of current file availability."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PHASE3_M4_ARCHITECTURE_DECISIONS.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 12,
+          "severity": "historical_preference",
+          "note": "Mode 4 “new favorite” is subjective listener preference. Mark as dated informal preference and distinguish it from technical promotion/evidence."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PHASE3_MATH_TO_ALGORITHMS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PUNCH_CONTROL_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/PUNCH_CONTROL_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/REFERENCES.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/RESEARCH_MICROSTRUCTURE_SYNTHESIS.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 208,
+          "severity": "stale_current_status",
+          "note": "Calls the specialist verified/stable and Family A the clear champion, then recommends production defaults retain it. Reframe as a historical pilot conclusion/recommendation and distinguish measured metrics from perceptual evidence."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/RICH_SPRINT_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/RICH_SPRINT_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_REPORT.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 69,
+          "severity": "stale_champion_recommendation",
+          "note": "Labels M4 A2 “Recommended New Master Champion”; mark as a historical recommendation only, distinct from actual production champion."
+        },
+        {
+          "line": 21,
+          "severity": "archival_paths",
+          "note": "Historical /sdcard/Download deliverables may have been externally removed. Keep the report/results but mark paths archival/unavailable as applicable."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/ROACH_PHASE_III_MATHEMATICAL_MOONSHOT.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SCENE_V2_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SCENE_V2_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SPRINT1_CLEAN_AND_SPEED_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SPRINT2_MID_FLOW_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SPRINT3_TRIBAND_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SPRINT3_TRIBAND_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/SPRINT5_AUTONOMOUS_SPECIALISTS_AND_CRITICS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/STAGE_AUDIT_STATUS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/STREAK_PLAN.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/STREAK_RESULTS.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/TITAN_TRANSFER.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/UNDEGRADED_TEST.md",
+      "status": "reviewed",
+      "issues": [],
+      "broken_relative_markdown_links": []
+    },
+    {
+      "file": "docs/V1_ALPHA_FREEZE.md",
+      "status": "needs_contextual_correction",
+      "issues": [
+        {
+          "line": 7,
+          "severity": "archival_framing",
+          "note": "Historical freeze, but unqualified status/champion labels and current-default CLI instructions can read as current production. Add a short archival snapshot banner; preserve historical claims."
+        },
+        {
+          "line": 118,
+          "severity": "archival_paths",
+          "note": "Downloads WAV paths are historical deliverables; owner reports some were externally removed. Mark paths archival/unavailable where applicable."
+        },
+        {
+          "line": 128,
+          "severity": "stale_current_status",
+          "note": "“runs ... by default” conflicts with present production v1.3.1 Smooth defaults. State that this describes the tagged v1 alpha only."
+        }
+      ],
+      "broken_relative_markdown_links": []
+    }
+  ]
+}

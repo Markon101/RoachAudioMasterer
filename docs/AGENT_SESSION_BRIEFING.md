@@ -2,23 +2,34 @@
 
 ## 1. Quick Context for Subsequent Agents
 
-If you are an agent joining this codebase, **read this file first**, along with `AGENTS.md`, `docs/ARCHITECTURE.md`, `RESULTS.md`, and `docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md`.
+Read `AGENTS.md`, [README](../README.md), [the current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md), [architecture](ARCHITECTURE.md), and RESULTS Sections 24–27 first. The historical sprint summaries below are not the current task ledger.
 
-This repository is **Highband**, an offline, Rust-first unified acoustic-scene restoration, expansion, and autonomous mastering system developed directly on Android/Termux on a Samsung Galaxy S25 Ultra (Snapdragon 8 Elite / Adreno 830).
+This repository is **RoachAudioMasterer**, an offline, Rust-first unified acoustic-scene restoration, expansion, and autonomous mastering system developed on Android/Termux on a Samsung Galaxy S25 Ultra (Adreno 830). `highband` is the legacy forwarding binary.
 
 ### Key Repository Principles:
-- **Procedural synthetic training only**: No real-world copyrighted audio corpora are used for training. Models are trained entirely on procedural mathematical signals (sine sweeps, harmonic stacks, FM/PM, chaotic attractors, modal resonators, filtered noise).
+- **Training policy**: Base training is procedural-only. Historical, separately authorized same-song adapter experiments are documented in [CURRENT_MODEL](CURRENT_MODEL.md#the-song-adapter); they do not authorize new adaptation. User audio remains local.
 - **Local user audio confidentiality**: User song audio (*Feelin' Catchy*, etc.) stays strictly local on device in `/sdcard/Download/` and is never tracked in Git.
 - **Physical epistemic modesty**: We never claim to "recover lost information". Multi-band flow matching reconstructs plausible harmonic and texture continuations conditioned on surviving spectral context and physical principles.
 - **Device limits**:
-  - Maximum 2 concurrent compilation jobs (`CARGO_BUILD_JOBS=2`).
-  - Max 4 background CPU cores; up to 8 foreground CPU cores only after explicit user confirmation.
-  - Memory resident peak (VmHWM) strictly bounded under 64–128 MiB.
-  - CPU is the numerical reference; OpenCL is an opt-in, bit-exact acceleration backend.
+  - Use Cargo `-j 8`, including background builds. Do not impose an extra four-core cap; Android may restrict effective affinity itself.
+  - Ask before every new speed experiment and wait for fresh explicit foreground confirmation. Ordinary read-only audits and builds may run in background.
+  - Check storage, active work and observed RSS/HWM before costly runs. Use bounded, experiment-specific memory limits; there is no universal 64–128 MiB cap.
+  - CPU is the numerical reference. OpenCL is opt-in and tolerance-gated; it is not generally byte-identical to CPU. The latest 96 native solver pairs differed by at most 8.94e-8 in waveform amplitude.
+
+### Current checkpoint, 2026-10-18
+
+- Production champion: v1.3.1 Smooth, signal commit `493cdca`; frozen history and Euler8 remain protected. Explicit production model paths are in README; automatic resolution still prefers older weights.
+- Full-cache and host-batch experiments failed their predeclared utility gates. No faster cache/default solver was promoted.
+- The native development diagnostic exposes a magnitude/complex-phase metric conflict and forced-head stopped-mid false additions. Final seeds, WOLA/real-track qualification and controlled listening remain pending.
+- Use [the documentation index](README.md) to distinguish current instructions, historical evidence and unpromoted proposals. The next audio priority is [long-duration coherence](LONG_COHERENCE_PLAN.md), with output changes gated by measured defects and listening.
 
 ---
 
-## 2. Lineage of Implementations (Where We Are)
+## 2. Historical lineage through the earlier calibration sprint
+
+The following preserves the earlier milestone narrative and listening impressions.
+Its settings, timings, future-tense fixes and favorite labels are dated evidence,
+not a specification of the current production default or a fresh validation.
 
 1. **v0 (Frozen)**: 24 kHz mono magnitude MLP predicting high-band envelope residual (`src/model.rs`).
 2. **Native-v2 (Frozen)**: 48 kHz stereo shared temporal/frequency M/S complex flow matching (`src/scene_model.rs`, `src/scene_engine.rs`).
@@ -46,17 +57,17 @@ This repository is **Highband**, an offline, Rust-first unified acoustic-scene r
    - Dynamic contrast budgeting and Musical Intent engine (`ENHANCE`, `PRESERVE`, `RESTORE`, `EXPLORE`).
    - OpenCL Qualcomm Adreno 830 GPU accelerated execution for mid-flow CFM and full-song streaming mastering.
    - Mastered 4 full songs, establishing user-confirmed benchmark: *"so far it seems to me these are all the best versions yet overall, but this is fantastic restoration."*
-8. **Perceptual Calibration & Acoustic Variance Optimization (Current)**:
+8. **Perceptual Calibration & Acoustic Variance Optimization (historical)**:
    - Audited with multi-agent research team (`adversarial-reviewer`, `code-reviewer`, `dynamical-systems-critic`).
    - Clamped Band 2 low-mid Auto-EQ boost ($\le +0.25\text{ dB}$) to eliminate perceived vocal boxiness.
    - Replaced rigid 120 Hz mono sub kill with 80 Hz crossover and `mono_bass_strength = 0.85`, preserving 15% side sub energy for stereo synth warmth and bass respiration.
    - Fixed unnormalized STFT calculation, setting sub gain strictly neutral ($0.0\text{ dB}$) when Stage 1 abstains.
    - Scaled microstructure phase continuity by intent directive ($0.10$ in `PRESERVE` regime) to protect delicate transient microtexture and acoustic grit.
-   - Remastered all 4 tracks to 24-bit lossless FLAC in `/sdcard/Download/FLAC/`. See [`docs/PERCEPTUAL_CALIBRATION_RESULTS.md`](file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/docs/PERCEPTUAL_CALIBRATION_RESULTS.md).
+   - Remastered all 4 tracks to 24-bit lossless FLAC in `/sdcard/Download/FLAC/`. See [`docs/PERCEPTUAL_CALIBRATION_RESULTS.md`](PERCEPTUAL_CALIBRATION_RESULTS.md).
 
 ---
 
-## 3. Epistemic Audit: Critical Pitfalls & False Assumptions
+## 3. Historical failure modes to check against current source
 
 Any agent modifying this codebase MUST be aware of these fundamental epistemic and physical issues:
 
@@ -94,11 +105,11 @@ Any agent modifying this codebase MUST be aware of these fundamental epistemic a
 
 ## 4. Codebase Navigation Map
 
-- [`src/rich_low.rs`](file:///data/data/com.termux/files/home/projects/highband/src/rich_low.rs): Sub-bass conditional flow matching head ($20\text{--}500\text{ Hz}$).
-- [`src/rich_mid.rs`](file:///data/data/com.termux/files/home/projects/highband/src/rich_mid.rs): Mid-band conditional flow matching head ($500\text{--}6000\text{ Hz}$).
-- [`src/rich_field.rs`](file:///data/data/com.termux/files/home/projects/highband/src/rich_field.rs): High-band Basis coupled field operator ($>6000\text{ Hz}$).
-- [`src/scene_clean.rs`](file:///data/data/com.termux/files/home/projects/highband/src/scene_clean.rs): Streaming chunk engine, auto-EQ, denoise, and tri-band waveform synthesis.
-- [`src/master.rs`](file:///data/data/com.termux/files/home/projects/highband/src/master.rs): Autonomous mastering pass (BS.1770-4 LUFS, soft-knee glue compression, 4x polyphase true peak limiter).
-- [`src/rich_synth.rs`](file:///data/data/com.termux/files/home/projects/highband/src/rich_synth.rs): Procedural synthetic audio generators (`generate_low`, `generate_mid`, `generate_high`).
-- [`src/dsp.rs`](file:///data/data/com.termux/files/home/projects/highband/src/dsp.rs): STFT, iSTFT, Fourier projection, and band-locking primitives.
-- [`src/main.rs`](file:///data/data/com.termux/files/home/projects/highband/src/main.rs): Unified CLI entry point.
+- [`src/rich_low.rs`](../src/rich_low.rs): Sub-bass conditional flow matching head ($20\text{--}500\text{ Hz}$).
+- [`src/rich_mid.rs`](../src/rich_mid.rs): Mid-band conditional flow matching head ($500\text{--}6000\text{ Hz}$).
+- [`src/rich_field.rs`](../src/rich_field.rs): High-band Basis coupled field operator ($>6000\text{ Hz}$).
+- [`src/scene_clean.rs`](../src/scene_clean.rs): Streaming chunk engine, auto-EQ, denoise, and tri-band waveform synthesis.
+- [`src/master.rs`](../src/master.rs): Autonomous mastering pass (BS.1770-4 LUFS, soft-knee glue compression, 4x polyphase true peak limiter).
+- [`src/rich_synth.rs`](../src/rich_synth.rs): Procedural synthetic audio generators (`generate_low`, `generate_mid`, `generate_high`).
+- [`src/dsp.rs`](../src/dsp.rs): STFT, iSTFT, Fourier projection, and band-locking primitives.
+- [`src/main.rs`](../src/main.rs): Unified CLI entry point.

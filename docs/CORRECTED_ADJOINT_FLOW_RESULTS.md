@@ -3,7 +3,14 @@
 **Target Checkpoints**: `artifacts/rich-low-sfht-v2/` and `artifacts/rich-mid-v3/`  
 **Execution Platform**: Samsung Galaxy S25 Ultra (Termux aarch64, Snapdragon 8 Elite, Adreno 830 OpenCL)  
 **Date**: 2026-10-13  
-**Status**: Completed, Verified & Promoted (Tier 1 & Tier 2)
+**Status**: Historical 2026-10-13 training/adjoint report. Promotion language refers to the then-research candidates, not controlled listening superiority or current automatic CLI routing.
+
+Current context: [the 2026-10-18 handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
+records the production configuration and newer diagnostic limitations. The
+[metadata audit](../artifacts/mission-20261018/training_metadata_audit.json) found
+incompatible generic Mid-v3 provenance; the historical dirty training source is
+not authenticated. Retain these measurements without treating them as complete
+source-lineage or broader quality verification.
 
 ---
 
@@ -12,7 +19,7 @@
 In commit `9dcfae3`, continuous flow matching adjoints were analytically repaired:
 1. **SFHT Soft-Clamp Chain Rule Repair**: Corrected the analytical VJP for $v_{\text{clamped}} = 16 \tanh(v / 16)$ in `src/sfht.rs`.
 2. **Mid-Band Upper Protected Band Adjoint**: Locked boundary conditions in `src/rich_mid.rs` so $>8\text{ kHz}$ energy produces strictly zero gradient leakage.
-3. **Endpoint-Anchored Time Sampling**: Replaced bounded interval $s \sim \text{Uniform}(0.05, 0.95)$ with continuous support $s \sim \text{Uniform}(0.0, 1.0)$ augmented by a $10\%$ stratified draw in $[0.95, 1.0]$. This eliminates the out-of-distribution velocity extrapolation gap at $s \to 1.0$, rendering the historical heuristic `--sfht-shrinkage 0.88` obsolete.
+3. **Endpoint-Anchored Time Sampling**: Replaced bounded interval $s \sim \text{Uniform}(0.05, 0.95)$ with support over $s \sim \text{Uniform}(0.0, 1.0)$ and a $10\%$ stratified draw in $[0.95, 1.0]$. This covers the endpoint region during training; it does not certify endpoint accuracy. The historical experiment separately compared `--sfht-shrinkage 1.0` with `0.88`.
 
 Both models were trained from scratch with AdamW ($10^{-4}$ weight decay) and verified on held-out procedural seeds.
 
@@ -65,12 +72,12 @@ Evaluated on 16 held-out multi-track stem scenes (`seeds 850000..850015`):
 | **Mean Missing-Band NMSE** | 1.0761 | **1.0682** | **-0.73%** |
 | **Mean Missing-Band LSD** | 19.15 dB | 19.47 dB | +0.32 dB |
 | **Abstention False-Add NMSE** (`stopped_mid`) | 0.002678 | **0.002493** | **-6.91% false energy reduction** |
-| **Dual Passband Lock Residual** ($<500\text{ Hz}, >8\text{ kHz}$) | Bit-exact ($<10^{-7}$) | Bit-exact ($<10^{-7}$) | Verified |
-| **Adreno 830 OpenCL vs CPU Parity** | Match | **Bit-exact to float precision ($<10^{-6}$)** | Verified |
+| **Dual Passband Lock Residual** ($<500\text{ Hz}, >8\text{ kHz}$) | Reported error $<10^{-7}$ | Reported error $<10^{-7}$ | Tested tolerance, not byte identity |
+| **Adreno 830 OpenCL vs CPU Parity** | Reference | **Reported error $<10^{-6}$** | Tested tolerance, not byte identity |
 
 ---
 
 ## 5. Promotion & Integration Invariant
 
-1. Checkpoints `artifacts/rich-low-sfht-v2/` and `artifacts/rich-mid-v3/` are promoted as candidates for default active routing.
+1. The historical experiment selected `artifacts/rich-low-sfht-v2/` and `artifacts/rich-mid-v3/` as research candidates. Select these paths explicitly for the recorded Smooth configuration; current automatic resolution still prefers older checkpoints.
 2. Legacy champion tag `v1.1.0-alpha.1-champion` and existing production checkpoints `artifacts/rich-low-sfht/` and `artifacts/rich-mid-v2/` are preserved with zero modifications, upholding the Constitutional Invariant.

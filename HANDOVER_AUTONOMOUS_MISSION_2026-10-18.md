@@ -1,10 +1,17 @@
 # Mission continuation — 2026-10-18
 
 This is a partial research checkpoint. Read AGENTS, README, architecture,
-RESULTS Sections 24–26 and the relevant frozen plan before changing behavior.
+RESULTS Sections 24–27 and the relevant frozen plan before changing behavior.
 Recheck Git state, running jobs, storage and retained artifacts before resuming.
 The machine-readable checkpoint is
 `artifacts/mission-20261018/mission_state.json`.
+
+Owner steering after this checkpoint: prioritize changes that affect audio and
+coherence over longer passages. The [long-coherence plan](docs/LONG_COHERENCE_PLAN.md)
+now leads the next work. The [documentation index](docs/README.md) and
+[audit receipt](artifacts/mission-20261018/documentation_audit.json) reconcile all
+72 pre-existing Markdown documents; no new audio or speed result was produced
+by that documentation pass.
 
 ## Preserve the champion and execution policy
 
@@ -95,7 +102,7 @@ old Chasing source WAV and Stage2 WAVs are absent. New matched native-rate float
 inputs for host tests were created from retained raw FLACs. Do not compare their
 absolute times uncritically with the older Stage2-input baseline.
 
-## Native solver diagnostic complete; reconstruction conflict unresolved
+## Next audio work: longer coherence, with solver conflict retained
 
 Read [the Phase A plan](docs/NATIVE_MID_SOLVER_PHASE_A_PLAN.md). The research
 entry point compares Euler8/8 NFE, Euler4/4 NFE, Heun2/4 NFE and midpoint1/2 NFE
@@ -144,9 +151,12 @@ and control. Phase values with poor output-bin coverage cannot establish phase
 preservation. Prefer actual target reconstruction over mere Euler8 agreement.
 Any useful short-scene candidate still needs paired longer procedural and real
 WOLA/seam tests, final mastering consequences and appropriate blind listening.
-First investigate the phase/magnitude conflict and repeat adverse families on
-development seeds, with explicit quality tolerances fixed before final evaluation.
-Do not start adaptive routing or distillation from this evidence.
+Regenerate the adverse control recipes and resolve their phase/magnitude
+interpretation alongside the longer-phrase baseline. The owner's next priority
+is audible continuity and phrase/section coherence: inspect overlap residuals,
+normalization/context changes, stereo/decay stability and post-mastering transient
+survival. Fix tolerances before final evaluation. Follow the long-coherence plan;
+do not start adaptive routing or distillation from this short-scene evidence.
 
 A pre-change CPU numerical control, including raw float chunk samples, is saved
 under `runs/mission-20261018/euler-numerical-golden/`. It is a functional parity
@@ -183,4 +193,4 @@ Stage 4 still needs a real stage ledger with actual pre-limiter snapshots,
 stable metrics and diagnostic-disabled parity. The Python true-peak correction
 alone is not that ledger. Stage 5 spectral contrast, adaptive NFE, distillation
 and speculative PH/Patankar work remain unstarted. Dynamics-v2 stays demoted.
-Resolve the zero-training native solver question before expanding this scope.
+Keep solver acceleration secondary to the owner's longer-time audio priority.

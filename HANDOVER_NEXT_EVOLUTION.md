@@ -1,9 +1,10 @@
 # ROACH AUDIO — RESEARCH HANDOVER & NEXT EVOLUTION ROADMAP
 
-**Latest continuation checkpoint:** [2026-10-17 autonomous mission handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md).
-Read it first for measured cache results, listening packages, current repository
-state and the unapplied next candidate. Older sections below retain historical
-snapshot metadata.
+**Latest continuation checkpoint:** [2026-10-18 autonomous mission handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md).
+Read it first for the failed cache/host-batch gates, restored listening paths and
+mixed native solver diagnostic. The new [long-coherence plan](docs/LONG_COHERENCE_PLAN.md)
+sets the next audio-output priority. Sections below retain their dated historical
+snapshot metadata and do not authorize old experiments or promotion recommendations.
 
 **Timestamp**: 2026-10-16T06:45:00Z  
 **Branch**: `experiment/phase3-geometric-moonshot` (Clean, Commit `493cdca`)  

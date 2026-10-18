@@ -622,9 +622,9 @@ Evaluated frame-by-frame on full reference track `listen.wav` (40,578 frames @ 4
 - **Post-Synthesis Time-Domain Low-Band Deviation**: RMS = **$1.8618 \times 10^{-8}$**.
 - **Audio Reconstruction Quality**: Full-Band SNR = **139.1 dB**, Reconstructed Spectral Leakage = **-141.19 dB**.
 - **Audio Artifact Exports**:
-  - [`runs/gtf_phase2_audit/gtf_audio.wav`](file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_audio.wav)
-  - [`runs/gtf_phase2_audit/morphic_audio.wav`](file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/morphic_audio.wav)
-  - [`runs/gtf_phase2_audit/gtf_benchmark_report.json`](file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_benchmark_report.json)
+  - `runs/gtf_phase2_audit/gtf_audio.wav`
+  - `runs/gtf_phase2_audit/morphic_audio.wav`
+  - `runs/gtf_phase2_audit/gtf_benchmark_report.json`
 
 #### 5. Creative Wildcard: Family 146 Controlled Nonlinear Texture Organism
 - Implemented Chirikov standard map dynamics with input-conditioned stochasticity $K \in [0.01, 3.0]$.
@@ -661,9 +661,9 @@ Auditioned and verified end-to-end autonomous mastering with the integrated GTF 
 | **Transient Timing** | — | **PASS** | Exact | Zero phase smearing or onset shift |
 
 **Audition Deliverables (Direct on Phone Storage)**:
-- [`/sdcard/Download/Chasing Horizons [Highband Morphic Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20%5BHighband%20Morphic%20Mastered%5D.wav) (26 MB, 16-bit PCM)
-- [`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20Mastered%5D.flac) (18 MB, Lossless FLAC)
-- Baseline champion for A/B comparison: [`/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Mastered%5D.wav)
+- `/sdcard/Download/Chasing Horizons [Highband Morphic Mastered].wav` (26 MB, 16-bit PCM)
+- `/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic Mastered].flac` (18 MB, Lossless FLAC)
+- Baseline champion for A/B comparison: `/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`
 
 #### 7. Full-Track Song Test on `Chasing Horizons (1).wav` (OpenCL GPU on Adreno 830 + Morphic GTF)
 Auditioned and verified the full 3m 36s track with OpenCL hardware acceleration on Qualcomm Adreno 830 GPU:
@@ -697,9 +697,9 @@ Auditioned and verified the full 3m 36s track with OpenCL hardware acceleration 
 | **Transient Timing** | — | **PASS** | Exact | Zero attack smearing or onset shift |
 
 **Audition Deliverables (Direct on Phone Storage)**:
-- [`/sdcard/Download/Chasing Horizons (1) [Highband Morphic Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20Mastered%5D.wav) (40 MB, 16-bit PCM)
-- [`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20Mastered%5D.flac) (27 MB, Lossless FLAC)
-- Baseline champion for direct A/B switching: [`/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Mastered%5D.wav) (40 MB)
+- `/sdcard/Download/Chasing Horizons (1) [Highband Morphic Mastered].wav` (40 MB, 16-bit PCM)
+- `/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic Mastered].flac` (27 MB, Lossless FLAC)
+- Baseline champion for direct A/B switching: `/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav` (40 MB)
 
 #### 8. Focused Attribution & Functionality Audit: Morphic GTF, Intermediate WAV Analysis, Known-Band Preservation, and 4-Mode Comparative Listening Study
 
@@ -753,19 +753,19 @@ Processed directly from `stage4_spatial.wav` through all 4 modes and mastered th
 
 ##### 6. Exported Audition Deliverables (Direct on Phone Storage)
 All comparison masters and amplified difference listening files have been rendered at identical -11.02 LUFS / -1.00 dBTP and exported to `/sdcard/Download/`:
-- [`/sdcard/Download/Chasing Horizons - Morphic M0 [Bypass Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M0%20%5BBypass%20Mastered%5D.wav) (40 MB, Level-matched Baseline)
-- [`/sdcard/Download/Chasing Horizons - Morphic M1 [Memoryless Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M1%20%5BMemoryless%20Mastered%5D.wav) (40 MB, Memoryless Control)
-- [`/sdcard/Download/Chasing Horizons - Morphic M2 [DSP Smoother Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M2%20%5BDSP%20Smoother%20Mastered%5D.wav) (40 MB, 1-Pole DSP Control)
-- [`/sdcard/Download/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].wav`](file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M3%20%5BGeometric%20Memory%20Mastered%5D.wav) (40 MB, Geometric Memory Master)
-- [`/sdcard/Download/Chasing Horizons - Morphic M3 vs M0 [Geometric Delta +30dB].wav`](file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M3%20vs%20M0%20%5BGeometric%20Delta%20+30dB%5D.wav) (40 MB, Geometric Delta amplified +30 dB, raw RMS -110.7 dBFS)
-- [`/sdcard/Download/Chasing Horizons - Morphic M3 vs M1 [Memory Dynamics Delta +30dB].wav`](file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M3%20vs%20M1%20%5BMemory%20Dynamics%20Delta%20+30dB%5D.wav) (40 MB, Memory dynamics delta amplified +30 dB, raw RMS -68.5 dBFS)
+- `/sdcard/Download/Chasing Horizons - Morphic M0 [Bypass Mastered].wav` (40 MB, Level-matched Baseline)
+- `/sdcard/Download/Chasing Horizons - Morphic M1 [Memoryless Mastered].wav` (40 MB, Memoryless Control)
+- `/sdcard/Download/Chasing Horizons - Morphic M2 [DSP Smoother Mastered].wav` (40 MB, 1-Pole DSP Control)
+- `/sdcard/Download/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].wav` (40 MB, Geometric Memory Master)
+- `/sdcard/Download/Chasing Horizons - Morphic M3 vs M0 [Geometric Delta +30dB].wav` (40 MB, Geometric Delta amplified +30 dB, raw RMS -110.7 dBFS)
+- `/sdcard/Download/Chasing Horizons - Morphic M3 vs M1 [Memory Dynamics Delta +30dB].wav` (40 MB, Memory dynamics delta amplified +30 dB, raw RMS -68.5 dBFS)
 
 ##### 7. Formal Listening Audition Verdict & Production Champion Status
 - **Device Owner Assessment**: In formal listening audition on Samsung Galaxy S25 Ultra hardware across the level-matched test tracks (-11.02 LUFS, -1.00 dBTP), the owner declared:
   > *"M3 Mastered is by far fave! incredible!"*
 - **Acoustic Confirmation**: Mode 3 (`GeometricMemory`) has officially earned champion status. The dual-timescale symplectic resonant memory dynamics successfully translate the mathematical properties of conservative phase rotation and selective dissipation into audibly superior high-frequency microdynamics: an open, silky, non-fatiguing air band that breathes naturally with transient attacks, entirely free from the harsh high-frequency grain and spectral jitter produced by memoryless modulation.
 - **Production Archival Master**:
-  - [`/sdcard/Download/FLAC/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20-%20Morphic%20M3%20%5BGeometric%20Memory%20Mastered%5D.flac) (47 MB, 24-bit 48 kHz Lossless FLAC, -11.02 LUFS, -1.00 dBTP)
+  - `/sdcard/Download/FLAC/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].flac` (47 MB, 24-bit 48 kHz Lossless FLAC, -11.02 LUFS, -1.00 dBTP)
 
 #### 9. Phase III Milestone: Calibrated Hybrid Port-Hamiltonian M4.5 Material & Full-Archive Production Masters (2026-10-10)
 
@@ -831,7 +831,7 @@ Following device owner directive (*Option B: Self-Supervised CFM Mid-Band Flow E
   - **Abstention Discipline (`stopped_mid_abstention`)**: High frequencies intentionally extinguished via steep brickwall low-pass filter ($no\_upper = true$), ensuring the model learns strict abstention rather than fabricating spurious high-frequency energy.
 - **Continuous Flow Matching Ceiling Handover**:
   `MID_CEILING_HZ = 8000.0` locks the top of the CFM vector field exactly at the 8.0 kHz boundary where Stage 4 Port-Hamiltonian material takes over, establishing an unbroken, multi-scale acoustic restoration continuum from sub-bass to air shimmer.
-- **Frozen Model Checkpoint**: Saved and verified with SHA256 checksums in [`artifacts/rich-mid-v2/`](file:///data/data/com.termux/files/home/projects/highband/artifacts/rich-mid-v2/) (`basis.json`: `883b1bf94...`).
+- **Frozen Model Checkpoint**: Saved and verified with SHA256 checksums in `artifacts/rich-mid-v2/` (local historical path: `artifacts/rich-mid-v2`) (`basis.json`: `883b1bf94...`).
 
 ##### 2. Empirical Spectral Band Comparison: CFM-v2 vs Milestone v1.0.0-alpha.2
 
@@ -858,9 +858,9 @@ Following device owner directive (*Option B: Self-Supervised CFM Mid-Band Flow E
 - **Isolated CFM-v2 vs v1 Difference Track**: **-28.98 dBFS RMS** (Peak **-9.74 dBFS**).
 
 ##### 3. Delivered Production Masters in `/sdcard/Download/FLAC/`
-- [`/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (23.8 MB, 24-bit 48 kHz FLAC)
-- [`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (47.1 MB, 24-bit 48 kHz FLAC)
-- [`/sdcard/Download/FLAC/Fourier Longing - Normed - remixv5.5bc-cust-neg-77-93-45 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20-%20remixv5.5bc-cust-neg-77-93-45%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac) (39.0 MB, 329.9s, -11.02 LUFS, -1.00 dBTP, -59.4% sub-side leak, 0.7015 upper-mid flatness)
+- `/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac` (23.8 MB, 24-bit 48 kHz FLAC)
+- `/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac` (47.1 MB, 24-bit 48 kHz FLAC)
+- `/sdcard/Download/FLAC/Fourier Longing - Normed - remixv5.5bc-cust-neg-77-93-45 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac` (39.0 MB, 329.9s, -11.02 LUFS, -1.00 dBTP, -59.4% sub-side leak, 0.7015 upper-mid flatness)
 
 #### 11. Hyperspace Protocol: M4 Full Activation Tournament & ROACH EARS Human Preference Victory (2026-10-10)
 
@@ -921,7 +921,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub-Bass Side Leak: **-64.8%** reduction (0.115 -> 0.041)
   - Sub Instability: 0.103 -> 0.023 (-0.080 defect reduction)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/Feelin’ Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - **Chasing Horizons** (140.4s, Qualcomm Adreno 830 OpenCL GPU acceleration):
   - Hardware Acceleration: Adreno 830 GPU streaming across 18 WOLA chunks @ ~6.7s/chunk (~3x speedup vs CPU). Total pipeline runtime **168.8s** (faster than real-time playback).
   - Loudness: **-11.03 LUFS** (Before: -15.69 LUFS, +4.65 LU gain)
@@ -929,7 +929,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub-Bass Side Leak: **-64.7%** reduction (0.201 -> 0.071)
   - Sub Instability: 0.305 -> 0.072 (**-0.233 defect reduction**)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - **Path to Connection** (164.4s, Qualcomm Adreno 830 OpenCL GPU acceleration):
   - Hardware Acceleration: Adreno 830 GPU streaming across 21 WOLA chunks @ ~5.3s/chunk. Total pipeline runtime **160.8s** (faster than real-time playback).
   - Loudness: **-11.15 LUFS** (Before: -14.95 LUFS, +3.80 LU gain)
@@ -937,7 +937,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub-Bass Side Leak: **-55.9%** reduction (0.172 -> 0.076)
   - Sub Instability: 0.274 -> 0.099 (**-0.175 defect reduction**)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/Path to Connection [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Path%20to%20Connection%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/Path to Connection [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - **Verse 1 v 77** (285.0s / 4m 45s, Qualcomm Adreno 830 OpenCL GPU acceleration):
   - Hardware Acceleration: Adreno 830 GPU streaming across 36 WOLA chunks @ ~7.2s/chunk. Total pipeline runtime **351.4s**.
   - Loudness: **-11.02 LUFS** (Before: -15.49 LUFS, +4.47 LU gain)
@@ -945,7 +945,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub-Bass Side Leak: **-62.7%** reduction (0.067 -> 0.025)
   - Sub Instability: 0.038 -> 0.010
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/Verse 1 v 77 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Verse%201%20v%2077%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/Verse 1 v 77 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - **War Crimes Trending** (262.0s / 4m 22s, Qualcomm Adreno 830 OpenCL GPU acceleration):
   - Hardware Acceleration: Adreno 830 GPU streaming across 33 WOLA chunks @ ~7.4s/chunk. Stage 1 SFHT sub-bass activated (auth=0.85). Total pipeline runtime **352.0s**.
   - Loudness: **-11.14 LUFS** (Before: -14.00 LUFS, +2.86 LU gain)
@@ -954,7 +954,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub Instability: 0.496 -> 0.036 (**-0.460 defect reduction**)
   - Inter-Channel Correlation: 0.855 -> 0.929 (+0.074 mono focus)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/War Crimes Trending [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/War%20Crimes%20Trending%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/War Crimes Trending [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - **VextorDreamsDigital** (278.9s / 4m 39s, Qualcomm Adreno 830 OpenCL GPU acceleration):
   - Hardware Acceleration: Adreno 830 GPU streaming across 35 WOLA chunks @ ~6.3s/chunk. Total pipeline runtime **317.2s**.
   - Loudness: **-11.02 LUFS** (Before: -12.83 LUFS, +1.81 LU gain)
@@ -964,7 +964,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Inter-Channel Correlation: 0.826 -> 0.850 (+0.024)
   - Embedded Art: Front cover art preserved and embedded into FLAC
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/VextorDreamsDigital_normmaster [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/VextorDreamsDigital_normmaster%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/VextorDreamsDigital_normmaster [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - **Fourier Longing - Normed** (275.0s / 4m 35s, Qualcomm Adreno 830 OpenCL GPU acceleration):
   - Hardware Acceleration: Adreno 830 GPU streaming across 35 WOLA chunks @ ~6.6s/chunk. Stage 1 SFHT sub-bass activated (auth=0.85). Total pipeline runtime **376.9s**.
   - Loudness: **-11.02 LUFS** (Before: -12.65 LUFS, +1.63 LU gain)
@@ -973,7 +973,7 @@ All tracks rendered end-to-end with the upgraded Titan architectural additions (
   - Sub Instability: 0.763 -> 0.265 (**-0.498 defect reduction**)
   - Inter-Channel Correlation: 0.786 -> 0.828 (+0.042)
   - Mono Compatibility: **PASS** | Transient Timing: **PASS**
-  - Lossless FLAC: [`/sdcard/Download/FLAC/Fourier Longing - Normed [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`](file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac)
+  - Lossless FLAC: `/sdcard/Download/FLAC/Fourier Longing - Normed [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`
 - Storage Discipline: Phone storage strictly audited—all short 20s test samples, heavy interim test WAVs, and +30dB difference tracks discarded. Only complete full-song production masters delivered to user storage.
 
 #### 13. Next Evolution: Intent Validation, Coupled Clocks and Contrast Allocation (2026-10-11)
@@ -1126,7 +1126,7 @@ Full-song (140.4s) factorial ablation executed on `/sdcard/Download/Chasing Hori
 
 **Lossless Master Delivery**:
 The winning verified candidate master (`04_phase_consistency`) was encoded directly to 24-bit / 48 kHz lossless FLAC:
-- Path: [`/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac`](file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BRoach%20NextGen%20v1.2%20Candidate%5D.flac) (31 MB).
+- Path: `/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac` (31 MB).
 - Storage hygiene verified: zero scratch, excerpt, or interim WAV files present in `/sdcard/Download/`.
 
 ### 21. Roach NextGen v1.3: Quiet-Passage Mid Denoise & Kick Transient Un-Flattening
@@ -1358,7 +1358,7 @@ parity; 13 focused Rust checks and the OpenCL release build passed. Observed
 CPU/OpenCL RSS/HWM was about 37/78 MiB. See the
 [complete measured report](docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md).
 
-Across the 10 scenes with defined target ratios, all neural methods lose to
+Across the 10 scenes with defined target ratios, all four tested rich-mid solver arms lose to
 identity in paired missing-band complex NMSE: mean Euler8/Euler4/Heun2/midpoint
 1.224235/1.225212/1.223665/1.224643 versus identity 0.895706. Weighted whole-clip
 log-magnitude error instead improves from 61.49 dB to roughly 32 dB. Stopped-mid

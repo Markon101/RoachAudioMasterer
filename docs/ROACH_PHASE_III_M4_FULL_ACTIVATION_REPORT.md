@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary
 
-Following the research directive [`ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md`](file:///data/data/com.termux/files/home/projects/highband/docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md), we have transitioned the Port-Hamiltonian acoustic material from a partially dormant prototype into a **fully activated 4-dimensional dynamical organism**.
+Following the research directive [`ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md`](ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md), we have transitioned the Port-Hamiltonian acoustic material from a partially dormant prototype into a **fully activated 4-dimensional dynamical organism**.
 
 All four coordinates $(z_0, z_1, z_2, z_3)$ are now fully observable, participating in energy exchange, and directly mapped to frequency-differentiated musical functions:
 1. **Both Resonant Pairs Active:** Pair 1 $(\omega_1 = 16\text{ rad/s})$ governs Presence (8–12 kHz); Pair 2 $(\omega_2 = 32\text{ rad/s})$ governs Air Shimmer (12–20 kHz) and Sub-Bass Damping (< 60 Hz).
@@ -66,7 +66,7 @@ The Static High-Shelf control (`m5_static_shelf`, +0.8 dB) produced an unmastere
 All files are located on device storage in `/sdcard/Download` (WAV) and `/sdcard/Download/FLAC/` (24-bit FLAC):
 
 ### Primary Masters (Level-Matched to -11.02 LUFS, -1.00 dBTP):
-1. **`Chasing Horizons (1) [Highband Morphic M4 A2 Mastered].flac`** — **Recommended New Master Champion:** Fully coupled 4D Port-Hamiltonian material with presence/air split and state-driven damping.
+1. **`Chasing Horizons (1) [Highband Morphic M4 A2 Mastered].flac`** — **Historical candidate recommendation:** Fully coupled 4D Port-Hamiltonian material with presence/air split and state-driven damping. This dated recommendation does not supersede v1.3.1 Smooth or establish blinded preference.
 2. **`Chasing Horizons (1) [Highband Morphic M4 Mastered].flac`** — **Frozen User Favorite (Oct 9):** Completely preserved and untouched.
 3. **`Chasing Horizons (1) - Morphic M4 A4 [Nonlinear AVF Mastered].flac`** — Nonlinear quartic AVF material.
 4. **`Chasing Horizons (1) - Morphic M4 A3 [Adaptive Mastered].flac`** — Audio-flux adaptive coupling.

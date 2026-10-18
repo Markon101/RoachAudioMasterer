@@ -1,5 +1,12 @@
 # Current model and next controlled extensions
 
+Current navigation, 2026-10-18: the production configuration is v1.3.1 Smooth
+(`493cdca`), documented in [README](../README.md) and
+[the current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md). The body below
+is the historical native scene-v2 baseline, not the latest Mid-v3 checkpoint
+specification. See the separate [native Mid-v3 diagnostic](NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md)
+and [metadata audit](../artifacts/mission-20261018/training_metadata_audit.json).
+
 Status: Updated 2026-10-08. This describes the **implemented native scene v2** baseline
 from 2026-10-05. Older v0 and flow-v1 models remain available. Exact run evidence for v2 is in
 [SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md). Subsequent sprints expanded this system into:
@@ -31,8 +38,10 @@ The supplied cutoff/transition describe what is trusted and what may be added.
 There is no automatic damage classifier. A controlled test first low-passes an
 available reference and scores reconstruction against that reference. Direct
 Legacy `scene-restore` reads bounded regions of up to 12 seconds. Full-song streaming
-with 8.0-second chunk caching and equal-power cosine crossfading is now implemented in
+with historically tested 8.0-second chunk caching and weighted overlap-add is implemented in
 `rich-field-restore-song` and `rich-triband-restore`. This is an offline, noncausal model.
+Current rich-mid/triband CLI defaults are 10-second chunks and 2-second overlap;
+inspect the selected command's help rather than assuming historical settings.
 
 Stereo is converted to orthonormal mid/side: `M=(L+R)/sqrt(2)` and
 `S=(L-R)/sqrt(2)`. Both channels use shared weights. Each sees its own complex

@@ -66,7 +66,7 @@
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Resolve magnitude/complex-phase objective conflict and stopped-mid/aspiration adverse cases; regenerate procedural targets/controls and validate provenance, repeat development families before final seeds or WOLA promotion. No adaptive routing/training yet.",
+  "next_action": "Follow docs/LONG_COHERENCE_PLAN.md: deterministic WOLA controls, continuous24-48s procedural phrases, adverse-control regeneration, aligned boundary-offset baseline, then only measured opt-in audio corrections and final-mastering/blind gates. No adaptive routing/training yet.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -100,5 +100,8 @@
     }
   ],
   "external_paid_api_calls_in_this_continuation": 0,
-  "raw_audio_policy": "owner audio and private listening keys stay ignored/local; committed raw cases are procedural metrics only"
+  "raw_audio_policy": "owner audio and private listening keys stay ignored/local; committed raw cases are procedural metrics only",
+  "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
+  "documentation_review_base_commit": "394fe30",
+  "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary."
 }

@@ -1,5 +1,12 @@
 # v1 Initial Production Alpha Freeze Receipt
 
+Archive context, 2026-10-18: this receipt preserves the original tagged alpha
+configuration and historical listening decision. It is not the current default;
+v1.3.1 Smooth (`493cdca`) is the later promoted champion. Recorded device audio
+paths are historical delivery locations and may be absent after cleanup. Do not
+retag or alter the frozen release. See the
+[current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md).
+
 **Milestone**: `v1-initial-production-alpha`  
 **Package Version**: `1.0.0-alpha.1`  
 **Date**: October 9, 2026  

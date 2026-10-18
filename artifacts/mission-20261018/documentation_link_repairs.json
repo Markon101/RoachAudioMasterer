@@ -1,0 +1,511 @@
+{
+  "schema": "documentation-local-uri-repair-v1",
+  "source_base": "394fe30",
+  "legacy_checkout_alias_verified": true,
+  "repairs": [
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 625,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_audio.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/gtf_phase2_audit/gtf_audio.wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 626,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/morphic_audio.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/gtf_phase2_audit/morphic_audio.wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 627,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_benchmark_report.json",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/gtf_phase2_audit/gtf_benchmark_report.json`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 664,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20%5BHighband%20Morphic%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons [Highband Morphic Mastered].wav`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 665,
+      "original_uri": "file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 666,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 700,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons (1) [Highband Morphic Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 701,
+      "original_uri": "file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 702,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20(1)%20%5BHighband%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons (1) [Highband Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 756,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M0%20%5BBypass%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons - Morphic M0 [Bypass Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 757,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M1%20%5BMemoryless%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons - Morphic M1 [Memoryless Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 758,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M2%20%5BDSP%20Smoother%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons - Morphic M2 [DSP Smoother Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 759,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M3%20%5BGeometric%20Memory%20Mastered%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 760,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M3%20vs%20M0%20%5BGeometric%20Delta%20+30dB%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons - Morphic M3 vs M0 [Geometric Delta +30dB].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 761,
+      "original_uri": "file:///sdcard/Download/Chasing%20Horizons%20-%20Morphic%20M3%20vs%20M1%20%5BMemory%20Dynamics%20Delta%20+30dB%5D.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/Chasing Horizons - Morphic M3 vs M1 [Memory Dynamics Delta +30dB].wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 768,
+      "original_uri": "file:///sdcard/Download/FLAC/Chasing%20Horizons%20-%20Morphic%20M3%20%5BGeometric%20Memory%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Chasing Horizons - Morphic M3 [Geometric Memory Mastered].flac`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 834,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/artifacts/rich-mid-v2/",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`artifacts/rich-mid-v2/` (local historical path: `artifacts/rich-mid-v2`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 861,
+      "original_uri": "file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Feelin\u2019 Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 862,
+      "original_uri": "file:///sdcard/Download/FLAC/Chasing%20Horizons%20(1)%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Chasing Horizons (1) [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 863,
+      "original_uri": "file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20-%20remixv5.5bc-cust-neg-77-93-45%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Fourier Longing - Normed - remixv5.5bc-cust-neg-77-93-45 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 924,
+      "original_uri": "file:///sdcard/Download/FLAC/Feelin%E2%80%99%20Catchy%20ext%20v1.2.2.2.2.2%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Feelin\u2019 Catchy ext v1.2.2.2.2.2 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 932,
+      "original_uri": "file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Chasing Horizons [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 940,
+      "original_uri": "file:///sdcard/Download/FLAC/Path%20to%20Connection%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Path to Connection [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 948,
+      "original_uri": "file:///sdcard/Download/FLAC/Verse%201%20v%2077%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Verse 1 v 77 [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 957,
+      "original_uri": "file:///sdcard/Download/FLAC/War%20Crimes%20Trending%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/War Crimes Trending [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 967,
+      "original_uri": "file:///sdcard/Download/FLAC/VextorDreamsDigital_normmaster%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/VextorDreamsDigital_normmaster [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 976,
+      "original_uri": "file:///sdcard/Download/FLAC/Fourier%20Longing%20-%20Normed%20%5BHighband%20Morphic%20M4%20Calibrated%20CFM-v2%20Mastered%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Fourier Longing - Normed [Highband Morphic M4 Calibrated CFM-v2 Mastered].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "RESULTS.md",
+      "line_before_repair": 1129,
+      "original_uri": "file:///sdcard/Download/FLAC/Chasing%20Horizons%20%5BRoach%20NextGen%20v1.2%20Candidate%5D.flac",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.2 Candidate].flac`",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 66,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "classification": "tracked_repository_link",
+      "replacement": "[`docs/PERCEPTUAL_CALIBRATION_RESULTS.md`](PERCEPTUAL_CALIBRATION_RESULTS.md)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 108,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/rich_low.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/rich_low.rs`](../src/rich_low.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 109,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/rich_mid.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/rich_mid.rs`](../src/rich_mid.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 110,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/rich_field.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/rich_field.rs`](../src/rich_field.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 111,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/scene_clean.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/scene_clean.rs`](../src/scene_clean.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 112,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/master.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/master.rs`](../src/master.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 113,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/rich_synth.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/rich_synth.rs`](../src/rich_synth.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 114,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/dsp.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/dsp.rs`](../src/dsp.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/AGENT_SESSION_BRIEFING.md",
+      "line_before_repair": 115,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/src/main.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/main.rs`](../src/main.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "line_before_repair": 58,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/scene_clean.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/scene_clean.rs`](../src/scene_clean.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "line_before_repair": 61,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/spatial.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/spatial.rs`](../src/spatial.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "line_before_repair": 65,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/scene_stats.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/scene_stats.rs`](../src/scene_stats.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "line_before_repair": 70,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/musical_intent.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/musical_intent.rs`](../src/musical_intent.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "line_before_repair": 72,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/RoachAudioMasterer/src/main.rs",
+      "classification": "tracked_repository_link",
+      "replacement": "[`src/main.rs`](../src/main.rs)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 32,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_a_commutator.py",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_a_commutator.py`](../analysis/phase3/pilot_a_commutator.py)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 33,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_a_results.json",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_a_results.json`](../analysis/phase3/pilot_a_results.json)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 58,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_b_reaction_reservoir.py",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_b_reaction_reservoir.py`](../analysis/phase3/pilot_b_reaction_reservoir.py)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 59,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_b_results.json",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_b_results.json`](../analysis/phase3/pilot_b_results.json)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 76,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/phase3_morphogenic_atlas/pilot_b_morphogenesis_256.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/phase3_morphogenic_atlas/pilot_b_morphogenesis_256.png`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 83,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_c_meanflow_distillation.py",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_c_meanflow_distillation.py`](../analysis/phase3/pilot_c_meanflow_distillation.py)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 84,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_c_results.json",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_c_results.json`](../analysis/phase3/pilot_c_results.json)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 103,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_d_port_hamiltonian.py",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_d_port_hamiltonian.py`](../analysis/phase3/pilot_d_port_hamiltonian.py)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "line_before_repair": 104,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/analysis/phase3/pilot_d_results.json",
+      "classification": "tracked_repository_link",
+      "replacement": "[`analysis/phase3/pilot_d_results.json`](../analysis/phase3/pilot_d_results.json)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 28,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/morphic_primer_1024.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`morphic_primer_1024.png` (local historical path: `/sdcard/Download/MorphicAtlas/morphic_primer_1024.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 29,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/channel_density.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`channel_density.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_density.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 30,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/channel_streamfunction.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`channel_streamfunction.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_streamfunction.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 31,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/channel_ftle_stretching.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`channel_ftle_stretching.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_ftle_stretching.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 32,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/channel_topology_interface.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`channel_topology_interface.png` (local historical path: `/sdcard/Download/MorphicAtlas/channel_topology_interface.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 33,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/baseline_curl_noise.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`baseline_curl_noise.png` (local historical path: `/sdcard/Download/MorphicAtlas/baseline_curl_noise.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 34,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/sequence/frame_00.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`sequence/frame_00.png` (local historical path: `/sdcard/Download/MorphicAtlas/sequence/frame_00.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "line_before_repair": 34,
+      "original_uri": "file:///sdcard/Download/MorphicAtlas/sequence/frame_09.png",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`sequence/frame_09.png` (local historical path: `/sdcard/Download/MorphicAtlas/sequence/frame_09.png`)",
+      "local_target_present_at_audit": true
+    },
+    {
+      "file": "docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md",
+      "line_before_repair": 365,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_audio.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/gtf_phase2_audit/gtf_audio.wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md",
+      "line_before_repair": 366,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/morphic_audio.wav",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/gtf_phase2_audit/morphic_audio.wav`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md",
+      "line_before_repair": 367,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/runs/gtf_phase2_audit/gtf_benchmark_report.json",
+      "classification": "local_historical_reference_not_published",
+      "replacement": "`runs/gtf_phase2_audit/gtf_benchmark_report.json`",
+      "local_target_present_at_audit": false
+    },
+    {
+      "file": "docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_REPORT.md",
+      "line_before_repair": 13,
+      "original_uri": "file:///data/data/com.termux/files/home/projects/highband/docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md",
+      "classification": "tracked_repository_link",
+      "replacement": "[`ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md`](ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md)",
+      "local_target_present_at_audit": true
+    }
+  ]
+}

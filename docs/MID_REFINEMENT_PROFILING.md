@@ -110,15 +110,18 @@ Choose `--backend cpu` for reference measurements. Keep matched inputs, checkpoi
 steps, cutoffs and chunk sizes when comparing paths. Do not reuse cached chunks
 as measurements of refinement. Profiling leaves the numerical model unchanged;
 the explicit research overrides change feature preparation, not integration.
-the tests use the frozen tracked `artifacts/rich-mid-v3/basis.json` trained
+The tests use the frozen tracked `artifacts/rich-mid-v3/basis.json` trained
 checkpoint, compare on/off states and waveforms exactly, and exercise both cache
 paths at an injected small threshold. The fixture is procedural, not owner audio.
 
 ## Cache budget investigation
 
-The owner permits a modest RAM increase (2026-10-17). The optional 384 MiB
-full-template research candidate can now be compared with the measured fallback
-and proposed compact preparation. Ordinary defaults remain unchanged.
+The owner permits a modest RAM increase (2026-10-17). The 384 MiB full-template
+qualification has since completed: the best 9.27% median time reduction failed
+its 10% gate. Larger host batches subsequently reached only 5.08%, also failing.
+See [cache results](MID_CACHE_BASELINE_RESULTS.md) and
+[host-batch results](HOST_BATCH_RESULTS_20261018.md). Ordinary defaults remain
+64 MiB/8192 rows; these research controls are not promoted optimizations.
 At 1500–8000 Hz, a ten-second chunk has 1878 frames and 138 modeled bins;
 two active M/S channels require 518328 rows and 393929280 payload bytes
 (375.68 MiB). Eight seconds requires 315269280 bytes (300.66 MiB).

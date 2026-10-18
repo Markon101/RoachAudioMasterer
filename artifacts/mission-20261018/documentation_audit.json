@@ -1,0 +1,804 @@
+{
+  "schema": "roach-documentation-review-v1",
+  "source_base": "394fe30",
+  "preexisting_markdown_count": 72,
+  "archive_reviewer_file_count": 59,
+  "current_document_review_count": 13,
+  "added_documents": [
+    "docs/README.md",
+    "docs/LONG_COHERENCE_PLAN.md"
+  ],
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "24a0a21ab461527c445b40719d7b0b62a493b95f1a4f216396e896e372859621",
+      "role": "Current execution policy",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md",
+      "sha256": "18125f185c69ccdf5a5c10cecae34264e36b9f5f09b0d68231ad88c96051d940",
+      "role": "Superseded historical checkpoint",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
+      "sha256": "b0335e5b08c8e1b366bcfa1a24ea125ff9d06c9285e2f712e0c2c0253528c805",
+      "role": "Current continuation checkpoint",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "HANDOVER_NEXT_EVOLUTION.md",
+      "sha256": "0a45c18a2f3bd74f735c6fa75cd71e29ff88b624ef09b4a2a24f09f0202099fc",
+      "role": "Historical snapshot with current pointer",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "README.md",
+      "sha256": "43519a6b5a21663179b81acaf8c72f9735cbe781bdd8f0da8fcb627eec8d9d37",
+      "role": "Current entry point and scoped legacy examples",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "RESULTS.md",
+      "sha256": "355c189952b74ac7ffbdcb02744ee5c8b6129a3cf21ed505403bb07bc31a22cd",
+      "role": "Versioned evidence ledger; latest Sections24\u201327",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "VALIDATION.md",
+      "sha256": "3f938978accd712d43663fb0c27a3fd3b525129ab55a54f5545ad623d4449e2f",
+      "role": "Versioned validation ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "artifacts/README.md",
+      "sha256": "7e57e92deb0a15ddc5f4791f664b6f06c57ce3e41fa25b6d0ffd5b95c4f0e2a0",
+      "role": "Historical artifact catalog/receipt",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "artifacts/next-evolution-v1/README.md",
+      "sha256": "1e346b7ddce956b2d9401dd3dfd48f43289429a7dbfa1b7ba699e4d4291364f1",
+      "role": "Historical artifact catalog/receipt",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "artifacts/punch-controls-v1/README.md",
+      "sha256": "c268dcd22497373e2e236db5216b7b055a1a49b8780fba6f880c53f782dccb7c",
+      "role": "Historical artifact catalog/receipt",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "artifacts/rich-field-v1/README.md",
+      "sha256": "aba75e8330f2bfce15298a901545cd5b758e4c33ef6ccbcbdce8684541aaf9ad",
+      "role": "Historical artifact catalog/receipt",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/AGENT_SESSION_BRIEFING.md",
+      "sha256": "a6185f589b4ae33d2042f22ac80bcafc4bcdc33f9e3dbdd04ca67018f5653ec6",
+      "role": "Current policy plus explicitly historical lineage",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "3b2968b8cae2eb27a7cd75e8579254baa8207aea1acecb116a84573b8cc0ae17",
+      "role": "Current project contract and unimplemented goals",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/BLIND_LISTENING_PROTOCOL.md",
+      "sha256": "ecd04e7ff0cf532d8cd0befe4ad7cb64c1a4563fed6712696b7e84ca9bf71d60",
+      "role": "Current controlled-listening protocol",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/CORRECTED_ADJOINT_FLOW_PLAN.md",
+      "sha256": "d2c98d91246d24ee6e8071d71d07ac25ec25e80c45bb626ad7ae442738233581",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/CORRECTED_ADJOINT_FLOW_RESULTS.md",
+      "sha256": "bd1a4e582e7ffd02fc0fdcd2285769aad95e1c06f889969969705249358d4397",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/CURRENT_MODEL.md",
+      "sha256": "cd775377ade9720669430285d2c40ef247ab3e5aba28f58f6096385a44cb31ca",
+      "role": "Historical scene-v2 specification; current pointer",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/DYNAMICS_V1_PLAN.md",
+      "sha256": "be78fa0a7d09684f9ebbb9db66a176e47e730efc3a6cacb88ff46206ab80a2fd",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/DYNAMICS_V1_RESULTS.md",
+      "sha256": "1f344cb72d0535e3f2708d0f31bd23dd921515657887b5f13e5ee389a443842c",
+      "role": "Historical failed utility gate; no promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/DYNAMICS_V2_PLAN.md",
+      "sha256": "69b8e8b8be233afdffc4cf33ff0aae7040bb242e4c710c4a13dc96bfc2d074c3",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/DYNAMICS_V2_RESULTS.md",
+      "sha256": "f3bad7a74bfb72567770384dfbf190ef1ba1125f727b38ea7040a8fef5934b8e",
+      "role": "Historical demoted pilot; no promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/EPISTEMIC_STANDARDS.md",
+      "sha256": "8c98ef0c95437003e067f81b6f65d4d35552c76c1a1f117558b6bec22f08cfd9",
+      "role": "Current evidence-classification policy",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/FLOW_PLAN.md",
+      "sha256": "0acdf1b997a0c1261d3f71edc75064acea21a83eb13caaaf365d3f87d1ce3ac9",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/FLOW_RESULTS.md",
+      "sha256": "484f47d49e643d894ba8879ba566c659f73b60b3e049436cd292c54b2d1fa26d",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/HOST_BATCH_PLAN_20261018.md",
+      "sha256": "918115462ed5a26eba906f9f931636390b1dfc6c2d8cb79057a8c1805dd42c1f",
+      "role": "Dated latest mission plan/result; scope as stated",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/HOST_BATCH_RESULTS_20261018.md",
+      "sha256": "e45435b9d36473f978dc69549a882348ef75824a95c36c9fa3996668076b0038",
+      "role": "Dated latest mission plan/result; scope as stated",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/HYPERSPACE_TEAM_A_LIE_COUPLING.md",
+      "sha256": "341723b817742b283430834e9364ef7e77f690c39a119db498580ec33cdcc962",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/LISTENING_RESTORATION_20261018.md",
+      "sha256": "96fa92943b9ab9778a4e9088864d945d40b4aa909c6d7a8eb78cd20055cf5f96",
+      "role": "Dated latest mission plan/result; scope as stated",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/LONGER_TRAINING_PLAN.md",
+      "sha256": "256c368d15bd00496434936b1a900cea105340ddeb08d49a243153ae671df828",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/LONGER_TRAINING_RESULTS.md",
+      "sha256": "e8b2f3789002b1b8a158cf65e18f359822f8d900ee19a0982a46e4da64709b61",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/MICROSTRUCTURE_SHIMMER_AUDIT.md",
+      "sha256": "eff07c61cc9223f92f57ba09c85f50877f8b7b564449e2fc85b5e1a96d302978",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/MID_BAND_FLOW_RESULTS.md",
+      "sha256": "01877e5c4be064841cd9945cce44d3d9283b7ba76afde51b1e8f7644f8933589",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/MID_CACHE_BASELINE_RESULTS.md",
+      "sha256": "e1486c0ff1578e82adc2372effb4d98ebaed8359bc9545c8ccc437653d06d007",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/MID_REFINEMENT_PROFILING.md",
+      "sha256": "1095df4a4927a5d94e1cecebfa727cc505dd0e3e01c9f9f4da4badb82ca4b1af",
+      "role": "Current profiler reference; failed trials documented",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/NATIVE_LONGER_PLAN.md",
+      "sha256": "80f54bfc6bc3722cd506c440360b40b2803736e76dd117d6ab168ae557cfcf10",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/NATIVE_LONGER_RESULTS.md",
+      "sha256": "ddbc31ae09f3bb079524d750b6411b595b16db1bcb403b957d9fea7cb959cfb7",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
+      "sha256": "5febcb7b49bd3d40d6f123dca6d8c1bb95e6b949dfdc742898a03ee922f40faf",
+      "role": "Dated latest mission plan/result; scope as stated",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/NATIVE_MID_SOLVER_PHASE_A_PLAN.md",
+      "sha256": "cd7b11602823e22923123d200b55197544c660678e0bb9b552ca2ec1089d099c",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/NEXT_EVOLUTION_PLAN.md",
+      "sha256": "a186773316d7c0e44094496e8db894f3c5b8f8f783275af56db1fb86d31633d0",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/NEXT_EVOLUTION_RESULTS.md",
+      "sha256": "3039e6abd983693d6ddd62d5ac7fff5747c42b159d97203b7f4b9793846f9efb",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/OPENCL.md",
+      "sha256": "ef13534da4bbf29f5fd8522a163af8ccdfbdba908890bcf29015bc10fdadbe64",
+      "role": "Backend engineering reference; scope by selected command",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PERCEPTUAL_CALIBRATION_RESULTS.md",
+      "sha256": "dcefb6acd674d64bb6756bc2b8c91ba1257e350c2222c6698ca8c07cb842d274",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PHASE3_ARCHITECTURE_DECISIONS.md",
+      "sha256": "66955b88733c9c2923a68cbcc84be144d7e267303f6a70136f4dba19873ad8f7",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PHASE3_GATE1_LAB_REPORT.md",
+      "sha256": "22c48fcc2dba524783395df5996d72ffcd0fca270a1c69b37635e3c1e97084e0",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PHASE3_GATE2_ARTIFACTS_REPORT.md",
+      "sha256": "164aaff5a028b1d8e54cb50fa3e83a658ce1579a016b32523f20d2e1088af750",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PHASE3_M4_ARCHITECTURE_DECISIONS.md",
+      "sha256": "097f9ecef2dd44e5783b1bb79bd74a6f1fcbc31187370ccaa3590fc5c03a3335",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PHASE3_MATH_TO_ALGORITHMS.md",
+      "sha256": "05e88505cb48e14dab6a3e4b07c67fabeea675f04696f71eb69ee1cbbd486b51",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PUNCH_CONTROL_PLAN.md",
+      "sha256": "d7ab1b660239cf3475031ac6a81bb6eed5b3e0a9059c4c7f97c188dc373aecf7",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/PUNCH_CONTROL_RESULTS.md",
+      "sha256": "3b4776edbe968cae9c3c244830228692c6a81d5403ba9bff36aaa8b766b46768",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/REFERENCES.md",
+      "sha256": "1b35667700850c3066646ca9ee9c33033366d29bf8ae04757f810093c5e01f8e",
+      "role": "Method provenance and primary references",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/RESEARCH_DIRECTION.md",
+      "sha256": "9dc27878accfa5d399606a74e9895e68e09e71ad3490a531ed876df25bf1c902",
+      "role": "Historical literature/proposal snapshot",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/RESEARCH_GEOMETRIC_TRANSPORT_FLOW.md",
+      "sha256": "d831cb5b94a2a4338834a1ba3386b067512077f14b4fbb138d9d9b60edd3c8b7",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/RESEARCH_MICROSTRUCTURE_SYNTHESIS.md",
+      "sha256": "1cf2484e7402a7440ca188f87e56abae2486f6705cb5605e9f44c57002ae01d8",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/RICH_SPRINT_PLAN.md",
+      "sha256": "b9c22bec7420c56ec669a401699477f48d9018cd6e2559be2dd728bec65b7e4b",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/RICH_SPRINT_RESULTS.md",
+      "sha256": "745135ec23b83e00090b44e22eba960b06684423389f12ec16d4bff092b0532e",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_CONTINUATION.md",
+      "sha256": "475e30c8f8a71d9c4abf38d7b915152a99dd42c601efce9b0572c2a23c5cbb3e",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/ROACH_PHASE_III_M4_FULL_ACTIVATION_REPORT.md",
+      "sha256": "8daf2e7412f63b7c04fc15b4f2908f70095a33a3174a70940fe8c12c1b859484",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/ROACH_PHASE_III_MATHEMATICAL_MOONSHOT.md",
+      "sha256": "1e313914b0f5e69300006f29572fb9c28e2c898e9051252eaa6756bb3383ebe5",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SCENE_V2_PLAN.md",
+      "sha256": "5f8bc36aeabb90472a5b0d05e9b98c3f0b4c50cf041f84c2f854006dd81343b2",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SCENE_V2_RESULTS.md",
+      "sha256": "bdaa30fd58f5c333e61712bf30259dd5cf3e5883d904a45db94dc0cc13c65e69",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SPRINT1_CLEAN_AND_SPEED_PLAN.md",
+      "sha256": "c2c7f67a89bda23d7c378350eac5d3f35b3c4f6091d2ccfcc7975682c0ecf046",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SPRINT2_MID_FLOW_PLAN.md",
+      "sha256": "a7d8ba2be19fc337e9a40fd64ffac07648f3c492daa883f2eef7ce509786b149",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SPRINT3_TRIBAND_PLAN.md",
+      "sha256": "a4a0fada20857b4cba22d98fc443a4d223d449c0cd8482131aa1ac456a47779a",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SPRINT3_TRIBAND_RESULTS.md",
+      "sha256": "706b943d38cd35ceec5716ed04c2e45b0c25e97ac3e3ec9c4baa3478777e8f3e",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md",
+      "sha256": "55f17a3d255645b10801d0b854b36c1c679bf2201a7bc0db12b0e379989949b4",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/SPRINT5_AUTONOMOUS_SPECIALISTS_AND_CRITICS.md",
+      "sha256": "f0338fca4dad0e3fa7e4c7ec311782b5a33e20aa9f8d8ad452d13d474a3e8d3c",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/STAGE_AUDIT_STATUS.md",
+      "sha256": "5054b97c7f1506220fab84c9d715e5317c87effe8d98b1df416f90a19bec4243",
+      "role": "Current measurement foundation; ledger incomplete",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/STREAK_PLAN.md",
+      "sha256": "f30aa0b89df18fc81c382d19e6c107bdb44f29078420fd7b3aca18c9fd93e6ba",
+      "role": "Historical frozen plan/proposal; not current task ledger",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/STREAK_RESULTS.md",
+      "sha256": "64bd79c1f618e0e03c0a442df69e49f547574ecc86a5da6bb101db405bf59a6c",
+      "role": "Historical scoped evidence; not current promotion",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/TITAN_TRANSFER.md",
+      "sha256": "c33d654381678f1dea8c77636c5d8e70247e7cc4ad1959c98f8b65319e0d9d32",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/UNDEGRADED_TEST.md",
+      "sha256": "793ad1d37dcb831831b45c090fc9d79fef6eb8bb2c36c6acfe902494a8f4f4e9",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/V1_ALPHA_FREEZE.md",
+      "sha256": "eb2a7f814f7458f74c4e485054a156460d1382ab342583d9c56f20d7a6831b1e",
+      "role": "Historical design/proposal/reference; read stated status",
+      "reviewed_by": "archive_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "60e7f94e9a02cdae5d23ac1d7fdb45d276d570d2175fc8d2c25b86ed7a5dedb2",
+      "role": "New proposed plan/navigation",
+      "reviewed_by": "active_reviewer_and_integrator"
+    },
+    {
+      "path": "docs/LONG_COHERENCE_PLAN.md",
+      "sha256": "64f8c488816721400092f0f35338bf925cc5e4b46435d652397a94b5bfeafa34",
+      "role": "New proposed plan/navigation",
+      "reviewed_by": "active_reviewer_and_integrator"
+    }
+  ],
+  "local_markdown_targets_checked": 280,
+  "missing_local_targets": [],
+  "generated_report_self_links": 0,
+  "file_uri_links_repaired": 63,
+  "readme_cli_help_checks": [
+    {
+      "document": "README.md",
+      "arguments": [
+        "auto-master",
+        "--input",
+        "song.wav",
+        "--auto-tune",
+        "--backend",
+        "opencl",
+        "--sfht-model",
+        "artifacts/rich-low-sfht-v2/basis.json",
+        "--mid-model",
+        "artifacts/rich-mid-v3/basis.json",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--clock-transient-punch",
+        "--phase-consistency",
+        "0.5",
+        "--target-lufs",
+        "-13.0",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "runs/master-output"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "auto-master",
+        "--input",
+        "song.wav",
+        "--auto-tune",
+        "--no-glue",
+        "--max-limiter-gr-db",
+        "2",
+        "--no-export-sdcard",
+        "--out",
+        "runs/fresh-punch-control"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "auto-master",
+        "--input",
+        "song.wav",
+        "--auto-tune",
+        "--coupled-clocks",
+        "--contrast-budget",
+        "--no-export-sdcard",
+        "--out",
+        "runs/new-contrast-experiment"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "auto-master",
+        "--input",
+        "song.wav"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "auto-master",
+        "--input",
+        "song.wav"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "rich-triband-restore",
+        "--input",
+        "song.wav",
+        "--sfht-model",
+        "artifacts/rich-low-sfht-v2/basis.json",
+        "--mid-model",
+        "artifacts/rich-mid-v3/basis.json",
+        "--out",
+        "runs/song-restore"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "evaluate",
+        "--model",
+        "runs/train/model.json",
+        "--backend",
+        "opencl",
+        "--out",
+        "runs/eval-gpu"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "benchmark",
+        "--model",
+        "runs/train/model.json",
+        "--out",
+        "runs/bench",
+        "--foreground-confirmed"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "evaluate-wav",
+        "--input",
+        "excerpt.wav",
+        "--model",
+        "runs/train/model.json",
+        "--cutoff",
+        "6000",
+        "--transition",
+        "500",
+        "--out",
+        "runs/song-test"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "flow-train",
+        "--seed",
+        "20000",
+        "--steps",
+        "2000",
+        "--out",
+        "runs/flow-train"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "flow-evaluate",
+        "--model",
+        "runs/flow-train/flow.json",
+        "--deterministic",
+        "artifacts/v0/model.json",
+        "--seed",
+        "140000",
+        "--count",
+        "48",
+        "--backend",
+        "opencl",
+        "--out",
+        "runs/flow-test"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "flow-restore",
+        "--input",
+        "excerpt-degraded.wav",
+        "--model",
+        "artifacts/flow-v1/flow.json",
+        "--cutoff",
+        "6000",
+        "--transition",
+        "500",
+        "--strength",
+        "0.25",
+        "--out",
+        "runs/flow-restored.wav"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "scene-train",
+        "--seed",
+        "40000",
+        "--steps",
+        "600",
+        "--out",
+        "runs/native-det"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "scene-train",
+        "--seed",
+        "40000",
+        "--steps",
+        "600",
+        "--flow-prior",
+        "runs/native-det/model.json",
+        "--backend",
+        "opencl",
+        "--out",
+        "runs/native-flow"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "scene-evaluate",
+        "--model",
+        "runs/native-det/model.json",
+        "--flow",
+        "runs/native-flow/model.json",
+        "--seed",
+        "180000",
+        "--count",
+        "24",
+        "--backend",
+        "opencl",
+        "--out",
+        "runs/native-test"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "scene-restore",
+        "--model",
+        "artifacts/native-v2/deterministic.json",
+        "--flow",
+        "artifacts/native-v2/flow.json",
+        "--input",
+        "song.wav",
+        "--start",
+        "30",
+        "--seconds",
+        "10",
+        "--cutoff",
+        "6000",
+        "--transition",
+        "500",
+        "--controlled",
+        "--strength",
+        "1",
+        "--out",
+        "runs/native-listen"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "scene-train",
+        "--resume",
+        "runs/native-flow/training-state.json",
+        "--steps",
+        "1500",
+        "--flow-prior",
+        "runs/native-det/model.json",
+        "--backend",
+        "opencl",
+        "--out",
+        "runs/native-flow-1500"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    },
+    {
+      "document": "README.md",
+      "arguments": [
+        "rich-train",
+        "--det",
+        "artifacts/native-v2/deterministic.json",
+        "--flow",
+        "artifacts/native-longer-v2/flow3000.json",
+        "--steps",
+        "400",
+        "--backend",
+        "opencl",
+        "--out",
+        "runs/rich-sprint/gate400"
+      ],
+      "check": "Clap help only; no inference/filesystem execution",
+      "passed": true,
+      "error": null
+    }
+  ],
+  "external_links_not_live_checked": 98,
+  "production_source_changed": false,
+  "raw_experiment_receipts_preserved": true,
+  "limitations": [
+    "Local target existence and10linked local Markdown heading fragments checked; external URL uptime and source-code fragments were not live-validated.",
+    "Historical listening/performance observations were not repeated.",
+    "No entire historical test-suite claim; documentation-only checks and current receipt reconciliation."
+  ],
+  "next_audio_priority": "docs/LONG_COHERENCE_PLAN.md",
+  "local_markdown_anchors_checked": 10,
+  "anchor_check_warnings": [],
+  "independent_final_diff_review": "No material issue; reviewed historical-number preservation, URI destinations, current champion/defaults and hypothesis scope."
+}
