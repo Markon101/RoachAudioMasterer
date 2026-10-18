@@ -17,6 +17,13 @@ using at most eight available threads. The MiB limit covers estimated template
 plus Row payload, **not total process RSS**. No candidate speedup is established
 merely by providing this switch.
 
+`ROACH_MID_BATCH_ROWS` is a separate, profiling-gated host limit: default8192,
+exact multiples of8192 through65536. It changes feature preparation and the
+number of host predict calls, while OpenCL capacity remains8192. Large host calls
+are split internally into the same ordered device tiles. `host_batch_rows` is
+the configured limit, not the size of every tail batch. Disabling profiling
+restores8192. The largest feature matrix is46MiB; this is not a total-RSS bound.
+
 The restore directory receives a new `refinement_profile.jsonl`, one compact
 record per chunk. Auto-master uses `stage2_mid/refinement_profile.jsonl`.
 Schema v1 permits additive fields; readers must ignore unknown fields. Existing
@@ -44,7 +51,7 @@ velocity interpretation, field-result allocation, row enumeration, preparation,
 waveform synthesis, WOLA, disk I/O and JSON serialization are not included in
 those named components; these are not an exhaustive whole-chunk decomposition.
 NFE counts completed field evaluations; predictor batch count counts actual
-`predict` calls (8192 rows maximum in the existing Engine). OpenCL may internally
+`predict` calls (ordinary default8192 rows maximum per host call). OpenCL may internally
 split a call to its capacity; it reports summed events across those splits.
 
 Outer `prepare_ms` measures scene preparation (including STFT/features), and

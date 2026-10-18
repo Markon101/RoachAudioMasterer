@@ -59,6 +59,19 @@ fn optional_env_text(key: &str) -> Result<Option<String>> {
     }
 }
 
+fn research_batch_rows(profiling: bool, rows: Option<&str>) -> Result<usize> {
+    ensure!(
+        profiling || rows.is_none(),
+        "ROACH_MID_BATCH_ROWS requires both profiling and foreground gates"
+    );
+    let rows = rows.unwrap_or("8192").parse::<usize>()?;
+    ensure!(
+        (8192..=65536).contains(&rows) && rows % 8192 == 0,
+        "ROACH_MID_BATCH_ROWS must be multiples of 8192 through 65536"
+    );
+    Ok(rows)
+}
+
 fn write_refinement_record(
     file: &mut fs::File,
     chunk_index: usize,
@@ -628,6 +641,8 @@ pub fn restore_with_quiet_gate(
         cache_mib.as_deref(),
         cache_build.as_deref(),
     )?;
+    let batch_rows = optional_env_text("ROACH_MID_BATCH_ROWS")?;
+    let batch_rows = research_batch_rows(profiling, batch_rows.as_deref())?;
     if !out.exists() {
         new_run(out)?;
     }
@@ -649,6 +664,7 @@ pub fn restore_with_quiet_gate(
     if profiling {
         engine.set_profiling(true);
         engine.set_research_cache_config(cache_mib, cache_build)?;
+        engine.set_research_batch_rows(batch_rows)?;
     }
 
     let d = Damage {
@@ -1088,6 +1104,16 @@ mod tests {
         assert!(!profile_requested(false, true)?);
         assert!(profile_requested(true, false).is_err());
         assert!(profile_requested(true, true)?);
+        assert_eq!(research_batch_rows(false, None)?, 8192);
+        assert_eq!(research_batch_rows(true, None)?, 8192);
+        assert!(research_batch_rows(false, Some("8192")).is_err());
+        assert!(research_batch_rows(false, Some("32768")).is_err());
+        for rows in ["0", "1", "8191", "8193", "65535", "65537", "-8192", "invalid"] {
+            assert!(research_batch_rows(true, Some(rows)).is_err());
+        }
+        for rows in (8192..=65536).step_by(8192) {
+            assert_eq!(research_batch_rows(true, Some(&rows.to_string()))?, rows);
+        }
         assert_eq!(
             research_cache_options(false, None, None)?,
             (64, scene_engine::CacheBuild::Serial)

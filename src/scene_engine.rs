@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 use std::{fs, path::Path, time::Instant};
 
 const FIELD_CACHE_CAP_BYTES: usize = 64 * 1024 * 1024;
+const DEFAULT_HOST_BATCH_ROWS: usize = 8192;
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
@@ -88,6 +89,7 @@ pub struct RefinementProfile {
     pub integration_ms: f64,
     pub nfe: usize,
     pub predictor_batch_count: usize,
+    pub host_batch_rows: usize,
     pub memory_before: ProcessMemory,
     pub memory_after: ProcessMemory,
     pub terminal_state_fingerprint: String,
@@ -189,6 +191,7 @@ pub struct Engine {
     profile: Option<RefinementProfile>,
     cache_cap_bytes: usize,
     cache_build: CacheBuild,
+    batch_rows: usize,
 }
 struct CachedField {
     damage: Damage,
@@ -204,6 +207,7 @@ impl Engine {
             profile: None,
             cache_cap_bytes: FIELD_CACHE_CAP_BYTES,
             cache_build: CacheBuild::Serial,
+            batch_rows: DEFAULT_HOST_BATCH_ROWS,
         })
     }
     pub fn name(&self) -> &str {
@@ -217,6 +221,7 @@ impl Engine {
         if !enabled {
             self.cache_cap_bytes = FIELD_CACHE_CAP_BYTES;
             self.cache_build = CacheBuild::Serial;
+            self.batch_rows = DEFAULT_HOST_BATCH_ROWS;
         }
     }
     /// Research only. The restore entry point also validates both environment
@@ -229,6 +234,17 @@ impl Engine {
         );
         self.cache_cap_bytes = mib * 1024 * 1024;
         self.cache_build = build;
+        Ok(())
+    }
+    /// Change host feature/predict call batching only. The OpenCL predictor's
+    /// fixed 8192-row device capacity and kernel segments remain unchanged.
+    pub fn set_research_batch_rows(&mut self, rows: usize) -> Result<()> {
+        ensure!(self.profiling, "research host batching requires profiling");
+        ensure!(
+            (8192..=65536).contains(&rows) && rows % 8192 == 0,
+            "research host batch rows must be multiples of 8192 through 65536"
+        );
+        self.batch_rows = rows;
         Ok(())
     }
     pub fn take_profile(&mut self) -> Option<RefinementProfile> {
@@ -256,7 +272,7 @@ impl Engine {
         ceil_bin: usize,
     ) -> Result<[Vec<C>; 2]> {
         let mut result = zero_state(p);
-        let batch_size = 8192;
+        let batch_size = self.batch_rows;
         let mut rows = Vec::with_capacity(batch_size);
         let num_threads = std::thread::available_parallelism()
             .map(|n| n.get().min(8))
@@ -527,6 +543,7 @@ impl Engine {
             cache_required_bytes: required,
             cache_cap_bytes: cache_cap,
             cache_build_mode: self.cache_build,
+            host_batch_rows: self.batch_rows,
             cache_eligible: required <= cache_cap,
             memory_before: ProcessMemory::read(),
             ..RefinementProfile::default()
@@ -646,7 +663,7 @@ impl Engine {
         let num_threads = std::thread::available_parallelism()
             .map(|n| n.get().min(8))
             .unwrap_or(4);
-        let batch_size = 8192;
+        let batch_size = self.batch_rows;
         for (chunk_index, rows) in cache.rows.chunks(batch_size).enumerate() {
             let feature_start = self.profile.as_ref().map(|_| Instant::now());
             let start = chunk_index * batch_size * HEAD_INPUT;
@@ -831,7 +848,11 @@ mod tests {
             assert_eq!(profile.template_bytes + profile.rows_bytes, required);
             assert_eq!(profile.row_count, rows);
             assert_eq!(profile.nfe, 2);
-            assert_eq!(profile.predictor_batch_count, 2 * rows.div_ceil(8192));
+            assert_eq!(profile.host_batch_rows, DEFAULT_HOST_BATCH_ROWS);
+            assert_eq!(
+                profile.predictor_batch_count,
+                2 * rows.div_ceil(profile.host_batch_rows)
+            );
             assert!(profile.kernel_event_ms.is_none());
             assert!(profile.write_event_ms.is_none());
             assert!(profile.read_event_ms.is_none());
@@ -859,10 +880,19 @@ mod tests {
         let mut engine = Engine::new(&Model::new(71), "cpu")?;
         assert_eq!(engine.cache_cap_bytes, FIELD_CACHE_CAP_BYTES);
         assert_eq!(engine.cache_build, CacheBuild::Serial);
+        assert_eq!(engine.batch_rows, DEFAULT_HOST_BATCH_ROWS);
+        assert!(engine.set_research_batch_rows(32768).is_err());
         assert!(engine
             .set_research_cache_config(384, CacheBuild::Parallel)
             .is_err());
         engine.set_profiling(true);
+        for rows in [0, 1, 8191, 8193, 65535, 65537, usize::MAX] {
+            assert!(engine.set_research_batch_rows(rows).is_err());
+        }
+        for rows in (8192..=65536).step_by(8192) {
+            engine.set_research_batch_rows(rows)?;
+            assert_eq!(engine.batch_rows, rows);
+        }
         assert!(engine
             .set_research_cache_config(0, CacheBuild::Parallel)
             .is_err());
@@ -876,12 +906,82 @@ mod tests {
         engine.set_profiling(false);
         assert_eq!(engine.cache_cap_bytes, FIELD_CACHE_CAP_BYTES);
         assert_eq!(engine.cache_build, CacheBuild::Serial);
+        assert_eq!(engine.batch_rows, DEFAULT_HOST_BATCH_ROWS);
         let a = [vec![C::new(0.0, 0.0)], vec![C::new(0.0, 0.0)]];
         let b = [vec![C::new(-0.0, 0.0)], vec![C::new(0.0, 0.0)]];
         assert_ne!(
             terminal_state_fingerprint(&a),
             terminal_state_fingerprint(&b)
         );
+        Ok(())
+    }
+    #[test]
+    fn trained_mid_host_batch_parity_crosses_batch_boundaries() -> Result<()> {
+        let field = crate::rich_mid::MidField::load(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("artifacts/rich-mid-v3/basis.json")
+                .as_path(),
+        )?;
+        assert!(field.core.optimizer_steps > 0);
+        let model_fingerprint = field.core.fingerprint();
+        let audio = crate::native_audio::Audio {
+            rate: crate::native_dsp::RATE,
+            channels: vec![
+                (0..16384).map(|i| 0.12 * (i as f32 * 0.17).sin()).collect(),
+                (0..16384).map(|i| 0.09 * (i as f32 * 0.23).cos()).collect(),
+            ],
+        };
+        let d = Damage {
+            cutoff: 1500.0,
+            transition: 225.0,
+            power: 2.0,
+        };
+        let p = crate::scene_features::prepare(&audio, d, 11);
+        let prior = crate::scene_features::prior_state(&p, "harmonic");
+        let ceil_bin = (8000.0 * crate::native_dsp::FFT as f32 / crate::native_dsp::RATE as f32)
+            .floor() as usize
+            + 1;
+        let rows = p.active.iter().filter(|x| **x).count()
+            * p.frames
+            * ceil_bin.saturating_sub(d.cutoff_bin() + 1);
+        assert_eq!(rows, 18492, "fixture must cross two 8192-row boundaries");
+        let mut reference: Option<([Vec<C>; 2], Vec<Vec<f32>>, String)> = None;
+        for (mib, cached) in [(1, false), (64, true)] {
+            for batch_rows in [8192, 32768, 65536] {
+                let mut engine = Engine::new(&field.core, "cpu")?;
+                engine.set_profiling(true);
+                engine.set_research_cache_config(mib, CacheBuild::Serial)?;
+                engine.set_research_batch_rows(batch_rows)?;
+                let state = engine.refine_mode_bounded(
+                    &p,
+                    d,
+                    &prior,
+                    2,
+                    field.kind.mode(),
+                    Some(ceil_bin),
+                )?;
+                assert_ne!(state, prior, "trained field must change state");
+                let waveform = crate::rich_mid::mid_waveform(&p, d, 8000.0, &state, 1.0);
+                let profile = engine.take_profile().unwrap();
+                assert_eq!(profile.cache_used, cached);
+                assert_eq!(profile.cache_eligible, cached);
+                assert_eq!(profile.cache_cap_bytes, mib * 1024 * 1024);
+                assert_eq!(profile.host_batch_rows, batch_rows);
+                assert_eq!(profile.row_count, rows);
+                assert_eq!(profile.nfe, 2);
+                assert_eq!(profile.predictor_batch_count, 2 * rows.div_ceil(batch_rows));
+                assert_eq!(engine.model.fingerprint(), model_fingerprint);
+                if let Some((expected_state, expected_waveform, expected_fingerprint)) = &reference
+                {
+                    assert_eq!(&state, expected_state);
+                    assert_eq!(&waveform.channels, expected_waveform);
+                    assert_eq!(&profile.terminal_state_fingerprint, expected_fingerprint);
+                } else {
+                    reference =
+                        Some((state, waveform.channels, profile.terminal_state_fingerprint));
+                }
+            }
+        }
         Ok(())
     }
     #[test]
