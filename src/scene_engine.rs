@@ -9,7 +9,68 @@ use crate::{
 use anyhow::{ensure, Result};
 use rustfft::num_complex::Complex32 as C;
 use serde::{Deserialize, Serialize};
-use std::{fs, path::Path};
+use std::{fs, path::Path, time::Instant};
+
+const FIELD_CACHE_CAP_BYTES: usize = 64 * 1024 * 1024;
+
+/// Process-wide Linux accounting; VmHWM is not a per-chunk peak.
+#[derive(Clone, Debug, Default, Serialize)]
+pub struct ProcessMemory {
+    pub vm_rss_kib: Option<u64>,
+    pub process_high_water_kib: Option<u64>,
+}
+impl ProcessMemory {
+    pub fn read() -> Self {
+        let text = fs::read_to_string("/proc/self/status").unwrap_or_default();
+        let value = |key: &str| {
+            text.lines().find_map(|line| {
+                line.strip_prefix(key)?
+                    .split_whitespace()
+                    .next()?
+                    .parse()
+                    .ok()
+            })
+        };
+        Self {
+            vm_rss_kib: value("VmRSS:"),
+            process_high_water_kib: value("VmHWM:"),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, Serialize)]
+pub struct RefinementProfile {
+    pub frames: usize,
+    pub active_channels: usize,
+    pub band_start_bin: usize,
+    pub band_end_bin_exclusive: usize,
+    pub row_count: usize,
+    pub row_size_bytes: usize,
+    pub template_bytes: usize,
+    pub rows_bytes: usize,
+    pub cache_required_bytes: usize,
+    pub cache_cap_bytes: usize,
+    pub cache_eligible: bool,
+    pub cache_used: bool,
+    pub encoder_ms: f64,
+    pub cache_build_ms: f64,
+    pub feature_assembly_ms: f64,
+    pub inference_wall_ms: f64,
+    pub kernel_event_ms: Option<f64>,
+    pub write_event_ms: Option<f64>,
+    pub read_event_ms: Option<f64>,
+    pub integration_ms: f64,
+    pub nfe: usize,
+    pub predictor_batch_count: usize,
+    pub memory_before: ProcessMemory,
+    pub memory_after: ProcessMemory,
+}
+
+fn add_optional(sum: &mut Option<f64>, value: Option<f64>) {
+    if let Some(value) = value {
+        *sum = Some(sum.unwrap_or(0.0) + value);
+    }
+}
 #[derive(Clone, Serialize, Deserialize)]
 // Static feature-wise affine adaptation; related to FiLM (Perez et al., 2017),
 // https://arxiv.org/abs/1709.07871. No conditioning generator is implemented.
@@ -97,6 +158,8 @@ pub fn encode(m: &Model, p: &Prepared, adapter: Option<&Adapter>) -> Encoding {
 pub struct Engine {
     pub model: Model,
     head: Box<dyn Predictor>,
+    profiling: bool,
+    profile: Option<RefinementProfile>,
 }
 struct CachedField {
     damage: Damage,
@@ -108,10 +171,21 @@ impl Engine {
         Ok(Self {
             model: m.clone(),
             head: crate::scene_model::backend(&m.head, backend)?,
+            profiling: false,
+            profile: None,
         })
     }
     pub fn name(&self) -> &str {
         self.head.name()
+    }
+    /// Only restoration opts in; constructors and other users remain disabled.
+    pub fn set_profiling(&mut self, enabled: bool) {
+        self.profiling = enabled;
+        self.profile = None;
+        self.head.set_transfer_profiling(enabled);
+    }
+    pub fn take_profile(&mut self) -> Option<RefinementProfile> {
+        self.profile.take()
     }
     pub fn field(
         &mut self,
@@ -200,6 +274,7 @@ impl Engine {
         num_threads: usize,
         result: &mut [Vec<C>; 2],
     ) -> Result<()> {
+        let feature_start = self.profile.as_ref().map(|_| Instant::now());
         let mut x = vec![0.0f32; rows.len() * HEAD_INPUT];
         let step = (rows.len() + num_threads - 1) / num_threads;
         let chunks_slice = x.as_chunks_mut::<HEAD_INPUT>().0;
@@ -220,6 +295,9 @@ impl Engine {
                 });
             }
         });
+        if let (Some(start), Some(profile)) = (feature_start, &mut self.profile) {
+            profile.feature_assembly_ms += start.elapsed().as_secs_f64() * 1000.0;
+        }
         self.flush(p, state, mode, rows, &x, result)
     }
     fn flush(
@@ -231,7 +309,17 @@ impl Engine {
         x: &[f32],
         result: &mut [Vec<C>; 2],
     ) -> Result<()> {
+        let inference_start = self.profile.as_ref().map(|_| Instant::now());
         let y = self.head.predict(x, rows.len())?;
+        if let (Some(start), Some(profile)) = (inference_start, &mut self.profile) {
+            profile.inference_wall_ms += start.elapsed().as_secs_f64() * 1000.0;
+            profile.predictor_batch_count += 1;
+            add_optional(&mut profile.kernel_event_ms, self.head.kernel_ms());
+            if let Some((write, read)) = self.head.transfer_ms() {
+                add_optional(&mut profile.write_event_ms, Some(write));
+                add_optional(&mut profile.read_event_ms, Some(read));
+            }
+        }
         ensure!(y.iter().all(|x| x.is_finite()), "nonfinite shared head");
         for (r, y) in rows.iter().zip(y.as_chunks::<HEAD_OUTPUT>().0.iter()) {
             let i = r.time * BINS + r.bin;
@@ -346,6 +434,20 @@ impl Engine {
         mode: u8,
         ceil_bin: Option<usize>,
     ) -> Result<[Vec<C>; 2]> {
+        self.refine_with_cache_cap(p, d, prior, steps, mode, ceil_bin, FIELD_CACHE_CAP_BYTES)
+    }
+    // The cap parameter exists to exercise both existing paths with tiny tests.
+    // Production always supplies the frozen 64 MiB cap above.
+    fn refine_with_cache_cap(
+        &mut self,
+        p: &Prepared,
+        d: Damage,
+        prior: &[Vec<C>; 2],
+        steps: usize,
+        mode: u8,
+        ceil_bin: Option<usize>,
+        cache_cap: usize,
+    ) -> Result<[Vec<C>; 2]> {
         ensure!((1..=6).contains(&mode), "invalid refinement mode");
         ensure!(
             (1..=16).contains(&steps),
@@ -359,10 +461,31 @@ impl Engine {
         } else {
             (d.cutoff_bin() + 1, ceil_bin.unwrap_or(BINS).min(BINS))
         };
-        let e = encode(&self.model, p, None);
         let count =
             p.active.iter().filter(|x| **x).count() * p.frames * max_k.saturating_sub(min_k);
-        let cache = if count * (HEAD_INPUT * 4 + std::mem::size_of::<Row>()) <= 64 * 1024 * 1024 {
+        let required = count * (HEAD_INPUT * 4 + std::mem::size_of::<Row>());
+        self.profile = self.profiling.then(|| RefinementProfile {
+            frames: p.frames,
+            active_channels: p.active.iter().filter(|x| **x).count(),
+            band_start_bin: min_k,
+            band_end_bin_exclusive: max_k,
+            row_count: count,
+            row_size_bytes: std::mem::size_of::<Row>(),
+            template_bytes: count * HEAD_INPUT * 4,
+            rows_bytes: count * std::mem::size_of::<Row>(),
+            cache_required_bytes: required,
+            cache_cap_bytes: cache_cap,
+            cache_eligible: required <= cache_cap,
+            memory_before: ProcessMemory::read(),
+            ..RefinementProfile::default()
+        });
+        let encoder_start = self.profile.as_ref().map(|_| Instant::now());
+        let e = encode(&self.model, p, None);
+        if let (Some(start), Some(profile)) = (encoder_start, &mut self.profile) {
+            profile.encoder_ms = start.elapsed().as_secs_f64() * 1000.0;
+        }
+        let cache_start = self.profile.as_ref().map(|_| Instant::now());
+        let cache = if required <= cache_cap {
             let mut rows = Vec::with_capacity(count);
             let mut template = Vec::with_capacity(count * HEAD_INPUT);
             let zero = zero_state(p);
@@ -394,6 +517,10 @@ impl Engine {
         } else {
             None
         };
+        if let (Some(start), Some(profile)) = (cache_start, &mut self.profile) {
+            profile.cache_build_ms = start.elapsed().as_secs_f64() * 1000.0;
+            profile.cache_used = cache.is_some();
+        }
         let mut state = prior.clone();
         for j in 0..steps {
             let v = if let Some(cache) = &cache {
@@ -401,6 +528,10 @@ impl Engine {
             } else {
                 self.field_bounded(p, d, &e, &state, j as f32 / steps as f32, mode, max_k)?
             };
+            let integration_start = self.profile.as_ref().map(|_| Instant::now());
+            if let Some(profile) = &mut self.profile {
+                profile.nfe += 1;
+            }
             for c in 0..2 {
                 for (x, v) in state[c].iter_mut().zip(&v[c]) {
                     *x += *v / steps as f32;
@@ -413,6 +544,12 @@ impl Engine {
                     .all(|x| x.re.is_finite() && x.im.is_finite() && x.norm() < 64.0),
                 "scene integration exceeded declared finite-state bound"
             );
+            if let (Some(start), Some(profile)) = (integration_start, &mut self.profile) {
+                profile.integration_ms += start.elapsed().as_secs_f64() * 1000.0;
+            }
+        }
+        if let Some(profile) = &mut self.profile {
+            profile.memory_after = ProcessMemory::read();
         }
         Ok(state)
     }
@@ -430,6 +567,7 @@ impl Engine {
             .unwrap_or(4);
         let batch_size = 8192;
         for (chunk_index, rows) in cache.rows.chunks(batch_size).enumerate() {
+            let feature_start = self.profile.as_ref().map(|_| Instant::now());
             let start = chunk_index * batch_size * HEAD_INPUT;
             let mut x = cache.template[start..start + rows.len() * HEAD_INPUT].to_vec();
             let num_rows = rows.len();
@@ -453,6 +591,9 @@ impl Engine {
                     });
                 }
             });
+            if let (Some(start), Some(profile)) = (feature_start, &mut self.profile) {
+                profile.feature_assembly_ms += start.elapsed().as_secs_f64() * 1000.0;
+            }
             self.flush(p, state, mode, rows, &x, &mut result)?;
         }
         Ok(result)
@@ -528,6 +669,81 @@ pub fn encoder_backward(d: &Dense, p: &Prepared, e: &Encoding, de: &[f32], g: &m
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn refinement_profiling_is_exact_on_both_cache_paths() -> Result<()> {
+        let field = crate::rich_mid::MidField::load(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("artifacts/rich-mid-v3/basis.json")
+                .as_path(),
+        )?;
+        let mode = field.kind.mode();
+        let m = field.core;
+        assert!(m.optimizer_steps > 0);
+        assert!(m.head.weights[m.head.w2()..].iter().any(|x| *x != 0.0));
+        let fingerprint = m.fingerprint();
+        let audio = crate::native_audio::Audio {
+            rate: crate::native_dsp::RATE,
+            channels: vec![
+                (0..512).map(|i| 0.12 * (i as f32 * 0.17).sin()).collect(),
+                (0..512).map(|i| 0.09 * (i as f32 * 0.23).cos()).collect(),
+            ],
+        };
+        let d = Damage {
+            cutoff: 1500.0,
+            transition: 225.0,
+            power: 2.0,
+        };
+        let p = crate::scene_features::prepare(&audio, d, 11);
+        let prior = crate::scene_features::prior_state(&p, "harmonic");
+        let max_bin = d.cutoff_bin() + 17;
+        let rows = p.active.iter().filter(|x| **x).count() * p.frames * 16;
+        let required = rows * (HEAD_INPUT * 4 + std::mem::size_of::<Row>());
+        assert!(required > 0);
+        let mut reference = None;
+        for cap in [required, required - 1] {
+            let mut plain = Engine::new(&m, "cpu")?;
+            let mut profiled = Engine::new(&m, "cpu")?;
+            profiled.set_profiling(true);
+            let a = plain.refine_with_cache_cap(&p, d, &prior, 2, mode, Some(max_bin), cap)?;
+            let b = profiled.refine_with_cache_cap(&p, d, &prior, 2, mode, Some(max_bin), cap)?;
+            assert_eq!(a, b, "profiling changed the frozen field");
+            assert_ne!(a, prior, "fixture must exercise nonzero velocity");
+            assert!(plain.take_profile().is_none());
+            let wa = crate::rich_mid::mid_waveform(&p, d, 8000.0, &a, 1.0);
+            let wb = crate::rich_mid::mid_waveform(&p, d, 8000.0, &b, 1.0);
+            assert_eq!(wa.channels, wb.channels);
+            if let Some(reference) = &reference {
+                assert_eq!(reference, &a);
+            }
+            reference = Some(a);
+            let profile = profiled.take_profile().unwrap();
+            assert_eq!(profile.cache_used, cap == required);
+            assert_eq!(profile.cache_eligible, cap == required);
+            assert_eq!(profile.cache_required_bytes, required);
+            assert_eq!(profile.template_bytes + profile.rows_bytes, required);
+            assert_eq!(profile.row_count, rows);
+            assert_eq!(profile.nfe, 2);
+            assert_eq!(profile.predictor_batch_count, 2 * rows.div_ceil(8192));
+            assert!(profile.kernel_event_ms.is_none());
+            assert!(profile.write_event_ms.is_none());
+            assert!(profile.read_event_ms.is_none());
+            for time in [
+                profile.encoder_ms,
+                profile.cache_build_ms,
+                profile.feature_assembly_ms,
+                profile.inference_wall_ms,
+                profile.integration_ms,
+            ] {
+                assert!(time.is_finite() && time >= 0.0);
+            }
+            let json = serde_json::to_value(profile)?;
+            assert!(json["kernel_event_ms"].is_null());
+            assert!(json["memory_after"].get("process_high_water_kib").is_some());
+            assert_eq!(profiled.model.fingerprint(), fingerprint);
+        }
+        assert_eq!(m.fingerprint(), fingerprint);
+        Ok(())
+    }
     #[test]
     fn adapter_zero_exact_and_model_parameter_budget() {
         let m = Model::new(71);

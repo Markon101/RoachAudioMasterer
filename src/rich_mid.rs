@@ -19,7 +19,47 @@ use anyhow::{ensure, Result};
 use rustfft::num_complex::Complex32 as C;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::{fs, path::Path, time::Instant};
+use std::{fs, io::Write, path::Path, time::Instant};
+
+fn profile_requested(requested: bool, foreground_confirmed: bool) -> Result<bool> {
+    ensure!(
+        !requested || foreground_confirmed,
+        "ROACH_PROFILE_MID=1 requires explicit owner foreground confirmation (ROACH_FOREGROUND_CONFIRMED=1)"
+    );
+    Ok(requested)
+}
+
+fn write_refinement_record(
+    file: &mut fs::File,
+    chunk_index: usize,
+    start: usize,
+    end: usize,
+    rate: u32,
+    backend: &str,
+    disk_cache_hit: bool,
+    profile: Option<scene_engine::RefinementProfile>,
+    prepare_ms: Option<f64>,
+    prior_ms: Option<f64>,
+    materialization_ms: f64,
+) -> Result<()> {
+    serde_json::to_writer(&mut *file, &json!({
+        "schema": "rich-mid-refinement-profile-v1",
+        "chunk_index": chunk_index,
+        "chunk_start_sample": start,
+        "chunk_end_sample_exclusive": end,
+        "sample_rate": rate,
+        "backend": backend,
+        "disk_chunk_cache_hit": disk_cache_hit,
+        "refinement_bypassed": disk_cache_hit,
+        "prepare_ms": prepare_ms,
+        "prior_ms": prior_ms,
+        "chunk_materialization_ms": materialization_ms,
+        "refinement": profile,
+    }))?;
+    file.write_all(b"\n")?;
+    file.flush()?;
+    Ok(())
+}
 
 type CachedScene = (
     u64,
@@ -547,12 +587,31 @@ pub fn restore_with_quiet_gate(
     out: &Path,
     quiet_abstention: bool,
 ) -> Result<()> {
+    let profiling = profile_requested(
+        std::env::var("ROACH_PROFILE_MID").as_deref() == Ok("1"),
+        std::env::var("ROACH_FOREGROUND_CONFIRMED").as_deref() == Ok("1"),
+    )?;
     if !out.exists() {
         new_run(out)?;
     }
+    // Never append to or overwrite a prior diagnostic run. The caller supplies
+    // stage2_mid during auto-master, or the explicit rich-mid restore directory.
+    let mut profile_file = if profiling {
+        Some(
+            fs::OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .open(out.join("refinement_profile.jsonl"))?,
+        )
+    } else {
+        None
+    };
     let field = MidField::load(model_path)?;
     let audio = native_audio::read_entire(input_path)?;
     let mut engine = Engine::new(&field.core, backend)?;
+    if profiling {
+        engine.set_profiling(true);
+    }
 
     let d = Damage {
         cutoff: mid_cutoff,
@@ -617,7 +676,11 @@ pub fn restore_with_quiet_gate(
             chunk_dir.join(format!("chunk_{:04}.bin", idx))
         };
 
-        let y = if chunk_cache_file.exists() {
+        let disk_cache_hit = chunk_cache_file.exists();
+        let mut refinement_profile = None;
+        let mut prepare_ms = None;
+        let mut prior_ms = None;
+        let y = if disk_cache_hit {
             println!(
                 "Chunk {}/{} ({:.1}s - {:.1}s) loaded from cache",
                 idx + 1,
@@ -660,8 +723,12 @@ pub fn restore_with_quiet_gate(
                 chunk_audio.clone()
             };
 
+            let prepare_start = profiling.then(Instant::now);
             let p = scene_features::prepare(&chunk_input, d, 11);
+            prepare_ms = prepare_start.map(|start| start.elapsed().as_secs_f64() * 1000.0);
+            let prior_start = profiling.then(Instant::now);
             let initial = scene_features::prior_state(&p, "harmonic");
+            prior_ms = prior_start.map(|start| start.elapsed().as_secs_f64() * 1000.0);
             let ceil_bin =
                 ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
             let state = engine.refine_mode_bounded(
@@ -672,6 +739,9 @@ pub fn restore_with_quiet_gate(
                 field.kind.mode(),
                 Some(ceil_bin + 1),
             )?;
+            if profiling {
+                refinement_profile = engine.take_profile();
+            }
             let y = mid_waveform_with_quiet_gate(&p, d, mid_ceiling, &state, strength, quiet_abstention);
 
             let mut bytes = Vec::with_capacity(num_channels * actual_chunk_len * 4);
@@ -692,6 +762,14 @@ pub fn restore_with_quiet_gate(
             );
             y
         };
+
+        if let Some(file) = &mut profile_file {
+            write_refinement_record(
+                file, idx, c_start, c_end, audio.rate, engine.name(), disk_cache_hit,
+                refinement_profile, prepare_ms, prior_ms,
+                chunk_t0.elapsed().as_secs_f64() * 1000.0,
+            )?;
+        }
 
         let mut w = vec![1.0f32; actual_chunk_len];
         if idx > 0 {
@@ -966,6 +1044,54 @@ pub fn evaluate_mid(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn mid_profile_gate_and_disk_cache_bypass_schema() -> Result<()> {
+        assert!(!profile_requested(false, false)?);
+        assert!(!profile_requested(false, true)?);
+        assert!(profile_requested(true, false).is_err());
+        assert!(profile_requested(true, true)?);
+        let path = std::env::temp_dir().join(format!(
+            "roach-mid-profile-test-{}-{}.jsonl",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)?
+                .as_nanos()
+        ));
+        let mut file = fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&path)?;
+        assert!(fs::OpenOptions::new().write(true).create_new(true).open(&path).is_err());
+        write_refinement_record(&mut file, 3, 512, 1024, RATE, "cpu-f32", true, None,
+            None, None, 0.5)?;
+        write_refinement_record(
+            &mut file, 4, 1024, 1536, RATE, "cpu-f32", false,
+            Some(scene_engine::RefinementProfile::default()),
+            Some(0.1), Some(0.2), 0.7,
+        )?;
+        drop(file);
+        let content = fs::read_to_string(&path)?;
+        fs::remove_file(path)?;
+        let rows: Vec<serde_json::Value> = content
+            .lines()
+            .map(serde_json::from_str)
+            .collect::<std::result::Result<_, _>>()?;
+        assert_eq!(rows.len(), 2);
+        assert_eq!(rows[0]["schema"], "rich-mid-refinement-profile-v1");
+        assert_eq!(rows[0]["disk_chunk_cache_hit"], true);
+        assert_eq!(rows[0]["refinement_bypassed"], true);
+        assert_eq!(rows[0]["chunk_index"], 3);
+        assert_eq!(rows[0]["chunk_start_sample"], 512);
+        assert!(rows[0]["refinement"].is_null());
+        assert!(rows[0]["prepare_ms"].is_null());
+        assert!(rows[0]["prior_ms"].is_null());
+        assert_eq!(rows[0]["chunk_materialization_ms"], 0.5);
+        assert_eq!(rows[1]["refinement_bypassed"], false);
+        assert_eq!(rows[1]["prepare_ms"], 0.1);
+        assert_eq!(rows[1]["prior_ms"], 0.2);
+        assert!(rows[1]["refinement"]["write_event_ms"].is_null());
+        Ok(())
+    }
     use crate::native_dsp;
 
     #[test]

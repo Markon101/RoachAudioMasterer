@@ -34,6 +34,8 @@ pub struct OpenCl {
     outputs: usize,
     info: String,
     pub last_kernel_ms: f64,
+    profile_transfers: bool,
+    last_transfer_ms: Option<(f64, f64)>,
 }
 impl OpenCl {
     pub fn new(model: &Model, capacity: usize) -> Result<Self> {
@@ -134,6 +136,8 @@ impl OpenCl {
             outputs,
             info,
             last_kernel_ms: 0.0,
+            profile_transfers: false,
+            last_transfer_ms: None,
         })
     }
 }
@@ -144,6 +148,13 @@ impl Predictor for OpenCl {
     fn kernel_ms(&self) -> Option<f64> {
         Some(self.last_kernel_ms)
     }
+    fn set_transfer_profiling(&mut self, enabled: bool) {
+        self.profile_transfers = enabled;
+        self.last_transfer_ms = None;
+    }
+    fn transfer_ms(&self) -> Option<(f64, f64)> {
+        self.last_transfer_ms
+    }
     fn predict(&mut self, features: &[f32], frames: usize) -> Result<Vec<f32>> {
         ensure!(
             frames > 0 && features.len() == frames * self.inputs,
@@ -151,13 +162,14 @@ impl Predictor for OpenCl {
         );
         let mut out = vec![0.0; frames * self.outputs];
         self.last_kernel_ms = 0.0;
+        self.last_transfer_ms = self.profile_transfers.then_some((0.0, 0.0));
         for start in (0..frames).step_by(self.capacity) {
             let n = (frames - start).min(self.capacity);
             let n32 = n as u32;
             // SAFETY: fixed argument layout matches kernels.cl; buffers are large
             // enough for n rows, kernel bounds guard unused/rounded work items.
             unsafe {
-                self.queue.enqueue_write_buffer(
+                let write_event = self.queue.enqueue_write_buffer(
                     &mut self.x,
                     CL_BLOCKING,
                     0,
@@ -178,13 +190,23 @@ impl Predictor for OpenCl {
                     .set_arg(&n32)
                     .set_global_work_size(n * self.outputs)
                     .enqueue_nd_range(&self.queue)?;
-                self.queue.enqueue_read_buffer(
+                let read_event = self.queue.enqueue_read_buffer(
                     &self.y,
                     CL_BLOCKING,
                     0,
                     &mut out[start * self.outputs..(start + n) * self.outputs],
                     &[],
                 )?;
+                if let Some((write_ms, read_ms)) = &mut self.last_transfer_ms {
+                    *write_ms += (write_event.profiling_command_end()?
+                        - write_event.profiling_command_start()?)
+                        as f64
+                        / 1e6;
+                    *read_ms += (read_event.profiling_command_end()?
+                        - read_event.profiling_command_start()?)
+                        as f64
+                        / 1e6;
+                }
                 for e in [e1, e2] {
                     self.last_kernel_ms +=
                         (e.profiling_command_end()? - e.profiling_command_start()?) as f64 / 1e6;

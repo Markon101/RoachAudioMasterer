@@ -9,6 +9,11 @@ pub trait Predictor {
     fn kernel_ms(&self) -> Option<f64> {
         None
     }
+    /// Additional event queries are opt-in. Values describe the last predict call.
+    fn set_transfer_profiling(&mut self, _enabled: bool) {}
+    fn transfer_ms(&self) -> Option<(f64, f64)> {
+        None
+    }
     fn predict(&mut self, features: &[f32], frames: usize) -> Result<Vec<f32>>;
 }
 pub struct Cpu {
