@@ -29,6 +29,36 @@ fn profile_requested(requested: bool, foreground_confirmed: bool) -> Result<bool
     Ok(requested)
 }
 
+fn research_cache_options(
+    profiling: bool,
+    mib: Option<&str>,
+    build: Option<&str>,
+) -> Result<(usize, scene_engine::CacheBuild)> {
+    ensure!(
+        profiling || (mib.is_none() && build.is_none()),
+        "ROACH_MID_CACHE_MIB/ROACH_MID_CACHE_BUILD require both profiling and foreground gates"
+    );
+    let mib = mib.unwrap_or("64").parse::<usize>()?;
+    ensure!(
+        (1..=384).contains(&mib),
+        "ROACH_MID_CACHE_MIB must be 1..384"
+    );
+    let build = match build.unwrap_or("serial") {
+        "serial" => scene_engine::CacheBuild::Serial,
+        "parallel" => scene_engine::CacheBuild::Parallel,
+        _ => anyhow::bail!("ROACH_MID_CACHE_BUILD must be serial or parallel"),
+    };
+    Ok((mib, build))
+}
+
+fn optional_env_text(key: &str) -> Result<Option<String>> {
+    match std::env::var(key) {
+        Ok(value) => Ok(Some(value)),
+        Err(std::env::VarError::NotPresent) => Ok(None),
+        Err(error) => Err(error.into()),
+    }
+}
+
 fn write_refinement_record(
     file: &mut fs::File,
     chunk_index: usize,
@@ -591,6 +621,13 @@ pub fn restore_with_quiet_gate(
         std::env::var("ROACH_PROFILE_MID").as_deref() == Ok("1"),
         std::env::var("ROACH_FOREGROUND_CONFIRMED").as_deref() == Ok("1"),
     )?;
+    let cache_mib = optional_env_text("ROACH_MID_CACHE_MIB")?;
+    let cache_build = optional_env_text("ROACH_MID_CACHE_BUILD")?;
+    let (cache_mib, cache_build) = research_cache_options(
+        profiling,
+        cache_mib.as_deref(),
+        cache_build.as_deref(),
+    )?;
     if !out.exists() {
         new_run(out)?;
     }
@@ -611,6 +648,7 @@ pub fn restore_with_quiet_gate(
     let mut engine = Engine::new(&field.core, backend)?;
     if profiling {
         engine.set_profiling(true);
+        engine.set_research_cache_config(cache_mib, cache_build)?;
     }
 
     let d = Damage {
@@ -1050,6 +1088,27 @@ mod tests {
         assert!(!profile_requested(false, true)?);
         assert!(profile_requested(true, false).is_err());
         assert!(profile_requested(true, true)?);
+        assert_eq!(
+            research_cache_options(false, None, None)?,
+            (64, scene_engine::CacheBuild::Serial)
+        );
+        for (mib, build) in [
+            (Some("64"), None),
+            (None, Some("serial")),
+            (Some("384"), Some("parallel")),
+        ] {
+            assert!(research_cache_options(false, mib, build).is_err());
+        }
+        for mib in ["0", "385", "-1", "invalid", "9999999999999999999999999"] {
+            assert!(research_cache_options(true, Some(mib), None).is_err());
+        }
+        for mib in ["1", "64", "384"] {
+            assert_eq!(
+                research_cache_options(true, Some(mib), Some("parallel"))?,
+                (mib.parse()?, scene_engine::CacheBuild::Parallel)
+            );
+        }
+        assert!(research_cache_options(true, None, Some("invalid")).is_err());
         let path = std::env::temp_dir().join(format!(
             "roach-mid-profile-test-{}-{}.jsonl",
             std::process::id(),

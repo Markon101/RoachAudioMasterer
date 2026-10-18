@@ -95,3 +95,38 @@ the same model/inputs/steps/WOLA configuration and a 896 MiB process bound.
 Require byte-identical full-song output. This is Mid-CFM timing, not an automatic
 claim about the complete mastering pipeline or subjective quality. Further
 speed work requires a new explicit foreground confirmation under AGENTS.md.
+
+## Full-cache qualification result (Tier 3)
+
+The owner separately confirmed foreground operation. All nine balanced trials
+completed using one candidate binary, with the same input/model/8 NFE/settings.
+The [qualification receipt](../artifacts/mission-20261017/mid_cache_qualification.json)
+pins its binary and source hashes, all measurements and the gate outcome.
+
+| Arm | Median chunk materialization | Reduction vs matched fallback | Largest sampled RSS |
+| --- | --- | --- | --- |
+| 64 MiB fallback | 4701.1 ms | control | about 210 MiB |
+| 384 MiB serial cache | 4450.1 ms | 5.34% | about 586 MiB |
+| 384 MiB parallel cache | 4265.5 ms | 9.27% | about 586 MiB |
+
+All nine float output WAV SHA256 values match exactly, and all full-state
+noncryptographic fingerprints agree. Cache selection, eight evaluations and
+512 predictor batches match the intended arms. The 768 MiB bound passed.
+Trained-model CPU unit checks separately compare exact states/waveforms across
+serial, parallel and fallback paths; no new real-chunk CPU run is implied here.
+
+**Utility gate FAILED:** 9.27% is below the predeclared 10% median reduction.
+The conditional full-track and CPU follow-ups were **not run**. The extra
+approximately 376 MiB is feasible on this phone, but its benefit did not meet
+the chosen gate. Keep normal 64 MiB/serial behavior. The experimental controls
+remain explicit, bounded research controls for reproducibility, not a promoted
+optimization. Do not round this result into a pass or claim full-track speedup.
+
+Much of the feature-assembly span remains even with immutable templates. Repeated
+small host batches and thread setup are one possible explanation; memory copying
+and dynamic updates also remain. A distinct next hypothesis is larger host
+feature batches (32768/65536 rows) while retaining the GPU's 8192-row internal
+tiles, identical row order and eight neural field evaluations. This adds roughly
+18/40 MiB feature scratch relative to the 8192-row host batch, rather than a
+376 MiB template. It needs separate parity tests, review and explicit speed-run
+authorization; no gain follows from its lower thread-launch count alone.

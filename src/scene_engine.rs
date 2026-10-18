@@ -13,6 +13,29 @@ use std::{fs, path::Path, time::Instant};
 
 const FIELD_CACHE_CAP_BYTES: usize = 64 * 1024 * 1024;
 
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum CacheBuild {
+    #[default]
+    Serial,
+    Parallel,
+}
+
+/// Noncryptographic FNV-1a over channel order, then real/imaginary f32 bits.
+/// Every component is encoded little endian, including signed zero.
+fn terminal_state_fingerprint(state: &[Vec<C>; 2]) -> String {
+    let mut hash = 0xcbf29ce484222325u64;
+    for value in state.iter().flatten() {
+        for component in [value.re, value.im] {
+            for byte in component.to_bits().to_le_bytes() {
+                hash ^= byte as u64;
+                hash = hash.wrapping_mul(0x100000001b3);
+            }
+        }
+    }
+    format!("noncryptographic-fnv1a64-f32le:{hash:016x}")
+}
+
 /// Process-wide Linux accounting; VmHWM is not a per-chunk peak.
 #[derive(Clone, Debug, Default, Serialize)]
 pub struct ProcessMemory {
@@ -50,6 +73,7 @@ pub struct RefinementProfile {
     pub rows_bytes: usize,
     pub cache_required_bytes: usize,
     pub cache_cap_bytes: usize,
+    pub cache_build_mode: CacheBuild,
     pub cache_eligible: bool,
     pub cache_used: bool,
     pub encoder_ms: f64,
@@ -59,11 +83,14 @@ pub struct RefinementProfile {
     pub kernel_event_ms: Option<f64>,
     pub write_event_ms: Option<f64>,
     pub read_event_ms: Option<f64>,
+    pub blocking_write_wall_ms: Option<f64>,
+    pub blocking_read_wall_ms: Option<f64>,
     pub integration_ms: f64,
     pub nfe: usize,
     pub predictor_batch_count: usize,
     pub memory_before: ProcessMemory,
     pub memory_after: ProcessMemory,
+    pub terminal_state_fingerprint: String,
 }
 
 fn add_optional(sum: &mut Option<f64>, value: Option<f64>) {
@@ -160,6 +187,8 @@ pub struct Engine {
     head: Box<dyn Predictor>,
     profiling: bool,
     profile: Option<RefinementProfile>,
+    cache_cap_bytes: usize,
+    cache_build: CacheBuild,
 }
 struct CachedField {
     damage: Damage,
@@ -173,6 +202,8 @@ impl Engine {
             head: crate::scene_model::backend(&m.head, backend)?,
             profiling: false,
             profile: None,
+            cache_cap_bytes: FIELD_CACHE_CAP_BYTES,
+            cache_build: CacheBuild::Serial,
         })
     }
     pub fn name(&self) -> &str {
@@ -183,6 +214,22 @@ impl Engine {
         self.profiling = enabled;
         self.profile = None;
         self.head.set_transfer_profiling(enabled);
+        if !enabled {
+            self.cache_cap_bytes = FIELD_CACHE_CAP_BYTES;
+            self.cache_build = CacheBuild::Serial;
+        }
+    }
+    /// Research only. The restore entry point also validates both environment
+    /// gates before accepting overrides. Disabling profiling resets this config.
+    pub fn set_research_cache_config(&mut self, mib: usize, build: CacheBuild) -> Result<()> {
+        ensure!(self.profiling, "research cache config requires profiling");
+        ensure!(
+            (1..=384).contains(&mib),
+            "research cache MiB must be 1..384"
+        );
+        self.cache_cap_bytes = mib * 1024 * 1024;
+        self.cache_build = build;
+        Ok(())
     }
     pub fn take_profile(&mut self) -> Option<RefinementProfile> {
         self.profile.take()
@@ -319,6 +366,10 @@ impl Engine {
                 add_optional(&mut profile.write_event_ms, Some(write));
                 add_optional(&mut profile.read_event_ms, Some(read));
             }
+            if let Some((write, read)) = self.head.transfer_wall_ms() {
+                add_optional(&mut profile.blocking_write_wall_ms, Some(write));
+                add_optional(&mut profile.blocking_read_wall_ms, Some(read));
+            }
         }
         ensure!(y.iter().all(|x| x.is_finite()), "nonfinite shared head");
         for (r, y) in rows.iter().zip(y.as_chunks::<HEAD_OUTPUT>().0.iter()) {
@@ -434,10 +485,10 @@ impl Engine {
         mode: u8,
         ceil_bin: Option<usize>,
     ) -> Result<[Vec<C>; 2]> {
-        self.refine_with_cache_cap(p, d, prior, steps, mode, ceil_bin, FIELD_CACHE_CAP_BYTES)
+        self.refine_with_cache_cap(p, d, prior, steps, mode, ceil_bin, self.cache_cap_bytes)
     }
     // The cap parameter exists to exercise both existing paths with tiny tests.
-    // Production always supplies the frozen 64 MiB cap above.
+    // Ordinary users supply the frozen 64 MiB cap; opt-in research is bounded.
     fn refine_with_cache_cap(
         &mut self,
         p: &Prepared,
@@ -475,6 +526,7 @@ impl Engine {
             rows_bytes: count * std::mem::size_of::<Row>(),
             cache_required_bytes: required,
             cache_cap_bytes: cache_cap,
+            cache_build_mode: self.cache_build,
             cache_eligible: required <= cache_cap,
             memory_before: ProcessMemory::read(),
             ..RefinementProfile::default()
@@ -500,14 +552,42 @@ impl Engine {
                             time: t,
                             bin,
                         };
-                        let mut f = [0.0; HEAD_INPUT];
-                        crate::scene_features::features_into(
-                            p, d, r, &e.values, &zero, 0.0, &mut f,
-                        );
-                        template.extend_from_slice(&f);
+                        if self.cache_build == CacheBuild::Serial {
+                            let mut f = [0.0; HEAD_INPUT];
+                            crate::scene_features::features_into(
+                                p, d, r, &e.values, &zero, 0.0, &mut f,
+                            );
+                            template.extend_from_slice(&f);
+                        }
                         rows.push(r);
                     }
                 }
+            }
+            if self.cache_build == CacheBuild::Parallel && count > 0 {
+                template.resize(count * HEAD_INPUT, 0.0);
+                let threads = std::thread::available_parallelism()
+                    .map(|n| n.get().min(8))
+                    .unwrap_or(1);
+                let rows_per_thread = count.div_ceil(threads);
+                let values = &e.values;
+                let zero = &zero;
+                std::thread::scope(|scope| {
+                    for (thread_rows, thread_features) in rows
+                        .chunks(rows_per_thread)
+                        .zip(template.chunks_mut(rows_per_thread * HEAD_INPUT))
+                    {
+                        scope.spawn(move || {
+                            for (row, features) in thread_rows
+                                .iter()
+                                .zip(thread_features.as_chunks_mut::<HEAD_INPUT>().0)
+                            {
+                                crate::scene_features::features_into(
+                                    p, d, *row, values, zero, 0.0, features,
+                                );
+                            }
+                        });
+                    }
+                });
             }
             Some(CachedField {
                 damage: d,
@@ -550,6 +630,7 @@ impl Engine {
         }
         if let Some(profile) = &mut self.profile {
             profile.memory_after = ProcessMemory::read();
+            profile.terminal_state_fingerprint = terminal_state_fingerprint(&state);
         }
         Ok(state)
     }
@@ -699,11 +780,30 @@ mod tests {
         let rows = p.active.iter().filter(|x| **x).count() * p.frames * 16;
         let required = rows * (HEAD_INPUT * 4 + std::mem::size_of::<Row>());
         assert!(required > 0);
-        let mut reference = None;
-        for cap in [required, required - 1] {
+        let mut ordinary_engine = Engine::new(&m, "cpu")?;
+        let ordinary =
+            ordinary_engine.refine_mode_bounded(&p, d, &prior, 2, mode, Some(max_bin))?;
+        assert!(ordinary_engine.take_profile().is_none());
+        let mut default_profiled = Engine::new(&m, "cpu")?;
+        default_profiled.set_profiling(true);
+        assert_eq!(
+            ordinary,
+            default_profiled.refine_mode_bounded(&p, d, &prior, 2, mode, Some(max_bin),)?
+        );
+        let default_profile = default_profiled.take_profile().unwrap();
+        assert_eq!(default_profile.cache_cap_bytes, FIELD_CACHE_CAP_BYTES);
+        assert_eq!(default_profile.cache_build_mode, CacheBuild::Serial);
+        let mut reference = Some(ordinary);
+        for (cap, build) in [
+            (required, CacheBuild::Serial),
+            (required, CacheBuild::Parallel),
+            (required - 1, CacheBuild::Serial),
+            (required - 1, CacheBuild::Parallel),
+        ] {
             let mut plain = Engine::new(&m, "cpu")?;
             let mut profiled = Engine::new(&m, "cpu")?;
             profiled.set_profiling(true);
+            profiled.set_research_cache_config(64, build)?;
             let a = plain.refine_with_cache_cap(&p, d, &prior, 2, mode, Some(max_bin), cap)?;
             let b = profiled.refine_with_cache_cap(&p, d, &prior, 2, mode, Some(max_bin), cap)?;
             assert_eq!(a, b, "profiling changed the frozen field");
@@ -717,6 +817,14 @@ mod tests {
             }
             reference = Some(a);
             let profile = profiled.take_profile().unwrap();
+            assert_eq!(profile.cache_build_mode, build);
+            assert_eq!(
+                profile.terminal_state_fingerprint,
+                terminal_state_fingerprint(&b)
+            );
+            assert!(profile
+                .terminal_state_fingerprint
+                .starts_with("noncryptographic-fnv1a64-f32le:"));
             assert_eq!(profile.cache_used, cap == required);
             assert_eq!(profile.cache_eligible, cap == required);
             assert_eq!(profile.cache_required_bytes, required);
@@ -727,6 +835,8 @@ mod tests {
             assert!(profile.kernel_event_ms.is_none());
             assert!(profile.write_event_ms.is_none());
             assert!(profile.read_event_ms.is_none());
+            assert!(profile.blocking_write_wall_ms.is_none());
+            assert!(profile.blocking_read_wall_ms.is_none());
             for time in [
                 profile.encoder_ms,
                 profile.cache_build_ms,
@@ -742,6 +852,36 @@ mod tests {
             assert_eq!(profiled.model.fingerprint(), fingerprint);
         }
         assert_eq!(m.fingerprint(), fingerprint);
+        Ok(())
+    }
+    #[test]
+    fn research_cache_config_is_bounded_and_resets_with_profiling() -> Result<()> {
+        let mut engine = Engine::new(&Model::new(71), "cpu")?;
+        assert_eq!(engine.cache_cap_bytes, FIELD_CACHE_CAP_BYTES);
+        assert_eq!(engine.cache_build, CacheBuild::Serial);
+        assert!(engine
+            .set_research_cache_config(384, CacheBuild::Parallel)
+            .is_err());
+        engine.set_profiling(true);
+        assert!(engine
+            .set_research_cache_config(0, CacheBuild::Parallel)
+            .is_err());
+        assert!(engine
+            .set_research_cache_config(385, CacheBuild::Parallel)
+            .is_err());
+        engine.set_research_cache_config(1, CacheBuild::Serial)?;
+        assert_eq!(engine.cache_cap_bytes, 1024 * 1024);
+        engine.set_research_cache_config(384, CacheBuild::Parallel)?;
+        assert_eq!(engine.cache_cap_bytes, 384 * 1024 * 1024);
+        engine.set_profiling(false);
+        assert_eq!(engine.cache_cap_bytes, FIELD_CACHE_CAP_BYTES);
+        assert_eq!(engine.cache_build, CacheBuild::Serial);
+        let a = [vec![C::new(0.0, 0.0)], vec![C::new(0.0, 0.0)]];
+        let b = [vec![C::new(-0.0, 0.0)], vec![C::new(0.0, 0.0)]];
+        assert_ne!(
+            terminal_state_fingerprint(&a),
+            terminal_state_fingerprint(&b)
+        );
         Ok(())
     }
     #[test]

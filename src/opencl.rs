@@ -15,7 +15,7 @@ use opencl3::{
     program::Program,
     types::CL_BLOCKING,
 };
-use std::ptr;
+use std::{ptr, time::Instant};
 
 const SOURCE: &str = include_str!("kernels.cl");
 pub struct OpenCl {
@@ -36,6 +36,7 @@ pub struct OpenCl {
     pub last_kernel_ms: f64,
     profile_transfers: bool,
     last_transfer_ms: Option<(f64, f64)>,
+    last_transfer_wall_ms: Option<(f64, f64)>,
 }
 impl OpenCl {
     pub fn new(model: &Model, capacity: usize) -> Result<Self> {
@@ -138,6 +139,7 @@ impl OpenCl {
             last_kernel_ms: 0.0,
             profile_transfers: false,
             last_transfer_ms: None,
+            last_transfer_wall_ms: None,
         })
     }
 }
@@ -151,9 +153,13 @@ impl Predictor for OpenCl {
     fn set_transfer_profiling(&mut self, enabled: bool) {
         self.profile_transfers = enabled;
         self.last_transfer_ms = None;
+        self.last_transfer_wall_ms = None;
     }
     fn transfer_ms(&self) -> Option<(f64, f64)> {
         self.last_transfer_ms
+    }
+    fn transfer_wall_ms(&self) -> Option<(f64, f64)> {
+        self.last_transfer_wall_ms
     }
     fn predict(&mut self, features: &[f32], frames: usize) -> Result<Vec<f32>> {
         ensure!(
@@ -163,12 +169,14 @@ impl Predictor for OpenCl {
         let mut out = vec![0.0; frames * self.outputs];
         self.last_kernel_ms = 0.0;
         self.last_transfer_ms = self.profile_transfers.then_some((0.0, 0.0));
+        self.last_transfer_wall_ms = self.profile_transfers.then_some((0.0, 0.0));
         for start in (0..frames).step_by(self.capacity) {
             let n = (frames - start).min(self.capacity);
             let n32 = n as u32;
             // SAFETY: fixed argument layout matches kernels.cl; buffers are large
             // enough for n rows, kernel bounds guard unused/rounded work items.
             unsafe {
+                let write_start = self.profile_transfers.then(Instant::now);
                 let write_event = self.queue.enqueue_write_buffer(
                     &mut self.x,
                     CL_BLOCKING,
@@ -176,6 +184,11 @@ impl Predictor for OpenCl {
                     &features[start * self.inputs..(start + n) * self.inputs],
                     &[],
                 )?;
+                if let (Some(start), Some((write, _))) =
+                    (write_start, &mut self.last_transfer_wall_ms)
+                {
+                    *write += start.elapsed().as_secs_f64() * 1000.0;
+                }
                 let e1 = ExecuteKernel::new(&self.hidden_kernel)
                     .set_arg(&self.x)
                     .set_arg(&self.weights)
@@ -190,6 +203,7 @@ impl Predictor for OpenCl {
                     .set_arg(&n32)
                     .set_global_work_size(n * self.outputs)
                     .enqueue_nd_range(&self.queue)?;
+                let read_start = self.profile_transfers.then(Instant::now);
                 let read_event = self.queue.enqueue_read_buffer(
                     &self.y,
                     CL_BLOCKING,
@@ -197,6 +211,11 @@ impl Predictor for OpenCl {
                     &mut out[start * self.outputs..(start + n) * self.outputs],
                     &[],
                 )?;
+                if let (Some(start), Some((_, read))) =
+                    (read_start, &mut self.last_transfer_wall_ms)
+                {
+                    *read += start.elapsed().as_secs_f64() * 1000.0;
+                }
                 if let Some((write_ms, read_ms)) = &mut self.last_transfer_ms {
                     *write_ms += (write_event.profiling_command_end()?
                         - write_event.profiling_command_start()?)

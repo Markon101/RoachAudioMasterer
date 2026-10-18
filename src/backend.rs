@@ -14,6 +14,11 @@ pub trait Predictor {
     fn transfer_ms(&self) -> Option<(f64, f64)> {
         None
     }
+    /// Blocking write/read call wall times, including host staging and waits.
+    /// Read wall time can include queued kernels; these are not pure transfers.
+    fn transfer_wall_ms(&self) -> Option<(f64, f64)> {
+        None
+    }
     fn predict(&mut self, features: &[f32], frames: usize) -> Result<Vec<f32>>;
 }
 pub struct Cpu {

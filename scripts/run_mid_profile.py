@@ -69,6 +69,14 @@ def run(plan_path, foreground_confirmed):
                    '--mid-cutoff', str(plan['cutoff']), '--mid-ceiling', str(plan['ceiling']),
                    '--steps', '8', '--strength', '1', '--chunk-seconds', '10',
                    '--overlap-seconds', '2', '--out', str(out)]
+        cache_mib = int(job.get('cache_mib', 64))
+        build = job.get('cache_build', 'serial')
+        if not 1 <= cache_mib <= 384 or build not in ['serial', 'parallel']:
+            raise ValueError('invalid research cache configuration')
+        env.update(ROACH_MID_CACHE_MIB=str(cache_mib), ROACH_MID_CACHE_BUILD=build)
+        rss_limit_kib = int(job.get('rss_limit_mib', 1536)) * 1024
+        if not 1 <= rss_limit_kib <= 1536*1024:
+            raise ValueError('RSS limit must be1..1536MiB')
         start_sensors = sensors()
         start = time.monotonic()
         peak_rss, peak_hwm = 0, 0
@@ -80,8 +88,8 @@ def run(plan_path, foreground_confirmed):
                     counters = memory(process.pid)
                     peak_rss = max(peak_rss, counters.get('VmRSS', 0))
                     peak_hwm = max(peak_hwm, counters.get('VmHWM', 0))
-                    if time.monotonic()-start > 180 or peak_rss > 1536*1024:
-                        raise RuntimeError('bounded run exceeded 180 seconds or 1.5 GiB observed RSS')
+                    if time.monotonic()-start > 180 or max(peak_rss, peak_hwm) > rss_limit_kib:
+                        raise RuntimeError('bounded run exceeded 180 seconds or declared RSS/HWM limit')
                     time.sleep(.25)
             except BaseException:
                 process.terminate()
@@ -97,12 +105,15 @@ def run(plan_path, foreground_confirmed):
         rows = [json.loads(line) for line in (out/'refinement_profile.jsonl').read_text().splitlines()]
         if not rows or any(row['disk_chunk_cache_hit'] for row in rows):
             raise ValueError('missing refinement or reused audio cache invalidates timing')
+        if any(row['refinement']['cache_cap_bytes'] != cache_mib*1024*1024 for row in rows):
+            raise ValueError('requested cache budget was not applied')
         receipt = {'job_index': index, 'command': command, 'input_sha256': job['sha256'],
                    'process_wall_seconds': elapsed, 'wall_poll_resolution_seconds': .25,
                    'sampled_peak_rss_kib': peak_rss, 'sampled_process_hwm_kib': peak_hwm,
                    'cpu_affinity': affinity, 'sensors_start_raw': start_sensors,
                    'sensors_end_raw': sensors(), 'chunks': rows,
                    'binary_sha256': plan['binary_sha256'], 'model_sha256': plan['model_sha256']}
+        receipt.update(cache_mib=cache_mib, cache_build=build, rss_limit_kib=rss_limit_kib)
         (out/'profile_receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')
         receipts.append(receipt)
         print(f'Completed profile job {index+1}/{len(jobs)} ({job["backend"]}).', flush=True)
