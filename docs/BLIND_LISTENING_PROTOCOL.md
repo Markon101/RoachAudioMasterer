@@ -125,7 +125,23 @@ is retained, so retry with fresh directory names. The tool checks free storage f
 planned uncompressed pairs plus a safety margin; monitor phone storage during larger
 sessions. Each pair contains two uncompressed excerpts.
 
-Distribute the listener folder only after `READY` exists. It contains neutral
+`READY` records successful package creation; it does not prove the WAVs still
+exist. External cleanup can remove audio while leaving this marker behind. Before
+hand-off, the organizer must verify the package against its private key:
+
+```sh
+python scripts/blind_listening.py verify \
+  --organizer /private/fresh-organizer-session
+```
+
+Verification requires `READY`, every expected A/B WAV, and an exact match to each
+recorded audio hash. It prints only a neutral readiness flag and trial/audio-file
+counts. It does not print the key or source identities. Keep the organizer folder
+private. If verification fails, restore the missing or changed package from
+trusted retained files and verify again before hand-off. Run verification again
+after any external copy or cleanup that could affect the listener folder.
+
+Distribute the listener folder only after verification succeeds. It contains neutral
 instructions, the WAV pairs and `responses.csv`; all labels, source paths, source
 and output hashes, gains, measurements, provenance, seed, installed FFmpeg/ffprobe versions and assignments stay in
 the organizer folder. The tool checks source hashes again before declaring ready.

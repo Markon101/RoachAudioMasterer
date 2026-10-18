@@ -180,6 +180,34 @@ def assignments(tracks, seed):
     return trials
 
 
+def verify_audio(listener, key):
+    """Check the listener package against the private key without revealing it."""
+    listener = Path(listener)
+    require((listener / 'READY').is_file(), 'session is not ready')
+    trials = key.get('trials')
+    require(isinstance(trials, list) and trials, 'private audio record is invalid')
+    trial_ids = [trial.get('trial') for trial in trials if isinstance(trial, dict)]
+    require(len(trial_ids) == len(trials) and all(isinstance(t, str) and t for t in trial_ids)
+            and len(set(trial_ids)) == len(trial_ids), 'private audio record is invalid')
+    for trial in trials:
+        members = trial.get('members')
+        require(isinstance(members, dict), 'private audio record is invalid')
+        for slot in ('A', 'B'):
+            member = members.get(slot)
+            recorded_hash = member.get('sha256') if isinstance(member, dict) else None
+            require(isinstance(recorded_hash, str) and
+                    re.fullmatch(r'[0-9a-f]{64}', recorded_hash) is not None,
+                    'private audio record is invalid')
+            path = listener / trial['trial'] / f'{slot}.wav'
+            require(path.is_file(), 'expected listening audio file is missing')
+            try:
+                digest = sha256(path)
+            except OSError as error:
+                raise ValueError('expected listening audio file is unavailable') from error
+            require(digest == recorded_hash, 'listening audio changed after preparation (hash mismatch)')
+    return {'trials': len(trials), 'audio_files': 2 * len(trials)}
+
+
 def prepare(manifest_path, listener, organizer):
     manifest_path, listener, organizer = map(lambda p: Path(p).resolve(), [manifest_path, listener, organizer])
     require(listener != organizer and listener not in organizer.parents and organizer not in listener.parents,
@@ -267,16 +295,19 @@ def reveal(organizer, responses):
                 'invalid or incomplete categorical responses')
     session = json.loads((organizer / 'session.private.json').read_text())
     listener = Path(session['listener'])
-    require((listener / 'READY').is_file(), 'session is not ready')
-    for trial in key['trials']:
-        for slot, member in trial['members'].items():
-            require(sha256(listener / trial['trial'] / f'{slot}.wav') == member['sha256'],
-                    'listening audio changed after preparation')
+    verify_audio(listener, key)
     output = organizer / 'revealed.private.json'
     with output.open('x') as f:
         json.dump({'key': key, 'responses': rows, 'responses_sha256': sha256(responses)}, f, indent=2)
         f.write('\n')
     return output
+
+
+def verify(organizer):
+    organizer = Path(organizer)
+    key = json.loads((organizer / 'key.private.json').read_text())
+    session = json.loads((organizer / 'session.private.json').read_text())
+    return verify_audio(Path(session['listener']), key)
 
 
 def main():
@@ -289,13 +320,20 @@ def main():
     show = commands.add_parser('reveal')
     show.add_argument('--organizer', type=Path, required=True)
     show.add_argument('--responses', type=Path, required=True)
+    check = commands.add_parser('verify')
+    check.add_argument('--organizer', type=Path, required=True)
     args = parser.parse_args()
     try:
         if args.command == 'prepare':
             prepare(args.manifest, args.listener, args.organizer)
-        else:
+        elif args.command == 'reveal':
             print(reveal(args.organizer, args.responses))
+        else:
+            counts = verify(args.organizer)
+            print(f"ready=true trials={counts['trials']} audio_files={counts['audio_files']}")
     except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
+        if args.command == 'verify':
+            parser.exit(1, f'Verification failed: {error}\n')
         parser.exit(1, f'Aborted: {error}\n')
 
 

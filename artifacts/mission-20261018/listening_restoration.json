@@ -1,0 +1,37 @@
+{
+  "schema": "blind-listening-restoration-v1",
+  "date": "2026-10-18",
+  "packages": [
+    {
+      "listener": "runs/mission-20261018/listen/session1",
+      "ready": true,
+      "trials": 8,
+      "audio_files": 16
+    },
+    {
+      "listener": "runs/mission-20261018/listen/session2",
+      "ready": true,
+      "trials": 8,
+      "audio_files": 16
+    },
+    {
+      "listener": "runs/mission-20261018/listen/session3",
+      "ready": true,
+      "trials": 8,
+      "audio_files": 16
+    }
+  ],
+  "original_assignments_retained": true,
+  "retained_master_source_hashes_verified": true,
+  "output_hashes_verified": true,
+  "old_missing_audio_markers_renamed_stale": true,
+  "verification_command": "python scripts/blind_listening.py verify --organizer <private-session>",
+  "tests": {
+    "command": "python -m unittest discover -s scripts -p test_blind_listening.py -v",
+    "passed": 13
+  },
+  "scope": "historical playback; three available versions; original alpha and equal-target architecture conditions remain pending",
+  "human_judgments_received": false,
+  "production_promoted": false,
+  "private_evidence": "runs/mission-20261018/listening-private/restoration_receipt.json"
+}

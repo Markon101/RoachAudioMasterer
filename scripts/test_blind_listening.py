@@ -1,6 +1,8 @@
 """Bounded local tests; real FFmpeg smoke uses procedural audio only."""
 import copy
 import csv
+from contextlib import redirect_stdout
+from io import StringIO
 import json
 import math
 from pathlib import Path
@@ -113,6 +115,35 @@ class ListeningTests(unittest.TestCase):
         self.assertTrue(output.is_file())
         with self.assertRaises(FileExistsError):
             blind.reveal(self.organizer, response_path)
+
+    def test_verify_rejects_missing_audio_despite_ready_marker(self):
+        self.fake_prepare()
+        self.assertTrue((self.listener / 'READY').is_file())
+        (self.listener / 'T0001' / 'A.wav').unlink()
+        with self.assertRaisesRegex(ValueError, 'audio file is missing'):
+            blind.verify(self.organizer)
+
+    def test_verify_rejects_changed_audio_hash(self):
+        self.fake_prepare()
+        (self.listener / 'T0001' / 'B.wav').write_bytes(b'changed audio')
+        with self.assertRaisesRegex(ValueError, 'hash mismatch'):
+            blind.verify(self.organizer)
+
+    def test_verify_requires_ready_marker(self):
+        self.fake_prepare()
+        (self.listener / 'READY').unlink()
+        with self.assertRaisesRegex(ValueError, 'session is not ready'):
+            blind.verify(self.organizer)
+
+    def test_verify_cli_prints_only_neutral_counts(self):
+        self.fake_prepare()
+        output = StringIO()
+        with patch('sys.argv', ['blind_listening.py', 'verify', '--organizer', str(self.organizer)]), \
+                redirect_stdout(output):
+            blind.main()
+        self.assertEqual(output.getvalue(), 'ready=true trials=4 audio_files=8\n')
+        self.assertNotIn('secret_', output.getvalue())
+        self.assertNotIn('LUFS', output.getvalue())
 
     def test_mismatches_and_declared_common_interval(self):
         def validate(specs):
