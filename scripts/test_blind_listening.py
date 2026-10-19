@@ -48,8 +48,28 @@ class ListeningTests(unittest.TestCase):
             return {'rate': 8000, 'channels': 1, 'frames': encoded.get(path, 1040000)}
         def measure(path, excerpt=None):
             return {'lufs': -23. if path.name in {'A.wav', 'B.wav'} else -18., 'true_peak_dbfs': -3.}
-        with patch.object(blind, 'probe', side_effect=probe), patch.object(blind, 'measure', side_effect=measure), patch.object(blind, 'encode', side_effect=encode):
+        def fake_run(args):
+            return (f"{Path(args[0]).name} version mocked\n", '')
+        with patch.object(blind, 'probe', side_effect=probe), patch.object(blind, 'measure', side_effect=measure), \
+                patch.object(blind, 'encode', side_effect=encode), \
+                patch.object(blind, 'run', side_effect=fake_run):
             blind.prepare(self.manifest_path, self.listener, self.organizer)
+
+    def procedural_manifest(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest['mode'] = 'procedural_diagnostic'
+        for variant in manifest['tracks'][0]['variants']:
+            variant['provenance'] = {
+                'procedural': True,
+                'run_record': 'runs/diagnostic/summary.json',
+                'git_commit': 'a' * 40,
+                'source_sha256': 'b' * 64,
+            }
+        manifest['tracks'][0]['excerpts'] = [
+            {'id': 'short_control', 'kind': 'diagnostic', 'start_sample': 0, 'frames': 13 * 8000},
+            {'id': 'longer_diagnostic', 'kind': 'diagnostic', 'start_sample': 0, 'frames': 26 * 8000},
+        ]
+        return manifest
 
     def test_blinding_attenuation_and_determinism(self):
         self.fake_prepare()
@@ -171,6 +191,109 @@ class ListeningTests(unittest.TestCase):
             self.manifest['tracks'][0]['variants'][0]['provenance']['target_lufs'] = -13
             with self.assertRaisesRegex(ValueError, 'same original'):
                 blind.validate(copy.deepcopy(self.manifest), self.root)
+
+    def test_old_modes_still_reject_short_only_excerpts(self):
+        spec = {'rate': 8000, 'channels': 1, 'frames': 26 * 8000}
+        for mode in ('historical_playback', 'equal_target_architecture'):
+            manifest = copy.deepcopy(self.manifest)
+            manifest['mode'] = mode
+            manifest['tracks'][0]['excerpts'] = [
+                {'id': '13s', 'kind': 'diagnostic', 'start_sample': 0, 'frames': 13 * 8000},
+                {'id': '26s', 'kind': 'long', 'start_sample': 0, 'frames': 26 * 8000},
+            ]
+            if mode == 'equal_target_architecture':
+                for variant in manifest['tracks'][0]['variants']:
+                    variant['provenance'] = {'git_commit': 'a' * 40,
+                                             'source_sha256': 'b' * 64,
+                                             'target_lufs': -11.0}
+            with patch.object(blind, 'probe', return_value=spec):
+                with self.assertRaisesRegex(ValueError, '30s diagnostic|>=120s long'):
+                    blind.validate(manifest, self.root)
+
+    def test_procedural_diagnostic_accepts_13_and_26_seconds(self):
+        self.manifest = self.procedural_manifest()
+        self.write_manifest()
+        self.fake_prepare()
+        key = json.loads((self.organizer / 'key.private.json').read_text())
+        self.assertEqual(key['mode'], 'procedural_diagnostic')
+        self.assertEqual(len(key['trials']), 4)
+        self.assertEqual(sum(t['identity'] for t in key['trials']), 2)
+        self.assertTrue(all(member['gain_db'] <= 0
+                            for trial in key['trials'] for member in trial['members'].values()))
+        self.assertTrue(all(trial['members']['A']['sha256'] == trial['members']['B']['sha256']
+                            for trial in key['trials'] if trial['identity']))
+        instructions = (self.listener / 'INSTRUCTIONS.txt').read_text()
+        self.assertIn('do not assess fatigue', instructions)
+        self.assertIn('long-session claims', instructions)
+        with (self.listener / 'responses.csv').open(newline='') as response_file:
+            rows = list(csv.DictReader(response_file))
+        self.assertTrue(all(row['fatigue'] == 'not_assessed' for row in rows))
+        blind.verify(self.organizer)
+        for row in rows:
+            row.update({k: 'indistinguishable' for k in blind.FIELDS[1:5]})
+            row['confidence'] = 'low'
+        response_path = self.listener / 'responses.csv'
+        with response_path.open('w', newline='') as destination:
+            writer = csv.DictWriter(destination, fieldnames=blind.FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+        self.assertTrue(blind.reveal(self.organizer, response_path).is_file())
+
+    def test_procedural_diagnostic_rejects_long_or_fatigue_excerpt_types(self):
+        spec = {'rate': 8000, 'channels': 1, 'frames': 200 * 8000}
+        base = self.procedural_manifest()
+        for kind in ('long', 'fatigue'):
+            manifest = copy.deepcopy(base)
+            manifest['tracks'][0]['excerpts'][0]['kind'] = kind
+            with patch.object(blind, 'probe', return_value=spec):
+                with self.assertRaisesRegex(ValueError, '8 to 48 seconds'):
+                    blind.validate(manifest, self.root)
+        manifest = copy.deepcopy(base)
+        manifest['tracks'][0]['excerpts'][0]['frames'] = 49 * 8000
+        with patch.object(blind, 'probe', return_value=spec):
+            with self.assertRaisesRegex(ValueError, '8 to 48 seconds'):
+                blind.validate(manifest, self.root)
+
+    def test_procedural_mode_requires_declared_provenance_not_metadata_claims(self):
+        spec = {'rate': 8000, 'channels': 1, 'frames': 26 * 8000}
+        base = self.procedural_manifest()
+        mutations = [
+            ('procedural', False),
+            ('run_record', ''),
+            ('git_commit', 'short'),
+            ('source_sha256', 'bad'),
+            ('git_commit', None),
+            ('source_sha256', None),
+        ]
+        for field, value in mutations:
+            manifest = copy.deepcopy(base)
+            manifest['tracks'][0]['variants'][0]['provenance'][field] = value
+            with patch.object(blind, 'probe', return_value=spec):
+                with self.assertRaisesRegex(ValueError, 'procedural diagnostic requires'):
+                    blind.validate(manifest, self.root)
+        manifest = copy.deepcopy(base)
+        manifest['tracks'][0]['variants'][1]['provenance']['source_sha256'] = 'c' * 64
+        with patch.object(blind, 'probe', return_value=spec):
+            with self.assertRaisesRegex(ValueError, 'same procedural source hash'):
+                blind.validate(manifest, self.root)
+
+    def test_procedural_diagnostic_reveal_rejects_fatigue_judgment(self):
+        self.manifest = self.procedural_manifest()
+        self.write_manifest()
+        self.fake_prepare()
+        response_path = self.listener / 'responses.csv'
+        with response_path.open(newline='') as source:
+            rows = list(csv.DictReader(source))
+        for row in rows:
+            row.update({k: 'indistinguishable' for k in blind.FIELDS[1:5]})
+            row['confidence'] = 'low'
+        rows[0]['fatigue'] = 'mild'
+        with response_path.open('w', newline='') as destination:
+            writer = csv.DictWriter(destination, fieldnames=blind.FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+        with self.assertRaisesRegex(ValueError, 'fatigue must remain not_assessed'):
+            blind.reveal(self.organizer, response_path)
 
     def test_shared_target_never_amplifies_and_preserves_peak_headroom(self):
         stats = [{'lufs': -18, 'true_peak_dbfs': 1}, {'lufs': -22, 'true_peak_dbfs': -3}]

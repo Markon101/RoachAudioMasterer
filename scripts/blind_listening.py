@@ -32,6 +32,20 @@ session impression. Take breaks whenever needed. Use listening only; save file
 comparisons and diagnostics until judgments are recorded. Do not change file names or trial identifiers.
 Return the completed CSV to the organizer. Do not seek the answer key while judging.
 """
+PROCEDURAL_DIAGNOSTIC_INSTRUCTIONS = """This is a short procedural diagnostic comparison, not a fatigue or long-session study.
+Listen using the same playback device, settings and comfortable volume throughout.
+Disable playback enhancement, normalization and crossfade. Follow trial order.
+Compare A.wav and B.wav freely, then enter one responses.csv row per trial.
+For transient, tonal, spatial and preference choose A, B, indistinguishable,
+or abstain. Consider onset definition, tonal character and spatial presentation
+respectively; use your own musical judgment. 'Indistinguishable' means no reliable
+audible difference; 'abstain' means you cannot judge this aspect. Preference is
+your overall choice. Confidence: low, medium, high. Leave fatigue as not_assessed;
+these 8-to-48-second excerpts do not assess fatigue or support long-session claims.
+Use listening only; save file comparisons and diagnostics until judgments are
+recorded. Do not change file names or trial identifiers. Return the completed CSV
+to the organizer. Do not seek the answer key while judging.
+"""
 
 
 def require(condition, message):
@@ -109,7 +123,8 @@ def integer(value):
 
 def validate(manifest, base):
     require(manifest.get('version') == 1, 'manifest version must be 1')
-    require(manifest.get('mode') in {'historical_playback', 'equal_target_architecture'}, 'choose one mode; pooling prohibited')
+    mode = manifest.get('mode')
+    require(mode in {'historical_playback', 'equal_target_architecture', 'procedural_diagnostic'}, 'choose one mode; pooling prohibited')
     require(integer(manifest.get('seed')), 'private integer seed required')
     require(isinstance(manifest.get('target_lufs'), (int, float)) and
             math.isfinite(manifest['target_lufs']), 'finite target_lufs ceiling required')
@@ -128,6 +143,18 @@ def validate(manifest, base):
             require(path.suffix.lower() in {'.wav', '.flac'} and path.is_file(), 'local WAV/FLAC required')
             v['path'] = str(path)
             require(isinstance(v.get('provenance'), dict) and v['provenance'], 'explicit provenance required')
+            if mode == 'procedural_diagnostic':
+                provenance = v['provenance']
+                require(provenance.get('procedural') is True,
+                        'procedural diagnostic requires procedural provenance true')
+                require(isinstance(provenance.get('run_record'), str) and provenance['run_record'].strip(),
+                        'procedural diagnostic requires a declared run_record')
+                require(isinstance(provenance.get('git_commit'), str) and
+                        re.fullmatch(r'[0-9a-f]{40}', provenance['git_commit']) is not None,
+                        'procedural diagnostic requires a full git_commit declaration')
+                require(isinstance(provenance.get('source_sha256'), str) and
+                        re.fullmatch(r'[0-9a-f]{64}', provenance['source_sha256']) is not None,
+                        'procedural diagnostic requires a source_sha256 declaration')
             v['sha256'] = sha256(path)
             specs.append(probe(path))
         require(len({(s['rate'], s['channels']) for s in specs}) == 1, 'rate/channel mismatch')
@@ -148,18 +175,29 @@ def validate(manifest, base):
             require(len({p['source_sha256'] for p in provenances}) == 1 and
                     len({p['target_lufs'] for p in provenances}) == 1,
                     'architecture mode requires same original source and render target')
+        if mode == 'procedural_diagnostic':
+            provenances = [v['provenance'] for v in variants]
+            require(len({p['source_sha256'] for p in provenances}) == 1,
+                    'procedural diagnostic variants must declare the same procedural source hash')
         kinds, excerpt_ids = set(), set()
         for e in track.get('excerpts', []):
             require(isinstance(e.get('id'), str) and e['id'] not in excerpt_ids, 'unique excerpt id required')
             excerpt_ids.add(e['id'])
             require(integer(e.get('start_sample')) and e['start_sample'] >= 0 and
                     integer(e.get('frames')) and e['frames'] > 0, 'sample interval must be positive integers')
-            require((e.get('kind') == 'diagnostic' and e['frames'] == 30 * rate) or
-                    (e.get('kind') == 'long' and e['frames'] >= 120 * rate), 'require 30s diagnostic or >=120s long')
+            if mode == 'procedural_diagnostic':
+                require(e.get('kind') == 'diagnostic' and 8 * rate <= e['frames'] <= 48 * rate,
+                        'procedural diagnostic requires diagnostic excerpts from 8 to 48 seconds')
+            else:
+                require((e.get('kind') == 'diagnostic' and e['frames'] == 30 * rate) or
+                        (e.get('kind') == 'long' and e['frames'] >= 120 * rate), 'require 30s diagnostic or >=120s long')
             low, high = (trim['start_sample'], trim['start_sample'] + trim['frames']) if trim else (0, specs[0]['frames'])
             require(low <= e['start_sample'] and e['start_sample'] + e['frames'] <= high, 'excerpt outside common interval')
             kinds.add(e['kind'])
-        require(kinds == {'diagnostic', 'long'}, 'each track needs diagnostic and long excerpts')
+        if mode == 'procedural_diagnostic':
+            require(kinds == {'diagnostic'}, 'procedural diagnostic accepts diagnostic excerpts only; no long or fatigue study')
+        else:
+            require(kinds == {'diagnostic', 'long'}, 'each track needs diagnostic and long excerpts')
         track['audio_specs'] = specs
         tracks.append(track)
     require(sum(len(t['excerpts']) * (math.comb(len(t['variants']), 2) + 1) for t in tracks) <= 64, 'session exceeds 64 trials; split manifest')
@@ -264,8 +302,12 @@ def prepare(manifest_path, listener, organizer):
         with (listener / 'responses.csv').open('x', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=FIELDS)
             writer.writeheader()
-            writer.writerows({'trial': row['trial']} for row in key)
-        (listener / 'INSTRUCTIONS.txt').write_text(INSTRUCTIONS)
+            writer.writerows({'trial': row['trial'],
+                              **({'fatigue': 'not_assessed'} if manifest['mode'] == 'procedural_diagnostic' else {})}
+                             for row in key)
+        instructions = (PROCEDURAL_DIAGNOSTIC_INSTRUCTIONS
+                        if manifest['mode'] == 'procedural_diagnostic' else INSTRUCTIONS)
+        (listener / 'INSTRUCTIONS.txt').write_text(instructions)
         dump(organizer / 'session.private.json', {
             'listener': str(listener), 'responses': 'responses.csv',
             'python_version': sys.version,
@@ -293,6 +335,9 @@ def reveal(organizer, responses):
                 row['confidence'] in {'low', 'medium', 'high'} and
                 row['fatigue'] in {'none', 'mild', 'high', 'not_assessed'} and None not in row,
                 'invalid or incomplete categorical responses')
+    if key.get('mode') == 'procedural_diagnostic':
+        require(all(row['fatigue'] == 'not_assessed' for row in rows),
+                'procedural diagnostic fatigue must remain not_assessed')
     session = json.loads((organizer / 'session.private.json').read_text())
     listener = Path(session['listener'])
     verify_audio(listener, key)

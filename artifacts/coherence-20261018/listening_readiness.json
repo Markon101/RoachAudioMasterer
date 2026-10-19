@@ -1,0 +1,19 @@
+{
+  "schema": "coherence-short-listening-readiness-v1",
+  "listener": "runs/coherence-20261018/listen/diagnostic1",
+  "instructions": "INSTRUCTIONS.txt",
+  "responses": "responses.csv",
+  "ready": true,
+  "verified": {
+    "trials": 4,
+    "audio_files": 8
+  },
+  "mode": "procedural_diagnostic",
+  "question": "Are the prepared outputs distinguishable, objectionable, or preferable on these procedural excerpts?",
+  "scope": "short mechanistic development comparison only; no fatigue/general song-quality claim; hidden labels and keys withheld",
+  "owner_judgments_received": false,
+  "tools": {
+    "harness_sha256": "ca3461e7841160e672045fc11819a03623a17916f5641d24133b698d32cf6422",
+    "ffmpeg_version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers"
+  }
+}

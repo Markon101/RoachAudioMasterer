@@ -26,8 +26,24 @@ original-source SHA-256 and requested render target, plus a full source git comm
 for each variant. Keep other render settings and controls matched and retain their
 provenance. These declarations are checked for completeness and equality, not
 independently authenticated; the organizer must verify them against run records.
-Matching requested targets alone does not isolate an architecture. Use distinct
-sessions and interpret these two modes separately; do not pool their responses.
+Matching requested targets alone does not isolate an architecture.
+
+`procedural_diagnostic` is for short, fixed procedural passages used to judge a
+specific local mechanism, such as a transient or texture change. It accepts only
+excerpts labeled `diagnostic` with durations from 8 through 48 seconds. It does not
+request a long excerpt, assess fatigue, or support long-session claims. Each
+variant must declare `procedural: true`, a nonempty `run_record`, a full git commit
+and a source SHA-256. Variants in one track must declare the same source hash.
+These are metadata declarations: the tool checks their shape and same-source
+equality, but does not authenticate them or inspect the run record. The organizer
+must check each declaration against retained run evidence. Short procedural
+judgments apply only to the prepared excerpts and listening setup; they do not
+establish long-term preference, fatigue, general audio quality, or population
+preference. The CSV fixes fatigue to `not_assessed`, and reveal rejects any other
+fatigue value in this mode.
+
+Keep these modes in separate sessions and interpret them separately; do not pool
+their responses.
 
 ## Private manifest
 
@@ -35,9 +51,11 @@ Use a fresh output directory pair for every preparation. Paths below are illustr
 the script resolves relative source paths against the manifest directory. Excerpt
 bounds and any common trim use the original decoded sample grid, with an inclusive
 start and exclusive end. The tool never resamples, shifts, pads or automatically
-shortens audio. Every track requires at least one exactly 30-second `diagnostic`
-excerpt and one `long` excerpt lasting at least 120 seconds. Multiple excerpts are
-allowed, with at most 64 trials per session and two to six variants per track.
+shortens audio. Historical and equal-target tracks require an exactly 30-second
+`diagnostic` excerpt and a `long` excerpt lasting at least 120 seconds. Procedural
+diagnostic tracks instead require only `diagnostic` excerpts of 8 through 48
+seconds. Multiple excerpts are allowed, with at most 64 trials per session and
+two to six variants per track.
 
 ```json
 {
@@ -86,6 +104,39 @@ sample rates, channel counts and decoded sample counts. For intentional end-leng
 differences only, declare a track-level `"common_trim": {"start_sample": 0,
 "frames": 5760000}` containing every excerpt. The same original sample interval
 then applies to every variant. Other rate/channel mismatches are rejected.
+
+A short procedural mechanism check can use a separate manifest like this:
+
+```json
+{
+  "version": 1,
+  "mode": "procedural_diagnostic",
+  "seed": 7419322,
+  "target_lufs": -23.0,
+  "tracks": [{
+    "id": "fixed_procedural_phrase",
+    "variants": [
+      {"label": "arm_a", "path": "renders/arm-a.wav", "provenance": {
+        "procedural": true, "run_record": "runs/arm-a/summary.json",
+        "git_commit": "FULL_40_CHARACTER_GIT_COMMIT",
+        "source_sha256": "SAME_64_CHARACTER_PROCEDURAL_SOURCE_SHA256"}},
+      {"label": "arm_b", "path": "renders/arm-b.wav", "provenance": {
+        "procedural": true, "run_record": "runs/arm-b/summary.json",
+        "git_commit": "FULL_40_CHARACTER_GIT_COMMIT",
+        "source_sha256": "SAME_64_CHARACTER_PROCEDURAL_SOURCE_SHA256"}}
+    ],
+    "excerpts": [
+      {"id": "short_attack", "kind": "diagnostic", "start_sample": 432000, "frames": 624000},
+      {"id": "longer_phrase", "kind": "diagnostic", "start_sample": 0, "frames": 1248000}
+    ]
+  }]
+}
+```
+
+At 48 kHz these example excerpts are 13 and 26 seconds. Before preparation,
+independently confirm that both renders use the same procedural source, musical
+time origin and alignment. The run-record, commit and source-hash declarations
+are retained privately but are not authenticated by the listening tool.
 
 ## Prepare and hand off
 
@@ -158,7 +209,8 @@ accepts `low`, `medium`, `high`; `fatigue` accepts `none`, `mild`, `high`, `not_
 or whenever fatigue cannot be assessed. Short trials cannot establish prolonged
 fatigue; even a 120-second passage provides only a limited session impression.
 These are categorical subjective judgments. Confidence and fatigue apply to the
-whole trial.
+whole trial. In `procedural_diagnostic`, fatigue is prefilled as `not_assessed`
+and cannot be changed; the mode does not collect fatigue judgments.
 The generated instructions give the same definitions without identifying controls.
 
 ```sh
