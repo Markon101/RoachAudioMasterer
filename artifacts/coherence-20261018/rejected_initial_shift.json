@@ -1,0 +1,9 @@
+{
+  "schema": "long-coherence-rejected-input-v1",
+  "manifest": "runs/coherence-20261018/fixture-881000/manifest.json",
+  "sha256": "0d7bdca42444f88d67916b073c616d6830e37cf7eb1e840a523265d3bca9fa42",
+  "status": "rejected_before_neural_evaluation",
+  "reason": "3-second144000-sampleoffsetis128mod256, shiftingtheSTFTgrid aswellasWOLAlayout. Use144384samples(3.008s) instead tokeephopgridfixed.",
+  "inference_executed": false,
+  "original_files_preserved": true
+}

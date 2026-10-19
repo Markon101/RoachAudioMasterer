@@ -5,6 +5,11 @@ output changes and coherence over longer periods. This supersedes further cache
 tuning as the next priority. No new renderer, training campaign or audio benefit
 is claimed by this plan. Preserve Smooth `493cdca`, weights and default Euler8.
 
+Implementation checkpoints are now recorded in
+[LONG_COHERENCE_RESULTS.md](LONG_COHERENCE_RESULTS.md): deterministic controls,
+continuous fixtures and a guarded native quality session. This updates progress,
+not the original decision gates or an audio-benefit claim.
+
 ## Decisions this work must answer
 
 Can a sustained source, transient, stereo image and decay remain consistent when

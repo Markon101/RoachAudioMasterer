@@ -15,6 +15,7 @@ This repository is **RoachAudioMasterer**, an offline, Rust-first unified acoust
   - Ask before every new speed experiment and wait for fresh explicit foreground confirmation. Ordinary read-only audits and builds may run in background.
   - Check storage, active work and observed RSS/HWM before costly runs. Use bounded, experiment-specific memory limits; there is no universal 64–128 MiB cap.
   - CPU is the numerical reference. OpenCL is opt-in and tolerance-gated; it is not generally byte-identical to CPU. The latest 96 native solver pairs differed by at most 8.94e-8 in waveform amplitude.
+  - Native agents inherit the shared working directory. Set each command's workdir explicitly and verify its Git top-level/branch before writing to an assigned worktree; a task packet alone does not switch directories.
 
 ### Current checkpoint, 2026-10-18
 

@@ -1,0 +1,93 @@
+{
+  "schema": "wola-controls-v1",
+  "classification": "deterministic mathematical control; not audio-quality evidence",
+  "provenance": {
+    "seed": 20261018,
+    "numpy_version": "2.5.4",
+    "python_logical_control": true,
+    "rust_f32_rounding_emulated": false,
+    "source_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/rich_mid.rs",
+    "source_sha256": "b0c82e11c302a819063231c06dd743ed80c821426bb3955b28ecd53375912f2a"
+  },
+  "source_window_mirror": {
+    "rule": "regular starts by chunk-overlap; if next regular position is before total end, append max(0,total-chunk) unless duplicate",
+    "weight_rule": "per-chunk ones; nonfirst prefix sin^2(pi/2*j/fade_len); nonlast suffix cos^2(pi/2*j/overlap); divide accumulated signal by accumulated weights",
+    "identity_geometry": {
+      "total": 1013,
+      "chunk": 401,
+      "overlap": 101,
+      "starts": [
+        0,
+        300,
+        600,
+        612
+      ],
+      "intersections": [
+        [
+          300,
+          401
+        ],
+        [
+          600,
+          701
+        ],
+        [
+          612,
+          1001
+        ]
+      ],
+      "weight_min": 0.9999999999999998,
+      "weight_max": 2.0
+    }
+  },
+  "identity": {
+    "max_abs_error": 4.440892098500626e-16,
+    "tolerance": 2e-14,
+    "pass": true
+  },
+  "identical_coherent_residual": {
+    "max_abs_error": 1.3877787807814457e-17,
+    "tolerance": 2e-14,
+    "pass": true
+  },
+  "orthogonal_equal_variance_midpoint": {
+    "correlation": -2.0816682952492675e-17,
+    "variance_ratio": 0.5,
+    "variance_ratio_expected": 0.5,
+    "level_delta_db": -3.010299956639812,
+    "level_delta_db_expected": -3.010299956639812,
+    "interpretation": "toy equal-weight uncorrelated residual midpoint; zero covariance is sufficient for this variance identity, not a claim of statistical independence or a measured audio artifact"
+  },
+  "chunk_lock_vs_whole_track": {
+    "seed": 20261018,
+    "sample_rate_hz": 24000,
+    "protected_bands_hz": [
+      [
+        0.0,
+        1500.0
+      ],
+      [
+        8000.0,
+        12000.0
+      ]
+    ],
+    "protected_cutoff_rule": "closed protected bands; residual retained only for strict 1500 < f < 8000 Hz",
+    "total_samples": 12037,
+    "chunk_samples": 4096,
+    "overlap_samples": 1024,
+    "starts": [
+      0,
+      3072,
+      6144,
+      7941
+    ],
+    "chunk_error_max_forbidden_energy_ratio": 3.6104701951110904e-32,
+    "chunk_error_max_forbidden_energy_db": -314.42436235810464,
+    "whole_track_error_forbidden_energy_ratio": 0.00043562977844840994,
+    "whole_track_error_forbidden_energy_db": -33.60882440730323,
+    "whole_track_error_after_global_projection_ratio": 1.6985429814278848e-31,
+    "whole_track_error_after_global_projection_db": -307.69923458884756,
+    "global_projection_relative_waveform_change": 0.020871745936754074,
+    "interpretation": "per-chunk Fourier locks can leak on the whole-track grid after time-window stitching; global projection is only a numerical counterexample and may alter temporal behavior"
+  }
+}

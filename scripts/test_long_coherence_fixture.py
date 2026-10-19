@@ -1,0 +1,106 @@
+import hashlib
+import tempfile
+import unittest
+from pathlib import Path
+
+import numpy as np
+
+from scripts.long_coherence_fixture import RATE, _lowpass_once, _render_source, prepare
+from scripts.roach_ears.audio_io import read_wav
+
+
+def _small(out):
+    return prepare(out, seed=881000, duration_seconds=0.24,
+                   view_specs=[("view0", 0.0, 0.18), ("view3", 0.03, 0.18)],
+                   event_times=[0.08, 0.16])
+
+
+class LongCoherenceFixtureTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def test_fixture_is_deterministic(self):
+        a = _small(self.root / "a")
+        b = _small(self.root / "b")
+        self.assertEqual(a["source_sha256"], b["source_sha256"])
+        for name, digest in a["source_sha256"].items():
+            path = self.root / "a" / (name.replace("_", "-") + ".wav")
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), digest)
+
+    def test_views_are_bit_identical_crops_of_same_physical_source(self):
+        root = self.root / "fixture"
+        manifest = _small(root)
+        target = read_wav(root / "target-full.wav").samples.T
+        degraded = read_wav(root / "input-full.wav").samples.T
+        for view in manifest["views"]:
+            start, count = view["origin_sample"], view["samples"]
+            actual_target = read_wav(root / view["target"]).samples.T
+            actual_input = read_wav(root / view["input"]).samples.T
+            self.assertTrue(np.array_equal(actual_target, target[start:start + count]))
+            self.assertTrue(np.array_equal(actual_input, degraded[start:start + count]))
+            for event in view["events"]:
+                self.assertEqual(event["view_sample"], event["sample"] - start)
+
+    def test_damage_was_applied_once_before_cropping(self):
+        root = self.root / "fixture"
+        _small(root)
+        full = read_wav(root / "target-full.wav").samples.T.astype(np.float64)
+        globally_damaged = _lowpass_once(full, 1500.0, 225.0, 2.0).astype(np.float32)
+        view = read_wav(root / "view3-input.wav").samples.T
+        start = 3 * RATE // 100
+        self.assertTrue(np.array_equal(view, globally_damaged[start:start + len(view)]))
+        crop_damaged = _lowpass_once(full[start:start + len(view)], 1500.0, 225.0, 2.0).astype(np.float32)
+        self.assertGreater(float(np.max(np.abs(view - crop_damaged))), 1e-7)
+
+    def test_source_is_finite_stereo_and_peak_bounded(self):
+        source, events = _render_source(int(0.24 * RATE), 881000, [0.08])
+        self.assertEqual(source.shape, (int(0.24 * RATE), 2))
+        self.assertTrue(np.isfinite(source).all())
+        self.assertFalse(np.array_equal(source[:, 0], source[:, 1]))
+        self.assertLessEqual(float(np.max(np.abs(source))), 0.620001)
+        self.assertEqual(events[0]["sample"], int(round(0.08 * RATE)))
+
+    def test_silence_wav_roundtrip(self):
+        from scripts.long_coherence_fixture import _write_float_wav
+
+        silence = np.zeros((127, 2), dtype=np.float32)
+        path = self.root / "silence.wav"
+        _write_float_wav(path, silence)
+        decoded = read_wav(path)
+        self.assertEqual(decoded.samples.shape, (2, 127))
+        self.assertTrue(np.isfinite(decoded.samples).all())
+        self.assertFalse(np.any(decoded.samples))
+
+    def test_invalid_view_scope_and_duration_fail_before_output(self):
+        for identifier in ("../escape", "bad/name"):
+            out = self.root / "invalid"
+            with self.assertRaises(ValueError):
+                prepare(out, duration_seconds=0.24, view_specs=[(identifier, 0, 0.1)])
+            self.assertFalse(out.exists())
+        with self.assertRaises(ValueError):
+            prepare(self.root / "too-long", duration_seconds=49)
+        self.assertFalse((self.root / "too-long").exists())
+
+    def test_direct_cli_import_and_float_bits(self):
+        import os
+        import subprocess
+        from scripts.long_coherence_fixture import _write_float_wav
+
+        out = self.root / "cli"
+        env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+        result = subprocess.run([os.sys.executable, str(Path(__file__).with_name("long_coherence_fixture.py")),
+                                 "--out", str(out), "--duration-seconds", "0.01"],
+                                env=env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        samples = np.array([[0.0, -0.0], [0.125, -0.25]], dtype=np.float32)
+        path = self.root / "bits.wav"
+        _write_float_wav(path, samples)
+        self.assertTrue(np.array_equal(read_wav(path).samples.T.view(np.uint32), samples.view(np.uint32)))
+
+
+if __name__ == "__main__":
+    unittest.main()

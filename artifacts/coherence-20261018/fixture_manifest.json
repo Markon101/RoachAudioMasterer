@@ -1,0 +1,176 @@
+{
+  "audio_policy": "procedural only; no owner audio",
+  "channels": 2,
+  "comparison_interior_global_samples": [
+    384000,
+    1008000
+  ],
+  "duration_seconds": 32.0,
+  "environment": {
+    "numpy": "2.5.4",
+    "python": "3.14.6"
+  },
+  "events": [
+    {
+      "kind": "fixed_attack_with_early_and_late_decay",
+      "sample": 456000,
+      "time_seconds": 9.5
+    },
+    {
+      "kind": "fixed_attack_with_early_and_late_decay",
+      "sample": 600000,
+      "time_seconds": 12.5
+    },
+    {
+      "kind": "fixed_attack_with_early_and_late_decay",
+      "sample": 744000,
+      "time_seconds": 15.5
+    },
+    {
+      "kind": "fixed_attack_with_early_and_late_decay",
+      "sample": 888000,
+      "time_seconds": 18.5
+    }
+  ],
+  "generator_sha256": "8a7f4c0de0935e4107e408875530241150679e031293d6744b93857314bb5640",
+  "native_stft_hop_samples": 256,
+  "recipe": {
+    "common_peak_target": 0.62,
+    "continuity_controls": [
+      "oscillator phase integrated over full source",
+      "shared slow frequency and level trajectories",
+      "aspiration generated and filtered over full source",
+      "decay noise indexed on full source",
+      "damage applied before crop"
+    ],
+    "damage": {
+      "applications": 1,
+      "cutoff_hz": 1500.0,
+      "implementation": "NumPy float64 rfft/irfft; mirrors src/dsp.rs gain and global finite-clip filtering, with expected small differences from Rust f32 rustfft",
+      "power": 2.0,
+      "transition_hz": 225.0,
+      "type": "whole-source Fourier lowpass"
+    },
+    "early_reflection_delays_seconds_lr": [
+      [
+        0.031,
+        0.041
+      ],
+      [
+        0.067,
+        0.059
+      ],
+      [
+        0.113,
+        0.129
+      ]
+    ],
+    "event_times_seconds": [
+      9.5,
+      12.5,
+      15.5,
+      18.5
+    ],
+    "harmonic_section_envelope": {
+      "relative_levels": [
+        0.4,
+        0.4,
+        1.0,
+        1.0,
+        0.2,
+        0.2
+      ],
+      "seconds": [
+        0,
+        8,
+        12,
+        18,
+        22,
+        48
+      ]
+    },
+    "late_decay_proxy_seconds": 2.8,
+    "source": "continuous shared harmonic oscillator bank with integrated slow frequency drift and multisecond level motion; dense globally filtered aspiration; fixed attacks with global-index early and late decay fields"
+  },
+  "sample_rate": 48000,
+  "samples": 1536000,
+  "schema": "long-coherence-procedural-fixture-v1",
+  "seed": 881000,
+  "source_sha256": {
+    "input_full": "aca1d25d24092bde0e42c3fd243b6022bd41356d7fb48a2f5a859887ca02b150",
+    "target_full": "aeb5c7b6751061dd06524ed5e6f790db0490a9ee69a2edb63c956eadd41f932c",
+    "view0_input": "235356df463c248d6ed23edf053074264faa91ef3ecf2d2de3e113ddb23fe229",
+    "view0_target": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158",
+    "view3_input": "0d6c5f848e9a5a3aecdbca7fd43573427b4eb7af6c03b5f143140c77f924108a",
+    "view3_target": "eb53a5c51d158e12ed43dd109326286f102766877e410ea769c6ce0c6c35f134"
+  },
+  "view_origins_hop_aligned": true,
+  "views": [
+    {
+      "events": [
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 456000,
+          "time_seconds": 9.5,
+          "view_sample": 456000
+        },
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 600000,
+          "time_seconds": 12.5,
+          "view_sample": 600000
+        },
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 744000,
+          "time_seconds": 15.5,
+          "view_sample": 744000
+        },
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 888000,
+          "time_seconds": 18.5,
+          "view_sample": 888000
+        }
+      ],
+      "id": "view0",
+      "input": "view0-input.wav",
+      "origin_sample": 0,
+      "samples": 1248000,
+      "target": "view0-target.wav"
+    },
+    {
+      "events": [
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 456000,
+          "time_seconds": 9.5,
+          "view_sample": 311616
+        },
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 600000,
+          "time_seconds": 12.5,
+          "view_sample": 455616
+        },
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 744000,
+          "time_seconds": 15.5,
+          "view_sample": 599616
+        },
+        {
+          "kind": "fixed_attack_with_early_and_late_decay",
+          "sample": 888000,
+          "time_seconds": 18.5,
+          "view_sample": 743616
+        }
+      ],
+      "id": "view3",
+      "input": "view3-input.wav",
+      "origin_sample": 144384,
+      "samples": 1248000,
+      "target": "view3-target.wav"
+    }
+  ]
+}

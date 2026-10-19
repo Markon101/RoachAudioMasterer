@@ -20,6 +20,7 @@ were not revalidated in this documentation pass.
 
 | Document | Role |
 | --- | --- |
+| [LONG_COHERENCE_RESULTS.md](LONG_COHERENCE_RESULTS.md) | Current long-phrase controls and measurement checkpoints |
 | [LONG_COHERENCE_PLAN.md](LONG_COHERENCE_PLAN.md) | New proposed audio experiment; no benefit claimed |
 | [AGENTS.md](../AGENTS.md) | Current execution policy |
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md) | Superseded historical checkpoint |

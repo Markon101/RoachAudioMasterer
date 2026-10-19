@@ -1,0 +1,37 @@
+{
+  "schema": "coherence-tools-verification-v1",
+  "source_parent": "cdfb642",
+  "source_sha256": {
+    "scripts/check_wola_controls.py": "1b22990bd9dcf2c34368eb8bd0d33d6d3dcc1a3e13dd6fba277d1803d556c5b6",
+    "scripts/test_wola_controls.py": "69991ac9f486bea5ad1b4739eb9d152997c58f9b6ab9700ff4d13d6f076472b3",
+    "scripts/long_coherence_fixture.py": "8a7f4c0de0935e4107e408875530241150679e031293d6744b93857314bb5640",
+    "scripts/test_long_coherence_fixture.py": "3e6499f763252f49d3f3899c32adb6c203a2d5e89665563526dcaa977e4e6faa",
+    "scripts/run_coherence_quality.py": "908a4dab97cb3de16de5cf66619503cc9a78ab14e9a460c178543eb3b74496e6",
+    "scripts/test_run_coherence_quality.py": "521af3a8d2892ff8e9d9411806ed979a09b38dddb4618c1278f768533f02e686",
+    "scripts/analyze_long_coherence.py": "79007c01dc7d168e78227c2635f833cd6603264b5282eeda59b05bdf0c350388",
+    "scripts/test_analyze_long_coherence.py": "4431c41d11f71bd96f4c477f02b5d8939ad7c03353fa85625aa8e3a661154d96"
+  },
+  "tests": {
+    "mathematical_controls": 9,
+    "continuous_fixture": 7,
+    "quality_runner": 6,
+    "offline_analysis": 3,
+    "total_passed": 25
+  },
+  "command": "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -m unittest scripts.test_wola_controls scripts.test_long_coherence_fixture scripts.test_run_coherence_quality scripts.test_analyze_long_coherence",
+  "core_model_or_weights_changed": false,
+  "interpretation": "Tested research machinery and model-independent controls; no deployed coherence or subjective improvement yet.",
+  "native_session": "runs/coherence-20261018/native-baseline-v1",
+  "native_session_status_at_tool_checkpoint": "running",
+  "delegation": {
+    "coherence_controls": "native gpt-6-luna: source mirror/math controls + independentstaticreview",
+    "coherence_fixture": "native gpt-6-luna: fixture/runner boundedimplementation; root corrected actualnativeWAVformat and hopalignment",
+    "integrator": "root: protocol, source/numericalreview, nativeexecution and offlineanalysis"
+  },
+  "known_failed_assumptions": [
+    "Initial3-secondshiftchangedSTFTgrid; rejectedbeforeinference.",
+    "NativeHoundstereofloatoutputisextensibletag65534, notalwayssimpletag3; parser/testcorrectedbeforeinference.",
+    "Task-worktreepathdoesnotchangeagentcwd; explicitworkdircheckaddedafterownedfileswerebrieflywritteninsharedrootwithoutcollision."
+  ],
+  "scope_gate": "run-local HALT/HALTED.json prevents subsequentjobs; source/input pins and observedresourcebounds; no globalshutdown/framework"
+}

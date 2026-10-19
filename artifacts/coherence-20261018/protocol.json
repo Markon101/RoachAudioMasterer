@@ -1,0 +1,42 @@
+{
+  "schema": "long-coherence-protocol-v1",
+  "frozen_before_neural_output": true,
+  "seed": 881000,
+  "view_offset_samples": 144384,
+  "native_hop_samples": 256,
+  "interior_global_samples": [
+    384000,
+    1008000
+  ],
+  "band_definition_hz": {
+    "low": "0<=f<=1500",
+    "mid": "1500<f<8000",
+    "high": "8000<=f<=24000"
+  },
+  "metrics": {
+    "FFT": "float64 rFFT/n with one-sidedParsevalweights",
+    "power_null_floor": 1e-14,
+    "amplitude_floor": 1e-07,
+    "phase_target_mask": "magnitude>=max(1e-7,1e-4*targetbandpeak), output>=1e-7",
+    "native_vs_python_wola_max_abs_tolerance": 5e-07,
+    "overlap_statistic_window_samples": 9600,
+    "protected_rms_investigation_trigger": 1e-06
+  },
+  "hypotheses": [
+    "Independentlynormalizedchunkresiduals maydisagreeforidenticalphysicalinput.",
+    "Per-chunkclosed-bandFourierlocks maynotpreservewhole-trackprotectedbands."
+  ],
+  "falsifiers": [
+    "Inputalignmentorhashmismatchinvalidatesrun.",
+    "Noordinaryoverlapcorrelation/leveldefectaboveknownnumericalroundoffweakensresidualdipclaim.",
+    "Boundary-layoutdependenceisnotitselfevidenceofaudibleinferiority."
+  ],
+  "resource_limits": {
+    "cpu_jobs": 3,
+    "per_job_seconds_safety_limit": 300,
+    "sampled_peak_rss_hwm_mib": 768
+  },
+  "production_mutation": false,
+  "full_clip_reference_is_ground_truth": false,
+  "runtime_performance_claim": false
+}
