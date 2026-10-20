@@ -116,3 +116,14 @@ This completes bounded finalizer observation, not the whole signal-chain ledger.
 Upstream stage ordering/settings/hashes, band crest/phase/coherence definitions,
 and broad real-recording validation remain open. No controller or production
 default was changed.
+
+### Semantic validation tightened
+
+A bounded DeepSeek 1017/Hermes worker generated two counterexamples: a false
+final-trim scalar with unchanged audio, and an unknown limiter kind. Independent
+execution reproduced both. The analyzer now validates the native limiter spec,
+retained-output identity and exact float32 final-trim relationship. Five original
+and two adversarial checks pass; all ten saved native audits still validate.
+The stereo synthetic fixture was corrected to apply trim after constructing both
+channels, since float32 multiplication is not associative. No DSP changed. See
+[the revalidation receipt](../artifacts/master-stage-audit-20261020/semantic_validation.json).

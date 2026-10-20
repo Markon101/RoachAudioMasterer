@@ -48,12 +48,17 @@ def make_audit(root: Path, dynamic: bool = False, onsets=(2_000, 12_000), silenc
         final_gain, limiter_passes, bypasses = 1.0, 0, 1
         limiter = None
         input_stage = 'gain_only_input'
-    stages.extend((('pre_final_trim', stages[-1][1].copy(), None),
-                   ('final_output', stages[-1][1]*final_gain, None)))
+    pre_trim_signal = stages[-1][1].copy()
+    stages.append(('pre_final_trim', pre_trim_signal, None))
+    pre_trim_channels = [pre_trim_signal, pre_trim_signal*0.9]
+    final_channels = [np.multiply(c, np.float32(final_gain), dtype=np.float32)
+                      for c in pre_trim_channels]
+    stages.append(('final_output', np.stack(final_channels, axis=1), None))
     record_rows = []
     final_hash = None
     for seq, (stage, signal, iteration) in enumerate(stages):
-        channels = [signal, signal*0.9]
+        channels = ([signal[:, 0], signal[:, 1]] if signal.ndim == 2
+                    else [signal, signal*0.9])
         wav_path = audit_dir/f'{seq:02}_{stage}.wav'
         _write_float_wav(wav_path, np.stack(channels, axis=1))
         meta = {'stage': stage, 'iteration': iteration,

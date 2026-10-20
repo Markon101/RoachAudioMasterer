@@ -42,10 +42,27 @@ def finite(value) -> bool:
 def fnv_planar(channels) -> str:
     h = 0xcbf29ce484222325
     for channel in channels:
-        for byte in channel.astype('<f4', copy=False).tobytes():
-            h ^= byte
-            h = (h * 0x100000001b3) & 0xffffffffffffffff
+        h = _fnv_bytes(h, channel.astype('<f4', copy=False).tobytes())
     return f'{h:016x}'
+
+
+def _fnv_bytes(state: int, raw: bytes) -> int:
+    h = state
+    for byte in raw:
+        h ^= byte
+        h = (h * 0x100000001b3) & 0xffffffffffffffff
+    return h
+
+
+def fnv_planar_after_scalar(channels, gain: float, block_samples: int = 262_144) -> str:
+    """Fingerprint Rust-like f32 scalar multiplication using bounded blocks."""
+    factor = np.float32(gain)
+    state = 0xcbf29ce484222325
+    for channel in channels:
+        for start in range(0, channel.size, block_samples):
+            block = np.multiply(channel[start:start+block_samples], factor, dtype=np.float32)
+            state = _fnv_bytes(state, np.asarray(block, dtype='<f4').tobytes())
+    return f'{state:016x}'
 
 
 def _rms(channels) -> float:
@@ -68,7 +85,8 @@ def _window_energy(channels, onsets: list[int], begin_ms: float, end_ms: float) 
     return total / count if count else None
 
 
-def _snapshot_metrics(path: Path, expected: dict, onsets: list[int], windows: dict) -> dict:
+def _snapshot_metrics(path: Path, expected: dict, onsets: list[int], windows: dict,
+                      final_trim_gain_for_expected: float | None = None) -> dict:
     info = wav_info(path)
     require(info['rate'] == RATE and 1 <= info['channels'] <= 2
             and 0 < info['frames'] <= MAX_FRAMES and info['format'] == 3
@@ -108,7 +126,7 @@ def _snapshot_metrics(path: Path, expected: dict, onsets: list[int], windows: di
         measured_db = 20.0 * math.log10(peak)
         require(abs(measured_db - float(native['sample_peak_dbfs'])) < 2e-4,
                 f'{path.name}: stored native sample peak does not match snapshot')
-    return {
+    result = {
         'snapshot_sha256': digest(path), 'fnv1a_planar_f32le': fnv_planar(channels),
         'geometry': {'sample_rate_hz': RATE, 'channels': len(channels), 'frames': frames},
         'mean_square_all_channels': rms*rms, 'rms_all_channels': rms,
@@ -124,6 +142,27 @@ def _snapshot_metrics(path: Path, expected: dict, onsets: list[int], windows: di
         'native_metrics': native,
         'qualification': 'fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected'
     }
+    if final_trim_gain_for_expected is not None:
+        result['fnv1a_planar_f32le_after_final_trim'] = fnv_planar_after_scalar(
+            channels, final_trim_gain_for_expected)
+    return result
+
+
+def _validate_limiter_spec(spec: dict, sequence: int) -> None:
+    require(set(spec) == {'kind', 'lookahead_samples', 'hold_samples', 'release_ms'},
+            f'record {sequence}: unknown limiter specification fields')
+    kind = spec.get('kind')
+    require(kind in ('legacy', 'smooth'), f'record {sequence}: unknown limiter kind/backend')
+    lookahead, hold, release = (spec.get('lookahead_samples'), spec.get('hold_samples'), spec.get('release_ms'))
+    require(type(lookahead) is int and lookahead > 0,
+            f'record {sequence}: limiter lookahead must be a positive integer')
+    require(type(hold) is int and hold >= 0,
+            f'record {sequence}: limiter hold must be a nonnegative integer')
+    require(type(release) in (int, float) and math.isfinite(float(release)) and release > 0,
+            f'record {sequence}: limiter release must be finite and positive')
+    expected = {'legacy': (96, 0, 60.0), 'smooth': (64, 528, 80.0)}[kind]
+    require((lookahead, hold, float(release)) == expected,
+            f'record {sequence}: limiter parameters do not match the native {kind} implementation')
 
 
 def _stage(row: dict) -> str:
@@ -190,6 +229,13 @@ def analyze(audit_dir: Path, onset_path: Path, out: Path) -> dict:
     require(summary.get('rate') == RATE and channels in (1, 2)
             and type(frames) is int and 0 < frames <= MAX_FRAMES, 'summary geometry outside bounds')
     require(summary.get('snapshots_enabled') is True, 'audit summary must declare snapshots enabled')
+    final_meta = rows[-1].get('meta', {})
+    declared_final_trim = final_meta.get('final_trim_gain_linear')
+    require(type(declared_final_trim) in (int, float)
+            and math.isfinite(float(declared_final_trim))
+            and 0.0 < float(declared_final_trim) <= 1.0,
+            'final trim gain must be a finite numeric scalar in (0, 1]')
+    declared_final_trim = float(declared_final_trim)
     windows = {'transient': (0.0, float(fixed['transient_ms'])),
                'sustain': (float(fixed['sustain_start_ms']), float(fixed['sustain_end_ms']))}
     stats, snapshot_receipts, snapshot_names = {}, [], set()
@@ -206,7 +252,8 @@ def analyze(audit_dir: Path, onset_path: Path, out: Path) -> dict:
         snapshot_names.add(name)
         path = audit_dir/name
         require(path.is_file() and path.stat().st_size == snap.get('bytes'), f'record {idx}: snapshot file/size mismatch')
-        measured = _snapshot_metrics(path, row, onsets, windows)
+        expected_trim = declared_final_trim if _stage(row) == 'pre_final_trim' else None
+        measured = _snapshot_metrics(path, row, onsets, windows, expected_trim)
         require(measured['geometry'] == {'sample_rate_hz': RATE, 'channels': channels, 'frames': frames},
                 f'record {idx}: snapshot geometry differs from summary')
         require(measured['fnv1a_planar_f32le'] == row.get('planar_f32le_fnv1a64'),
@@ -238,6 +285,7 @@ def analyze(audit_dir: Path, onset_path: Path, out: Path) -> dict:
             a, b = _pair(rows, i, 'pre_limiter', 'post_limiter')
             kind = a['meta'].get('limiter')
             require(isinstance(kind, dict), f'iteration {a["sequence"]}: limiter metadata missing')
+            _validate_limiter_spec(kind, a['sequence'])
             require(a['meta'].get('iteration') == b['meta'].get('iteration'), 'limiter pair iteration mismatch')
             require(type(a['meta'].get('iteration')) is int, 'limiter iteration must be integer')
             require(a['meta'].get('limiter') == b['meta'].get('limiter'), 'limiter spec changed within pair')
@@ -279,15 +327,25 @@ def analyze(audit_dir: Path, onset_path: Path, out: Path) -> dict:
     require(summary.get('last_retained_iteration') == iterations[-1], 'last retained iteration mismatch')
     require(i + 2 == len(rows), 'unexpected or missing records after retry sequence')
     a, b = _pair(rows, i, 'pre_final_trim', 'final_output')
+    retained = rows[i-1]
+    require(_stage(retained) in ('post_limiter', 'gain_only_output'),
+            'pre_final_trim must follow the retained limiter/bypass output')
+    require(retained['planar_f32le_fnv1a64'] == a['planar_f32le_fnv1a64'],
+            'pre_final_trim waveform differs from last retained limiter/bypass output')
     require(a['meta'].get('final_trim_gain_linear') is None
-            and isinstance(b['meta'].get('final_trim_gain_linear'), (int, float)),
+            and type(b['meta'].get('final_trim_gain_linear')) in (int, float),
             'final trim metadata misplaced')
-    comparisons.append(_compare('retained_output_to_pre_final_trim', rows[i-1], a, stats,
+    comparisons.append(_compare('retained_output_to_pre_final_trim', retained, a, stats,
                                 stats[0]['rms_all_channels']))
     comparisons.append(_compare('pre_final_trim_to_final_output', a, b, stats,
                                 stats[0]['rms_all_channels']))
     final_trim = float(b['meta']['final_trim_gain_linear'])
-    require(final_trim > 0 and math.isfinite(final_trim), 'invalid final trim gain')
+    require(final_trim == declared_final_trim, 'final trim metadata changed during analysis')
+    expected_final_fingerprint = stats[i]['fnv1a_planar_f32le_after_final_trim']
+    require(rows[i+1]['planar_f32le_fnv1a64'] == expected_final_fingerprint,
+            'final snapshot does not equal pre-final-trim samples multiplied by declared f32 gain')
+    require(stats[i+1]['fnv1a_planar_f32le'] == expected_final_fingerprint,
+            'final output sample payload disagrees with exact final-trim scalar multiplication')
 
     compact_rows = []
     for row in rows:

@@ -1,0 +1,27 @@
+{
+  "schema": "master-audit-semantic-revalidation-v1",
+  "date_utc": "2026-10-20T23:47:51.959640+00:00",
+  "parent_commit": "07e9ac9",
+  "analyzer_sha256": "bc85cf49f5112ed7a136ad0ef4244c835dc0ac617cf5d991da43d034b3f5069f",
+  "regressions": "Hermes1017generated2counterexamples; nativeworker androot independentlyreproduced; repairedcheckerrejectsboth",
+  "root_tests_passed": 18,
+  "analyzer_tests": 5,
+  "adversarial_tests": 2,
+  "unrelated_real_gate_tests": 11,
+  "native_saved_audits_revalidated": 10,
+  "native_audio_changed": false,
+  "synthetic_fixture_correction": "rightchannel finaltrim nowappliedafterstereoconstruction; correctf32multiplyorder ratherthanassumingassociativity",
+  "receipts": {
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-auto-bypass-candidate-wavs.json": "0771e2bb2ee1f1d7e66993c33eaa4372287a83011a46ccae64b9f4dcc22b4b1b",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-budget-half-candidate-wavs.json": "909b1f4638062b4c04595a5d469f8811bd53774d4af70db828b2fc85362d230b",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-gain-only-candidate-wavs.json": "1daeb5f9726d52744cc36e298c875c3fc4741f332541b167329ed7ff9b27d859",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-legacy-stress-candidate-wavs.json": "9a712b9fc4f937b756dab6f64120229b3e32f6cd4c6ff08dd5c4684758f80653",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-long-normal-candidate-wavs.json": "58a8cc73f3bc280d9c959494f9e7cba86560306a26cacc2c8af01015165cb89c",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-silence-candidate-wavs.json": "b0e66a5c7f63640ccaac8c53064c9e9bd6ce4f7a17c187eb26b92d54100fb0f8",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/native-smooth-stress-candidate-wavs.json": "22fabc174ee1c6410c3b41d15ca9313aaa31944b658affae3a5dea6f13ae67f5",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/engaged-budget-half-candidate-wavs.json": "430eabf1ab5107894a42d56641c1404232f751f349293d1961ef7dbd34ca1761",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/engaged-legacy-candidate-wavs.json": "79723bff9e97f2b3a87145472c6a2b15ad42055c0f23ec94543b631d8adf8d6e",
+    "runs/stage-accountability-20261020/semantic-recheck-v1/engaged-smooth-candidate-wavs.json": "bfa1f48ee2692672685755b6c4522a27922295f345c2400c433a2b902c9eaa39"
+  },
+  "root_stdout_sha256": "3be1f41f3a59d32c10b1fd9ee4b14a5f0550718d78deac531bd7cd98f77e7b1e"
+}
