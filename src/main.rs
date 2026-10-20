@@ -1471,12 +1471,13 @@ fn run() -> Result<()> {
                 profile.transient_density_per_sec
             );
             println!("-- Spectral & Spatial Sub-Second Balance --");
+            println!("  Legacy spectral scores below are uncalibrated FFT-bin levels, not band RMS dBFS.");
             println!(
-                "  Sub-Bass (<120 Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS",
+                "  Sub-Bass score: {:.1} | Low-Mid score: {:.1} | Mid score: {:.1}",
                 profile.sub_energy_dbfs, profile.low_mid_energy_dbfs, profile.mid_energy_dbfs
             );
             println!(
-                "  High (>6 kHz): {:.1} dBFS | Ultrasonic: {:.1} dBFS | Est. Cutoff: {:.0} Hz",
+                "  High score: {:.1} | Ultrasonic score: {:.1} | Heuristic cutoff: {:.0} Hz",
                 profile.high_energy_dbfs,
                 profile.ultrasonic_energy_dbfs,
                 profile.estimated_cutoff_hz
@@ -1487,7 +1488,7 @@ fn run() -> Result<()> {
                 profile.side_to_mid_ratio,
                 profile.sub_side_leak_ratio
             );
-            println!("-- Objective Artifact Critics (0.0=Clean, 1.0=Severe) --");
+            println!("-- Heuristic Artifact Scores (0.0..1.0; uncalibrated) --");
             println!(
                 "  AI Phase Shimmer:       {:.3}",
                 profile.artifacts.ai_shimmer
@@ -1520,7 +1521,7 @@ fn run() -> Result<()> {
                 "  Composite Defect Index: {:.3}",
                 profile.artifacts.composite_defect_index
             );
-            println!("-- Explicit Specialist Authorities & Learned Abstention --");
+            println!("-- Explicit Specialist Authorities & Heuristic Abstention --");
             println!(
                 "  Sub-Bass Specialist:       alpha = {:.2} [{}]",
                 profile.authorities.sub_bass_authority,
@@ -2381,7 +2382,7 @@ fn auto_master_pipeline(
     let assessor = assess::SceneAssessor::default();
     let pre_profile = assessor.assess(&current_audio);
     let pre_master_metrics = master::metrics(&current_audio);
-    println!("  Spectral: Sub (<120Hz): {:.1} dBFS | Low-Mid: {:.1} dBFS | Mid: {:.1} dBFS | High (>6kHz): {:.1} dBFS", pre_profile.sub_energy_dbfs, pre_profile.low_mid_energy_dbfs, pre_profile.mid_energy_dbfs, pre_profile.high_energy_dbfs);
+    println!("  Legacy spectral scores (uncalibrated): Sub: {:.1} | Low-Mid: {:.1} | Mid: {:.1} | High: {:.1}", pre_profile.sub_energy_dbfs, pre_profile.low_mid_energy_dbfs, pre_profile.mid_energy_dbfs, pre_profile.high_energy_dbfs);
     println!(
         "  Spatial:  Correlation: {:.3} | Side/Mid Ratio: {:.3} | Sub Side Leakage: {:.3}",
         pre_profile.interchannel_correlation,

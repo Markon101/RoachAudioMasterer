@@ -11,6 +11,8 @@ measurements, an isolated excitation prototype, a failed raw preservation gate,
 separate projection controls and a short listening package. It is not promoted.
 The [adverse Mid controls](ADVERSE_MID_CONTROLS_20261020.md) separate coherent false
 edits from target fidelity and identify the legacy assessment-unit defect.
+The [band observer](STAGE_AUDIT_STATUS.md#calibrated-digital-band-observer-2026-10-20)
+now measures calibrated digital levels while preserving existing routing.
 
 Historical plans, favorite labels, timings and device delivery paths below remain
 dated records. They do not override current policy or promise files survived cleanup.
@@ -32,7 +34,7 @@ were not revalidated in this documentation pass.
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) | Current continuation checkpoint |
 | [HANDOVER_NEXT_EVOLUTION.md](../HANDOVER_NEXT_EVOLUTION.md) | Historical snapshot with current pointer |
 | [README.md](../README.md) | Current entry point and scoped legacy examples |
-| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–29 |
+| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–30 |
 | [VALIDATION.md](../VALIDATION.md) | Versioned validation ledger |
 | [artifacts/README.md](../artifacts/README.md) | Historical artifact catalog/receipt |
 | [artifacts/next-evolution-v1/README.md](../artifacts/next-evolution-v1/README.md) | Historical artifact catalog/receipt |

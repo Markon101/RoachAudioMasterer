@@ -1,0 +1,364 @@
+{
+  "schema": "assessment-physical-band-observer-v1",
+  "scope": "whole-clip physical mean-square band observer; no routing, mastering, or model inference",
+  "provenance": {
+    "audio_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-881002-v1/view0-input.wav",
+    "audio_sha256": "532d68102eccb1ca2704012f767198f7e81c7c1c9c17d4e824305e637f14c3f9",
+    "observer_source_sha256": "4b60c5df51c0225f92b734aee01cfc4299b8e2077abb9c9247fe09a8c857014c",
+    "assessment_sha256": "b77fbfa5bcba88a795dce78249bfd90805ba17966f588e3f099ce9a8ecc8fa7e"
+  },
+  "geometry": {
+    "sample_rate_hz": 48000,
+    "channels": 2,
+    "frames": 1248000,
+    "duration_seconds": 26.0,
+    "wav_format_tag": 3,
+    "bits_per_sample": 32
+  },
+  "spectrum": {
+    "transform": "float64 rFFT(x)/N over whole clip",
+    "one_sided_parseval_weights": "DC=1; Nyquist=1 for even N; other positive bins=2",
+    "band_edges": "disjoint: DC, then (low,high] through Nyquist",
+    "null_power_floor": 1e-14,
+    "rms_reference": "20*log10(rms/1); a peak-one sine has RMS -3.0103 dBFS. Power is mean-square normalized samples, not acoustic watts or SPL.",
+    "orthonormal_mid_side_note": "M/S channels can exceed unit sample magnitude; their dBFS RMS is a linear level reference, not a clipping assertion."
+  },
+  "channels": {
+    "left": {
+      "sample_count": 1248000,
+      "waveform_rms_squared": 0.018412937843325122,
+      "waveform_rms": 0.13569428080551194,
+      "waveform_rms_dbfs": -17.348769128890716,
+      "band_power_sum": 0.018412937843325122,
+      "band_power_closure_error": 0.0,
+      "band_power_closure_pass_1e-10": true,
+      "bands": {
+        "dc": {
+          "frequency_hz": [
+            0.0,
+            0.0
+          ],
+          "power_mean_square": 9.499416368103877e-12,
+          "rms": 3.0821123224347093e-06,
+          "rms_dbfs": -110.22303076384644,
+          "power_below_null_floor": false
+        },
+        "sub_0_120_hz": {
+          "frequency_hz": [
+            0.0,
+            120.0
+          ],
+          "power_mean_square": 7.856587771116599e-07,
+          "rms": 0.0008863739488002002,
+          "rms_dbfs": -61.047660333418065,
+          "power_below_null_floor": false
+        },
+        "low_mid_120_500_hz": {
+          "frequency_hz": [
+            120.0,
+            500.0
+          ],
+          "power_mean_square": 0.016973865789418036,
+          "rms": 0.13028378943451882,
+          "rms_dbfs": -17.702192360668473,
+          "power_below_null_floor": false
+        },
+        "mid_500_6000_hz": {
+          "frequency_hz": [
+            500.0,
+            6000.0
+          ],
+          "power_mean_square": 0.001438281535091602,
+          "rms": 0.03792468239935045,
+          "rms_dbfs": -28.42156095059371,
+          "power_below_null_floor": false
+        },
+        "high_6000_14000_hz": {
+          "frequency_hz": [
+            6000.0,
+            14000.0
+          ],
+          "power_mean_square": 3.3073941353655377e-09,
+          "rms": 5.7509948142608664e-05,
+          "rms_dbfs": -84.80514048021001,
+          "power_below_null_floor": false
+        },
+        "upper_14000_22000_hz": {
+          "frequency_hz": [
+            14000.0,
+            22000.0
+          ],
+          "power_mean_square": 1.278357794800007e-09,
+          "rms": 3.575412975867273e-05,
+          "rms_dbfs": -88.93347576099573,
+          "power_below_null_floor": false
+        },
+        "top_22000_24000_hz": {
+          "frequency_hz": [
+            22000.0,
+            24000.0
+          ],
+          "power_mean_square": 2.6478702571274085e-10,
+          "rms": 1.627227782803443e-05,
+          "rms_dbfs": -95.77103298686293,
+          "power_below_null_floor": false
+        }
+      }
+    },
+    "right": {
+      "sample_count": 1248000,
+      "waveform_rms_squared": 0.018415472232675093,
+      "waveform_rms": 0.1357036190846622,
+      "waveform_rms_dbfs": -17.34817139941548,
+      "band_power_sum": 0.018415472232675097,
+      "band_power_closure_error": 3.469446951953614e-18,
+      "band_power_closure_pass_1e-10": true,
+      "bands": {
+        "dc": {
+          "frequency_hz": [
+            0.0,
+            0.0
+          ],
+          "power_mean_square": 1.4758053255994205e-10,
+          "rms": 1.2148272822090473e-05,
+          "rms_dbfs": -98.30970926790724,
+          "power_below_null_floor": false
+        },
+        "sub_0_120_hz": {
+          "frequency_hz": [
+            0.0,
+            120.0
+          ],
+          "power_mean_square": 7.835436750953576e-07,
+          "rms": 0.0008851800241167655,
+          "rms_dbfs": -61.05936790740685,
+          "power_below_null_floor": false
+        },
+        "low_mid_120_500_hz": {
+          "frequency_hz": [
+            120.0,
+            500.0
+          ],
+          "power_mean_square": 0.016976132004527626,
+          "rms": 0.13029248637019566,
+          "rms_dbfs": -17.701612564036772,
+          "power_below_null_floor": false
+        },
+        "mid_500_6000_hz": {
+          "frequency_hz": [
+            500.0,
+            6000.0
+          ],
+          "power_mean_square": 0.0014385521411581375,
+          "rms": 0.03792824990898127,
+          "rms_dbfs": -28.420743922325563,
+          "power_below_null_floor": false
+        },
+        "high_6000_14000_hz": {
+          "frequency_hz": [
+            6000.0,
+            14000.0
+          ],
+          "power_mean_square": 2.9961943787868836e-09,
+          "rms": 5.473750431639064e-05,
+          "rms_dbfs": -85.23430015106024,
+          "power_below_null_floor": false
+        },
+        "upper_14000_22000_hz": {
+          "frequency_hz": [
+            14000.0,
+            22000.0
+          ],
+          "power_mean_square": 1.1593735057211153e-09,
+          "rms": 3.404957423700207e-05,
+          "rms_dbfs": -89.35776628452561,
+          "power_below_null_floor": false
+        },
+        "top_22000_24000_hz": {
+          "frequency_hz": [
+            22000.0,
+            24000.0
+          ],
+          "power_mean_square": 2.4016582016450704e-10,
+          "rms": 1.5497284283528746e-05,
+          "rms_dbfs": -96.1948880030608,
+          "power_below_null_floor": false
+        }
+      }
+    },
+    "mid_orthonormal": {
+      "sample_count": 1248000,
+      "waveform_rms_squared": 0.03679107569834783,
+      "waveform_rms": 0.19180999895299472,
+      "waveform_rms_dbfs": -14.342575140708293,
+      "band_power_sum": 0.036791075698347844,
+      "band_power_closure_error": 1.3877787807814457e-17,
+      "band_power_closure_pass_1e-10": true,
+      "bands": {
+        "dc": {
+          "frequency_hz": [
+            0.0,
+            0.0
+          ],
+          "power_mean_square": 1.1598231582528724e-10,
+          "rms": 1.0769508615776638e-05,
+          "rms_dbfs": -99.35608223919391,
+          "power_below_null_floor": false
+        },
+        "sub_0_120_hz": {
+          "frequency_hz": [
+            0.0,
+            120.0
+          ],
+          "power_mean_square": 1.1460858679258625e-06,
+          "rms": 0.0010705540004716542,
+          "rms_dbfs": -59.40782842604815,
+          "power_below_null_floor": false
+        },
+        "low_mid_120_500_hz": {
+          "frequency_hz": [
+            120.0,
+            500.0
+          ],
+          "power_mean_square": 0.033942548477950044,
+          "rms": 0.18423503596751092,
+          "rms_dbfs": -14.692555530507574,
+          "power_below_null_floor": false
+        },
+        "mid_500_6000_hz": {
+          "frequency_hz": [
+            500.0,
+            6000.0
+          ],
+          "power_mean_square": 0.002847371777913265,
+          "rms": 0.05336077002736435,
+          "rms_dbfs": -25.455558238418487,
+          "power_below_null_floor": false
+        },
+        "high_6000_14000_hz": {
+          "frequency_hz": [
+            6000.0,
+            14000.0
+          ],
+          "power_mean_square": 6.299704501377324e-09,
+          "rms": 7.937067784375615e-05,
+          "rms_dbfs": -82.00679821408488,
+          "power_below_null_floor": false
+        },
+        "upper_14000_22000_hz": {
+          "frequency_hz": [
+            14000.0,
+            22000.0
+          ],
+          "power_mean_square": 2.436277259558375e-09,
+          "rms": 4.935865941816466e-05,
+          "rms_dbfs": -86.13273288516888,
+          "power_below_null_floor": false
+        },
+        "top_22000_24000_hz": {
+          "frequency_hz": [
+            22000.0,
+            24000.0
+          ],
+          "power_mean_square": 5.046525309639144e-10,
+          "rms": 2.2464472639345762e-05,
+          "rms_dbfs": -92.97007544305309,
+          "power_below_null_floor": false
+        }
+      }
+    },
+    "side_orthonormal": {
+      "sample_count": 1248000,
+      "waveform_rms_squared": 3.733437765237709e-05,
+      "waveform_rms": 0.00611018638442209,
+      "waveform_rms_dbfs": -44.27891083773015,
+      "band_power_sum": 3.733437765237709e-05,
+      "band_power_closure_error": 0.0,
+      "band_power_closure_pass_1e-10": true,
+      "bands": {
+        "dc": {
+          "frequency_hz": [
+            0.0,
+            0.0
+          ],
+          "power_mean_square": 4.109763310275924e-11,
+          "rms": 6.41074356863221e-06,
+          "rms_dbfs": -103.86183189316404,
+          "power_below_null_floor": false
+        },
+        "sub_0_120_hz": {
+          "frequency_hz": [
+            0.0,
+            120.0
+          ],
+          "power_mean_square": 4.231165842811545e-07,
+          "rms": 0.0006504741226837195,
+          "rms_dbfs": -63.73539951930256,
+          "power_below_null_floor": false
+        },
+        "low_mid_120_500_hz": {
+          "frequency_hz": [
+            120.0,
+            500.0
+          ],
+          "power_mean_square": 7.449315995620045e-06,
+          "rms": 0.002729343510007497,
+          "rms_dbfs": -51.27883602817553,
+          "power_below_null_floor": false
+        },
+        "mid_500_6000_hz": {
+          "frequency_hz": [
+            500.0,
+            6000.0
+          ],
+          "power_mean_square": 2.9461898336474136e-05,
+          "rms": 0.005427881569864447,
+          "rms_dbfs": -45.30739273430448,
+          "power_below_null_floor": false
+        },
+        "high_6000_14000_hz": {
+          "frequency_hz": [
+            6000.0,
+            14000.0
+          ],
+          "power_mean_square": 3.884012775100493e-12,
+          "rms": 1.970789886086412e-06,
+          "rms_dbfs": -114.10719350302003,
+          "power_below_null_floor": false
+        },
+        "upper_14000_22000_hz": {
+          "frequency_hz": [
+            14000.0,
+            22000.0
+          ],
+          "power_mean_square": 1.4540409627493853e-12,
+          "rms": 1.205836208922831e-06,
+          "rms_dbfs": -118.37423358507633,
+          "power_below_null_floor": false
+        },
+        "top_22000_24000_hz": {
+          "frequency_hz": [
+            22000.0,
+            24000.0
+          ],
+          "power_mean_square": 3.0031491333133597e-13,
+          "rms": 5.480099573286383e-07,
+          "rms_dbfs": -125.2242310064588,
+          "power_below_null_floor": false
+        }
+      }
+    }
+  },
+  "legacy_assessment": {
+    "sha256": "b77fbfa5bcba88a795dce78249bfd90805ba17966f588e3f099ce9a8ecc8fa7e",
+    "fields": {
+      "sub_energy_dbfs": 32.77716,
+      "low_mid_energy_dbfs": 26.024326,
+      "mid_energy_dbfs": 8.045576,
+      "high_energy_dbfs": -53.03994,
+      "ultrasonic_energy_dbfs": -57.59767
+    },
+    "unit_qualification": "Legacy assess.rs fields are raw windowed FFT-bin mean power divided by frame/bin counts; values are not calibrated physical dBFS band powers.",
+    "input_binding": "Caller-supplied assessment JSON; the JSON contains no input hash, so association with --audio is not authenticated."
+  }
+}

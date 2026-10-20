@@ -1,0 +1,39 @@
+{
+  "schema": "assessment-band-observer-evidence-index-v1",
+  "parent_state_commit": "3122dd3",
+  "recorded_utc": "2026-10-20T06:18:04.515056+00:00",
+  "files": {
+    "actual_validation.json": {
+      "bytes": 4071,
+      "sha256": "16b036b87291e0fa2944fea1337bc1e43e3219970c0f354a1f2b3435f4e418e1"
+    },
+    "stopped_input_view0.json": {
+      "bytes": 11748,
+      "sha256": "fcebf070176682612ab2b24ff13a5779e691c4a859b238a6b6a5c3c342403255"
+    },
+    "tone_level0.json": {
+      "bytes": 11346,
+      "sha256": "1d111a7134b409e3ce69202c060475c238b06305ccc062228bd84dc49451da5c"
+    },
+    "tone_level1.json": {
+      "bytes": 11348,
+      "sha256": "159ad895aa5a669f23e2db0a776334ae005da61acf96086086bf0ce261e43ef1"
+    },
+    "tone_level2.json": {
+      "bytes": 11361,
+      "sha256": "8c836d3250a8d32766ab2266db9600b3ffe0278be2548a80192b55e597634a84"
+    },
+    "verification.json": {
+      "bytes": 2508,
+      "sha256": "237680bbaab8d9ec49210ecf3b2e09bd287483ecd56e33a1f6a4e69db6e6d996"
+    }
+  },
+  "source_sha256": {
+    "scripts/audit_assessment_bands.py": "4b60c5df51c0225f92b734aee01cfc4299b8e2077abb9c9247fe09a8c857014c",
+    "scripts/test_audit_assessment_bands.py": "75d21aa3afcf5b7d758e7498221e011d450b6ed5c6798285689f56302ba607fb",
+    "src/assess.rs": "f93ab8ac84b0c76fcc8ca124949508ab7c79df26b3bf189168f9a65ac4addf1d",
+    "src/main.rs": "76649e6703d1f51efff192a628b80c371f4da8f242b3b24ae9a1accdf16e4465"
+  },
+  "prior_evidence_index": "artifacts/adverse-20261020/evidence_index.json",
+  "invariant": "legacy routing and native audio computations preserved; calibrated observations are separate"
+}

@@ -2,7 +2,7 @@
 
 ## 1. Quick Context for Subsequent Agents
 
-Read `AGENTS.md`, [README](../README.md), [the current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md), [architecture](ARCHITECTURE.md), and RESULTS Sections 24–29 first. The historical sprint summaries below are not the current task ledger.
+Read `AGENTS.md`, [README](../README.md), [the current handoff](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md), [architecture](ARCHITECTURE.md), and RESULTS Sections 24–30 first. The historical sprint summaries below are not the current task ledger.
 
 This repository is **RoachAudioMasterer**, an offline, Rust-first unified acoustic-scene restoration, expansion, and autonomous mastering system developed on Android/Termux on a Samsung Galaxy S25 Ultra (Adreno 830). `highband` is the legacy forwarding binary.
 
@@ -24,7 +24,8 @@ This repository is **RoachAudioMasterer**, an offline, Rust-first unified acoust
 - The native development diagnostic exposes a magnitude/complex-phase metric conflict and forced-head stopped-mid false additions. Final seeds, WOLA/real-track qualification and controlled listening remain pending.
 - Use [the documentation index](README.md) to distinguish current instructions, historical evidence and unpromoted proposals. The next audio priority is [long-duration coherence](LONG_COHERENCE_PLAN.md), with output changes gated by measured defects and listening.
 - The [coherence measurements](LONG_COHERENCE_RESULTS.md) show lower layout sensitivity with absolute-origin excitation, but its unprojected band gate fails. A separate whole-clip projection control passes development gates; native combined integration, broader adverse controls and owner listening remain pending. The prototype is an archived patch, not a current main-source flag. No audible improvement is established.
-- [Adverse controls](ADVERSE_MID_CONTROLS_20261020.md) now expose coherent false edits and verify that the base assessor abstains on the tested stopped inputs. Legacy assessment band fields are raw FFT-bin scores, not calibrated dBFS. Keep routing unchanged while verifying a diagnostic-only physical band-power observer.
+- [Adverse controls](ADVERSE_MID_CONTROLS_20261020.md) now expose coherent false edits and verify that the base assessor abstains on the tested stopped inputs. Legacy assessment band fields are raw FFT-bin scores, not calibrated dBFS. Keep routing unchanged and use the diagnostic observer below for measured levels.
+- The [digital band observer](STAGE_AUDIT_STATUS.md#calibrated-digital-band-observer-2026-10-20) is now verified and remains offline/optional. Use its calibrated levels for measurement, retaining legacy scores solely as the current routing scale until a separately qualified policy exists. This does not complete stage attribution.
 
 ---
 

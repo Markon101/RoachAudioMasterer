@@ -1,0 +1,79 @@
+{
+  "schema": "assessment-band-observer-actual-validation-v1",
+  "source_parent": "3122dd3",
+  "observer_source_sha256": "4b60c5df51c0225f92b734aee01cfc4299b8e2077abb9c9247fe09a8c857014c",
+  "jobs": [
+    {
+      "id": "tone_level0",
+      "command": [
+        "/data/data/com.termux/files/usr/bin/python",
+        "scripts/audit_assessment_bands.py",
+        "--audio",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level0/tone.wav",
+        "--assessment",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level0/assessment/assessment.json",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/assessment-band-observer-20261020/tone_level0.json"
+      ],
+      "result_sha256": "1d111a7134b409e3ce69202c060475c238b06305ccc062228bd84dc49451da5c",
+      "physical_low_mid_rms_dbfs": -19.999999993114123,
+      "legacy_low_mid_score": 25.132885,
+      "difference_db": 45.132884993114125,
+      "max_power_closure_error": 3.469446951953614e-18
+    },
+    {
+      "id": "tone_level1",
+      "command": [
+        "/data/data/com.termux/files/usr/bin/python",
+        "scripts/audit_assessment_bands.py",
+        "--audio",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level1/tone.wav",
+        "--assessment",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level1/assessment/assessment.json",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/assessment-band-observer-20261020/tone_level1.json"
+      ],
+      "result_sha256": "159ad895aa5a669f23e2db0a776334ae005da61acf96086086bf0ce261e43ef1",
+      "physical_low_mid_rms_dbfs": -59.999999959597055,
+      "legacy_low_mid_score": -14.867173,
+      "difference_db": 45.132826959597054,
+      "max_power_closure_error": 3.1763735522036263e-22
+    },
+    {
+      "id": "tone_level2",
+      "command": [
+        "/data/data/com.termux/files/usr/bin/python",
+        "scripts/audit_assessment_bands.py",
+        "--audio",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level2/tone.wav",
+        "--assessment",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level2/assessment/assessment.json",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/assessment-band-observer-20261020/tone_level2.json"
+      ],
+      "result_sha256": "8c836d3250a8d32766ab2266db9600b3ffe0278be2548a80192b55e597634a84",
+      "physical_low_mid_rms_dbfs": -99.99999999668815,
+      "legacy_low_mid_score": -54.86702,
+      "difference_db": 45.13297999668815,
+      "max_power_closure_error": 1.2924697071141057e-26
+    },
+    {
+      "id": "stopped_input_view0",
+      "command": [
+        "/data/data/com.termux/files/usr/bin/python",
+        "scripts/audit_assessment_bands.py",
+        "--audio",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-881002-v1/view0-input.wav",
+        "--assessment",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/long_stopped_view0-assessment.json/assessment.json",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/assessment-band-observer-20261020/stopped_input_view0.json"
+      ],
+      "result_sha256": "fcebf070176682612ab2b24ff13a5779e691c4a859b238a6b6a5c3c342403255",
+      "max_power_closure_error": 1.3877787807814457e-17
+    }
+  ],
+  "routing_changed": false,
+  "native_signal_processing_changed": false,
+  "interpretation": "Exact digital signal-power calibration on known tones and one real native-format procedural input; no acousticSPL, stagecausalledger, newcontroller or perceptualclaim."
+}

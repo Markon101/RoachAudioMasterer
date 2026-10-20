@@ -4,9 +4,11 @@
 //! - Multi-time-scale analysis:
 //!   - Millisecond: Transient attacks, onset density, clipping detection (0.1-5 ms)
 //!   - Sub-second: Spectral balance, Mid/Side coherence, artifact evaluation (20-500 ms)
-//!   - Multi-second: Macro-dynamic contrast, EBU R128 Loudness Range (1-10 s)
-//! - Explicit specialist authorities and learned abstention:
-//!   Modules output explicit confidence alpha in [0.0, 1.0]. If audio is intact, alpha -> 0 (abstain).
+//!   - Multi-second: Macro-dynamic contrast and crest-derived range heuristic,
+//!     not a measured EBU R128 loudness range.
+//! - Explicit specialist authorities and heuristic abstention:
+//!   Deterministic feature thresholds select authority alpha in [0.0, 1.0].
+//!   These are not calibrated defect probabilities or guaranteed intent recognition.
 //! - Strict separation of Conservative/Reversible stages from Generative/Irreversible stages.
 //! - Automatic preservation guardrails: mono compatibility, known-band invariance, and transient timing.
 
@@ -41,7 +43,10 @@ pub struct AcousticProfile {
     pub clipping_sample_count: usize,
     pub transient_density_per_sec: f32,
 
-    // Sub-second scale (20 - 500 ms)
+    // Legacy routing scale: mean unnormalized STFT-bin power in dB, not physical
+    // integrated band RMS dBFS. Field names/values remain for schema compatibility.
+    // Use the separate calibrated band observer for physical measurements; do not
+    // subtract one fixed offset or silently reinterpret existing routing thresholds.
     pub sub_energy_dbfs: f32,
     pub low_mid_energy_dbfs: f32,
     pub mid_energy_dbfs: f32,
@@ -242,9 +247,12 @@ impl SceneAssessor {
         // 4. Artifact Critics
         let artifacts = self.critics.evaluate(audio);
 
-        // 5. Explicit Specialist Authorities & Learned Abstention
+        // 5. Explicit specialist authorities and heuristic abstention.
+        // Preserve the historical uncalibrated band-score thresholds. Physical
+        // band-level calibration is diagnostic-only until routing is requalified.
         // Sub-Bass Authority:
-        // If sub is already present (>-35 dBFS) and side-leak is near zero (<0.05), abstain!
+        // These negative thresholds refer to the historical raw spectral score,
+        // not calibrated sub-band dBFS. Keep them unchanged pending qualification.
         let sub_bass_authority = if sub_energy_dbfs < -42.0 || artifacts.sub_instability > 0.40 {
             0.85
         } else if sub_energy_dbfs < -32.0 {

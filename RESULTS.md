@@ -1432,4 +1432,21 @@ See [the report](docs/ADVERSE_MID_CONTROLS_20261020.md) for identities, exact
 definitions, controls, limitations and reproduction. No new neural architecture,
 training, speed claim, listening result or production promotion is established.
 
+### 30. Calibrated band observation preserves legacy routing (2026-10-20)
+
+A separate offline observer now reports whole-clip Parseval band powers and
+digital RMS dBFS, with exact disjoint edges, DC/even-N Nyquist weights, L/R and
+orthonormal M/S, explicit null values and waveform-power closure. Five known-answer
+and actual-WAV regressions pass, as do independent exact-edge checks. Native-format
+known tones recover -20/-60/-100 dBFS mid RMS while the legacy scores remain
+approximately 45.13 dB higher. The stopped-input probe also closes correctly.
+
+The observer uses no model and changes no audio. Legacy field names, authority
+formulas and thresholds remain intact; native changes only qualify console labels
+and comments. The OpenCL Cargo check passes. See the
+[measurement contract](docs/STAGE_AUDIT_STATUS.md#calibrated-digital-band-observer-2026-10-20)
+and [actual receipts](artifacts/assessment-band-observer-20261020/actual_validation.json).
+Actual pre-limiter observation, full stage attribution and routing recalibration
+remain separate work. No production candidate or perceptual preference is promoted.
+
 

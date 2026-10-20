@@ -1,0 +1,49 @@
+{
+  "schema": "assessment-band-observer-verification-v1",
+  "recorded_utc": "2026-10-20T06:18:04.515056+00:00",
+  "source_parent": "3122dd3",
+  "tests": {
+    "new_observer_known_answer_and_actual_WAV": 5,
+    "focused_total": 16,
+    "failures": 0,
+    "command": "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -m unittest scripts.test_audit_assessment_bands scripts.test_analyze_stopped_coherence scripts.test_run_coherence_quality"
+  },
+  "native_check": {
+    "command": "CARGO_TARGET_DIR=/data/data/com.termux/files/usr/tmp/roach-native-solvers-target cargo check --locked --features opencl -j 8 --bin roach-audio-masterer",
+    "status": "passed"
+  },
+  "native_diff_scope": "src/assess.rs only comments; src/main.rs only println text plus one explanatory println. Numerical statements, thresholds, JSON field names/values, weights and solver unchanged.",
+  "assessor_code_after_removing_full_line_comments_equals_parent": true,
+  "independent_review": {
+    "agent": "coherence_fixture native gpt-6-luna",
+    "verdict": "no critical issue; independent exact-bin checks for120/500/6000/14000/22000Hz and even-NNyquist; null/oddN/MSpower confirmed",
+    "scope": "mathematical/diagnostic review only, not perceptual evidence"
+  },
+  "root_integration_refinements": [
+    "Float64 conversion before M/S even for direct float32 callers.",
+    "Explicit reference1 RMS definition; neutral upper/top band names.",
+    "Actual float-WAV geometry/hash/RMS integration regression."
+  ],
+  "actual_probe_count": 4,
+  "max_observed_parseval_closure_error": 1.3877787807814457e-17,
+  "optional_python_not_required_by_Rust_core": true,
+  "diagnostics_disabled_signal_path": "no observer invoked by native pipeline; native computational code unchanged",
+  "owner_blind_package_reverified": {
+    "trials": 4,
+    "audio_files": 8,
+    "judgments_received": false
+  },
+  "environment": {
+    "python": "3.14.8",
+    "platform": "Android-17-aarch64-64bit"
+  },
+  "support_source_sha256": {
+    "scripts/run_coherence_quality.py": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254",
+    "scripts/run_mid_profile.py": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862",
+    "scripts/roach_ears/audio_io.py": "9bdb9c07bbf55bbafb8826c1cf8e55a978f25cd300838a2d21483a892bdc0bbc"
+  },
+  "routing_recalibrated": false,
+  "production_promoted": false,
+  "speed_qualification": false,
+  "stage_ledger_complete": false
+}

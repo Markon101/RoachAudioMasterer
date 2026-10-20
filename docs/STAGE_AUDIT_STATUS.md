@@ -1,7 +1,7 @@
 # Stage attribution audit: measurement foundation
 
-Status: 2026-10-17. Meter repair and source reconnaissance, **not a completed
-stage ledger**. No mastering or restoration algorithm changed. The frozen
+Status: 2026-10-20. Meter repair, calibrated band observation and source
+reconnaissance, **not a completed stage ledger**. No mastering or restoration algorithm changed. The frozen
 eight-step model, production flags and champion remain intact.
 
 ## Verified meter defect and repair
@@ -53,6 +53,64 @@ python scripts/check_true_peak_native.py
 ```
 
 ## Ledger gaps and next contract
+
+### Calibrated digital band observer (2026-10-20)
+
+The [adverse-control probe](ADVERSE_MID_CONTROLS_20261020.md) found that assessor
+fields named `*_energy_dbfs` are legacy mean unnormalized STFT-bin powers in dB.
+They are not physical integrated band RMS levels. A known low-mid tone produces
+an approximately 45.13 dB difference; the offset depends on window, band and
+source. Current thresholds, authority formulas and serialized field names remain
+unchanged. Console labels and source comments now state the legacy units and
+heuristic nature of the authorities. No calibrated defect probability is implied.
+
+`scripts/audit_assessment_bands.py` is a separate opt-in offline observer. It
+accepts native 48 kHz mono/stereo WAVs from one sample through 48 seconds, checks
+geometry and finiteness, and writes compact versioned JSON. The schema is
+`assessment-physical-band-observer-v1`; it is not a replacement assessment or a
+controller. Optional legacy JSON is copied with an explicit warning that the
+JSON itself contains no input hash and therefore does not authenticate association
+with the supplied audio. The result binds the actual audio, observer and optional
+assessment hashes.
+
+Measurements use float64 whole-clip `rFFT(x)/N` with one-sided Parseval weights:
+DC and even-length Nyquist have weight one, other positive bins weight two.
+Disjoint bands are DC, (0,120], (120,500], (500,6000], (6000,14000],
+(14000,22000], (22000,24000] Hz. Stereo reports L/R and orthonormal M/S; mono
+remains one mono channel. Summed band powers must match waveform mean square
+within 1e-10. These exact whole-clip bands differ from legacy rounded STFT bins.
+They do not measure localized transient envelopes or remove finite-window effects.
+
+Power means mean-square normalized samples, not acoustic watts or SPL. RMS
+dBFS uses `20*log10(rms/1)`: a peak-one sine has -3.0103 dBFS RMS. M/S may exceed
+unit magnitude through the orthonormal transform without implying clipped L/R
+inputs. Exactly zero power has null dBFS; values below 1e-14 are separately flagged,
+with actual finite power retained. No one constant converts old band scores into
+these measurements, and no threshold retuning is included.
+
+Five regressions cover analytic stereo sine/M/S levels, DC/Nyquist multiplicity,
+odd lengths, silence/nonfinite inputs, and real float-WAV geometry/hash/RMS flow.
+Independent exact-bin checks covered 120/500/6000/14000/22000 Hz and Nyquist.
+Actual native-format probes recover mid-channel -20/-60/-100 dBFS on known tones;
+all four probe audits, including the stopped input, satisfy Parseval closure.
+See [validation](../artifacts/assessment-band-observer-20261020/actual_validation.json).
+
+```sh
+LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so \
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 \
+python -m unittest scripts.test_audit_assessment_bands
+LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so \
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 \
+python scripts/audit_assessment_bands.py --audio stage.wav \
+  --assessment optional-legacy-assessment.json --out NEW-band-audit.json
+```
+
+Omit `--assessment` when no matching legacy report exists. A fresh output path
+is required; the tool never modifies audio or normalizes gain. The canonical Rust
+pipeline gains no Python dependency. This is a Tier 2 numerical/diagnostic repair
+with limited Tier 3 probes, not a completed stage ledger or perceptual result.
+
+### Remaining stage-accountability work
 
 `master::metrics` already provides LUFS, RMS, sample peak, the native true-peak
 estimate and broadband crest. Existing run directories preserve most restoration,
