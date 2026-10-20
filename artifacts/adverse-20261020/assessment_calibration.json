@@ -1,0 +1,460 @@
+{
+  "schema": "legacy-assessment-units-probe-v1",
+  "scope": "actualnativeassess onknownsyntheticsinetones; no neuralinference or speedexperiment; productionroutingnotchanged",
+  "native_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+  "source_assess_sha256": "eaef4185589a3c2cc24ac19c207b7843f93ea849990b62773e8e689a0b302dab",
+  "tone_geometry": "L=R=amplitude*sin2pi281.25t;4s48k; orthonormalM=(L+R)/sqrt2; lowmid band120..500",
+  "rows": [
+    {
+      "amplitude_per_LR_channel": 0.1,
+      "frequency_hz": 281.25,
+      "frames": 192000,
+      "input_sha256": "33d5fc8f58989927ed08ef642032dc8ad3e83c9fbe3c0afffa8c4560f84c8db4",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "assess",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level0/tone.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level0/assessment"
+      ],
+      "physical_mid_waveform_rms_dbfs": -19.999999993114123,
+      "legacy_low_mid_energy_dbfs": 25.132885,
+      "legacy_minus_physical_mid_db": 45.132884993114125,
+      "profile": {
+        "peak_sample_dbfs": -20.0,
+        "clipping_sample_count": 0,
+        "transient_density_per_sec": 0.0,
+        "sub_energy_dbfs": -1.7388709,
+        "low_mid_energy_dbfs": 25.132885,
+        "mid_energy_dbfs": -27.354301,
+        "high_energy_dbfs": -70.241234,
+        "ultrasonic_energy_dbfs": -79.282745,
+        "estimated_cutoff_hz": 22000.0,
+        "interchannel_correlation": 1.0,
+        "side_to_mid_ratio": 0.0,
+        "sub_side_leak_ratio": 0.0,
+        "integrated_lufs": -20.800745,
+        "crest_factor_db": 3.0102997,
+        "dynamic_range_lra_lu": 2.0,
+        "artifacts": {
+          "ai_shimmer": 0.0,
+          "metallic_grain": 0.03312993,
+          "spectral_combing": 0.0,
+          "codec_swish": 0.0,
+          "phase_haze": 0.0,
+          "sub_instability": 0.0,
+          "over_wide_transient": 0.0,
+          "composite_defect_index": 0.0049694898
+        },
+        "authorities": {
+          "sub_bass_authority": 0.0,
+          "mid_flow_authority": 0.0,
+          "high_field_authority": 0.0,
+          "spatial_cleanup_authority": 0.0,
+          "conservative_defizz_authority": 0.0,
+          "master_glue_authority": 0.2
+        },
+        "stats": {
+          "band_slopes": [
+            {
+              "name": "sub",
+              "f_low_hz": 20.0,
+              "f_high_hz": 120.0,
+              "slope_db_per_octave": 6.55474,
+              "wiener_flatness": 0.6264522
+            },
+            {
+              "name": "low_mid",
+              "f_low_hz": 120.0,
+              "f_high_hz": 500.0,
+              "slope_db_per_octave": -6.855263,
+              "wiener_flatness": 0.037642654
+            },
+            {
+              "name": "mid",
+              "f_low_hz": 500.0,
+              "f_high_hz": 6000.0,
+              "slope_db_per_octave": 0.0,
+              "wiener_flatness": 0.0
+            },
+            {
+              "name": "high",
+              "f_low_hz": 6000.0,
+              "f_high_hz": 20000.0,
+              "slope_db_per_octave": -24.0,
+              "wiener_flatness": 0.0
+            },
+            {
+              "name": "global",
+              "f_low_hz": 20.0,
+              "f_high_hz": 20000.0,
+              "slope_db_per_octave": -6.2143726,
+              "wiener_flatness": 2.103705e-06
+            }
+          ],
+          "global_slope_db_per_octave": -6.2143726,
+          "global_wiener_flatness": 2.103705e-06,
+          "dynamics": {
+            "peak_dbfs": -20.0,
+            "peak_headroom_db": 20.0,
+            "l10_dbfs": -20.0,
+            "l50_dbfs": -20.0,
+            "l90_dbfs": -20.0,
+            "dynamic_spread_db": 0.0,
+            "crest_l10_db": 3.0103004,
+            "crest_l50_db": 3.0103004,
+            "crest_l90_db": 3.0103004,
+            "transient_crest_db": 3.0103004
+          },
+          "entropy_hnr": {
+            "spectral_entropy": 0.10800795,
+            "sub_entropy": 0.2723102,
+            "mid_entropy": 0.3498647,
+            "high_entropy": 0.89346194,
+            "hnr_db": 29.99137,
+            "harmonic_fraction": 0.999
+          },
+          "phase_jitter": [
+            {
+              "band_name": "sub",
+              "f_low_hz": 20.0,
+              "f_high_hz": 120.0,
+              "angular_variance": 0.008129821,
+              "phase_jitter_rad": 0.16925058
+            },
+            {
+              "band_name": "low_mid",
+              "f_low_hz": 120.0,
+              "f_high_hz": 500.0,
+              "angular_variance": 0.0003647142,
+              "phase_jitter_rad": 0.18483174
+            },
+            {
+              "band_name": "mid",
+              "f_low_hz": 500.0,
+              "f_high_hz": 6000.0,
+              "angular_variance": 0.0059343763,
+              "phase_jitter_rad": 0.5183372
+            },
+            {
+              "band_name": "high",
+              "f_low_hz": 6000.0,
+              "f_high_hz": 20000.0,
+              "angular_variance": 0.02781076,
+              "phase_jitter_rad": 1.1253885
+            },
+            {
+              "band_name": "global",
+              "f_low_hz": 20.0,
+              "f_high_hz": 20000.0,
+              "angular_variance": 0.00036575235,
+              "phase_jitter_rad": 0.18491976
+            }
+          ]
+        }
+      }
+    },
+    {
+      "amplitude_per_LR_channel": 0.001,
+      "frequency_hz": 281.25,
+      "frames": 192000,
+      "input_sha256": "674861a97a82d7f5e154da1033c85d4a7077855e6d016ce73ab599944e39469f",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "assess",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level1/tone.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level1/assessment"
+      ],
+      "physical_mid_waveform_rms_dbfs": -59.99999995959705,
+      "legacy_low_mid_energy_dbfs": -14.867173,
+      "legacy_minus_physical_mid_db": 45.13282695959705,
+      "profile": {
+        "peak_sample_dbfs": -60.0,
+        "clipping_sample_count": 0,
+        "transient_density_per_sec": 0.0,
+        "sub_energy_dbfs": -41.7388,
+        "low_mid_energy_dbfs": -14.867173,
+        "mid_energy_dbfs": -67.35398,
+        "high_energy_dbfs": -110.24138,
+        "ultrasonic_energy_dbfs": -119.28311,
+        "estimated_cutoff_hz": 22000.0,
+        "interchannel_correlation": 1.0,
+        "side_to_mid_ratio": 0.0,
+        "sub_side_leak_ratio": 0.0,
+        "integrated_lufs": -60.800743,
+        "crest_factor_db": 3.0102997,
+        "dynamic_range_lra_lu": 2.0,
+        "artifacts": {
+          "ai_shimmer": 0.0,
+          "metallic_grain": 0.0,
+          "spectral_combing": 0.0,
+          "codec_swish": 0.0,
+          "phase_haze": 0.0,
+          "sub_instability": 0.0,
+          "over_wide_transient": 0.0,
+          "composite_defect_index": 0.0
+        },
+        "authorities": {
+          "sub_bass_authority": 0.5,
+          "mid_flow_authority": 0.0,
+          "high_field_authority": 0.0,
+          "spatial_cleanup_authority": 0.0,
+          "conservative_defizz_authority": 0.0,
+          "master_glue_authority": 0.2
+        },
+        "stats": {
+          "band_slopes": [
+            {
+              "name": "sub",
+              "f_low_hz": 20.0,
+              "f_high_hz": 120.0,
+              "slope_db_per_octave": 6.554715,
+              "wiener_flatness": 0.62645453
+            },
+            {
+              "name": "low_mid",
+              "f_low_hz": 120.0,
+              "f_high_hz": 500.0,
+              "slope_db_per_octave": -6.8552704,
+              "wiener_flatness": 0.037642468
+            },
+            {
+              "name": "mid",
+              "f_low_hz": 500.0,
+              "f_high_hz": 6000.0,
+              "slope_db_per_octave": 0.0,
+              "wiener_flatness": 0.0
+            },
+            {
+              "name": "high",
+              "f_low_hz": 6000.0,
+              "f_high_hz": 20000.0,
+              "slope_db_per_octave": -24.0,
+              "wiener_flatness": 0.0
+            },
+            {
+              "name": "global",
+              "f_low_hz": 20.0,
+              "f_high_hz": 20000.0,
+              "slope_db_per_octave": -6.2143664,
+              "wiener_flatness": 2.1037022e-06
+            }
+          ],
+          "global_slope_db_per_octave": -6.2143664,
+          "global_wiener_flatness": 2.1037022e-06,
+          "dynamics": {
+            "peak_dbfs": -60.0,
+            "peak_headroom_db": 60.0,
+            "l10_dbfs": -60.0,
+            "l50_dbfs": -60.0,
+            "l90_dbfs": -60.0,
+            "dynamic_spread_db": 0.0,
+            "crest_l10_db": 3.0103014,
+            "crest_l50_db": 3.0103014,
+            "crest_l90_db": 3.0103014,
+            "transient_crest_db": 3.0103014
+          },
+          "entropy_hnr": {
+            "spectral_entropy": 0.108007886,
+            "sub_entropy": 0.27231008,
+            "mid_entropy": 0.34986562,
+            "high_entropy": 0.8748224,
+            "hnr_db": 29.99137,
+            "harmonic_fraction": 0.999
+          },
+          "phase_jitter": [
+            {
+              "band_name": "sub",
+              "f_low_hz": 20.0,
+              "f_high_hz": 120.0,
+              "angular_variance": 0.00812982,
+              "phase_jitter_rad": 0.16925056
+            },
+            {
+              "band_name": "low_mid",
+              "f_low_hz": 120.0,
+              "f_high_hz": 500.0,
+              "angular_variance": 0.00036471427,
+              "phase_jitter_rad": 0.18483174
+            },
+            {
+              "band_name": "mid",
+              "f_low_hz": 500.0,
+              "f_high_hz": 6000.0,
+              "angular_variance": 0.0059763296,
+              "phase_jitter_rad": 0.5182706
+            },
+            {
+              "band_name": "high",
+              "f_low_hz": 6000.0,
+              "f_high_hz": 20000.0,
+              "angular_variance": 0.24198705,
+              "phase_jitter_rad": 0.82303697
+            },
+            {
+              "band_name": "global",
+              "f_low_hz": 20.0,
+              "f_high_hz": 20000.0,
+              "angular_variance": 0.00036575907,
+              "phase_jitter_rad": 0.18491971
+            }
+          ]
+        }
+      }
+    },
+    {
+      "amplitude_per_LR_channel": 1e-05,
+      "frequency_hz": 281.25,
+      "frames": 192000,
+      "input_sha256": "dd09fd501f55d8cf576e4ec301ee3d2c3a64ac68e32332260954c04e46f62a82",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "assess",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level2/tone.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/assessment-calibration-v1/level2/assessment"
+      ],
+      "physical_mid_waveform_rms_dbfs": -99.99999999668815,
+      "legacy_low_mid_energy_dbfs": -54.86702,
+      "legacy_minus_physical_mid_db": 45.13297999668815,
+      "profile": {
+        "peak_sample_dbfs": -100.0,
+        "clipping_sample_count": 0,
+        "transient_density_per_sec": 0.0,
+        "sub_energy_dbfs": -81.73881,
+        "low_mid_energy_dbfs": -54.86702,
+        "mid_energy_dbfs": -107.35404,
+        "high_energy_dbfs": -120.0,
+        "ultrasonic_energy_dbfs": -120.0,
+        "estimated_cutoff_hz": 22000.0,
+        "interchannel_correlation": 1.0,
+        "side_to_mid_ratio": 0.0,
+        "sub_side_leak_ratio": 0.0,
+        "integrated_lufs": -70.0,
+        "crest_factor_db": 3.0102997,
+        "dynamic_range_lra_lu": 2.0,
+        "artifacts": {
+          "ai_shimmer": 0.0,
+          "metallic_grain": 0.0,
+          "spectral_combing": 0.0,
+          "codec_swish": 0.0,
+          "phase_haze": 0.0,
+          "sub_instability": 0.0,
+          "over_wide_transient": 0.0,
+          "composite_defect_index": 0.0
+        },
+        "authorities": {
+          "sub_bass_authority": 0.85,
+          "mid_flow_authority": 0.6,
+          "high_field_authority": 0.0,
+          "spatial_cleanup_authority": 0.0,
+          "conservative_defizz_authority": 0.0,
+          "master_glue_authority": 0.2
+        },
+        "stats": {
+          "band_slopes": [
+            {
+              "name": "sub",
+              "f_low_hz": 20.0,
+              "f_high_hz": 120.0,
+              "slope_db_per_octave": 6.554702,
+              "wiener_flatness": 0.62645286
+            },
+            {
+              "name": "low_mid",
+              "f_low_hz": 120.0,
+              "f_high_hz": 500.0,
+              "slope_db_per_octave": -6.8552737,
+              "wiener_flatness": 0.037642606
+            },
+            {
+              "name": "mid",
+              "f_low_hz": 500.0,
+              "f_high_hz": 6000.0,
+              "slope_db_per_octave": 0.0,
+              "wiener_flatness": 0.0
+            },
+            {
+              "name": "high",
+              "f_low_hz": 6000.0,
+              "f_high_hz": 20000.0,
+              "slope_db_per_octave": -24.0,
+              "wiener_flatness": 0.0
+            },
+            {
+              "name": "global",
+              "f_low_hz": 20.0,
+              "f_high_hz": 20000.0,
+              "slope_db_per_octave": -4.0881414,
+              "wiener_flatness": 2.5104398e-05
+            }
+          ],
+          "global_slope_db_per_octave": -4.0881414,
+          "global_wiener_flatness": 2.5104398e-05,
+          "dynamics": {
+            "peak_dbfs": -100.0,
+            "peak_headroom_db": 100.0,
+            "l10_dbfs": -106.0,
+            "l50_dbfs": -112.0,
+            "l90_dbfs": -124.0,
+            "dynamic_spread_db": 18.0,
+            "crest_l10_db": 6.0,
+            "crest_l50_db": 10.0,
+            "crest_l90_db": 14.0,
+            "transient_crest_db": 14.0
+          },
+          "entropy_hnr": {
+            "spectral_entropy": 0.10800685,
+            "sub_entropy": 0.27231014,
+            "mid_entropy": 0.34507707,
+            "high_entropy": 0.0,
+            "hnr_db": 29.99137,
+            "harmonic_fraction": 0.999
+          },
+          "phase_jitter": [
+            {
+              "band_name": "sub",
+              "f_low_hz": 20.0,
+              "f_high_hz": 120.0,
+              "angular_variance": 0.00812982,
+              "phase_jitter_rad": 0.16925055
+            },
+            {
+              "band_name": "low_mid",
+              "f_low_hz": 120.0,
+              "f_high_hz": 500.0,
+              "angular_variance": 0.0003647142,
+              "phase_jitter_rad": 0.18483172
+            },
+            {
+              "band_name": "mid",
+              "f_low_hz": 500.0,
+              "f_high_hz": 6000.0,
+              "angular_variance": 0.0076117595,
+              "phase_jitter_rad": 0.16289797
+            },
+            {
+              "band_name": "high",
+              "f_low_hz": 6000.0,
+              "f_high_hz": 20000.0,
+              "angular_variance": 0.0,
+              "phase_jitter_rad": 0.0
+            },
+            {
+              "band_name": "global",
+              "f_low_hz": 20.0,
+              "f_high_hz": 20000.0,
+              "angular_variance": 0.00036591693,
+              "phase_jitter_rad": 0.18482038
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "interpretation": "Bandfields labeleddBFS differ byroughly45.15dBfromphysicalMidRMSonthislowmidtone; rawperbinSTFTenergyaveragenotnormalizedbandRMS. FixedFFT/bandwidthspecificoffset; notuniversalconversion orjustificationtoretunelegacythresholds."
+}

@@ -35,6 +35,10 @@ def _hash_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def _hash_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
 def _write_float_wav(path: Path, samples: np.ndarray) -> None:
     """Write canonical stereo IEEE-f32 RIFF/WAVE, interleaved little-endian."""
     if samples.ndim != 2 or samples.shape[1] != 2:
@@ -144,7 +148,8 @@ def _render_source(n: int, seed: int, events: Iterable[float],
 def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
             view_specs: list[tuple[str, float, float]] | None = None,
             event_times: Iterable[float] | None = None,
-            base_hz: float = 146.8) -> dict:
+            base_hz: float = 146.8,
+            source_mode: str = "full") -> dict:
     """Generate a full source, globally degrade it once, then write aligned views."""
     out = Path(out)
     if out.exists() and any(out.iterdir()):
@@ -153,6 +158,8 @@ def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
         raise ValueError("duration_seconds must be positive and finite")
     if not math.isfinite(base_hz) or not 40.0 <= base_hz <= 1000.0:
         raise ValueError("base_hz must be finite and in 40..1000 Hz")
+    if source_mode not in ("full", "stopped_mid"):
+        raise ValueError("source_mode must be 'full' or 'stopped_mid'")
     n = int(round(duration_seconds * RATE))
     if not 1 <= n <= 48 * RATE:
         raise ValueError("fixture duration must round to 1 sample through 48 seconds")
@@ -175,10 +182,44 @@ def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
         normalized_views.append((view_id, origin, length))
 
     events = tuple(DEFAULT_EVENTS if event_times is None else event_times)
-    target, event_rows = _render_source(n, seed, events, base_hz)
-    # Filter after the one common peak scale, over the entire source, before
-    # any crop. Rust's f32 rustfft can differ by small roundoff from this.
-    damaged = _lowpass_once(target.astype(np.float64), 1500.0, 225.0, 2.0).astype(np.float32)
+    parent_source, event_rows = _render_source(n, seed, events, base_hz)
+    parent_recipe = {
+        "seed": int(seed), "duration_seconds": n / RATE, "base_hz": float(base_hz),
+        "event_times_seconds": list(map(float, events)),
+        "parent_source_f32_sha256": _hash_bytes(parent_source.tobytes(order="C")),
+        "independent_stems": False,
+        "description": "same continuous harmonic/aspiration/attack phrase recipe as full mode; not an independently synthesized stopped-mid stem",
+    }
+    if source_mode == "stopped_mid":
+        target = _lowpass_once(parent_source.astype(np.float64), 1200.0, 100.0, 3.0).astype(np.float32)
+        # A stopped-mid negative control: expose precisely the target as input.
+        damaged = target.copy()
+        source_construction = {
+            "mode": "stopped_mid", "parent_recipe": parent_recipe,
+            "transform": {"type": "whole-source Fourier lowpass during source construction",
+                          "cutoff_hz": 1200.0, "transition_hz": 100.0, "power": 3.0,
+                          "applications": 1,
+                          "implementation": "NumPy float64 rfft/irfft over complete parent source, followed by one float32 cast",
+                          "renormalization_after_transform": False},
+            "declared_missing_mid_band_hz": [1500.0, 8000.0],
+            "stem_policy": "no independent stems; stopped-mid target derives from the same generated full-source phrase",
+        }
+        damage = {"type": "identity", "applications": 0,
+                  "note": "input is an exact copy of the stopped-mid target; no manufactured degradation"}
+        continuity_controls = ["parent source generated over the complete physical source",
+                              "stopped-mid source transform applied globally before any crop",
+                              "input is an exact target copy",
+                              "no short-clip tiling or independent stems"]
+    else:
+        target = parent_source
+        # Preserve the original full-mode degradation path and float bits.
+        damaged = _lowpass_once(target.astype(np.float64), 1500.0, 225.0, 2.0).astype(np.float32)
+        source_construction = {"mode": "full", "parent_recipe": parent_recipe,
+                               "transform": None, "independent_stems": False}
+        damage = {"type": "whole-source Fourier lowpass", "cutoff_hz": 1500.0,
+                  "transition_hz": 225.0, "power": 2.0, "applications": 1,
+                  "implementation": "NumPy float64 rfft/irfft; mirrors src/dsp.rs gain and global finite-clip filtering, with expected small differences from Rust f32 rustfft"}
+        continuity_controls = ["oscillator phase integrated over full source", "shared slow frequency and level trajectories", "aspiration generated and filtered over full source", "decay noise indexed on full source", "damage applied before crop"]
     out.mkdir(parents=True, exist_ok=True)
     paths: dict[str, Path] = {}
     full_target = out / "target-full.wav"
@@ -210,6 +251,8 @@ def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
         "schema": "long-coherence-procedural-fixture-v1",
         "sample_rate": RATE, "channels": 2, "samples": n,
         "duration_seconds": n / RATE, "seed": int(seed),
+        "source_mode": source_mode,
+        "source_construction": source_construction,
         "source_sha256": {name: _hash_file(path) for name, path in paths.items()},
         "generator_sha256": _hash_file(Path(__file__)),
         "environment": {"numpy": np.__version__, "python": platform.python_version()},
@@ -221,10 +264,8 @@ def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
             "harmonic_section_envelope": {"seconds": [0, 8, 12, 18, 22, 48], "relative_levels": [0.4, 0.4, 1.0, 1.0, 0.2, 0.2]},
             "early_reflection_delays_seconds_lr": [[0.031, 0.041], [0.067, 0.059], [0.113, 0.129]],
             "late_decay_proxy_seconds": 2.8,
-            "damage": {"type": "whole-source Fourier lowpass", "cutoff_hz": 1500.0,
-                       "transition_hz": 225.0, "power": 2.0, "applications": 1,
-                       "implementation": "NumPy float64 rfft/irfft; mirrors src/dsp.rs gain and global finite-clip filtering, with expected small differences from Rust f32 rustfft"},
-            "continuity_controls": ["oscillator phase integrated over full source", "shared slow frequency and level trajectories", "aspiration generated and filtered over full source", "decay noise indexed on full source", "damage applied before crop"]
+            "damage": damage,
+            "continuity_controls": continuity_controls
         },
         "events": event_rows,
         "views": views,
@@ -259,8 +300,10 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--duration-seconds", type=float, default=32.0)
     parser.add_argument("--base-hz", type=float, default=146.8)
+    parser.add_argument("--source-mode", choices=("full", "stopped_mid"), default="full")
     args = parser.parse_args()
-    manifest = prepare(args.out, args.seed, args.duration_seconds, base_hz=args.base_hz)
+    manifest = prepare(args.out, args.seed, args.duration_seconds, base_hz=args.base_hz,
+                       source_mode=args.source_mode)
     print(json.dumps({"out": str(args.out), "samples": manifest["samples"],
                       "hashes": manifest["source_sha256"]}, indent=2))
 

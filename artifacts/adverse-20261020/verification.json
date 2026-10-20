@@ -1,0 +1,43 @@
+{
+  "schema": "adverse-control-verification-v1",
+  "recorded_utc": "2026-10-20T06:02:37.948459+00:00",
+  "source_parent": "9cd6d56428909bf2b697ab337c862a1254f293b7",
+  "python_tests": {
+    "passed": 17,
+    "failed": 0,
+    "command": "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts OPENBLAS_NUM_THREADS=1 python -m unittest scripts.test_long_coherence_fixture scripts.test_analyze_adverse_mid_sources scripts.test_analyze_stopped_coherence"
+  },
+  "rust_export_tests": {
+    "passed": 3,
+    "failed": 0,
+    "filters": [
+      "tests::seed_scope_rejects_duplicates_final_and_oversized_sets",
+      "tests::existing_generator_and_damage_are_seed_deterministic",
+      "tests::exported_float_wav_and_planar_samples_roundtrip_and_output_is_fresh"
+    ],
+    "command_pattern": "CARGO_TARGET_DIR=/data/data/com.termux/files/usr/tmp/roach-native-solvers-target cargo test --locked -j 8 --example export_mid_controls FILTER -- --exact --test-threads=1",
+    "initial_zero_selection_not_counted": true
+  },
+  "release_export_helper_build": "cargo build --release --locked -j 8 --example export_mid_controls, passed",
+  "raw_output_integrity": "native runner/analysis source pins + completion and all output hashes verified; four native projection jobs retained",
+  "main_production_src_diff_empty": true,
+  "new_long_gpu_jobs": 4,
+  "new_short_neural_jobs": 0,
+  "speed_qualification": false,
+  "promotion": false,
+  "review_corrections": [
+    "Both vocal source families include aspiration; names do not define an aspiration ablation.",
+    "Root added missing analyzer-source hashes in versioned reports; all numerical results unchanged.",
+    "A coherent-peak approximation undercounts neighboring-window-bin energy; actual known-tone probe shows45.13dB legacy-unit offset. No controller thresholds retuned."
+  ],
+  "environment": {
+    "python": "Python 3.14.8",
+    "free_disk_bytes": 21471289344
+  },
+  "delegation": {
+    "coherence_controls": "native Luna exporter/short analysis and independent unit derivation",
+    "coherence_fixture": "native Luna stopped fixture/negative analyzer",
+    "root": "protocol, actual native runs, known-tone calibration, source/hash/math review, integration and evidence reconciliation"
+  },
+  "external_paid_calls": 0
+}

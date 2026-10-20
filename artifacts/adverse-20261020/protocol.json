@@ -1,0 +1,55 @@
+{
+  "schema": "adverse-mid-development-protocol-v1",
+  "created_utc": "2026-10-20T05:43:28.691013+00:00",
+  "source_base": "9cd6d56",
+  "primary_question": "Does more coherent excitation merely make target-null false residuals consistent?",
+  "short_export_seeds": [
+    860003,
+    860007,
+    860002,
+    860004,
+    860005,
+    860015,
+    860019
+  ],
+  "seed_status": "development only; final870000..870047 remain untouched",
+  "native_source_export": "actual generate_mid_multitrack plus returned recipe.damage; no neuralinference, no normalization; preserveexactIEEE32andplanarbytes",
+  "short_analysis": "verify regeneratedtarget/inputFNVmatchesoldcontrolfingerprints for5existingcases; comparepreservednativeEuler8 to regeneratedtarget/input; retainnullabsolutepower",
+  "long_stopped_fixture": {
+    "seed": 881002,
+    "base_hz": 146.8,
+    "duration_seconds": 32,
+    "source_construction": "existingcontinuouslygeneratedfullsource ->global1200Hz lowpass transition100Hz power3 ->f32; no newnormalization",
+    "input": "exactcopyofstoppedtarget; no manufactured loss",
+    "view_samples": 1248000,
+    "origins": [
+      0,
+      144384
+    ],
+    "common_interior": [
+      384000,
+      1008000
+    ],
+    "modes": [
+      "restart",
+      "continuous"
+    ],
+    "backend": "samepinnedOpenCLbinary; Euler8 strength1,cutoff1500 ceiling8000,chunk8 overlap2",
+    "projection": "separateactualnativewholeclipprojectionperarm/view; no targetselection"
+  },
+  "gates": {
+    "max_protected_absolute_error_rms": 1e-06,
+    "continuous_projected_vs_restart_projected_false_residual_rms_growth_max": 0.1,
+    "layout_rms_reduction_minimum_for_mechanistic_claim": 0.5,
+    "stopped_target_full_source_missing_band_power_max": 1e-14,
+    "null_metric_policy": "ratiosundefinedifreferencepower<=1e-14; preserveabsoluteerrorandidentityzero; commoncroppedFFTdoesnotcertifyfullsourcebandnull"
+  },
+  "falsifiers": [
+    "Highcoherencewithnonzeroerroronidentitynegativeisconsistentfiction,notquality.",
+    "Morethan10%false-residualRMSgrowthrejectscombinedcandidatefornativeintegrationeveniflayoutimproves.",
+    "Target/inputoroldfingerprintmismatchinvalidatesregeneratedreferenceassociation."
+  ],
+  "known_source_qualification": "Both vocal_formant_solo andvocal_with_aspiration callgenerate_speech_vocal withaspiration. Family3changesseedandroom; familylabelsarenotaspirationablation. No additiveaspirationstemexportedafternonlinearformants/tanh.",
+  "no_speed_qualification": true,
+  "promotion": false
+}

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/export-mid-controls",
+    "--seeds",
+    "860003",
+    "860007",
+    "860002",
+    "860004",
+    "860005",
+    "860015",
+    "860019",
+    "--out",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1"
+  ],
+  "binary_sha256": "f1a990e9833d2d9a639c8c272a8bdb9751fb7b26525e862d957dda52fa7be476",
+  "receipt": {
+    "cases": 7,
+    "duration_seconds": 0.3413333333333333,
+    "manifest": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/manifest.json",
+    "manifest_sha256": "201eda8db166a5578ecc36a4429acc5114d3059a9768b3aeb5cf21fc9b4d825c",
+    "out": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1",
+    "samples_per_channel": 16384
+  },
+  "model_loaded": false,
+  "inference_performed": false,
+  "scope": "source regeneration only"
+}

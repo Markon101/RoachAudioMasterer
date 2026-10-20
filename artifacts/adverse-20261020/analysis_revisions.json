@@ -1,0 +1,25 @@
+{
+  "schema": "adverse-analysis-revision-receipt-v1",
+  "reports": [
+    {
+      "prior": "short_source_analysis.json",
+      "prior_sha256": "113604f38ae0a76920a1c688a2d61fb344142c5a7b31ab609fa97bf04b153a3c",
+      "current": "short_source_analysis_v2.json",
+      "current_sha256": "b0925c942972d96b85a6531038c5551c4764d28d4ae8289b8024738889a0fae6",
+      "analysis_source_sha256": "6c2a2dea3faf986a702f68dc31e98eba37c2e992dc74562be3480a5840503f7a",
+      "all_numerical_results_identical": true,
+      "sample_root_spelling_changed_but_same_canonical_path": true,
+      "reason": "Root review added missing explicit analyzer-source identity. Raw runs and prior reports retained; no measurement or threshold change."
+    },
+    {
+      "prior": "stopped_analysis.json",
+      "prior_sha256": "f642713d45cbc216ffa7abdd8c0f963c225ded44795d7806cb51f71040176ac5",
+      "current": "stopped_analysis_v2.json",
+      "current_sha256": "062d155e98d9510fe181cc08a46e9d124624165947f7109ea02c63e5f2906e3b",
+      "analysis_source_sha256": "5022ae70909189676a1f91b71aa051655071c8786d99f06668a16cebfed14648",
+      "all_numerical_results_identical": true,
+      "sample_root_spelling_changed_but_same_canonical_path": false,
+      "reason": "Root review added missing explicit analyzer-source identity. Raw runs and prior reports retained; no measurement or threshold change."
+    }
+  ]
+}

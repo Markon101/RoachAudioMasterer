@@ -1,7 +1,7 @@
 # Mission continuation — 2026-10-18
 
 This is a partial research checkpoint. Read AGENTS, README, architecture,
-RESULTS Sections 24–28 and the relevant frozen plan before changing behavior.
+RESULTS Sections 24–29 and the relevant frozen plan before changing behavior.
 Recheck Git state, running jobs, storage and retained artifacts before resuming.
 The machine-readable checkpoint is
 `artifacts/mission-20261018/mission_state.json`.
@@ -14,6 +14,15 @@ now leads the next work. The [documentation index](docs/README.md) and
 by that documentation pass.
 
 ## Latest continuation: measured long-phrase coherence
+
+Continuation on 2026-10-20: the [adverse-control report](docs/ADVERSE_MID_CONTROLS_20261020.md)
+now leads the frontier. Exact short sources are exported; the long stopped-mid
+negative confirms that more coherent residuals can still be wrong. Its base
+assessor/tuning Mid authority is zero, so do not label forced-head edits automatic
+activation. A known-tone probe verifies that legacy assessment band fields are
+uncalibrated FFT-bin scores despite dBFS names. Preserve routing/defaults while
+adding a calibrated diagnostic observer. Prototype source integration, broad
+audible quality and owner judgments remain pending.
 
 The [completed report](docs/LONG_COHERENCE_RESULTS.md) now supersedes the plan's
 initial pending baseline. `b031c41` added controlled continuous fixtures and the

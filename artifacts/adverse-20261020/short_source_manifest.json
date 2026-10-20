@@ -1,0 +1,264 @@
+{
+  "cases": [
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "stopped_mid_abstention",
+      "family_index": 11,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860003/degraded_input.planar-f32le",
+            "sha256": "0d4d8467b3b7b0d959763018771c12a2ad3b00ba0e964259152693c779dc2cad"
+          },
+          "wav": {
+            "path": "seed-860003/degraded_input.wav",
+            "sha256": "814b34e9725e4b63ec2a21fa4d1a5bf343009e33e48e4467511b771634c7ecb1"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860003/target.planar-f32le",
+            "sha256": "3494b2aec6b676e3492dc888cc368083f5ec250afd3e166f0383f0b421642692"
+          },
+          "wav": {
+            "path": "seed-860003/target.wav",
+            "sha256": "c9d910a4dba55da1104096ecd7f05c2789049195d0a7f81ed13e60e264ec54e0"
+          }
+        }
+      },
+      "recipe_path": "seed-860003/recipe.json",
+      "recipe_sha256": "c00ba7ffb455f1bfc57db0348b47729af191ea0a463568bad10b493431790e84",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860003
+    },
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "vocal_with_aspiration",
+      "family_index": 3,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860007/degraded_input.planar-f32le",
+            "sha256": "35709cc45a8fffd81c4dc9fbd454d5b680bf6952e32e64be7ba0c9bdfbf9996e"
+          },
+          "wav": {
+            "path": "seed-860007/degraded_input.wav",
+            "sha256": "655148158591305ac919622d9b6521ce0cf03acd6425966710dbb768be52f6c1"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860007/target.planar-f32le",
+            "sha256": "f78b2e6aea7e6c01844e24742813187c7d4a5c43170af67562652085e14817fd"
+          },
+          "wav": {
+            "path": "seed-860007/target.wav",
+            "sha256": "e3e7a5bbd345c8451a427dc21dd821076209cbecf3aee0cd46404521b5b87d94"
+          }
+        }
+      },
+      "recipe_path": "seed-860007/recipe.json",
+      "recipe_sha256": "789346ee06b3e63a37c5478894eb56e87248060c1903a22fa9d761c1257e2aa9",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860007
+    },
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "multitrack_ambient_dense",
+      "family_index": 10,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860002/degraded_input.planar-f32le",
+            "sha256": "46c64e8055843a58e6bc888175823de24ad24b2e5137b8b4f8dffc3f7e98378f"
+          },
+          "wav": {
+            "path": "seed-860002/degraded_input.wav",
+            "sha256": "cd36c23637db2fd6798c0810ea65eb27bc6ca478ca3009945b24d174baa2cbeb"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860002/target.planar-f32le",
+            "sha256": "4a8fae1ab26fc4015842fbc116f28513088706f4fd582858a5568cc078f1a220"
+          },
+          "wav": {
+            "path": "seed-860002/target.wav",
+            "sha256": "272a4e5411c5ce56d9c2ee2fbbf23dfd91c9429f0b9ba13deade11fa4bc46c6a"
+          }
+        }
+      },
+      "recipe_path": "seed-860002/recipe.json",
+      "recipe_sha256": "91f38b4019de8beb4ef3c64de45ea170ed57c69fc3213b38d6c720df85dc0381",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860002
+    },
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "silence",
+      "family_index": 0,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860004/degraded_input.planar-f32le",
+            "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471"
+          },
+          "wav": {
+            "path": "seed-860004/degraded_input.wav",
+            "sha256": "48e9b9a7a4158047d9fe7e0a58ead96b4c20108b8565d4bd5a2012c342f97511"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860004/target.planar-f32le",
+            "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471"
+          },
+          "wav": {
+            "path": "seed-860004/target.wav",
+            "sha256": "48e9b9a7a4158047d9fe7e0a58ead96b4c20108b8565d4bd5a2012c342f97511"
+          }
+        }
+      },
+      "recipe_path": "seed-860004/recipe.json",
+      "recipe_sha256": "63f97fd1a09ff4ecc52a910da3d5a773a2ab5b5aae91d74fb92ba5e599d343d0",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860004
+    },
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "near_silence",
+      "family_index": 1,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860005/degraded_input.planar-f32le",
+            "sha256": "b64661c1a6614611402f494ab1bc8618b7f2de896e73088fd3f5d07e2b2af548"
+          },
+          "wav": {
+            "path": "seed-860005/degraded_input.wav",
+            "sha256": "14960b8a9755ddf8d4ec3f3e213858c006b1002104cf942ef4810fb308addef3"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860005/target.planar-f32le",
+            "sha256": "6bf4827ed4a08c330e8ffa97cf79d6a3d654d2604b85e8754bd61d5baaa91e68"
+          },
+          "wav": {
+            "path": "seed-860005/target.wav",
+            "sha256": "ea0181d7c6885a8057f4a652a32cb404056116df2415d4277cc357102635ff20"
+          }
+        }
+      },
+      "recipe_path": "seed-860005/recipe.json",
+      "recipe_sha256": "4476e565bc2337d84111a6b7d4eb7817872a1c15620d5e8668136187d055c8dd",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860005
+    },
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "stopped_mid_abstention",
+      "family_index": 11,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860015/degraded_input.planar-f32le",
+            "sha256": "1fe70922392e7276404d4cfc38ec34739e4770bbd1002ee589adc84d83827c6e"
+          },
+          "wav": {
+            "path": "seed-860015/degraded_input.wav",
+            "sha256": "0147627ecf83076e77bfc7dcb9d7599e9f5a6c2382459e17d2cd921b0f0b018c"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860015/target.planar-f32le",
+            "sha256": "fbb791930b4ff2c06d7bbd69b5a67ed4ab6c646fcf0d227911cd0c00eb23fce5"
+          },
+          "wav": {
+            "path": "seed-860015/target.wav",
+            "sha256": "ae5ec8dd34f19b94833dda4d048f7e47306182f88129f8643e4643f47ad024f5"
+          }
+        }
+      },
+      "recipe_path": "seed-860015/recipe.json",
+      "recipe_sha256": "25de048ff2bb2ec36931d9e87372ffbc273183693bfef4a7f02b58cc1cbfdef8",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860015
+    },
+    {
+      "duration_seconds": 0.3413333333333333,
+      "family": "vocal_with_aspiration",
+      "family_index": 3,
+      "files": {
+        "degraded_input": {
+          "planar_f32le": {
+            "path": "seed-860019/degraded_input.planar-f32le",
+            "sha256": "1059a7cb8d44576834a3b575e71a0e7b45db95c85c284d52103d934a7660cb95"
+          },
+          "wav": {
+            "path": "seed-860019/degraded_input.wav",
+            "sha256": "c9646c9e4a5dbd5e0782d95a7db68a1f93f75cdbff61eae48bae941877dbc997"
+          }
+        },
+        "target": {
+          "planar_f32le": {
+            "path": "seed-860019/target.planar-f32le",
+            "sha256": "ccb90bc9db67e71fc6533e3f5a5c17c2653958fcd8a33821e0751f2690d64693"
+          },
+          "wav": {
+            "path": "seed-860019/target.wav",
+            "sha256": "eeeee557b61bb748b57158e31e3b6f775f4ec0f584e2c5a65b3826ffabbba0f0"
+          }
+        }
+      },
+      "recipe_path": "seed-860019/recipe.json",
+      "recipe_sha256": "e04c25257dfa5551ec28c1954c994e5381163698a4ed9cb8579eee9c9f1a5945",
+      "sample_rate_hz": 48000,
+      "samples_per_channel": 16384,
+      "seed": 860019
+    }
+  ],
+  "generator": "existing rich_synth::generate_mid_multitrack(seed) followed by that returned recipe.damage.apply(target)",
+  "geometry": {
+    "channels": 2,
+    "raw_layout": "channel-major planar f32 little-endian, L then R",
+    "sample_rate_hz": 48000,
+    "samples_per_channel": 16384
+  },
+  "long_coherence_limit": "16384 samples at 48000 Hz is about 0.3413 seconds and cannot establish long coherence; samples are not tiled",
+  "provenance": {
+    "executable_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/export-mid-controls",
+    "executable_sha256": "f1a990e9833d2d9a639c8c272a8bdb9751fb7b26525e862d957dda52fa7be476",
+    "git_head": "9cd6d56428909bf2b697ab337c862a1254f293b7",
+    "git_status_porcelain": "M scripts/long_coherence_fixture.py\n M scripts/test_long_coherence_fixture.py\n?? examples/export_mid_controls.rs",
+    "source_sha256": {
+      "examples/export_mid_controls.rs": "f8e81c53cc00fc2c6b1cd9e995a5e47ed7d9978b93b1d76ab416e36c594d14e4",
+      "src/backend.rs": "37587c75107ee157947d8665d5ccbca1a0ebf07ab0d8dbb06c1b12c9dc457e6c",
+      "src/dsp.rs": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54",
+      "src/model.rs": "35fe86f07132b11b331a1f65f866a6315dbabe2ef79ad5480522fd9fbd12583a",
+      "src/native_audio.rs": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b",
+      "src/native_dsp.rs": "aeaac57f069fc8ea0a2669fed1ae917d1902b6813daa15a52b6ed7cd08c6a8d8",
+      "src/rich_synth.rs": "e0bc220a0b752df7e864c958f4e5fb24789d78299e6ed0b72401e34ee8eee364",
+      "src/scene.rs": "e4c645b249baadf19abb08668c85954fa782d39afec323fe2b323b78c9f774e5",
+      "src/scene_features.rs": "4ea762fcc825b7101cdfb733edbb6742ad849934ac965c55edafb5038a019556",
+      "src/scene_model.rs": "54cb759c444a9e0562fe86845fd84fb71a5b1dbe82ad4b5470909060dc06dfb7",
+      "src/synth.rs": "4e34f83bf9e06aef3be0f7368d7c037357cf6d698ad09b3c5bd398064a57f107"
+    }
+  },
+  "schema": "mid-procedural-source-bundle-v1",
+  "scope": "exact deterministic source export only; no Mid model load, inference, correction, or normalization",
+  "seed_policy": {
+    "final_seeds_rejected": true,
+    "maximum_cases": 8,
+    "maximum_exclusive": 870000,
+    "minimum_inclusive": 860000
+  },
+  "source_decomposition": "not exported: the generator returns only the final composite target and recipe; this bundle must not be described as a component-stem decomposition"
+}

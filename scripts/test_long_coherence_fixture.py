@@ -5,7 +5,9 @@ from pathlib import Path
 
 import numpy as np
 
-from scripts.long_coherence_fixture import RATE, _lowpass_once, _render_source, prepare
+from scripts.long_coherence_fixture import (
+    DEFAULT_EVENTS, DEFAULT_SEED, RATE, _hash_bytes, _lowpass_once, _render_source, prepare,
+)
 from scripts.roach_ears.audio_io import read_wav
 
 
@@ -30,6 +32,16 @@ class LongCoherenceFixtureTests(unittest.TestCase):
         for name, digest in a["source_sha256"].items():
             path = self.root / "a" / (name.replace("_", "-") + ".wav")
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), digest)
+
+    def test_full_mode_default_and_explicit_mode_preserve_all_audio_hashes(self):
+        implicit = prepare(self.root / "implicit", seed=DEFAULT_SEED, duration_seconds=0.24,
+                           view_specs=[("view0", 0.0, 0.18)], event_times=[0.08])
+        explicit = prepare(self.root / "explicit", seed=DEFAULT_SEED, duration_seconds=0.24,
+                           view_specs=[("view0", 0.0, 0.18)], event_times=[0.08],
+                           source_mode="full")
+        self.assertEqual(implicit["source_sha256"], explicit["source_sha256"])
+        self.assertEqual(implicit["source_mode"], "full")
+        self.assertEqual(implicit["recipe"]["damage"]["applications"], 1)
 
     def test_views_are_bit_identical_crops_of_same_physical_source(self):
         root = self.root / "fixture"
@@ -86,6 +98,47 @@ class LongCoherenceFixtureTests(unittest.TestCase):
         self.assertEqual(decoded.samples.shape, (2, 127))
         self.assertTrue(np.isfinite(decoded.samples).all())
         self.assertFalse(np.any(decoded.samples))
+
+    def test_stopped_mid_is_identity_input_with_only_float_quantization_in_missing_band(self):
+        duration = 2.0
+        seed = DEFAULT_SEED
+        root = self.root / "stopped"
+        manifest = prepare(root, seed=seed, duration_seconds=duration, source_mode="stopped_mid")
+        target = read_wav(root / "target-full.wav").samples.T
+        input_audio = read_wav(root / "input-full.wav").samples.T
+        self.assertEqual(target.shape, (int(duration * RATE), 2))
+        self.assertTrue(np.isfinite(target).all())
+        self.assertTrue(np.array_equal(target.view(np.uint32), input_audio.view(np.uint32)))
+
+        parent, _ = _render_source(len(target), seed, DEFAULT_EVENTS)
+        expected = _lowpass_once(parent.astype(np.float64), 1200.0, 100.0, 3.0).astype(np.float32)
+        self.assertTrue(np.array_equal(target.view(np.uint32), expected.view(np.uint32)))
+
+        spectrum = np.fft.rfft(target.astype(np.float64), axis=0) / target.shape[0]
+        frequencies = np.fft.rfftfreq(target.shape[0], 1.0 / RATE)
+        mask = (frequencies > 1500.0) & (frequencies < 8000.0)
+        weights = np.full(int(target.shape[0] // 2) + 1, 2.0)
+        weights[0] = 1.0
+        if target.shape[0] % 2 == 0:
+            weights[-1] = 1.0
+        band_power_by_channel = np.sum(weights[mask, None] * np.abs(spectrum[mask]) ** 2, axis=0)
+        self.assertLess(float(np.max(band_power_by_channel)), 1e-14)
+        self.assertEqual(manifest["source_mode"], "stopped_mid")
+        self.assertEqual(manifest["recipe"]["damage"], {
+            "type": "identity", "applications": 0,
+            "note": "input is an exact copy of the stopped-mid target; no manufactured degradation",
+        })
+        construction = manifest["source_construction"]
+        self.assertEqual(construction["parent_recipe"]["parent_source_f32_sha256"],
+                         _hash_bytes(parent.tobytes(order="C")))
+        self.assertFalse(construction["parent_recipe"]["independent_stems"])
+        self.assertFalse(construction["transform"]["renormalization_after_transform"])
+
+    def test_invalid_source_mode_fails_before_creating_output(self):
+        out = self.root / "invalid-mode"
+        with self.assertRaisesRegex(ValueError, "source_mode must be"):
+            prepare(out, duration_seconds=0.24, source_mode="invented")
+        self.assertFalse(out.exists())
 
     def test_invalid_view_scope_and_duration_fail_before_output(self):
         for identifier in ("../escape", "bad/name"):

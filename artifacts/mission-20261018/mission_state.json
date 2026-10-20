@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-20T05:37:29.575179+00:00",
+  "date_utc": "2026-10-20T06:02:37.948459+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "238193df474ad180be1aa92375d44eb703061911",
@@ -19,7 +19,8 @@
     "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
     "4": "truepeak meter repaired previously; full causal stage ledger and actual pre-limiter snapshots pending",
     "5": "not started; dynamics-v2 remains demoted",
-    "long_coherence": "native baseline and isolated absolute-origin excitation measured; raw bandgate failed; separate projection+continuity development gates pass; no native integration/promotion"
+    "long_coherence": "native baseline and isolated absolute-origin excitation measured; raw bandgate failed; separate projection+continuity development gates pass; no native integration/promotion",
+    "adverse_mid": "7 native source pairs exported; short prior false-add quantified; long stopped negative retains96.319%layout reduction with1.14%false-energy growth; baseMidabstains; assessmentunitdefect verified"
   },
   "native_development": {
     "scene_seeds": [
@@ -70,13 +71,14 @@
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Regenerate exact adverse stopped-mid/aspiration target+input controls; test consistent-fiction hypothesis on continuous phrases. Owner blind diagnostic pending; no training/adaptiveNFE or combined native integration before adverse qualification.",
+  "next_action": "Add calibrated diagnostic-only physical band-power observer and clarify legacy units before any routing retune. Preserve automatic abstention qualification. Owner blind package pending; native continuous prototype remains unintegrated.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
     "docs/HOST_BATCH_RESULTS_20261018.md",
     "docs/LISTENING_RESTORATION_20261018.md",
-    "docs/LONG_COHERENCE_RESULTS.md"
+    "docs/LONG_COHERENCE_RESULTS.md",
+    "docs/ADVERSE_MID_CONTROLS_20261020.md"
   ],
   "delegation": [
     {
@@ -109,7 +111,7 @@
   "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
   "documentation_review_base_commit": "394fe30",
   "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary.",
-  "checkpoint_tool_parent_commit": "7ec7eaf8c1748108475435e8ffecb7c3f02e8be2",
+  "checkpoint_tool_parent_commit": "9cd6d56428909bf2b697ab337c862a1254f293b7",
   "repo_object": {
     "identity": "Rust-first unified acoustic-scene restoration/correction/expansion with protected historical champions",
     "canonical_core": {
@@ -119,17 +121,17 @@
       "main_native_signal_path_unchanged": true
     },
     "local_realization": {
-      "evidence_index": "artifacts/coherence-20261018/evidence_index.json",
-      "index_sha256": "b4937cc8f8273331ff415233949fda473aad63fa8a8d372355e3cc2ac7e6707e",
+      "evidence_index": "artifacts/adverse-20261020/evidence_index.json",
+      "index_sha256": "7494aff0ef9cda61380fd0ae897c92d7bfee183036889d084e47916f6273d131",
       "pinned_native_binary": "runs/coherence-20261018/continuous-excitation-candidate",
       "native_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
       "raw_run_root": "runs/coherence-20261018",
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "mechanistic continuity confirmed on limited development material; unprojected preservation falsified; combined offline control passes; fidelity and perceptual preference unestablished",
+    "frontier": "Coherent false residual confirmed; fixed harmonic prior already accounts for most stopped-mid false addition. Known-tone probe falsifies legacy dBFS labels; diagnostic calibration next without changing routing.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
-    "verification": "artifacts/coherence-20261018/checkpoint_verification.json"
+    "verification": "artifacts/adverse-20261020/verification.json"
   }
 }

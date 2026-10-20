@@ -1,0 +1,136 @@
+{
+  "schema": "adverse-native-source-association-v1",
+  "bundle_manifest_sha256": "201eda8db166a5578ecc36a4429acc5114d3059a9768b3aeb5cf21fc9b4d825c",
+  "old_cpu_cases_sha256": "9ac0a38675aa0f2dd69f760be2d6ca01a2a1ff98227f95543408fcd082ed4984",
+  "comparisons": [
+    {
+      "seed": 860003,
+      "family": "stopped_mid_abstention",
+      "signal": "target",
+      "sha256": "3494b2aec6b676e3492dc888cc368083f5ec250afd3e166f0383f0b421642692",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:ba4d3c3a7f0ee3f8",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860003,
+      "family": "stopped_mid_abstention",
+      "signal": "degraded_input",
+      "sha256": "0d4d8467b3b7b0d959763018771c12a2ad3b00ba0e964259152693c779dc2cad",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:ae6eb6ecee202086",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860007,
+      "family": "vocal_with_aspiration",
+      "signal": "target",
+      "sha256": "f78b2e6aea7e6c01844e24742813187c7d4a5c43170af67562652085e14817fd",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:7863c3ccb5b0da71",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860007,
+      "family": "vocal_with_aspiration",
+      "signal": "degraded_input",
+      "sha256": "35709cc45a8fffd81c4dc9fbd454d5b680bf6952e32e64be7ba0c9bdfbf9996e",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:5cf09b1aa2962dcd",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860002,
+      "family": "multitrack_ambient_dense",
+      "signal": "target",
+      "sha256": "4a8fae1ab26fc4015842fbc116f28513088706f4fd582858a5568cc078f1a220",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:67b366da0fc14113",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860002,
+      "family": "multitrack_ambient_dense",
+      "signal": "degraded_input",
+      "sha256": "46c64e8055843a58e6bc888175823de24ad24b2e5137b8b4f8dffc3f7e98378f",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:aeb93cf1b69d9063",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860004,
+      "family": "silence",
+      "signal": "target",
+      "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:c74b47c8c74a2325",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860004,
+      "family": "silence",
+      "signal": "degraded_input",
+      "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:c74b47c8c74a2325",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860005,
+      "family": "near_silence",
+      "signal": "target",
+      "sha256": "6bf4827ed4a08c330e8ffa97cf79d6a3d654d2604b85e8754bd61d5baaa91e68",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:c02e3a876dd0e2a6",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860005,
+      "family": "near_silence",
+      "signal": "degraded_input",
+      "sha256": "b64661c1a6614611402f494ab1bc8618b7f2de896e73088fd3f5d07e2b2af548",
+      "old_identity_control_present": true,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:abee85ccf4438a4c",
+      "old_control_fingerprint_matches": true
+    },
+    {
+      "seed": 860015,
+      "family": "stopped_mid_abstention",
+      "signal": "target",
+      "sha256": "fbb791930b4ff2c06d7bbd69b5a67ed4ab6c646fcf0d227911cd0c00eb23fce5",
+      "old_identity_control_present": false,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:ca6655c191491d79",
+      "old_control_fingerprint_matches": false
+    },
+    {
+      "seed": 860015,
+      "family": "stopped_mid_abstention",
+      "signal": "degraded_input",
+      "sha256": "1fe70922392e7276404d4cfc38ec34739e4770bbd1002ee589adc84d83827c6e",
+      "old_identity_control_present": false,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:af765150ce4d19ad",
+      "old_control_fingerprint_matches": false
+    },
+    {
+      "seed": 860019,
+      "family": "vocal_with_aspiration",
+      "signal": "target",
+      "sha256": "ccb90bc9db67e71fc6533e3f5a5c17c2653958fcd8a33821e0751f2690d64693",
+      "old_identity_control_present": false,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:0e8b548ec4e0a8f2",
+      "old_control_fingerprint_matches": false
+    },
+    {
+      "seed": 860019,
+      "family": "vocal_with_aspiration",
+      "signal": "degraded_input",
+      "sha256": "1059a7cb8d44576834a3b575e71a0e7b45db95c85c284d52103d934a7660cb95",
+      "old_identity_control_present": false,
+      "fnv1a64": "noncryptographic-fnv1a64-f32le:1df8d5b0a9703a8e",
+      "old_control_fingerprint_matches": false
+    }
+  ],
+  "historical_fingerprint_matches": 10,
+  "new_development_inputs": 4,
+  "scope": "New sampleSHA256 pins actual regeneratedbytes. Old receipt onlyFNV1a64: agreement corroborates deterministicregeneration, not cryptographic authentication ofmissingoldtargetaudio."
+}

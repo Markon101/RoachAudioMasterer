@@ -1,0 +1,92 @@
+{
+  "schema": "stopped-projection-complete-v1",
+  "binary": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/trusted-projection",
+  "binary_sha256": "edb69f25b3d9c714f92cdabed891246459754307f347de3f8f241b8bcb314775",
+  "protocol_sha256": "5d5e247eda931f08a57b3cf1964c5c1029a2b816fb6ad1c24de454375f2d142c",
+  "source_pins": [
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/examples/trusted_projection.rs",
+      "sha256": "db639b2e0949991ea46320fdcf8a4d908eb47c8b81622fbdd7f0216ecf374be2"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/dsp.rs",
+      "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/native_audio.rs",
+      "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+    }
+  ],
+  "jobs": [
+    {
+      "mode": "restart",
+      "id": "view0",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/trusted-projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-881002-v1/view0-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-restart-gpu-v1/renders/view0/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-projection-v1/restart/view0"
+      ],
+      "input_sha256": "532d68102eccb1ca2704012f767198f7e81c7c1c9c17d4e824305e637f14c3f9",
+      "proposal_sha256": "9a2ed1443762d8991a9819f89401ede56e4b3cbf8222bbec3c93318ede4c9b58",
+      "output_sha256": "e957013425914ef6b186f9562aa666dd071467e5a6ca41fcfe58744d07ee4078",
+      "metadata_sha256": "04faa37fdeb1e5ff405b0aa82b97fe22cb78c4f64af68565ca2a3955d75d830e"
+    },
+    {
+      "mode": "restart",
+      "id": "view3",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/trusted-projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-881002-v1/view3-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-restart-gpu-v1/renders/view3/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-projection-v1/restart/view3"
+      ],
+      "input_sha256": "d4082aa1e339297ca9225255f0b3979dcf76e67c4adf1052348b22f499963423",
+      "proposal_sha256": "c3d57fca1a3ff5eab82c03f1bfe207d1a2247c9967522b87737cb41872bf0275",
+      "output_sha256": "6b5b8bc23a356dad83804e4f0c882131c4d711b18da99fb225645746aa4502f4",
+      "metadata_sha256": "621496ee860a1d71c4b5e9ce774cbb96bc5a5bfa0ee6fef51e7d7ef474384363"
+    },
+    {
+      "mode": "continuous",
+      "id": "view0",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/trusted-projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-881002-v1/view0-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-continuous-gpu-v1/renders/view0/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-projection-v1/continuous/view0"
+      ],
+      "input_sha256": "532d68102eccb1ca2704012f767198f7e81c7c1c9c17d4e824305e637f14c3f9",
+      "proposal_sha256": "2185984d72f3051c80a788244ddc2e5d68f22892e0a0556dd5027c4696c2956b",
+      "output_sha256": "b635aa18d0becbcba0a05e34d38b5d7a27c6342dc3cd56f02bf22a725e68056f",
+      "metadata_sha256": "444ce1747bc2fdfba9f6b5606bccd7280a39179f835760ebd12e841576dcffcd"
+    },
+    {
+      "mode": "continuous",
+      "id": "view3",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/trusted-projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-881002-v1/view3-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-continuous-gpu-v1/renders/view3/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/stopped-projection-v1/continuous/view3"
+      ],
+      "input_sha256": "d4082aa1e339297ca9225255f0b3979dcf76e67c4adf1052348b22f499963423",
+      "proposal_sha256": "57959bf2f2a9d7ea073d8d86c2d812c74a65ec8f1ad5ed7208dbfd0aa2236b1a",
+      "output_sha256": "dac23ee9c11ee464f0448dd665300d887d36648f55fad5a8b8840ed426b8e310",
+      "metadata_sha256": "559609f224097cf12fbe147a3e54f14db7c09733c742479af1022a5aba7203ca"
+    }
+  ],
+  "scope": "four actual native projection controls; source negative input equals target by construction, projection reads only observed input and proposal; no gain or speed comparison",
+  "completed_utc": "2026-10-20T05:48:05.526354+00:00"
+}

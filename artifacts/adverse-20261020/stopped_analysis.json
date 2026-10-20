@@ -1,0 +1,1186 @@
+{
+  "schema": "stopped-mid-coherence-analysis-v1",
+  "scope": "forced missing-mid negative control; no autonomous gating, target scoring, or audio-quality claim",
+  "provenance": {
+    "fixture_manifest_sha256": "24fdd5db56f6768bfd5250a873019e343b94bf96b95088da21c8de28f2f54c48",
+    "protocol_sha256": "5d5e247eda931f08a57b3cf1964c5c1029a2b816fb6ad1c24de454375f2d142c",
+    "restart_complete_sha256": "2612c7f3e138b0412812e2c10b89af720317848c0ce490e31d930cacb9af7bdf",
+    "continuous_complete_sha256": "6079f71ce1ff4749ea978a25c6e4e0f6d4c60d4a0c97a4d5753008b5e6b2e962",
+    "projection_complete_sha256": "d364ad41f8b0cd3787677c1d1aa7975b4225bf91bab622dedf3f047e526462e0",
+    "source_mode": "stopped_mid",
+    "generator_sha256": "2729cf89af5c141dbb416ec655acac25d8c413013e9038bac1b9d0bb4d8a0383",
+    "restart_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+    "continuous_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+    "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+    "projection_binary_sha256": "edb69f25b3d9c714f92cdabed891246459754307f347de3f8f241b8bcb314775",
+    "source_pins": {
+      "restart": [
+        {
+          "name": "src/acoustic_dynamics.rs",
+          "sha256": "201d8cacfdcbba76ffdf2d1486d60cf625ba81a9a1c9eacf2ead42901b81c492"
+        },
+        {
+          "name": "src/assess.rs",
+          "sha256": "eaef4185589a3c2cc24ac19c207b7843f93ea849990b62773e8e689a0b302dab"
+        },
+        {
+          "name": "src/associative_landscape.rs",
+          "sha256": "b6b1b698d5536cea4ba8a2508d10de1773a93421e7f72126f7954e32a842dcda"
+        },
+        {
+          "name": "src/audio.rs",
+          "sha256": "b900ab55648f1f75c8b51679046a30a15cf734fd5fdc29c69eab7b9a8dc57333"
+        },
+        {
+          "name": "src/backend.rs",
+          "sha256": "37587c75107ee157947d8665d5ccbca1a0ebf07ab0d8dbb06c1b12c9dc457e6c"
+        },
+        {
+          "name": "src/bin/highband.rs",
+          "sha256": "c5a4ef7da14d3b070e450f705a95b14aa16183404a0a9823767d52189e5250e1"
+        },
+        {
+          "name": "src/critics.rs",
+          "sha256": "6bddada456aff9f1ab14a22e29e93012249302c74e5cdc2934ca5e832acfbfb7"
+        },
+        {
+          "name": "src/dsp.rs",
+          "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+        },
+        {
+          "name": "src/dynamics.rs",
+          "sha256": "af00c07c4d43f14b6a4863e1403716440e0fe21c19da6cd9ca902c437da9bfff"
+        },
+        {
+          "name": "src/dynamics_synth.rs",
+          "sha256": "d1cefe9ef0d85c3850bbd53f6f238c87ea571ebf03b2ace3e07fd3c994ecdb71"
+        },
+        {
+          "name": "src/experiment.rs",
+          "sha256": "9ca4b7c785c622ae6bf77caaf314fba2a658819bf486d6ad9ca0726b57cebbff"
+        },
+        {
+          "name": "src/flow.rs",
+          "sha256": "2aa149a678feddfe2d6c78b29b3c75a8f48eeec4be322a545307f3976eb02a98"
+        },
+        {
+          "name": "src/flow_experiment.rs",
+          "sha256": "06d0746df4c6abe4885909bb515cdc83ee6fda691d484b27a1cb4ea3c469d8f5"
+        },
+        {
+          "name": "src/gtf.rs",
+          "sha256": "c1407f93c00af37e04b6fba786fedcfc7c1bf08190673d816935eb3512556248"
+        },
+        {
+          "name": "src/main.rs",
+          "sha256": "87f65fb3a08867bfdaf11e5ac47b3b8a354c9197abbd8db2e40aab8ae76835d4"
+        },
+        {
+          "name": "src/master.rs",
+          "sha256": "5cfaec7483766370a6bdb0fc8be6cc86d4dfeb0941ad479cde4aff0560240867"
+        },
+        {
+          "name": "src/metrics.rs",
+          "sha256": "d99ffc724d3aeabdc12dd3d10ce08e4a0995033bc7265612dab5f31c1039ef07"
+        },
+        {
+          "name": "src/microstructure.rs",
+          "sha256": "1ed892522ba8ab3eddb88d85c87fedd1883cee4a26e0034d5dbbb93b7fc08e9c"
+        },
+        {
+          "name": "src/mid_solver_audit.rs",
+          "sha256": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+        },
+        {
+          "name": "src/model.rs",
+          "sha256": "35fe86f07132b11b331a1f65f866a6315dbabe2ef79ad5480522fd9fbd12583a"
+        },
+        {
+          "name": "src/musical_intent.rs",
+          "sha256": "34c3987cc3d3d6605ec463858d336b156c7beabf45bc23c47589e7fbb32fa54a"
+        },
+        {
+          "name": "src/native_audio.rs",
+          "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+        },
+        {
+          "name": "src/native_dsp.rs",
+          "sha256": "aeaac57f069fc8ea0a2669fed1ae917d1902b6813daa15a52b6ed7cd08c6a8d8"
+        },
+        {
+          "name": "src/opencl.rs",
+          "sha256": "e0cd6eca2a7799dc515fd798fd59ecbbdc32cd2612003f4302728ce4138dc783"
+        },
+        {
+          "name": "src/reconstruction.rs",
+          "sha256": "ea90c971e27f1d7f59bcce8793002e595f54b6580f9d21c87096a31c9dec6827"
+        },
+        {
+          "name": "src/rich_allocation.rs",
+          "sha256": "80d65b7920a437c9635128dc727a10626aeb0df2970bf73c66f18d8a0c076c40"
+        },
+        {
+          "name": "src/rich_dynamics.rs",
+          "sha256": "8bf674f192d3fc056d90fc50ef500acbe2b2b7221c86f67f9c9465f6ff10b73c"
+        },
+        {
+          "name": "src/rich_experiment.rs",
+          "sha256": "8bb1c0dc729016ddbfb521c201858f2f5876c706df369082cbece831bd80336e"
+        },
+        {
+          "name": "src/rich_field.rs",
+          "sha256": "cbb1e2350472315f565b0d5cc4a29b93f8cbfdfec93a7673bfcd031df7248bd7"
+        },
+        {
+          "name": "src/rich_gate.rs",
+          "sha256": "ba6215206659b07b460fc65a0b270941c37ac9b21dc85563795602fa2a6d098f"
+        },
+        {
+          "name": "src/rich_gate_tests.rs",
+          "sha256": "4e8446a74dad3754b71bf6529fcb6f103beba97b3e2f2fed69762b3b7a48393a"
+        },
+        {
+          "name": "src/rich_low.rs",
+          "sha256": "a16cddcdd11525bbc255844aa6cf272a57d66cf056f161a56c86ab0b27a8c65b"
+        },
+        {
+          "name": "src/rich_mid.rs",
+          "sha256": "7466f2b47dc39b8d1d29944b4ab225a3ae7bd6ec314fb924ab5eb76746ef7672"
+        },
+        {
+          "name": "src/rich_oracle.rs",
+          "sha256": "09656d5a81f1216e808378b530549abe40ffc7e5e6ef9a7dbd267f131b362f6b"
+        },
+        {
+          "name": "src/rich_synth.rs",
+          "sha256": "e0bc220a0b752df7e864c958f4e5fb24789d78299e6ed0b72401e34ee8eee364"
+        },
+        {
+          "name": "src/scene.rs",
+          "sha256": "e4c645b249baadf19abb08668c85954fa782d39afec323fe2b323b78c9f774e5"
+        },
+        {
+          "name": "src/scene_adapter.rs",
+          "sha256": "24a855c5dc79e338d159bef1966c5411a7864f62c784c0c7c7cad1e63220eec2"
+        },
+        {
+          "name": "src/scene_clean.rs",
+          "sha256": "7ac46ea6ea9120cb57965322c39c52964581e07760ee829eb72f7c21173f482e"
+        },
+        {
+          "name": "src/scene_engine.rs",
+          "sha256": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5"
+        },
+        {
+          "name": "src/scene_experiment.rs",
+          "sha256": "514d89260fc18f468b90752e698e21097a5f7b4b96c56eb2876bcc69891b3074"
+        },
+        {
+          "name": "src/scene_features.rs",
+          "sha256": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2"
+        },
+        {
+          "name": "src/scene_loss.rs",
+          "sha256": "323cd865cbcb86285477d661bef8a4d2c21842f782ffcccdf2841dbeb4c33ece"
+        },
+        {
+          "name": "src/scene_metrics.rs",
+          "sha256": "0b324b522961ebc5fe558aa75527ea1d2299f854e553736b9748c2ec66a130cd"
+        },
+        {
+          "name": "src/scene_model.rs",
+          "sha256": "54cb759c444a9e0562fe86845fd84fb71a5b1dbe82ad4b5470909060dc06dfb7"
+        },
+        {
+          "name": "src/scene_stats.rs",
+          "sha256": "b2e2b62e40b2f3adab9ded0961fa7dc1ba725b525035e7e484e59b24d79a59b6"
+        },
+        {
+          "name": "src/scene_synth.rs",
+          "sha256": "e87de84d82302ac1b87a937ec259c4243cae1112127708c127bb02c84553f104"
+        },
+        {
+          "name": "src/scene_training_state.rs",
+          "sha256": "e7df65a4d0b5a2e38912057254edbad8334a651c9313f24f8bb26798dbc07a2c"
+        },
+        {
+          "name": "src/sfht.rs",
+          "sha256": "32387fc988802d9e4b5aeb1c246b657cbae1d8b6b16766c689e0a3b5bdf91dcb"
+        },
+        {
+          "name": "src/signal_time.rs",
+          "sha256": "039e95d205bc86585c8a53ce5698c4a0bc90786cef2a250223ee5566fddf36fe"
+        },
+        {
+          "name": "src/spatial.rs",
+          "sha256": "d299533149761fd06f7f5348b4db42c4af5987898c3a44eca61466189411ed16"
+        },
+        {
+          "name": "src/stft_hires.rs",
+          "sha256": "19245f311f146b7f4e65715c76ecb4033ebcd4a2230d1764bd2344d44c7ab43d"
+        },
+        {
+          "name": "src/synth.rs",
+          "sha256": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be"
+        },
+        {
+          "name": "scripts/run_coherence_quality.py",
+          "sha256": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254"
+        },
+        {
+          "name": "scripts/run_mid_profile.py",
+          "sha256": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862"
+        },
+        {
+          "name": "scripts/long_coherence_fixture.py",
+          "sha256": "2729cf89af5c141dbb416ec655acac25d8c413013e9038bac1b9d0bb4d8a0383"
+        },
+        {
+          "name": "stopped_fixture_manifest",
+          "sha256": "24fdd5db56f6768bfd5250a873019e343b94bf96b95088da21c8de28f2f54c48"
+        },
+        {
+          "name": "Cargo.toml",
+          "sha256": "8ea807e2b5cb25c42e5628a2b2235f87e7eb25a349316ed037d869f5d5558854"
+        },
+        {
+          "name": "Cargo.lock",
+          "sha256": "6714acafb87f26c670094efb8fb563d3df24a04045799da3ba235b1fc30409b8"
+        }
+      ],
+      "continuous": [
+        {
+          "name": "src/acoustic_dynamics.rs",
+          "sha256": "201d8cacfdcbba76ffdf2d1486d60cf625ba81a9a1c9eacf2ead42901b81c492"
+        },
+        {
+          "name": "src/assess.rs",
+          "sha256": "eaef4185589a3c2cc24ac19c207b7843f93ea849990b62773e8e689a0b302dab"
+        },
+        {
+          "name": "src/associative_landscape.rs",
+          "sha256": "b6b1b698d5536cea4ba8a2508d10de1773a93421e7f72126f7954e32a842dcda"
+        },
+        {
+          "name": "src/audio.rs",
+          "sha256": "b900ab55648f1f75c8b51679046a30a15cf734fd5fdc29c69eab7b9a8dc57333"
+        },
+        {
+          "name": "src/backend.rs",
+          "sha256": "37587c75107ee157947d8665d5ccbca1a0ebf07ab0d8dbb06c1b12c9dc457e6c"
+        },
+        {
+          "name": "src/bin/highband.rs",
+          "sha256": "c5a4ef7da14d3b070e450f705a95b14aa16183404a0a9823767d52189e5250e1"
+        },
+        {
+          "name": "src/critics.rs",
+          "sha256": "6bddada456aff9f1ab14a22e29e93012249302c74e5cdc2934ca5e832acfbfb7"
+        },
+        {
+          "name": "src/dsp.rs",
+          "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+        },
+        {
+          "name": "src/dynamics.rs",
+          "sha256": "af00c07c4d43f14b6a4863e1403716440e0fe21c19da6cd9ca902c437da9bfff"
+        },
+        {
+          "name": "src/dynamics_synth.rs",
+          "sha256": "d1cefe9ef0d85c3850bbd53f6f238c87ea571ebf03b2ace3e07fd3c994ecdb71"
+        },
+        {
+          "name": "src/experiment.rs",
+          "sha256": "9ca4b7c785c622ae6bf77caaf314fba2a658819bf486d6ad9ca0726b57cebbff"
+        },
+        {
+          "name": "src/flow.rs",
+          "sha256": "2aa149a678feddfe2d6c78b29b3c75a8f48eeec4be322a545307f3976eb02a98"
+        },
+        {
+          "name": "src/flow_experiment.rs",
+          "sha256": "06d0746df4c6abe4885909bb515cdc83ee6fda691d484b27a1cb4ea3c469d8f5"
+        },
+        {
+          "name": "src/gtf.rs",
+          "sha256": "c1407f93c00af37e04b6fba786fedcfc7c1bf08190673d816935eb3512556248"
+        },
+        {
+          "name": "src/main.rs",
+          "sha256": "87f65fb3a08867bfdaf11e5ac47b3b8a354c9197abbd8db2e40aab8ae76835d4"
+        },
+        {
+          "name": "src/master.rs",
+          "sha256": "5cfaec7483766370a6bdb0fc8be6cc86d4dfeb0941ad479cde4aff0560240867"
+        },
+        {
+          "name": "src/metrics.rs",
+          "sha256": "d99ffc724d3aeabdc12dd3d10ce08e4a0995033bc7265612dab5f31c1039ef07"
+        },
+        {
+          "name": "src/microstructure.rs",
+          "sha256": "1ed892522ba8ab3eddb88d85c87fedd1883cee4a26e0034d5dbbb93b7fc08e9c"
+        },
+        {
+          "name": "src/mid_solver_audit.rs",
+          "sha256": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+        },
+        {
+          "name": "src/model.rs",
+          "sha256": "35fe86f07132b11b331a1f65f866a6315dbabe2ef79ad5480522fd9fbd12583a"
+        },
+        {
+          "name": "src/musical_intent.rs",
+          "sha256": "34c3987cc3d3d6605ec463858d336b156c7beabf45bc23c47589e7fbb32fa54a"
+        },
+        {
+          "name": "src/native_audio.rs",
+          "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+        },
+        {
+          "name": "src/native_dsp.rs",
+          "sha256": "aeaac57f069fc8ea0a2669fed1ae917d1902b6813daa15a52b6ed7cd08c6a8d8"
+        },
+        {
+          "name": "src/opencl.rs",
+          "sha256": "e0cd6eca2a7799dc515fd798fd59ecbbdc32cd2612003f4302728ce4138dc783"
+        },
+        {
+          "name": "src/reconstruction.rs",
+          "sha256": "ea90c971e27f1d7f59bcce8793002e595f54b6580f9d21c87096a31c9dec6827"
+        },
+        {
+          "name": "src/rich_allocation.rs",
+          "sha256": "80d65b7920a437c9635128dc727a10626aeb0df2970bf73c66f18d8a0c076c40"
+        },
+        {
+          "name": "src/rich_dynamics.rs",
+          "sha256": "8bf674f192d3fc056d90fc50ef500acbe2b2b7221c86f67f9c9465f6ff10b73c"
+        },
+        {
+          "name": "src/rich_experiment.rs",
+          "sha256": "8bb1c0dc729016ddbfb521c201858f2f5876c706df369082cbece831bd80336e"
+        },
+        {
+          "name": "src/rich_field.rs",
+          "sha256": "cbb1e2350472315f565b0d5cc4a29b93f8cbfdfec93a7673bfcd031df7248bd7"
+        },
+        {
+          "name": "src/rich_gate.rs",
+          "sha256": "ba6215206659b07b460fc65a0b270941c37ac9b21dc85563795602fa2a6d098f"
+        },
+        {
+          "name": "src/rich_gate_tests.rs",
+          "sha256": "4e8446a74dad3754b71bf6529fcb6f103beba97b3e2f2fed69762b3b7a48393a"
+        },
+        {
+          "name": "src/rich_low.rs",
+          "sha256": "a16cddcdd11525bbc255844aa6cf272a57d66cf056f161a56c86ab0b27a8c65b"
+        },
+        {
+          "name": "src/rich_mid.rs",
+          "sha256": "7466f2b47dc39b8d1d29944b4ab225a3ae7bd6ec314fb924ab5eb76746ef7672"
+        },
+        {
+          "name": "src/rich_oracle.rs",
+          "sha256": "09656d5a81f1216e808378b530549abe40ffc7e5e6ef9a7dbd267f131b362f6b"
+        },
+        {
+          "name": "src/rich_synth.rs",
+          "sha256": "e0bc220a0b752df7e864c958f4e5fb24789d78299e6ed0b72401e34ee8eee364"
+        },
+        {
+          "name": "src/scene.rs",
+          "sha256": "e4c645b249baadf19abb08668c85954fa782d39afec323fe2b323b78c9f774e5"
+        },
+        {
+          "name": "src/scene_adapter.rs",
+          "sha256": "24a855c5dc79e338d159bef1966c5411a7864f62c784c0c7c7cad1e63220eec2"
+        },
+        {
+          "name": "src/scene_clean.rs",
+          "sha256": "7ac46ea6ea9120cb57965322c39c52964581e07760ee829eb72f7c21173f482e"
+        },
+        {
+          "name": "src/scene_engine.rs",
+          "sha256": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5"
+        },
+        {
+          "name": "src/scene_experiment.rs",
+          "sha256": "514d89260fc18f468b90752e698e21097a5f7b4b96c56eb2876bcc69891b3074"
+        },
+        {
+          "name": "src/scene_features.rs",
+          "sha256": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2"
+        },
+        {
+          "name": "src/scene_loss.rs",
+          "sha256": "323cd865cbcb86285477d661bef8a4d2c21842f782ffcccdf2841dbeb4c33ece"
+        },
+        {
+          "name": "src/scene_metrics.rs",
+          "sha256": "0b324b522961ebc5fe558aa75527ea1d2299f854e553736b9748c2ec66a130cd"
+        },
+        {
+          "name": "src/scene_model.rs",
+          "sha256": "54cb759c444a9e0562fe86845fd84fb71a5b1dbe82ad4b5470909060dc06dfb7"
+        },
+        {
+          "name": "src/scene_stats.rs",
+          "sha256": "b2e2b62e40b2f3adab9ded0961fa7dc1ba725b525035e7e484e59b24d79a59b6"
+        },
+        {
+          "name": "src/scene_synth.rs",
+          "sha256": "e87de84d82302ac1b87a937ec259c4243cae1112127708c127bb02c84553f104"
+        },
+        {
+          "name": "src/scene_training_state.rs",
+          "sha256": "e7df65a4d0b5a2e38912057254edbad8334a651c9313f24f8bb26798dbc07a2c"
+        },
+        {
+          "name": "src/sfht.rs",
+          "sha256": "32387fc988802d9e4b5aeb1c246b657cbae1d8b6b16766c689e0a3b5bdf91dcb"
+        },
+        {
+          "name": "src/signal_time.rs",
+          "sha256": "039e95d205bc86585c8a53ce5698c4a0bc90786cef2a250223ee5566fddf36fe"
+        },
+        {
+          "name": "src/spatial.rs",
+          "sha256": "d299533149761fd06f7f5348b4db42c4af5987898c3a44eca61466189411ed16"
+        },
+        {
+          "name": "src/stft_hires.rs",
+          "sha256": "19245f311f146b7f4e65715c76ecb4033ebcd4a2230d1764bd2344d44c7ab43d"
+        },
+        {
+          "name": "src/synth.rs",
+          "sha256": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be"
+        },
+        {
+          "name": "scripts/run_coherence_quality.py",
+          "sha256": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254"
+        },
+        {
+          "name": "scripts/run_mid_profile.py",
+          "sha256": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862"
+        },
+        {
+          "name": "scripts/long_coherence_fixture.py",
+          "sha256": "2729cf89af5c141dbb416ec655acac25d8c413013e9038bac1b9d0bb4d8a0383"
+        },
+        {
+          "name": "stopped_fixture_manifest",
+          "sha256": "24fdd5db56f6768bfd5250a873019e343b94bf96b95088da21c8de28f2f54c48"
+        },
+        {
+          "name": "Cargo.toml",
+          "sha256": "8ea807e2b5cb25c42e5628a2b2235f87e7eb25a349316ed037d869f5d5558854"
+        },
+        {
+          "name": "Cargo.lock",
+          "sha256": "6714acafb87f26c670094efb8fb563d3df24a04045799da3ba235b1fc30409b8"
+        }
+      ],
+      "projection": [
+        {
+          "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/examples/trusted_projection.rs",
+          "sha256": "db639b2e0949991ea46320fdcf8a4d908eb47c8b81622fbdd7f0216ecf374be2"
+        },
+        {
+          "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/dsp.rs",
+          "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+        },
+        {
+          "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/native_audio.rs",
+          "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+        }
+      ]
+    }
+  },
+  "fixture_null": {
+    "per_channel": {
+      "left": 2.5649898216830326e-18,
+      "right": 2.554559541985829e-18,
+      "mid": 2.5616044077797747e-18,
+      "side": 2.5579449560159968e-18
+    },
+    "maximum": 2.5649898216830326e-18,
+    "threshold": 1e-14,
+    "samples": 1536000,
+    "scope": "32s full-source FFT, not a cropped-view FFT"
+  },
+  "identity_oracle": {
+    "view0": {
+      "false_residual_rms": 0.0,
+      "max_abs": 0.0,
+      "bitwise_output_equals_input": true,
+      "scope": "mathematical identity oracle, not model output"
+    },
+    "view3": {
+      "false_residual_rms": 0.0,
+      "max_abs": 0.0,
+      "bitwise_output_equals_input": true,
+      "scope": "mathematical identity oracle, not model output"
+    }
+  },
+  "common_interior_global_samples": [
+    384000,
+    1008000
+  ],
+  "aligned_input_identical": true,
+  "views": {
+    "view0": {
+      "origin_sample": 0,
+      "samples": 1248000,
+      "input_sha256": "532d68102eccb1ca2704012f767198f7e81c7c1c9c17d4e824305e637f14c3f9",
+      "target_sha256": "532d68102eccb1ca2704012f767198f7e81c7c1c9c17d4e824305e637f14c3f9",
+      "arms": {
+        "restart": {
+          "output_sha256": "9a2ed1443762d8991a9819f89401ede56e4b3cbf8222bbec3c93318ede4c9b58",
+          "false_residual": {
+            "rms": 0.0013875807620679268,
+            "max_abs": 0.03484882414340973,
+            "relative_rms_to_input": 0.010225434771662168
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 4.3078046037671645e-07,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 1.877368413750855e-07,
+                  "reference_power": 0.018412917872020824,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 3.139529517698764e-07,
+                  "reference_power": 3.481776468916984e-09,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 2.0747017091263027e-07,
+                  "reference_power": 0.018415454554931293,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 3.371143113978637e-07,
+                  "reference_power": 3.1566446865453674e-09,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 2.616585869185114e-07,
+                  "reference_power": 0.036791038098893065,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 4.3078046037671645e-07,
+                  "reference_power": 6.634422566653668e-09,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 9.911497021029874e-08,
+                  "reference_power": 3.733432805904765e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 1.6321982058483724e-07,
+                  "reference_power": 3.998588808676732e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": {
+            "samples_per_channel": 1248000,
+            "max_abs": 4.8512556138913254e-08,
+            "rms": 2.997855721492012e-09,
+            "reference_rms": 0.13570604040396322,
+            "relative_rms": 2.209080533606418e-08
+          },
+          "raw_overlap_cosines": [
+            0.6929698766944841,
+            0.7385589642169533,
+            0.7724201408207109
+          ]
+        },
+        "restart_projected": {
+          "output_sha256": "e957013425914ef6b186f9562aa666dd071467e5a6ca41fcfe58744d07ee4078",
+          "false_residual": {
+            "rms": 0.0013875807013359687,
+            "max_abs": 0.03484874963760376,
+            "relative_rms_to_input": 0.010225434324112957
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 2.759170057566676e-09,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 8.401650184054686e-10,
+                  "reference_power": 0.018412917872020824,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.759170057566676e-09,
+                  "reference_power": 3.481776468916984e-09,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 8.329051276344378e-10,
+                  "reference_power": 0.018415454554931293,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.753238030674011e-09,
+                  "reference_power": 3.1566446865453674e-09,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 8.406871951976195e-10,
+                  "reference_power": 0.036791038098893065,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.753619939396966e-09,
+                  "reference_power": 6.634422566653668e-09,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 8.323780688706752e-10,
+                  "reference_power": 3.733432805904765e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.7587889172217322e-09,
+                  "reference_power": 3.998588808676732e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": null,
+          "raw_overlap_cosines": null
+        },
+        "continuous": {
+          "output_sha256": "2185984d72f3051c80a788244ddc2e5d68f22892e0a0556dd5027c4696c2956b",
+          "false_residual": {
+            "rms": 0.001403419099469983,
+            "max_abs": 0.03716598451137543,
+            "relative_rms_to_input": 0.010342151499382536
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 7.071462155087153e-07,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 4.4708382371575025e-07,
+                  "reference_power": 0.018412917872020824,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 3.3278443093577804e-07,
+                  "reference_power": 3.481776468916984e-09,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 5.624279693977998e-07,
+                  "reference_power": 0.018415454554931293,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 1.454683262130303e-07,
+                  "reference_power": 3.1566446865453674e-09,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 7.071462155087153e-07,
+                  "reference_power": 0.036791038098893065,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.8995615981701047e-07,
+                  "reference_power": 6.634422566653668e-09,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 1.270960112709102e-07,
+                  "reference_power": 3.733432805904765e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.187051366305797e-07,
+                  "reference_power": 3.998588808676732e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": {
+            "samples_per_channel": 1248000,
+            "max_abs": 4.800431058216148e-08,
+            "rms": 2.9959719121891128e-09,
+            "reference_rms": 0.13570620295247615,
+            "relative_rms": 2.207689734888752e-08
+          },
+          "raw_overlap_cosines": [
+            0.9847971283524144,
+            0.9832766172724398,
+            0.9806548535637348
+          ]
+        },
+        "continuous_projected": {
+          "output_sha256": "b635aa18d0becbcba0a05e34d38b5d7a27c6342dc3cd56f02bf22a725e68056f",
+          "false_residual": {
+            "rms": 0.0014034189730829975,
+            "max_abs": 0.037166014313697815,
+            "relative_rms_to_input": 0.010342150568004766
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 2.7541887810135344e-09,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 8.499158156659897e-10,
+                  "reference_power": 0.018412917872020824,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.7535744857109874e-09,
+                  "reference_power": 3.481776468916984e-09,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 8.401746250169537e-10,
+                  "reference_power": 0.018415454554931293,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.7533312192061255e-09,
+                  "reference_power": 3.1566446865453674e-09,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 8.480024088532735e-10,
+                  "reference_power": 0.036791038098893065,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.752716732348418e-09,
+                  "reference_power": 6.634422566653668e-09,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 8.421058179054863e-10,
+                  "reference_power": 3.733432805904765e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.7541887810135344e-09,
+                  "reference_power": 3.998588808676732e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": null,
+          "raw_overlap_cosines": null
+        }
+      }
+    },
+    "view3": {
+      "origin_sample": 144384,
+      "samples": 1248000,
+      "input_sha256": "d4082aa1e339297ca9225255f0b3979dcf76e67c4adf1052348b22f499963423",
+      "target_sha256": "d4082aa1e339297ca9225255f0b3979dcf76e67c4adf1052348b22f499963423",
+      "arms": {
+        "restart": {
+          "output_sha256": "c3d57fca1a3ff5eab82c03f1bfe207d1a2247c9967522b87737cb41872bf0275",
+          "false_residual": {
+            "rms": 0.0013509222393255345,
+            "max_abs": 0.03633953630924225,
+            "relative_rms_to_input": 0.010223209693772403
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 3.4312718765944166e-07,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 1.7388385936834854e-07,
+                  "reference_power": 0.017460559235800595,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 1.4793298575806273e-07,
+                  "reference_power": 1.7640121050698305e-10,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 2.056321010227334e-07,
+                  "reference_power": 0.01746281048096027,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 3.4312718765944166e-07,
+                  "reference_power": 1.0017808965760678e-10,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 1.8844675090083025e-07,
+                  "reference_power": 0.03488681050865694,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.774937131992855e-07,
+                  "reference_power": 2.7120521525019693e-10,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 1.923745814673354e-07,
+                  "reference_power": 3.6559208103912595e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.5023523796862704e-07,
+                  "reference_power": 5.374084914394486e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": {
+            "samples_per_channel": 1248000,
+            "max_abs": 6.564580667944853e-08,
+            "rms": 4.03709950683032e-09,
+            "reference_rms": 0.1321495727859636,
+            "relative_rms": 3.054947073774517e-08
+          },
+          "raw_overlap_cosines": [
+            0.8088641710363887,
+            0.8262906878537527,
+            0.7451155907067687
+          ]
+        },
+        "restart_projected": {
+          "output_sha256": "6b5b8bc23a356dad83804e4f0c882131c4d711b18da99fb225645746aa4502f4",
+          "false_residual": {
+            "rms": 0.0013509221957875679,
+            "max_abs": 0.036339372396469116,
+            "relative_rms_to_input": 0.010223209364295435
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 2.6727279026150594e-09,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 8.216545768110174e-10,
+                  "reference_power": 0.017460559235800595,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.664822510846524e-09,
+                  "reference_power": 1.7640121050698305e-10,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 8.131475470299742e-10,
+                  "reference_power": 0.01746281048096027,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.6727279026150594e-09,
+                  "reference_power": 1.0017808965760678e-10,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 8.170296454909162e-10,
+                  "reference_power": 0.03488681050865694,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.6699837325827302e-09,
+                  "reference_power": 2.7120521525019693e-10,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 8.177944334940314e-10,
+                  "reference_power": 3.6559208103912595e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.6675719902980213e-09,
+                  "reference_power": 5.374084914394486e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": null,
+          "raw_overlap_cosines": null
+        },
+        "continuous": {
+          "output_sha256": "57959bf2f2a9d7ea073d8d86c2d812c74a65ec8f1ad5ed7208dbfd0aa2236b1a",
+          "false_residual": {
+            "rms": 0.0013664316887600032,
+            "max_abs": 0.036230504512786865,
+            "relative_rms_to_input": 0.010340578665270491
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 6.320257939029828e-07,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 5.016140847946032e-07,
+                  "reference_power": 0.017460559235800595,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.9144619043358243e-07,
+                  "reference_power": 1.7640121050698305e-10,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 4.687630877895259e-07,
+                  "reference_power": 0.01746281048096027,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.211802976807729e-07,
+                  "reference_power": 1.0017808965760678e-10,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 6.320257939029828e-07,
+                  "reference_power": 0.03488681050865694,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.0863388764334257e-07,
+                  "reference_power": 2.7120521525019693e-10,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 2.681397366663144e-07,
+                  "reference_power": 3.6559208103912595e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 3.0055533089140163e-07,
+                  "reference_power": 5.374084914394486e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": {
+            "samples_per_channel": 1248000,
+            "max_abs": 6.478404257492798e-08,
+            "rms": 4.041989021377711e-09,
+            "reference_rms": 0.13214973267925068,
+            "relative_rms": 3.058643358127927e-08
+          },
+          "raw_overlap_cosines": [
+            0.9801946884809803,
+            0.9827974025497778,
+            0.9815573506509558
+          ]
+        },
+        "continuous_projected": {
+          "output_sha256": "dac23ee9c11ee464f0448dd665300d887d36648f55fad5a8b8840ed426b8e310",
+          "false_residual": {
+            "rms": 0.0013664315698104187,
+            "max_abs": 0.036230504512786865,
+            "relative_rms_to_input": 0.010340577765110208
+          },
+          "whole_view_protected": {
+            "maximum_error_rms": 2.675703654969765e-09,
+            "threshold": 1e-06,
+            "pass": true,
+            "channels": {
+              "left": {
+                "low": {
+                  "error_rms": 8.138511436530235e-10,
+                  "reference_power": 0.017460559235800595,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.6665128521170317e-09,
+                  "reference_power": 1.7640121050698305e-10,
+                  "pass": true
+                }
+              },
+              "right": {
+                "low": {
+                  "error_rms": 8.097784406113919e-10,
+                  "reference_power": 0.01746281048096027,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.675703654969765e-09,
+                  "reference_power": 1.0017808965760678e-10,
+                  "pass": true
+                }
+              },
+              "mid": {
+                "low": {
+                  "error_rms": 8.185919489358665e-10,
+                  "reference_power": 0.03488681050865694,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.668943000541974e-09,
+                  "reference_power": 2.7120521525019693e-10,
+                  "pass": true
+                }
+              },
+              "side": {
+                "low": {
+                  "error_rms": 8.049857314144546e-10,
+                  "reference_power": 3.6559208103912595e-05,
+                  "pass": true
+                },
+                "high": {
+                  "error_rms": 2.6732796522975876e-09,
+                  "reference_power": 5.374084914394486e-12,
+                  "pass": true
+                }
+              }
+            },
+            "scope": "whole-view absolute output-minus-input error; protected bands 0-1500 and 8000-24000 Hz"
+          },
+          "raw_wola_parity": null,
+          "raw_overlap_cosines": null
+        }
+      }
+    }
+  },
+  "layout_waveform_differences": {
+    "restart": {
+      "samples_per_channel": 624000,
+      "max_abs": 0.05069365352392197,
+      "rms": 0.0011966772729405505,
+      "reference_rms": 0.1772064170803737,
+      "relative_rms": 0.006753013195892256
+    },
+    "restart_projected": {
+      "samples_per_channel": 624000,
+      "max_abs": 0.050693362951278687,
+      "rms": 0.0011966772037440786,
+      "reference_rms": 0.17720642265753875,
+      "relative_rms": 0.006753012592871557
+    },
+    "continuous": {
+      "samples_per_channel": 624000,
+      "max_abs": 0.0019849836826324463,
+      "rms": 4.405167757968328e-05,
+      "reference_rms": 0.17720664439826347,
+      "relative_rms": 0.0002485893106845319
+    },
+    "continuous_projected": {
+      "samples_per_channel": 624000,
+      "max_abs": 0.001984834671020508,
+      "rms": 4.4051320876394224e-05,
+      "reference_rms": 0.17720664995452406,
+      "relative_rms": 0.0002485872899673853
+    }
+  },
+  "layout_rms_reductions": {
+    "continuous_vs_restart": 0.9631883394330397,
+    "continuous_projected_vs_restart_projected": 0.9631886353825664
+  },
+  "projected_negative_control_gates_by_view": {
+    "view0": {
+      "layout_rms_reduction": 0.9631886353825664,
+      "layout_pass": true,
+      "false_residual_rms_growth": {
+        "ratio": 0.011414306736739415,
+        "denominator_defined": true,
+        "null_power_floor": 1e-14,
+        "pass": true
+      }
+    },
+    "view3": {
+      "layout_rms_reduction": 0.9631886353825664,
+      "layout_pass": true,
+      "false_residual_rms_growth": {
+        "ratio": 0.011480582724313793,
+        "denominator_defined": true,
+        "null_power_floor": 1e-14,
+        "pass": true
+      }
+    }
+  },
+  "gates": {
+    "false_residual_growth_max": 0.1,
+    "false_residual_growth_pass": true,
+    "minimum_layout_rms_reduction": 0.5,
+    "layout_reduction_pass": true,
+    "max_protected_absolute_error_rms": 1e-06,
+    "all_whole_view_protected_pass": true,
+    "stopped_target_full_source_missing_band_power_max": 2.5649898216830326e-18,
+    "stopped_target_full_source_missing_band_pass": true
+  },
+  "interpretation": "Nonzero residual on bit-identical stopped-mid input is a false residual under this forced policy; coherent residual is not quality evidence.",
+  "promotion": false
+}

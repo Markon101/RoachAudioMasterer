@@ -1407,4 +1407,29 @@ remain pending. Native combined integration and broader adverse/real-recording
 qualification remain open. Tier 2 tools/parity and Tier 3 limited measurements;
 Tier 4 absent. The production champion, weights and default signal path are unchanged.
 
+### 29. Stopped-mid negative separates continuity from correctness (2026-10-20)
+
+Exact native source export restores seven short target/input pairs without model
+inference. Ten historical fingerprints match prior identity controls; new SHA256
+receipts pin the regenerated files. Both vocal families already include aspiration,
+so family labels are not a controlled aspiration ablation. The stopped short
+case shows most false-add error already exists in the deterministic harmonic
+prior (6.13e-6 L/R error power versus 5.72e-6 Euler8 and numerical-floor identity).
+
+A continuously generated 32-second stopped-mid negative has bit-identical target
+and input. Combined continuous excitation + projection lowers layout RMS 96.319%
+and passes the frozen preservation/growth limits, but still adds about 0.0014 RMS
+of incorrect residual. Growth is 1.14–1.15%; identity remains the exact answer.
+Continuity alone is therefore not sufficient evidence of cleaner reconstruction.
+Standalone base assessment/tuning Mid authority is zero on the stopped examples;
+this forced-head failure is not an automatic production activation result.
+
+Known-tone probing also verifies a legacy measurement defect: assessment band
+fields labeled dBFS report unnormalized per-bin STFT power. A low-mid sine has
+about a 45.13 dB offset from physical orthonormal-mid RMS. Routing and thresholds
+remain unchanged; a calibrated observer must precede any controller retuning.
+See [the report](docs/ADVERSE_MID_CONTROLS_20261020.md) for identities, exact
+definitions, controls, limitations and reproduction. No new neural architecture,
+training, speed claim, listening result or production promotion is established.
+
 

@@ -1,0 +1,84 @@
+{
+  "schema": "adverse-mid-evidence-index-v1",
+  "parent_state_commit": "9cd6d56",
+  "recorded_utc": "2026-10-20T06:02:37.948459+00:00",
+  "result": "Coherence gains persist on a target-null negative with false edits; continuity is insufficient for fidelity. Legacy assessment-unit defect verified; routing unchanged.",
+  "files": {
+    "analysis_revisions.json": {
+      "bytes": 1379,
+      "sha256": "c25c204470e4b8df583c73a3823fc13a12df5a3da670af3af00a8b570ede3b5f"
+    },
+    "assessment_calibration.json": {
+      "bytes": 16061,
+      "sha256": "3882b0607433336d3ca888bf6c9fd61a13ec61649854f86875c42f3642920507"
+    },
+    "input_assessments.json": {
+      "bytes": 29125,
+      "sha256": "6ed4ca9bfaebee92d2d1e3c8e60ba074ce506238ed45f2c768948cda99ce214c"
+    },
+    "projection_receipt.json": {
+      "bytes": 5324,
+      "sha256": "d364ad41f8b0cd3787677c1d1aa7975b4225bf91bab622dedf3f047e526462e0"
+    },
+    "protocol.json": {
+      "bytes": 2511,
+      "sha256": "5d5e247eda931f08a57b3cf1964c5c1029a2b816fb6ad1c24de454375f2d142c"
+    },
+    "short_export_receipt.json": {
+      "bytes": 996,
+      "sha256": "6465949068d4218e7e96c5098aefa10ab5580a657ff5ddcc32084470c3f56c80"
+    },
+    "short_source_analysis.json": {
+      "bytes": 356365,
+      "sha256": "113604f38ae0a76920a1c688a2d61fb344142c5a7b31ab609fa97bf04b153a3c"
+    },
+    "short_source_analysis_v2.json": {
+      "bytes": 356402,
+      "sha256": "b0925c942972d96b85a6531038c5551c4764d28d4ae8289b8024738889a0fae6"
+    },
+    "short_source_association.json": {
+      "bytes": 5377,
+      "sha256": "60e4c959406662499bf369f3b498fea942937ed19644e9482de2c224e2ef7784"
+    },
+    "short_source_manifest.json": {
+      "bytes": 10596,
+      "sha256": "201eda8db166a5578ecc36a4429acc5114d3059a9768b3aeb5cf21fc9b4d825c"
+    },
+    "stopped_analysis.json": {
+      "bytes": 43272,
+      "sha256": "f642713d45cbc216ffa7abdd8c0f963c225ded44795d7806cb51f71040176ac5"
+    },
+    "stopped_analysis_v2.json": {
+      "bytes": 43475,
+      "sha256": "062d155e98d9510fe181cc08a46e9d124624165947f7109ea02c63e5f2906e3b"
+    },
+    "stopped_continuous_plan.json": {
+      "bytes": 16227,
+      "sha256": "b12ab0d656afb16795a1992f9d6a5c4159eec079b88cf52faf1afccadd454aa5"
+    },
+    "stopped_fixture_manifest.json": {
+      "bytes": 5728,
+      "sha256": "267e0b6ab729cee50ce457c37bce4765c0f5a323c06a834985d6422119617afc"
+    },
+    "stopped_restart_plan.json": {
+      "bytes": 16221,
+      "sha256": "03eaf32ad82e55f1280934f4f657ae2101b34b9240dba0e23f0549ce16333b27"
+    },
+    "verification.json": {
+      "bytes": 2322,
+      "sha256": "ef9805de7b108c77f8ca3f858a741e5b245dfd63480cc0651cba0109131fa180"
+    }
+  },
+  "tool_source_sha256": {
+    "examples/export_mid_controls.rs": "f8e81c53cc00fc2c6b1cd9e995a5e47ed7d9978b93b1d76ab416e36c594d14e4",
+    "scripts/long_coherence_fixture.py": "2729cf89af5c141dbb416ec655acac25d8c413013e9038bac1b9d0bb4d8a0383",
+    "scripts/test_long_coherence_fixture.py": "ab979baeaeefd132d0ebd7c61583a7c6c763919687206ee0487bb3b518da8f0c",
+    "scripts/analyze_adverse_mid_sources.py": "6c2a2dea3faf986a702f68dc31e98eba37c2e992dc74562be3480a5840503f7a",
+    "scripts/test_analyze_adverse_mid_sources.py": "8dd8971f837dab0299ef0c68ba248cf6165e5b9e2faa5b6e6240673bac4012fe",
+    "scripts/analyze_stopped_coherence.py": "5022ae70909189676a1f91b71aa051655071c8786d99f06668a16cebfed14648",
+    "scripts/test_analyze_stopped_coherence.py": "0a3636ddff6bdf1caebd27374526ffbc8134f13a3b6aadde08a92f351338befe"
+  },
+  "historical_evidence_index": "artifacts/coherence-20261018/evidence_index.json",
+  "raw_run_root": "runs/adverse-20261020",
+  "production_promoted": false
+}
