@@ -1,0 +1,80 @@
+{
+  "schema": "agent-migration-worker-guard-validation-v1",
+  "recorded_utc": "2026-10-20T07:42:18Z",
+  "route": {
+    "requested_model": "deepseek/deepseek-v4.1-flash-1017",
+    "requested_provider": "openrouter",
+    "agent_model_after": "deepseek/deepseek-v4.1-flash-1017",
+    "agent_provider_after": "openrouter",
+    "served_model_header": null,
+    "served_model_note": "Hermes did not expose a provider-returned model ID in the captured result."
+  },
+  "hermes_worker": {
+    "status": "incomplete",
+    "completed": false,
+    "failed_flag": false,
+    "api_calls": 4,
+    "tool_calls_reported": ["read_file", "read_file", "write_file", "terminal"],
+    "tool_execution_cwd_and_results_captured": false,
+    "terminal_exit_code_reported_by_worker": null,
+    "iteration_budget": 4,
+    "max_tokens_per_call": 500,
+    "input_tokens_cumulative": 24202,
+    "output_tokens_cumulative": 1276,
+    "estimated_cost_usd": 0.008890872,
+    "served_model": null,
+    "completion_note": "Hermes reported output truncation and iteration-budget exhaustion before completing its requested summary."
+  },
+  "scope_escape": {
+    "created_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/test_master_audit_adversarial.py",
+    "assigned_path": "/data/data/com.termux/files/usr/tmp/roach-hermes-stage-adversary-20261020/scripts/test_master_audit_adversarial.py",
+    "effect": "A new untracked file only; it was moved into the assigned worktree and removed from the main workspace. No existing source was overwritten.",
+    "containment": "runs/agent-migration-20261020/HALT remains present. The guarded driver refuses to create an AIAgent while that marker exists."
+  },
+  "adversarial_checker_test": {
+    "provenance": "Manual native test after moving the worker-created file into its assigned worktree; not attributed to Hermes execution.",
+    "command": "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=scripts python -m unittest scripts.test_master_audit_adversarial",
+    "exit_code": 1,
+    "failures": [
+      "test_final_trim_gain_metadata_must_match_unmodified_audio: analyzer did not raise ValueError after metadata-only final trim gain changed from 1.0 to 0.5",
+      "test_limiter_backend_spec_must_be_a_known_kind: analyzer did not raise ValueError after paired limiter kinds changed to unknown_backend"
+    ],
+    "preserved_regression_file": "/data/data/com.termux/files/usr/tmp/roach-hermes-stage-adversary-20261020/scripts/test_master_audit_adversarial.py",
+    "private_stdout": "runs/agent-migration-20261020/adversarial-test-output.txt"
+  },
+  "offline_guard_qualification": {
+    "implementation": "artifacts/agent-migration-20261020/hermes_job_guard.py",
+    "tests": "artifacts/agent-migration-20261020/test_hermes_job_guard.py",
+    "test_command": "HERMES_HOME=/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/agent-migration-20261020/hermes-home PYTHONPATH=/data/data/com.termux/files/home/.hermes/hermes-agent python -m unittest discover -s artifacts/agent-migration-20261020 -p 'test_hermes_job_guard.py' -v",
+    "exit_code": 0,
+    "tests_passed": 9,
+    "coverage": [
+      "actual installed registry reads",
+      "exact registry write call intercepted and safely created with O_EXCL/O_NOFOLLOW because Hermes protects /usr/tmp from write_file",
+      "outside-write and dotdot denial with persistent HALT",
+      "symlink escape denial",
+      "preexisting partial output is preserved rather than overwritten",
+      "preexisting HALT blocks dispatch and is preserved",
+      "exact terminal command/workdir/timeout and foreground policy",
+      "actual failed-run preflight refuses before Hermes config/client setup",
+      "writes require both allowlisted reads; test command requires that write first"
+    ],
+    "terminal_execution": "The allowed terminal branch was tested with a spy; no shell command or model call was run by the guard tests."
+  },
+  "openrouter_account_metadata": {
+    "source": "read-only GET /api/v1/auth/key after the Hermes worker, with response fields filtered before display",
+    "limit_usd": 5.0,
+    "usage_usd": 0.171570092,
+    "remaining_usd": 4.828429908,
+    "usage_before_smokes_usd": 0.15813134,
+    "observed_usage_delta_usd": 0.013438752,
+    "note": "Delta includes the two bounded route smokes and worker usage; OpenRouter may update usage asynchronously. No additional credits or subscriptions were added."
+  },
+  "safety": {
+    "model_calls_after_worker": 0,
+    "credentials_or_credential_hashes_recorded": false,
+    "user_audio_read": false,
+    "source_runtime_or_neural_workloads_run": false,
+    "existing_halt_deleted_or_cleared": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "agent-migration-evidence-v1",
+  "files": {
+    "scope_incident.json": "536b2b3aa951ee77e7bb972729f4949776ac7a8f0c5976b67ad58a2cdf83e2cb",
+    "hermes_job_guard.py": "0b9e5e2905874d3630170693b2b073d2baffeb72bef31d8f1391c847da260240",
+    "test_hermes_job_guard.py": "50632ca586662db8400e98eb575e210510997b3c31ee68651af88978045a7a57",
+    "migration.json": "4e6d1dcee760021f16d17ea489524a19eee495b2b54457aab0a86a7da40ef079",
+    "hermes_worker_and_guard_validation.json": "0990ae28e03aec9a4973affcdddebfbf226a31d36efaf3ed7370bfbb6b9f2030",
+    "MIGRATION_RECEIPT.json": "fa26f5c83d929fccdf6d76733a03449a153cc148eafab6cc65abf463c6a8367f"
+  },
+  "private_run_root": "runs/agent-migration-20261020",
+  "no_secrets_or_audio_published": true
+}

@@ -1,0 +1,165 @@
+{
+  "schema": "agent-workforce-migration-receipt-v1",
+  "recorded_utc": "2026-10-20T07:42:18Z",
+  "objective": "Migrate active OpenRouter Hermes and Codex agent roles to DeepSeek V4.1 Flash 1017 while preserving model-independent behavior, bounding validation, and keeping exposed embedded credentials out of active copies.",
+  "route": {
+    "model_id": "deepseek/deepseek-v4.1-flash-1017",
+    "provider": "openrouter",
+    "provider_catalog_checked_utc": "2026-10-20T07:07:00Z",
+    "catalog": {
+      "context_tokens": 1048576,
+      "tool_calls": true,
+      "structured_outputs": true,
+      "max_listed_input_price_usd_per_million": 0.3,
+      "max_listed_output_price_usd_per_million": 1.2,
+      "source": "https://openrouter.ai/deepseek/deepseek-v4.1-flash-1017"
+    },
+    "route_validation": [
+      {
+        "route": "deepseek-flash helper through existing OpenRouter environment credential",
+        "requested_model": "deepseek/deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek/deepseek-v4.1-flash-1017",
+        "status": "success",
+        "prompt_tokens": 158,
+        "completion_tokens": 2,
+        "total_tokens": 160,
+        "reported_cost_usd": 0.00001364,
+        "timeout_seconds": 30,
+        "max_tokens": 16,
+        "retries": 0
+      },
+      {
+        "route": "openrouter-subagents staged helper through existing OpenRouter environment credential",
+        "requested_model": "deepseek/deepseek-v4.1-flash-1017",
+        "returned_model": "deepseek/deepseek-v4.1-flash-1017",
+        "status": "success",
+        "response_marker": "SUBAGENT_READY",
+        "usage": null,
+        "usage_note": "The legacy smoke response did not capture provider token usage. Its serialized request was 439 bytes; bounded maximum listed pricing is approximately USD 0.0000522 at the 16-token output cap.",
+        "timeout_seconds": 30,
+        "max_tokens": 16,
+        "retries": 0
+      }
+    ]
+  },
+  "active_hermes_configuration": {
+    "path": "/data/data/com.termux/files/home/.hermes/config.yaml",
+    "previous_primary": "z-ai/glm-5.3-flash",
+    "primary": "deepseek/deepseek-v4.1-flash-1017",
+    "provider": "openrouter",
+    "fallbacks": [
+      {
+        "provider": "openrouter",
+        "model": "xiaomi/mimo-v2.6-pro"
+      }
+    ],
+    "duplicate_primary_fallback_removed": true,
+    "fallback_order_note": "The duplicate new primary was removed from the fallback chain; the existing Xiaomi fallback remains. No other routing behavior was changed.",
+    "raw_retry_fields": "api_max_retries and auto_recovery_cycles remain absent; main-config defaults were not changed."
+  },
+  "isolated_worker_overlay": {
+    "supported_selector": "HERMES_HOME",
+    "config_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/agent-migration-20261020/hermes-home/config.yaml",
+    "model": "deepseek/deepseek-v4.1-flash-1017",
+    "provider": "openrouter",
+    "api_max_retries": 0,
+    "effective_hermes_attempt_limit": 1,
+    "auto_recovery_cycles": 0,
+    "fallbacks": [],
+    "credential_source": "pre-existing inherited OPENROUTER_API_KEY environment variable; its value is not recorded",
+    "unsupported_overrides": {
+      "HERMES_CONFIG_PATH": "Not used by the installed config resolver.",
+      "HERMES_ENV_PATH": "Not used by the installed env resolver; get_env_path() is HERMES_HOME/.env."
+    }
+  },
+  "canonical_active_skill_files": [
+    {"path": "~/.codex/skills/openrouter-subagents/SKILL.md", "sha256": "21860531a1ebdbe4c7567a5345448328208bdae639759998351600112fffff90"},
+    {"path": "~/.codex/skills/openrouter-subagents/references/ROLES.md", "sha256": "eed398cac7c4e3fdf71d46f149597c29f19b044235f261cba0d3701ad217ebcc"},
+    {"path": "~/.codex/skills/openrouter-subagents/scripts/subagent.py", "sha256": "287c00c0ad7339ec1591a1d9a2d2657f101ff529a86bb066cf9bf5b252c8616d"},
+    {"path": "~/.codex/skills/openrouter-subagents/scripts/test_subagent.py", "sha256": "a1cdf4006cde386447e996eac0f8206b5a7432adda1ddf883e4b24979f206d40"},
+    {"path": "~/.codex/skills/deepseek-flash/README.md", "sha256": "4492daed2b9373007125efd03a5e8e67bda61fedc4ae2908f2a87d56708527d0"},
+    {"path": "~/.codex/skills/deepseek-flash/SKILL.md", "sha256": "ceb6d88321bac63c139d4b3ecf634a41bbea7012ca0a861b9f034f1e8da406aa"},
+    {"path": "~/.codex/skills/deepseek-flash/agents/openai.yaml", "sha256": "16a55a50fa382877764d95e657f0f925540aa1a4e425f95b0c193e0cd950a2f2"},
+    {"path": "~/.codex/skills/deepseek-flash/references/research-harness.md", "sha256": "53298de674d27495d51f4310d234d80f861e693247b34ccc5cc534e02511446c"},
+    {"path": "~/.codex/skills/deepseek-flash/scripts/deepseek_flash.py", "sha256": "14f3d214ea933dd3be1c3b92adcff7c96b7b2901c9265709cd6fc9c735ff4648"},
+    {"path": "~/.codex/skills/deepseek-flash/scripts/test_deepseek_flash.py", "sha256": "4957d0e0087e9e7e760386168603cc7422efa76b596867f4334013adda08d641"}
+  ],
+  "alias_and_copy_audit": {
+    "canonical_skill_roots": [
+      "/data/data/com.termux/files/home/.codex/skills/openrouter-subagents",
+      "/data/data/com.termux/files/home/.codex/skills/deepseek-flash"
+    ],
+    "symlink_targets": "Both resolve to the same path shown; neither is a symlink alias.",
+    "duplicate_agent_skill_copies": "No .agents/skills or .hermes/skills copy of either migrated skill was found in the checked roots.",
+    "agent_orchestra": "Unchanged; installed copies retained their prior matching hash."
+  },
+  "offline_validation": {
+    "openrouter_subagents_tests": {"passed": 8, "failed": 0},
+    "deepseek_flash_tests": {"passed": 31, "failed": 0},
+    "hermes_job_guard_tests": {"passed": 10, "failed": 0},
+    "hermes_job_guard_command": "PYTHONDONTWRITEBYTECODE=1 HERMES_HOME=/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/agent-migration-20261020/hermes-home PYTHONPATH=/data/data/com.termux/files/home/.hermes/hermes-agent python -m unittest discover -s artifacts/agent-migration-20261020 -p 'test_hermes_job_guard.py' -v",
+    "guard_scope": "Job-local wrapper patches the actual installed registry instance only during the one-shot. It allows only two absolute reads, a create-only exact output path, and one exact foreground test command with a fixed workdir and 120-second timeout. It rejects outside paths, traversal, symlinks, unexpected tools/arguments, repeats, and stale output. A violation latches HALT; if marker persistence fails, an in-process latch still blocks later calls.",
+    "filesystem_note": "Hermes write_file denies the assigned /usr/tmp path as a protected system path. The one authorized write is therefore implemented by the local wrapper using a descriptor walk with O_NOFOLLOW and O_EXCL; reads and the terminal test delegate to the installed registry. No Hermes global code was modified."
+  },
+  "hermes_worker_attempt": {
+    "requested_model": "deepseek/deepseek-v4.1-flash-1017",
+    "agent_model_after": "deepseek/deepseek-v4.1-flash-1017",
+    "agent_provider_after": "openrouter",
+    "provider_returned_model_id": null,
+    "status": "incomplete",
+    "completed": false,
+    "api_calls": 4,
+    "model_tool_call_names_reported": ["read_file", "read_file", "write_file", "terminal"],
+    "tool_cwd_and_terminal_exit_status": "Not retained in the worker receipt; do not infer successful execution from tool-call names.",
+    "input_tokens_cumulative": 24202,
+    "output_tokens_cumulative": 1276,
+    "hermes_estimated_cost_usd": 0.008890872,
+    "reason": "Output was truncated and the four-iteration budget was exhausted before the requested completion summary.",
+    "scope_escape": {
+      "path_written": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/test_master_audit_adversarial.py",
+      "intended_path": "/data/data/com.termux/files/usr/tmp/roach-hermes-stage-adversary-20261020/scripts/test_master_audit_adversarial.py",
+      "effect": "A newly created untracked file only; it was moved to the assigned worktree, and root later copied it back for independent source-side replication. No prior file was overwritten.",
+      "incident_receipt": "artifacts/agent-migration-20261020/scope_incident.json"
+    },
+    "manual_native_test_after_move": {
+      "attribution": "Run manually after the Hermes worker, not a result returned by that worker.",
+      "exit_code": 1,
+      "failed_cases": [
+        "Final trim gain metadata-only change from 1.0 to 0.5 was accepted rather than rejected.",
+        "Paired limiter kind changed to unknown_backend was accepted rather than rejected."
+      ],
+      "regression_test_path": "/data/data/com.termux/files/usr/tmp/roach-hermes-stage-adversary-20261020/scripts/test_master_audit_adversarial.py",
+      "private_stdout": "runs/agent-migration-20261020/adversarial-test-output.txt"
+    },
+    "halting": "runs/agent-migration-20261020/HALT is present and preserved. The guarded driver preflight refuses client creation while it exists; the assigned output file also already exists and is protected from overwrite."
+  },
+  "credential_incident": {
+    "exposure_time_utc": "Between 2026-10-20T07:07:47Z and 2026-10-20T07:21:05Z",
+    "exposed_active_file": "~/.codex/skills/openrouter-subagents/scripts/subagent.py lines 25-26",
+    "details": "Two embedded legacy OpenRouter credential literals were printed by an earlier bounded source inspection. Their values and hashes are intentionally absent from this receipt.",
+    "remediation": "Both embedded fallback constants were removed from active OpenRouter and deepseek-flash scripts. Active lookup now uses inherited environment credentials only and fails closed. The current inherited route credential was compared in memory and was distinct from the exposed literals.",
+    "owner_action": "No automatic revocation or global key shutdown was performed. Owner should revoke either exposed credential if it remains valid.",
+    "backup_rollback_rule": "Do not restore embedded credential literals from backup, even during rollback."
+  },
+  "private_backup": {
+    "directory": "runs/agent-migration-20261020/backup/",
+    "directory_mode": "0700",
+    "manifest": "runs/agent-migration-20261020/backup/manifest.json",
+    "manifest_mode": "0600",
+    "manifest_sha256": "4a9e9a2e957b523aee4122a771d56194cd41dfc6bcfb82efaa9c0bdc63161f21",
+    "coverage": "Pre-migration Hermes config, environment/auth credential files, existing local OpenRouter key file, active skill scripts, tests and docs. The backup directory is private and ignored; no backup contents or credential hashes are reproduced here."
+  },
+  "account_snapshot": {
+    "source": "Read-only OpenRouter key metadata endpoint; fields filtered before display.",
+    "limit_usd": 5.0,
+    "usage_usd": 0.171570092,
+    "remaining_usd": 4.828429908,
+    "prior_snapshot_usage_usd": 0.15813134,
+    "observed_delta_usd": 0.013438752,
+    "qualification": "The usage endpoint can update asynchronously and the delta may include other account activity; it is not attributed solely to this worker. No credits or subscriptions were added."
+  },
+  "roll_back": {
+    "procedure": "Use the private backup only to restore routing/config/docs if needed. Keep the existing fallback order without duplicating the restored primary, preserve environment-only credential lookup, and never restore embedded exposed credential literals.",
+    "halt": "Do not remove or clear the failed-run HALT marker automatically. A fresh model worker needs an explicit root-approved run scope, fresh output path, and the guarded job driver."
+  }
+}

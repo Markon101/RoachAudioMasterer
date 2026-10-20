@@ -1,0 +1,71 @@
+{
+  "schema": "deepseek-hermes-migration-v1",
+  "date_utc": "2026-10-20T23:48:50.141530+00:00",
+  "target_model": "deepseek/deepseek-v4.1-flash-1017",
+  "verified_active_paths": [
+    {
+      "path": "/data/data/com.termux/files/home/.codex/skills/deepseek-flash/scripts/deepseek_flash.py",
+      "resolved": "/data/data/com.termux/files/home/.codex/skills/deepseek-flash/scripts/deepseek_flash.py",
+      "sha256": "14f3d214ea933dd3be1c3b92adcff7c96b7b2901c9265709cd6fc9c735ff4648"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/.codex/skills/openrouter-subagents/scripts/subagent.py",
+      "resolved": "/data/data/com.termux/files/home/.codex/skills/openrouter-subagents/scripts/subagent.py",
+      "sha256": "287c00c0ad7339ec1591a1d9a2d2657f101ff529a86bb066cf9bf5b252c8616d"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/.hermes/config.yaml",
+      "resolved": "/data/data/com.termux/files/home/.hermes/config.yaml",
+      "sha256": "3fc57b5b841d6ef9041f0813ac55d7f84a016b54f0f7afd8b3f3d7c2d60ce0e9"
+    }
+  ],
+  "hermes_primary_provider": "openrouter",
+  "hermes_primary_model": "deepseek/deepseek-v4.1-flash-1017",
+  "fallback_after_deduplication": [
+    "xiaomi/mimo-v2.6-pro"
+  ],
+  "live_catalog_advertised": {
+    "context_tokens": 1048576,
+    "tools": true,
+    "tool_choice": true,
+    "response_format": true,
+    "context_capability_measured": false
+  },
+  "direct_smokes": {
+    "routes": 2,
+    "both_requested_and_returned_model": true,
+    "hardened_cost_usd": 1.364e-05,
+    "legacy_usage_exact": null,
+    "max_output_each": 16,
+    "timeout_seconds": 30,
+    "retries": 0
+  },
+  "hermes_job": "hermes_worker_and_guard_validation.json",
+  "guard_root_independent_tests": 10,
+  "root_test_log_sha256": "bf8c7c657528898d3cc2d0a76b6f7f0b2a3e3bd5eb9fb95aaed20604a90c1c64",
+  "budget": {
+    "existing_account_limit_usd": 5,
+    "mission_test_ceiling_usd": 0.1,
+    "observed_account_usage_delta_usd": 0.013438752,
+    "additional_credits_added": false
+  },
+  "rollback": "Privatechmod600 backups in ignored runs/agent-migration-20261020/backup; restore model fields selectively, NEVERrestoreexposedlegacyembeddedkeys",
+  "credential_incident": {
+    "legacy_embedded_constant_exposed_in_worker_tool_output": true,
+    "matches_any_current_configured_credential": false,
+    "embedded_fallbacks_removed_by_worker": true,
+    "old_key_revocation_if_still_valid": "requirescredentialowner; no unauthorised accountrevocationperformed",
+    "no_credential_values_in_public_receipts": true
+  },
+  "containment": "Hermesworkeronly latched at runs/agent-migration-20261020/HALT; no new paid jobs; DSPunaffected",
+  "failed_assumptions": [
+    "HERMES_CONFIG_PATH and HERMES_ENV_PATH are not supported config overrides in this installed build; use verified HERMES_HOME/config.yaml and .env",
+    "AIAgent cwd argument does not constrain file tools; exact allowlist paths and job-local registry guard required",
+    "Hermes sensitivepath policy rejects /usr/tmp WT write; guarded create-only exacttarget write isjob-local, not globalpolicy removal"
+  ],
+  "limitations": [
+    "Toolguard is not an OS sandbox for arbitrary Python test code; coordinator still reviews generated code",
+    "Hermes job ended incomplete after4modelcalls; terminal cwd/exit notcaptured; native rerun attribution separate",
+    "No new model context/concurrency ceilings adopted merelyfromcatalog"
+  ]
+}

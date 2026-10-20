@@ -1,0 +1,13 @@
+{
+  "schema": "hermes-worker-scope-incident-v1",
+  "recorded_utc": "2026-10-20T07:34:58.406199+00:00",
+  "scope": "Hermesresearchworkeronly; DSPworkcontinues",
+  "wrong_write": "ROOT/scripts/test_master_audit_adversarial.py instead of assignedisolatedWT",
+  "effect": "newuntrackedfile only; preserved/movedintoassignedWT; no existing source overwritten",
+  "unproven_claim": "AIAgentcwdargumentdoesnotestablishfiletoolcontainment",
+  "containment": "runs/agent-migration-20261020/HALT created byroot; no further paidHermesjobs untiloffline path+HALTguardqualification; noautomaticresume",
+  "worker_model_completion": false,
+  "model_api_calls": 4,
+  "reported_estimated_cost_usd": 0.008890872,
+  "next": "verifyactualtoolpathresolver; explicit job-localallowlist andexactterminalcommand; independentreplicationoftestfailures"
+}
