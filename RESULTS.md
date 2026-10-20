@@ -1492,3 +1492,15 @@ The finalizer ledger is now usable for causal diagnostics. The upstream stage
 ledger and broader acoustic/perceptual qualification remain open. Models, routing,
 default integration, and historical champions remain unchanged.
 
+### 33. Real-song coherence screen passes; one listening experiment earned (2026-10-20)
+
+The default-off combined intervention passes the fixed Chasing Horizons screen
+at actual 10/2 geometry, including the irregular tail: 98.419% lower layout RMS,
+combined protected-band error <=3.11e-9 RMS, residual growth <=2.44%, exact short
+CPU disabled parity, CPU/OpenCL difference <=2.98e-8, and zero silence output.
+Seventeen Rust and eleven Python checks pass. Eleven native jobs complete; two
+prior metadata-validation stops are retained without changing acoustic gates.
+[Report and provenance](docs/REAL_COHERENCE_ELIGIBILITY_20261020.md) distinguish
+this result from fidelity, listening preference and production promotion. The
+matched full-song control/candidate still require final mastering checks.
+

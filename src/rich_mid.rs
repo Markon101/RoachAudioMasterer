@@ -21,6 +21,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{fs, io::Write, path::Path, time::Instant};
 
+const COHERENCE_MAX_SECONDS: f64 = 180.0;
+
 fn profile_requested(requested: bool, foreground_confirmed: bool) -> Result<bool> {
     ensure!(
         !requested || foreground_confirmed,
@@ -119,6 +121,12 @@ pub struct MidField {
     pub kind: Kind,
     pub core: Model,
     pub recipe: String,
+}
+
+pub(crate) fn validate_coherence_model(model_path: &Path) -> Result<()> {
+    let field = MidField::load(model_path)?;
+    ensure!(field.kind.mode() == 6, "mid coherence requires a Basis mode 6 checkpoint");
+    Ok(())
 }
 
 impl MidField {
@@ -630,6 +638,123 @@ pub fn restore_with_quiet_gate(
     out: &Path,
     quiet_abstention: bool,
 ) -> Result<()> {
+    restore_with_excitation_origin(
+        model_path, input_path, mid_cutoff, mid_ceiling, controlled, steps, strength,
+        chunk_seconds, overlap_seconds, denoise, auto_eq, backend, out,
+        quiet_abstention, None, false,
+    )
+}
+
+/// Opt-in research conditioning: index excitation on the input's absolute
+/// sample timeline, rather than restarting its deterministic stream per chunk.
+pub fn restore_with_continuous_excitation(
+    model_path: &Path, input_path: &Path, mid_cutoff: f32, mid_ceiling: f32,
+    controlled: bool, steps: usize, strength: f32, chunk_seconds: f64,
+    overlap_seconds: f64, denoise: bool, auto_eq: bool, backend: &str, out: &Path,
+    input_origin_samples: u64,
+) -> Result<()> {
+    restore_with_continuous_excitation_and_quiet_gate(
+        model_path, input_path, mid_cutoff, mid_ceiling, controlled, steps, strength,
+        chunk_seconds, overlap_seconds, denoise, auto_eq, backend, out,
+        false, input_origin_samples,
+    )
+}
+
+pub fn restore_with_continuous_excitation_and_quiet_gate(
+    model_path: &Path, input_path: &Path, mid_cutoff: f32, mid_ceiling: f32,
+    controlled: bool, steps: usize, strength: f32, chunk_seconds: f64,
+    overlap_seconds: f64, denoise: bool, auto_eq: bool, backend: &str, out: &Path,
+    quiet_abstention: bool, input_origin_samples: u64,
+) -> Result<()> {
+    ensure_fresh_coherence_output(out)?;
+    restore_with_excitation_origin(
+        model_path, input_path, mid_cutoff, mid_ceiling, controlled, steps, strength,
+        chunk_seconds, overlap_seconds, denoise, auto_eq, backend, out,
+        quiet_abstention, Some(input_origin_samples), false,
+    )
+}
+
+pub fn restore_with_coherence(
+    model_path: &Path, input_path: &Path, mid_cutoff: f32, mid_ceiling: f32,
+    controlled: bool, steps: usize, strength: f32, chunk_seconds: f64,
+    overlap_seconds: f64, denoise: bool, auto_eq: bool, backend: &str, out: &Path,
+    quiet_abstention: bool, input_origin_samples: u64,
+) -> Result<()> {
+    validate_coherence_configuration(mid_cutoff, mid_ceiling, steps, chunk_seconds, overlap_seconds)?;
+    ensure_fresh_coherence_output(out)?;
+    restore_with_excitation_origin(
+        model_path, input_path, mid_cutoff, mid_ceiling, controlled, steps, strength,
+        chunk_seconds, overlap_seconds, denoise, auto_eq, backend, out,
+        quiet_abstention, Some(input_origin_samples), true,
+    )
+}
+
+pub(crate) fn validate_coherence_configuration(
+    cutoff_hz: f32, ceiling_hz: f32, steps: usize, chunk_seconds: f64, overlap_seconds: f64,
+) -> Result<()> {
+    ensure!(steps == 8, "mid coherence candidate is bounded to the frozen Euler8 solver");
+    ensure!(cutoff_hz.is_finite() && ceiling_hz.is_finite()
+            && cutoff_hz >= 0.0 && cutoff_hz < ceiling_hz && ceiling_hz <= RATE as f32 / 2.0,
+        "mid coherence requires valid trusted-band cutoffs within Nyquist");
+    ensure!(chunk_seconds.is_finite() && overlap_seconds.is_finite()
+            && chunk_seconds == 10.0 && overlap_seconds == 2.0,
+        "mid coherence candidate is bounded to the frozen 10-second / 2-second chunk geometry");
+    Ok(())
+}
+
+fn ensure_fresh_coherence_output(out: &Path) -> Result<()> {
+    if out.exists() {
+        ensure!(fs::read_dir(out)?.next().is_none(),
+            "coherence mode requires a fresh output directory; existing chunk caches/evidence are not authenticated");
+    }
+    Ok(())
+}
+
+pub(crate) fn validate_coherence_audio(audio: &Audio, input_origin_samples: u64) -> Result<()> {
+    ensure!(audio.rate == RATE, "mid coherence requires native 48000 Hz audio");
+    ensure!((1..=2).contains(&audio.channels.len()), "mid coherence supports mono/stereo");
+    let frames = audio.channels.first().map_or(0, Vec::len);
+    ensure!(frames > 0 && frames as f64 / RATE as f64 <= COHERENCE_MAX_SECONDS,
+        "mid coherence is bounded to nonempty clips of at most 180 seconds");
+    ensure!(audio.channels.iter().all(|c| c.len() == frames && c.iter().all(|x| x.is_finite())),
+        "mid coherence requires aligned finite channels");
+    ensure!(input_origin_samples.checked_add(frames as u64).is_some(),
+        "input origin plus clip duration overflows the absolute sample timeline");
+    Ok(())
+}
+
+fn project_whole_track_trusted_bands(
+    input: &Audio, proposal: &Audio, cutoff_hz: f32, ceiling_hz: f32,
+) -> Result<Audio> {
+    ensure!(input.rate == RATE && proposal.rate == RATE, "whole-track projection requires 48000 Hz audio");
+    ensure!(input.channels.len() == proposal.channels.len() && (1..=2).contains(&input.channels.len()),
+        "whole-track projection requires matching mono/stereo geometry");
+    let frames = input.channels.first().map_or(0, Vec::len);
+    ensure!(frames > 0 && frames <= (COHERENCE_MAX_SECONDS * RATE as f64) as usize
+            && input.channels.iter().all(|c| c.len() == frames && c.iter().all(|x| x.is_finite()))
+            && proposal.channels.iter().all(|c| c.len() == frames && c.iter().all(|x| x.is_finite())),
+        "whole-track projection requires aligned finite clips of at most 180 seconds");
+    ensure!(cutoff_hz.is_finite() && ceiling_hz.is_finite()
+            && 0.0 <= cutoff_hz && cutoff_hz < ceiling_hz && ceiling_hz <= RATE as f32 / 2.0,
+        "invalid whole-track trusted-band cutoffs");
+    if input.channels.iter().zip(&proposal.channels).all(|(a,b)| a == b) {
+        return Ok(input.clone());
+    }
+    let trusted = [
+        crate::scene::TrustedBand { min_hz:0.0, max_hz:cutoff_hz },
+        crate::scene::TrustedBand { min_hz:ceiling_hz, max_hz:RATE as f32/2.0 },
+    ];
+    Ok(Audio { rate:RATE, channels:input.channels.iter().zip(&proposal.channels)
+        .map(|(original,proposed)| crate::dsp::lock_known_bands(original,proposed,RATE,&trusted))
+        .collect() })
+}
+
+fn restore_with_excitation_origin(
+    model_path: &Path, input_path: &Path, mid_cutoff: f32, mid_ceiling: f32,
+    controlled: bool, steps: usize, strength: f32, chunk_seconds: f64,
+    overlap_seconds: f64, denoise: bool, auto_eq: bool, backend: &str, out: &Path,
+    quiet_abstention: bool, excitation_origin: Option<u64>, whole_track_projection: bool,
+) -> Result<()> {
     let profiling = profile_requested(
         std::env::var("ROACH_PROFILE_MID").as_deref() == Ok("1"),
         std::env::var("ROACH_FOREGROUND_CONFIRMED").as_deref() == Ok("1"),
@@ -660,6 +785,15 @@ pub fn restore_with_quiet_gate(
     };
     let field = MidField::load(model_path)?;
     let audio = native_audio::read_entire(input_path)?;
+    if let Some(origin) = excitation_origin {
+        ensure!(field.kind.mode() == 6, "continuous excitation research path requires Basis mode 6");
+        if whole_track_projection {
+            validate_coherence_audio(&audio, origin)?;
+        } else {
+            ensure!(origin.checked_add(audio.frames() as u64).is_some(),
+                "input origin plus clip duration overflows the absolute sample timeline");
+        }
+    }
     let mut engine = Engine::new(&field.core, backend)?;
     if profiling {
         engine.set_profiling(true);
@@ -724,7 +858,9 @@ pub fn restore_with_quiet_gate(
         let chunk_t0 = Instant::now();
         let c_end = (c_start + chunk_samples).min(total_samples);
         let actual_chunk_len = c_end - c_start;
-        let chunk_cache_file = if quiet_abstention {
+        let chunk_cache_file = if excitation_origin.is_some() {
+            chunk_dir.join(format!("chunk_continuous_{:04}.bin", idx))
+        } else if quiet_abstention {
             chunk_dir.join(format!("chunk_q_{:04}.bin", idx))
         } else {
             chunk_dir.join(format!("chunk_{:04}.bin", idx))
@@ -778,7 +914,11 @@ pub fn restore_with_quiet_gate(
             };
 
             let prepare_start = profiling.then(Instant::now);
-            let p = scene_features::prepare(&chunk_input, d, 11);
+            let p = if let Some(origin) = excitation_origin {
+                scene_features::prepare_with_noise_origin(&chunk_input, d, 11, origin + c_start as u64)
+            } else {
+                scene_features::prepare(&chunk_input, d, 11)
+            };
             prepare_ms = prepare_start.map(|start| start.elapsed().as_secs_f64() * 1000.0);
             let prior_start = profiling.then(Instant::now);
             let initial = scene_features::prior_state(&p, "harmonic");
@@ -865,6 +1005,12 @@ pub fn restore_with_quiet_gate(
         channels: output_channels,
     };
 
+    if whole_track_projection {
+        full_reconstructed = project_whole_track_trusted_bands(
+            &audio, &full_reconstructed, mid_cutoff, mid_ceiling,
+        )?;
+    }
+
     if denoise || auto_eq {
         println!(
             "Applying acoustic post-processing: denoise={}, auto_eq={}",
@@ -895,6 +1041,23 @@ pub fn restore_with_quiet_gate(
             "controlled": controlled,
             "steps": steps,
             "strength": strength,
+            "excitation_mode": if excitation_origin.is_some() { "continuous" } else { "restart_per_chunk" },
+            "input_origin_samples": excitation_origin.unwrap_or(0),
+            "noise_seed": 11,
+            "mid_model_mode": field.kind.mode(),
+            "whole_track_trusted_projection": whole_track_projection,
+            "projection_policy": if whole_track_projection { "after_normalized_wola_before_clean" } else { "none" },
+            "protected_bands_hz_closed": if whole_track_projection { Some([[0.0,mid_cutoff],[mid_ceiling,RATE as f32/2.0]]) } else { None },
+            "post_polish_relock": false,
+            "quiet_abstention": quiet_abstention,
+            "chunk_seconds": chunk_seconds,
+            "overlap_seconds": overlap_seconds,
+            "chunk_samples": chunk_samples,
+            "overlap_samples": overlap_samples,
+            "step_samples": step_samples,
+            "chunk_count": num_chunks,
+            "chunk_start_samples": chunk_starts,
+            "raw_chunk_prefix": if excitation_origin.is_some() { "chunk_continuous_" } else if quiet_abstention { "chunk_q_" } else { "chunk_" },
             "total_seconds": total_samples as f64 / audio.rate as f64,
             "denoise": denoise,
             "auto_eq": auto_eq,
@@ -1098,6 +1261,76 @@ pub fn evaluate_mid(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn whole_track_lock_preserves_cutoff_boundaries_and_identity() -> Result<()> {
+        let n = 4800usize;
+        let tone = |hz: f32, amp: f32, phase: f32| -> Vec<f32> {
+            let omega = std::f64::consts::TAU * hz as f64 / RATE as f64;
+            (0..n).map(|i| (amp as f64 * (omega * i as f64 + phase as f64).sin()) as f32).collect()
+        };
+        let input = Audio { rate:RATE, channels:vec![
+            tone(700.0,0.20,0.1).into_iter().zip(tone(1500.0,0.08,0.2)).map(|(a,b)|a+b)
+                .zip(tone(8000.0,0.06,0.3)).map(|(a,b)|a+b)
+                .zip(tone(12000.0,0.04,0.4)).map(|(a,b)|a+b).collect(),
+            tone(700.0,0.17,0.5).into_iter().zip(tone(1500.0,0.07,0.6)).map(|(a,b)|a+b)
+                .zip(tone(8000.0,0.05,0.7)).map(|(a,b)|a+b)
+                .zip(tone(12000.0,0.03,0.8)).map(|(a,b)|a+b).collect(),
+        ]};
+        let identity = project_whole_track_trusted_bands(&input, &input, 1500.0, 8000.0)?;
+        assert_eq!(identity.channels, input.channels);
+        let residual = tone(3000.0, 0.025, 0.9);
+        let cutoff_add = tone(1500.0, 0.02, 1.1);
+        let ceiling_add = tone(8000.0, 0.015, 1.3);
+        let proposal = Audio { rate:RATE, channels:input.channels.iter().map(|ch| (0..n)
+            .map(|i|ch[i]+residual[i]+cutoff_add[i]+ceiling_add[i]).collect()).collect() };
+        let locked = project_whole_track_trusted_bands(&input, &proposal, 1500.0, 8000.0)?;
+        for (c, channel) in locked.channels.iter().enumerate() {
+            let expected: Vec<f32> = input.channels[c].iter().zip(&residual).map(|(x,r)|x+r).collect();
+            let max = channel.iter().zip(expected).map(|(a,b)|(a-b).abs()).fold(0.0f32,f32::max);
+            assert!(max < 3e-6, "whole-track projection max error {max}");
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn coherence_bounds_and_basis_mode_are_checked() -> Result<()> {
+        let audio = Audio { rate:RATE, channels:vec![vec![0.0; 1024]] };
+        assert!(validate_coherence_audio(&audio,0).is_ok());
+        assert!(validate_coherence_audio(&audio,u64::MAX).is_err());
+        assert!(validate_coherence_configuration(1500.0,8000.0,8,10.0,2.0).is_ok());
+        assert!(validate_coherence_configuration(1500.0,8000.0,8,9.0,2.0).is_err());
+        assert!(validate_coherence_configuration(8000.0,1500.0,8,10.0,2.0).is_err());
+        let base = std::env::temp_dir().join(format!("mid-coherence-model-{}-{}",std::process::id(),
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)?.as_nanos()));
+        let basis = base.with_extension("basis.json");
+        MidField::new(Kind::Basis,1).save(&basis)?;
+        assert!(validate_coherence_model(&basis).is_ok());
+        let other = base.with_extension("other.json");
+        MidField::new(Kind::Diagonal,2).save(&other)?;
+        assert!(validate_coherence_model(&other).is_err());
+        fs::remove_file(basis)?;
+        fs::remove_file(other)?;
+        Ok(())
+    }
+
+    #[test]
+    fn continuous_excitation_rejects_existing_evidence_before_model_io() -> Result<()> {
+        let path = std::env::temp_dir().join(format!("roach-continuous-guard-{}", std::process::id()));
+        fs::create_dir_all(&path)?;
+        let evidence = path.join("keep.txt");
+        fs::write(&evidence, b"preserve")?;
+        let result = restore_with_continuous_excitation(
+            Path::new("missing-model.json"), Path::new("missing-input.wav"),
+            1500.0, 8000.0, false, 8, 1.0, 8.0, 2.0, false, false,
+            "cpu", &path, 0,
+        );
+        assert!(result.unwrap_err().to_string().contains("fresh output directory"));
+        assert_eq!(fs::read(&evidence)?, b"preserve");
+        fs::remove_file(evidence)?;
+        fs::remove_dir(path)?;
+        Ok(())
+    }
     #[test]
     fn mid_profile_gate_and_disk_cache_bypass_schema() -> Result<()> {
         assert!(!profile_requested(false, false)?);

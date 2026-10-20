@@ -1,0 +1,102 @@
+{
+  "schema": "real-coherence-listening-eligibility-protocol-v1",
+  "source_parent": "ebb07b4",
+  "design_status": "declaredbeforecandidateorrealexcerptrender",
+  "source": {
+    "path": "/sdcard/Download/Chasing Horizons.wav",
+    "sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559",
+    "duration_seconds": 140.4
+  },
+  "selection": "Fixed source48..80seconds, selected by timestamp before inspecting candidate deltas; no search for favorable material.",
+  "views": {
+    "source_start_sample": 2304000,
+    "full_frames": 1536000,
+    "view_frames": 1248000,
+    "view_starts_samples": [
+      0,
+      144384
+    ],
+    "comparison_global_samples": [
+      384000,
+      1008000
+    ]
+  },
+  "conditioning": {
+    "mid_model": "artifacts/rich-mid-v3/basis.json",
+    "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+    "solver": "Euler8",
+    "steps": 8,
+    "mid_cutoff": 1500,
+    "mid_ceiling": 8000,
+    "strength": 0.6,
+    "chunk_seconds": 10,
+    "overlap_seconds": 2,
+    "quiet_abstention": true,
+    "post_denoise": false,
+    "post_auto_eq": false,
+    "backend": "opencl"
+  },
+  "arms": [
+    "restart",
+    "continuous_with_final_trusted_band_lock"
+  ],
+  "controls": [
+    "bit-exact disabled-path comparison against pinned baseline on matched origin-zero input",
+    "CPU/OpenCL combined-path numerical parity on short matching excerpt",
+    "silence exactlyzero remainsrequired",
+    "projection-only procedural controls retained; no need re-run unchangedhelper"
+  ],
+  "eligibility_gates": {
+    "layout_rms_reduction_min": 0.5,
+    "max_whole_view_protected_error_rms": 1e-06,
+    "residual_rms_growth_vs_restart_max": 0.1,
+    "backend_sample_max_abs": 2e-06,
+    "finite_geometry_required": true,
+    "mastered_ceiling_dbtp": -1.0,
+    "mastered_ceiling_tolerance_db": 0.01,
+    "process_hwm_mib_cap_excerpt": 768,
+    "process_hwm_mib_cap_fullsong": 1024
+  },
+  "mastering": {
+    "target_lufs": -13,
+    "ceiling_db": -1,
+    "controls": "recordedSmoothrecipe; no routingthreshold or modelweight change; no force-specialists; newactualbaselinehashbound",
+    "upstream_and_downstream_must_match": true
+  },
+  "interpretation_limits": [
+    "Eligibility for exploratory listening only, not production promotion or target reconstruction.",
+    "Procedural complex-error conflict and false healthy edits remain negative evidence.",
+    "Lowerlayoutdifference can make incorrect residuals moreconsistent.",
+    "HistoricalSmoothFLAC has incompleteinput/executableprovenance; recreate matched control and labelhistorical comparison separately.",
+    "Fullsongcandidatecount1; independentlyrecreatedbaselineiscontrol, notsecondcandidate."
+  ],
+  "falsifiers": [
+    "Any preservation/parity/resource failure halts candidate eligibility and preserves artifacts.",
+    "No meaningfullayoutgainat10/2 stops this intervention; no retuning against real song.",
+    "No thresholdrelaxation or phasefidelity claim without newtarget evidence."
+  ],
+  "human_decision": "whether this single experimental candidate is distinguishable, objectionable, or preferable; indistinguishable/abstain permitted; nopromotionwithoutowner",
+  "next_after_eligibility": "Renderonefullsongcandidateplusmatchedbaselinecontrol; recordSHAcommands/sourceconfiguration; prepareattenuation-onlyblindfullsongcomparison.",
+  "quiet_gate_requirement": "AutoMastercandidatequiet_mid_denoise=true andforce_specialists=false; softsigmoid doesnotguaranteezeroquietresidual",
+  "absolute_view_origins_samples": [
+    2304000,
+    2448384
+  ],
+  "tail_probe": {
+    "source_start_sample": 5760000,
+    "source_end_sample": 6739200,
+    "frames": 979200,
+    "absolute_chunk_starts_samples": [
+      5760000,
+      6144000,
+      6259200
+    ],
+    "local_chunk_starts_samples": [
+      0,
+      384000,
+      499200
+    ],
+    "comparisons": "restart vscombined protectedband/growthfrozengates; derivativedescriptivesonly; layoutmetricnullwithoutsecondlayout"
+  },
+  "gate_scope": "protectederror1e-6atMidoutputonly. Finalmasteringhasintentionalgain/EQ/dynamics sofinalinputrelativebanderrornotanabsoluteinvariant; finalfinite/geometry/truepeakgatesandmatchedsettings required; no finalrelock."
+}

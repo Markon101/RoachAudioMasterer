@@ -1,0 +1,27 @@
+{
+  "schema": "coherence-claim-review-reconciliation-v1",
+  "independent_review": "nativeLuna read-only currentdiff+eligibilityprotocol",
+  "accepted_findings": [
+    "bindglobalvieworigins tooriginalsong",
+    "qualifyquietgateas soft+requireenabled,no force-specialists",
+    "irregularfullsongtailneedsmatchedgeometryprobe",
+    "externalfullsongtimeout+1GiBsampledHWMcap"
+  ],
+  "rejected_gate_extension": "Rawinput-relative1e-6bandinvarianceaftermastering isnotMid-stagecontract; conventionalgain/EQ/dynamicsaltertrustedbandsintentionally. No finalrelock.",
+  "counterexample": {
+    "unchanged_pinned_baseline_mastering": true,
+    "input": "runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav",
+    "output": "runs/stage-accountability-20261020/master-observer-native-v1/legacy-stress-baseline/mastered.wav",
+    "protected_band_lr_error_rms": [
+      0.12473635182716881,
+      0.12473558508192516
+    ],
+    "requested_master_target_lufs": -9,
+    "interpretation": "Evenbaselinefailsrawinputrelativegateafterordinarymastering; gatewouldrejectintendedbaselinebehavior.",
+    "input_sha256": "10aa25ddcc3efb4f0a10a8558a0faf311a6db6fe8e3e19426d48aab1a8904c1c",
+    "output_sha256": "33b7cdfe1c50a95127b6c7268c4805757dffa1e22215eb5b4972a96aea496eb8",
+    "definition": "Float64rFFT(y-x)/N, sumone-sidedParsevalweights(DC/Nyquist1,other2), closed0..1500Hz+8000..24000Hz, sqrtperL/R"
+  },
+  "required_final_checks": "finitegeometry, finite4xtruepeakceiling, exactfrozenDSPsettings, controlledpre/postbandmetricsdescriptive; ownerjudgmentpending",
+  "ground_truth_on_real_song": null
+}

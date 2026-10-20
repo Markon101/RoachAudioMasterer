@@ -135,7 +135,26 @@ fn band_rms(row: &[C]) -> f32 {
 fn wrap(x: f32) -> f32 {
     (x + std::f32::consts::PI).rem_euclid(TAU) - std::f32::consts::PI
 }
+fn white_noise(sample_seed: u64, channel: usize, sample_origin: u64, samples: usize) -> Vec<f32> {
+    let mut rng = Rng(sample_seed ^ (channel as u64 * 0x71188435));
+    rng.advance(sample_origin);
+    (0..samples).map(|_| rng.signed()).collect()
+}
+
+/// Preserve the historical per-clip noise stream exactly (origin zero).
 pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
+    prepare_with_noise_origin(a, d, sample_seed, 0)
+}
+
+/// Research-only conditioning variant that continues the white-noise prior
+/// from an absolute sample origin. This changes chunk conditioning only; it
+/// changes neither learned weights nor the solver/ODE update semantics.
+pub fn prepare_with_noise_origin(
+    a: &Audio,
+    d: Damage,
+    sample_seed: u64,
+    sample_origin: u64,
+) -> Prepared {
     let ms = a.mid_side();
     let s = Stft::default();
     let fine = Stft::new(256, 64);
@@ -163,8 +182,7 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
     for c in 0..2 {
         let fs = fine.analyze(&ms[c]);
         let cs = coarse.analyze(&ms[c]);
-        let mut rng = Rng(sample_seed ^ (c as u64 * 0x71188435));
-        let white: Vec<_> = (0..a.frames()).map(|_| rng.signed()).collect();
+        let white = white_noise(sample_seed, c, sample_origin, a.frames());
         let ns = s.analyze(&white);
         for t in 0..frames {
             let input = &mut encoder_features
@@ -479,6 +497,60 @@ pub fn waveform(p: &Prepared, d: Damage, state: &[Vec<C>; 2], strength: f32) -> 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn assert_prepared_equal(a: &Prepared, b: &Prepared) {
+        assert_eq!(a.input.rate, b.input.rate);
+        assert_eq!(a.input.channels, b.input.channels);
+        assert_eq!(a.ms, b.ms);
+        assert_eq!(a.scale, b.scale);
+        assert_eq!(a.active, b.active);
+        assert_eq!(a.low_rms, b.low_rms);
+        assert_eq!(a.harmonic, b.harmonic);
+        assert_eq!(a.noise, b.noise);
+        assert_eq!(a.encoder_features, b.encoder_features);
+        assert_eq!(a.frames, b.frames);
+        for c in 0..2 {
+            assert_eq!(a.base[c].data, b.base[c].data);
+            assert_eq!(a.base[c].frames, b.base[c].frames);
+            assert_eq!(a.base[c].samples, b.base[c].samples);
+        }
+    }
+
+    #[test]
+    fn origin_zero_prepare_is_bit_exact_compatibility_path() {
+        let input = Audio {
+            rate: RATE,
+            channels: vec![(0..4096)
+                .map(|i| (TAU * 437.0 * i as f32 / RATE as f32).sin() * 0.23)
+                .collect()],
+        };
+        let d = Damage {
+            cutoff: 1800.0,
+            transition: 225.0,
+            power: 2.0,
+        };
+        let historical = prepare(&input, d, 11);
+        let explicit_zero = prepare_with_noise_origin(&input, d, 11, 0);
+        assert_prepared_equal(&historical, &explicit_zero);
+        for channel in 0..2 {
+            let mut old_rng = Rng(11 ^ (channel as u64 * 0x71188435));
+            let old_stream: Vec<_> = (0..input.frames()).map(|_| old_rng.signed()).collect();
+            assert_eq!(white_noise(11, channel, 0, input.frames()), old_stream);
+        }
+    }
+
+    #[test]
+    fn noise_prior_subsequence_matches_shared_absolute_stream() {
+        let seed = 11;
+        let origin = 1733u64;
+        let count = 257;
+        for channel in 0..2 {
+            let whole = white_noise(seed, channel, 0, 4096);
+            let chunk = white_noise(seed, channel, origin, count);
+            assert_eq!(chunk, whole[origin as usize..origin as usize + count]);
+        }
+    }
+
     #[test]
     fn sine_harmonic_phase_link() {
         let input = Audio {

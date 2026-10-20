@@ -1,0 +1,46 @@
+{
+  "schema": "real-coherence-gate-plan-v1",
+  "baseline_source_commit": "07e9ac90fee6bae65f84e1aab80cf2aaf37f22b3",
+  "candidate_binary": {
+    "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+    "sha256": "cdbb2a3fb20c7662e3e0b39f46365301f105e3fd5a8f057635ecf24382dbbb93"
+  },
+  "baseline_binary": {
+    "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+    "sha256": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437"
+  },
+  "model": {
+    "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+    "sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3"
+  },
+  "source_wav": {
+    "path": "/storage/emulated/0/Download/Chasing Horizons.wav",
+    "sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559"
+  },
+  "protocol": {
+    "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/listening-coherence-20261020/eligibility_protocol.json",
+    "sha256": "be1a6d2afb33190f6ed5c05bd9219902f55a2254a512e90d21ff536c32669a30"
+  },
+  "source_pins": [
+    {
+      "name": "src/main.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/main.rs",
+      "sha256": "ae59f5baa83f1d5dd0a11afbe9d0598b06d9b4a9edb4a1fdcdfcaf89ec44991b"
+    },
+    {
+      "name": "src/rich_mid.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/rich_mid.rs",
+      "sha256": "8f9be1e6cd0f1b36f93b54f062897c2e758a97d9f0fb24d5ed7113b039d1bbe1"
+    },
+    {
+      "name": "src/scene_features.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/scene_features.rs",
+      "sha256": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2"
+    },
+    {
+      "name": "src/synth.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/synth.rs",
+      "sha256": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be"
+    }
+  ]
+}

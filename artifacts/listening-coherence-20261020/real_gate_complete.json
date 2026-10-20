@@ -1,0 +1,1161 @@
+{
+  "schema": "real-coherence-target-free-gate-complete-v1",
+  "scope": "short real-song Mid coherence screen; not a full mastering or production-quality qualification",
+  "eligible_for_bounded_listening": true,
+  "production_eligible": false,
+  "baseline_identity": {
+    "binary_sha256": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437",
+    "source_commit": "07e9ac90fee6bae65f84e1aab80cf2aaf37f22b3",
+    "artifact_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1"
+  },
+  "runner_process_memory_kib": {
+    "VmRSS": 92332,
+    "VmHWM": 203100
+  },
+  "target_metrics": null,
+  "target_metrics_note": "No true target/source reconstruction is available for this real song.",
+  "post_finalizer_true_peak": null,
+  "post_finalizer_note": "The sequence invokes rich-mid-restore only; final mastering/true-peak validation is a separate later gate.",
+  "mastered_output_or_auto_master_claim": null,
+  "protocol_sha256": "be1a6d2afb33190f6ed5c05bd9219902f55a2254a512e90d21ff536c32669a30",
+  "derived_geometry_sha256": "df3262cd1fe37d68ed3a18c3780ca429b4c1ca2470d4974c5c1c919cbc0b5d92",
+  "pins": [
+    {
+      "name": "candidate_binary",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+      "sha256": "cdbb2a3fb20c7662e3e0b39f46365301f105e3fd5a8f057635ecf24382dbbb93"
+    },
+    {
+      "name": "baseline_binary_857e065f",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+      "sha256": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437"
+    },
+    {
+      "name": "model",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+      "sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3"
+    },
+    {
+      "name": "source_wav",
+      "path": "/storage/emulated/0/Download/Chasing Horizons.wav",
+      "sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559"
+    },
+    {
+      "name": "protocol",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/listening-coherence-20261020/eligibility_protocol.json",
+      "sha256": "be1a6d2afb33190f6ed5c05bd9219902f55a2254a512e90d21ff536c32669a30"
+    },
+    {
+      "name": "src/main.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/main.rs",
+      "sha256": "ae59f5baa83f1d5dd0a11afbe9d0598b06d9b4a9edb4a1fdcdfcaf89ec44991b"
+    },
+    {
+      "name": "src/rich_mid.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/rich_mid.rs",
+      "sha256": "8f9be1e6cd0f1b36f93b54f062897c2e758a97d9f0fb24d5ed7113b039d1bbe1"
+    },
+    {
+      "name": "src/scene_features.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/scene_features.rs",
+      "sha256": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2"
+    },
+    {
+      "name": "src/synth.rs",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/synth.rs",
+      "sha256": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be"
+    },
+    {
+      "name": "gate_script",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/run_real_coherence_gate.py",
+      "sha256": "5b81a8ba03c9ccbe515f78176483986c1125ca1e4457d68fcdd3c7d59917c653"
+    },
+    {
+      "name": "plan",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/listening-coherence-20261020/real_gate_plan.json",
+      "sha256": "784fbef1d9452ea75576d01fc35b8fe05754712bb0ea95181fc26d2d8cd15546"
+    },
+    {
+      "name": "python_dependency_long_coherence_fixture.py",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/long_coherence_fixture.py",
+      "sha256": "2729cf89af5c141dbb416ec655acac25d8c413013e9038bac1b9d0bb4d8a0383"
+    },
+    {
+      "name": "python_dependency_roach_ears/audio_io.py",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/roach_ears/audio_io.py",
+      "sha256": "9bdb9c07bbf55bbafb8826c1cf8e55a978f25cd300838a2d21483a892bdc0bbc"
+    },
+    {
+      "name": "python_dependency_run_mid_profile.py",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/run_mid_profile.py",
+      "sha256": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862"
+    },
+    {
+      "name": "derived_view0",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/view0.wav",
+      "sha256": "7517d58c33b8a1670a416487fb87c511c2e710ad90ceced9e5a7e4a4edb34023"
+    },
+    {
+      "name": "derived_view1",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/view1.wav",
+      "sha256": "e98bc0732fe3dc2f732ab257c29e697f28f014ce874c4293805131bb037c29f8"
+    },
+    {
+      "name": "derived_tail120to140_4",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/tail120to140_4.wav",
+      "sha256": "12ba070bd9e250cbd65c31e774450e7e87226e1bf58022f31e19d81a0a7341d2"
+    },
+    {
+      "name": "derived_source_probe_1s",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/source_probe_1s.wav",
+      "sha256": "2bb43b90d5bb05bc82816f369e44d1181ced6b2c9e3bedb79501b91141d1abd9"
+    },
+    {
+      "name": "derived_true_silence_16384",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/true_silence_16384.wav",
+      "sha256": "2598c672a6250585929b1e1f81f3bf9ae83ef83db47b2d71115131575a47f0ee"
+    }
+  ],
+  "children": [
+    {
+      "name": "view0-restart",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/view0.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-restart"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/view0-restart.log",
+      "log_sha256": "d83e212174fe7204b2e342ae1f18e5a6fc23a03cd0af74a80a1a9b9c3c09890c",
+      "sampled_peak_rss_mib": 224.52734375,
+      "sampled_process_hwm_mib": 224.52734375,
+      "input_sha256": "7517d58c33b8a1670a416487fb87c511c2e710ad90ceced9e5a7e4a4edb34023",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-restart",
+      "backend": "opencl",
+      "arm": "restart",
+      "group": "paired_view",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-restart/restored.wav",
+      "restored_sha256": "137910f959d8f015466fa8bec2c7be4f88f3f4e6056eaa69b04dbe8ee3f356a6",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-restart/restoration.json",
+      "restoration_json_sha256": "54ae7d90b2f6fd1ebecb91a00ee8cdc632d7a14a2786d1c230f23e814fb2a9e7",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "restart_per_chunk",
+        "input_origin_samples": 0,
+        "whole_track_trusted_projection": false,
+        "chunk_start_samples": [
+          0,
+          384000,
+          768000
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 1248000
+      }
+    },
+    {
+      "name": "view0-continuous_with_final_trusted_band_lock",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/view0.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--continuous-excitation",
+        "--final-band-lock",
+        "--input-origin-samples",
+        "2304000",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-continuous_with_final_trusted_band_lock"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/view0-continuous_with_final_trusted_band_lock.log",
+      "log_sha256": "0f049cbf25eefe26fd2b4754a445ca4347ef0ea30a5022cd8f45e12270b9f85b",
+      "sampled_peak_rss_mib": 225.640625,
+      "sampled_process_hwm_mib": 225.640625,
+      "input_sha256": "7517d58c33b8a1670a416487fb87c511c2e710ad90ceced9e5a7e4a4edb34023",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-continuous_with_final_trusted_band_lock",
+      "backend": "opencl",
+      "arm": "continuous_with_final_trusted_band_lock",
+      "group": "paired_view",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-continuous_with_final_trusted_band_lock/restored.wav",
+      "restored_sha256": "98f97045c1a19586d8e00f82a6e532dcd6f2a6a9d131e629dba1315d7db067b0",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view0-continuous_with_final_trusted_band_lock/restoration.json",
+      "restoration_json_sha256": "4b22ea7ef0a27b6ea93e8f7cc994f436c35d8d21f07a192701a64461c1cc26f2",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "continuous",
+        "input_origin_samples": 2304000,
+        "whole_track_trusted_projection": true,
+        "chunk_start_samples": [
+          0,
+          384000,
+          768000
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 1248000
+      }
+    },
+    {
+      "name": "view1-restart",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/view1.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-restart"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/view1-restart.log",
+      "log_sha256": "871a6edf9da71060c4ed6caa9658967f0a11f9f4525b5237d983be3ce402cec9",
+      "sampled_peak_rss_mib": 225.52734375,
+      "sampled_process_hwm_mib": 225.52734375,
+      "input_sha256": "e98bc0732fe3dc2f732ab257c29e697f28f014ce874c4293805131bb037c29f8",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-restart",
+      "backend": "opencl",
+      "arm": "restart",
+      "group": "paired_view",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-restart/restored.wav",
+      "restored_sha256": "502e78d920a6c57342c88da6b1f427b5dc19258aa5892a4b5e224eaadcae2da4",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-restart/restoration.json",
+      "restoration_json_sha256": "fc0e6a1f7c2f1e429ad69dc15f2fcf0b1d2dc0a7bbeb278a9d4e2f6c7caa61ca",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "restart_per_chunk",
+        "input_origin_samples": 0,
+        "whole_track_trusted_projection": false,
+        "chunk_start_samples": [
+          0,
+          384000,
+          768000
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 1248000
+      }
+    },
+    {
+      "name": "view1-continuous_with_final_trusted_band_lock",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/view1.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--continuous-excitation",
+        "--final-band-lock",
+        "--input-origin-samples",
+        "2448384",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-continuous_with_final_trusted_band_lock"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/view1-continuous_with_final_trusted_band_lock.log",
+      "log_sha256": "176da8bee18e729dde9ac2a3f9efc39f23124783ecef7787f2ae94a17bf431f5",
+      "sampled_peak_rss_mib": 225.48046875,
+      "sampled_process_hwm_mib": 225.48046875,
+      "input_sha256": "e98bc0732fe3dc2f732ab257c29e697f28f014ce874c4293805131bb037c29f8",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-continuous_with_final_trusted_band_lock",
+      "backend": "opencl",
+      "arm": "continuous_with_final_trusted_band_lock",
+      "group": "paired_view",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-continuous_with_final_trusted_band_lock/restored.wav",
+      "restored_sha256": "58399024dc9b76961c44cc1591c275a5e718d67a942c51719c78e382b5f343a5",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/view1-continuous_with_final_trusted_band_lock/restoration.json",
+      "restoration_json_sha256": "183fc0dd3ae98411a9b125e10a795278b793859e8217dadc38e54132e0377d72",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "continuous",
+        "input_origin_samples": 2448384,
+        "whole_track_trusted_projection": true,
+        "chunk_start_samples": [
+          0,
+          384000,
+          768000
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 1248000
+      }
+    },
+    {
+      "name": "tail120-restart",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/tail120to140_4.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-restart"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/tail120-restart.log",
+      "log_sha256": "6503b90203aac51427ac153aa84f79ad8d280af2b144a236553a97e7b7472e92",
+      "sampled_peak_rss_mib": 222.32421875,
+      "sampled_process_hwm_mib": 222.32421875,
+      "input_sha256": "12ba070bd9e250cbd65c31e774450e7e87226e1bf58022f31e19d81a0a7341d2",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-restart",
+      "backend": "opencl",
+      "arm": "restart",
+      "group": "unpaired_tail",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-restart/restored.wav",
+      "restored_sha256": "3238dc0ba31217bf7e139c0a6633b3c9100539ef9b5511990654f48b539f1fdb",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-restart/restoration.json",
+      "restoration_json_sha256": "f89a46b74831be72683e6c05e2bb3a0466e0f5792a552a648ca78121a43d0632",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "restart_per_chunk",
+        "input_origin_samples": 0,
+        "whole_track_trusted_projection": false,
+        "chunk_start_samples": [
+          0,
+          384000,
+          499200
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 979200
+      }
+    },
+    {
+      "name": "tail120-continuous_with_final_trusted_band_lock",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/tail120to140_4.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--continuous-excitation",
+        "--final-band-lock",
+        "--input-origin-samples",
+        "5760000",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-continuous_with_final_trusted_band_lock"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/tail120-continuous_with_final_trusted_band_lock.log",
+      "log_sha256": "994bbe650d3e4c73bf835669fb9bdb6cb92eab6ec7712aaf8958cb11c95d3d17",
+      "sampled_peak_rss_mib": 222.4921875,
+      "sampled_process_hwm_mib": 222.4921875,
+      "input_sha256": "12ba070bd9e250cbd65c31e774450e7e87226e1bf58022f31e19d81a0a7341d2",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-continuous_with_final_trusted_band_lock",
+      "backend": "opencl",
+      "arm": "continuous_with_final_trusted_band_lock",
+      "group": "unpaired_tail",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-continuous_with_final_trusted_band_lock/restored.wav",
+      "restored_sha256": "57899a0bcca3a5ab8aed9ca1e7cc20ab604126c39bb9dd8b03d4afe07ce74036",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/tail120-continuous_with_final_trusted_band_lock/restoration.json",
+      "restoration_json_sha256": "4060b5e3ca3d379f74103b260166c4310f0c7fcfe6a4b09f3f055fde4a63795d",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "continuous",
+        "input_origin_samples": 5760000,
+        "whole_track_trusted_projection": true,
+        "chunk_start_samples": [
+          0,
+          384000,
+          499200
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 979200
+      }
+    },
+    {
+      "name": "baseline857-plain-probe",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/source_probe_1s.wav",
+        "--backend",
+        "cpu",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/baseline857-plain-probe"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/baseline857-plain-probe.log",
+      "log_sha256": "1e2f0f7bb2ec86d38fdc51ed863f5f82f8fb7a636bf77be034038c1b72cb798c",
+      "sampled_peak_rss_mib": 67.76171875,
+      "sampled_process_hwm_mib": 68.00390625,
+      "input_sha256": "2bb43b90d5bb05bc82816f369e44d1181ced6b2c9e3bedb79501b91141d1abd9",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/baseline857-plain-probe",
+      "backend": "cpu",
+      "arm": "restart",
+      "group": "baseline_parity",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/baseline857-plain-probe/restored.wav",
+      "restored_sha256": "e5cc4986271274dea0ca3c330115999bade821be33531c68bd52cb45d707bf37",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/baseline857-plain-probe/restoration.json",
+      "restoration_json_sha256": "6e20a36471bfac0063722588b9d9c5f4580a8829b8546a6e66e1afb5414acf54",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 48000
+      }
+    },
+    {
+      "name": "candidate-plain-probe",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/source_probe_1s.wav",
+        "--backend",
+        "cpu",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-plain-probe"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/candidate-plain-probe.log",
+      "log_sha256": "e1242bdfcceb6ee2bbb2a5f68878bba6181b5b288905e90b5cb10cfea21fdee8",
+      "sampled_peak_rss_mib": 67.76953125,
+      "sampled_process_hwm_mib": 67.76953125,
+      "input_sha256": "2bb43b90d5bb05bc82816f369e44d1181ced6b2c9e3bedb79501b91141d1abd9",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-plain-probe",
+      "backend": "cpu",
+      "arm": "restart",
+      "group": "baseline_parity",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-plain-probe/restored.wav",
+      "restored_sha256": "e5cc4986271274dea0ca3c330115999bade821be33531c68bd52cb45d707bf37",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-plain-probe/restoration.json",
+      "restoration_json_sha256": "8af2a3991f456671479ccdc62b6a69fe332ca93222fe5b64f74aded4bc2f045c",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": false,
+        "excitation_mode": "restart_per_chunk",
+        "input_origin_samples": 0,
+        "whole_track_trusted_projection": false,
+        "chunk_start_samples": [
+          0
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 48000
+      }
+    },
+    {
+      "name": "candidate-combined-probe-cpu",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/source_probe_1s.wav",
+        "--backend",
+        "cpu",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--continuous-excitation",
+        "--final-band-lock",
+        "--input-origin-samples",
+        "2304000",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-cpu"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/candidate-combined-probe-cpu.log",
+      "log_sha256": "81a750a50afbef48b4cca16a737327a58e22558110b71298c5a77e01480d5498",
+      "sampled_peak_rss_mib": 67.8203125,
+      "sampled_process_hwm_mib": 67.8203125,
+      "input_sha256": "2bb43b90d5bb05bc82816f369e44d1181ced6b2c9e3bedb79501b91141d1abd9",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-cpu",
+      "backend": "cpu",
+      "arm": "continuous_with_final_trusted_band_lock",
+      "group": "backend_parity",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-cpu/restored.wav",
+      "restored_sha256": "5dd0efbb721e40ce9b2d8c593427cbe5c34f1582cbc59b08fc8a9cf4cb383c02",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-cpu/restoration.json",
+      "restoration_json_sha256": "899a562e30d3562df3dd5823a1c00644bc5a9379772fd08030fdb957fc92bd43",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "continuous",
+        "input_origin_samples": 2304000,
+        "whole_track_trusted_projection": true,
+        "chunk_start_samples": [
+          0
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 48000
+      }
+    },
+    {
+      "name": "candidate-combined-probe-opencl",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/source_probe_1s.wav",
+        "--backend",
+        "opencl",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--continuous-excitation",
+        "--final-band-lock",
+        "--input-origin-samples",
+        "2304000",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-opencl"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/candidate-combined-probe-opencl.log",
+      "log_sha256": "f664d0fd0a7ef13fe9db97c6b8f0e724964c2621d3b0e5d41e1daa78dd3bdd62",
+      "sampled_peak_rss_mib": 107.22265625,
+      "sampled_process_hwm_mib": 108.97265625,
+      "input_sha256": "2bb43b90d5bb05bc82816f369e44d1181ced6b2c9e3bedb79501b91141d1abd9",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-opencl",
+      "backend": "opencl",
+      "arm": "continuous_with_final_trusted_band_lock",
+      "group": "backend_parity",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-opencl/restored.wav",
+      "restored_sha256": "0b47f4089ea10845ddf74a6f29bc5d164b0863f1278c455245725a59ec8f43d4",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-probe-opencl/restoration.json",
+      "restoration_json_sha256": "f634811d86647dfb3879ebca3d60192985b8300476b7a92cd1123760e364f061",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "continuous",
+        "input_origin_samples": 2304000,
+        "whole_track_trusted_projection": true,
+        "chunk_start_samples": [
+          0
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 48000
+      }
+    },
+    {
+      "name": "candidate-combined-silence",
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/inputs/true_silence_16384.wav",
+        "--backend",
+        "cpu",
+        "--mid-cutoff",
+        "1500",
+        "--mid-ceiling",
+        "8000",
+        "--steps",
+        "8",
+        "--strength",
+        "0.6",
+        "--chunk-seconds",
+        "10",
+        "--overlap-seconds",
+        "2",
+        "--quiet-abstention",
+        "--continuous-excitation",
+        "--final-band-lock",
+        "--input-origin-samples",
+        "0",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-silence"
+      ],
+      "exit_code": 0,
+      "log": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/logs/candidate-combined-silence.log",
+      "log_sha256": "834657a891fa2e2829d8e7485b12914cb1bddc4a2095dd2a0457eeefd22c328a",
+      "sampled_peak_rss_mib": 0.015625,
+      "sampled_process_hwm_mib": 0.015625,
+      "input_sha256": "2598c672a6250585929b1e1f81f3bf9ae83ef83db47b2d71115131575a47f0ee",
+      "render_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-silence",
+      "backend": "cpu",
+      "arm": "continuous_with_final_trusted_band_lock",
+      "group": "silence",
+      "restored_wav": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-silence/restored.wav",
+      "restored_sha256": "48e9b9a7a4158047d9fe7e0a58ead96b4c20108b8565d4bd5a2012c342f97511",
+      "restoration_json": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/real-gate-v3/renders/candidate-combined-silence/restoration.json",
+      "restoration_json_sha256": "73aae7dece01d87209bc04cba742897ce0dad4b86d70b04534868c11dd43fec9",
+      "settings": {
+        "steps": 8,
+        "strength": 0.6000000238418579,
+        "mid_cutoff": 1500.0,
+        "mid_ceiling": 8000.0,
+        "chunk_seconds": 10.0,
+        "overlap_seconds": 2.0,
+        "controlled": false,
+        "denoise": false,
+        "auto_eq": false,
+        "quiet_abstention": true,
+        "excitation_mode": "continuous",
+        "input_origin_samples": 0,
+        "whole_track_trusted_projection": true,
+        "chunk_start_samples": [
+          0
+        ]
+      },
+      "output_geometry": {
+        "rate": 48000,
+        "channels": 2,
+        "frames": 16384
+      }
+    }
+  ],
+  "analysis": {
+    "view_protected_error": [
+      {
+        "job": "view0-restart",
+        "closed_protected_bands_hz": [
+          [
+            0.0,
+            1500
+          ],
+          [
+            8000,
+            24000.0
+          ]
+        ],
+        "parseval_one_sided_weights": "DC/Nyquist=1; interior=2; odd-length has no Nyquist bin",
+        "error_rms": {
+          "left": 1.9938763869533425e-06,
+          "right": 1.9450130417629465e-06,
+          "mid_orthonormal": 2.72611612968465e-06,
+          "side_orthonormal": 5.717601127669047e-07
+        },
+        "max_error_rms": 2.72611612968465e-06
+      },
+      {
+        "job": "view0-continuous_with_final_trusted_band_lock",
+        "closed_protected_bands_hz": [
+          [
+            0.0,
+            1500
+          ],
+          [
+            8000,
+            24000.0
+          ]
+        ],
+        "parseval_one_sided_weights": "DC/Nyquist=1; interior=2; odd-length has no Nyquist bin",
+        "error_rms": {
+          "left": 2.8496509346197915e-09,
+          "right": 2.8805732918129554e-09,
+          "mid_orthonormal": 2.867961225908508e-09,
+          "side_orthonormal": 2.8623436805286723e-09
+        },
+        "max_error_rms": 2.8805732918129554e-09
+      },
+      {
+        "job": "view1-restart",
+        "closed_protected_bands_hz": [
+          [
+            0.0,
+            1500
+          ],
+          [
+            8000,
+            24000.0
+          ]
+        ],
+        "parseval_one_sided_weights": "DC/Nyquist=1; interior=2; odd-length has no Nyquist bin",
+        "error_rms": {
+          "left": 4.165949066869477e-06,
+          "right": 4.455708094374372e-06,
+          "mid_orthonormal": 6.048935844088986e-06,
+          "side_orthonormal": 7.866647342542412e-07
+        },
+        "max_error_rms": 6.048935844088986e-06
+      },
+      {
+        "job": "view1-continuous_with_final_trusted_band_lock",
+        "closed_protected_bands_hz": [
+          [
+            0.0,
+            1500
+          ],
+          [
+            8000,
+            24000.0
+          ]
+        ],
+        "parseval_one_sided_weights": "DC/Nyquist=1; interior=2; odd-length has no Nyquist bin",
+        "error_rms": {
+          "left": 2.830099980001079e-09,
+          "right": 2.867576534217988e-09,
+          "mid_orthonormal": 2.850570979712179e-09,
+          "side_orthonormal": 2.8472278036898625e-09
+        },
+        "max_error_rms": 2.867576534217988e-09
+      },
+      {
+        "job": "tail120-restart",
+        "closed_protected_bands_hz": [
+          [
+            0.0,
+            1500
+          ],
+          [
+            8000,
+            24000.0
+          ]
+        ],
+        "parseval_one_sided_weights": "DC/Nyquist=1; interior=2; odd-length has no Nyquist bin",
+        "error_rms": {
+          "left": 1.9425204707469687e-06,
+          "right": 2.5616408755149836e-06,
+          "mid_orthonormal": 2.8805135256884794e-06,
+          "side_orthonormal": 1.4275964355187657e-06
+        },
+        "max_error_rms": 2.8805135256884794e-06
+      },
+      {
+        "job": "tail120-continuous_with_final_trusted_band_lock",
+        "closed_protected_bands_hz": [
+          [
+            0.0,
+            1500
+          ],
+          [
+            8000,
+            24000.0
+          ]
+        ],
+        "parseval_one_sided_weights": "DC/Nyquist=1; interior=2; odd-length has no Nyquist bin",
+        "error_rms": {
+          "left": 3.0534664507323906e-09,
+          "right": 3.1080840111959565e-09,
+          "mid_orthonormal": 3.0818550488188606e-09,
+          "side_orthonormal": 3.079937181881776e-09
+        },
+        "max_error_rms": 3.1080840111959565e-09
+      }
+    ],
+    "max_protected_error_rms_all_arms_views_and_tail": 6.048935844088986e-06,
+    "paired_view_layout": {
+      "restart": {
+        "aligned_common_source_samples": [
+          384000,
+          1008000
+        ],
+        "view0_local_samples": [
+          384000,
+          1008000
+        ],
+        "view1_local_samples": [
+          239616,
+          863616
+        ],
+        "layout_difference_rms": 0.003327299471813763
+      },
+      "continuous_with_final_trusted_band_lock": {
+        "aligned_common_source_samples": [
+          384000,
+          1008000
+        ],
+        "view0_local_samples": [
+          384000,
+          1008000
+        ],
+        "view1_local_samples": [
+          239616,
+          863616
+        ],
+        "layout_difference_rms": 5.26136739452397e-05
+      },
+      "reduction_fraction": 0.9841872742772507
+    },
+    "per_view_residual_growth_vs_restart": [
+      {
+        "view": 0,
+        "restart_residual_rms": 0.004339726912342615,
+        "candidate_residual_rms": 0.004360914928229039,
+        "ratio": 1.00488233852369,
+        "growth_fraction": 0.004882338523690022,
+        "defined_floor_rms": 1e-12,
+        "defined": true
+      },
+      {
+        "view": 1,
+        "restart_residual_rms": 0.004216601790950217,
+        "candidate_residual_rms": 0.0042463965938391605,
+        "ratio": 1.007066069874772,
+        "growth_fraction": 0.007066069874771985,
+        "defined_floor_rms": 1e-12,
+        "defined": true
+      }
+    ],
+    "tail_control": [
+      {
+        "source_interval_start_sample": 5760000,
+        "frames": 979200,
+        "expected_chunk_starts_samples": [
+          0,
+          384000,
+          499200
+        ],
+        "residual_rms_growth": {
+          "restart_residual_rms": 0.004001104940785073,
+          "candidate_residual_rms": 0.004098742009609934,
+          "ratio": 1.0244025263695542,
+          "growth_fraction": 0.0244025263695542,
+          "defined_floor_rms": 1e-12,
+          "defined": true
+        },
+        "layout_reduction": null,
+        "layout_reduction_note": "Unpaired tail has no boundary-shifted comparator.",
+        "first_residual_differences_near_boundaries": [
+          {
+            "boundary_local_sample": 384000,
+            "boundary_global_sample": 6144000,
+            "search_window_samples": [
+              372000,
+              396000
+            ],
+            "first_differing_residual_sample_local": 372000,
+            "first_differing_residual_sample_global": 6132000,
+            "distance_to_boundary_samples": -12000,
+            "descriptive_only": true
+          },
+          {
+            "boundary_local_sample": 499200,
+            "boundary_global_sample": 6259200,
+            "search_window_samples": [
+              487200,
+              511200
+            ],
+            "first_differing_residual_sample_local": 487200,
+            "first_differing_residual_sample_global": 6247200,
+            "distance_to_boundary_samples": -12000,
+            "descriptive_only": true
+          }
+        ]
+      }
+    ],
+    "tail_residual_growth_vs_restart": {
+      "restart_residual_rms": 0.004001104940785073,
+      "candidate_residual_rms": 0.004098742009609934,
+      "ratio": 1.0244025263695542,
+      "growth_fraction": 0.0244025263695542,
+      "defined_floor_rms": 1e-12,
+      "defined": true
+    },
+    "tail_layout_reduction": null,
+    "tail_unpaired_boundary_differences_are_descriptive_only": true,
+    "baseline857_vs_candidate_plain_probe": {
+      "frames": 48000,
+      "sample_bits_exact": true,
+      "baseline_sha256": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437"
+    },
+    "candidate_cpu_opencl_combined_probe_max_abs": 2.9802322387695312e-08,
+    "combined_true_silence_max_abs": 0.0,
+    "maximum_residual_growth_fraction_views_and_tail": 0.0244025263695542,
+    "metrics_are_target_free": true
+  },
+  "gates": {
+    "full_view_layout_difference_reduction_at_least_threshold": {
+      "observed": 0.9841872742772507,
+      "minimum": 0.5,
+      "pass": true
+    },
+    "combined_whole_view_protected_error_rms": {
+      "observed_max": 2.8805732918129554e-09,
+      "limit": 1e-06,
+      "pass": true
+    },
+    "combined_tail_protected_error_rms": {
+      "observed_max": 3.1080840111959565e-09,
+      "limit": 1e-06,
+      "pass": true
+    },
+    "residual_rms_growth_each_view_and_tail": {
+      "observed": [
+        0.004882338523690022,
+        0.007066069874771985,
+        0.0244025263695542
+      ],
+      "maximum": 0.1,
+      "pass": true
+    },
+    "baseline_restart_disabled_path_sample_bits_exact": {
+      "pass": true
+    },
+    "combined_cpu_opencl_short_probe_max_abs": {
+      "observed": 2.9802322387695312e-08,
+      "limit": 2e-06,
+      "pass": true
+    },
+    "combined_true_silence_exact_zero": {
+      "observed_max_abs": 0.0,
+      "pass": true
+    },
+    "finite_metrics_and_geometry": {
+      "pass": true
+    },
+    "fixed_native_settings_and_chunk_starts": {
+      "pass": true
+    },
+    "final_auto_master_true_peak": {
+      "observed_dbtp": null,
+      "pass": null,
+      "status": "not_run; this gate covers rich-mid outputs only"
+    }
+  },
+  "interpretation": "Lower layout residual can make wrong residuals more consistent; this gate grants only bounded listening eligibility, not recovery or preference."
+}

@@ -4,13 +4,18 @@ use std::f32::consts::TAU;
 
 #[derive(Clone)]
 pub struct Rng(pub u64);
+const SPLITMIX64_GAMMA: u64 = 0x9e3779b97f4a7c15;
 impl Rng {
     pub fn next_u64(&mut self) -> u64 {
-        self.0 = self.0.wrapping_add(0x9e3779b97f4a7c15);
+        self.0 = self.0.wrapping_add(SPLITMIX64_GAMMA);
         let mut z = self.0;
         z = (z ^ (z >> 30)).wrapping_mul(0xbf58476d1ce4e5b9);
         z = (z ^ (z >> 27)).wrapping_mul(0x94d049bb133111eb);
         z ^ (z >> 31)
+    }
+    /// Skip `draws` SplitMix64 outputs without evaluating their mixer.
+    pub fn advance(&mut self, draws: u64) {
+        self.0 = self.0.wrapping_add(SPLITMIX64_GAMMA.wrapping_mul(draws));
     }
     pub fn unit(&mut self) -> f32 {
         ((self.next_u64() >> 40) as f32) / 16777216.0
@@ -172,6 +177,38 @@ fn voice(family: usize, n: usize, rate: u32, rng: &mut Rng) -> Vec<f32> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn advance_matches_iterative_draws() {
+        for seed in [0, 1, 0xdead_beef, u64::MAX] {
+            for draws in 0..=2048u64 {
+                let mut iterative = Rng(seed);
+                for _ in 0..draws {
+                    iterative.next_u64();
+                }
+                let mut advanced = Rng(seed);
+                advanced.advance(draws);
+                assert_eq!(advanced.0, iterative.0, "seed={seed} draws={draws}");
+                assert_eq!(advanced.next_u64(), iterative.next_u64());
+            }
+        }
+    }
+    #[test]
+    fn advance_composes_with_wrapping_state_arithmetic() {
+        for (seed, first, second) in [
+            (u64::MAX, 0, 1),
+            (0x1234_5678_9abc_def0, 17, 991),
+            (7, u64::MAX, 2),
+        ] {
+            let mut composed = Rng(seed);
+            composed.advance(first);
+            composed.advance(second);
+            let mut combined = Rng(seed);
+            combined.advance(first.wrapping_add(second));
+            assert_eq!(composed.0, combined.0);
+            assert_eq!(composed.next_u64(), combined.next_u64());
+        }
+    }
+
     #[test]
     fn deterministic_diverse_finite() {
         for s in 0..12 {

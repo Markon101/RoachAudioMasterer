@@ -49,7 +49,7 @@ pub mod sfht;
 pub mod spatial;
 pub mod stft_hires;
 mod synth;
-use anyhow::{ensure, Result};
+use anyhow::{ensure, Context, Result};
 use clap::{Parser, Subcommand, CommandFactory, FromArgMatches};
 use std::collections::BTreeSet;
 use std::path::PathBuf;
@@ -113,6 +113,9 @@ enum Commands {
         no_sfht: bool,
         #[arg(long)]
         no_mid: bool,
+        /// Research candidate: continuous mid excitation plus a whole-track trusted-band lock before polish.
+        #[arg(long)]
+        mid_coherence: bool,
         #[arg(long, default_value_t = 200.0)]
         low_cutoff: f32,
         #[arg(long, default_value_t = 1500.0)]
@@ -507,6 +510,18 @@ enum Commands {
         chunk_seconds: f64,
         #[arg(long, default_value_t = 2.0)]
         overlap_seconds: f64,
+        /// Research only: continue excitation on the absolute input sample timeline.
+        #[arg(long)]
+        continuous_excitation: bool,
+        /// Absolute sample origin of a cropped input (used only with continuous excitation).
+        #[arg(long, default_value_t = 0)]
+        input_origin_samples: u64,
+        /// Apply the existing input-derived quiet-passage abstention gate (default: off here).
+        #[arg(long)]
+        quiet_abstention: bool,
+        /// Lock trusted whole-track bands after WOLA (requires --continuous-excitation).
+        #[arg(long, requires = "continuous_excitation")]
+        final_band_lock: bool,
         #[arg(long)]
         denoise: bool,
         #[arg(long)]
@@ -1028,6 +1043,22 @@ fn tuning_parameter_sources(explicit: &BTreeSet<String>, auto: bool, no_glue: bo
     serde_json::Value::Object(sources)
 }
 
+fn validate_mid_coherence_request(
+    enabled: bool, no_mid: bool, cutoff: f32, ceiling: f32, steps: usize,
+    chunk_seconds: f64, overlap_seconds: f64, quiet_abstention: bool, force_specialists: bool,
+) -> Result<()> {
+    ensure!(!enabled || (quiet_abstention && !force_specialists),
+        "--mid-coherence requires --quiet-mid-denoise and preserves assessor abstention (no --force-specialists)");
+    ensure!(!enabled || !no_mid,
+        "--mid-coherence requires the mid stage; --no-mid is incompatible");
+    if enabled {
+        rich_mid::validate_coherence_configuration(
+            cutoff, ceiling, steps, chunk_seconds, overlap_seconds,
+        )?;
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod manual_control_tests {
     use super::*;
@@ -1056,6 +1087,17 @@ mod manual_control_tests {
         assert_eq!(tuning_parameter_sources(&ids, true, true)["glue_ratio"], "no-glue");
         }).unwrap().join().unwrap();
     }
+
+    #[test]
+    fn mid_coherence_request_enforces_opt_in_gate_and_frozen_geometry() {
+        assert!(validate_mid_coherence_request(true, true, 1500.0, 8000.0, 8, 10.0, 2.0, true, false).is_err());
+        assert!(validate_mid_coherence_request(true, false, 1500.0, 8000.0, 7, 10.0, 2.0, true, false).is_err());
+        assert!(validate_mid_coherence_request(true, false, 1500.0, 8000.0, 8, 9.0, 2.0, true, false).is_err());
+        assert!(validate_mid_coherence_request(true, false, 1500.0, 8000.0, 8, 10.0, 2.0, true, false).is_ok());
+        assert!(validate_mid_coherence_request(false, true, 1500.0, 8000.0, 8, 10.0, 2.0, true, false).is_ok());
+        assert!(validate_mid_coherence_request(true, false, 1500.0, 8000.0, 8, 10.0, 2.0, false, false).is_err());
+        assert!(validate_mid_coherence_request(true, false, 1500.0, 8000.0, 8, 10.0, 2.0, true, true).is_err());
+    }
 }
 fn run() -> Result<()> {
     let matches = Cli::command().get_matches();
@@ -1077,6 +1119,7 @@ fn run() -> Result<()> {
             mid_model,
             no_sfht,
             no_mid,
+            mid_coherence,
             low_cutoff,
             mid_cutoff,
             mid_ceiling,
@@ -1133,6 +1176,7 @@ fn run() -> Result<()> {
             mid_model.as_deref(),
             no_sfht,
             no_mid,
+            mid_coherence,
             low_cutoff,
             mid_cutoff,
             mid_ceiling,
@@ -1415,25 +1459,39 @@ fn run() -> Result<()> {
             strength,
             chunk_seconds,
             overlap_seconds,
+            continuous_excitation,
+            input_origin_samples,
+            quiet_abstention,
+            final_band_lock,
             denoise,
             auto_eq,
             backend,
             out,
-        } => rich_mid::restore(
-            &model,
-            &input,
-            mid_cutoff,
-            mid_ceiling,
-            controlled,
-            steps,
-            strength,
-            chunk_seconds,
-            overlap_seconds,
-            denoise,
-            auto_eq,
-            &backend,
-            &out,
-        ),
+        } => {
+            anyhow::ensure!(continuous_excitation || input_origin_samples == 0,
+                "--input-origin-samples requires --continuous-excitation");
+            anyhow::ensure!(!final_band_lock || continuous_excitation,
+                "--final-band-lock requires --continuous-excitation");
+            if final_band_lock {
+                rich_mid::restore_with_coherence(
+                    &model, &input, mid_cutoff, mid_ceiling, controlled, steps,
+                    strength, chunk_seconds, overlap_seconds, denoise, auto_eq,
+                    &backend, &out, quiet_abstention, input_origin_samples,
+                )
+            } else if continuous_excitation {
+                rich_mid::restore_with_continuous_excitation_and_quiet_gate(
+                    &model, &input, mid_cutoff, mid_ceiling, controlled, steps,
+                    strength, chunk_seconds, overlap_seconds, denoise, auto_eq,
+                    &backend, &out, quiet_abstention, input_origin_samples,
+                )
+            } else {
+                rich_mid::restore_with_quiet_gate(
+                    &model, &input, mid_cutoff, mid_ceiling, controlled, steps,
+                    strength, chunk_seconds, overlap_seconds, denoise, auto_eq,
+                    &backend, &out, quiet_abstention,
+                )
+            }
+        },
         Commands::Master {
             input,
             target_lufs,
@@ -2235,6 +2293,7 @@ fn auto_master_pipeline(
     mid_model: Option<&std::path::Path>,
     no_sfht: bool,
     no_mid: bool,
+    mid_coherence: bool,
     low_cutoff: f32,
     mid_cutoff: f32,
     mid_ceiling: f32,
@@ -2282,6 +2341,10 @@ fn auto_master_pipeline(
     dynamics_strength: f32,
 ) -> Result<()> {
     master_controls.validate()?;
+    validate_mid_coherence_request(
+        mid_coherence, no_mid, mid_cutoff, mid_ceiling, steps, chunk_seconds, overlap_seconds,
+        master_controls.quiet_mid_denoise, force_specialists,
+    )?;
     ensure!((0.0..=1.0).contains(&dynamics_strength),"dynamics strength must be finite and0..1");
     let pipeline_start = std::time::Instant::now();
 
@@ -2313,6 +2376,10 @@ fn auto_master_pipeline(
         }
     };
     master_audit.validate_for_output(&out_dir)?;
+    if mid_coherence {
+        ensure!(!out_dir.exists(),
+            "--mid-coherence requires a fresh run directory; existing caches/evidence are not authenticated");
+    }
     if !out_dir.exists() {
         experiment::new_run(&out_dir)?;
     }
@@ -2365,6 +2432,9 @@ fn auto_master_pipeline(
 
     if master_audit.stage_audit_dir.is_some() {
         master_audit::MasterAuditArgs::validate_audio(&current_audio)?;
+    }
+    if mid_coherence {
+        rich_mid::validate_coherence_audio(&current_audio, 0)?;
     }
     let original_input_audio = current_audio.clone();
     let num_frames = current_audio.frames();
@@ -2519,6 +2589,7 @@ fn auto_master_pipeline(
     } else { None };
     let mut applied_spatial = None;
     let mut applied_morphic = None;
+    let mut mid_coherence_applied = false;
 
     // Model Resolution
     let resolved_sfht = if !no_sfht {
@@ -2551,6 +2622,14 @@ fn auto_master_pipeline(
     } else {
         None
     };
+
+    if mid_coherence {
+        let mid_path = resolved_mid.as_deref().context(
+            "--mid-coherence requires a resolvable mid model (provide --mid-model)"
+        )?;
+        // Validate Basis mode before Stage 1 can invoke neural inference.
+        rich_mid::validate_coherence_model(mid_path)?;
+    }
 
     // Stage 1: High-Resolution SFHT Sub-Bass Restoration
     if let Some(ref m_path) = resolved_sfht {
@@ -2622,22 +2701,20 @@ fn auto_master_pipeline(
             let stage2_dir = out_dir.join("stage2_mid");
             let stage2_in = out_dir.join("stage2_in.wav");
             native_audio::write(&stage2_in, &current_audio, false)?;
-            rich_mid::restore_with_quiet_gate(
-                m_path,
-                &stage2_in,
-                mid_cutoff,
-                mid_ceiling,
-                false,
-                steps,
-                eff_strength,
-                chunk_seconds,
-                overlap_seconds,
-                false,
-                false,
-                backend,
-                &stage2_dir,
-                master_controls.quiet_mid_denoise,
-            )?;
+            if mid_coherence {
+                rich_mid::restore_with_coherence(
+                    m_path, &stage2_in, mid_cutoff, mid_ceiling, false, steps,
+                    eff_strength, chunk_seconds, overlap_seconds, false, false,
+                    backend, &stage2_dir, master_controls.quiet_mid_denoise, 0,
+                )?;
+                mid_coherence_applied = true;
+            } else {
+                rich_mid::restore_with_quiet_gate(
+                    m_path, &stage2_in, mid_cutoff, mid_ceiling, false, steps,
+                    eff_strength, chunk_seconds, overlap_seconds, false, false,
+                    backend, &stage2_dir, master_controls.quiet_mid_denoise,
+                )?;
+            }
             let mid_wav = if stage2_dir.join("restored.wav").exists() {
                 stage2_dir.join("restored.wav")
             } else {
@@ -3183,6 +3260,8 @@ fn auto_master_pipeline(
             "auto_tune": auto_tune,
             "coupled_clocks": coupled_clocks,
             "contrast_budget": contrast_budget,
+            "mid_coherence_requested": mid_coherence,
+            "mid_coherence_applied": mid_coherence_applied,
             "applied_spatial": applied_spatial,
             "applied_morphic": applied_morphic,
             "effective_glue_ratio": eff_glue_ratio,

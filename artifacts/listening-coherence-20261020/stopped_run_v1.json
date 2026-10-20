@@ -1,0 +1,9 @@
+{
+  "schema": "real-coherence-run-v1-stop-v1",
+  "run": "runs/listening-coherence-20261020/real-gate-v1",
+  "reason": "harness compared requestedPython0.6 directly with serializedRustf32 0.6000000238418579",
+  "fix": "compareagainstexactfloat32representableparameter,noacoustictoleranceschanged",
+  "completed_native_children": 1,
+  "hypothesis_verdict": null,
+  "restart": "freshreal-gate-v2; oldHALTEDpreserved"
+}

@@ -1,0 +1,115 @@
+{
+  "schema": "full-song-listening-eligibility-review-v1",
+  "review_date": "2026-10-20",
+  "scope": "read-only eligibility and provenance review; no render, inference, build, or audio upload",
+  "decision": {
+    "single_experimental_candidate_method": "continuous excitation plus whole-view trusted-band projection",
+    "eligibility": "conditional for one controlled listening comparison only; not yet an authenticated full-song candidate",
+    "production_promotion": false,
+    "reason": "The combined method has the strongest procedural boundary-consistency result and passes the development protected-band gate, but there is no full-song integration or real-song evidence. Forced no-loss controls show false residual edits, target-aligned complex error conflicts with magnitude metrics, and the available Smooth receipt is not hash-bound to its historical input or executable."
+  },
+  "recommended_real_song": {
+    "display_name": "Chasing Horizons",
+    "duration_seconds": 140.4,
+    "sample_rate_hz": 48000,
+    "channels": 2,
+    "current_local_input_path": "/sdcard/Download/Chasing Horizons.wav",
+    "current_local_input_bytes": 26970654,
+    "current_local_input_sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559",
+    "input_sha256_scope": "hash of the file present during this read-only audit; the archived run did not store an input hash, so equality with the historical run input is not proven",
+    "why_selected": "Existing full-song Smooth run, matching local source path is present, and its Smooth FLAC is present. The separate 216.4-second Chasing Horizons (1) original input named by an older run is absent, so it is not eligible for a reproducible candidate from that source."
+  },
+  "available_smooth_reference": {
+    "official_production_commit": "493cdca",
+    "archived_run": "runs/next-gen-v1_3-lufs13-smooth/chasing-horizons",
+    "archived_runtime_checkout_commit": "0d877c5b9bc3d8ff0b6b9eff88635b38fae19b0d",
+    "archived_runtime_checkout_dirty": true,
+    "archived_executable_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/target/release/roach-audio-masterer",
+    "archived_executable_sha256": null,
+    "archived_input_sha256": null,
+    "existing_smooth_flac_path": "/sdcard/Download/FLAC/Chasing Horizons [Roach NextGen v1.3.1 Smooth -13 LUFS].flac",
+    "existing_smooth_flac_bytes": 31034344,
+    "existing_smooth_flac_sha256": "2f8148ff44ea2b8ec2a0bc1ff0994ba7a06d0759da0fbd4e5b5cef80e6744954",
+    "recorded_result": {
+      "integrated_lufs": -12.997487446752597,
+      "true_peak_dbtp": -1.0000003576278687,
+      "limiter_gain_reduction_db": 0.5070399641990662
+    },
+    "status": "usable historical listening reference, but not an exact reproducibility anchor until input and binary identities are re-established",
+    "archived_float_master_wav_present": false,
+    "archived_listen_wav_present": false
+  },
+  "recorded_smooth_configuration": {
+    "backend": "opencl",
+    "target_lufs": -13.0,
+    "ceiling_dbtp": -1.0,
+    "sfht_model": "artifacts/rich-low-sfht-v2/basis.json",
+    "mid_model": "artifacts/rich-mid-v3/basis.json",
+    "mid_solver": "Euler8",
+    "mid_cutoff_hz": 1500.0,
+    "mid_ceiling_hz": 8000.0,
+    "mid_strength": 0.6,
+    "mid_quiet_gate_control": true,
+    "denoise": true,
+    "auto_eq": true,
+    "glue_threshold_db": -20.0,
+    "effective_glue_ratio": 1.5099999904632568,
+    "sidechain_highpass_hz": 90.0,
+    "clock_transient_punch": true,
+    "kick_transient_guard": true,
+    "spatial_enabled": true,
+    "morphic_mode": "PortHamiltonianLieV2",
+    "morphic_coupling_kappa": 6.0,
+    "morphic_quartic_beta": 0.0,
+    "morphic_shelf_db": 0.7,
+    "auto_tune": false,
+    "mid_chunk_seconds": 10.0,
+    "mid_overlap_seconds": 2.0
+  },
+  "candidate_evidence": {
+    "source_parent": "b031c41",
+    "saved_patch": "artifacts/coherence-20261018/continuous_candidate.patch",
+    "saved_patch_sha256": "9e09e36690e37f79a249fe12e19adf7ae28a2c4eec5b333f889d670f5450b686",
+    "development_case_only": true,
+    "layout_rms_reduction_with_combined_method": 0.9710837653703502,
+    "protected_band_error_rms_max": 2.79e-09,
+    "protected_band_gate_rms": 1e-06,
+    "target_fidelity": "not established: continuous excitation slightly worsened target-aligned complex NMSE in the recorded procedural comparison while magnitude LSD improved",
+    "false_edit_controls": "continuous plus projection still added residual to exact no-extra-loss stopped-mid input; a separate forced healthy procedural control showed residual RMS growth of 2.71-3.07%. These forced-policy controls do not estimate autonomous activation on real music, but bar a claim that continuity or projection makes healthy-source edits safe.",
+    "integration_status": "isolated patch only; no full-song real-input candidate, complete production pipeline qualification, or owner preference result",
+    "evidence_tiers": {
+      "tier_2": "tool, hash, geometry, and development numerical gates",
+      "tier_3": "limited procedural development observations only",
+      "tier_4": "absent"
+    },
+    "development_chunk_geometry": "The continuous-plus-projection development comparison used 8-second chunks with 2-second overlap; the selected Smooth full-song run used 10-second chunks with 2-second overlap. Candidate behavior at the recorded Smooth geometry is unverified."
+  },
+  "gaps_and_gates": [
+    {
+      "gate": "Exact baseline identity",
+      "status": "not met",
+      "required": "Use the present input SHA above to create a hash-bound baseline with a clean, verified 493cdca-equivalent executable; retain executable SHA256, all settings, mastered.wav, listen.wav, master.json, and output hashes. Do not use the dirty historical run as though its source and binary were authenticated."
+    },
+    {
+      "gate": "Meaningful real excerpt",
+      "status": "not yet selected",
+      "required": "Freeze one 24-32 second passage from the input alone before candidate output is viewed. Choose an active passage containing sustained decay and multiple input-derived onsets, crossing several 10-second chunk boundaries with the recorded 2-second overlap. Current retained run receipts contain aggregate onset counts, not timestamps, so this review does not invent an interval."
+    },
+    {
+      "gate": "Cheap excerpt falsification",
+      "status": "required before full-song candidate",
+      "required": "On the same predeclared excerpt and pinned input, compare Euler8 restart/projection and continuous/projection in two hop-aligned shifted layouts using the recorded Smooth geometry (10-second chunks, 2-second overlap), identical weights, gain, and Smooth finalization. Retain boundary-interior residual RMS/correlation, protected-band error, complex and magnitude error separately, fixed input-derived transient/decay windows, stereo metrics, pre-finalizer and final outputs. Require the existing 1e-6 absolute protected-band gate; do not tune on a target."
+    },
+    {
+      "gate": "False healthy-edit handling",
+      "status": "unresolved",
+      "required": "Include an unchanged/no-addition control and identify where the frozen base policy abstains before reading candidate results. Since the real song has no clean target, treat edit magnitude as a risk diagnostic and listening question, not evidence of correction."
+    },
+    {
+      "gate": "Finalizer attribution",
+      "status": "unresolved",
+      "required": "Use identical Smooth finalization and report output after limiting. The existing observer does not retain the true pre-limiter signal; do not claim transient or ambience survival from pre-finalizer-only measurements."
+    }
+  ],
+  "listening_boundary": "If provenance is re-established and the fixed real excerpt gates do not reveal a fatal protected-band or false-edit issue, one full-song pair may be prepared for blind owner preference. Label it an experimental listening candidate. It cannot establish restoration accuracy, healthy-input safety, broad preference, or production promotion."
+}
