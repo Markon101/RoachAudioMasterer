@@ -1,9 +1,9 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-20T07:14:22.660709+00:00",
+  "date_utc": "2026-10-20T23:59:28.341633+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
-  "verified_source_commit": "ebb07b45cb400bb581c7dc1a876dce0ae7a25e48",
+  "verified_source_commit": "707443ea3303c9db877f0b9640a6d4e72028cbb7",
   "published_through_source_commit": true,
   "champion_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
   "frozen_alpha_peeled_commit": "652088782f1d64f62ee84a7c1d7cdda4a990ef15",
@@ -19,10 +19,11 @@
     "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
     "4": "boundedactualfinalizerobserververified40nativeparityruns+20Rust/5Python; fullupstreamstageledgerpending",
     "5": "not started; dynamics-v2 remains demoted",
-    "long_coherence": "native baseline and isolated absolute-origin excitation measured; raw bandgate failed; separate projection+continuity development gates pass; no native integration/promotion",
+    "long_coherence": "opt-incombinedimplementationcommitted707443e; real10/2+tailgatespass98.419%layoutreduction; fullsongchecksrequired",
     "adverse_mid": "7 native source pairs exported; short prior false-add quantified; long stopped negative retains96.319%layout reduction with1.14%false-energy growth; baseMidabstains; assessmentunitdefect verified",
     "assessment_band_observer": "calibrateddigitalobserververified5knownanswer/realWAVtests+4actualprobes; legacyconsolelabelsqualified; no routingretune; fullstageledgerpending",
-    "passive_routing": "45 repeatedconditionsverified;13authoritytransitions5legacy8artifact;cutoffhypothesisnotobserved;6basecardactiveflips;nothresholdchange"
+    "passive_routing": "45 repeatedconditionsverified;13authoritytransitions5legacy8artifact;cutoffhypothesisnotobserved;6basecardactiveflips;nothresholdchange",
+    "agent_migration": "twoinstalledroutes+Hermesdefaultversioned;2livesmokes+4callpartialcodeworker;2counterexamplesfixed; scopeescape locallylatched;10offlineguardchecks"
   },
   "native_development": {
     "scene_seeds": [
@@ -66,7 +67,11 @@
     "passive_routing": 8,
     "master_stage_rust": 20,
     "master_stage_analyzer": 5,
-    "master_stage_native_output_parity_runs": 40
+    "master_stage_native_output_parity_runs": 40,
+    "real_coherence_rust": 17,
+    "real_coherence_gate": 11,
+    "semantic_audit": 7,
+    "hermes_offline_guard_root": 10
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
@@ -77,8 +82,8 @@
   "owner_judgments_received": false,
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
-  "jobs_running_at_checkpoint": 0,
-  "next_action": "Earn exactly one real-song listening candidate: isolated default-off continuous excitation +finaltrustedprojection, preserveMidquietgate; qualifyactual10/2geometry/cleanbaseline beforefullsong. MigrateDeepSeek/Hermesrequested1017model withboundedrealtests; no productionpromotion.",
+  "jobs_running_at_checkpoint": 2,
+  "next_action": "Checkexistingfullsong-v2 COMPLETE/HALTED andLISTENING_READY beforeANYnewrender. Exactlyonecandidateauthorizedaftercontrolsuccess; nofurtherRAMceilingincrease. Ifreadyverifyblindpackageandreport; ifhaltedpreservedataanddiagnoselegacyPHmemory. No ownerjudgments/promotion.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -87,7 +92,9 @@
     "docs/LONG_COHERENCE_RESULTS.md",
     "docs/ADVERSE_MID_CONTROLS_20261020.md",
     "docs/PASSIVE_ROUTING_AUDIT_20261020.md",
-    "docs/MASTER_STAGE_AUDIT_20261020.md"
+    "docs/MASTER_STAGE_AUDIT_20261020.md",
+    "docs/REAL_COHERENCE_ELIGIBILITY_20261020.md",
+    "docs/AGENT_MIGRATION_20261020.md"
   ],
   "delegation": [
     {
@@ -115,12 +122,12 @@
       "purpose": "critical Rust numerical solver, shared cache and harness implementation"
     }
   ],
-  "external_paid_api_calls_in_this_continuation": 0,
+  "external_paid_api_calls_in_this_continuation": 6,
   "raw_audio_policy": "owner audio and private listening keys stay ignored/local; committed raw cases are procedural metrics only",
   "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
   "documentation_review_base_commit": "394fe30",
   "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary.",
-  "checkpoint_tool_parent_commit": "ebb07b4",
+  "checkpoint_tool_parent_commit": "707443ea3303c9db877f0b9640a6d4e72028cbb7",
   "repo_object": {
     "identity": "Rust-first unified acoustic-scene restoration/correction/expansion with protected historical champions",
     "canonical_core": {
@@ -128,20 +135,36 @@
       "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
       "production_ref": "493cdcad1b06b97297fb3837fc2a851c4533e326",
       "main_native_signal_path_unchanged": true,
-      "native_changes_since_numerical_baseline": "default-off finalizerobserver+read-onlycallbacks; pinnedbaseline40nativeoutputparitycontrols; noDSPmath/defaultchanges"
+      "native_changes_since_numerical_baseline": "default-off finalizerobserver+read-onlycallbacks; pinnedbaseline40nativeoutputparitycontrols; noDSPmath/defaultchanges",
+      "experimental_mid_path": "default-off --mid-coherence; continuousorigin+wholeWOLAprojection; strictEuler8/10s2s/Basis/<=180s/quiet/noforce/freshdir"
     },
     "local_realization": {
       "evidence_index": "artifacts/master-stage-audit-20261020/evidence_index.json",
       "index_sha256": "6d47635c5620c1ae3783935a28af919d6b974a220e4aee9fd15387622f753db6",
-      "pinned_native_binary": "runs/stage-accountability-20261020/master-observer-candidate-v1",
-      "native_binary_sha256": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437",
+      "pinned_native_binary": "runs/listening-coherence-20261020/coherence-candidate-v1",
+      "native_binary_sha256": "cdbb2a3fb20c7662e3e0b39f46365301f105e3fd5a8f057635ecf24382dbbb93",
       "raw_run_root": "runs/coherence-20261018",
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Earn exactly one real-song listening candidate: isolated default-off continuous excitation +finaltrustedprojection, preserveMidquietgate; qualifyactual10/2geometry/cleanbaseline beforefullsong. MigrateDeepSeek/Hermesrequested1017model withboundedrealtests; no productionpromotion.",
+    "frontier": "Checkexistingfullsong-v2 COMPLETE/HALTED andLISTENING_READY beforeANYnewrender. Exactlyonecandidateauthorizedaftercontrolsuccess; nofurtherRAMceilingincrease. Ifreadyverifyblindpackageandreport; ifhaltedpreservedataanddiagnoselegacyPHmemory. No ownerjudgments/promotion.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"
-  }
+  },
+  "agent_model": "deepseek/deepseek-v4.1-flash-1017",
+  "live_jobs": [
+    {
+      "kind": "fullsongqualification",
+      "script": "artifacts/listening-coherence-20261020/render_fullsong_v2.py",
+      "run": "runs/listening-coherence-20261020/fullsong-v2",
+      "session_id": 17751
+    },
+    {
+      "kind": "conditionalblindpackage",
+      "script": "artifacts/listening-coherence-20261020/package_listening.py",
+      "ready_marker": "runs/listening-coherence-20261020/LISTENING_READY.json",
+      "session_id": 71875
+    }
+  ]
 }

@@ -1,3 +1,5 @@
+Current live frontier: [HANDOVER_CURRENT_20261020.md](HANDOVER_CURRENT_20261020.md).
+
 # Mission continuation — 2026-10-18
 
 This is a partial research checkpoint. Read AGENTS, README, architecture,

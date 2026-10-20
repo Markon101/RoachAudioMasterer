@@ -1,0 +1,18 @@
+{
+  "schema": "fullsong-resource-revision-v1",
+  "date_utc": "2026-10-20T23:59:28.341633+00:00",
+  "original_run": "runs/listening-coherence-20261020/fullsong-v1",
+  "original_guard_mib": 1024,
+  "failure_stage": "existingPHstageofunchangedSmoothcontrol; candidate notstarted",
+  "elapsed_seconds_approx": 183.3,
+  "timeout_seconds": 900,
+  "manual_halt_present": false,
+  "conclusion": "memory guard exceeded; exactpeakwasnotcapturedbyv1supervisor",
+  "available_before_retry_kib": 3412688,
+  "revised_guard_mib": 1536,
+  "minimum_start_available_mib": 2560,
+  "retry_count_authorized_by_root": 1,
+  "authorization": "OwnerpreviouslyallowsmoderateadditionalRAM; physicalphone~11.1GiB; no quality gate relaxed",
+  "current_run": "runs/listening-coherence-20261020/fullsong-v2",
+  "further_automatic_increases_allowed": false
+}

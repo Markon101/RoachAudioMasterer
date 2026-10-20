@@ -1,7 +1,7 @@
 # Documentation index and source of truth
 
 Updated 2026-10-20. Start with [project policy](../AGENTS.md), [README](../README.md),
-[the current checkpoint](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md),
+[the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
 Current production is v1.3.1 Smooth (`493cdca`) with frozen Euler8. Later research
