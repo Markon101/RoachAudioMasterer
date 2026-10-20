@@ -1,7 +1,7 @@
 # Mission continuation — 2026-10-18
 
 This is a partial research checkpoint. Read AGENTS, README, architecture,
-RESULTS Sections 24–31 and the relevant frozen plan before changing behavior.
+RESULTS Sections 24–32 and the relevant frozen plan before changing behavior.
 Recheck Git state, running jobs, storage and retained artifacts before resuming.
 The machine-readable checkpoint is
 `artifacts/mission-20261018/mission_state.json`.
@@ -15,8 +15,11 @@ by that documentation pass.
 
 ## Latest continuation: measured long-phrase coherence
 
-Continuation on 2026-10-20: the [adverse-control report](docs/ADVERSE_MID_CONTROLS_20261020.md)
-now leads the frontier. Exact short sources are exported; the long stopped-mid
+Continuation on 2026-10-20: the [finalizer observer](docs/MASTER_STAGE_AUDIT_20261020.md)
+is verified. The next owner milestone is one hash-bound real-song listening
+candidate, conditional on actual 10/2 geometry, output/preservation and resource
+gates. The [adverse-control report](docs/ADVERSE_MID_CONTROLS_20261020.md)
+remains essential negative evidence. Exact short sources are exported; the long stopped-mid
 negative confirms that more coherent residuals can still be wrong. Its base
 assessor/tuning Mid authority is zero, so do not label forced-head edits automatic
 activation. A known-tone probe verifies that legacy assessment band fields are
@@ -32,7 +35,8 @@ No routing thresholds were retuned; native code changes are comments/console
 labels only. The [passive matrix](docs/PASSIVE_ROUTING_AUDIT_20261020.md) now
 verifies 45 repeated gain conditions: 13 authority changes, five legacy score
 and eight artifact threshold crossings. Cutoff stayed at 22 kHz in the seven
-High changes, falsifying that suspected explanation here. No policy is retuned. Actual pre-limiter snapshots remain missing. Never substitute one fixed
+High changes, falsifying that suspected explanation here. No policy is retuned. Actual [pre-limiter observation](docs/MASTER_STAGE_AUDIT_20261020.md) is now
+verified in 40 native runs with exact pinned-baseline outputs. Never substitute one fixed
 offset for requalification, or treat authority scalars as learned probabilities.
 
 The [completed report](docs/LONG_COHERENCE_RESULTS.md) now supersedes the plan's
@@ -53,8 +57,9 @@ or independent held-out qualification is claimed.
 
 Normal -13 LUFS finalization had no limiting. Explicit -9 LUFS stress engages all
 arms at about 0.96–1.14 dB GR; all sixteen outputs pass finite/peak checks. Raw and
-input-referred scalar-gain sensitivity controls are recorded separately. Actual
-pre-limiter snapshots are still missing; these reports do not complete Stage 4.
+input-referred scalar-gain sensitivity controls are recorded separately. The original coherence runs had no actual pre-limiter snapshots. The new
+[finalizer observer](docs/MASTER_STAGE_AUDIT_20261020.md) supplies bounded actual
+snapshots with parity; upstream stage attribution still does not complete Stage 4.
 No speed qualification was performed in these quality runs.
 
 Local native prototype worktree:
@@ -273,7 +278,8 @@ Antigravity receipt and local SQLite/append-only ledger remain reusable; inspect
 actual capabilities and spending limits before using external collaborators.
 Do not recreate orchestration infrastructure or invent an underlying model ID.
 
-Stage 4 still needs a real stage ledger with actual pre-limiter snapshots,
+Stage 4 now has bounded actual pre-limiter snapshots and a fixed-onset finalizer
+ledger; the upstream stage ledger still needs
 stable metrics and diagnostic-disabled parity. The Python true-peak correction
 alone is not that ledger. Stage 5 spectral contrast, adaptive NFE, distillation
 and speculative PH/Patankar work remain unstarted. Dynamics-v2 stays demoted.

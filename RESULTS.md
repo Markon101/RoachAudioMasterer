@@ -1470,3 +1470,25 @@ HALT path repair. Sampled native HWM peaks at 92.64 MiB under a 384 MiB cap; no
 speed qualification or subjective result is claimed. Actual pre-limiter observation
 is the next causal-accountability step. Champion and frozen references are intact.
 
+### 32. Actual limiter observation earns a bounded finalizer ledger (2026-10-20)
+
+A default-off borrowed observer now captures the actual gain-scaled signal before
+each native limiter invocation, its output, gain-only bypasses, retry identity and
+final uniform trim. Forty native runs over ten controls preserve exact mastered
+and listen WAVs against pinned `674a472`; direct-Master metadata hashes also match.
+Twenty focused Rust tests and five offline-analysis tests pass, including direct
+limiter replay, quiet gain metadata, incomplete/HALT handling and fixed onsets.
+Observed process HWM peaks below 136 MiB; no speed qualification is claimed.
+
+The initial musical excerpts all failed to engage gain reduction, despite their
+intended stress condition. A separately declared fixed-peak control engages both
+limiter paths at about 13.7–13.9 dB GR. Its final limiter pass reduces the fixed
+transient/sustain ratio to about 6% of its pre-limiter value; a 0.5 dB budget retains
+about 91% but misses the -9 LUFS target by over 12 LU. These are diagnostic controls,
+not musical superiority or a dynamics recommendation. The [report](docs/MASTER_STAGE_AUDIT_20261020.md)
+retains actual waveforms, hashes, retries, nulls and final-trim distinctions.
+
+The finalizer ledger is now usable for causal diagnostics. The upstream stage
+ledger and broader acoustic/perceptual qualification remain open. Models, routing,
+default integration, and historical champions remain unchanged.
+

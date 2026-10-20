@@ -1,9 +1,9 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-20T06:52:11.198970+00:00",
+  "date_utc": "2026-10-20T07:14:22.660709+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
-  "verified_source_commit": "674a472cc3f77da83edc8b66e6ec2d0b77864e04",
+  "verified_source_commit": "ebb07b45cb400bb581c7dc1a876dce0ae7a25e48",
   "published_through_source_commit": true,
   "champion_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
   "frozen_alpha_peeled_commit": "652088782f1d64f62ee84a7c1d7cdda4a990ef15",
@@ -17,7 +17,7 @@
     "1": "fallback verified; full-cache9.27% and host-batch5.08% both failed10% gate; full-track followups not executed",
     "2": "3 restored historical sessions,48files hash-verified; originalalpha/equaltarget conditions and owner judgments pending",
     "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
-    "4": "truepeak meter repaired previously; full causal stage ledger and actual pre-limiter snapshots pending",
+    "4": "boundedactualfinalizerobserververified40nativeparityruns+20Rust/5Python; fullupstreamstageledgerpending",
     "5": "not started; dynamics-v2 remains demoted",
     "long_coherence": "native baseline and isolated absolute-origin excitation measured; raw bandgate failed; separate projection+continuity development gates pass; no native integration/promotion",
     "adverse_mid": "7 native source pairs exported; short prior false-add quantified; long stopped negative retains96.319%layout reduction with1.14%false-energy growth; baseMidabstains; assessmentunitdefect verified",
@@ -63,7 +63,10 @@
     "long_coherence_checkpoint_python": 59,
     "coherence_native_focused": "21 passed1ignored;8helpertestexecutions; source isolated",
     "assessment_band_observer": 5,
-    "passive_routing": 8
+    "passive_routing": 8,
+    "master_stage_rust": 20,
+    "master_stage_analyzer": 5,
+    "master_stage_native_output_parity_runs": 40
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
@@ -75,7 +78,7 @@
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Actual pre-limiter borrowed observer and baseline-output parity in isolated WT; no policy retune. Coherence is not fidelity; owner listening pending.",
+  "next_action": "Earn exactly one real-song listening candidate: isolated default-off continuous excitation +finaltrustedprojection, preserveMidquietgate; qualifyactual10/2geometry/cleanbaseline beforefullsong. MigrateDeepSeek/Hermesrequested1017model withboundedrealtests; no productionpromotion.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -83,7 +86,8 @@
     "docs/LISTENING_RESTORATION_20261018.md",
     "docs/LONG_COHERENCE_RESULTS.md",
     "docs/ADVERSE_MID_CONTROLS_20261020.md",
-    "docs/PASSIVE_ROUTING_AUDIT_20261020.md"
+    "docs/PASSIVE_ROUTING_AUDIT_20261020.md",
+    "docs/MASTER_STAGE_AUDIT_20261020.md"
   ],
   "delegation": [
     {
@@ -116,7 +120,7 @@
   "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
   "documentation_review_base_commit": "394fe30",
   "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary.",
-  "checkpoint_tool_parent_commit": "674a472",
+  "checkpoint_tool_parent_commit": "ebb07b4",
   "repo_object": {
     "identity": "Rust-first unified acoustic-scene restoration/correction/expansion with protected historical champions",
     "canonical_core": {
@@ -124,18 +128,18 @@
       "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
       "production_ref": "493cdcad1b06b97297fb3837fc2a851c4533e326",
       "main_native_signal_path_unchanged": true,
-      "native_changes_since_numerical_baseline": "comments and console labels only; quantitative native behavior unchanged"
+      "native_changes_since_numerical_baseline": "default-off finalizerobserver+read-onlycallbacks; pinnedbaseline40nativeoutputparitycontrols; noDSPmath/defaultchanges"
     },
     "local_realization": {
-      "evidence_index": "artifacts/routing-audit-20261020/evidence_index.json",
-      "index_sha256": "09c5aed172a2759b6acf7baafe479db006283fdf37a6b670a50ffa2cfd53f81c",
-      "pinned_native_binary": "runs/coherence-20261018/continuous-excitation-candidate",
-      "native_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+      "evidence_index": "artifacts/master-stage-audit-20261020/evidence_index.json",
+      "index_sha256": "6d47635c5620c1ae3783935a28af919d6b974a220e4aee9fd15387622f753db6",
+      "pinned_native_binary": "runs/stage-accountability-20261020/master-observer-candidate-v1",
+      "native_binary_sha256": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437",
       "raw_run_root": "runs/coherence-20261018",
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Actual pre-limiter borrowed observer and baseline-output parity in isolated WT; no policy retune. Coherence is not fidelity; owner listening pending.",
+    "frontier": "Earn exactly one real-song listening candidate: isolated default-off continuous excitation +finaltrustedprojection, preserveMidquietgate; qualifyactual10/2geometry/cleanbaseline beforefullsong. MigrateDeepSeek/Hermesrequested1017model withboundedrealtests; no productionpromotion.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"

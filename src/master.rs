@@ -721,6 +721,72 @@ pub struct MasterResult {
     pub onset_audit: crate::assess::OnsetAuditReport,
 }
 
+/// Observation points on the actual finalization path. No routing uses these.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MasterAuditStage {
+    Input,
+    PreShaped,
+    PreLimiter,
+    PostLimiter,
+    GainOnlyInput,
+    GainOnlyOutput,
+    PreFinalTrim,
+    FinalOutput,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MasterLimiterKind { Legacy, Smooth }
+
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize)]
+pub struct MasterLimiterSpec {
+    pub kind: MasterLimiterKind,
+    pub lookahead_samples: usize,
+    pub hold_samples: usize,
+    pub release_ms: f32,
+}
+
+#[derive(Clone, Debug, PartialEq, serde::Serialize)]
+pub struct MasterObservationMeta {
+    pub stage: MasterAuditStage,
+    pub iteration: Option<usize>,
+    pub limiter: Option<MasterLimiterSpec>,
+    /// Nominal/base make-up drive; quiet passage mode uses a varying gain curve.
+    pub base_drive_db: Option<f32>,
+    pub quiet_makeup_curve_enabled: bool,
+    pub effective_ceiling_linear: Option<f32>,
+    pub gain_reduction_db: Option<f32>,
+    pub final_trim_gain_linear: Option<f32>,
+}
+
+impl MasterObservationMeta {
+    fn at(stage: MasterAuditStage) -> Self {
+        Self { stage, iteration: None, limiter: None, base_drive_db: None,
+            quiet_makeup_curve_enabled: false,
+            effective_ceiling_linear: None, gain_reduction_db: None,
+            final_trim_gain_linear: None }
+    }
+}
+
+/// A synchronous, read-only borrow: observers need not retain or clone audio.
+pub trait MasterObserver {
+    fn observe(&mut self, meta: &MasterObservationMeta, audio: &Audio) -> Result<()>;
+}
+
+impl<F> MasterObserver for F
+where F: FnMut(&MasterObservationMeta, &Audio) -> Result<()> {
+    fn observe(&mut self, meta: &MasterObservationMeta, audio: &Audio) -> Result<()> {
+        self(meta, audio)
+    }
+}
+
+fn observe_master(observer: &mut Option<&mut dyn MasterObserver>,
+                  meta: &MasterObservationMeta, audio: &Audio) -> Result<()> {
+    if let Some(sink) = observer.as_deref_mut() { sink.observe(meta, audio)?; }
+    Ok(())
+}
+
 pub fn metrics(a: &Audio) -> serde_json::Value {
     let n: usize = a.channels.iter().map(|c| c.len()).sum();
     let rms = (a
@@ -769,6 +835,20 @@ pub fn master_audio_with_controls(
     sidechain_hp_hz: f32,
     controls: &MasterControls,
 ) -> Result<MasterResult> {
+    master_audio_with_observer(input_audio, target_lufs, ceiling_db,
+        glue_threshold_db, glue_ratio, sidechain_hp_hz, controls, None)
+}
+
+pub fn master_audio_with_observer(
+    input_audio: &Audio,
+    target_lufs: f32,
+    ceiling_db: f32,
+    glue_threshold_db: f32,
+    glue_ratio: f32,
+    sidechain_hp_hz: f32,
+    controls: &MasterControls,
+    mut observer: Option<&mut dyn MasterObserver>,
+) -> Result<MasterResult> {
     controls.validate()?;
     ensure!(
         glue_threshold_db.is_finite(),
@@ -801,6 +881,7 @@ pub fn master_audio_with_controls(
         "mastering requires nonempty aligned finite channels"
     );
 
+    observe_master(&mut observer, &MasterObservationMeta::at(MasterAuditStage::Input), input_audio)?;
     let before = metrics(input_audio);
 
     let filtered_input = if controls.kick_transient_guard {
@@ -850,6 +931,8 @@ pub fn master_audio_with_controls(
     } else {
         None
     };
+
+    observe_master(&mut observer, &MasterObservationMeta::at(MasterAuditStage::PreShaped), &pre_shaped)?;
 
     let ceiling_lin = 10.0f32.powf(ceiling_db / 20.0);
     let mut pre_gain_db = target_lufs - lufs(&pre_shaped) as f32;
@@ -909,6 +992,20 @@ pub fn master_audio_with_controls(
                     .collect(),
             }
         };
+        let limiter = if controls.max_limiter_gr_db == Some(0.0) { None }
+            else if controls.kick_transient_guard { Some(MasterLimiterSpec {
+                kind: MasterLimiterKind::Smooth, lookahead_samples: 64,
+                hold_samples: 528, release_ms: 80.0 }) }
+            else { Some(MasterLimiterSpec { kind: MasterLimiterKind::Legacy,
+                lookahead_samples: 96, hold_samples: 0, release_ms: 60.0 }) };
+        let mut observation = MasterObservationMeta::at(if limiter.is_some() {
+            MasterAuditStage::PreLimiter } else { MasterAuditStage::GainOnlyInput });
+        observation.iteration = Some(it);
+        observation.limiter = limiter;
+        observation.base_drive_db = Some(pre_gain_db);
+        observation.quiet_makeup_curve_enabled = quiet_timeline.is_some();
+        observation.effective_ceiling_linear = Some(effective_ceiling);
+        observe_master(&mut observer, &observation, &scaled)?;
         let (l, gr) = if controls.max_limiter_gr_db == Some(0.0) {
             (scaled, 0.0)
         } else if controls.kick_transient_guard {
@@ -916,6 +1013,10 @@ pub fn master_audio_with_controls(
         } else {
             limit(&scaled, effective_ceiling, 96, 60.0)
         };
+        observation.stage = if limiter.is_some() { MasterAuditStage::PostLimiter }
+            else { MasterAuditStage::GainOnlyOutput };
+        observation.gain_reduction_db = Some(gr);
+        observe_master(&mut observer, &observation, &l)?;
         limiter_gr = gr;
         let loud = lufs(&l) as f32;
         let tp = true_peak(&l);
@@ -937,12 +1038,15 @@ pub fn master_audio_with_controls(
             break;
         }
     }
+    observe_master(&mut observer, &MasterObservationMeta::at(MasterAuditStage::PreFinalTrim), &mastered)?;
+    let mut final_trim_gain = 1.0f32;
     if controls.max_limiter_gr_db.is_some() || controls.kick_transient_guard {
         pre_gain_db = last_applied_drive;
         // Gain-only ceiling correction cannot add compression or exceed the budget.
         let peak = true_peak(&mastered);
         if peak > ceiling_lin {
             let correction = ceiling_lin / peak * (1.0 - 1e-6);
+            final_trim_gain = correction;
             for c in &mut mastered.channels {
                 for x in c {
                     *x *= correction;
@@ -951,6 +1055,9 @@ pub fn master_audio_with_controls(
             pre_gain_db += db(correction);
         }
     }
+    let mut final_observation = MasterObservationMeta::at(MasterAuditStage::FinalOutput);
+    final_observation.final_trim_gain_linear = Some(final_trim_gain);
+    observe_master(&mut observer, &final_observation, &mastered)?;
     let after = metrics(&mastered);
     let onset_audit = crate::assess::scan_onset_diagnostics(&mastered);
     Ok(MasterResult {
@@ -964,6 +1071,7 @@ pub fn master_audio_with_controls(
     })
 }
 
+#[allow(dead_code)] // Compatibility entry point without audit options.
 pub fn run(
     input: &Path,
     target_lufs: f32,
@@ -975,6 +1083,24 @@ pub fn run(
     controls: &MasterControls,
     out: &Path,
 ) -> Result<()> {
+    run_with_audit(input, target_lufs, ceiling_db, glue_threshold_db, glue_ratio,
+        sidechain_hp_hz, apply_spatial, controls, out,
+        &crate::master_audit::MasterAuditArgs::default())
+}
+
+pub fn run_with_audit(
+    input: &Path,
+    target_lufs: f32,
+    ceiling_db: f32,
+    glue_threshold_db: f32,
+    glue_ratio: f32,
+    sidechain_hp_hz: f32,
+    apply_spatial: bool,
+    controls: &MasterControls,
+    out: &Path,
+    audit: &crate::master_audit::MasterAuditArgs,
+) -> Result<()> {
+    audit.validate_for_output(out)?;
     new_run(out)?;
     let mut input_audio = native_audio::read_entire(input)?;
     ensure!(input_audio.rate == RATE, "mastering requires 48 kHz input");
@@ -982,6 +1108,9 @@ pub fn run(
         (1..=2).contains(&input_audio.channels.len()),
         "mastering supports mono/stereo"
     );
+    if audit.stage_audit_dir.is_some() {
+        crate::master_audit::MasterAuditArgs::validate_audio(&input_audio)?;
+    }
 
     if apply_spatial && input_audio.channels.len() == 2 {
         println!("=== Applying 3D Spatial Acoustics (Mono Sub-Bass Guard + ERDN Depth) ===");
@@ -996,7 +1125,8 @@ pub fn run(
         input_audio = spat_audio;
     }
 
-    let result = master_audio_with_controls(
+    let mut audit_sink = audit.create(&input_audio)?;
+    let result = master_audio_with_observer(
         &input_audio,
         target_lufs,
         ceiling_db,
@@ -1004,7 +1134,9 @@ pub fn run(
         glue_ratio,
         sidechain_hp_hz,
         controls,
+        audit_sink.as_mut().map(|sink| sink as &mut dyn MasterObserver),
     )?;
+    if let Some(sink) = audit_sink { sink.finish(&result)?; }
 
     println!("Before: {}", result.before_metrics);
     println!("After: {}", result.after_metrics);
@@ -1040,6 +1172,120 @@ pub fn run(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn audit_bits(a: &Audio) -> Vec<Vec<u32>> {
+        a.channels.iter().map(|c| c.iter().map(|x| x.to_bits()).collect()).collect()
+    }
+
+    fn audit_fixture() -> Audio {
+        let n = 2 * RATE as usize;
+        let x: Vec<f32> = (0..n).map(|i| {
+            let t = i as f32 / RATE as f32;
+            let level = if i < RATE as usize / 3 { 0.02 } else { 1.0 };
+            let body = level * (0.13 * (2.0 * PI * 130.0 * t).sin()
+                + 0.07 * (2.0 * PI * 440.0 * t).sin()
+                + 0.04 * (2.0 * PI * 6300.0 * t).sin());
+            body + if (RATE as usize..RATE as usize + 48).contains(&i) { 1.3 } else { 0.0 }
+        }).collect();
+        Audio { rate: RATE, channels: vec![x.clone(), x.iter().map(|x| x * 0.91).collect()] }
+    }
+
+    #[test]
+    fn audit_borrowed_observation_preserves_bits_and_replays_each_limiter() -> Result<()> {
+        for controls in [MasterControls::default(),
+            MasterControls { kick_transient_guard: true, clock_transient_punch: true,
+                quiet_mid_denoise: true, ..MasterControls::default() },
+            MasterControls { max_limiter_gr_db: Some(0.5), ..MasterControls::default() },
+            MasterControls { max_limiter_gr_db: Some(0.0), ..MasterControls::default() }] {
+            let input = audit_fixture();
+            let reference = master_audio_with_controls(&input, -9.0, -1.0, -20.0, 1.6, 90.0, &controls)?;
+            let mut captures: Vec<(MasterObservationMeta, Audio)> = Vec::new();
+            let mut capture = |meta: &MasterObservationMeta, audio: &Audio| -> Result<()> {
+                captures.push((meta.clone(), audio.clone())); Ok(())
+            };
+            let observed = master_audio_with_observer(&input, -9.0, -1.0, -20.0, 1.6,
+                90.0, &controls, Some(&mut capture))?;
+            assert_eq!(audit_bits(&reference.mastered), audit_bits(&observed.mastered));
+            assert_eq!(reference.before_metrics, observed.before_metrics);
+            assert_eq!(reference.after_metrics, observed.after_metrics);
+            assert_eq!(reference.pre_gain_db.to_bits(), observed.pre_gain_db.to_bits());
+            assert_eq!(reference.limiter_gr.to_bits(), observed.limiter_gr.to_bits());
+            assert_eq!(reference.glue_gr.to_bits(), observed.glue_gr.to_bits());
+            assert_eq!(reference.onset_audit, observed.onset_audit);
+            assert_eq!(audit_bits(&captures[0].1), audit_bits(&input));
+            let shaped = captures.iter().find(|(m, _)| m.stage == MasterAuditStage::PreShaped).unwrap();
+            let first = captures.iter().find(|(m, _)| matches!(m.stage,
+                MasterAuditStage::PreLimiter | MasterAuditStage::GainOnlyInput)).unwrap();
+            assert_eq!(first.0.quiet_makeup_curve_enabled, controls.quiet_mid_denoise);
+            if controls.quiet_mid_denoise {
+                let scalar = 10.0f32.powf(first.0.base_drive_db.unwrap() / 20.0);
+                assert!(shaped.1.channels[0].iter().zip(&first.1.channels[0])
+                    .any(|(&x, &y)| (x * scalar).to_bits() != y.to_bits()));
+            }
+            let mut iterations = Vec::new();
+            let mut actual_limiter_calls = 0;
+            for pair in captures.windows(2) {
+                let (pre, audio) = &pair[0];
+                let (post, result) = &pair[1];
+                if pre.stage == MasterAuditStage::PreLimiter {
+                    actual_limiter_calls += 1;
+                    assert_eq!(post.stage, MasterAuditStage::PostLimiter);
+                    assert_eq!(pre.iteration, post.iteration);
+                    assert_eq!(pre.limiter, post.limiter);
+                    let spec = pre.limiter.unwrap();
+                    let ceiling = pre.effective_ceiling_linear.unwrap();
+                    let (expected, gr) = match spec.kind {
+                        MasterLimiterKind::Legacy => limit(audio, ceiling,
+                            spec.lookahead_samples, spec.release_ms),
+                        MasterLimiterKind::Smooth => limit_smooth(audio, ceiling,
+                            spec.lookahead_samples, spec.hold_samples, spec.release_ms),
+                    };
+                    assert_eq!(audit_bits(&expected), audit_bits(result));
+                    assert_eq!(post.gain_reduction_db.unwrap().to_bits(), gr.to_bits());
+                    iterations.push(pre.iteration.unwrap());
+                } else if pre.stage == MasterAuditStage::GainOnlyInput {
+                    assert_eq!(post.stage, MasterAuditStage::GainOnlyOutput);
+                    assert!(pre.limiter.is_none());
+                    assert_eq!(audit_bits(audio), audit_bits(result));
+                    iterations.push(pre.iteration.unwrap());
+                }
+            }
+            assert_eq!(iterations, (0..iterations.len()).collect::<Vec<_>>());
+            assert!(!iterations.is_empty() && iterations.len() <= 6);
+            assert_eq!(actual_limiter_calls == 0, controls.max_limiter_gr_db == Some(0.0));
+            let pre = captures.iter().find(|(m, _)| m.stage == MasterAuditStage::PreFinalTrim).unwrap();
+            let final_capture = captures.last().unwrap();
+            assert_eq!(final_capture.0.stage, MasterAuditStage::FinalOutput);
+            let gain = final_capture.0.final_trim_gain_linear.unwrap();
+            for (before, after) in pre.1.channels.iter().flatten().zip(final_capture.1.channels.iter().flatten()) {
+                assert_eq!((before * gain).to_bits(), after.to_bits());
+            }
+            assert_eq!(audit_bits(&final_capture.1), audit_bits(&observed.mastered));
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn audit_error_stops_progression_and_silence_retains_all_retry_records() -> Result<()> {
+        let input = Audio { rate: RATE, channels: vec![vec![0.0; 512]] };
+        let mut seen = 0;
+        let mut fail = |_: &MasterObservationMeta, _: &Audio| -> Result<()> {
+            seen += 1; anyhow::bail!("intentional observer stop")
+        };
+        let result = master_audio_with_observer(&input, -13.0, -1.0, -20.0, 1.0,
+            90.0, &MasterControls::default(), Some(&mut fail));
+        assert!(result.err().unwrap().to_string().contains("intentional observer stop"));
+        assert_eq!(seen, 1);
+        let mut passes = Vec::new();
+        let mut collect = |m: &MasterObservationMeta, _: &Audio| -> Result<()> {
+            if m.stage == MasterAuditStage::PreLimiter { passes.push(m.iteration.unwrap()); } Ok(())
+        };
+        let result = master_audio_with_observer(&input, -13.0, -1.0, -20.0, 1.0,
+            90.0, &MasterControls::default(), Some(&mut collect))?;
+        assert_eq!(passes, vec![0, 1, 2, 3, 4, 5]);
+        assert!(result.mastered.channels.iter().flatten().all(|x| *x == 0.0));
+        Ok(())
+    }
 
     fn tone(amp: f32, hz: f32, secs: usize) -> Audio {
         let c: Vec<f32> = (0..RATE as usize * secs)

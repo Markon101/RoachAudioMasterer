@@ -1,0 +1,93 @@
+{
+  "schema": "master-stage-audit-evidence-index-v1",
+  "parent_state_commit": "ebb07b4",
+  "native_parent_commit": "674a472",
+  "recorded_utc": "2026-10-20T07:14:22.660709+00:00",
+  "files": {
+    "auto-bypass_analysis.json": {
+      "bytes": 23735,
+      "sha256": "eb289912dea153a0ccbaa1d783818d8b76e203c45b330c8b1bf0e0a198570ca2"
+    },
+    "budget-half_analysis.json": {
+      "bytes": 23547,
+      "sha256": "07639f24bcde7bfaae52608860758aa86a1e1790be9a53cd575de071229c0e01"
+    },
+    "engaged_budget-half_analysis.json": {
+      "bytes": 30759,
+      "sha256": "2b2e129b44fad3481a6ffd1c5ea7c108846de137edeace7d1a07de6a384ce316"
+    },
+    "engaged_legacy_analysis.json": {
+      "bytes": 30536,
+      "sha256": "17328d608e796a627b96d1ed44151a119b494c7fc18e6f9c134c31c0690bfab3"
+    },
+    "engaged_protocol.json": {
+      "bytes": 2125,
+      "sha256": "de1924bdd1b584115980dc7e5e3245d9d660103aaa1ff3f5409fc60af7f13693"
+    },
+    "engaged_qualification.json": {
+      "bytes": 17344,
+      "sha256": "12294578222e8a267894a2e4f059963db313056cc34f16d20a216aeb0b80cfb3"
+    },
+    "engaged_smooth_analysis.json": {
+      "bytes": 37770,
+      "sha256": "5a0ab06edee8d9148a5b0163aeb83ff48fe7b8cb74a22dbc74735f9cb27bde6b"
+    },
+    "gain-only_analysis.json": {
+      "bytes": 23332,
+      "sha256": "545cf90ef56ed7b203459ce7fa0ecaa57defbbbae280ff0d6cc584c1bf4d9dfa"
+    },
+    "legacy-stress_analysis.json": {
+      "bytes": 23513,
+      "sha256": "c1a350f99aecf52b4d13e44909b7051e552b9611db75387f30174979514645b6"
+    },
+    "long-normal_analysis.json": {
+      "bytes": 23636,
+      "sha256": "b0870164d770daf249b2d9ce927ee56da2c6b7f441717c968a56ed5e0ceb0c89"
+    },
+    "native_protocol.json": {
+      "bytes": 5420,
+      "sha256": "bcb7768ae60ec8f13e4000a62a691521cdc9eecd9abb06d2fd6505dc2dda709e"
+    },
+    "native_qualification.json": {
+      "bytes": 83237,
+      "sha256": "7ff97a2dd5c16c73b95d5efc992f2f57a731901789b2455c081ad7a130f154dc"
+    },
+    "qualification_plan.json": {
+      "bytes": 1192,
+      "sha256": "1a084653493b628ad64e86f921462f1779a6c653a3d5f2bc6575da36fd7da412"
+    },
+    "silence_analysis.json": {
+      "bytes": 52073,
+      "sha256": "011e41ba8498f1fdbf219d14f135e82b5237a56a953cd9735e1f552ef04ada02"
+    },
+    "smooth-stress_analysis.json": {
+      "bytes": 23604,
+      "sha256": "97aeeefd207a051216f847c86da59429f74affbcc44a315de6f11c1132fbe284"
+    },
+    "validate_engaged.py": {
+      "bytes": 4850,
+      "sha256": "016fb16d5056b3e21769ea7ca765a9e8b8ec9195501113c101eacf08ebae3c80"
+    },
+    "validate_native.py": {
+      "bytes": 9189,
+      "sha256": "1cf5b42d2fa084b36ecbf136ae021b13f5ed3901cea9720ce4fc0bd16587b6d5"
+    },
+    "verification.json": {
+      "bytes": 53978,
+      "sha256": "4d742e8c9850b289de62e4e6421074cbe3a3876c52d7131ae2645867132face4"
+    }
+  },
+  "source_sha256": {
+    "src/master.rs": "1c189e0691759161c854ce2e7973f05c7697a8bed09d23e520ddecc1722e2517",
+    "src/main.rs": "1d99f15345aad43fd487fe27e127e592c6a485ce194c6bbfbc6bda74c0b342ed",
+    "src/master_audit.rs": "1300eae51f6f8e55453fbd05a5a080f09361e704612d4a0aff787f51a606dca3",
+    "scripts/analyze_master_stage_audit.py": "d03a91e795fa42fc12fc2b1aed1b2daf82f2300d582c7b1055b5c8d109582115",
+    "scripts/test_analyze_master_stage_audit.py": "e2f7ba8db73da53db2a8d25fea01c9c6f0e4f5b36af4794bf3a48a30547cefa8"
+  },
+  "prior_evidence_index": "artifacts/routing-audit-20261020/evidence_index.json",
+  "raw_sessions": [
+    "runs/stage-accountability-20261020/master-observer-native-v1",
+    "runs/stage-accountability-20261020/master-observer-engaged-v1"
+  ],
+  "invariant": "default/disabled diagnostic signal path matches baseline; observer changes no mathematical DSP"
+}

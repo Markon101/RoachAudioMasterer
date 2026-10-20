@@ -1,0 +1,121 @@
+{
+  "schema": "master-observer-native-quality-v1",
+  "scope": "procedural output parity and actual observations; no speed or audible-quality claim",
+  "baseline_parent": "674a472",
+  "pins": {
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/baseline-674a472": "1b474970ec278a7db41424d57fb709cf37034e1934b3a5cdf572d2490dca2828",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/view0-input.wav": "235356df463c248d6ed23edf053074264faa91ef3ecf2d2de3e113ddb23fe229",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/manifest.json": "c6c4281039ec31d9f9af1411ec0b5ee6253367919105a6f6b5415bfdb9b70e89",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav": "10aa25ddcc3efb4f0a10a8558a0faf311a6db6fe8e3e19426d48aab1a8904c1c",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/silence.wav": "2598c672a6250585929b1e1f81f3bf9ae83ef83db47b2d71115131575a47f0ee",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/master-stage-audit-20261020/validate_native.py": "1cf5b42d2fa084b36ecbf136ae021b13f5ed3901cea9720ce4fc0bd16587b6d5",
+    "/data/data/com.termux/files/usr/tmp/roach-master-observer-20261020/src/master.rs": "1c189e0691759161c854ce2e7973f05c7697a8bed09d23e520ddecc1722e2517",
+    "/data/data/com.termux/files/usr/tmp/roach-master-observer-20261020/src/main.rs": "1d99f15345aad43fd487fe27e127e592c6a485ce194c6bbfbc6bda74c0b342ed",
+    "/data/data/com.termux/files/usr/tmp/roach-master-observer-20261020/src/master_audit.rs": "1300eae51f6f8e55453fbd05a5a080f09361e704612d4a0aff787f51a606dca3",
+    "/data/data/com.termux/files/usr/tmp/roach-master-observer-20261020/Cargo.lock": "6714acafb87f26c670094efb8fb563d3df24a04045799da3ba235b1fc30409b8"
+  },
+  "cases": [
+    {
+      "name": "legacy-stress",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav",
+      "flags": [],
+      "target_lufs": -9,
+      "command": "master"
+    },
+    {
+      "name": "smooth-stress",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav",
+      "flags": [
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--quiet-mid-denoise"
+      ],
+      "target_lufs": -9,
+      "command": "master"
+    },
+    {
+      "name": "budget-half",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav",
+      "flags": [
+        "--max-limiter-gr-db",
+        "0.5"
+      ],
+      "target_lufs": -9,
+      "command": "master"
+    },
+    {
+      "name": "gain-only",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav",
+      "flags": [
+        "--max-limiter-gr-db",
+        "0"
+      ],
+      "target_lufs": -9,
+      "command": "master"
+    },
+    {
+      "name": "silence",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/silence.wav",
+      "flags": [],
+      "target_lufs": -13,
+      "command": "master"
+    },
+    {
+      "name": "long-normal",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/view0-input.wav",
+      "flags": [
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--quiet-mid-denoise"
+      ],
+      "target_lufs": -13,
+      "command": "master"
+    },
+    {
+      "name": "auto-bypass",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-native-v1/procedural-8to14.wav",
+      "flags": [
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--quiet-mid-denoise",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--no-morphic-gtf",
+        "--no-export-sdcard"
+      ],
+      "target_lufs": -9,
+      "command": "auto-master"
+    }
+  ],
+  "variants": [
+    "baseline",
+    "candidate-disabled",
+    "candidate-json",
+    "candidate-wavs"
+  ],
+  "gates": [
+    "exact output WAV SHA parity",
+    "same master.json when applicable",
+    "complete trace with final-output binding",
+    "zero-budget has no limiter passes",
+    "bounded process memory 512MiB",
+    "no overwrite; HALT preserves evidence"
+  ],
+  "frozen_onsets_global_samples": [
+    456000,
+    600000,
+    744000,
+    888000
+  ],
+  "fixed_window_ms": {
+    "transient": 20,
+    "sustain_start": 80,
+    "sustain_end": 200
+  },
+  "interpretation": "Repeated deterministic variants; no model inference or new subjective outcome."
+}

@@ -15,6 +15,8 @@ The [band observer](STAGE_AUDIT_STATUS.md#calibrated-digital-band-observer-2026-
 now measures calibrated digital levels while preserving existing routing.
 The [passive routing matrix](PASSIVE_ROUTING_AUDIT_20261020.md) measures gain
 sensitivity without retuning authorities.
+The [native master observer](MASTER_STAGE_AUDIT_20261020.md) now captures actual
+pre/post limiter signals with exact output parity; the full stage ledger remains open.
 
 Historical plans, favorite labels, timings and device delivery paths below remain
 dated records. They do not override current policy or promise files survived cleanup.
@@ -28,6 +30,7 @@ were not revalidated in this documentation pass.
 
 | Document | Role |
 | --- | --- |
+| [MASTER_STAGE_AUDIT_20261020.md](MASTER_STAGE_AUDIT_20261020.md) | Actual finalizer observations, active limiter controls and fixed-onset ledger |
 | [PASSIVE_ROUTING_AUDIT_20261020.md](PASSIVE_ROUTING_AUDIT_20261020.md) | Passive base-routing measurements and falsified cutoff explanation |
 | [ADVERSE_MID_CONTROLS_20261020.md](ADVERSE_MID_CONTROLS_20261020.md) | Current negative controls and assessment-unit findings |
 | [LONG_COHERENCE_RESULTS.md](LONG_COHERENCE_RESULTS.md) | Current long-phrase controls and measurement checkpoints |
@@ -37,7 +40,7 @@ were not revalidated in this documentation pass.
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) | Current continuation checkpoint |
 | [HANDOVER_NEXT_EVOLUTION.md](../HANDOVER_NEXT_EVOLUTION.md) | Historical snapshot with current pointer |
 | [README.md](../README.md) | Current entry point and scoped legacy examples |
-| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–31 |
+| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–32 |
 | [VALIDATION.md](../VALIDATION.md) | Versioned validation ledger |
 | [artifacts/README.md](../artifacts/README.md) | Historical artifact catalog/receipt |
 | [artifacts/next-evolution-v1/README.md](../artifacts/next-evolution-v1/README.md) | Historical artifact catalog/receipt |

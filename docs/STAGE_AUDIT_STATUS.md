@@ -116,7 +116,10 @@ with limited Tier 3 probes, not a completed stage ledger or perceptual result.
 estimate and broadband crest. Existing run directories preserve most restoration,
 polish, microstructure, spatial and PH intermediate WAVs. `master.json` records
 finalizer input/output metrics, pre-gain and maximum glue/limiter reduction.
-It does **not** preserve the actual signal immediately before each limiter pass.
+The default run still does **not** preserve the actual signal immediately before
+each limiter pass. An explicit [native finalizer observer](MASTER_STAGE_AUDIT_20261020.md)
+now does so for bounded diagnostic inputs, with pinned baseline parity and active
+limiter controls verified.
 The pre-finalizer WAV must not be mislabeled pre-limiter.
 
 The next offline ledger should hash stage audio/settings and report an ordered
@@ -139,3 +142,13 @@ Per-stage latency/RSS and complete before/after causal accountability are pendin
 Sequential stage differences alone cannot isolate the cause of final preference;
 that needs matched enabled/disabled controls and owner listening. No new dynamics
 operator or production promotion follows from this measurement repair.
+
+### Native finalizer observation verified (2026-10-20)
+
+The opt-in native observer and fixed-onset analyzer now preserve actual per-retry
+pre/post limiter signals, bypasses and final gain-only trim. Forty native runs
+across ten controls preserve exact outputs against the pinned baseline; 20 focused
+Rust and five Python checks pass. Seven initial music/null cases had zero GR, so
+a separately declared peak control verifies nontrivial limiting. See the
+[contract and results](MASTER_STAGE_AUDIT_20261020.md). Upstream structured stage
+ordering and the remaining metrics above are still pending; Stage 4 is incomplete.

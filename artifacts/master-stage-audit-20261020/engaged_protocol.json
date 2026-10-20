@@ -1,0 +1,52 @@
+{
+  "schema": "master-engaged-limiter-control-v1",
+  "reason": "PartA musical excerpts all had zero GR; keep that negative, use declared known peak positive control",
+  "fixture": "2s48kstereo:130/440/6300Hz tones .13/.07/.04; .02level first1/3s; +1.3pulse at48000..48048; right=.91left; float32 once; no target fitting",
+  "input_sha256": "a6c0a9510727b19b42973ce5e0fe531b24f277a1138bac6924b4f820c6eb70f6",
+  "pins": {
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/baseline-674a472": "1b474970ec278a7db41424d57fb709cf37034e1934b3a5cdf572d2490dca2828",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1": "857e065fba22b9d3676c0ff318558e3faaa64e938451988dd804bd7b970b8437",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav": "a6c0a9510727b19b42973ce5e0fe531b24f277a1138bac6924b4f820c6eb70f6",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/master-stage-audit-20261020/validate_engaged.py": "016fb16d5056b3e21769ea7ca765a9e8b8ec9195501113c101eacf08ebae3c80",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/master-stage-audit-20261020/validate_native.py": "1cf5b42d2fa084b36ecbf136ae021b13f5ed3901cea9720ce4fc0bd16587b6d5"
+  },
+  "variants": [
+    "baseline",
+    "candidate-disabled",
+    "candidate-json",
+    "candidate-wavs"
+  ],
+  "cases": [
+    [
+      "legacy",
+      []
+    ],
+    [
+      "smooth",
+      [
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--quiet-mid-denoise"
+      ]
+    ],
+    [
+      "budget-half",
+      [
+        "--max-limiter-gr-db",
+        "0.5"
+      ]
+    ]
+  ],
+  "target_lufs": -9,
+  "ceiling_db": -1,
+  "gates": {
+    "exact_output_hash_parity": true,
+    "min_limiter_gr_db": 0.05,
+    "max_budget_gr_db": 0.50001,
+    "process_cap_mib": 512
+  },
+  "fixed_onsets_samples": [
+    48000
+  ],
+  "scope": "known positive control, no music/preference/speed evidence"
+}

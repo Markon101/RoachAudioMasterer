@@ -1,0 +1,1043 @@
+{
+  "schema": "master-stage-audit-analysis-v1",
+  "scope": "offline comparison of saved snapshots; fixed caller onsets; no waveform modification or onset redetection",
+  "provenance": {
+    "audit_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-wavs/audit",
+    "master_audit_json_sha256": "3d0a208bd61937234b308176e388602d70ea3ba0697d6b70e1319e95262e70b5",
+    "observations_jsonl_sha256": "7f10b074430882739aeaaaf11beacc97f443f2db81e5a8d7ca1cbf132a7e4103",
+    "fixed_onsets_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-wavs/fixed_onsets.json",
+    "fixed_onsets_sha256": "00e0d2b25a16e789330e49895ea2e5bc57fb60f9be6915f499118db1a1b10b1c",
+    "analysis_source_sha256": "d03a91e795fa42fc12fc2b1aed1b2daf82f2300d582c7b1055b5c8d109582115",
+    "analysis_checkout_master_source_sha256": "1c189e0691759161c854ce2e7973f05c7697a8bed09d23e520ddecc1722e2517",
+    "analysis_checkout_master_audit_source_sha256": "1300eae51f6f8e55453fbd05a5a080f09361e704612d4a0aff787f51a606dca3",
+    "wav_header_reader_source_sha256": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254",
+    "wav_decoder_source_sha256": "9bdb9c07bbf55bbafb8826c1cf8e55a978f25cd300838a2d21483a892bdc0bbc",
+    "source_hash_scope": "local analysis-worktree source hashes; not authenticated source provenance for the compiled native binary",
+    "native_command_argv_descriptive_only": [
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+      "master",
+      "--input",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+      "--out",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-wavs",
+      "--target-lufs",
+      "-9",
+      "--kick-transient-guard",
+      "--clock-transient-punch",
+      "--quiet-mid-denoise",
+      "--stage-audit-dir",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-wavs/audit",
+      "--stage-audit-wavs"
+    ],
+    "snapshot_sha256": [
+      {
+        "sequence": 0,
+        "file": "00_input.wav",
+        "bytes": 768068,
+        "sha256": "c317a3df71eaeae0b86fb368f52dfc4a8285710e8db4de996437d5fab7031313",
+        "fnv1a_planar_f32le": "53da1e90b3bad69b"
+      },
+      {
+        "sequence": 1,
+        "file": "01_pre_shaped.wav",
+        "bytes": 768068,
+        "sha256": "b9ad05829c4324aee12c2db278cf4a6cc8edd873a7fe40e85f7156361522f06b",
+        "fnv1a_planar_f32le": "192c7de19f1c9be1"
+      },
+      {
+        "sequence": 2,
+        "file": "02_pre_limiter.wav",
+        "bytes": 768068,
+        "sha256": "601f11a7e8b77a9b421e24288e4009b861c396e00c704b606e653179abf17eee",
+        "fnv1a_planar_f32le": "d7224ed4a96c4d4f"
+      },
+      {
+        "sequence": 3,
+        "file": "03_post_limiter.wav",
+        "bytes": 768068,
+        "sha256": "660c2b5b8f88109eb330ede3d7918c6691c5e8c1960dbd67ed453a828f96e014",
+        "fnv1a_planar_f32le": "cf901b9882917cf7"
+      },
+      {
+        "sequence": 4,
+        "file": "04_pre_limiter.wav",
+        "bytes": 768068,
+        "sha256": "3d12f2e3529e4a2396362150db53cffc650f02bb799b2963da95914677d9eb10",
+        "fnv1a_planar_f32le": "3cbbc9bca6fd1798"
+      },
+      {
+        "sequence": 5,
+        "file": "05_post_limiter.wav",
+        "bytes": 768068,
+        "sha256": "a32dc9a862911e87eca6f7b7ef74ca08240347e8dff0b7ec7926ff44fc0bd750",
+        "fnv1a_planar_f32le": "e68c8481c73d279e"
+      },
+      {
+        "sequence": 6,
+        "file": "06_pre_limiter.wav",
+        "bytes": 768068,
+        "sha256": "1e01d564afdd38404ececd8a200ef31ba836d3ad354aedab2faa520bf3680c19",
+        "fnv1a_planar_f32le": "41ce52a9c2155d8c"
+      },
+      {
+        "sequence": 7,
+        "file": "07_post_limiter.wav",
+        "bytes": 768068,
+        "sha256": "696ec47192a70f5c4b588267bf62a6282231c516bafeb6735148d361e543f344",
+        "fnv1a_planar_f32le": "66e83c913dba4bf8"
+      },
+      {
+        "sequence": 8,
+        "file": "08_pre_final_trim.wav",
+        "bytes": 768068,
+        "sha256": "696ec47192a70f5c4b588267bf62a6282231c516bafeb6735148d361e543f344",
+        "fnv1a_planar_f32le": "66e83c913dba4bf8"
+      },
+      {
+        "sequence": 9,
+        "file": "09_final_output.wav",
+        "bytes": 768068,
+        "sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+        "fnv1a_planar_f32le": "a6136d1c55a573c5"
+      }
+    ]
+  },
+  "geometry": {
+    "sample_rate_hz": 48000,
+    "channels": 2,
+    "frames": 96000,
+    "record_count": 10,
+    "iteration_count": 3,
+    "last_retained_iteration": 2
+  },
+  "fixed_onsets": {
+    "record_count": 1,
+    "input_snapshot_sha256": "c317a3df71eaeae0b86fb368f52dfc4a8285710e8db4de996437d5fab7031313",
+    "samples": [
+      48000
+    ],
+    "transient_ms": 20,
+    "sustain_ms": [
+      80,
+      200
+    ],
+    "selection": "supplied onset sample positions; no redetection"
+  },
+  "stage_records": [
+    {
+      "sequence": 0,
+      "meta": {
+        "base_drive_db": null,
+        "effective_ceiling_linear": null,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": null,
+        "iteration": null,
+        "limiter": null,
+        "quiet_makeup_curve_enabled": false,
+        "stage": "input"
+      },
+      "snapshot": {
+        "sequence": 0,
+        "file": "00_input.wav",
+        "bytes": 768068,
+        "sha256": "c317a3df71eaeae0b86fb368f52dfc4a8285710e8db4de996437d5fab7031313",
+        "fnv1a_planar_f32le": "53da1e90b3bad69b"
+      },
+      "measured": {
+        "snapshot_sha256": "c317a3df71eaeae0b86fb368f52dfc4a8285710e8db4de996437d5fab7031313",
+        "fnv1a_planar_f32le": "53da1e90b3bad69b",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.00979863171901353,
+        "rms_all_channels": 0.09898803826227455,
+        "peak_sample": 1.4738317728042603,
+        "sampled_crest_ratio_peak_over_rms": 14.888988595766062,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.010720017184891222,
+            "rms": 0.10353751583310863
+          },
+          "right": {
+            "mean_square": 0.008877246253135842,
+            "rms": 0.09421913952661552
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.09957830584531638,
+          "sustain_mean_square": 0.010685071243756821,
+          "transient_to_sustain_energy_ratio": 9.319386232777715,
+          "transient_rms": 0.31556030460962037,
+          "sustain_rms": 0.10336861827342388
+        },
+        "native_metrics": {
+          "crest_factor_db": 23.457304000854492,
+          "lufs_integrated": -17.45355786198076,
+          "rms_dbfs": -20.088346481323242,
+          "sample_peak_dbfs": 3.3689582347869873,
+          "true_peak_dbtp": 4.201247215270996
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 23.457304000854492,
+        "lufs_integrated": -17.45355786198076,
+        "rms_dbfs": -20.088346481323242,
+        "sample_peak_dbfs": 3.3689582347869873,
+        "true_peak_dbtp": 4.201247215270996
+      }
+    },
+    {
+      "sequence": 1,
+      "meta": {
+        "base_drive_db": null,
+        "effective_ceiling_linear": null,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": null,
+        "iteration": null,
+        "limiter": null,
+        "quiet_makeup_curve_enabled": false,
+        "stage": "pre_shaped"
+      },
+      "snapshot": {
+        "sequence": 1,
+        "file": "01_pre_shaped.wav",
+        "bytes": 768068,
+        "sha256": "b9ad05829c4324aee12c2db278cf4a6cc8edd873a7fe40e85f7156361522f06b",
+        "fnv1a_planar_f32le": "192c7de19f1c9be1"
+      },
+      "measured": {
+        "snapshot_sha256": "b9ad05829c4324aee12c2db278cf4a6cc8edd873a7fe40e85f7156361522f06b",
+        "fnv1a_planar_f32le": "192c7de19f1c9be1",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.0074758345272072,
+        "rms_all_channels": 0.08646290838970894,
+        "peak_sample": 1.223777413368225,
+        "sampled_crest_ratio_peak_over_rms": 14.15378497161313,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.008178802588164672,
+            "rms": 0.09043673251596761
+          },
+          "right": {
+            "mean_square": 0.006772866466249729,
+            "rms": 0.08229742685072072
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.0703659648412419,
+          "sustain_mean_square": 0.007703762196387596,
+          "transient_to_sustain_energy_ratio": 9.133974160603959,
+          "transient_rms": 0.26526583805918524,
+          "sustain_rms": 0.08777107835948922
+        },
+        "native_metrics": {
+          "crest_factor_db": 23.017454147338867,
+          "lufs_integrated": -18.58607105333461,
+          "rms_dbfs": -21.263404846191406,
+          "sample_peak_dbfs": 1.7540485858917236,
+          "true_peak_dbtp": 2.5379326343536377
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 23.017454147338867,
+        "lufs_integrated": -18.58607105333461,
+        "rms_dbfs": -21.263404846191406,
+        "sample_peak_dbfs": 1.7540485858917236,
+        "true_peak_dbtp": 2.5379326343536377
+      }
+    },
+    {
+      "sequence": 2,
+      "meta": {
+        "base_drive_db": 9.586071014404297,
+        "effective_ceiling_linear": 0.8912509083747864,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": null,
+        "iteration": 0,
+        "limiter": {
+          "hold_samples": 528,
+          "kind": "smooth",
+          "lookahead_samples": 64,
+          "release_ms": 80.0
+        },
+        "quiet_makeup_curve_enabled": true,
+        "stage": "pre_limiter"
+      },
+      "snapshot": {
+        "sequence": 2,
+        "file": "02_pre_limiter.wav",
+        "bytes": 768068,
+        "sha256": "601f11a7e8b77a9b421e24288e4009b861c396e00c704b606e653179abf17eee",
+        "fnv1a_planar_f32le": "d7224ed4a96c4d4f"
+      },
+      "measured": {
+        "snapshot_sha256": "601f11a7e8b77a9b421e24288e4009b861c396e00c704b606e653179abf17eee",
+        "fnv1a_planar_f32le": "d7224ed4a96c4d4f",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.052289847648874496,
+        "rms_all_channels": 0.22866973487734335,
+        "peak_sample": 3.301687002182007,
+        "sampled_crest_ratio_peak_over_rms": 14.438670705386551,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.05720676933890953,
+            "rms": 0.2391793664572877
+          },
+          "right": {
+            "mean_square": 0.04737292595883946,
+            "rms": 0.21765322409475
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.5130480195982197,
+          "sustain_mean_square": 0.06669468244662723,
+          "transient_to_sustain_energy_ratio": 7.692487628362112,
+          "transient_rms": 0.7162737043883571,
+          "sustain_rms": 0.2582531363732631
+        },
+        "native_metrics": {
+          "crest_factor_db": 23.19054412841797,
+          "lufs_integrated": -10.008134790599991,
+          "rms_dbfs": -12.815826416015625,
+          "sample_peak_dbfs": 10.374717712402344,
+          "true_peak_dbtp": 11.160606384277344
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 23.19054412841797,
+        "lufs_integrated": -10.008134790599991,
+        "rms_dbfs": -12.815826416015625,
+        "sample_peak_dbfs": 10.374717712402344,
+        "true_peak_dbtp": 11.160606384277344
+      }
+    },
+    {
+      "sequence": 3,
+      "meta": {
+        "base_drive_db": 9.586071014404297,
+        "effective_ceiling_linear": 0.8912509083747864,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": 11.374717712402344,
+        "iteration": 0,
+        "limiter": {
+          "hold_samples": 528,
+          "kind": "smooth",
+          "lookahead_samples": 64,
+          "release_ms": 80.0
+        },
+        "quiet_makeup_curve_enabled": true,
+        "stage": "post_limiter"
+      },
+      "snapshot": {
+        "sequence": 3,
+        "file": "03_post_limiter.wav",
+        "bytes": 768068,
+        "sha256": "660c2b5b8f88109eb330ede3d7918c6691c5e8c1960dbd67ed453a828f96e014",
+        "fnv1a_planar_f32le": "cf901b9882917cf7"
+      },
+      "measured": {
+        "snapshot_sha256": "660c2b5b8f88109eb330ede3d7918c6691c5e8c1960dbd67ed453a828f96e014",
+        "fnv1a_planar_f32le": "cf901b9882917cf7",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.04462674101661787,
+        "rms_all_channels": 0.2112504225241168,
+        "peak_sample": 0.8912509679794312,
+        "sampled_crest_ratio_peak_over_rms": 4.218931055050004,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.04882308502569227,
+            "rms": 0.22095946466646835
+          },
+          "right": {
+            "mean_square": 0.040430397007543493,
+            "rms": 0.20107311358693258
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.037876567870382086,
+          "sustain_mean_square": 0.04749066968464098,
+          "transient_to_sustain_energy_ratio": 0.7975580913450836,
+          "transient_rms": 0.19461903265195335,
+          "sustain_rms": 0.21792354091433302
+        },
+        "native_metrics": {
+          "crest_factor_db": 12.504048347473145,
+          "lufs_integrated": -10.790307813265096,
+          "rms_dbfs": -13.504048347473145,
+          "sample_peak_dbfs": -0.9999997019767761,
+          "true_peak_dbtp": -0.2141098827123642
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 12.504048347473145,
+        "lufs_integrated": -10.790307813265096,
+        "rms_dbfs": -13.504048347473145,
+        "sample_peak_dbfs": -0.9999997019767761,
+        "true_peak_dbtp": -0.2141098827123642
+      }
+    },
+    {
+      "sequence": 4,
+      "meta": {
+        "base_drive_db": 11.376379013061523,
+        "effective_ceiling_linear": 0.81415194272995,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": null,
+        "iteration": 1,
+        "limiter": {
+          "hold_samples": 528,
+          "kind": "smooth",
+          "lookahead_samples": 64,
+          "release_ms": 80.0
+        },
+        "quiet_makeup_curve_enabled": true,
+        "stage": "pre_limiter"
+      },
+      "snapshot": {
+        "sequence": 4,
+        "file": "04_pre_limiter.wav",
+        "bytes": 768068,
+        "sha256": "3d12f2e3529e4a2396362150db53cffc650f02bb799b2963da95914677d9eb10",
+        "fnv1a_planar_f32le": "3cbbc9bca6fd1798"
+      },
+      "measured": {
+        "snapshot_sha256": "3d12f2e3529e4a2396362150db53cffc650f02bb799b2963da95914677d9eb10",
+        "fnv1a_planar_f32le": "3cbbc9bca6fd1798",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.07532129132609523,
+        "rms_all_channels": 0.2744472468910833,
+        "peak_sample": 3.936678409576416,
+        "sampled_crest_ratio_peak_over_rms": 14.344025870803215,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.0824039069291016,
+            "rms": 0.2870608070237064
+          },
+          "right": {
+            "mean_square": 0.06823867572308888,
+            "rms": 0.26122533514781615
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.7297043033013063,
+          "sustain_mean_square": 0.0994075657535547,
+          "transient_to_sustain_energy_ratio": 7.340530851649116,
+          "transient_rms": 0.854227313600605,
+          "sustain_rms": 0.31528965373693235
+        },
+        "native_metrics": {
+          "crest_factor_db": 23.1334228515625,
+          "lufs_integrated": -8.441300631379404,
+          "rms_dbfs": -11.230822563171387,
+          "sample_peak_dbfs": 11.902599334716797,
+          "true_peak_dbtp": 12.689031600952148
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 23.1334228515625,
+        "lufs_integrated": -8.441300631379404,
+        "rms_dbfs": -11.230822563171387,
+        "sample_peak_dbfs": 11.902599334716797,
+        "true_peak_dbtp": 12.689031600952148
+      }
+    },
+    {
+      "sequence": 5,
+      "meta": {
+        "base_drive_db": 11.376379013061523,
+        "effective_ceiling_linear": 0.81415194272995,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": 13.688488960266113,
+        "iteration": 1,
+        "limiter": {
+          "hold_samples": 528,
+          "kind": "smooth",
+          "lookahead_samples": 64,
+          "release_ms": 80.0
+        },
+        "quiet_makeup_curve_enabled": true,
+        "stage": "post_limiter"
+      },
+      "snapshot": {
+        "sequence": 5,
+        "file": "05_post_limiter.wav",
+        "bytes": 768068,
+        "sha256": "a32dc9a862911e87eca6f7b7ef74ca08240347e8dff0b7ec7926ff44fc0bd750",
+        "fnv1a_planar_f32le": "e68c8481c73d279e"
+      },
+      "measured": {
+        "snapshot_sha256": "a32dc9a862911e87eca6f7b7ef74ca08240347e8dff0b7ec7926ff44fc0bd750",
+        "fnv1a_planar_f32le": "e68c8481c73d279e",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.06376630778011659,
+        "rms_all_channels": 0.25251991561086146,
+        "peak_sample": 0.81415194272995,
+        "sampled_crest_ratio_peak_over_rms": 3.2241098321313215,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.06976238455553385,
+            "rms": 0.26412569840046585
+          },
+          "right": {
+            "mean_square": 0.05777023100469934,
+            "rms": 0.24035438628138106
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.03180852053019324,
+          "sustain_mean_square": 0.0686819698157882,
+          "transient_to_sustain_energy_ratio": 0.46312766822947604,
+          "transient_rms": 0.17834943378153248,
+          "sustain_rms": 0.26207245146292696
+        },
+        "native_metrics": {
+          "crest_factor_db": 10.168197631835938,
+          "lufs_integrated": -9.268001897554859,
+          "rms_dbfs": -11.95408821105957,
+          "sample_peak_dbfs": -1.785890817642212,
+          "true_peak_dbtp": -0.9994571805000305
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 10.168197631835938,
+        "lufs_integrated": -9.268001897554859,
+        "rms_dbfs": -11.95408821105957,
+        "sample_peak_dbfs": -1.785890817642212,
+        "true_peak_dbtp": -0.9994571805000305
+      }
+    },
+    {
+      "sequence": 6,
+      "meta": {
+        "base_drive_db": 11.644380569458008,
+        "effective_ceiling_linear": 0.81415194272995,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": null,
+        "iteration": 2,
+        "limiter": {
+          "hold_samples": 528,
+          "kind": "smooth",
+          "lookahead_samples": 64,
+          "release_ms": 80.0
+        },
+        "quiet_makeup_curve_enabled": true,
+        "stage": "pre_limiter"
+      },
+      "snapshot": {
+        "sequence": 6,
+        "file": "06_pre_limiter.wav",
+        "bytes": 768068,
+        "sha256": "1e01d564afdd38404ececd8a200ef31ba836d3ad354aedab2faa520bf3680c19",
+        "fnv1a_planar_f32le": "41ce52a9c2155d8c"
+      },
+      "measured": {
+        "snapshot_sha256": "1e01d564afdd38404ececd8a200ef31ba836d3ad354aedab2faa520bf3680c19",
+        "fnv1a_planar_f32le": "41ce52a9c2155d8c",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.07959905711115496,
+        "rms_all_channels": 0.28213304859791766,
+        "peak_sample": 4.041715621948242,
+        "sampled_crest_ratio_peak_over_rms": 14.325566047770247,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.08708391977709351,
+            "rms": 0.2950998471315997
+          },
+          "right": {
+            "mean_square": 0.07211419444521641,
+            "rms": 0.2685408617793881
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.7692168669497872,
+          "sustain_mean_square": 0.10552815410219828,
+          "transient_to_sustain_energy_ratio": 7.28920991269157,
+          "transient_rms": 0.8770500937516552,
+          "sustain_rms": 0.3248509721429171
+        },
+        "native_metrics": {
+          "crest_factor_db": 23.122236251831055,
+          "lufs_integrated": -8.204073212311293,
+          "rms_dbfs": -10.990921020507812,
+          "sample_peak_dbfs": 12.131315231323242,
+          "true_peak_dbtp": 12.917831420898438
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 23.122236251831055,
+        "lufs_integrated": -8.204073212311293,
+        "rms_dbfs": -10.990921020507812,
+        "sample_peak_dbfs": 12.131315231323242,
+        "true_peak_dbtp": 12.917831420898438
+      }
+    },
+    {
+      "sequence": 7,
+      "meta": {
+        "base_drive_db": 11.644380569458008,
+        "effective_ceiling_linear": 0.81415194272995,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": 13.917205810546875,
+        "iteration": 2,
+        "limiter": {
+          "hold_samples": 528,
+          "kind": "smooth",
+          "lookahead_samples": 64,
+          "release_ms": 80.0
+        },
+        "quiet_makeup_curve_enabled": true,
+        "stage": "post_limiter"
+      },
+      "snapshot": {
+        "sequence": 7,
+        "file": "07_post_limiter.wav",
+        "bytes": 768068,
+        "sha256": "696ec47192a70f5c4b588267bf62a6282231c516bafeb6735148d361e543f344",
+        "fnv1a_planar_f32le": "66e83c913dba4bf8"
+      },
+      "measured": {
+        "snapshot_sha256": "696ec47192a70f5c4b588267bf62a6282231c516bafeb6735148d361e543f344",
+        "fnv1a_planar_f32le": "66e83c913dba4bf8",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.06735078926268512,
+        "rms_all_channels": 0.2595203060700359,
+        "peak_sample": 0.81415194272995,
+        "sampled_crest_ratio_peak_over_rms": 3.1371415788567907,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.07368392218735921,
+            "rms": 0.2714478259028044
+          },
+          "right": {
+            "mean_square": 0.061017656338011025,
+            "rms": 0.24701752232991697
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.031833041510851985,
+          "sustain_mean_square": 0.0727299747435793,
+          "transient_to_sustain_energy_ratio": 0.4376880594704489,
+          "transient_rms": 0.1784181647446582,
+          "sustain_rms": 0.26968495461107816
+        },
+        "native_metrics": {
+          "crest_factor_db": 9.930683135986328,
+          "lufs_integrated": -9.034131756336455,
+          "rms_dbfs": -11.716573715209961,
+          "sample_peak_dbfs": -1.785890817642212,
+          "true_peak_dbtp": -0.9993746876716614
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 9.930683135986328,
+        "lufs_integrated": -9.034131756336455,
+        "rms_dbfs": -11.716573715209961,
+        "sample_peak_dbfs": -1.785890817642212,
+        "true_peak_dbtp": -0.9993746876716614
+      }
+    },
+    {
+      "sequence": 8,
+      "meta": {
+        "base_drive_db": null,
+        "effective_ceiling_linear": null,
+        "final_trim_gain_linear": null,
+        "gain_reduction_db": null,
+        "iteration": null,
+        "limiter": null,
+        "quiet_makeup_curve_enabled": false,
+        "stage": "pre_final_trim"
+      },
+      "snapshot": {
+        "sequence": 8,
+        "file": "08_pre_final_trim.wav",
+        "bytes": 768068,
+        "sha256": "696ec47192a70f5c4b588267bf62a6282231c516bafeb6735148d361e543f344",
+        "fnv1a_planar_f32le": "66e83c913dba4bf8"
+      },
+      "measured": {
+        "snapshot_sha256": "696ec47192a70f5c4b588267bf62a6282231c516bafeb6735148d361e543f344",
+        "fnv1a_planar_f32le": "66e83c913dba4bf8",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.06735078926268512,
+        "rms_all_channels": 0.2595203060700359,
+        "peak_sample": 0.81415194272995,
+        "sampled_crest_ratio_peak_over_rms": 3.1371415788567907,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.07368392218735921,
+            "rms": 0.2714478259028044
+          },
+          "right": {
+            "mean_square": 0.061017656338011025,
+            "rms": 0.24701752232991697
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.031833041510851985,
+          "sustain_mean_square": 0.0727299747435793,
+          "transient_to_sustain_energy_ratio": 0.4376880594704489,
+          "transient_rms": 0.1784181647446582,
+          "sustain_rms": 0.26968495461107816
+        },
+        "native_metrics": {
+          "crest_factor_db": 9.930683135986328,
+          "lufs_integrated": -9.034131756336455,
+          "rms_dbfs": -11.716573715209961,
+          "sample_peak_dbfs": -1.785890817642212,
+          "true_peak_dbtp": -0.9993746876716614
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 9.930683135986328,
+        "lufs_integrated": -9.034131756336455,
+        "rms_dbfs": -11.716573715209961,
+        "sample_peak_dbfs": -1.785890817642212,
+        "true_peak_dbtp": -0.9993746876716614
+      }
+    },
+    {
+      "sequence": 9,
+      "meta": {
+        "base_drive_db": null,
+        "effective_ceiling_linear": null,
+        "final_trim_gain_linear": 0.9999269843101501,
+        "gain_reduction_db": null,
+        "iteration": null,
+        "limiter": null,
+        "quiet_makeup_curve_enabled": false,
+        "stage": "final_output"
+      },
+      "snapshot": {
+        "sequence": 9,
+        "file": "09_final_output.wav",
+        "bytes": 768068,
+        "sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+        "fnv1a_planar_f32le": "a6136d1c55a573c5"
+      },
+      "measured": {
+        "snapshot_sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+        "fnv1a_planar_f32le": "a6136d1c55a573c5",
+        "geometry": {
+          "sample_rate_hz": 48000,
+          "channels": 2,
+          "frames": 96000
+        },
+        "mean_square_all_channels": 0.06734095428072025,
+        "rms_all_channels": 0.2595013569920594,
+        "peak_sample": 0.8140925168991089,
+        "sampled_crest_ratio_peak_over_rms": 3.137141656349873,
+        "mean_square_by_channel": {
+          "left": {
+            "mean_square": 0.07367316240227423,
+            "rms": 0.2714280059284123
+          },
+          "right": {
+            "mean_square": 0.06100874615916627,
+            "rms": 0.24699948615162395
+          }
+        },
+        "fixed_onsets": {
+          "record_count": 1,
+          "transient_ms": [
+            0.0,
+            20.0
+          ],
+          "sustain_ms": [
+            80.0,
+            200.0
+          ],
+          "transient_mean_square": 0.03182839332539238,
+          "sustain_mean_square": 0.0727193542701723,
+          "transient_to_sustain_energy_ratio": 0.4376880631687294,
+          "transient_rms": 0.17840513816981948,
+          "sustain_rms": 0.26966526337326485
+        },
+        "native_metrics": {
+          "crest_factor_db": 9.930682182312012,
+          "lufs_integrated": -9.03476598878689,
+          "rms_dbfs": -11.717206954956055,
+          "sample_peak_dbfs": -1.786524772644043,
+          "true_peak_dbtp": -1.000008463859558
+        },
+        "qualification": "fixed-onset transient/sustain energy proxies; onset list supplied by caller, not redetected"
+      },
+      "native_metrics": {
+        "crest_factor_db": 9.930682182312012,
+        "lufs_integrated": -9.03476598878689,
+        "rms_dbfs": -11.717206954956055,
+        "sample_peak_dbfs": -1.786524772644043,
+        "true_peak_dbtp": -1.000008463859558
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison": "input_to_pre_shaped",
+      "from_sequence": 0,
+      "to_sequence": 1,
+      "from_stage": "input",
+      "to_stage": "pre_shaped",
+      "rms_ratio_to_from": 0.8734682483616903,
+      "rms_ratio_to_input": 0.8734682483616903,
+      "input_rms_match_gain_linear_for_to_stage_only": 1.1448613064935529,
+      "transient_sustain_ratio_from": 9.319386232777715,
+      "transient_sustain_ratio_to": 9.133974160603959,
+      "transient_sustain_ratio_multiplier": 0.9801046906370686,
+      "limiter_reduction_db": null,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "pre_shaped_to_pre_limiter_iteration_0",
+      "from_sequence": 1,
+      "to_sequence": 2,
+      "from_stage": "pre_shaped",
+      "to_stage": "pre_limiter",
+      "rms_ratio_to_from": 2.6447148162848553,
+      "rms_ratio_to_input": 2.3100744179965425,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.43288648720990974,
+      "transient_sustain_ratio_from": 9.133974160603959,
+      "transient_sustain_ratio_to": 7.692487628362112,
+      "transient_sustain_ratio_multiplier": 0.8421840803470664,
+      "limiter_reduction_db": null,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "limiter_iteration_0",
+      "from_sequence": 2,
+      "to_sequence": 3,
+      "from_stage": "pre_limiter",
+      "to_stage": "post_limiter",
+      "rms_ratio_to_from": 0.9238232713106082,
+      "rms_ratio_to_input": 2.134100505804515,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.468581492427424,
+      "transient_sustain_ratio_from": 7.692487628362112,
+      "transient_sustain_ratio_to": 0.7975580913450836,
+      "transient_sustain_ratio_multiplier": 0.10368012662178308,
+      "limiter_reduction_db": 11.374717712402344,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "pre_shaped_to_pre_limiter_iteration_1",
+      "from_sequence": 1,
+      "to_sequence": 4,
+      "from_stage": "pre_shaped",
+      "to_stage": "pre_limiter",
+      "rms_ratio_to_from": 3.174161637659517,
+      "rms_ratio_to_input": 2.7725294056633327,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.36068147661746736,
+      "transient_sustain_ratio_from": 9.133974160603959,
+      "transient_sustain_ratio_to": 7.340530851649116,
+      "transient_sustain_ratio_multiplier": 0.803651370430825,
+      "limiter_reduction_db": null,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "limiter_iteration_1",
+      "from_sequence": 4,
+      "to_sequence": 5,
+      "from_stage": "pre_limiter",
+      "to_stage": "post_limiter",
+      "rms_ratio_to_from": 0.9201036573381117,
+      "rms_ratio_to_input": 2.5510144462282938,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.39200091613691657,
+      "transient_sustain_ratio_from": 7.340530851649116,
+      "transient_sustain_ratio_to": 0.46312766822947604,
+      "transient_sustain_ratio_multiplier": 0.06309184956636076,
+      "limiter_reduction_db": 13.688488960266113,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "pre_shaped_to_pre_limiter_iteration_2",
+      "from_sequence": 1,
+      "to_sequence": 6,
+      "from_stage": "pre_shaped",
+      "to_stage": "pre_limiter",
+      "rms_ratio_to_from": 3.2630529536003667,
+      "rms_ratio_to_input": 2.850173147692752,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.35085587723311173,
+      "transient_sustain_ratio_from": 9.133974160603959,
+      "transient_sustain_ratio_to": 7.28920991269157,
+      "transient_sustain_ratio_multiplier": 0.7980326837501794,
+      "limiter_reduction_db": null,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "limiter_iteration_2",
+      "from_sequence": 6,
+      "to_sequence": 7,
+      "from_stage": "pre_limiter",
+      "to_stage": "post_limiter",
+      "rms_ratio_to_from": 0.9198507844428097,
+      "rms_ratio_to_input": 2.62173400570301,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.3814269478996413,
+      "transient_sustain_ratio_from": 7.28920991269157,
+      "transient_sustain_ratio_to": 0.4376880594704489,
+      "transient_sustain_ratio_multiplier": 0.06004602209470887,
+      "limiter_reduction_db": 13.917205810546875,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "retained_output_to_pre_final_trim",
+      "from_sequence": 7,
+      "to_sequence": 8,
+      "from_stage": "post_limiter",
+      "to_stage": "pre_final_trim",
+      "rms_ratio_to_from": 1.0,
+      "rms_ratio_to_input": 2.62173400570301,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.3814269478996413,
+      "transient_sustain_ratio_from": 0.4376880594704489,
+      "transient_sustain_ratio_to": 0.4376880594704489,
+      "transient_sustain_ratio_multiplier": 1.0,
+      "limiter_reduction_db": null,
+      "final_trim_gain_linear": null
+    },
+    {
+      "comparison": "pre_final_trim_to_final_output",
+      "from_sequence": 8,
+      "to_sequence": 9,
+      "from_stage": "pre_final_trim",
+      "to_stage": "final_output",
+      "rms_ratio_to_from": 0.9999269842184473,
+      "rms_ratio_to_input": 2.6215425777455605,
+      "input_rms_match_gain_linear_for_to_stage_only": 0.3814548001199991,
+      "transient_sustain_ratio_from": 0.4376880594704489,
+      "transient_sustain_ratio_to": 0.4376880631687294,
+      "transient_sustain_ratio_multiplier": 1.0000000084495804,
+      "limiter_reduction_db": null,
+      "final_trim_gain_linear": 0.9999269843101501
+    }
+  ],
+  "final_trim_gain_linear": 0.9999269843101501,
+  "interpretation_limits": [
+    "Each retry input is compared with pre_shaped independently; retries are not treated as sequential production stages.",
+    "quiet_makeup_curve_enabled identifies a time-varying gain mode; it does not encode the framewise curve. Saved waveforms permit measurement, while JSON metadata alone cannot reconstruct that curve.",
+    "Level-match values are hypothetical scalar gains to the first input RMS; no audio was altered for comparison.",
+    "Transient/sustain ratios use identical fixed windows and can change under nonlinear/time-varying gain; they are proxies, not perceptual or mastering quality scores.",
+    "FNV is used only to verify the audit implementation fingerprint; SHA-256 receipts bind saved files."
+  ]
+}

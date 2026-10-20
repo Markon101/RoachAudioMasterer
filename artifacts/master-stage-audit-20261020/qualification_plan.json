@@ -1,0 +1,40 @@
+{
+  "schema": "master-stage-qualification-plan-v1",
+  "baseline_parent": "674a472",
+  "baseline_binary_sha256": "1b474970ec278a7db41424d57fb709cf37034e1934b3a5cdf572d2490dca2828",
+  "cases": [
+    "legacy6s-stress-9",
+    "smooth6s-stress-9",
+    "budget0.5-6s-stress-9",
+    "budget0-6s-stress-9",
+    "silence0.341s",
+    "smooth26s-normal-13",
+    "auto-bypass6s-stress-9"
+  ],
+  "variants": [
+    "pinnedbaseline",
+    "candidatedisabled",
+    "candidateJSON",
+    "candidateWAV"
+  ],
+  "exact_gates": [
+    "mastered.wav hash",
+    "listen.wav hash",
+    "master.json hash for Master cases"
+  ],
+  "snapshot_analysis": "fixed manifest onset windows, no redetection; final trim separated; retries explicitly retained",
+  "limits": {
+    "native_process_hwm_mib": 512,
+    "child_timeout_seconds": 180,
+    "audit_seconds": 48,
+    "snapshots_mib": 320,
+    "records": 32
+  },
+  "falsifiers": [
+    "any output mismatch halts qualification",
+    "partial audit may not claim complete",
+    "audit metadata must replay actual limiter variant",
+    "gain-only budget must record zero actual limiter calls"
+  ],
+  "scope": "diagnostic eligibility, not speed test or perceptual superiority"
+}

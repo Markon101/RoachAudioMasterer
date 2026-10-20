@@ -8,6 +8,7 @@ mod flow;
 mod flow_experiment;
 pub mod gtf;
 mod master;
+mod master_audit;
 mod metrics;
 pub mod microstructure;
 pub mod musical_intent;
@@ -224,6 +225,8 @@ enum Commands {
         contrast_budget: bool,
         #[command(flatten)]
         master_controls: master::MasterControls,
+        #[command(flatten)]
+        master_audit: master_audit::MasterAuditArgs,
         /// Optional learned dynamics pilot before final mastering (CPU reference).
         #[arg(long)] dynamics_model: Option<PathBuf>,
         #[arg(long, default_value_t=1.0)] dynamics_strength: f32,
@@ -528,6 +531,8 @@ enum Commands {
         sidechain_hp_hz: f32,
         #[command(flatten)]
         master_controls: master::MasterControls,
+        #[command(flatten)]
+        master_audit: master_audit::MasterAuditArgs,
         #[arg(long)]
         spatial: bool,
         #[arg(long)]
@@ -1118,6 +1123,7 @@ fn run() -> Result<()> {
             coupled_clocks,
             contrast_budget,
             master_controls,
+            master_audit,
             dynamics_model,
             dynamics_strength,
         } => auto_master_pipeline(
@@ -1168,6 +1174,7 @@ fn run() -> Result<()> {
             coupled_clocks,
             contrast_budget,
             &master_controls,
+            &master_audit,
             &explicit,
             dynamics_model.as_deref(),
             dynamics_strength,
@@ -1435,9 +1442,10 @@ fn run() -> Result<()> {
             glue_ratio,
             sidechain_hp_hz,
             master_controls,
+            master_audit,
             spatial,
             out,
-        } => master::run(
+        } => master::run_with_audit(
             &input,
             target_lufs,
             ceiling_db,
@@ -1447,6 +1455,7 @@ fn run() -> Result<()> {
             spatial,
             &master_controls,
             &out,
+            &master_audit,
         ),
         Commands::Assess { input, out } => {
             let audio = native_audio::read_entire(&input)?;
@@ -2267,6 +2276,7 @@ fn auto_master_pipeline(
     coupled_clocks: bool,
     contrast_budget: bool,
     master_controls: &master::MasterControls,
+    master_audit: &master_audit::MasterAuditArgs,
     explicit: &BTreeSet<String>,
     dynamics_model: Option<&std::path::Path>,
     dynamics_strength: f32,
@@ -2302,6 +2312,7 @@ fn auto_master_pipeline(
             std::path::PathBuf::from(format!("runs/master-{}-{}", slug, ts))
         }
     };
+    master_audit.validate_for_output(&out_dir)?;
     if !out_dir.exists() {
         experiment::new_run(&out_dir)?;
     }
@@ -2352,6 +2363,9 @@ fn auto_master_pipeline(
         }
     };
 
+    if master_audit.stage_audit_dir.is_some() {
+        master_audit::MasterAuditArgs::validate_audio(&current_audio)?;
+    }
     let original_input_audio = current_audio.clone();
     let num_frames = current_audio.frames();
     let duration_s = num_frames as f32 / current_audio.rate as f32;
@@ -2872,7 +2886,8 @@ fn auto_master_pipeline(
         target_lufs, ceiling_db, eff_glue_ratio
     );
     let t0 = std::time::Instant::now();
-    let master_res = master::master_audio_with_controls(
+    let mut audit_sink = master_audit.create(&current_audio)?;
+    let master_res = master::master_audio_with_observer(
         &current_audio,
         target_lufs,
         ceiling_db,
@@ -2880,7 +2895,9 @@ fn auto_master_pipeline(
         eff_glue_ratio,
         sidechain_hp_hz,
         master_controls,
+        audit_sink.as_mut().map(|sink| sink as &mut dyn master::MasterObserver),
     )?;
+    if let Some(sink) = audit_sink { sink.finish(&master_res)?; }
     current_audio = master_res.mastered;
     println!(
         "  Completed in {:.2}s | Glue GR: {:.2} dB | Limiter GR: {:.2} dB | Pre-Gain: {:+.2} dB",

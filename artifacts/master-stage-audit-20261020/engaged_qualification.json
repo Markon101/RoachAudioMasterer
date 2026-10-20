@@ -1,0 +1,309 @@
+{
+  "schema": "master-engaged-limiter-complete-v1",
+  "cases": [
+    {
+      "case": "legacy",
+      "variants": [
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/baseline-674a472",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/legacy-baseline",
+            "--target-lufs",
+            "-9"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.24609375,
+          "log_sha256": "8a0bbf7d267fe01a997274f65d55fdb43d7ad680ccae7ebe7318550d09f835a3",
+          "variant": "baseline",
+          "mastered_sha256": "209ad4dcacd28dfca02140fd05cda8f6a040749e6b7c4a2233e5e1d6d4545f90",
+          "listen_sha256": "ba43a345839ba06a156ad53ec08f01a4570a419048442b818386ab2be0377bf0",
+          "master_json_sha256": "d626c1b90cd88270e759aae13c691a4d2ee5aea65f19cc89fc30f8fa4ad0be10",
+          "limiter_gain_reduction_db": 13.680042266845703
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/legacy-candidate-disabled",
+            "--target-lufs",
+            "-9"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.109375,
+          "log_sha256": "17deb55570852b3648ccd1d302504dc37a7ce66eb6610a5c6d645173d678cbc5",
+          "variant": "candidate-disabled",
+          "mastered_sha256": "209ad4dcacd28dfca02140fd05cda8f6a040749e6b7c4a2233e5e1d6d4545f90",
+          "listen_sha256": "ba43a345839ba06a156ad53ec08f01a4570a419048442b818386ab2be0377bf0",
+          "master_json_sha256": "d626c1b90cd88270e759aae13c691a4d2ee5aea65f19cc89fc30f8fa4ad0be10",
+          "limiter_gain_reduction_db": 13.680042266845703
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/legacy-candidate-json",
+            "--target-lufs",
+            "-9",
+            "--stage-audit-dir",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/legacy-candidate-json/audit"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.40234375,
+          "log_sha256": "06f9eeacefd869826d9c43f2fd583356b3b8d91d20c752faeb5182dabd3a7a6d",
+          "variant": "candidate-json",
+          "mastered_sha256": "209ad4dcacd28dfca02140fd05cda8f6a040749e6b7c4a2233e5e1d6d4545f90",
+          "listen_sha256": "ba43a345839ba06a156ad53ec08f01a4570a419048442b818386ab2be0377bf0",
+          "master_json_sha256": "d626c1b90cd88270e759aae13c691a4d2ee5aea65f19cc89fc30f8fa4ad0be10",
+          "limiter_gain_reduction_db": 13.680042266845703,
+          "audit_summary_sha256": "7e01b4b59e0675effcbbc7ffa0a4a425f626916fbb189b3a7a1751bcaafd8475"
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/legacy-candidate-wavs",
+            "--target-lufs",
+            "-9",
+            "--stage-audit-dir",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/legacy-candidate-wavs/audit",
+            "--stage-audit-wavs"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 15.90234375,
+          "log_sha256": "f389276a23905dac01b4eb407c97c7d9e3389cc4f4923535a6c7c59ce4fdc0d4",
+          "variant": "candidate-wavs",
+          "mastered_sha256": "209ad4dcacd28dfca02140fd05cda8f6a040749e6b7c4a2233e5e1d6d4545f90",
+          "listen_sha256": "ba43a345839ba06a156ad53ec08f01a4570a419048442b818386ab2be0377bf0",
+          "master_json_sha256": "d626c1b90cd88270e759aae13c691a4d2ee5aea65f19cc89fc30f8fa4ad0be10",
+          "limiter_gain_reduction_db": 13.680042266845703,
+          "audit_summary_sha256": "6b5390c5a0143d60fb4b7f60b351000350ab3c5ac2e851ee9a8635aeb55d956a"
+        }
+      ],
+      "all_outputs_exact": true
+    },
+    {
+      "case": "smooth",
+      "variants": [
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/baseline-674a472",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-baseline",
+            "--target-lufs",
+            "-9",
+            "--kick-transient-guard",
+            "--clock-transient-punch",
+            "--quiet-mid-denoise"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 15.02734375,
+          "log_sha256": "60e04e0fbc39bbf668c120219da48fc9f61b2a41c896cc8a6eed4740ed8e0525",
+          "variant": "baseline",
+          "mastered_sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+          "listen_sha256": "3a21190483985909a94ef7d03d15fb00fd4087a209e1dc697a09a10511e4acfd",
+          "master_json_sha256": "520e2b147362199cf73e7aca3640dfc5012247dd746bbc4b4f593f58407a8075",
+          "limiter_gain_reduction_db": 13.917205810546875
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-disabled",
+            "--target-lufs",
+            "-9",
+            "--kick-transient-guard",
+            "--clock-transient-punch",
+            "--quiet-mid-denoise"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 15.14453125,
+          "log_sha256": "432de635faecba870843d282fad8b4f892c1a54dda4ec0659790ddc00d8930a4",
+          "variant": "candidate-disabled",
+          "mastered_sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+          "listen_sha256": "3a21190483985909a94ef7d03d15fb00fd4087a209e1dc697a09a10511e4acfd",
+          "master_json_sha256": "520e2b147362199cf73e7aca3640dfc5012247dd746bbc4b4f593f58407a8075",
+          "limiter_gain_reduction_db": 13.917205810546875
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-json",
+            "--target-lufs",
+            "-9",
+            "--kick-transient-guard",
+            "--clock-transient-punch",
+            "--quiet-mid-denoise",
+            "--stage-audit-dir",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-json/audit"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 16.76171875,
+          "log_sha256": "12e779d5a264fdc388544c9e4b2d89de43ab9124591450e2da8ff1445a4ec1b7",
+          "variant": "candidate-json",
+          "mastered_sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+          "listen_sha256": "3a21190483985909a94ef7d03d15fb00fd4087a209e1dc697a09a10511e4acfd",
+          "master_json_sha256": "520e2b147362199cf73e7aca3640dfc5012247dd746bbc4b4f593f58407a8075",
+          "limiter_gain_reduction_db": 13.917205810546875,
+          "audit_summary_sha256": "c42c1e2d14a11b68f836354d925e661cebeff16a9554d6d87380f49702418f87"
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-wavs",
+            "--target-lufs",
+            "-9",
+            "--kick-transient-guard",
+            "--clock-transient-punch",
+            "--quiet-mid-denoise",
+            "--stage-audit-dir",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/smooth-candidate-wavs/audit",
+            "--stage-audit-wavs"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 15.2265625,
+          "log_sha256": "950745b454b47f79607f19f6970492cec01afcec8e41c957905678430f55fe5c",
+          "variant": "candidate-wavs",
+          "mastered_sha256": "6ea6189489748da087b1286b2037642103ba469e35991b89d0c3b16e14f9bf42",
+          "listen_sha256": "3a21190483985909a94ef7d03d15fb00fd4087a209e1dc697a09a10511e4acfd",
+          "master_json_sha256": "520e2b147362199cf73e7aca3640dfc5012247dd746bbc4b4f593f58407a8075",
+          "limiter_gain_reduction_db": 13.917205810546875,
+          "audit_summary_sha256": "3d0a208bd61937234b308176e388602d70ea3ba0697d6b70e1319e95262e70b5"
+        }
+      ],
+      "all_outputs_exact": true
+    },
+    {
+      "case": "budget-half",
+      "variants": [
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/baseline-674a472",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/budget-half-baseline",
+            "--target-lufs",
+            "-9",
+            "--max-limiter-gr-db",
+            "0.5"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.33984375,
+          "log_sha256": "5d752be10de96d204be2cd89690e89cb22fe476e94e77a326456032c049b51a7",
+          "variant": "baseline",
+          "mastered_sha256": "e3d7bc64ec3d5059f8f93fd9bd75b4f6dffc49269e9c85d6817785dbcdc28645",
+          "listen_sha256": "f7466106c3f18a04c19ae585f9d4ca568dc5c7c0b055ec83defaa3dace185757",
+          "master_json_sha256": "005d9d5966e1e293315d5268eb4e3cd322413e412903c0e88d15bacd2bd67384",
+          "limiter_gain_reduction_db": 0.49990031123161316
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/budget-half-candidate-disabled",
+            "--target-lufs",
+            "-9",
+            "--max-limiter-gr-db",
+            "0.5"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.66015625,
+          "log_sha256": "1d78cad25cf0147fdf059cf9bf28bcdfb365d3701352803b7d39aa9b41413298",
+          "variant": "candidate-disabled",
+          "mastered_sha256": "e3d7bc64ec3d5059f8f93fd9bd75b4f6dffc49269e9c85d6817785dbcdc28645",
+          "listen_sha256": "f7466106c3f18a04c19ae585f9d4ca568dc5c7c0b055ec83defaa3dace185757",
+          "master_json_sha256": "005d9d5966e1e293315d5268eb4e3cd322413e412903c0e88d15bacd2bd67384",
+          "limiter_gain_reduction_db": 0.49990031123161316
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/budget-half-candidate-json",
+            "--target-lufs",
+            "-9",
+            "--max-limiter-gr-db",
+            "0.5",
+            "--stage-audit-dir",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/budget-half-candidate-json/audit"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.6640625,
+          "log_sha256": "975df913f8a67b17a1d7cacde7e09faaa34436723011c916fdb4e37adbcc0ee2",
+          "variant": "candidate-json",
+          "mastered_sha256": "e3d7bc64ec3d5059f8f93fd9bd75b4f6dffc49269e9c85d6817785dbcdc28645",
+          "listen_sha256": "f7466106c3f18a04c19ae585f9d4ca568dc5c7c0b055ec83defaa3dace185757",
+          "master_json_sha256": "005d9d5966e1e293315d5268eb4e3cd322413e412903c0e88d15bacd2bd67384",
+          "limiter_gain_reduction_db": 0.49990031123161316,
+          "audit_summary_sha256": "7147ae52c4372b5422f3423ee1a1c4d148a5b735661fdb780b1bec8dbc3149c1"
+        },
+        {
+          "argv": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-candidate-v1",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/budget-half-candidate-wavs",
+            "--target-lufs",
+            "-9",
+            "--max-limiter-gr-db",
+            "0.5",
+            "--stage-audit-dir",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/budget-half-candidate-wavs/audit",
+            "--stage-audit-wavs"
+          ],
+          "exit_code": 0,
+          "sampled_process_hwm_mib": 14.5703125,
+          "log_sha256": "6a5ee435bbbaac5acb7dddaa3b0e99c4d1b5118a5440390d706abea8121e57b2",
+          "variant": "candidate-wavs",
+          "mastered_sha256": "e3d7bc64ec3d5059f8f93fd9bd75b4f6dffc49269e9c85d6817785dbcdc28645",
+          "listen_sha256": "f7466106c3f18a04c19ae585f9d4ca568dc5c7c0b055ec83defaa3dace185757",
+          "master_json_sha256": "005d9d5966e1e293315d5268eb4e3cd322413e412903c0e88d15bacd2bd67384",
+          "limiter_gain_reduction_db": 0.49990031123161316,
+          "audit_summary_sha256": "800ed74ea417851dcde315df888a4ed482332d2cbefdb86a707a2b639595880f"
+        }
+      ],
+      "all_outputs_exact": true
+    }
+  ],
+  "protocol_sha256": "de1924bdd1b584115980dc7e5e3245d9d660103aaa1ff3f5409fc60af7f13693",
+  "native_runs": 12,
+  "all_outputs_exact": true,
+  "max_sampled_process_hwm_mib": 16.76171875,
+  "speed_qualification": false
+}
