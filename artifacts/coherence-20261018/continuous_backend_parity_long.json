@@ -1,0 +1,44 @@
+{
+  "schema": "continuous-long-cpu-gpu-parity-v1",
+  "cpu_output_sha256": "52280d63dbd57a97667838ae961e7596e2651de068fc538ddf000ac9093a6b54",
+  "gpu_output_sha256": "94b1a36e44af92c2bc7d6956d77fe4d2ceeb53cd91873ba3a3044fa88d1cacfd",
+  "frames": 1248000,
+  "delta": {
+    "samples_per_channel": 1248000,
+    "max_abs": 8.940696716308594e-08,
+    "rms": 3.931491344635511e-09,
+    "reference_rms": 0.13689770753479916,
+    "relative_rms": 2.8718460048983165e-08
+  },
+  "max_abs_gate": 2e-06,
+  "gate_pass": true,
+  "legacy_cpu_first_chunk_sha256": "626a59114b01870917c5c58eafbba8ea68b57c7b601cd57ea95c91efadd16512",
+  "continuous_cpu_first_chunk_sha256": "626a59114b01870917c5c58eafbba8ea68b57c7b601cd57ea95c91efadd16512",
+  "origin0_first_8s_byte_identity": true,
+  "chunks": [
+    {
+      "index": 0,
+      "cpu_sha256": "626a59114b01870917c5c58eafbba8ea68b57c7b601cd57ea95c91efadd16512",
+      "gpu_sha256": "de1f2c150cf6f54ef75fe4649d3c57523e090259420a7785dde2759f75633eee",
+      "max_abs": 4.470348358154297e-08
+    },
+    {
+      "index": 1,
+      "cpu_sha256": "b32a0b05e3c23a951a9eae6461b74a487011f27e8ad1ce03576952595be5c979",
+      "gpu_sha256": "f15fef1b7381b0278584950329e6f7886973b37d98b58cca82868538c0395192",
+      "max_abs": 5.960464477539063e-08
+    },
+    {
+      "index": 2,
+      "cpu_sha256": "17ee5458ae296487ef449f0eecc7146ad757a51fda08ce0f834320bfc3ea5d52",
+      "gpu_sha256": "a2dd940b7b9de1d1d4337a6f5a7912bf62643c6ebba88a5cf10f7b3c60fdf668",
+      "max_abs": 8.940696716308594e-08
+    },
+    {
+      "index": 3,
+      "cpu_sha256": "d6c7153add4a5309051de700643b0734c4fc37725d4e47631768f50cf9a19dc0",
+      "gpu_sha256": "e9386126de13d4f0d7eb9f32f71cbec6711e2568b3367a38ef64f4a21a55e4b4",
+      "max_abs": 5.960464477539063e-08
+    }
+  ]
+}

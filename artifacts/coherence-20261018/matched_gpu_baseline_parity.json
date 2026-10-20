@@ -1,0 +1,51 @@
+{
+  "schema": "continuous-matched-gpu-baseline-reference-v1",
+  "source_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+  "complete_sha256": "9ef03525c6e7e6c9ec55d060e23a2212387cc5e8464eea8311e99c3204990538",
+  "cpu_baseline_complete_sha256": "cb3733a2a3de2c4f7d6eaa87f1373bf6873b393fbe5a9ba4b5251a4c81691648",
+  "continuous_gpu_complete_sha256": "a7a3485638cff76cccf05037342cc22a2be6a794ef8474d6b1b181d672c3d995",
+  "origin_case_parity": {
+    "view0": {
+      "cpu_sha256": "1831e7e8ee546b04bcf7da81f40d7e7b55b84c99676dd67331b4e6e3d65a3c5c",
+      "gpu_sha256": "2ffda5c5979f54170bbe4a795d84a1ff4c9e0bdaa3741df22e5f9c2e4b9bd6f9",
+      "delta": {
+        "samples_per_channel": 1248000,
+        "max_abs": 8.940696716308594e-08,
+        "rms": 3.902344954211983e-09,
+        "reference_rms": 0.13689712208204324,
+        "relative_rms": 2.8505675611451386e-08
+      },
+      "passed": true
+    },
+    "view3": {
+      "cpu_sha256": "011bb0c5308a999a60c9ee6d3e505e5a096cc7ea748d4703cf5019925dfdc759",
+      "gpu_sha256": "ceac334492d0599dfdcdf30543417b6a97a8ae15c90ed8b3272f509a94c70803",
+      "delta": {
+        "samples_per_channel": 1248000,
+        "max_abs": 1.1920928955078125e-07,
+        "rms": 3.808167193365247e-09,
+        "reference_rms": 0.13332164797503357,
+        "relative_rms": 2.856375728327617e-08
+      },
+      "passed": true
+    }
+  },
+  "both_gpu_same_binary_layout": {
+    "restart": {
+      "samples_per_channel": 624000,
+      "max_abs": 0.05837142840027809,
+      "rms": 0.0024778832154126688,
+      "reference_rms": 0.1787500732457195,
+      "relative_rms": 0.013862278042294486
+    },
+    "continuous": {
+      "samples_per_channel": 624000,
+      "max_abs": 0.001815199851989746,
+      "rms": 7.165174770924846e-05,
+      "reference_rms": 0.17875088989024285,
+      "relative_rms": 0.00040084694265435144
+    },
+    "rms_reduction": 0.9710834847810551
+  },
+  "scope": "Eliminates backend/binary confound in original fixture layout pair. No source default or timequalification change."
+}

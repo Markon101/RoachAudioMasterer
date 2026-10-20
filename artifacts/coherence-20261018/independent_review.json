@@ -1,0 +1,23 @@
+{
+  "schema": "coherence-independent-claims-review-v1",
+  "reviewed_at_utc": "2026-10-20T05:37:29.575179+00:00",
+  "reviewer": "coherence_fixture, native gpt-6-luna",
+  "scope": "bounded independent invalidation review, no new measurements",
+  "source_files": {
+    "docs/LONG_COHERENCE_RESULTS.md": "b2fdfcbb01016dc15a18d1dcdcd7fb6463d8a6d09a21c254d4e75c70117b0160",
+    "RESULTS.md": "4ee50a4a2ae907795e9a27fc59edde6229bcd247df69f756951ab8e720190b1b"
+  },
+  "verdict": "no critical factual mismatch in Section28/current report against specified actual artifacts",
+  "findings": [
+    "Unprojected protected-band failure remains recorded; separate projection does not retroactively qualify it.",
+    "Matched same-binary GPU restart controls cover both26s views, closing initial layout backend confound; CPU/GPU max<=1.19e-7.",
+    "Residual-energy/scalar gain controls use observed input, not target-selected gains.",
+    "Normal-13LUFS has no limiting; -9LUFS explicitly stress only; truepeak is finite4x estimate.",
+    "No native prototype integration or perceptual preference established."
+  ],
+  "recommended_next": [
+    "Owner blinded judgments on ready package, without exposing source labels/metrics.",
+    "Stopped-mid false-addition controls on independent source family before integration."
+  ],
+  "limitation": "AI review can invalidate claims but supplies no perceptual evidence; original attempt hit usage limit, resumed read-only review completed after user continuation."
+}

@@ -12,7 +12,8 @@ Plan schema (created by the session owner):
             "target": "...", "target_sha256": "...", "samples": 1248000,
             "chunk_seconds": 8, "overlap_seconds": 2}, ...]
 }
-Jobs must be ordered view0, view3, full, with the pinned dimensions below.
+V1 jobs are the complete CPU sequence. V2 accepts its ordered prefix for a
+bounded reference check, explicit CPU/OpenCL selection and excitation origin.
 No profiling/cache environment is passed to the native process.
 """
 
@@ -188,8 +189,11 @@ def _safe_root(plan: dict) -> tuple[Path, bool]:
 
 
 def _validate_plan(plan_path: Path, plan: dict, root: Path) -> list[dict]:
-    if plan.get("schema") != "long-coherence-quality-v1":
+    if plan.get("schema") not in ("long-coherence-quality-v1", "long-coherence-quality-v2"):
         raise ValueError("unsupported quality plan schema")
+    backend = plan.get('backend', 'cpu')
+    if backend not in ('cpu', 'opencl') or (plan['schema'].endswith('v1') and backend != 'cpu'):
+        raise ValueError('unsupported backend for this quality schema')
     for key in ("binary", "model"):
         path = Path(plan[key])
         if not path.is_file() or digest(path) != _sha(plan.get(key + "_sha256"), key + "_sha256"):
@@ -206,9 +210,15 @@ def _validate_plan(plan_path: Path, plan: dict, root: Path) -> list[dict]:
         if not path.is_file() or digest(path) != _sha(pin.get("sha256"), pin["name"]):
             raise ValueError(f"source pin hash mismatch: {pin.get('name')}")
     jobs = plan.get("jobs")
-    if not isinstance(jobs, list) or len(jobs) != len(EXPECTED):
-        raise ValueError("plan must contain exactly the three fixed quality jobs")
+    if not isinstance(jobs, list) or not 1 <= len(jobs) <= len(EXPECTED) or (plan['schema'].endswith('v1') and len(jobs) != 3):
+        raise ValueError("plan must contain the complete v1 sequence or a nonempty v2 ordered prefix")
     for job, expected in zip(jobs, EXPECTED):
+        continuous = job.get("continuous_excitation", False)
+        origin = job.get("input_origin_samples", 0)
+        if type(continuous) is not bool or type(origin) is not int or not 0 <= origin <= 2**64 - 1 - expected['samples']:
+            raise ValueError("invalid excitation mode or absolute sample origin")
+        if not continuous and origin:
+            raise ValueError("nonzero excitation origin requires continuous mode")
         for key, value in expected.items():
             actual = job.get(key)
             if key == "id":
@@ -259,10 +269,13 @@ def _verify_pins(pins: list[dict], stage: str) -> None:
 
 
 def _command(plan: dict, job: dict, out: Path) -> list[str]:
-    return [plan["binary"], "rich-mid-restore", "--model", plan["model"],
-            "--input", job["input"], "--backend", "cpu", "--steps", "8",
+    args = [plan["binary"], "rich-mid-restore", "--model", plan["model"],
+            "--input", job["input"], "--backend", plan.get('backend', 'cpu'), "--steps", "8",
             "--strength", "1", "--chunk-seconds", str(job["chunk_seconds"]),
-            "--overlap-seconds", str(job["overlap_seconds"]), "--out", str(out)]
+            "--overlap-seconds", str(job["overlap_seconds"])]
+    if job.get('continuous_excitation', False):
+        args.extend(['--continuous-excitation', '--input-origin-samples', str(job.get('input_origin_samples', 0))])
+    return args + ['--out', str(out)]
 
 
 def _environment(root: Path) -> dict:
@@ -282,6 +295,8 @@ def _environment(root: Path) -> dict:
             return None
     disk = shutil.disk_usage(root.parent)
     return {"platform": platform.platform(), "machine": platform.machine(),
+            "opencl_device_hint": os.environ.get('HIGHBAND_OPENCL_DEVICE'),
+            "byte_order": sys.byteorder,
             "python": platform.python_version(), "cargo": version(["cargo", "--version"]),
             "rustc": version(["rustc", "--version"]),
             "cpu_affinity": sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
@@ -327,6 +342,8 @@ def _run_child(command: list[str], log_path: Path, root: Path) -> dict:
     env = os.environ.copy()
     for key in PROFILE_ENV:
         env.pop(key, None)
+    if command[command.index('--backend') + 1] == 'opencl':
+        env['OCL_ICD_ASSUME_ICD_EXTENSION'] = '1'
     started = time.monotonic()
     peak_rss = peak_hwm = 0
     observed = False
@@ -375,6 +392,9 @@ def _validate_output(job: dict, out: Path, log_path: Path) -> dict:
         raise SafetyStop(f"{job['id']}: restored WAV format/length differs from expected input geometry")
     _assert_finite_float_wav(restored, info)
     metadata = json.loads(restoration_path.read_text())
+    expected_mode = 'continuous' if job.get('continuous_excitation', False) else 'restart_per_chunk'
+    if metadata.get('excitation_mode', 'restart_per_chunk') != expected_mode or metadata.get('input_origin_samples', 0) != job.get('input_origin_samples', 0):
+        raise SafetyStop(f"{job['id']}: excitation mode/origin mismatch")
     if metadata.get("steps") != 8 or metadata.get("strength") != 1.0:
         raise SafetyStop(f"{job['id']}: restoration settings do not show Euler8 strength 1")
     if metadata.get("controlled") is not False or metadata.get("denoise") is not False or metadata.get("auto_eq") is not False:
@@ -392,12 +412,18 @@ def _validate_output(job: dict, out: Path, log_path: Path) -> dict:
         if path.stat().st_size != expected_bytes:
             raise SafetyStop(f"{job['id']}: unexpected raw chunk byte count: {path.name}")
         chunk_bytes.append(expected_bytes)
+    prefix = 'chunk_continuous_' if job.get('continuous_excitation', False) else 'chunk_'
+    if [p.name for p in chunks] != [f'{prefix}{i:04d}.bin' for i in range(len(expected_sizes))]:
+        raise SafetyStop(f"{job['id']}: unexpected chunk namespace/index sequence")
     return {"restored_wav": str(restored), "restored_wav_sha256": digest(restored),
             "restoration_json_sha256": digest(restoration_path),
             "restoration_settings": {"steps": metadata["steps"], "strength": metadata["strength"],
+                                     "excitation_mode": expected_mode,
+                                     "input_origin_samples": job.get('input_origin_samples', 0),
                                      "duration_seconds": metadata["total_seconds"]},
             "restored_wav_info": info,
             "chunk_files": [p.name for p in chunks], "chunk_sample_counts": expected_sizes,
+            "chunk_sha256": {p.name: digest(p) for p in chunks},
             "chunk_byte_counts": chunk_bytes}
 
 
@@ -450,6 +476,7 @@ def run(plan_path: str | Path) -> dict:
                 raise SafetyStop("explicit HALT marker appeared after child exit")
             artifacts = _validate_output(job, out, log_path)
             receipt = {"job_id": job["id"], "command": command,
+                       "backend_requested": plan.get('backend', 'cpu'),
                        "input_sha256": job["input_sha256"], "target_sha256": job["target_sha256"],
                        "target_set_sha256": plan["target_set_sha256"],
                        "binary_sha256": plan["binary_sha256"], "model_sha256": plan["model_sha256"],
@@ -473,6 +500,7 @@ def run(plan_path: str | Path) -> dict:
         _latch(root, plan_path, "explicit HALT marker appeared before completion", completed)
         raise SafetyStop("HALTED before completion marker")
     complete = {"schema": "long-coherence-quality-complete-v1",
+                "backend_requested": plan.get('backend', 'cpu'),
                 "job_count": len(completed), "jobs_completed": [j["id"] for j in completed],
                 "target_set_sha256": plan["target_set_sha256"],
                 "binary_sha256": plan["binary_sha256"], "model_sha256": plan["model_sha256"],

@@ -1,0 +1,362 @@
+{
+  "default_recipe_audio_bit_identity": true,
+  "original_manifest_sha256": "c6c4281039ec31d9f9af1411ec0b5ee6253367919105a6f6b5415bfdb9b70e89",
+  "reproduction_manifest_sha256": "12007f37af2e67e4c50b737206310ad883c09cb2ded3c7ef203463cdf669346a",
+  "pitch196_manifest": {
+    "schema": "long-coherence-procedural-fixture-v1",
+    "sample_rate": 48000,
+    "channels": 2,
+    "samples": 1536000,
+    "duration_seconds": 32.0,
+    "seed": 881001,
+    "source_sha256": {
+      "target_full": "da8f77e9b66507bbe8e43888cb9b1caae33829b283c5bd6fe142eb48dd58d690",
+      "input_full": "bfcc8c59a8e112243f15c3bc90f388696533deebe1430e74db8fd5a60843b34e",
+      "view0_target": "084664d997a17a5aaa852f58c0eea0b489b4a9be49f21458c5b270ca20aa1673",
+      "view0_input": "0aff99448e2a5403cc76e8ec7fae7552f09fc4b0f98ac13a9cca6a934a6239b6",
+      "view3_target": "16fd536cf96e6eb70e1153b1ce00cf9be93514d7d65a11b78945bd8dd812f380",
+      "view3_input": "a7aaf9dd9f3c235abf73e2f78c5c5aeedc8982ef92ebe86c983643f66995c9ab"
+    },
+    "generator_sha256": "855ce08a02df626ca63a3cd32dbc887cf7a4110fa2d4ca3aeb7154f922cd4ce6",
+    "environment": {
+      "numpy": "2.5.4",
+      "python": "3.14.6"
+    },
+    "recipe": {
+      "source": "continuous shared harmonic oscillator bank with integrated slow frequency drift and multisecond level motion; dense globally filtered aspiration; fixed attacks with global-index early and late decay fields",
+      "base_hz": 196.0,
+      "event_times_seconds": [
+        9.5,
+        12.5,
+        15.5,
+        18.5
+      ],
+      "common_peak_target": 0.62,
+      "harmonic_section_envelope": {
+        "seconds": [
+          0,
+          8,
+          12,
+          18,
+          22,
+          48
+        ],
+        "relative_levels": [
+          0.4,
+          0.4,
+          1.0,
+          1.0,
+          0.2,
+          0.2
+        ]
+      },
+      "early_reflection_delays_seconds_lr": [
+        [
+          0.031,
+          0.041
+        ],
+        [
+          0.067,
+          0.059
+        ],
+        [
+          0.113,
+          0.129
+        ]
+      ],
+      "late_decay_proxy_seconds": 2.8,
+      "damage": {
+        "type": "whole-source Fourier lowpass",
+        "cutoff_hz": 1500.0,
+        "transition_hz": 225.0,
+        "power": 2.0,
+        "applications": 1,
+        "implementation": "NumPy float64 rfft/irfft; mirrors src/dsp.rs gain and global finite-clip filtering, with expected small differences from Rust f32 rustfft"
+      },
+      "continuity_controls": [
+        "oscillator phase integrated over full source",
+        "shared slow frequency and level trajectories",
+        "aspiration generated and filtered over full source",
+        "decay noise indexed on full source",
+        "damage applied before crop"
+      ]
+    },
+    "events": [
+      {
+        "time_seconds": 9.5,
+        "sample": 456000,
+        "kind": "fixed_attack_with_early_and_late_decay"
+      },
+      {
+        "time_seconds": 12.5,
+        "sample": 600000,
+        "kind": "fixed_attack_with_early_and_late_decay"
+      },
+      {
+        "time_seconds": 15.5,
+        "sample": 744000,
+        "kind": "fixed_attack_with_early_and_late_decay"
+      },
+      {
+        "time_seconds": 18.5,
+        "sample": 888000,
+        "kind": "fixed_attack_with_early_and_late_decay"
+      }
+    ],
+    "views": [
+      {
+        "id": "view0",
+        "input": "view0-input.wav",
+        "target": "view0-target.wav",
+        "origin_sample": 0,
+        "samples": 1248000,
+        "events": [
+          {
+            "time_seconds": 9.5,
+            "sample": 456000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 456000
+          },
+          {
+            "time_seconds": 12.5,
+            "sample": 600000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 600000
+          },
+          {
+            "time_seconds": 15.5,
+            "sample": 744000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 744000
+          },
+          {
+            "time_seconds": 18.5,
+            "sample": 888000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 888000
+          }
+        ]
+      },
+      {
+        "id": "view3",
+        "input": "view3-input.wav",
+        "target": "view3-target.wav",
+        "origin_sample": 144384,
+        "samples": 1248000,
+        "events": [
+          {
+            "time_seconds": 9.5,
+            "sample": 456000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 311616
+          },
+          {
+            "time_seconds": 12.5,
+            "sample": 600000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 455616
+          },
+          {
+            "time_seconds": 15.5,
+            "sample": 744000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 599616
+          },
+          {
+            "time_seconds": 18.5,
+            "sample": 888000,
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "view_sample": 743616
+          }
+        ]
+      }
+    ],
+    "native_stft_hop_samples": 256,
+    "view_origins_hop_aligned": true,
+    "comparison_interior_global_samples": [
+      384000,
+      1008000
+    ],
+    "audio_policy": "procedural only; no owner audio"
+  },
+  "healthy_manifest": {
+    "audio_policy": "procedural only; no owner audio",
+    "channels": 2,
+    "comparison_interior_global_samples": [
+      384000,
+      1008000
+    ],
+    "duration_seconds": 32.0,
+    "environment": {
+      "numpy": "2.5.4",
+      "python": "3.14.6"
+    },
+    "events": [
+      {
+        "kind": "fixed_attack_with_early_and_late_decay",
+        "sample": 456000,
+        "time_seconds": 9.5
+      },
+      {
+        "kind": "fixed_attack_with_early_and_late_decay",
+        "sample": 600000,
+        "time_seconds": 12.5
+      },
+      {
+        "kind": "fixed_attack_with_early_and_late_decay",
+        "sample": 744000,
+        "time_seconds": 15.5
+      },
+      {
+        "kind": "fixed_attack_with_early_and_late_decay",
+        "sample": 888000,
+        "time_seconds": 18.5
+      }
+    ],
+    "generator_sha256": "8a7f4c0de0935e4107e408875530241150679e031293d6744b93857314bb5640",
+    "native_stft_hop_samples": 256,
+    "recipe": {
+      "common_peak_target": 0.62,
+      "continuity_controls": [
+        "oscillator phase integrated over full source",
+        "shared slow frequency and level trajectories",
+        "aspiration generated and filtered over full source",
+        "decay noise indexed on full source",
+        "damage applied before crop"
+      ],
+      "damage": {
+        "type": "identity healthy input equals procedural target",
+        "applications": 0
+      },
+      "early_reflection_delays_seconds_lr": [
+        [
+          0.031,
+          0.041
+        ],
+        [
+          0.067,
+          0.059
+        ],
+        [
+          0.113,
+          0.129
+        ]
+      ],
+      "event_times_seconds": [
+        9.5,
+        12.5,
+        15.5,
+        18.5
+      ],
+      "harmonic_section_envelope": {
+        "relative_levels": [
+          0.4,
+          0.4,
+          1.0,
+          1.0,
+          0.2,
+          0.2
+        ],
+        "seconds": [
+          0,
+          8,
+          12,
+          18,
+          22,
+          48
+        ]
+      },
+      "late_decay_proxy_seconds": 2.8,
+      "source": "continuous shared harmonic oscillator bank with integrated slow frequency drift and multisecond level motion; dense globally filtered aspiration; fixed attacks with global-index early and late decay fields",
+      "base_hz": 146.8
+    },
+    "sample_rate": 48000,
+    "samples": 1536000,
+    "schema": "long-coherence-healthy-fixture-v1",
+    "seed": 881000,
+    "source_sha256": {
+      "input_full": "aeb5c7b6751061dd06524ed5e6f790db0490a9ee69a2edb63c956eadd41f932c",
+      "target_full": "aeb5c7b6751061dd06524ed5e6f790db0490a9ee69a2edb63c956eadd41f932c",
+      "view0_input": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158",
+      "view0_target": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158",
+      "view3_input": "eb53a5c51d158e12ed43dd109326286f102766877e410ea769c6ce0c6c35f134",
+      "view3_target": "eb53a5c51d158e12ed43dd109326286f102766877e410ea769c6ce0c6c35f134"
+    },
+    "view_origins_hop_aligned": true,
+    "views": [
+      {
+        "events": [
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 456000,
+            "time_seconds": 9.5,
+            "view_sample": 456000
+          },
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 600000,
+            "time_seconds": 12.5,
+            "view_sample": 600000
+          },
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 744000,
+            "time_seconds": 15.5,
+            "view_sample": 744000
+          },
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 888000,
+            "time_seconds": 18.5,
+            "view_sample": 888000
+          }
+        ],
+        "id": "view0",
+        "input": "view0-input.wav",
+        "origin_sample": 0,
+        "samples": 1248000,
+        "target": "view0-target.wav"
+      },
+      {
+        "events": [
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 456000,
+            "time_seconds": 9.5,
+            "view_sample": 311616
+          },
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 600000,
+            "time_seconds": 12.5,
+            "view_sample": 455616
+          },
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 744000,
+            "time_seconds": 15.5,
+            "view_sample": 599616
+          },
+          {
+            "kind": "fixed_attack_with_early_and_late_decay",
+            "sample": 888000,
+            "time_seconds": 18.5,
+            "view_sample": 743616
+          }
+        ],
+        "id": "view3",
+        "input": "view3-input.wav",
+        "origin_sample": 144384,
+        "samples": 1248000,
+        "target": "view3-target.wav"
+      }
+    ],
+    "derived_from_manifest_sha256": "c6c4281039ec31d9f9af1411ec0b5ee6253367919105a6f6b5415bfdb9b70e89"
+  },
+  "plans": [
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/coherence-20261018/dev_pitch196_restart_plan.json",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/coherence-20261018/dev_pitch196_continuous_plan.json",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/coherence-20261018/dev_healthy_restart_plan.json",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/coherence-20261018/dev_healthy_continuous_plan.json"
+  ]
+}

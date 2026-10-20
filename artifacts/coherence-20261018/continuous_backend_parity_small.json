@@ -1,0 +1,9 @@
+{
+  "schema": "continuous-excitation-cpu-opencl-parity-v1",
+  "samples_per_channel": 8192,
+  "max_abs": 1.4901161193847656e-08,
+  "rms": 3.588740361302757e-10,
+  "tolerance_max_abs": 2e-06,
+  "passed": true,
+  "scope": "native frozen model offset144384, Euler8; smallproceduralcase; longCPUparitystillrequired"
+}

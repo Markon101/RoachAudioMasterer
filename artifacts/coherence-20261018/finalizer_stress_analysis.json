@@ -1,0 +1,3646 @@
+{
+  "schema": "coherence-finalizer-offline-analysis-v1",
+  "scope": "one 32-second seed-881000 procedural fixture; two aligned 26-second views; fixed 13-second common interior; no production-wide or perceptual claim",
+  "provenance": {
+    "session_complete_sha256": "dd067590598e57cdae74bf872018d567da10d9aecd594d455d3a1203d480dab0",
+    "protocol_sha256": "768c398ff0de24b9da3e9f3f157f9225fa4cf78102e27cd564880933e1e036dc",
+    "analysis_source_sha256": "3e46fb33ad0b1e7433fbb014a99671a3fd13f0ee2b39580540ce1f6c63636ef5",
+    "binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+    "binary_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+    "fixture_manifest_sha256": "c6c4281039ec31d9f9af1411ec0b5ee6253367919105a6f6b5415bfdb9b70e89",
+    "fixture_generator_sha256": "8a7f4c0de0935e4107e408875530241150679e031293d6744b93857314bb5640",
+    "fixture_input_full_sha256": "aca1d25d24092bde0e42c3fd243b6022bd41356d7fb48a2f5a859887ca02b150",
+    "fixture_seed": 881000
+  },
+  "condition": {
+    "schema": "coherence-finalizer-limiter-stress-v1",
+    "target_lufs": -9.0,
+    "ceiling_dbtp": -1.0,
+    "true_peak_linear_max": 0.8912529381337455,
+    "limiter_stress_is_not_a_production_recommendation": true,
+    "reason": "All8 normal-13LUFS finalizers reported zero limiter envelope reduction. Add declared identical-9LUFS stress condition acrossall8 to actually examine limiting, not as recommended playback/productiontarget.",
+    "finalizer_scope": "Existing Smooth-stage controls; not reproduction of entire production chain or pre-limiter observation. Native truepeak is finite4x estimate, not continuous-time guarantee. No observed effect at-13LUFS establishes limiter survival because limiting didnot engage.",
+    "promotion": false
+  },
+  "interior_global_samples": [
+    384000,
+    1008000
+  ],
+  "source_onsets_global_samples": [
+    456000,
+    600000,
+    744000,
+    888000
+  ],
+  "gates": {
+    "all_output_samples_finite": true,
+    "all_native_after_true_peaks_within_protocol_linear_limits": true,
+    "limiter_engaged_anywhere": true,
+    "limiter_engaged_by_arm_view": {
+      "restart": {
+        "view0": true,
+        "view3": true
+      },
+      "restart_projected": {
+        "view0": true,
+        "view3": true
+      },
+      "continuous": {
+        "view0": true,
+        "view3": true
+      },
+      "continuous_projected": {
+        "view0": true,
+        "view3": true
+      }
+    }
+  },
+  "arms": {
+    "restart": {
+      "views": {
+        "view0": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/view0/restored.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/restart/view0"
+          ],
+          "input_sha256": "1831e7e8ee546b04bcf7da81f40d7e7b55b84c99676dd67331b4e6e3d65a3c5c",
+          "output_sha256": "8d916d0d66793ea6869986a754285ad65a9fbcc725acb6c6390900acc95b39a0",
+          "master_metadata_sha256": "88f1b4079fe4f5a46f67704f09aaf0163607fe64d2c749f6bb08e9ef2bd7580d",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.198671340942383,
+            "lufs_integrated": -14.946383532156858,
+            "rms_dbfs": -17.272113800048828,
+            "sample_peak_dbfs": -5.0734429359436035,
+            "true_peak_dbtp": -5.0620341300964355
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.045568466186523,
+            "lufs_integrated": -9.00974308547872,
+            "rms_dbfs": -11.056203842163086,
+            "sample_peak_dbfs": -1.0106353759765625,
+            "true_peak_dbtp": -1.000008463859558
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 1.0333294868469238,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.076513767242432,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.684995651245117,
+          "target_shortfall_lu": 0.009743085478719493,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.000008463859558,
+            "observed_linear": 0.8912500696655274,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.9970949533225254,
+            "mid_rms": 0.19346110985717208,
+            "side_rms": 0.007378552806811182
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9964032227964549,
+            "mid_rms": 0.3956525012621749,
+            "side_rms": 0.0167937002773147
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16108066680356395,
+                  "attack_peak": 0.4448074698448181,
+                  "sustain_rms": 0.1643637179913394,
+                  "sustain_peak": 0.31247439980506897,
+                  "attack_to_sustain_db": -0.17525075871417484
+                },
+                "right": {
+                  "attack_rms": 0.16066684290458055,
+                  "attack_peak": 0.44725704193115234,
+                  "sustain_rms": 0.1644370336889107,
+                  "sustain_peak": 0.3302381634712219,
+                  "attack_to_sustain_db": -0.20146747908167048
+                },
+                "mid": {
+                  "attack_rms": 0.22716621663257536,
+                  "attack_peak": 0.6307848655326554,
+                  "sustain_rms": 0.2323553978144967,
+                  "sustain_peak": 0.43838717840530467,
+                  "attack_to_sustain_db": -0.1961804176730404
+                },
+                "side": {
+                  "attack_rms": 0.012503025539756315,
+                  "attack_peak": 0.04722294118856121,
+                  "sustain_rms": 0.008120279971248872,
+                  "sustain_peak": 0.03464863769394501,
+                  "attack_to_sustain_db": 3.748882303783059
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16510966259001703,
+                  "attack_peak": 0.45191195607185364,
+                  "sustain_rms": 0.1660680298502352,
+                  "sustain_peak": 0.3093010485172272,
+                  "attack_to_sustain_db": -0.05027087078275593
+                },
+                "right": {
+                  "attack_rms": 0.16480118112031375,
+                  "attack_peak": 0.449313759803772,
+                  "sustain_rms": 0.16573635252397334,
+                  "sustain_peak": 0.3144620656967163,
+                  "attack_to_sustain_db": -0.04914913709625597
+                },
+                "mid": {
+                  "attack_rms": 0.23284216721598117,
+                  "attack_peak": 0.6372628150753556,
+                  "sustain_rms": 0.2344440750006769,
+                  "sustain_peak": 0.42814768585327995,
+                  "attack_to_sustain_db": -0.059552571751367855
+                },
+                "side": {
+                  "attack_rms": 0.014323237951133161,
+                  "attack_peak": 0.05745621181207447,
+                  "sustain_rms": 0.009116182499618005,
+                  "sustain_peak": 0.03520869752930342,
+                  "attack_to_sustain_db": 3.924563920496759
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.2605142587117494,
+                  "attack_peak": 0.5576065182685852,
+                  "sustain_rms": 0.26796378442650465,
+                  "sustain_peak": 0.49539437890052795,
+                  "attack_to_sustain_db": -0.24489208321017528
+                },
+                "right": {
+                  "attack_rms": 0.26035342205698436,
+                  "attack_peak": 0.5456927418708801,
+                  "sustain_rms": 0.2678957250157399,
+                  "sustain_peak": 0.491718590259552,
+                  "attack_to_sustain_db": -0.24804985957611142
+                },
+                "mid": {
+                  "attack_rms": 0.3680702984967351,
+                  "attack_peak": 0.7801503885227167,
+                  "sustain_rms": 0.3788059794286605,
+                  "sustain_peak": 0.6973458871727882,
+                  "attack_to_sustain_db": -0.24972104624763147
+                },
+                "side": {
+                  "attack_rms": 0.01326041980628162,
+                  "attack_peak": 0.04300537981506094,
+                  "sustain_rms": 0.008873510859655044,
+                  "sustain_peak": 0.0314574172775913,
+                  "attack_to_sustain_db": 3.4892357659750957
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.14716620639973238,
+                  "attack_peak": 0.29889875650405884,
+                  "sustain_rms": 0.14217103812060702,
+                  "sustain_peak": 0.27474746108055115,
+                  "attack_to_sustain_db": 0.2999392063015479
+                },
+                "right": {
+                  "attack_rms": 0.1471968763256422,
+                  "attack_peak": 0.2853860557079315,
+                  "sustain_rms": 0.14257452825942277,
+                  "sustain_peak": 0.28204983472824097,
+                  "attack_to_sustain_db": 0.27713301223465986
+                },
+                "mid": {
+                  "attack_rms": 0.20793098372521687,
+                  "attack_peak": 0.41315175285940686,
+                  "sustain_rms": 0.20114025821770357,
+                  "sustain_peak": 0.37714146441827473,
+                  "attack_to_sustain_db": 0.28840409799959804
+                },
+                "side": {
+                  "attack_rms": 0.009461432934742995,
+                  "attack_peak": 0.03264093766226965,
+                  "sustain_rms": 0.009093773298447957,
+                  "sustain_peak": 0.03802986005465288,
+                  "attack_to_sustain_db": 0.3442558395223221
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3279472419964283,
+                  "attack_peak": 0.8849612474441528,
+                  "sustain_rms": 0.3374133530195119,
+                  "sustain_peak": 0.6391342282295227,
+                  "attack_to_sustain_db": -0.2471656554101556
+                },
+                "right": {
+                  "attack_rms": 0.3271021426270817,
+                  "attack_peak": 0.890160322189331,
+                  "sustain_rms": 0.3375501978920393,
+                  "sustain_peak": 0.6780100464820862,
+                  "attack_to_sustain_db": -0.27309956055213425
+                },
+                "mid": {
+                  "attack_rms": 0.46249837818542217,
+                  "attack_peak": 1.2552004993183445,
+                  "sustain_rms": 0.4769817324175041,
+                  "sustain_peak": 0.8998759717100976,
+                  "attack_to_sustain_db": -0.2678306492120759
+                },
+                "side": {
+                  "attack_rms": 0.02530722071160316,
+                  "attack_peak": 0.09413636645837055,
+                  "sustain_rms": 0.01662329187679776,
+                  "sustain_peak": 0.07047533841423072,
+                  "attack_to_sustain_db": 3.650548445766165
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.33120588613655416,
+                  "attack_peak": 0.890160322189331,
+                  "sustain_rms": 0.3413230348660302,
+                  "sustain_peak": 0.6369714140892029,
+                  "attack_to_sustain_db": -0.2613510421151511
+                },
+                "right": {
+                  "attack_rms": 0.33061672824926885,
+                  "attack_peak": 0.8835422992706299,
+                  "sustain_rms": 0.34064268559483885,
+                  "sustain_peak": 0.6464585661888123,
+                  "attack_to_sustain_db": -0.25948488419440646
+                },
+                "mid": {
+                  "attack_rms": 0.4671077528334282,
+                  "attack_peak": 1.2541971514426942,
+                  "sustain_rms": 0.48186198395305013,
+                  "sustain_peak": 0.8825826982975926,
+                  "attack_to_sustain_db": -0.27011177674225384
+                },
+                "side": {
+                  "attack_rms": 0.02855008323378245,
+                  "attack_peak": 0.11361928982320589,
+                  "sustain_rms": 0.018651589751330466,
+                  "sustain_peak": 0.0718101271309372,
+                  "attack_to_sustain_db": 3.6978304858034146
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.4345389895790762,
+                  "attack_peak": 0.890160322189331,
+                  "sustain_rms": 0.4639643157262946,
+                  "sustain_peak": 0.8598778247833252,
+                  "attack_to_sustain_db": -0.5691165869800066
+                },
+                "right": {
+                  "attack_rms": 0.43427121739526914,
+                  "attack_peak": 0.8678199648857117,
+                  "sustain_rms": 0.46384551179438066,
+                  "sustain_peak": 0.8526287078857422,
+                  "attack_to_sustain_db": -0.5722462503376153
+                },
+                "mid": {
+                  "attack_rms": 0.6139518237591053,
+                  "attack_peak": 1.2430797821830362,
+                  "sustain_rms": 0.6558818867165845,
+                  "sustain_peak": 1.2099043539930194,
+                  "attack_to_sustain_db": -0.5738268701677376
+                },
+                "side": {
+                  "attack_rms": 0.021881083730977843,
+                  "attack_peak": 0.0694912391360042,
+                  "sustain_rms": 0.01531325426723397,
+                  "sustain_peak": 0.05478913289652478,
+                  "attack_to_sustain_db": 3.10002668495714
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3135983108332208,
+                  "attack_peak": 0.6336209177970886,
+                  "sustain_rms": 0.3068517917857782,
+                  "sustain_peak": 0.592180073261261,
+                  "attack_to_sustain_db": 0.1889010230055777
+                },
+                "right": {
+                  "attack_rms": 0.31369256714758104,
+                  "attack_peak": 0.6065120697021484,
+                  "sustain_rms": 0.30772943110441164,
+                  "sustain_peak": 0.60499507188797,
+                  "attack_to_sustain_db": 0.16670388755674498
+                },
+                "mid": {
+                  "attack_rms": 0.44310440737376816,
+                  "attack_peak": 0.8769064450338424,
+                  "sustain_rms": 0.4341335559494041,
+                  "sustain_peak": 0.8103255511546368,
+                  "attack_to_sustain_db": 0.17765428548234052
+                },
+                "side": {
+                  "attack_rms": 0.02013483069287437,
+                  "attack_peak": 0.06863730183832498,
+                  "sustain_rms": 0.0195826578562007,
+                  "sustain_peak": 0.08339721248053708,
+                  "attack_to_sustain_db": 0.24152692069859572
+                }
+              }
+            }
+          ]
+        },
+        "view3": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/view3/restored.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/restart/view3"
+          ],
+          "input_sha256": "011bb0c5308a999a60c9ee6d3e505e5a096cc7ea748d4703cf5019925dfdc759",
+          "output_sha256": "2f640eb379a92c400945ae5bf8a041d72234ba41909bb55a9ab1e28fac1a37a9",
+          "master_metadata_sha256": "5040f48ad7a71e0a6ca26d1cb1cb31042c432f97cb2a1b10855174934fd53927",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.33101749420166,
+            "lufs_integrated": -14.77939327532894,
+            "rms_dbfs": -17.50198745727539,
+            "sample_peak_dbfs": -5.1709699630737305,
+            "true_peak_dbtp": -5.1705474853515625
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.211864471435547,
+            "lufs_integrated": -8.875245500757831,
+            "rms_dbfs": -11.218658447265625,
+            "sample_peak_dbfs": -1.0067940950393677,
+            "true_peak_dbtp": -1.0000003576278687
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 1.1059030294418335,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.074000358581543,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.84930419921875,
+          "target_shortfall_lu": -0.12475449924216875,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.0000003576278687,
+            "observed_linear": 0.8912509014378882,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.9969730186195995,
+            "mid_rms": 0.18840254777815305,
+            "side_rms": 0.007335095654339286
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9962258121088383,
+            "mid_rms": 0.38830402564128913,
+            "side_rms": 0.016884126475275665
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16107575150981912,
+                  "attack_peak": 0.43707579374313354,
+                  "sustain_rms": 0.1643604508581308,
+                  "sustain_peak": 0.310312956571579,
+                  "attack_to_sustain_db": -0.175343153076788
+                },
+                "right": {
+                  "attack_rms": 0.1606594672914387,
+                  "attack_peak": 0.4329681694507599,
+                  "sustain_rms": 0.16443380383953043,
+                  "sustain_peak": 0.32841551303863525,
+                  "attack_to_sustain_db": -0.2016956161896344
+                },
+                "mid": {
+                  "attack_rms": 0.2271579054343112,
+                  "attack_peak": 0.6140283743827852,
+                  "sustain_rms": 0.23235124651471745,
+                  "sustain_peak": 0.4389753798231227,
+                  "attack_to_sustain_db": -0.1963430241594779
+                },
+                "side": {
+                  "attack_rms": 0.012495925476665953,
+                  "attack_peak": 0.04650596007511814,
+                  "sustain_rms": 0.008107520859189818,
+                  "sustain_peak": 0.0347171171031521,
+                  "attack_to_sustain_db": 3.757607035660024
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16513015638722942,
+                  "attack_peak": 0.4397144317626953,
+                  "sustain_rms": 0.16607343095322208,
+                  "sustain_peak": 0.3092752695083618,
+                  "attack_to_sustain_db": -0.04947531514818497
+                },
+                "right": {
+                  "attack_rms": 0.16482016944867403,
+                  "attack_peak": 0.4391375184059143,
+                  "sustain_rms": 0.16574266977618113,
+                  "sustain_peak": 0.3140372037887573,
+                  "attack_to_sustain_db": -0.04847947734058399
+                },
+                "mid": {
+                  "attack_rms": 0.23286868067759978,
+                  "attack_peak": 0.6214421736232456,
+                  "sustain_rms": 0.23445183174278422,
+                  "sustain_peak": 0.4308739336757829,
+                  "attack_to_sustain_db": -0.058850949927841886
+                },
+                "side": {
+                  "attack_rms": 0.014346928766621359,
+                  "attack_peak": 0.0597704899954516,
+                  "sustain_rms": 0.009129931301167838,
+                  "sustain_peak": 0.03612870001202347,
+                  "attack_to_sustain_db": 3.9258286469428487
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.2605107672201896,
+                  "attack_peak": 0.5513806343078613,
+                  "sustain_rms": 0.26795929256659357,
+                  "sustain_peak": 0.49372613430023193,
+                  "attack_to_sustain_db": -0.24486289269556488
+                },
+                "right": {
+                  "attack_rms": 0.26034846140732437,
+                  "attack_peak": 0.538952648639679,
+                  "sustain_rms": 0.2678911461824345,
+                  "sustain_peak": 0.4926167130470276,
+                  "attack_to_sustain_db": -0.24806689875857496
+                },
+                "mid": {
+                  "attack_rms": 0.36806504865849266,
+                  "attack_peak": 0.7709820581255963,
+                  "sustain_rms": 0.37879994183763455,
+                  "sustain_peak": 0.6968435599588112,
+                  "attack_to_sustain_db": -0.24970649422209218
+                },
+                "side": {
+                  "attack_rms": 0.013240134094272443,
+                  "attack_peak": 0.04474001765922381,
+                  "sustain_rms": 0.008857355109310804,
+                  "sustain_peak": 0.03185460917795796,
+                  "attack_to_sustain_db": 3.4917665365752266
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.14717000074032213,
+                  "attack_peak": 0.29552140831947327,
+                  "sustain_rms": 0.14217416462803423,
+                  "sustain_peak": 0.27145880460739136,
+                  "attack_to_sustain_db": 0.29997213823648844
+                },
+                "right": {
+                  "attack_rms": 0.14720178829353453,
+                  "attack_peak": 0.2821519374847412,
+                  "sustain_rms": 0.14257786809977097,
+                  "sustain_peak": 0.2848588228225708,
+                  "attack_to_sustain_db": 0.2772193894829616
+                },
+                "mid": {
+                  "attack_rms": 0.2079367505890976,
+                  "attack_peak": 0.4077326585918459,
+                  "sustain_rms": 0.2011442827594096,
+                  "sustain_peak": 0.3804587585708702,
+                  "attack_to_sustain_db": 0.28847120250567626
+                },
+                "side": {
+                  "attack_rms": 0.00947012931107041,
+                  "attack_peak": 0.03439291893459475,
+                  "sustain_rms": 0.009105991036550673,
+                  "sustain_peak": 0.03909670215758489,
+                  "attack_to_sustain_db": 0.3405738139228897
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3325343545072485,
+                  "attack_peak": 0.8905540704727173,
+                  "sustain_rms": 0.34355082404773385,
+                  "sustain_peak": 0.6463225483894348,
+                  "attack_to_sustain_db": -0.2830895033049689
+                },
+                "right": {
+                  "attack_rms": 0.3316746663103605,
+                  "attack_peak": 0.8813528418540955,
+                  "sustain_rms": 0.34369082189961075,
+                  "sustain_peak": 0.6863261461257935,
+                  "attack_to_sustain_db": -0.3091126757189854
+                },
+                "mid": {
+                  "attack_rms": 0.46896654621719674,
+                  "attack_peak": 1.2512871644341081,
+                  "sustain_rms": 0.48565937139148535,
+                  "sustain_peak": 0.9189462826963674,
+                  "attack_to_sustain_db": -0.3037982004570781
+                },
+                "side": {
+                  "attack_rms": 0.025642927460711177,
+                  "attack_peak": 0.09383020121407529,
+                  "sustain_rms": 0.016897477371909324,
+                  "sustain_peak": 0.07185749426176288,
+                  "attack_to_sustain_db": 3.622914605724614
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3376637258548558,
+                  "attack_peak": 0.8905540704727173,
+                  "sustain_rms": 0.3478986995162737,
+                  "sustain_peak": 0.648808479309082,
+                  "attack_to_sustain_db": -0.25936794100143523
+                },
+                "right": {
+                  "attack_rms": 0.3370618548853447,
+                  "attack_peak": 0.8878278732299805,
+                  "sustain_rms": 0.34720750480329454,
+                  "sustain_peak": 0.6583465337753296,
+                  "attack_to_sustain_db": -0.2575899470201913
+                },
+                "mid": {
+                  "attack_rms": 0.4762120627811333,
+                  "attack_peak": 1.2575059319318904,
+                  "sustain_rms": 0.4911456403568379,
+                  "sustain_peak": 0.9062705758598674,
+                  "attack_to_sustain_db": -0.26819802413531113
+                },
+                "side": {
+                  "attack_rms": 0.029147161760115173,
+                  "attack_peak": 0.12045858537161419,
+                  "sustain_rms": 0.019039865422736498,
+                  "sustain_peak": 0.07515598631011092,
+                  "attack_to_sustain_db": 3.6986479364184093
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.44088684812782764,
+                  "attack_peak": 0.8905540704727173,
+                  "sustain_rms": 0.4724023738047158,
+                  "sustain_peak": 0.8737608194351196,
+                  "attack_to_sustain_db": -0.5996985491998899
+                },
+                "right": {
+                  "attack_rms": 0.44061275532114563,
+                  "attack_peak": 0.8671242594718933,
+                  "sustain_rms": 0.47228213707968225,
+                  "sustain_peak": 0.8708718419075012,
+                  "attack_to_sustain_db": -0.6028890869518234
+                },
+                "mid": {
+                  "attack_rms": 0.6229205574539427,
+                  "attack_peak": 1.24286626624848,
+                  "sustain_rms": 0.6678114923374514,
+                  "sustain_peak": 1.2327040710166242,
+                  "attack_to_sustain_db": -0.604424499162861
+                },
+                "side": {
+                  "attack_rms": 0.022153828225640812,
+                  "attack_peak": 0.07332013280924914,
+                  "sustain_rms": 0.015563755424324813,
+                  "sustain_peak": 0.05650503646652456,
+                  "attack_to_sustain_db": 3.0666877300790647
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3195765514073229,
+                  "attack_peak": 0.6383234858512878,
+                  "sustain_rms": 0.3127026953915182,
+                  "sustain_peak": 0.596047043800354,
+                  "attack_to_sustain_db": 0.18886562360697667
+                },
+                "right": {
+                  "attack_rms": 0.3196752220533514,
+                  "attack_peak": 0.6109080910682678,
+                  "sustain_rms": 0.31359750384885177,
+                  "sustain_peak": 0.622670590877533,
+                  "attack_to_sustain_db": 0.16672756719107334
+                },
+                "mid": {
+                  "attack_rms": 0.4515524779785805,
+                  "attack_peak": 0.8816501149805921,
+                  "sustain_rms": 0.4424105194639346,
+                  "sustain_peak": 0.8324688731595328,
+                  "attack_to_sustain_db": 0.17765569977878273
+                },
+                "side": {
+                  "attack_rms": 0.020537269430485994,
+                  "attack_peak": 0.07374405634828383,
+                  "sustain_rms": 0.019982552214436577,
+                  "sustain_peak": 0.08731714334656555,
+                  "attack_to_sustain_db": 0.2378348848364267
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "restart_projected": {
+      "views": {
+        "view0": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/view0/projected.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/restart_projected/view0"
+          ],
+          "input_sha256": "607e54ff6330bb8f53d84455112162a169ba4f6237446ab3cf170eb3c1df57bd",
+          "output_sha256": "5dbc58414efbce88acf541179981c0fa10663b230eba08add243bf43f81f6f2d",
+          "master_metadata_sha256": "a6c38ec3c2bb0586f02f7b2d7f31547a58711cdabb78e47c9275e39153aa8e41",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.19866943359375,
+            "lufs_integrated": -14.94638325178338,
+            "rms_dbfs": -17.272113800048828,
+            "sample_peak_dbfs": -5.073444366455078,
+            "true_peak_dbtp": -5.062036991119385
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.04556655883789,
+            "lufs_integrated": -9.009742883056923,
+            "rms_dbfs": -11.056203842163086,
+            "sample_peak_dbfs": -1.0106371641159058,
+            "true_peak_dbtp": -1.0000090599060059
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 1.0333311557769775,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.076513767242432,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.684995651245117,
+          "target_shortfall_lu": 0.009742883056922835,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.0000090599060059,
+            "observed_linear": 0.8912500085058257,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.9970949534757124,
+            "mid_rms": 0.1934611164925563,
+            "side_rms": 0.0073785528646148546
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9964032232860395,
+            "mid_rms": 0.3956525092192299,
+            "side_rms": 0.01679369947012183
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16108067192079834,
+                  "attack_peak": 0.44480738043785095,
+                  "sustain_rms": 0.16436372358447351,
+                  "sustain_peak": 0.3124743700027466,
+                  "attack_to_sustain_db": -0.17525077835175096
+                },
+                "right": {
+                  "attack_rms": 0.16066684820836388,
+                  "attack_peak": 0.44725659489631653,
+                  "sustain_rms": 0.16443703923568886,
+                  "sustain_peak": 0.33023780584335327,
+                  "attack_to_sustain_db": -0.20146748534302078
+                },
+                "mid": {
+                  "attack_rms": 0.22716622399632166,
+                  "attack_peak": 0.6307844862110189,
+                  "sustain_rms": 0.23235540569328558,
+                  "sustain_peak": 0.4383869044507893,
+                  "attack_to_sustain_db": -0.19618043063827473
+                },
+                "side": {
+                  "attack_rms": 0.012503025830506448,
+                  "attack_peak": 0.047223146654447705,
+                  "sustain_rms": 0.00812028006052487,
+                  "sustain_peak": 0.034648701902034534,
+                  "attack_to_sustain_db": 3.748882410273629
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16510966662625978,
+                  "attack_peak": 0.4519127309322357,
+                  "sustain_rms": 0.16606803391459496,
+                  "sustain_peak": 0.30930185317993164,
+                  "attack_to_sustain_db": -0.05027087102800143
+                },
+                "right": {
+                  "attack_rms": 0.16480118511412029,
+                  "attack_peak": 0.44931524991989136,
+                  "sustain_rms": 0.1657363564867315,
+                  "sustain_peak": 0.3144635856151581,
+                  "attack_to_sustain_db": -0.04914913428135449
+                },
+                "mid": {
+                  "attack_rms": 0.23284217287057754,
+                  "attack_peak": 0.637264416655599,
+                  "sustain_rms": 0.23444408066361597,
+                  "sustain_peak": 0.4281476647798557,
+                  "attack_to_sustain_db": -0.05955257061916129
+                },
+                "side": {
+                  "attack_rms": 0.01432323850814693,
+                  "attack_peak": 0.05745674128185889,
+                  "sustain_rms": 0.009116182948357952,
+                  "sustain_peak": 0.035208197035477354,
+                  "attack_to_sustain_db": 3.9245638307217527
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.2605142672761552,
+                  "attack_peak": 0.5576064586639404,
+                  "sustain_rms": 0.2679637937743554,
+                  "sustain_peak": 0.49539417028427124,
+                  "attack_to_sustain_db": -0.24489210066669348
+                },
+                "right": {
+                  "attack_rms": 0.26035343078838613,
+                  "attack_peak": 0.5456929802894592,
+                  "sustain_rms": 0.26789573443747255,
+                  "sustain_peak": 0.49171796441078186,
+                  "attack_to_sustain_db": -0.2480498737573483
+                },
+                "mid": {
+                  "attack_rms": 0.3680703107206596,
+                  "attack_peak": 0.7801505149632622,
+                  "sustain_rms": 0.37880599269259674,
+                  "sustain_peak": 0.6973455078511517,
+                  "attack_to_sustain_db": -0.24972106191937765
+                },
+                "side": {
+                  "attack_rms": 0.013260420193644986,
+                  "attack_peak": 0.04300527444793966,
+                  "sustain_rms": 0.008873511363289574,
+                  "sustain_peak": 0.03145750157128832,
+                  "attack_to_sustain_db": 3.489235526721604
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.1471662102074388,
+                  "attack_peak": 0.2988990545272827,
+                  "sustain_rms": 0.14217104170591133,
+                  "sustain_peak": 0.27474722266197205,
+                  "attack_to_sustain_db": 0.29993921199310153
+                },
+                "right": {
+                  "attack_rms": 0.14719688034580694,
+                  "attack_peak": 0.2853870987892151,
+                  "sustain_rms": 0.14257453195792336,
+                  "sustain_peak": 0.282050758600235,
+                  "attack_to_sustain_db": 0.2771330241400465
+                },
+                "mid": {
+                  "attack_rms": 0.2079309892416559,
+                  "attack_peak": 0.41315270116349834,
+                  "sustain_rms": 0.20114026336917176,
+                  "sustain_peak": 0.377141485491699,
+                  "attack_to_sustain_db": 0.28840410598037663
+                },
+                "side": {
+                  "attack_rms": 0.009461433471955702,
+                  "attack_peak": 0.032640416095019324,
+                  "sustain_rms": 0.009093773394202387,
+                  "sustain_peak": 0.038029280535485856,
+                  "attack_to_sustain_db": 0.34425624124072796
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.32794741130000543,
+                  "attack_peak": 0.884961724281311,
+                  "sustain_rms": 0.33741338794884207,
+                  "sustain_peak": 0.6391341090202332,
+                  "attack_to_sustain_db": -0.24716207047021016
+                },
+                "right": {
+                  "attack_rms": 0.32710231065287293,
+                  "attack_peak": 0.8901601433753967,
+                  "sustain_rms": 0.3375502324242751,
+                  "sustain_peak": 0.6780093312263489,
+                  "attack_to_sustain_db": -0.273095987374835
+                },
+                "mid": {
+                  "attack_rms": 0.4624986162993447,
+                  "attack_peak": 1.255200710052587,
+                  "sustain_rms": 0.47698178152102116,
+                  "sustain_peak": 0.8998752130668244,
+                  "attack_to_sustain_db": -0.26782707152657337
+                },
+                "side": {
+                  "attack_rms": 0.025307234815661012,
+                  "attack_peak": 0.09413684061041629,
+                  "sustain_rms": 0.016623293110294937,
+                  "sustain_peak": 0.07047549251364559,
+                  "attack_to_sustain_db": 3.6505526420105445
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.331205537722522,
+                  "attack_peak": 0.8901601433753967,
+                  "sustain_rms": 0.34132297423684355,
+                  "sustain_peak": 0.6369730234146118,
+                  "attack_to_sustain_db": -0.2613586364199161
+                },
+                "right": {
+                  "attack_rms": 0.33061638106411856,
+                  "attack_peak": 0.8835436105728149,
+                  "sustain_rms": 0.3406426249064932,
+                  "sustain_peak": 0.646461546421051,
+                  "attack_to_sustain_db": -0.2594924579066795
+                },
+                "mid": {
+                  "attack_rms": 0.4671072620321986,
+                  "attack_peak": 1.254197952232816,
+                  "sustain_rms": 0.4818618982355205,
+                  "sustain_peak": 0.8825826561507442,
+                  "attack_to_sustain_db": -0.27011935810110527
+                },
+                "side": {
+                  "attack_rms": 0.02855005083677281,
+                  "attack_peak": 0.11362020124880494,
+                  "sustain_rms": 0.01865158636501796,
+                  "sustain_peak": 0.07180904184958806,
+                  "attack_to_sustain_db": 3.69782220652219
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.43453898872850305,
+                  "attack_peak": 0.8901601433753967,
+                  "sustain_rms": 0.46396435232627337,
+                  "sustain_peak": 0.8598774075508118,
+                  "attack_to_sustain_db": -0.5691172891711533
+                },
+                "right": {
+                  "attack_rms": 0.43427121581113926,
+                  "attack_peak": 0.8678202629089355,
+                  "sustain_rms": 0.46384554829286684,
+                  "sustain_peak": 0.8526275157928467,
+                  "attack_to_sustain_db": -0.5722469654861291
+                },
+                "mid": {
+                  "attack_rms": 0.6139518220230669,
+                  "attack_peak": 1.243079866476733,
+                  "sustain_rms": 0.6558819383909309,
+                  "sustain_peak": 1.2099036374965948,
+                  "attack_to_sustain_db": -0.5738275790553102
+                },
+                "side": {
+                  "attack_rms": 0.021881084110063988,
+                  "attack_peak": 0.06949111269545867,
+                  "sustain_rms": 0.015313255473728117,
+                  "sustain_peak": 0.054789259337070316,
+                  "attack_to_sustain_db": 3.1000261510985934
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3135983275812886,
+                  "attack_peak": 0.6336215734481812,
+                  "sustain_rms": 0.30685180129799405,
+                  "sustain_peak": 0.5921795964241028,
+                  "attack_to_sustain_db": 0.1889012176279884
+                },
+                "right": {
+                  "attack_rms": 0.3136925841727829,
+                  "attack_peak": 0.6065143346786499,
+                  "sustain_rms": 0.3077294413052047,
+                  "sustain_peak": 0.6049970984458923,
+                  "attack_to_sustain_db": 0.1667040710457096
+                },
+                "mid": {
+                  "attack_rms": 0.4431044312067211,
+                  "attack_peak": 0.8769085102294195,
+                  "sustain_rms": 0.43413356990053936,
+                  "sustain_peak": 0.8103234438122112,
+                  "attack_to_sustain_db": 0.1776544735381896
+                },
+                "side": {
+                  "attack_rms": 0.020134832299968347,
+                  "attack_peak": 0.0686362060202637,
+                  "sustain_rms": 0.019582657920990933,
+                  "sustain_peak": 0.08339602183206665,
+                  "attack_to_sustain_db": 0.24152758523914136
+                }
+              }
+            }
+          ]
+        },
+        "view3": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/view3/projected.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/restart_projected/view3"
+          ],
+          "input_sha256": "5b3080b936d5cbc9487a8f2591b9aea13d736c7b4e5c083444e541d9cfaa86ab",
+          "output_sha256": "41a87b7826b38048b83c9ee451ef81ca7bcabda950d516916c9257d6e6e8c60d",
+          "master_metadata_sha256": "b300e6396bef3317e321967215abca681b51ad55812bae6d5c14fc7a2ecb10da",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.331018447875977,
+            "lufs_integrated": -14.779393046613981,
+            "rms_dbfs": -17.501985549926758,
+            "sample_peak_dbfs": -5.170967102050781,
+            "true_peak_dbtp": -5.1705474853515625
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.211865425109863,
+            "lufs_integrated": -8.875245190445826,
+            "rms_dbfs": -11.218658447265625,
+            "sample_peak_dbfs": -1.0067930221557617,
+            "true_peak_dbtp": -1.0000003576278687
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 1.105904221534729,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.074000358581543,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.84930419921875,
+          "target_shortfall_lu": -0.12475480955417417,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.0000003576278687,
+            "observed_linear": 0.8912509014378882,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.9969730188267943,
+            "mid_rms": 0.18840255205434547,
+            "side_rms": 0.007335095569427876
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9962258124437117,
+            "mid_rms": 0.38830403981166217,
+            "side_rms": 0.016884126341461775
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16107575478551753,
+                  "attack_peak": 0.4370761513710022,
+                  "sustain_rms": 0.16436045438257413,
+                  "sustain_peak": 0.3103133738040924,
+                  "attack_to_sustain_db": -0.17534316269201428
+                },
+                "right": {
+                  "attack_rms": 0.16065946935567957,
+                  "attack_peak": 0.43296685814857483,
+                  "sustain_rms": 0.1644338083051866,
+                  "sustain_peak": 0.32841458916664124,
+                  "attack_to_sustain_db": -0.2016957404779954
+                },
+                "mid": {
+                  "attack_rms": 0.2271579092117302,
+                  "attack_peak": 0.6140293016134525,
+                  "sustain_rms": 0.23235125212385568,
+                  "sustain_peak": 0.43897449473930394,
+                  "attack_to_sustain_db": -0.19634308940550038
+                },
+                "side": {
+                  "attack_rms": 0.012495925573083638,
+                  "attack_peak": 0.046506407885383565,
+                  "sustain_rms": 0.008107522128834912,
+                  "sustain_peak": 0.03471636306969046,
+                  "attack_to_sustain_db": 3.7576057424616782
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.165130162429613,
+                  "attack_peak": 0.4397142827510834,
+                  "sustain_rms": 0.16607343689062204,
+                  "sustain_peak": 0.30927523970603943,
+                  "attack_to_sustain_db": -0.049475307852147515
+                },
+                "right": {
+                  "attack_rms": 0.16482017544238967,
+                  "attack_peak": 0.43913742899894714,
+                  "sustain_rms": 0.16574267547247273,
+                  "sustain_peak": 0.3140377402305603,
+                  "attack_to_sustain_db": -0.04847945999576396
+                },
+                "mid": {
+                  "attack_rms": 0.23286868918081657,
+                  "attack_peak": 0.6214420050358516,
+                  "sustain_rms": 0.23445183997884106,
+                  "sustain_peak": 0.43087368079469185,
+                  "attack_to_sustain_db": -0.05885093788850982
+                },
+                "side": {
+                  "attack_rms": 0.014346929152216397,
+                  "attack_peak": 0.05977074287654267,
+                  "sustain_rms": 0.009129931214019598,
+                  "sustain_peak": 0.03612892918551225,
+                  "attack_to_sustain_db": 3.925828963298757
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.26051077187835636,
+                  "attack_peak": 0.5513808131217957,
+                  "sustain_rms": 0.26795929972068383,
+                  "sustain_peak": 0.49372556805610657,
+                  "attack_to_sustain_db": -0.2448629692835931
+                },
+                "right": {
+                  "attack_rms": 0.2603484660324417,
+                  "attack_peak": 0.5389539003372192,
+                  "sustain_rms": 0.2678911530029752,
+                  "sustain_peak": 0.49261632561683655,
+                  "attack_to_sustain_db": -0.24806696559663807
+                },
+                "mid": {
+                  "attack_rms": 0.36806505522689187,
+                  "attack_peak": 0.7709830696499606,
+                  "sustain_rms": 0.37879995171648434,
+                  "sustain_peak": 0.6968422534065073,
+                  "attack_to_sustain_db": -0.24970656573802788
+                },
+                "side": {
+                  "attack_rms": 0.013240134097792502,
+                  "attack_peak": 0.04474034429729976,
+                  "sustain_rms": 0.008857355341854075,
+                  "sustain_peak": 0.03185382946126051,
+                  "attack_to_sustain_db": 3.4917663108429124
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.14717000627368532,
+                  "attack_peak": 0.2955210208892822,
+                  "sustain_rms": 0.14217416931305193,
+                  "sustain_peak": 0.2714589536190033,
+                  "attack_to_sustain_db": 0.29997217858921554
+                },
+                "right": {
+                  "attack_rms": 0.14720179379227186,
+                  "attack_peak": 0.282151460647583,
+                  "sustain_rms": 0.1425778727767182,
+                  "sustain_peak": 0.28485894203186035,
+                  "attack_to_sustain_db": 0.2772194290240916
+                },
+                "mid": {
+                  "attack_rms": 0.2079367583859781,
+                  "attack_peak": 0.407732005315694,
+                  "sustain_rms": 0.20114428937666226,
+                  "sustain_peak": 0.3804592221862038,
+                  "attack_to_sustain_db": 0.2884712424465625
+                },
+                "side": {
+                  "attack_rms": 0.009470129576223195,
+                  "attack_peak": 0.03439259756487485,
+                  "sustain_rms": 0.009105991244666838,
+                  "sustain_peak": 0.03909643347142563,
+                  "attack_to_sustain_db": 0.3405738586030554
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3325342265157543,
+                  "attack_peak": 0.8905541896820068,
+                  "sustain_rms": 0.34355078040821846,
+                  "sustain_peak": 0.6463233828544617,
+                  "attack_to_sustain_db": -0.2830917431544731
+                },
+                "right": {
+                  "attack_rms": 0.33167453686194814,
+                  "attack_peak": 0.8813495635986328,
+                  "sustain_rms": 0.34369078076145776,
+                  "sustain_peak": 0.6863242387771606,
+                  "attack_to_sustain_db": -0.30911502605247837
+                },
+                "mid": {
+                  "attack_rms": 0.4689663645989641,
+                  "attack_peak": 1.2512882602521693,
+                  "sustain_rms": 0.48565931141603824,
+                  "sustain_peak": 0.9189445546755783,
+                  "attack_to_sustain_db": -0.3038004916259671
+                },
+                "side": {
+                  "attack_rms": 0.02564291484699504,
+                  "attack_peak": 0.0938310441510455,
+                  "sustain_rms": 0.01689747716127953,
+                  "sustain_peak": 0.0718558874131634,
+                  "attack_to_sustain_db": 3.6229104414189828
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3376638318796522,
+                  "attack_peak": 0.8905541896820068,
+                  "sustain_rms": 0.34789870707556675,
+                  "sustain_peak": 0.6488083600997925,
+                  "attack_to_sustain_db": -0.25936540240477807
+                },
+                "right": {
+                  "attack_rms": 0.33706195920700555,
+                  "attack_peak": 0.8878281712532043,
+                  "sustain_rms": 0.34720751143659573,
+                  "sustain_peak": 0.6583476662635803,
+                  "attack_to_sustain_db": -0.25758742465302686
+                },
+                "mid": {
+                  "attack_rms": 0.47621221126693175,
+                  "attack_peak": 1.25750622695983,
+                  "sustain_rms": 0.49114565042107317,
+                  "sustain_peak": 0.9062699858039882,
+                  "attack_to_sustain_db": -0.2681954938084322
+                },
+                "side": {
+                  "attack_rms": 0.029147170435125814,
+                  "attack_peak": 0.12045917542749335,
+                  "sustain_rms": 0.01903986489725506,
+                  "sustain_peak": 0.0751564630963347,
+                  "attack_to_sustain_db": 3.6986507613037007
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.4408868435099104,
+                  "attack_peak": 0.8905541896820068,
+                  "sustain_rms": 0.4724023387144547,
+                  "sustain_peak": 0.8737596869468689,
+                  "attack_to_sustain_db": -0.5996979949854273
+                },
+                "right": {
+                  "attack_rms": 0.44061275109928477,
+                  "attack_peak": 0.8671261668205261,
+                  "sustain_rms": 0.4722821012560644,
+                  "sustain_peak": 0.87087082862854,
+                  "attack_to_sustain_db": -0.6028885113347614
+                },
+                "mid": {
+                  "attack_rms": 0.622920551243536,
+                  "attack_peak": 1.2428676992413292,
+                  "sustain_rms": 0.6678114422222856,
+                  "sustain_peak": 1.232701500058865,
+                  "attack_to_sustain_db": -0.6044239339367429
+                },
+                "side": {
+                  "attack_rms": 0.02215382698004611,
+                  "attack_peak": 0.07332068071827978,
+                  "sustain_rms": 0.015563753619252762,
+                  "sustain_peak": 0.05650362454709944,
+                  "attack_to_sustain_db": 3.0666882490992613
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3195765604990996,
+                  "attack_peak": 0.6383227109909058,
+                  "sustain_rms": 0.3127026839932755,
+                  "sustain_peak": 0.5960474014282227,
+                  "attack_to_sustain_db": 0.18886618732280192
+                },
+                "right": {
+                  "attack_rms": 0.3196752313301929,
+                  "attack_peak": 0.6109070777893066,
+                  "sustain_rms": 0.31359749158896144,
+                  "sustain_peak": 0.6226707696914673,
+                  "attack_to_sustain_db": 0.16672815882116881
+                },
+                "mid": {
+                  "attack_rms": 0.4515524909417778,
+                  "attack_peak": 0.8816487241345912,
+                  "sustain_rms": 0.44241050275570637,
+                  "sustain_peak": 0.8324698425370486,
+                  "attack_to_sustain_db": 0.1776562771681608
+                },
+                "side": {
+                  "attack_rms": 0.02053727028411221,
+                  "attack_peak": 0.07374337146199553,
+                  "sustain_rms": 0.019982551361879607,
+                  "sustain_peak": 0.08731654275397427,
+                  "attack_to_sustain_db": 0.23783561644723117
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "continuous": {
+      "views": {
+        "view0": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/view0/restored.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/continuous/view0"
+          ],
+          "input_sha256": "94b1a36e44af92c2bc7d6956d77fe4d2ceeb53cd91873ba3a3044fa88d1cacfd",
+          "output_sha256": "409599b52c49f315b2f9ab94f53a05d8f407223ed7a70fe59730e7465e77dc55",
+          "master_metadata_sha256": "77ca5ca82e0202f3004086a5b6c8b358b07c9fb7995dbf3a5b091bc0b762cafa",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.132417678833008,
+            "lufs_integrated": -14.946287586322283,
+            "rms_dbfs": -17.272075653076172,
+            "sample_peak_dbfs": -5.139657974243164,
+            "true_peak_dbtp": -5.135724067687988
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.051568031311035,
+            "lufs_integrated": -9.010449447465588,
+            "rms_dbfs": -11.056940078735352,
+            "sample_peak_dbfs": -1.0053722858428955,
+            "true_peak_dbtp": -1.000009536743164
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 0.9603238701820374,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.076399326324463,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.68488883972168,
+          "target_shortfall_lu": 0.010449447465587625,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.000009536743164,
+            "observed_linear": 0.8912499595780673,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.997093338772541,
+            "mid_rms": 0.19346185901141114,
+            "side_rms": 0.00738063449845447
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9964020024319954,
+            "mid_rms": 0.39561882842238555,
+            "side_rms": 0.01679512460157773
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16110459011200343,
+                  "attack_peak": 0.45407938957214355,
+                  "sustain_rms": 0.16436386454652463,
+                  "sustain_peak": 0.3139900267124176,
+                  "attack_to_sustain_db": -0.17396859210277563
+                },
+                "right": {
+                  "attack_rms": 0.16068977113116076,
+                  "attack_peak": 0.4563910663127899,
+                  "sustain_rms": 0.16443800466413774,
+                  "sustain_peak": 0.33000892400741577,
+                  "attack_to_sustain_db": -0.20027932200603465
+                },
+                "mid": {
+                  "attack_rms": 0.22719903032968614,
+                  "attack_peak": 0.6437998334262438,
+                  "sustain_rms": 0.23235617771141567,
+                  "sustain_peak": 0.44244865946205697,
+                  "attack_to_sustain_db": -0.19495500321233525
+                },
+                "side": {
+                  "attack_rms": 0.012509680994806125,
+                  "attack_peak": 0.04471767456115697,
+                  "sustain_rms": 0.008120592708189996,
+                  "sustain_peak": 0.03393964274975024,
+                  "attack_to_sustain_db": 3.7531701245159503
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16513160825163783,
+                  "attack_peak": 0.45716893672943115,
+                  "sustain_rms": 0.16607206254023907,
+                  "sustain_peak": 0.30920425057411194,
+                  "attack_to_sustain_db": -0.04932737668710713
+                },
+                "right": {
+                  "attack_rms": 0.16482623516962797,
+                  "attack_peak": 0.45469069480895996,
+                  "sustain_rms": 0.1657394824620891,
+                  "sustain_peak": 0.31517294049263,
+                  "attack_to_sustain_db": -0.04799278904357296
+                },
+                "mid": {
+                  "attack_rms": 0.23287403969873588,
+                  "attack_peak": 0.6447821289510629,
+                  "sustain_rms": 0.23444845065999326,
+                  "sustain_peak": 0.42632883860579235,
+                  "attack_to_sustain_db": -0.05852580124194949
+                },
+                "side": {
+                  "attack_rms": 0.014346340242635551,
+                  "attack_peak": 0.060474942958174814,
+                  "sustain_rms": 0.009134001658579265,
+                  "sustain_peak": 0.03509005415074525,
+                  "attack_to_sustain_db": 3.9216008072847948
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.260509135342163,
+                  "attack_peak": 0.5533719062805176,
+                  "sustain_rms": 0.2679639462289754,
+                  "sustain_peak": 0.49205800890922546,
+                  "attack_to_sustain_db": -0.24506814953315753
+                },
+                "right": {
+                  "attack_rms": 0.26034995298338975,
+                  "attack_peak": 0.5395647287368774,
+                  "sustain_rms": 0.26789595162441415,
+                  "sustain_peak": 0.4915132224559784,
+                  "attack_to_sustain_db": -0.24817294254846267
+                },
+                "mid": {
+                  "attack_rms": 0.36806474384767823,
+                  "attack_peak": 0.7725369396608602,
+                  "sustain_rms": 0.3788062312602576,
+                  "sustain_peak": 0.6954663906102935,
+                  "attack_to_sustain_db": -0.24985790277060604
+                },
+                "side": {
+                  "attack_rms": 0.01324582770224949,
+                  "attack_peak": 0.042931907321394326,
+                  "sustain_rms": 0.008874487802453883,
+                  "sustain_peak": 0.031352050156314065,
+                  "attack_to_sustain_db": 3.4787160949636053
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.1471678033872027,
+                  "attack_peak": 0.2949075400829315,
+                  "sustain_rms": 0.14217467541086545,
+                  "sustain_peak": 0.27306246757507324,
+                  "attack_to_sustain_db": 0.2998112453831243
+                },
+                "right": {
+                  "attack_rms": 0.14719741129045766,
+                  "attack_peak": 0.2816437780857086,
+                  "sustain_rms": 0.14257789576538474,
+                  "sustain_peak": 0.2817288041114807,
+                  "attack_to_sustain_db": 0.2769594278007973
+                },
+                "mid": {
+                  "attack_rms": 0.20793218001831018,
+                  "attack_peak": 0.406881966601502,
+                  "sustain_rms": 0.20114459236950905,
+                  "sustain_peak": 0.37980112022013046,
+                  "attack_to_sustain_db": 0.288266909806458
+                },
+                "side": {
+                  "attack_rms": 0.009468302765519535,
+                  "attack_peak": 0.032469779310466906,
+                  "sustain_rms": 0.009107560023074439,
+                  "sustain_peak": 0.03971640307630875,
+                  "attack_to_sustain_db": 0.33740189353747285
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3243556129980856,
+                  "attack_peak": 0.8858721852302551,
+                  "sustain_rms": 0.3366498479445177,
+                  "sustain_peak": 0.6418941617012024,
+                  "attack_to_sustain_db": -0.32314009630878876
+                },
+                "right": {
+                  "attack_rms": 0.3235197614014404,
+                  "attack_peak": 0.8906998634338379,
+                  "sustain_rms": 0.3367884910046945,
+                  "sustain_peak": 0.6746262311935425,
+                  "attack_to_sustain_db": -0.349128568420093
+                },
+                "mid": {
+                  "attack_rms": 0.4574336379427026,
+                  "attack_peak": 1.2562261428768573,
+                  "sustain_rms": 0.4759041153072945,
+                  "sustain_peak": 0.9089399886571534,
+                  "attack_to_sustain_db": -0.34382724975716766
+                },
+                "side": {
+                  "attack_rms": 0.02502132248929419,
+                  "attack_peak": 0.08776408960159933,
+                  "sustain_rms": 0.01657953038741896,
+                  "sustain_peak": 0.06865912797895304,
+                  "attack_to_sustain_db": 3.574760706250477
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3291790286543714,
+                  "attack_peak": 0.8906998634338379,
+                  "sustain_rms": 0.3408994413345504,
+                  "sustain_peak": 0.6362926363945007,
+                  "attack_to_sustain_db": -0.30388260260705596
+                },
+                "right": {
+                  "attack_rms": 0.32860954520706337,
+                  "attack_peak": 0.8843868970870972,
+                  "sustain_rms": 0.3402185747205681,
+                  "sustain_peak": 0.6475427746772766,
+                  "attack_to_sustain_db": -0.3015569301228636
+                },
+                "mid": {
+                  "attack_rms": 0.46425899400717235,
+                  "attack_peak": 1.2551758855588142,
+                  "sustain_rms": 0.4812616886852048,
+                  "sustain_peak": 0.8794381219301948,
+                  "attack_to_sustain_db": -0.312419292128405
+                },
+                "side": {
+                  "attack_rms": 0.02840163006724668,
+                  "attack_peak": 0.11863041313389353,
+                  "sustain_rms": 0.018662654981763515,
+                  "sustain_peak": 0.07136922894866474,
+                  "attack_to_sustain_db": 3.6473967824491806
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.4365132700691834,
+                  "attack_peak": 0.8906998634338379,
+                  "sustain_rms": 0.4643790457757416,
+                  "sustain_peak": 0.8542622327804565,
+                  "attack_to_sustain_db": -0.5375032786671442
+                },
+                "right": {
+                  "attack_rms": 0.4362461964954985,
+                  "attack_peak": 0.8653312921524048,
+                  "sustain_rms": 0.46425980068326017,
+                  "sustain_peak": 0.8524503111839294,
+                  "attack_to_sustain_db": -0.5405885423608043
+                },
+                "mid": {
+                  "attack_rms": 0.6167430386774803,
+                  "attack_peak": 1.241102336344602,
+                  "sustain_rms": 0.6564678837906665,
+                  "sustain_peak": 1.2066836182703626,
+                  "attack_to_sustain_db": -0.5421845572341479
+                },
+                "side": {
+                  "attack_rms": 0.02196823038273552,
+                  "attack_peak": 0.06976384495217267,
+                  "sustain_rms": 0.015328999884295959,
+                  "sustain_peak": 0.05462387510351356,
+                  "attack_to_sustain_db": 3.125625069199228
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.31360553441027256,
+                  "attack_peak": 0.6251685619354248,
+                  "sustain_rms": 0.30682116744955484,
+                  "sustain_peak": 0.5884130001068115,
+                  "attack_to_sustain_db": 0.18996800571152175
+                },
+                "right": {
+                  "attack_rms": 0.3136975050313266,
+                  "attack_peak": 0.5991939902305603,
+                  "sustain_rms": 0.3076980904140427,
+                  "sustain_peak": 0.6043622493743896,
+                  "attack_to_sustain_db": 0.16772527152523875
+                },
+                "mid": {
+                  "attack_rms": 0.44311234065901295,
+                  "attack_peak": 0.8636206625651474,
+                  "sustain_rms": 0.434088461957264,
+                  "sustain_peak": 0.8154546540310185,
+                  "attack_to_sustain_db": 0.17871205617398636
+                },
+                "side": {
+                  "attack_rms": 0.020149675712594645,
+                  "attack_peak": 0.06827920113995216,
+                  "sustain_rms": 0.01960996774941539,
+                  "sustain_peak": 0.08701561425560649,
+                  "attack_to_sustain_db": 0.23582363205636275
+                }
+              }
+            }
+          ]
+        },
+        "view3": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/view3/restored.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/continuous/view3"
+          ],
+          "input_sha256": "81e52f7882e69a84d559cb9fceb9978f8e261d0d24d51069b62a3add2f785c98",
+          "output_sha256": "78bae168406cb2e8d068d4691f8a26830b906d0eceeeae16a4116d80745fa760",
+          "master_metadata_sha256": "1a061e32e18fd1514aee0e0d41a868980f1609474c96ecc564127a61100dbe40",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.362821578979492,
+            "lufs_integrated": -14.779279462509008,
+            "rms_dbfs": -17.501941680908203,
+            "sample_peak_dbfs": -5.139119625091553,
+            "true_peak_dbtp": -5.135196685791016
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.216673851013184,
+            "lufs_integrated": -8.879044602452009,
+            "rms_dbfs": -11.222389221191406,
+            "sample_peak_dbfs": -1.005715250968933,
+            "true_peak_dbtp": -1.0000003576278687
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 1.1348280906677246,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.074127674102783,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.849224090576172,
+          "target_shortfall_lu": -0.12095539754799134,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.0000003576278687,
+            "observed_linear": 0.8912509014378882,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.9969716987837978,
+            "mid_rms": 0.1884034544290995,
+            "side_rms": 0.007336732354230999
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9962257981936957,
+            "mid_rms": 0.38813732785865357,
+            "side_rms": 0.016876909174804434
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16110021949338724,
+                  "attack_peak": 0.4536670446395874,
+                  "sustain_rms": 0.16436344893265065,
+                  "sustain_peak": 0.31393787264823914,
+                  "attack_to_sustain_db": -0.1741822721081449
+                },
+                "right": {
+                  "attack_rms": 0.16068540663308553,
+                  "attack_peak": 0.4559592008590698,
+                  "sustain_rms": 0.1644375917360958,
+                  "sustain_peak": 0.330206036567688,
+                  "attack_to_sustain_db": -0.200493431256291
+                },
+                "mid": {
+                  "attack_rms": 0.22719296125235805,
+                  "attack_peak": 0.6432028865373597,
+                  "sustain_rms": 0.232355630735467,
+                  "sustain_peak": 0.4423145903369438,
+                  "attack_to_sustain_db": -0.1951665820627789
+                },
+                "side": {
+                  "attack_rms": 0.012507557037332046,
+                  "attack_peak": 0.0446900156918217,
+                  "sustain_rms": 0.008119469596363863,
+                  "sustain_peak": 0.033965688185040956,
+                  "attack_to_sustain_db": 3.7528966424703594
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16513529486462386,
+                  "attack_peak": 0.4571887254714966,
+                  "sustain_rms": 0.16607239737991725,
+                  "sustain_peak": 0.30917882919311523,
+                  "attack_to_sustain_db": -0.049150976488623724
+                },
+                "right": {
+                  "attack_rms": 0.16483015260898565,
+                  "attack_peak": 0.45470374822616577,
+                  "sustain_rms": 0.16573975098116978,
+                  "sustain_peak": 0.3152332901954651,
+                  "attack_to_sustain_db": -0.047800425444631846
+                },
+                "mid": {
+                  "attack_rms": 0.2328793613034425,
+                  "attack_peak": 0.6448053518645924,
+                  "sustain_rms": 0.23444886353897518,
+                  "sustain_peak": 0.42648174737218986,
+                  "attack_to_sustain_db": -0.05834261118858178
+                },
+                "side": {
+                  "attack_rms": 0.014347400392700256,
+                  "attack_peak": 0.06050792023295656,
+                  "sustain_rms": 0.009134364350971903,
+                  "sustain_peak": 0.03509050722936675,
+                  "attack_to_sustain_db": 3.9218977519449942
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.2605090741062545,
+                  "attack_peak": 0.5534061789512634,
+                  "sustain_rms": 0.267963724468879,
+                  "sustain_peak": 0.49205946922302246,
+                  "attack_to_sustain_db": -0.24506300303696205
+                },
+                "right": {
+                  "attack_rms": 0.26034984922762977,
+                  "attack_peak": 0.5395915508270264,
+                  "sustain_rms": 0.2678957304104872,
+                  "sustain_peak": 0.49149495363235474,
+                  "attack_to_sustain_db": -0.24816923174760114
+                },
+                "mid": {
+                  "attack_rms": 0.36806464112736004,
+                  "attack_peak": 0.7725794236841592,
+                  "sustain_rms": 0.37880593639067067,
+                  "sustain_peak": 0.6954491525492524,
+                  "attack_to_sustain_db": -0.24985356559270205
+                },
+                "side": {
+                  "attack_rms": 0.013245438321747686,
+                  "attack_peak": 0.042939683414944585,
+                  "sustain_rms": 0.008873700388727387,
+                  "sustain_peak": 0.03137279694249355,
+                  "attack_to_sustain_db": 3.4792314707852743
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.1471679609373447,
+                  "attack_peak": 0.2949226200580597,
+                  "sustain_rms": 0.14217515209424406,
+                  "sustain_peak": 0.27313661575317383,
+                  "attack_to_sustain_db": 0.29979142202693604
+                },
+                "right": {
+                  "attack_rms": 0.14719754257202894,
+                  "attack_peak": 0.2816517949104309,
+                  "sustain_rms": 0.1425783383827845,
+                  "sustain_peak": 0.2818104326725006,
+                  "attack_to_sustain_db": 0.27694021017064807
+                },
+                "mid": {
+                  "attack_rms": 0.20793241340615323,
+                  "attack_peak": 0.4069017334734536,
+                  "sustain_rms": 0.20114526352528564,
+                  "sustain_peak": 0.3799008607371315,
+                  "attack_to_sustain_db": 0.2882476770290879
+                },
+                "side": {
+                  "attack_rms": 0.00946766712515161,
+                  "attack_peak": 0.032464579443031875,
+                  "sustain_rms": 0.009107107683596278,
+                  "sustain_peak": 0.039720565077599204,
+                  "attack_to_sustain_db": 0.33725016708503586
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3248951409773034,
+                  "attack_peak": 0.8858709335327148,
+                  "sustain_rms": 0.3419538518112182,
+                  "sustain_peak": 0.6531474590301514,
+                  "attack_to_sustain_db": -0.4444856762654078
+                },
+                "right": {
+                  "attack_rms": 0.32406273708727973,
+                  "attack_peak": 0.8906646966934204,
+                  "sustain_rms": 0.34209575084014837,
+                  "sustain_peak": 0.6839175820350647,
+                  "attack_to_sustain_db": -0.47037168116550576
+                },
+                "mid": {
+                  "attack_rms": 0.4581996236830799,
+                  "attack_peak": 1.256200391152417,
+                  "sustain_rms": 0.4834032683856404,
+                  "sustain_peak": 0.9241814270436025,
+                  "attack_to_sustain_db": -0.4650970852630981
+                },
+                "side": {
+                  "attack_rms": 0.02503228027657765,
+                  "attack_peak": 0.08732965042386116,
+                  "sustain_rms": 0.01682913026552126,
+                  "sustain_peak": 0.06951779955310015,
+                  "attack_to_sustain_db": 3.448774814045972
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3302375286417972,
+                  "attack_peak": 0.8906646966934204,
+                  "sustain_rms": 0.34637224977212167,
+                  "sustain_peak": 0.6471998691558838,
+                  "attack_to_sustain_db": -0.4143332983727363
+                },
+                "right": {
+                  "attack_rms": 0.3296928467643888,
+                  "attack_peak": 0.8843390345573425,
+                  "sustain_rms": 0.34568184159243653,
+                  "sustain_peak": 0.6595291495323181,
+                  "attack_to_sustain_db": -0.41134084951071037
+                },
+                "mid": {
+                  "attack_rms": 0.4657734090732965,
+                  "attack_peak": 1.2551171749988386,
+                  "sustain_rms": 0.4889890143271797,
+                  "sustain_peak": 0.8951309109173471,
+                  "attack_to_sustain_db": -0.4224882245292994
+                },
+                "side": {
+                  "attack_rms": 0.028448724598621956,
+                  "attack_peak": 0.11843887151247971,
+                  "sustain_rms": 0.0189582405901127,
+                  "sustain_peak": 0.07227365817086003,
+                  "attack_to_sustain_db": 3.5252954132944487
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.44009129496678756,
+                  "attack_peak": 0.8906646966934204,
+                  "sustain_rms": 0.47222690292520464,
+                  "sustain_peak": 0.8708438873291016,
+                  "attack_to_sustain_db": -0.6121589414788389
+                },
+                "right": {
+                  "attack_rms": 0.43982211958745676,
+                  "attack_peak": 0.8656318187713623,
+                  "sustain_rms": 0.4721072283218971,
+                  "sustain_peak": 0.8689612150192261,
+                  "attack_to_sustain_db": -0.615271653944104
+                },
+                "mid": {
+                  "attack_rms": 0.6217994958457892,
+                  "attack_peak": 1.2410449744837786,
+                  "sustain_rms": 0.6675631384927007,
+                  "sustain_peak": 1.2300708202153605,
+                  "attack_to_sustain_db": -0.6168396442159633
+                },
+                "side": {
+                  "attack_rms": 0.022118583812476063,
+                  "attack_peak": 0.0701503104795933,
+                  "sustain_rms": 0.015586500758345724,
+                  "sustain_peak": 0.05564458748075039,
+                  "attack_to_sustain_db": 3.0401738384630472
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3195950995840546,
+                  "attack_peak": 0.637128472328186,
+                  "sustain_rms": 0.3126733464536168,
+                  "sustain_peak": 0.5997928380966187,
+                  "attack_to_sustain_db": 0.1901849954739639
+                },
+                "right": {
+                  "attack_rms": 0.3196888625020818,
+                  "attack_peak": 0.6107134819030762,
+                  "sustain_rms": 0.3135670119384536,
+                  "sustain_peak": 0.6160633563995361,
+                  "attack_to_sustain_db": 0.16794277663259038
+                },
+                "mid": {
+                  "attack_rms": 0.4515754467942223,
+                  "attack_peak": 0.8801399091047497,
+                  "sustain_rms": 0.4423681484270774,
+                  "sustain_peak": 0.8312199355976095,
+                  "attack_to_sustain_db": 0.17892942244810578
+                },
+                "side": {
+                  "attack_rms": 0.02053320088576579,
+                  "attack_peak": 0.0695715078089932,
+                  "sustain_rms": 0.019982838029493577,
+                  "sustain_peak": 0.08868181615449978,
+                  "attack_to_sustain_db": 0.23598975701961167
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "continuous_projected": {
+      "views": {
+        "view0": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/view0/projected.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/continuous_projected/view0"
+          ],
+          "input_sha256": "719a05ff347ad9700cddf9d228c10a3cce66d6fdf61f0a79953d5c7dadcc21d4",
+          "output_sha256": "3fb3612142d96741e4a90b585d9d12b4c91414d6113a13201d1041b533599c81",
+          "master_metadata_sha256": "cee73c10bdaf399335520600236098f69bd1584bcbc9adda9655dc18880cf969",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.132418632507324,
+            "lufs_integrated": -14.946287304344025,
+            "rms_dbfs": -17.272075653076172,
+            "sample_peak_dbfs": -5.139657020568848,
+            "true_peak_dbtp": -5.1357221603393555
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.051568031311035,
+            "lufs_integrated": -9.010439965990075,
+            "rms_dbfs": -11.05693244934082,
+            "sample_peak_dbfs": -1.005364179611206,
+            "true_peak_dbtp": -1.0000003576278687
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 0.9603261947631836,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.076400279998779,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.684898376464844,
+          "target_shortfall_lu": 0.01043996599007535,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.0000003576278687,
+            "observed_linear": 0.8912509014378882,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.997093339239113,
+            "mid_rms": 0.19346186623892203,
+            "side_rms": 0.007380634180300803
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9964020033326657,
+            "mid_rms": 0.3956192604922324,
+            "side_rms": 0.016795140838435512
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16110459525325938,
+                  "attack_peak": 0.4540794789791107,
+                  "sustain_rms": 0.16436387003163283,
+                  "sustain_peak": 0.3139897882938385,
+                  "attack_to_sustain_db": -0.17396860477726683
+                },
+                "right": {
+                  "attack_rms": 0.1606897757918967,
+                  "attack_peak": 0.4563908278942108,
+                  "sustain_rms": 0.1644380104262136,
+                  "sustain_peak": 0.33000901341438293,
+                  "attack_to_sustain_db": -0.2002793744380911
+                },
+                "mid": {
+                  "attack_rms": 0.22719903723062457,
+                  "attack_peak": 0.6437997280591226,
+                  "sustain_rms": 0.2323561856899767,
+                  "sustain_peak": 0.4424486383886327,
+                  "attack_to_sustain_db": -0.19495503764019553
+                },
+                "side": {
+                  "attack_rms": 0.012509681740308722,
+                  "attack_peak": 0.044717416411709836,
+                  "sustain_rms": 0.008120592115854001,
+                  "sustain_peak": 0.03393989563084131,
+                  "attack_to_sustain_db": 3.753171275713471
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16513161234572357,
+                  "attack_peak": 0.45716914534568787,
+                  "sustain_rms": 0.16607206684963416,
+                  "sustain_peak": 0.30920442938804626,
+                  "attack_to_sustain_db": -0.04932738672870149
+                },
+                "right": {
+                  "attack_rms": 0.16482623867518767,
+                  "attack_peak": 0.45469075441360474,
+                  "sustain_rms": 0.16573948674535835,
+                  "sustain_peak": 0.31517335772514343,
+                  "attack_to_sustain_db": -0.04799282878299864
+                },
+                "mid": {
+                  "attack_rms": 0.23287404493619354,
+                  "attack_peak": 0.6447823186118812,
+                  "sustain_rms": 0.23444845669470424,
+                  "sustain_peak": 0.4263287543120953,
+                  "attack_to_sustain_db": -0.05852582946688659
+                },
+                "side": {
+                  "attack_rms": 0.014346342626745508,
+                  "attack_peak": 0.06047447407448513,
+                  "sustain_rms": 0.009134002835316204,
+                  "sustain_peak": 0.03509017532293472,
+                  "attack_to_sustain_db": 3.9216011317206627
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.2605091438161957,
+                  "attack_peak": 0.5533719658851624,
+                  "sustain_rms": 0.2679639554682097,
+                  "sustain_peak": 0.492058128118515,
+                  "attack_to_sustain_db": -0.24506816647635835
+                },
+                "right": {
+                  "attack_rms": 0.2603499612806482,
+                  "attack_peak": 0.5395646691322327,
+                  "sustain_rms": 0.2678959614351585,
+                  "sustain_peak": 0.491513192653656,
+                  "attack_to_sustain_db": -0.24817298382238512
+                },
+                "mid": {
+                  "attack_rms": 0.36806475570850333,
+                  "attack_peak": 0.7725368975140117,
+                  "sustain_rms": 0.3788062447256437,
+                  "sustain_peak": 0.6954664749039905,
+                  "attack_to_sustain_db": -0.24985793162568276
+                },
+                "side": {
+                  "attack_rms": 0.013245827868507224,
+                  "attack_peak": 0.0429317071238639,
+                  "sustain_rms": 0.00887448817072505,
+                  "sustain_peak": 0.03135187103220789,
+                  "attack_to_sustain_db": 3.478715843541575
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.14716780718664108,
+                  "attack_peak": 0.29490748047828674,
+                  "sustain_rms": 0.1421746791604448,
+                  "sustain_peak": 0.2730620503425598,
+                  "attack_to_sustain_db": 0.2998112405537885
+                },
+                "right": {
+                  "attack_rms": 0.1471974153913755,
+                  "attack_peak": 0.28164368867874146,
+                  "sustain_rms": 0.14257789937571555,
+                  "sustain_peak": 0.2817288041114807,
+                  "attack_to_sustain_db": 0.2769594498470898
+                },
+                "mid": {
+                  "attack_rms": 0.20793218560613996,
+                  "attack_peak": 0.406881882307805,
+                  "sustain_rms": 0.2011445975781336,
+                  "sustain_peak": 0.37980074089849386,
+                  "attack_to_sustain_db": 0.28826691830474477
+                },
+                "side": {
+                  "attack_rms": 0.009468302861615301,
+                  "attack_peak": 0.03246982145731542,
+                  "sustain_rms": 0.009107560040854572,
+                  "sustain_peak": 0.03971638727124056,
+                  "attack_to_sustain_db": 0.3374019647354355
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 456000,
+              "attack_window_samples": [
+                455040,
+                459840
+              ],
+              "sustain_window_samples": [
+                460800,
+                470400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3243560705284828,
+                  "attack_peak": 0.8858737349510193,
+                  "sustain_rms": 0.336650220910429,
+                  "sustain_peak": 0.6418943405151367,
+                  "attack_to_sustain_db": -0.3231374670259307
+                },
+                "right": {
+                  "attack_rms": 0.3235202182451909,
+                  "attack_peak": 0.8907006978988647,
+                  "sustain_rms": 0.33678886445203715,
+                  "sustain_peak": 0.6746272444725037,
+                  "attack_to_sustain_db": -0.34912593437238626
+                },
+                "mid": {
+                  "attack_rms": 0.45743428348201814,
+                  "attack_peak": 1.2562278287507975,
+                  "sustain_rms": 0.4759046428367554,
+                  "sustain_peak": 0.9089409158878207,
+                  "attack_to_sustain_db": -0.3438246201843499
+                },
+                "side": {
+                  "attack_rms": 0.02502135882374796,
+                  "attack_peak": 0.0877636997432506,
+                  "sustain_rms": 0.01657954716973783,
+                  "sustain_peak": 0.0686597394375287,
+                  "attack_to_sustain_db": 3.5747645272412814
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 600000,
+              "attack_window_samples": [
+                599040,
+                603840
+              ],
+              "sustain_window_samples": [
+                604800,
+                614400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3291792793598713,
+                  "attack_peak": 0.8907006978988647,
+                  "sustain_rms": 0.34089978685836625,
+                  "sustain_peak": 0.6362935900688171,
+                  "attack_to_sustain_db": -0.30388479107456395
+                },
+                "right": {
+                  "attack_rms": 0.3286097949302267,
+                  "attack_peak": 0.8843873739242554,
+                  "sustain_rms": 0.34021891907948937,
+                  "sustain_peak": 0.6475443243980408,
+                  "attack_to_sustain_db": -0.3015591209698659
+                },
+                "mid": {
+                  "attack_rms": 0.46425934697036264,
+                  "attack_peak": 1.2551768127894816,
+                  "sustain_rms": 0.4812621760967237,
+                  "sustain_peak": 0.879438796279771,
+                  "attack_to_sustain_db": -0.3124214853691241
+                },
+                "side": {
+                  "attack_rms": 0.02840165549087275,
+                  "attack_peak": 0.11862957019692331,
+                  "sustain_rms": 0.018662675004986928,
+                  "sustain_peak": 0.07136953451331644,
+                  "attack_to_sustain_db": 3.6473952384770127
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 744000,
+              "attack_window_samples": [
+                743040,
+                747840
+              ],
+              "sustain_window_samples": [
+                748800,
+                758400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.4365136929713902,
+                  "attack_peak": 0.8907006978988647,
+                  "sustain_rms": 0.46437952100735097,
+                  "sustain_peak": 0.8542632460594177,
+                  "attack_to_sustain_db": -0.5375037524939564
+                },
+                "right": {
+                  "attack_rms": 0.4362466173247181,
+                  "attack_peak": 0.8653320074081421,
+                  "sustain_rms": 0.46426027648368173,
+                  "sustain_peak": 0.8524510860443115,
+                  "attack_to_sustain_db": -0.5405890652351419
+                },
+                "mid": {
+                  "attack_rms": 0.6167436349437307,
+                  "attack_peak": 1.2411033057221177,
+                  "sustain_rms": 0.6564685560817762,
+                  "sustain_peak": 1.2066848826758179,
+                  "attack_to_sustain_db": -0.5421850549791695
+                },
+                "side": {
+                  "attack_rms": 0.021968250617068086,
+                  "attack_peak": 0.0697635920710816,
+                  "sustain_rms": 0.01532901587281993,
+                  "sustain_peak": 0.0546236222224225,
+                  "attack_to_sustain_db": 3.1256240099376638
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 888000,
+              "attack_window_samples": [
+                887040,
+                891840
+              ],
+              "sustain_window_samples": [
+                892800,
+                902400
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3136058586599125,
+                  "attack_peak": 0.6251691579818726,
+                  "sustain_rms": 0.3068215207633962,
+                  "sustain_peak": 0.5884138941764832,
+                  "attack_to_sustain_db": 0.18996698434634868
+                },
+                "right": {
+                  "attack_rms": 0.3136978302289849,
+                  "attack_peak": 0.599195122718811,
+                  "sustain_rms": 0.30769844391838397,
+                  "sustain_peak": 0.6043629050254822,
+                  "attack_to_sustain_db": 0.16772429690426843
+                },
+                "mid": {
+                  "attack_rms": 0.4431127994024698,
+                  "attack_peak": 0.8636214212084206,
+                  "sustain_rms": 0.43408896125680335,
+                  "sustain_peak": 0.8154547383247155,
+                  "attack_to_sustain_db": 0.17871105773573567
+                },
+                "side": {
+                  "attack_rms": 0.02014969681907374,
+                  "attack_peak": 0.0682793697273462,
+                  "sustain_rms": 0.019609990013958273,
+                  "sustain_peak": 0.087015656402455,
+                  "attack_to_sustain_db": 0.23582286870767982
+                }
+              }
+            }
+          ]
+        },
+        "view3": {
+          "command": [
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+            "master",
+            "--input",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/view3/projected.wav",
+            "--target-lufs",
+            "-9",
+            "--ceiling-db",
+            "-1",
+            "--glue-threshold-db",
+            "-20",
+            "--glue-ratio",
+            "1.6",
+            "--sidechain-hp-hz",
+            "90",
+            "--clock-transient-punch",
+            "--kick-transient-guard",
+            "--quiet-mid-denoise",
+            "--out",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-stress-v1/continuous_projected/view3"
+          ],
+          "input_sha256": "d234aa5e5ec408242ba241c250e8fa17bbe5acdd1b4a81067729e5b8f4470cf4",
+          "output_sha256": "834cc4ed85c823eb252f3ea70e5e4c3ec5b580857521de0586cbad0e96a3c9e9",
+          "master_metadata_sha256": "089a589b5dd7d1dd62b1cfd2ead670ae8c595ebf2892d2986b1ea474dae67051",
+          "input_metrics_before_finalizer": {
+            "crest_factor_db": 12.362829208374023,
+            "lufs_integrated": -14.77927924913673,
+            "rms_dbfs": -17.501941680908203,
+            "sample_peak_dbfs": -5.13911247253418,
+            "true_peak_dbtp": -5.135188102722168
+          },
+          "native_metrics_after_finalizer": {
+            "crest_factor_db": 10.216672897338867,
+            "lufs_integrated": -8.879044330916642,
+            "rms_dbfs": -11.222389221191406,
+            "sample_peak_dbfs": -1.0057164430618286,
+            "true_peak_dbtp": -1.0000009536743164
+          },
+          "limiter": {
+            "budget_db": null,
+            "lookahead_samples": 96,
+            "max_gain_reduction_db": 1.1348379850387573,
+            "release_ms": 60.0,
+            "engaged": true
+          },
+          "glue": {
+            "attack_ms": 20.0,
+            "knee_db": 8.0,
+            "max_gain_reduction_db": 4.074129104614258,
+            "ratio": 1.600000023841858,
+            "release_ms": 160.0,
+            "threshold_db": -20.0
+          },
+          "pre_gain_db": 8.849224090576172,
+          "target_shortfall_lu": -0.12095566908335798,
+          "audio_geometry": {
+            "rate": 48000,
+            "channels": 2,
+            "frames": 1248000,
+            "format": "IEEE float32"
+          },
+          "finite_samples": true,
+          "true_peak_gate": {
+            "ceiling_dbtp": -1.0,
+            "protocol_linear_max": 0.8912529381337455,
+            "observed_dbtp": -1.0000009536743164,
+            "observed_linear": 0.8912508402781294,
+            "pass": true
+          },
+          "stereo_before_finalizer": {
+            "left_right_correlation": 0.9969717001193409,
+            "mid_rms": 0.18840345770458716,
+            "side_rms": 0.007336730861238885
+          },
+          "stereo_after_finalizer": {
+            "left_right_correlation": 0.9962257997685716,
+            "mid_rms": 0.38813736076756694,
+            "side_rms": 0.01687690707891923
+          },
+          "fixed_source_onset_windows_before_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.1611002229450411,
+                  "attack_peak": 0.45366695523262024,
+                  "sustain_rms": 0.164363453197263,
+                  "sustain_peak": 0.313938170671463,
+                  "attack_to_sustain_db": -0.17418231137467333
+                },
+                "right": {
+                  "attack_rms": 0.16068541059014582,
+                  "attack_peak": 0.45595937967300415,
+                  "sustain_rms": 0.16443759536305333,
+                  "sustain_peak": 0.33020609617233276,
+                  "attack_to_sustain_db": -0.20049340893883996
+                },
+                "mid": {
+                  "attack_rms": 0.22719296647207698,
+                  "attack_peak": 0.6432029497576325,
+                  "sustain_rms": 0.23235563623344896,
+                  "sustain_peak": 0.4423150118054289,
+                  "attack_to_sustain_db": -0.19516658803085496
+                },
+                "side": {
+                  "attack_rms": 0.012507557518692347,
+                  "attack_peak": 0.044690210620996054,
+                  "sustain_rms": 0.008119472043259406,
+                  "sustain_peak": 0.03396548271915447,
+                  "attack_to_sustain_db": 3.7528943591593125
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.16513530016668101,
+                  "attack_peak": 0.4571884274482727,
+                  "sustain_rms": 0.16607240353535907,
+                  "sustain_peak": 0.30917856097221375,
+                  "attack_to_sustain_db": -0.049151019548548155
+                },
+                "right": {
+                  "attack_rms": 0.16483015834265355,
+                  "attack_peak": 0.45470353960990906,
+                  "sustain_rms": 0.1657397570286492,
+                  "sustain_peak": 0.3152330815792084,
+                  "attack_to_sustain_db": -0.04780044023230286
+                },
+                "mid": {
+                  "attack_rms": 0.23287936915443425,
+                  "attack_peak": 0.6448049936163801,
+                  "sustain_rms": 0.23444887217855237,
+                  "sustain_peak": 0.42648212669382646,
+                  "attack_to_sustain_db": -0.05834263844389302
+                },
+                "side": {
+                  "attack_rms": 0.014347399856309359,
+                  "attack_peak": 0.06050799398994145,
+                  "sustain_rms": 0.009134364243427973,
+                  "sustain_peak": 0.03509045454580611,
+                  "attack_to_sustain_db": 3.9218975294787213
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.26050908047365545,
+                  "attack_peak": 0.5534066557884216,
+                  "sustain_rms": 0.2679637306948664,
+                  "sustain_peak": 0.49205997586250305,
+                  "attack_to_sustain_db": -0.2450629925469673
+                },
+                "right": {
+                  "attack_rms": 0.2603498562066458,
+                  "attack_peak": 0.5395917892456055,
+                  "sustain_rms": 0.2678957365100902,
+                  "sustain_peak": 0.49149519205093384,
+                  "attack_to_sustain_db": -0.2481691966763387
+                },
+                "mid": {
+                  "attack_rms": 0.3680646505553505,
+                  "attack_peak": 0.7725800980337354,
+                  "sustain_rms": 0.3788059451070275,
+                  "sustain_peak": 0.6954493843569193,
+                  "attack_to_sustain_db": -0.24985354296635226
+                },
+                "side": {
+                  "attack_rms": 0.013245438747672141,
+                  "attack_peak": 0.04293969395165671,
+                  "sustain_rms": 0.008873700455066826,
+                  "sustain_peak": 0.031372818015917806,
+                  "attack_to_sustain_db": 3.47923168515608
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.14716796572800445,
+                  "attack_peak": 0.2949226498603821,
+                  "sustain_rms": 0.1421751568438942,
+                  "sustain_peak": 0.27313676476478577,
+                  "attack_to_sustain_db": 0.29979141460305414
+                },
+                "right": {
+                  "attack_rms": 0.14719754768787743,
+                  "attack_peak": 0.2816518247127533,
+                  "sustain_rms": 0.14257834322987767,
+                  "sustain_peak": 0.28181037306785583,
+                  "attack_to_sustain_db": 0.2769402167631153
+                },
+                "mid": {
+                  "attack_rms": 0.20793242041208085,
+                  "attack_peak": 0.4069017966937264,
+                  "sustain_rms": 0.20114527028892337,
+                  "sustain_peak": 0.37990088181055576,
+                  "attack_to_sustain_db": 0.2882476776167316
+                },
+                "side": {
+                  "attack_rms": 0.009467667263782547,
+                  "attack_peak": 0.032464563637963684,
+                  "sustain_rms": 0.009107108331335023,
+                  "sustain_peak": 0.039720601956091645,
+                  "attack_to_sustain_db": 0.33724967648895554
+                }
+              }
+            }
+          ],
+          "fixed_source_onset_windows_after_finalizer": [
+            {
+              "global_onset_sample": 456000,
+              "global_onset_seconds": 9.5,
+              "onset_local_sample": 311616,
+              "attack_window_samples": [
+                310656,
+                315456
+              ],
+              "sustain_window_samples": [
+                316416,
+                326016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3248950649893779,
+                  "attack_peak": 0.8858702182769775,
+                  "sustain_rms": 0.3419538242358829,
+                  "sustain_peak": 0.6531480550765991,
+                  "attack_to_sustain_db": -0.4444870073256185
+                },
+                "right": {
+                  "attack_rms": 0.32406266256146093,
+                  "attack_peak": 0.8906645774841309,
+                  "sustain_rms": 0.34209572249102427,
+                  "sustain_peak": 0.6839175820350647,
+                  "attack_to_sustain_db": -0.4703729588987594
+                },
+                "mid": {
+                  "attack_rms": 0.45819951738821785,
+                  "attack_peak": 1.2561998010965378,
+                  "sustain_rms": 0.48340322871565533,
+                  "sustain_peak": 0.9241822699805727,
+                  "attack_to_sustain_db": -0.4650983874499859
+                },
+                "side": {
+                  "attack_rms": 0.025032274888225167,
+                  "attack_peak": 0.08733002974549776,
+                  "sustain_rms": 0.01682913317674993,
+                  "sustain_peak": 0.0695173705113532,
+                  "attack_to_sustain_db": 3.448771441804591
+                }
+              }
+            },
+            {
+              "global_onset_sample": 600000,
+              "global_onset_seconds": 12.5,
+              "onset_local_sample": 455616,
+              "attack_window_samples": [
+                454656,
+                459456
+              ],
+              "sustain_window_samples": [
+                460416,
+                470016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3302376285521098,
+                  "attack_peak": 0.8906645774841309,
+                  "sustain_rms": 0.34637227773709467,
+                  "sustain_peak": 0.647199273109436,
+                  "attack_to_sustain_db": -0.4143313718080415
+                },
+                "right": {
+                  "attack_rms": 0.32969294657650844,
+                  "attack_peak": 0.8843391537666321,
+                  "sustain_rms": 0.3456818693252692,
+                  "sustain_peak": 0.6595287322998047,
+                  "attack_to_sustain_db": -0.4113389167591839
+                },
+                "mid": {
+                  "attack_rms": 0.46577355015937294,
+                  "attack_peak": 1.2551171749988386,
+                  "sustain_rms": 0.48898905371262935,
+                  "sustain_peak": 0.8951317117074687,
+                  "attack_to_sustain_db": -0.4224862931139092
+                },
+                "side": {
+                  "attack_rms": 0.028448731183583913,
+                  "attack_peak": 0.11843900848973736,
+                  "sustain_rms": 0.01895824132726412,
+                  "sustain_peak": 0.072273573877163,
+                  "attack_to_sustain_db": 3.5252970860648576
+                }
+              }
+            },
+            {
+              "global_onset_sample": 744000,
+              "global_onset_seconds": 15.5,
+              "onset_local_sample": 599616,
+              "attack_window_samples": [
+                598656,
+                603456
+              ],
+              "sustain_window_samples": [
+                604416,
+                614016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.4400910553472125,
+                  "attack_peak": 0.8906645774841309,
+                  "sustain_rms": 0.4722269013111789,
+                  "sustain_peak": 0.8708449006080627,
+                  "attack_to_sustain_db": -0.6121636410594746
+                },
+                "right": {
+                  "attack_rms": 0.4398218825987516,
+                  "attack_peak": 0.8656325340270996,
+                  "sustain_rms": 0.4721072260885439,
+                  "sustain_peak": 0.8689616918563843,
+                  "attack_to_sustain_db": -0.6152762930609701
+                },
+                "mid": {
+                  "attack_rms": 0.6217991591426666,
+                  "attack_peak": 1.2410448480432332,
+                  "sustain_rms": 0.6675631357698532,
+                  "sustain_peak": 1.2300713259775427,
+                  "attack_to_sustain_db": -0.6168443121803653
+                },
+                "side": {
+                  "attack_rms": 0.022118569094904183,
+                  "attack_peak": 0.0701503104795933,
+                  "sustain_rms": 0.015586500829181013,
+                  "sustain_peak": 0.05564465070102316,
+                  "attack_to_sustain_db": 3.0401680194483154
+                }
+              }
+            },
+            {
+              "global_onset_sample": 888000,
+              "global_onset_seconds": 18.5,
+              "onset_local_sample": 743616,
+              "attack_window_samples": [
+                742656,
+                747456
+              ],
+              "sustain_window_samples": [
+                748416,
+                758016
+              ],
+              "channels": {
+                "left": {
+                  "attack_rms": 0.3195951100975903,
+                  "attack_peak": 0.6371285319328308,
+                  "sustain_rms": 0.312673365578261,
+                  "sustain_peak": 0.5997929573059082,
+                  "attack_to_sustain_db": 0.1901847499368226
+                },
+                "right": {
+                  "attack_rms": 0.3196888743376953,
+                  "attack_peak": 0.6107136607170105,
+                  "sustain_rms": 0.3135670313602622,
+                  "sustain_peak": 0.616063117980957,
+                  "attack_to_sustain_db": 0.16794256021485435
+                },
+                "mid": {
+                  "attack_rms": 0.4515754626185457,
+                  "attack_peak": 0.8801400776921438,
+                  "sustain_rms": 0.4423681756123289,
+                  "sustain_peak": 0.831219893450761,
+                  "attack_to_sustain_db": 0.1789291930413648
+                },
+                "side": {
+                  "attack_rms": 0.020533200784096196,
+                  "attack_peak": 0.06957144458872043,
+                  "sustain_rms": 0.019982840227160736,
+                  "sustain_peak": 0.08868186883806042,
+                  "attack_to_sustain_db": 0.23598875875729108
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "layout_comparisons": {
+    "restart": {
+      "raw_layout_difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.12278275936841965,
+        "rms": 0.008285635221823672,
+        "reference_rms": 0.349607319232948,
+        "relative_rms": 0.023699833401665264
+      },
+      "input_referred_attenuation_control": {
+        "available": true,
+        "method": "scalar least-squares output gain dot(y,x)/dot(x,x) against the same aligned procedural input; attenuate higher fitted gain to lower; no boost and no target-based scaling",
+        "fitted_gain": {
+          "view0": 1.9463160583714643,
+          "view3": 1.9830987725983011
+        },
+        "common_fitted_gain": 1.9463160583714643,
+        "attenuation_factor": {
+          "view0": 1.0,
+          "view3": 0.9814519000590962
+        },
+        "attenuation_db": {
+          "view0": 0.0,
+          "view3": -0.16261959730177905
+        },
+        "layout_difference_after_attenuation": {
+          "samples_per_channel": 624000,
+          "max_abs": 0.11831349181065412,
+          "rms": 0.004943383488412789,
+          "reference_rms": 0.349607319232948,
+          "relative_rms": 0.014139816921621562
+        }
+      }
+    },
+    "restart_projected": {
+      "raw_layout_difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.12278511375188828,
+        "rms": 0.00828563818328539,
+        "reference_rms": 0.3496073290561654,
+        "relative_rms": 0.023699841206573445
+      },
+      "input_referred_attenuation_control": {
+        "available": true,
+        "method": "scalar least-squares output gain dot(y,x)/dot(x,x) against the same aligned procedural input; attenuate higher fitted gain to lower; no boost and no target-based scaling",
+        "fitted_gain": {
+          "view0": 1.9463161160865015,
+          "view3": 1.9830988521984874
+        },
+        "common_fitted_gain": 1.9463161160865015,
+        "attenuation_factor": {
+          "view0": 1.0,
+          "view3": 0.9814518897677702
+        },
+        "attenuation_db": {
+          "view0": 0.0,
+          "view3": -0.16261968838043755
+        },
+        "layout_difference_after_attenuation": {
+          "samples_per_channel": 624000,
+          "max_abs": 0.11831585863934321,
+          "rms": 0.004943383510294152,
+          "reference_rms": 0.3496073290561654,
+          "relative_rms": 0.014139816586911382
+        }
+      }
+    },
+    "continuous": {
+      "raw_layout_difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.01703578233718872,
+        "rms": 0.006546308910353841,
+        "reference_rms": 0.34957058862676393,
+        "relative_rms": 0.01872671535688984
+      },
+      "input_referred_attenuation_control": {
+        "available": true,
+        "method": "scalar least-squares output gain dot(y,x)/dot(x,x) against the same aligned procedural input; attenuate higher fitted gain to lower; no boost and no target-based scaling",
+        "fitted_gain": {
+          "view0": 1.946141619522592,
+          "view3": 1.982082206861884
+        },
+        "common_fitted_gain": 1.946141619522592,
+        "attenuation_factor": {
+          "view0": 1.0,
+          "view3": 0.9818672569609539
+        },
+        "attenuation_db": {
+          "view0": 0.0,
+          "view3": -0.15894444927414586
+        },
+        "layout_difference_after_attenuation": {
+          "samples_per_channel": 624000,
+          "max_abs": 0.025988026645193063,
+          "rms": 0.0009895684320331557,
+          "reference_rms": 0.34957058862676393,
+          "relative_rms": 0.0028308114704973554
+        }
+      }
+    },
+    "continuous_projected": {
+      "raw_layout_difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.017035067081451416,
+        "rms": 0.006545932693111924,
+        "reference_rms": 0.349570970395009,
+        "relative_rms": 0.018725618679706544
+      },
+      "input_referred_attenuation_control": {
+        "available": true,
+        "method": "scalar least-squares output gain dot(y,x)/dot(x,x) against the same aligned procedural input; attenuate higher fitted gain to lower; no boost and no target-based scaling",
+        "fitted_gain": {
+          "view0": 1.946143744476878,
+          "view3": 1.9820821944736615
+        },
+        "common_fitted_gain": 1.946143744476878,
+        "attenuation_factor": {
+          "view0": 1.0,
+          "view3": 0.9818683351795475
+        },
+        "attenuation_db": {
+          "view0": 0.0,
+          "view3": -0.15893491103717805
+        },
+        "layout_difference_after_attenuation": {
+          "samples_per_channel": 624000,
+          "max_abs": 0.02598940611610734,
+          "rms": 0.0009895811807989056,
+          "reference_rms": 0.349570970395009,
+          "relative_rms": 0.0028308448487032443
+        }
+      }
+    }
+  },
+  "gain_control_note": "The optional scalar attenuation is input-referred to the same degraded procedural input in the shared interior. It is a gain sensitivity control, not a perceptual loudness match; raw differences remain primary.",
+  "measurement_limit": "Before values are the native Mid outputs immediately before this finalizer; they are not a pre-limiter snapshot. The true-peak field is the project finite 4x estimate, not a continuous-time guarantee.",
+  "spectral_metrics_included": false,
+  "target_audio_read": false
+}

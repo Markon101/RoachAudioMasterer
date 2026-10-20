@@ -1,0 +1,37 @@
+{
+  "schema": "coherence-checkpoint-verification-v1",
+  "recorded_utc": "2026-10-20T05:37:29.575179+00:00",
+  "source_base": "b031c41",
+  "tool_parent_head": "7ec7eaf8c1748108475435e8ffecb7c3f02e8be2",
+  "production_src_diff_empty": true,
+  "frozen_model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "python_tests": {
+    "coherence_controls_fixtures_runner_analysis": 36,
+    "listening_and_truepeak": 23,
+    "total_passed": 59,
+    "failed": 0,
+    "commands": [
+      "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts OPENBLAS_NUM_THREADS=1 python -m unittest scripts.test_wola_controls scripts.test_long_coherence_fixture scripts.test_run_coherence_quality scripts.test_analyze_long_coherence scripts.test_analyze_coherence_factorial scripts.test_analyze_coherence_finalizer",
+      "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts OPENBLAS_NUM_THREADS=1 python -m unittest scripts.test_blind_listening scripts.test_true_peak"
+    ]
+  },
+  "native_verification_artifact": "continuous_source_verification.json",
+  "new_short_listening_package_reverified": {
+    "trials": 4,
+    "audio_files": 8,
+    "owner_judgments_received": false
+  },
+  "documentation_receipt": "documentation_verification.json",
+  "git_diff_check": {
+    "source_docs_json_and_tools": "passed",
+    "saved_unified_patch": "passed with blank-at-eol disabled for this path only",
+    "reason": "Unified diff requires a leading context marker on blank context lines; those two single-space context lines are evidence format, not source trailing whitespace."
+  },
+  "validation_environment": {
+    "python": "3.14.8",
+    "numpy": "2.5.4",
+    "platform": "Android-17-aarch64-64bit",
+    "free_disk_bytes": 21826551808
+  },
+  "environment_scope": "original2026-10-18 neural renders recordedPython3.14.6; final offline verification nowPython3.14.8. No speed requalification or new audio render inferred from validation."
+}

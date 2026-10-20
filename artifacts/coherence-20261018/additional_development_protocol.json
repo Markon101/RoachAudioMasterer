@@ -1,0 +1,26 @@
+{
+  "schema": "coherence-additional-development-v1",
+  "frozen_before_outputs": true,
+  "new_case": {
+    "seed": 881001,
+    "base_hz": 196.0,
+    "damage": "same whole-source lowpass before cropping"
+  },
+  "healthy_case": "existing881000 clean source supplied as input; forced declared missing-mid policy, not autoassessment",
+  "jobs_per_arm": 2,
+  "modes": [
+    "restart",
+    "continuous"
+  ],
+  "projection": "separate offline actual Rust on each arm/view, no full counterfactual new jobs",
+  "gate_context": "additional development, not final heldout or threshold fit. Candidate1 failed bandgate remains failed.",
+  "gates": {
+    "layout_rms_reduction_minimum": 0.5,
+    "protected_absolute_error_rms_maximum": 1e-06,
+    "healthy_residual_rms_growth_maximum": 0.1,
+    "cpu_gpu_max_abs": 2e-06
+  },
+  "source_default_bit_identity": true,
+  "healthy_interpretation": "Any nonzero residual is forced-head false modification. Gain of continuity does not authorize forcing head on healthy input. Compare new policy vs baseline and report both absolute magnitudes.",
+  "final_evaluation_seeds_untouched": true
+}

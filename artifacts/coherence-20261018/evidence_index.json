@@ -1,0 +1,201 @@
+{
+  "schema": "coherence-evidence-index-v1",
+  "recorded_utc": "2026-10-20T05:37:29.575179+00:00",
+  "identity": "RoachAudioMasterer long-phrase development checkpoint",
+  "canonical_source_base": "b031c41",
+  "production_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
+  "native_mutation": "continuous_candidate.patch, isolated; not main source",
+  "files": {
+    "additional_development_analysis.json": {
+      "bytes": 123923,
+      "sha256": "9121e078627f640872e265d7037afa11a10bea2aa380fc96067336f82bc9c83e"
+    },
+    "additional_development_protocol.json": {
+      "bytes": 1118,
+      "sha256": "f90596b81c203e3d7d8e40f1acb19d4343630cc1db0e44e2f66927919b53f434"
+    },
+    "additional_fixture_receipt.json": {
+      "bytes": 11000,
+      "sha256": "77066550c21542e5bde5565c5354bdb61b3e8118bf0658b8c64c22147d388f3f"
+    },
+    "baseline_plan.json": {
+      "bytes": 16038,
+      "sha256": "1d725699b87fb9f6ad8126cb0fdd64efa3e75fb408e18577daa630ca5599265b"
+    },
+    "checkpoint_verification.json": {
+      "bytes": 2050,
+      "sha256": "68ddd26bf6662d9ca99d200892d7ab4dd89c7e5599306c799761eb1b9037f6a3"
+    },
+    "continuous_backend_parity_long.json": {
+      "bytes": 1766,
+      "sha256": "c56232733b8555209dd7c2947f42dfb24b356ad62f762d229c4af453076f7958"
+    },
+    "continuous_backend_parity_small.json": {
+      "bytes": 313,
+      "sha256": "3cd94b2dd6f9b7d30ad1497d61fd97d44e586e863258501b8207944aed9bba58"
+    },
+    "continuous_candidate.patch": {
+      "bytes": 14072,
+      "sha256": "9e09e36690e37f79a249fe12e19adf7ae28a2c4eec5b333f889d670f5450b686"
+    },
+    "continuous_cli_golden.json": {
+      "bytes": 5618,
+      "sha256": "2546a3d4776d100c97c3b9fba02e07824ae8e7acb66350b1ae0cd2cdaaf11c54"
+    },
+    "continuous_cpu_reference_plan.json": {
+      "bytes": 15626,
+      "sha256": "165f3f08905e8d250623ccca966d7c872dd8d56162872a01d6fd7551d370cf8f"
+    },
+    "continuous_gpu_analysis.json": {
+      "bytes": 132958,
+      "sha256": "ed936ab79fdc44decd04bd4d8db25cb7d7c3fd64ce460fffcaf9a89e0560dcd7"
+    },
+    "continuous_gpu_plan.json": {
+      "bytes": 17011,
+      "sha256": "12eda1a8e35dbbbe6077c997bb0c4dcf36db5f68d1bdc3bae466c1f8224d15a0"
+    },
+    "continuous_protocol.json": {
+      "bytes": 1362,
+      "sha256": "76bfbad7886306fdf28d0ca875974c19de1a9868bb40ae2dda28af74bda58abf"
+    },
+    "continuous_source_verification.json": {
+      "bytes": 3668,
+      "sha256": "ec9944d9dc48759f0335a40f3855260f01ca5bbb003f3478b81ee3fec844704f"
+    },
+    "dev_healthy_continuous_plan.json": {
+      "bytes": 16268,
+      "sha256": "e0d9d12ab516503573dfa5b99404650f0d3c651f663baf5fbf1c5f5ba9ecca00"
+    },
+    "dev_healthy_restart_plan.json": {
+      "bytes": 16262,
+      "sha256": "e6cef78f0bb9f50a25f9acc76b1c5219a5ca33b026c8ed71d3baa4bdaba8a1be"
+    },
+    "dev_pitch196_continuous_plan.json": {
+      "bytes": 16274,
+      "sha256": "568549118e44b732bb18d6196f721ba0f9580012998629990ffe062c8e510c41"
+    },
+    "dev_pitch196_restart_plan.json": {
+      "bytes": 16268,
+      "sha256": "ed958753c833a8b1e30adf1233b60a3b3fc351ecc82853805186ff7c6d6746ff"
+    },
+    "documentation_verification.json": {
+      "bytes": 541,
+      "sha256": "1ebe5de25c41ad7560bce28a0834389ac6e1150f24f24f64d1147c932c5bf0da"
+    },
+    "energy_control_analysis.json": {
+      "bytes": 6609,
+      "sha256": "b86f4d0db325bb7fa99a3fa80a63e944c0a612c96a53ab9a2326ef374228ad76"
+    },
+    "finalizer_analysis.json": {
+      "bytes": 143786,
+      "sha256": "2504a5415782ea2e9fbfe4c6e5f96d1b98be113a4f830444707583240ea716d1"
+    },
+    "finalizer_protocol.json": {
+      "bytes": 1293,
+      "sha256": "055207a7a7a529774e1a0667554716c59348813a44db0c4d829935a7a9789b4f"
+    },
+    "finalizer_receipt.json": {
+      "bytes": 17673,
+      "sha256": "66ad7b135db7a91a47899a2da6e3dd57208fbe57457ddfb79a64eab8f2573fe5"
+    },
+    "finalizer_stress_analysis.json": {
+      "bytes": 144007,
+      "sha256": "de0b003a482e31b9711a3ecdc57856c06c0f787f774300f4608f20a6153107dd"
+    },
+    "finalizer_stress_protocol.json": {
+      "bytes": 1607,
+      "sha256": "768c398ff0de24b9da3e9f3f157f9225fa4cf78102e27cd564880933e1e036dc"
+    },
+    "finalizer_stress_receipt.json": {
+      "bytes": 17827,
+      "sha256": "dd067590598e57cdae74bf872018d567da10d9aecd594d455d3a1203d480dab0"
+    },
+    "fixture_manifest.json": {
+      "bytes": 4777,
+      "sha256": "c6c4281039ec31d9f9af1411ec0b5ee6253367919105a6f6b5415bfdb9b70e89"
+    },
+    "independent_review.json": {
+      "bytes": 1493,
+      "sha256": "a7781d43f682b5465affdb65e1c59f064970dbb008ecc414fc2518252505a5c5"
+    },
+    "listening_readiness.json": {
+      "bytes": 784,
+      "sha256": "90415701b6a4746debf71b51d1dbd00f99ea6f2a48ec9a0fb09653a77da3ef52"
+    },
+    "matched_gpu_baseline_parity.json": {
+      "bytes": 2056,
+      "sha256": "78d5834e5d2779bc8675ba77fea1cba447ba387db0faee062e57222acd18394b"
+    },
+    "native_baseline_analysis.json": {
+      "bytes": 132269,
+      "sha256": "6b1992b38e62dac25e5b259dde3b39d5d192ad2c68e1165fa102befd99e31f71"
+    },
+    "null_control.json": {
+      "bytes": 2204,
+      "sha256": "c480bf3e6732742a2e74141a0dbfe9b67a9779250b6edf5baf100b680af0c6e1"
+    },
+    "projection_factorial_analysis.json": {
+      "bytes": 387448,
+      "sha256": "e1853f4a815537415843091319f52f740c4fbd3aa98626e38833da083a6af830"
+    },
+    "projection_factorial_analysis_v2.json": {
+      "bytes": 387448,
+      "sha256": "55fc02e5ba1f471849ea77f4c7cf17feab01b239c0a894cb1fa174099a882c83"
+    },
+    "projection_native_receipt.json": {
+      "bytes": 7409,
+      "sha256": "e2d6ec33cbe8118c3946c869af45a0bb7adfeff61772bed7750582fe9378b8ac"
+    },
+    "projection_protocol.json": {
+      "bytes": 2098,
+      "sha256": "ef85afa12f8a06c198034b90131b1c880b3a2781bd7875ab3ba4bc5d62b7ab32"
+    },
+    "protocol.json": {
+      "bytes": 1380,
+      "sha256": "552d08447cc8184ed1f9bf21af88cd952684ced1768b90d8fcfbf91ab2a81253"
+    },
+    "rejected_initial_shift.json": {
+      "bytes": 465,
+      "sha256": "ff3432b42f7cf3ca0c496c6589bcc6f05bda76db6d0fd28fb6b21c9ceee07a26"
+    },
+    "restart_gpu_reference_plan.json": {
+      "bytes": 16337,
+      "sha256": "21d01e68be787157868ee0f062c966120ca36abaae8ffcf60ed53b4073a8f37c"
+    },
+    "tools_verification.json": {
+      "bytes": 2578,
+      "sha256": "00097010b7cdf3e533b49f148538d55889424dd8bdbf8a31c1e0f4bb7f799fd8"
+    },
+    "wola_controls.json": {
+      "bytes": 3061,
+      "sha256": "23adc2a3630599b1f7aa247767269be0692e543b0c49b78d7549c660c7e4f772"
+    }
+  },
+  "tool_source_sha256": {
+    "scripts/run_coherence_quality.py": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254",
+    "scripts/analyze_long_coherence.py": "453d97f3e727ebaf667680806514e22a8126e8eac1110f52a7df9224e5131504",
+    "scripts/long_coherence_fixture.py": "855ce08a02df626ca63a3cd32dbc887cf7a4110fa2d4ca3aeb7154f922cd4ce6",
+    "scripts/analyze_coherence_factorial.py": "823b7ccbafde0379a7a75a562b4e2bd13b0a63a00bb3a64d267ec07fa1aaa6ed",
+    "scripts/analyze_coherence_finalizer.py": "3e46fb33ad0b1e7433fbb014a99671a3fd13f0ee2b39580540ce1f6c63636ef5",
+    "scripts/blind_listening.py": "ca3461e7841160e672045fc11819a03623a17916f5641d24133b698d32cf6422",
+    "examples/trusted_projection.rs": "db639b2e0949991ea46320fdcf8a4d908eb47c8b81622fbdd7f0216ecf374be2",
+    "examples/energy_match.rs": "9c6fd5e7147a3109aeb39eb41db1807bed6a485d57bb0792e00b46ef9d6b2092"
+  },
+  "versioned_reports": [
+    {
+      "prior": "projection_factorial_analysis.json",
+      "current": "projection_factorial_analysis_v2.json",
+      "reason": "V2 adds bitwise crop validation; v1 retained."
+    },
+    {
+      "earlier": "continuous_cli_golden.json",
+      "later": [
+        "continuous_backend_parity_small.json",
+        "continuous_backend_parity_long.json",
+        "matched_gpu_baseline_parity.json"
+      ],
+      "reason": "Golden receipt pending fields describe creation-time state; later explicit comparisons complete parity."
+    }
+  ],
+  "scope": "Hash index for actual evidence and local realization; no orchestration framework, automatic promotion or trust in model consensus."
+}

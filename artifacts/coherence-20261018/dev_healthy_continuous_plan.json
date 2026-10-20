@@ -1,0 +1,333 @@
+{
+  "schema": "long-coherence-quality-v2",
+  "root": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/dev-healthy-continuous-gpu-v1",
+  "binary": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+  "binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+  "model": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "source_pins": [
+    {
+      "name": "src/acoustic_dynamics.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/acoustic_dynamics.rs",
+      "sha256": "201d8cacfdcbba76ffdf2d1486d60cf625ba81a9a1c9eacf2ead42901b81c492"
+    },
+    {
+      "name": "src/assess.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/assess.rs",
+      "sha256": "eaef4185589a3c2cc24ac19c207b7843f93ea849990b62773e8e689a0b302dab"
+    },
+    {
+      "name": "src/associative_landscape.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/associative_landscape.rs",
+      "sha256": "b6b1b698d5536cea4ba8a2508d10de1773a93421e7f72126f7954e32a842dcda"
+    },
+    {
+      "name": "src/audio.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/audio.rs",
+      "sha256": "b900ab55648f1f75c8b51679046a30a15cf734fd5fdc29c69eab7b9a8dc57333"
+    },
+    {
+      "name": "src/backend.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/backend.rs",
+      "sha256": "37587c75107ee157947d8665d5ccbca1a0ebf07ab0d8dbb06c1b12c9dc457e6c"
+    },
+    {
+      "name": "src/bin/highband.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/bin/highband.rs",
+      "sha256": "c5a4ef7da14d3b070e450f705a95b14aa16183404a0a9823767d52189e5250e1"
+    },
+    {
+      "name": "src/critics.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/critics.rs",
+      "sha256": "6bddada456aff9f1ab14a22e29e93012249302c74e5cdc2934ca5e832acfbfb7"
+    },
+    {
+      "name": "src/dsp.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/dsp.rs",
+      "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+    },
+    {
+      "name": "src/dynamics.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/dynamics.rs",
+      "sha256": "af00c07c4d43f14b6a4863e1403716440e0fe21c19da6cd9ca902c437da9bfff"
+    },
+    {
+      "name": "src/dynamics_synth.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/dynamics_synth.rs",
+      "sha256": "d1cefe9ef0d85c3850bbd53f6f238c87ea571ebf03b2ace3e07fd3c994ecdb71"
+    },
+    {
+      "name": "src/experiment.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/experiment.rs",
+      "sha256": "9ca4b7c785c622ae6bf77caaf314fba2a658819bf486d6ad9ca0726b57cebbff"
+    },
+    {
+      "name": "src/flow.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/flow.rs",
+      "sha256": "2aa149a678feddfe2d6c78b29b3c75a8f48eeec4be322a545307f3976eb02a98"
+    },
+    {
+      "name": "src/flow_experiment.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/flow_experiment.rs",
+      "sha256": "06d0746df4c6abe4885909bb515cdc83ee6fda691d484b27a1cb4ea3c469d8f5"
+    },
+    {
+      "name": "src/gtf.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/gtf.rs",
+      "sha256": "c1407f93c00af37e04b6fba786fedcfc7c1bf08190673d816935eb3512556248"
+    },
+    {
+      "name": "src/main.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/main.rs",
+      "sha256": "87f65fb3a08867bfdaf11e5ac47b3b8a354c9197abbd8db2e40aab8ae76835d4"
+    },
+    {
+      "name": "src/master.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/master.rs",
+      "sha256": "5cfaec7483766370a6bdb0fc8be6cc86d4dfeb0941ad479cde4aff0560240867"
+    },
+    {
+      "name": "src/metrics.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/metrics.rs",
+      "sha256": "d99ffc724d3aeabdc12dd3d10ce08e4a0995033bc7265612dab5f31c1039ef07"
+    },
+    {
+      "name": "src/microstructure.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/microstructure.rs",
+      "sha256": "1ed892522ba8ab3eddb88d85c87fedd1883cee4a26e0034d5dbbb93b7fc08e9c"
+    },
+    {
+      "name": "src/mid_solver_audit.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/mid_solver_audit.rs",
+      "sha256": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+    },
+    {
+      "name": "src/model.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/model.rs",
+      "sha256": "35fe86f07132b11b331a1f65f866a6315dbabe2ef79ad5480522fd9fbd12583a"
+    },
+    {
+      "name": "src/musical_intent.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/musical_intent.rs",
+      "sha256": "34c3987cc3d3d6605ec463858d336b156c7beabf45bc23c47589e7fbb32fa54a"
+    },
+    {
+      "name": "src/native_audio.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/native_audio.rs",
+      "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+    },
+    {
+      "name": "src/native_dsp.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/native_dsp.rs",
+      "sha256": "aeaac57f069fc8ea0a2669fed1ae917d1902b6813daa15a52b6ed7cd08c6a8d8"
+    },
+    {
+      "name": "src/opencl.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/opencl.rs",
+      "sha256": "e0cd6eca2a7799dc515fd798fd59ecbbdc32cd2612003f4302728ce4138dc783"
+    },
+    {
+      "name": "src/reconstruction.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/reconstruction.rs",
+      "sha256": "ea90c971e27f1d7f59bcce8793002e595f54b6580f9d21c87096a31c9dec6827"
+    },
+    {
+      "name": "src/rich_allocation.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_allocation.rs",
+      "sha256": "80d65b7920a437c9635128dc727a10626aeb0df2970bf73c66f18d8a0c076c40"
+    },
+    {
+      "name": "src/rich_dynamics.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_dynamics.rs",
+      "sha256": "8bf674f192d3fc056d90fc50ef500acbe2b2b7221c86f67f9c9465f6ff10b73c"
+    },
+    {
+      "name": "src/rich_experiment.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_experiment.rs",
+      "sha256": "8bb1c0dc729016ddbfb521c201858f2f5876c706df369082cbece831bd80336e"
+    },
+    {
+      "name": "src/rich_field.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_field.rs",
+      "sha256": "cbb1e2350472315f565b0d5cc4a29b93f8cbfdfec93a7673bfcd031df7248bd7"
+    },
+    {
+      "name": "src/rich_gate.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_gate.rs",
+      "sha256": "ba6215206659b07b460fc65a0b270941c37ac9b21dc85563795602fa2a6d098f"
+    },
+    {
+      "name": "src/rich_gate_tests.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_gate_tests.rs",
+      "sha256": "4e8446a74dad3754b71bf6529fcb6f103beba97b3e2f2fed69762b3b7a48393a"
+    },
+    {
+      "name": "src/rich_low.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_low.rs",
+      "sha256": "a16cddcdd11525bbc255844aa6cf272a57d66cf056f161a56c86ab0b27a8c65b"
+    },
+    {
+      "name": "src/rich_mid.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_mid.rs",
+      "sha256": "7466f2b47dc39b8d1d29944b4ab225a3ae7bd6ec314fb924ab5eb76746ef7672"
+    },
+    {
+      "name": "src/rich_oracle.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_oracle.rs",
+      "sha256": "09656d5a81f1216e808378b530549abe40ffc7e5e6ef9a7dbd267f131b362f6b"
+    },
+    {
+      "name": "src/rich_synth.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/rich_synth.rs",
+      "sha256": "e0bc220a0b752df7e864c958f4e5fb24789d78299e6ed0b72401e34ee8eee364"
+    },
+    {
+      "name": "src/scene.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene.rs",
+      "sha256": "e4c645b249baadf19abb08668c85954fa782d39afec323fe2b323b78c9f774e5"
+    },
+    {
+      "name": "src/scene_adapter.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_adapter.rs",
+      "sha256": "24a855c5dc79e338d159bef1966c5411a7864f62c784c0c7c7cad1e63220eec2"
+    },
+    {
+      "name": "src/scene_clean.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_clean.rs",
+      "sha256": "7ac46ea6ea9120cb57965322c39c52964581e07760ee829eb72f7c21173f482e"
+    },
+    {
+      "name": "src/scene_engine.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_engine.rs",
+      "sha256": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5"
+    },
+    {
+      "name": "src/scene_experiment.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_experiment.rs",
+      "sha256": "514d89260fc18f468b90752e698e21097a5f7b4b96c56eb2876bcc69891b3074"
+    },
+    {
+      "name": "src/scene_features.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_features.rs",
+      "sha256": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2"
+    },
+    {
+      "name": "src/scene_loss.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_loss.rs",
+      "sha256": "323cd865cbcb86285477d661bef8a4d2c21842f782ffcccdf2841dbeb4c33ece"
+    },
+    {
+      "name": "src/scene_metrics.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_metrics.rs",
+      "sha256": "0b324b522961ebc5fe558aa75527ea1d2299f854e553736b9748c2ec66a130cd"
+    },
+    {
+      "name": "src/scene_model.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_model.rs",
+      "sha256": "54cb759c444a9e0562fe86845fd84fb71a5b1dbe82ad4b5470909060dc06dfb7"
+    },
+    {
+      "name": "src/scene_stats.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_stats.rs",
+      "sha256": "b2e2b62e40b2f3adab9ded0961fa7dc1ba725b525035e7e484e59b24d79a59b6"
+    },
+    {
+      "name": "src/scene_synth.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_synth.rs",
+      "sha256": "e87de84d82302ac1b87a937ec259c4243cae1112127708c127bb02c84553f104"
+    },
+    {
+      "name": "src/scene_training_state.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/scene_training_state.rs",
+      "sha256": "e7df65a4d0b5a2e38912057254edbad8334a651c9313f24f8bb26798dbc07a2c"
+    },
+    {
+      "name": "src/sfht.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/sfht.rs",
+      "sha256": "32387fc988802d9e4b5aeb1c246b657cbae1d8b6b16766c689e0a3b5bdf91dcb"
+    },
+    {
+      "name": "src/signal_time.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/signal_time.rs",
+      "sha256": "039e95d205bc86585c8a53ce5698c4a0bc90786cef2a250223ee5566fddf36fe"
+    },
+    {
+      "name": "src/spatial.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/spatial.rs",
+      "sha256": "d299533149761fd06f7f5348b4db42c4af5987898c3a44eca61466189411ed16"
+    },
+    {
+      "name": "src/stft_hires.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/stft_hires.rs",
+      "sha256": "19245f311f146b7f4e65715c76ecb4033ebcd4a2230d1764bd2344d44c7ab43d"
+    },
+    {
+      "name": "src/synth.rs",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/src/synth.rs",
+      "sha256": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be"
+    },
+    {
+      "name": "scripts/run_coherence_quality.py",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/run_coherence_quality.py",
+      "sha256": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254"
+    },
+    {
+      "name": "scripts/run_mid_profile.py",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/run_mid_profile.py",
+      "sha256": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862"
+    },
+    {
+      "name": "scripts/long_coherence_fixture.py",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/long_coherence_fixture.py",
+      "sha256": "855ce08a02df626ca63a3cd32dbc887cf7a4110fa2d4ca3aeb7154f922cd4ce6"
+    },
+    {
+      "name": "fixture_manifest",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/manifest.json",
+      "sha256": "ca66b157c44bee67ef0cc9bc1a09b5d76eeb45bdeb0d72d2f4bbfa6dedcbb05b"
+    },
+    {
+      "name": "Cargo.toml",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/Cargo.toml",
+      "sha256": "8ea807e2b5cb25c42e5628a2b2235f87e7eb25a349316ed037d869f5d5558854"
+    },
+    {
+      "name": "Cargo.lock",
+      "path": "/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018/Cargo.lock",
+      "sha256": "6714acafb87f26c670094efb8fb563d3df24a04045799da3ba235b1fc30409b8"
+    }
+  ],
+  "target_set_sha256": "b04478f716908b4690127bfb99ead7c5de3e477b6d9e1c46857da455631b2463",
+  "jobs": [
+    {
+      "id": "view0",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/view0-input.wav",
+      "target": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/view0-target.wav",
+      "samples": 1248000,
+      "origin_sample": 0,
+      "chunk_seconds": 8.0,
+      "overlap_seconds": 2.0,
+      "input_sha256": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158",
+      "target_sha256": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158",
+      "continuous_excitation": true,
+      "input_origin_samples": 0
+    },
+    {
+      "id": "view3",
+      "input": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/view3-input.wav",
+      "target": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/view3-target.wav",
+      "samples": 1248000,
+      "origin_sample": 144384,
+      "chunk_seconds": 8.0,
+      "overlap_seconds": 2.0,
+      "input_sha256": "eb53a5c51d158e12ed43dd109326286f102766877e410ea769c6ce0c6c35f134",
+      "target_sha256": "eb53a5c51d158e12ed43dd109326286f102766877e410ea769c6ce0c6c35f134",
+      "continuous_excitation": true,
+      "input_origin_samples": 144384
+    }
+  ],
+  "source_base_commit": "cdfb64226c4ccaa86bf53f173447db3c75840fd4",
+  "purpose": "candidateconditioningcoherence; OpenCLnumericallyparity-gatedagainstCPU; notspeedqualification",
+  "profiling": false,
+  "backend": "opencl"
+}

@@ -6,7 +6,9 @@ Updated 2026-10-18. Start with [project policy](../AGENTS.md), [README](../READM
 
 Current production is v1.3.1 Smooth (`493cdca`) with frozen Euler8. Later research
 did not promote cache, host-batch or solver changes. Owner blind judgments remain
-pending. The next audio priority is [long-duration coherence](LONG_COHERENCE_PLAN.md).
+pending. [Long-duration coherence](LONG_COHERENCE_RESULTS.md) now has procedural
+measurements, an isolated excitation prototype, a failed raw preservation gate,
+separate projection controls and a short listening package. It is not promoted.
 
 Historical plans, favorite labels, timings and device delivery paths below remain
 dated records. They do not override current policy or promise files survived cleanup.
@@ -21,13 +23,13 @@ were not revalidated in this documentation pass.
 | Document | Role |
 | --- | --- |
 | [LONG_COHERENCE_RESULTS.md](LONG_COHERENCE_RESULTS.md) | Current long-phrase controls and measurement checkpoints |
-| [LONG_COHERENCE_PLAN.md](LONG_COHERENCE_PLAN.md) | New proposed audio experiment; no benefit claimed |
+| [LONG_COHERENCE_PLAN.md](LONG_COHERENCE_PLAN.md) | Frozen hypotheses/gates; progress in results |
 | [AGENTS.md](../AGENTS.md) | Current execution policy |
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-17.md) | Superseded historical checkpoint |
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) | Current continuation checkpoint |
 | [HANDOVER_NEXT_EVOLUTION.md](../HANDOVER_NEXT_EVOLUTION.md) | Historical snapshot with current pointer |
 | [README.md](../README.md) | Current entry point and scoped legacy examples |
-| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–27 |
+| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–28 |
 | [VALIDATION.md](../VALIDATION.md) | Versioned validation ledger |
 | [artifacts/README.md](../artifacts/README.md) | Historical artifact catalog/receipt |
 | [artifacts/next-evolution-v1/README.md](../artifacts/next-evolution-v1/README.md) | Historical artifact catalog/receipt |

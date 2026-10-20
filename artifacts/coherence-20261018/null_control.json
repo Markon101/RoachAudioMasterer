@@ -1,0 +1,52 @@
+{
+  "schema": "continuous-excitation-native-null-control-v1",
+  "binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "input_sha256": "c4aab8b9321bd333a4aa81ace1f22e4cde8e69af0c9231f54c2d6ebfd32f35d1",
+  "jobs": [
+    {
+      "mode": "restart",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/null-8192-v1/zero.wav",
+        "--backend",
+        "cpu",
+        "--steps",
+        "8",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/null-8192-v1/restart"
+      ],
+      "output_sha256": "99db4b104cd23e629bc39927ebd89f47857fd210ab8c9b6376997e07aa4f913b",
+      "all_zero": true,
+      "max_abs": 0.0
+    },
+    {
+      "mode": "continuous",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/null-8192-v1/zero.wav",
+        "--backend",
+        "cpu",
+        "--steps",
+        "8",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/null-8192-v1/continuous",
+        "--continuous-excitation",
+        "--input-origin-samples",
+        "144384"
+      ],
+      "output_sha256": "99db4b104cd23e629bc39927ebd89f47857fd210ab8c9b6376997e07aa4f913b",
+      "all_zero": true,
+      "max_abs": 0.0
+    }
+  ],
+  "scope": "8192sample nativeCPU stereo silence; rules out unconditionalnoiseaddition here, not stopped-mid/healthyfalseactivation"
+}

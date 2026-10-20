@@ -1,0 +1,151 @@
+{
+  "schema": "coherence-input-only-energy-control-v1",
+  "command": [
+    "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/energy_match",
+    "--input",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/input.wav",
+    "--candidates",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_view0.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_view3.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_projected_view0.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_projected_view3.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_view0.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_view3.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_projected_view0.wav",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_projected_view3.wav",
+    "--seconds",
+    "13",
+    "--out",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/matched"
+  ],
+  "input_common_samples": [
+    384000,
+    1008000
+  ],
+  "arms": {
+    "restart": {
+      "difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.05821796506643295,
+        "rms": 0.0024712319440254047,
+        "reference_rms": 0.17874991936236012,
+        "relative_rms": 0.013825080049494998
+      },
+      "reduction_vs_restart": 0.0
+    },
+    "restart_projected": {
+      "difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.05821783095598221,
+        "rms": 0.0024712318750158956,
+        "reference_rms": 0.1787499250224944,
+        "relative_rms": 0.013825079225655108
+      },
+      "reduction_vs_restart": 2.7925144419072012e-08
+    },
+    "continuous": {
+      "difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.0017420947551727295,
+        "rms": 6.924505062063742e-05,
+        "reference_rms": 0.17874988308808984,
+        "relative_rms": 0.00038738515194727553
+      },
+      "reduction_vs_restart": 0.9719795421113553
+    },
+    "continuous_projected": {
+      "difference": {
+        "samples_per_channel": 624000,
+        "max_abs": 0.0017418712377548218,
+        "rms": 6.924438604179917e-05,
+        "reference_rms": 0.17874988860307894,
+        "relative_rms": 0.0003873814220693531
+      },
+      "reduction_vs_restart": 0.9719798110374833
+    }
+  },
+  "ordered_files": [
+    {
+      "arm": "restart",
+      "view": "view0",
+      "gain": 0.9946624636650085,
+      "listening_file": "candidate-1.wav",
+      "peak": 0.5576108694076538,
+      "residual_rms_after": 0.002258173970138697,
+      "residual_rms_before": 0.0022702917403103744,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_view0.wav"
+    },
+    {
+      "arm": "restart",
+      "view": "view3",
+      "gain": 0.9999999403953552,
+      "listening_file": "candidate-2.wav",
+      "peak": 0.5513806343078613,
+      "residual_rms_after": 0.0022581740358792214,
+      "residual_rms_before": 0.002258174054324957,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_view3.wav"
+    },
+    {
+      "arm": "restart_projected",
+      "view": "view0",
+      "gain": 0.9946624636650085,
+      "listening_file": "candidate-3.wav",
+      "peak": 0.557610809803009,
+      "residual_rms_after": 0.0022581738667315394,
+      "residual_rms_before": 0.0022702916271502595,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_projected_view0.wav"
+    },
+    {
+      "arm": "restart_projected",
+      "view": "view3",
+      "gain": 1.0,
+      "listening_file": "candidate-4.wav",
+      "peak": 0.5513808131217957,
+      "residual_rms_after": 0.0022581739216854654,
+      "residual_rms_before": 0.0022581739216854654,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/restart_projected_view3.wav"
+    },
+    {
+      "arm": "continuous",
+      "view": "view0",
+      "gain": 0.9665150046348572,
+      "listening_file": "candidate-5.wav",
+      "peak": 0.5535545945167542,
+      "residual_rms_after": 0.002258173882574308,
+      "residual_rms_before": 0.0023364085102184884,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_view0.wav"
+    },
+    {
+      "arm": "continuous",
+      "view": "view3",
+      "gain": 0.9675992131233215,
+      "listening_file": "candidate-6.wav",
+      "peak": 0.5535818338394165,
+      "residual_rms_after": 0.0022581738514918215,
+      "residual_rms_before": 0.002333790501302203,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_view3.wav"
+    },
+    {
+      "arm": "continuous_projected",
+      "view": "view0",
+      "gain": 0.9665150046348572,
+      "listening_file": "candidate-7.wav",
+      "peak": 0.5535546541213989,
+      "residual_rms_after": 0.0022581738655072237,
+      "residual_rms_before": 0.0023364084930454247,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_projected_view0.wav"
+    },
+    {
+      "arm": "continuous_projected",
+      "view": "view3",
+      "gain": 0.9675992727279663,
+      "listening_file": "candidate-8.wav",
+      "peak": 0.5535823106765747,
+      "residual_rms_after": 0.002258173972072896,
+      "residual_rms_before": 0.0023337904849186435,
+      "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/energy-controls-v1/continuous_projected_view3.wav"
+    }
+  ],
+  "target_residual_rms": 0.0022581739216854654,
+  "scope": "singleLRlinked attenuation per rendered view to minimum residualRMS acrossall8; no targetor total normalization. This secondary control intentionally changes relative residualstrength; not a productionpolicy."
+}

@@ -1,0 +1,132 @@
+{
+  "schema": "continuous-excitation-cli-golden-v1",
+  "binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+  "source_sha256": {
+    "src/synth.rs": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be",
+    "src/scene_features.rs": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2",
+    "src/rich_mid.rs": "7466f2b47dc39b8d1d29944b4ab225a3ae7bd6ec314fb924ab5eb76746ef7672",
+    "src/main.rs": "87f65fb3a08867bfdaf11e5ac47b3b8a354c9197abbd8db2e40aab8ae76835d4"
+  },
+  "source_parent": "b031c41",
+  "cases": [
+    {
+      "tag": "default",
+      "backend": "cpu",
+      "continuous": false,
+      "origin": 0,
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/mission-20261018/euler-numerical-golden/procedural-stereo-f32.wav",
+        "--controlled",
+        "--steps",
+        "8",
+        "--backend",
+        "cpu",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/golden/default"
+      ],
+      "exit_code": 0,
+      "exact_legacy_files": {
+        "chunks/chunk_0000.bin": "b504ec4812ca30161e087c983c1a4980f516863684917acd89ae7e8c6f75e14d",
+        "listen.wav": "c32447a0fcadef3c45013c061c45b817e35e6518c194e6780a3292d0a58141d6",
+        "reconstructed.wav": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc",
+        "restored.wav": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc"
+      },
+      "restored_sha256": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc"
+    },
+    {
+      "tag": "continuous0",
+      "backend": "cpu",
+      "continuous": true,
+      "origin": 0,
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/mission-20261018/euler-numerical-golden/procedural-stereo-f32.wav",
+        "--controlled",
+        "--steps",
+        "8",
+        "--backend",
+        "cpu",
+        "--continuous-excitation",
+        "--input-origin-samples",
+        "0",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/golden/continuous0"
+      ],
+      "exit_code": 0,
+      "exact_legacy_files": {
+        "chunks/chunk_continuous_0000.bin": "b504ec4812ca30161e087c983c1a4980f516863684917acd89ae7e8c6f75e14d",
+        "listen.wav": "c32447a0fcadef3c45013c061c45b817e35e6518c194e6780a3292d0a58141d6",
+        "reconstructed.wav": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc",
+        "restored.wav": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc"
+      },
+      "restored_sha256": "f5058a7d2a841dba87caae4bc3f4a2cd27a99b73936dc6ca12eb5e0f73d191cc"
+    },
+    {
+      "tag": "continuous-offset-cpu",
+      "backend": "cpu",
+      "continuous": true,
+      "origin": 144384,
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/mission-20261018/euler-numerical-golden/procedural-stereo-f32.wav",
+        "--controlled",
+        "--steps",
+        "8",
+        "--backend",
+        "cpu",
+        "--continuous-excitation",
+        "--input-origin-samples",
+        "144384",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/golden/continuous-offset-cpu"
+      ],
+      "exit_code": 0,
+      "exact_legacy_files": {},
+      "restored_sha256": "13b715fa8766137abccc7bf6450c88e7166576e92ba3342535e1bc390ef50083"
+    },
+    {
+      "tag": "continuous-offset-gpu",
+      "backend": "opencl",
+      "continuous": true,
+      "origin": 144384,
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "rich-mid-restore",
+        "--model",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/mission-20261018/euler-numerical-golden/procedural-stereo-f32.wav",
+        "--controlled",
+        "--steps",
+        "8",
+        "--backend",
+        "opencl",
+        "--continuous-excitation",
+        "--input-origin-samples",
+        "144384",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/golden/continuous-offset-gpu"
+      ],
+      "exit_code": 0,
+      "exact_legacy_files": {},
+      "restored_sha256": "e15d52118a5bda18d5c45610668bca8d37d3543cebfa163ec7b5b9d60d9c929c"
+    }
+  ],
+  "default_legacy_byte_identity": true,
+  "origin0_legacy_byte_identity": true,
+  "gpu_waveform_delta": "pending offline comparison",
+  "speed_claim": false
+}

@@ -1374,4 +1374,37 @@ training or promotion. The production champion/default are unchanged; owner
 blind listening, real-track solver validation and the remaining mission stages
 are still pending.
 
+### 28. Longer-phrase continuity improves; raw preservation gate fails (2026-10-18 local)
+
+Frozen Mid-v3/Euler8 on a continuous 32-second procedural source shows measurable
+layout sensitivity: aligned 13-second interior RMS difference 0.002477883 between
+two 26-second WOLA views. An isolated absolute-origin excitation prototype lowers
+this by 97.108%, with median overlap residual cosine 0.98224. A matched same-binary
+OpenCL baseline confirms the reduction; restart CPU/GPU differences are at most
+1.19e-7. Default-off CLI and origin-zero CPU chunk hashes remain exact.
+
+**Continuous excitation alone fails** the frozen absolute protected-band error
+RMS limit: 1.48e-6 versus 1e-6. A separately declared four-arm experiment applies
+the actual native whole-clip projection without target access. Both projected
+arms stay below 2.8e-9; projection alone leaves layout error essentially unchanged.
+Input-only residual-energy attenuation retains the continuity result. A second
+pitch and healthy source show 95.2% and 97.3% reductions, respectively, but forced
+healthy residuals remain and rise about 2.7–3.1%. Silence remains zero. These are
+development cases, not final held-out data or autonomous activation measurements.
+
+Identical -13 LUFS finalization never engages the limiter. A separately declared
+-9 LUFS stress condition engages all arms, which pass the finite true-peak gate
+and retain lower layout sensitivity. This is not a recommended production target.
+Complex target error remains in conflict with improved magnitude metrics; neither
+continuity nor peak compliance establishes audio preference. CPU/OpenCL observed
+HWM is about 154/196 MiB per view, and 506/548 MiB for the single-clip counterfactual;
+no speed qualification was performed.
+
+The [full report](docs/LONG_COHERENCE_RESULTS.md) records protocols, exact source
+patch, model/binary/input hashes, failed gates, controls, limitations and commands.
+A four-trial short procedural blind package is ready locally; owner judgments
+remain pending. Native combined integration and broader adverse/real-recording
+qualification remain open. Tier 2 tools/parity and Tier 3 limited measurements;
+Tier 4 absent. The production champion, weights and default signal path are unchanged.
+
 

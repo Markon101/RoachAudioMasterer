@@ -1,0 +1,42 @@
+{
+  "schema": "coherence-projection-factorial-protocol-v1",
+  "date_utc": "2026-10-19T03:03:13.879972+00:00",
+  "candidate1_verdict": "continuous-only failed predeclared1e-6 protected-band limit; failure remains recorded",
+  "hypothesis": "native whole-clip projection can preserve trusted bands while continuous excitation retains layout stability",
+  "arms": [
+    "restart",
+    "restart_projected",
+    "continuous",
+    "continuous_projected"
+  ],
+  "source_sessions": {
+    "restart": "runs/coherence-20261018/native-baseline-v1",
+    "continuous": "runs/coherence-20261018/continuous-gpu-v1"
+  },
+  "implementation": "actual src/dsp.rs::lock_known_bands reused by examples/trusted_projection.rs",
+  "source_sha256": {
+    "examples/trusted_projection.rs": "db639b2e0949991ea46320fdcf8a4d908eb47c8b81622fbdd7f0216ecf374be2",
+    "src/dsp.rs": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54",
+    "src/native_audio.rs": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+  },
+  "gates": {
+    "max_whole_view_protected_error_rms": 1e-06,
+    "layout_rms_reduction_vs_restart_minimum": 0.5,
+    "projection_only_layout_rms_reduction_maximum_for_excitation_attribution": 0.1
+  },
+  "scope": "one development phrase; existing CPU/GPU source difference checked; no new inference or speed qualification",
+  "controls": [
+    "projection-only arm",
+    "input-only residual attenuation to minimum across all arms; no target scaling",
+    "identity projection exact sample bits",
+    "post-mastering consequences and owner blind preference remain separate gates"
+  ],
+  "report": [
+    "whole-view LR/MS input-relative band error",
+    "aligned interior layout RMS",
+    "target error/phase/LSD and onset-envelope deviations",
+    "projection change waveform RMS/peaks/stereo",
+    "limiter consequences before any promotion"
+  ],
+  "interpretation": "No perceptual improvement or protected-band guarantee after arbitrary subsequent DSP. Whole-file Fourier projection has circular boundary/ringing and global support; finite float32 numerical preservation only."
+}

@@ -76,7 +76,8 @@ def _colored_noise(rng: np.random.Generator, n: int, low_hz: float,
     return out
 
 
-def _render_source(n: int, seed: int, events: Iterable[float]) -> tuple[np.ndarray, list[dict]]:
+def _render_source(n: int, seed: int, events: Iterable[float],
+                   base_hz: float = 146.8) -> tuple[np.ndarray, list[dict]]:
     rng = np.random.default_rng(seed)
     t = np.arange(n, dtype=np.float64) / RATE
     duration = n / RATE
@@ -87,7 +88,6 @@ def _render_source(n: int, seed: int, events: Iterable[float]) -> tuple[np.ndarr
     level = 0.72 + 0.18 * np.sin(2 * np.pi * t / 7.2 + 0.2) + 0.07 * np.sin(2 * np.pi * t / 3.1)
     section = np.interp(t, [0, 8, 12, 18, 22, 48], [0.4, 0.4, 1.0, 1.0, 0.2, 0.2])
     level *= section
-    base_hz = 146.8
     harmonic = np.zeros((n, 2), dtype=np.float64)
     for k in range(1, 19):
         inst_hz = base_hz * k * (1.0 + drift)
@@ -143,13 +143,16 @@ def _render_source(n: int, seed: int, events: Iterable[float]) -> tuple[np.ndarr
 
 def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
             view_specs: list[tuple[str, float, float]] | None = None,
-            event_times: Iterable[float] | None = None) -> dict:
+            event_times: Iterable[float] | None = None,
+            base_hz: float = 146.8) -> dict:
     """Generate a full source, globally degrade it once, then write aligned views."""
     out = Path(out)
     if out.exists() and any(out.iterdir()):
         raise FileExistsError(f"refusing non-empty output directory: {out}")
     if not math.isfinite(duration_seconds) or duration_seconds <= 0:
         raise ValueError("duration_seconds must be positive and finite")
+    if not math.isfinite(base_hz) or not 40.0 <= base_hz <= 1000.0:
+        raise ValueError("base_hz must be finite and in 40..1000 Hz")
     n = int(round(duration_seconds * RATE))
     if not 1 <= n <= 48 * RATE:
         raise ValueError("fixture duration must round to 1 sample through 48 seconds")
@@ -172,7 +175,7 @@ def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
         normalized_views.append((view_id, origin, length))
 
     events = tuple(DEFAULT_EVENTS if event_times is None else event_times)
-    target, event_rows = _render_source(n, seed, events)
+    target, event_rows = _render_source(n, seed, events, base_hz)
     # Filter after the one common peak scale, over the entire source, before
     # any crop. Rust's f32 rustfft can differ by small roundoff from this.
     damaged = _lowpass_once(target.astype(np.float64), 1500.0, 225.0, 2.0).astype(np.float32)
@@ -212,6 +215,7 @@ def prepare(out: Path, seed: int = DEFAULT_SEED, duration_seconds: float = 32.0,
         "environment": {"numpy": np.__version__, "python": platform.python_version()},
         "recipe": {
             "source": "continuous shared harmonic oscillator bank with integrated slow frequency drift and multisecond level motion; dense globally filtered aspiration; fixed attacks with global-index early and late decay fields",
+            "base_hz": base_hz,
             "event_times_seconds": list(map(float, events)),
             "common_peak_target": 0.62,
             "harmonic_section_envelope": {"seconds": [0, 8, 12, 18, 22, 48], "relative_levels": [0.4, 0.4, 1.0, 1.0, 0.2, 0.2]},
@@ -254,8 +258,9 @@ def main() -> None:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--duration-seconds", type=float, default=32.0)
+    parser.add_argument("--base-hz", type=float, default=146.8)
     args = parser.parse_args()
-    manifest = prepare(args.out, args.seed, args.duration_seconds)
+    manifest = prepare(args.out, args.seed, args.duration_seconds, base_hz=args.base_hz)
     print(json.dumps({"out": str(args.out), "samples": manifest["samples"],
                       "hashes": manifest["source_sha256"]}, indent=2))
 

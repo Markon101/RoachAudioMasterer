@@ -64,6 +64,18 @@ class LongCoherenceFixtureTests(unittest.TestCase):
         self.assertLessEqual(float(np.max(np.abs(source))), 0.620001)
         self.assertEqual(events[0]["sample"], int(round(0.08 * RATE)))
 
+    def test_pitch_varies_source_without_changing_default_recipe(self):
+        old, _ = _render_source(8192, 881000, [])
+        explicit, _ = _render_source(8192, 881000, [], base_hz=146.8)
+        higher, _ = _render_source(8192, 881000, [], base_hz=196.0)
+        self.assertTrue(np.array_equal(old.view(np.uint32), explicit.view(np.uint32)))
+        self.assertGreater(float(np.sqrt(np.mean((higher - old) ** 2))), 0.01)
+        for frequency in (float('nan'), 0.0, 1001.0):
+            out = self.root / 'invalid-pitch'
+            with self.assertRaises(ValueError):
+                prepare(out, duration_seconds=0.1, base_hz=frequency)
+            self.assertFalse(out.exists())
+
     def test_silence_wav_roundtrip(self):
         from scripts.long_coherence_fixture import _write_float_wav
 

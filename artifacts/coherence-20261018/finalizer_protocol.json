@@ -1,0 +1,34 @@
+{
+  "schema": "coherence-finalizer-condition-v1",
+  "date_utc": "2026-10-19T03:05:25.120080+00:00",
+  "question": "Does improved raw layout-associated continuity survive identical native finalization, and are there measurable peak/limiter/transient/stereo consequences?",
+  "arms": [
+    "restart",
+    "restart_projected",
+    "continuous",
+    "continuous_projected"
+  ],
+  "views": [
+    "view0",
+    "view3"
+  ],
+  "source_selection": "all predeclared arms andviews, no target selection",
+  "binary": "runs/coherence-20261018/continuous-excitation-candidate",
+  "target_lufs": -13.0,
+  "ceiling_dbtp": -1.0,
+  "glue_threshold_db": -20.0,
+  "glue_ratio": 1.6,
+  "sidechain_hp_hz": 90.0,
+  "flags": [
+    "--clock-transient-punch",
+    "--kick-transient-guard",
+    "--quiet-mid-denoise"
+  ],
+  "controls": "samefinalizerconfiguration; inputoriginsvaryacrossviews, so gainsmaydiffer. Report rawandcommonattenuationmatched layout diagnostics separately. No source-based gain tuning.",
+  "scope": "Existing Smooth-stage controls; not reproduction of entire production chain or pre-limiter observation. Native truepeak is finite4x estimate, not continuous-time guarantee.",
+  "gates": {
+    "true_peak_linear_max": 0.8912529381337455,
+    "all_outputs_finite": true
+  },
+  "promotion": false
+}

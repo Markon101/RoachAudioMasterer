@@ -98,12 +98,15 @@ class QualityRunnerTests(unittest.TestCase):
             "steps": 8, "strength": 1.0, "total_seconds": job["samples"] / runner.RATE,
             "elapsed_seconds": 17.0, "controlled": False, "denoise": False,
             "auto_eq": False,
+            "excitation_mode": 'continuous' if job.get('continuous_excitation', False) else 'restart_per_chunk',
+            "input_origin_samples": job.get('input_origin_samples', 0),
         }))
         sizes = runner._expected_chunks(job["samples"], job["chunk_seconds"], job["overlap_seconds"])
         chunks = out / "chunks"
         chunks.mkdir()
         for index, count in enumerate(sizes):
-            with (chunks / f"chunk_{index:04}.bin").open("wb") as f:
+            prefix = 'chunk_continuous_' if job.get('continuous_excitation', False) else 'chunk_'
+            with (chunks / f"{prefix}{index:04}.bin").open("wb") as f:
                 f.truncate(count * runner.CHANNELS * runner.SAMPLE_BYTES)
         return FakeProcess()
 
@@ -214,6 +217,35 @@ class QualityRunnerTests(unittest.TestCase):
             self.assertNotIn("elapsed_seconds", json.dumps(receipt))
             self.assertEqual(len(receipt["artifacts"]["chunk_files"]),
                              len(receipt["artifacts"]["chunk_sample_counts"]))
+
+    def test_explicit_continuous_mode_and_origins_reach_child_and_receipt(self):
+        self.plan['schema'] = 'long-coherence-quality-v2'
+        for job in self.jobs:
+            job['continuous_excitation'] = True
+            job['input_origin_samples'] = 144384 if job['id'] == 'view3' else 0
+        self.write_plan()
+        with mock.patch.object(runner, '_environment', return_value={'test': True}), \
+                self.launch_patch(), mock.patch.object(runner, 'memory', return_value={'VmRSS': 100, 'VmHWM': 200}):
+            runner.run(self.plan_path)
+        for (command, _), job in zip(self.launched, self.jobs):
+            self.assertIn('--continuous-excitation', command)
+            self.assertEqual(command[command.index('--input-origin-samples') + 1], str(job['input_origin_samples']))
+            r = json.loads((self.run_root/'receipts'/f"{job['id']}.json").read_text())
+            self.assertEqual(r['artifacts']['restoration_settings']['excitation_mode'], 'continuous')
+
+    def test_v2_gpu_prefix_keeps_fixed_bounds_and_records_actual_job_count(self):
+        self.plan.update(schema='long-coherence-quality-v2', backend='opencl')
+        self.plan['jobs'] = self.jobs[:1]
+        self.plan['target_set_sha256'] = runner.target_set_digest(self.plan['jobs'])
+        self.write_plan()
+        with mock.patch.object(runner, '_environment', return_value={'test': True}), \
+                self.launch_patch(), mock.patch.object(runner, 'memory', return_value={'VmRSS': 100, 'VmHWM': 200}):
+            done = runner.run(self.plan_path)
+        self.assertEqual(done['job_count'], 1)
+        self.assertEqual(done['backend_requested'], 'opencl')
+        command, env = self.launched[0]
+        self.assertEqual(command[command.index('--backend') + 1], 'opencl')
+        self.assertEqual(env['OCL_ICD_ASSUME_ICD_EXTENSION'], '1')
 
 
 if __name__ == "__main__":

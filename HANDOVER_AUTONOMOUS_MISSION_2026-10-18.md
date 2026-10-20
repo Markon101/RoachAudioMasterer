@@ -1,7 +1,7 @@
 # Mission continuation — 2026-10-18
 
 This is a partial research checkpoint. Read AGENTS, README, architecture,
-RESULTS Sections 24–27 and the relevant frozen plan before changing behavior.
+RESULTS Sections 24–28 and the relevant frozen plan before changing behavior.
 Recheck Git state, running jobs, storage and retained artifacts before resuming.
 The machine-readable checkpoint is
 `artifacts/mission-20261018/mission_state.json`.
@@ -12,6 +12,70 @@ now leads the next work. The [documentation index](docs/README.md) and
 [audit receipt](artifacts/mission-20261018/documentation_audit.json) reconcile all
 72 pre-existing Markdown documents; no new audio or speed result was produced
 by that documentation pass.
+
+## Latest continuation: measured long-phrase coherence
+
+The [completed report](docs/LONG_COHERENCE_RESULTS.md) now supersedes the plan's
+initial pending baseline. `b031c41` added controlled continuous fixtures and the
+guarded quality runner; `7ec7eaf` added short procedural blind auditions. Subsequent
+measurement artifacts belong to this checkpoint's benchmark commit. No native
+signal-path change has been integrated into the shared branch.
+
+An isolated absolute-origin excitation prototype lowers common-interior layout
+RMS 97.108% on the original phrase; matched same-binary OpenCL views confirm it.
+It **fails** the frozen 1e-6 absolute protected-band RMS gate (observed 1.48e-6).
+Separate actual-Rust whole-clip projection brings the error below 2.8e-9 while
+retaining the continuity change. Projection-only and input-only residual-energy
+controls exclude those simpler explanations in this setup. A different pitch
+and a healthy source retain about 95.2%/97.3% reductions; healthy forced edits
+still exist and grow 2.7–3.1%. Silence remains zero. No target/perceptual superiority
+or independent held-out qualification is claimed.
+
+Normal -13 LUFS finalization had no limiting. Explicit -9 LUFS stress engages all
+arms at about 0.96–1.14 dB GR; all sixteen outputs pass finite/peak checks. Raw and
+input-referred scalar-gain sensitivity controls are recorded separately. Actual
+pre-limiter snapshots are still missing; these reports do not complete Stage 4.
+No speed qualification was performed in these quality runs.
+
+Local native prototype worktree:
+`/data/data/com.termux/files/usr/tmp/roach-continuous-excitation-20261018`,
+branch `research/continuous-excitation-20261018`, base `b031c41`. Four source files
+are intentionally uncommitted there. Their exact diff is preserved in
+`artifacts/coherence-20261018/continuous_candidate.patch`; source hashes and focused
+test/build receipts are in `continuous_source_verification.json`. Do not treat
+`--continuous-excitation` as a flag in current main source. Keep its raw band-gate
+failure visible when designing combined native integration. Reject controlled
+clean targets as a trusted projection reference; use the observed input, globally
+damaged before cropping for controlled quality comparisons.
+
+Pinned binary: `runs/coherence-20261018/continuous-excitation-candidate`, SHA256
+`8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a`.
+The old baseline binary remains `runs/mission-20261018/native-solver-audit`.
+Raw clips/chunks/logs/plans/completion markers stay under `runs/coherence-20261018/`.
+Plans contain local absolute paths and source/binary pins: regenerate/re-pin a
+fresh plan after environment/source changes; never silently reuse old caches.
+The runner's local `HALT`/`HALTED.json` latch contains a session and preserves
+completed/failed evidence. It is not a global agent lockdown or auto-resume system.
+
+Ready owner package: `runs/coherence-20261018/listen/diagnostic1` — four trials,
+eight matched-playback WAVs, `INSTRUCTIONS.txt`, `responses.csv`. Only that listener
+directory should be supplied. Keep keys/measurements in
+`runs/coherence-20261018/listening-private-v1/` withheld until judgments are recorded.
+The question is distinguishability/objection/preference on these short procedural
+passages; 13/26 seconds cannot establish fatigue or real-song preference. Verify
+again after copies/cleanup; no owner judgments have arrived.
+
+Highest-value continuation: regenerate the adverse stopped-mid/aspiration controls
+with target/degraded decompositions, test whether the combined excitation +
+projection control worsens false residuals or the phase/magnitude conflict, and
+add actual stage attribution only where it resolves a concrete uncertainty.
+Broader families and controlled real recordings precede any promotion. Do not
+start adaptive NFE, training or a new architecture from this continuity result.
+Use the current tools checkout to generate/analyze data; rebuild the experimental
+native patch in a separate `b031c41` worktree. See the report for exact commands,
+gates, backend bounds and reproducibility qualifications. Preserve all original
+and revised reports; `projection_factorial_analysis_v2.json` adds bitwise crop
+checks without deleting v1.
 
 ## Preserve the champion and execution policy
 

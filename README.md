@@ -8,8 +8,10 @@ Generated content (sub-bass fundamentals, mid overtones, and high air) represent
 Research continuation: [2026-10-18 handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
 records the failed cache/host-batch gates, restored blind packages and mixed native
 solver diagnostic. The production champion and eight-step default are unchanged.
-Use the [documentation index](docs/README.md) for dated evidence and
-[long-duration coherence plan](docs/LONG_COHERENCE_PLAN.md) for the next audio work.
+Use the [documentation index](docs/README.md) for dated evidence and the
+[long-coherence report](docs/LONG_COHERENCE_RESULTS.md) for the measured continuity
+experiment, failed preservation gate and separate projection control. The native
+prototype stays isolated; a short blind diagnostic package is ready locally.
 
 The core direction is a unified autonomous mastering and scene restoration engine:
 - **Autonomous Mastering (`auto-master`)**: Single-command mastering with content-aware specialist routing, ITU-R BS.1770-4 LUFS target matching (-11.0 LUFS), soft-knee glue compression, 4x polyphase FIR true-peak limiting (-1.0 dBTP), and automated lossless export to device storage.

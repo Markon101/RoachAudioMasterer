@@ -87,9 +87,13 @@ def inspect_chunks(render, input_audio, origin, chunk_samples, overlap_samples):
     n = input_audio.shape[1]
     starts = chunk_starts(n, chunk_samples, overlap_samples)
     chunks, residuals, rows = [], [], []
+    metadata = json.loads((render / 'restoration.json').read_text())
+    prefix = metadata.get('raw_chunk_prefix', 'chunk_')
+    if prefix not in ('chunk_', 'chunk_q_', 'chunk_continuous_'):
+        raise ValueError('unknown chunk namespace')
     for index, start in enumerate(starts):
         count = min(chunk_samples, n - start)
-        path = render / 'chunks' / f'chunk_{index:04d}.bin'
+        path = render / 'chunks' / f'{prefix}{index:04d}.bin'
         raw = path.read_bytes()
         if len(raw) != count * 2 * 4:
             raise ValueError('unexpected chunk byte count')
@@ -132,6 +136,11 @@ def analyze(session, fixture):
         raise ValueError('halted session requires separate explicit evidence review')
     if not (session / 'COMPLETE.json').is_file():
         raise ValueError('session is not complete')
+    complete = json.loads((session / 'COMPLETE.json').read_text())
+    if complete['jobs_completed'] != ['view0', 'view3', 'full']:
+        raise ValueError('full analysis requires all three quality jobs')
+    plan = json.loads((session / 'plan.json').read_text())
+    job_pins = {job['id']: job for job in plan['jobs']}
     views = manifest['views']
     specs = [dict(v, chunk_seconds=8, overlap_seconds=2) for v in views]
     specs.append({'id': 'full', 'input': 'input-full.wav', 'target': 'target-full.wav',
@@ -141,6 +150,12 @@ def analyze(session, fixture):
     for spec in specs:
         name = spec['id']
         render = session / 'renders' / name
+        if digest(fixture / spec['input']) != job_pins[name]['input_sha256'] or digest(fixture / spec['target']) != job_pins[name]['target_sha256']:
+            raise ValueError('fixture no longer matches the rendered input/target pins')
+        receipt = json.loads((session / 'receipts' / f'{name}.json').read_text())
+        if digest(render / 'restored.wav') != receipt['artifacts']['restored_wav_sha256']:
+            raise ValueError('native output changed since completion')
+        metadata = json.loads((render / 'restoration.json').read_text())
         x = read_wav(fixture / spec['input']).samples.astype(np.float64)
         target = read_wav(fixture / spec['target']).samples.astype(np.float64)
         y = read_wav(render / 'restored.wav').samples.astype(np.float64)
@@ -152,6 +167,8 @@ def analyze(session, fixture):
         if delta['max_abs'] > 5e-7:
             raise ValueError('Python WOLA reconstruction disagrees with native output')
         cases[name] = {'output_sha256': digest(render / 'restored.wav'),
+                       'excitation_mode': metadata.get('excitation_mode', 'restart_per_chunk'),
+                       'input_origin_samples': metadata.get('input_origin_samples', 0),
                        'output_rms': rms(y), 'output_peak': float(np.max(np.abs(y))),
                        'vs_input': compare(x, y), 'vs_target': compare(target, y),
                        'identity_vs_target': compare(target, x),
@@ -168,7 +185,11 @@ def analyze(session, fixture):
     yf = audio['full'][:, begin:end]
     residual0, residual3 = y0 - x0, y3 - x3
     return {'schema': 'long-coherence-native-analysis-v1', 'fixture_manifest_sha256': digest(fixture / 'manifest.json'),
-            'scope': 'one procedural continuous phrase; fixed Euler8 CPU; single-clip render is a counterfactual, not ground truth',
+            'session_complete_sha256': digest(session / 'COMPLETE.json'),
+            'analysis_source_sha256': digest(Path(__file__)),
+            'binary_sha256': complete['binary_sha256'], 'model_sha256': complete['model_sha256'],
+            'backend_requested': plan.get('backend', 'cpu'),
+            'scope': 'one procedural continuous phrase; fixed Euler8; single-clip render is a counterfactual, not ground truth',
             'definitions': {'rate': RATE, 'band_boundaries_hz': BANDS, 'spectrum': 'float64 rFFT/n, one-sided Parseval weights',
                             'power_null_floor': NULL_POWER, 'amplitude_floor': FLOOR,
                             'phase_mask': 'reference>=max(1e-7,1e-4 band peak),output>=1e-7',
@@ -177,6 +198,7 @@ def analyze(session, fixture):
             'boundary_layout_difference': waveform_difference(y0, y3),
             'residual_layout_difference': waveform_difference(residual0, residual3),
             'boundary_layout_bands': compare(y0, y3),
+            'boundary_layout_bands_scope': 'cropped common13s Fourier grid; diagnostic with window leakage, not the whole-view input-relative protected-band gate',
             'full_counterfactual_difference': {'view0': waveform_difference(yf, y0), 'view3': waveform_difference(yf, y3)},
             'promotion': False}
 

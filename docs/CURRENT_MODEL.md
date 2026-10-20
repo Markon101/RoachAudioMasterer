@@ -12,7 +12,7 @@ from 2026-10-05. Older v0 and flow-v1 models remain available. Exact run evidenc
 [SCENE_V2_RESULTS.md](SCENE_V2_RESULTS.md). Subsequent sprints expanded this system into:
 - **Coupled Complex Field Sprint**: [RICH_SPRINT_RESULTS.md](RICH_SPRINT_RESULTS.md) (Basis rotational/transport operator and full-track streaming).
 - **Mid-Band Flow Sprint**: [MID_BAND_FLOW_RESULTS.md](MID_BAND_FLOW_RESULTS.md) (500 Hz – 6 kHz flow matching).
-- **Tri-Band & Autonomous Mastering Sprint**: [SPRINT3_TRIBAND_RESULTS.md](SPRINT3_TRIBAND_RESULTS.md) (sub-bass flow matching, chunk caching full-track restore in 3.2s, ITU-R BS.1770-4 LUFS and true-peak mastering).
+- **Tri-Band & Autonomous Mastering Sprint**: [SPRINT3_TRIBAND_RESULTS.md](SPRINT3_TRIBAND_RESULTS.md) (sub-bass flow matching, historical chunk-cache timing, loudness and true-peak mastering; not a current inference-speed qualification).
 - **Sprint 4 Roadmap**: [SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md](SPRINT4_ROADMAP_AND_EXPANSION_PLAN.md) (stabilization, 8192-point STFT binning, macro-dynamics, 3D spatial acoustics).
 
 The signal path below describes the core native scene v2 STFT engine that anchors these residual heads.

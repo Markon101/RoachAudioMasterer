@@ -1,0 +1,18 @@
+{
+  "schema": "coherence-doc-target-validation-v1",
+  "files": [
+    "README.md",
+    "RESULTS.md",
+    "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
+    "docs/README.md",
+    "docs/AGENT_SESSION_BRIEFING.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CURRENT_MODEL.md",
+    "docs/LONG_COHERENCE_PLAN.md",
+    "docs/LONG_COHERENCE_RESULTS.md",
+    "docs/BLIND_LISTENING_PROTOCOL.md"
+  ],
+  "local_targets_checked": 213,
+  "missing": [],
+  "scope": "changed current entrypoints/reports only; no remote link/anchor or entirearchive revalidation"
+}

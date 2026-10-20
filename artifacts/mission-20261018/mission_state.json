@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-18T09:09:17.689718+00:00",
+  "date_utc": "2026-10-20T05:37:29.575179+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "238193df474ad180be1aa92375d44eb703061911",
@@ -18,7 +18,8 @@
     "2": "3 restored historical sessions,48files hash-verified; originalalpha/equaltarget conditions and owner judgments pending",
     "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
     "4": "truepeak meter repaired previously; full causal stage ledger and actual pre-limiter snapshots pending",
-    "5": "not started; dynamics-v2 remains demoted"
+    "5": "not started; dynamics-v2 remains demoted",
+    "long_coherence": "native baseline and isolated absolute-origin excitation measured; raw bandgate failed; separate projection+continuity development gates pass; no native integration/promotion"
   },
   "native_development": {
     "scene_seeds": [
@@ -55,23 +56,27 @@
     "native_audit": 5,
     "opencl_release_build": "passed",
     "old_vs_refactored_cli": "exact SHA for raw float chunk and3WAVs",
-    "actual_native_cpu_opencl": "96 canonical sample pairs compared"
+    "actual_native_cpu_opencl": "96 canonical sample pairs compared",
+    "long_coherence_checkpoint_python": 59,
+    "coherence_native_focused": "21 passed1ignored;8helpertestexecutions; source isolated"
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
     "runs/mission-20261018/listen/session2",
-    "runs/mission-20261018/listen/session3"
+    "runs/mission-20261018/listen/session3",
+    "runs/coherence-20261018/listen/diagnostic1"
   ],
   "owner_judgments_received": false,
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Follow docs/LONG_COHERENCE_PLAN.md: deterministic WOLA controls, continuous24-48s procedural phrases, adverse-control regeneration, aligned boundary-offset baseline, then only measured opt-in audio corrections and final-mastering/blind gates. No adaptive routing/training yet.",
+  "next_action": "Regenerate exact adverse stopped-mid/aspiration target+input controls; test consistent-fiction hypothesis on continuous phrases. Owner blind diagnostic pending; no training/adaptiveNFE or combined native integration before adverse qualification.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
     "docs/HOST_BATCH_RESULTS_20261018.md",
-    "docs/LISTENING_RESTORATION_20261018.md"
+    "docs/LISTENING_RESTORATION_20261018.md",
+    "docs/LONG_COHERENCE_RESULTS.md"
   ],
   "delegation": [
     {
@@ -103,5 +108,28 @@
   "raw_audio_policy": "owner audio and private listening keys stay ignored/local; committed raw cases are procedural metrics only",
   "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
   "documentation_review_base_commit": "394fe30",
-  "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary."
+  "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary.",
+  "checkpoint_tool_parent_commit": "7ec7eaf8c1748108475435e8ffecb7c3f02e8be2",
+  "repo_object": {
+    "identity": "Rust-first unified acoustic-scene restoration/correction/expansion with protected historical champions",
+    "canonical_core": {
+      "source_base": "b031c41",
+      "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+      "production_ref": "493cdcad1b06b97297fb3837fc2a851c4533e326",
+      "main_native_signal_path_unchanged": true
+    },
+    "local_realization": {
+      "evidence_index": "artifacts/coherence-20261018/evidence_index.json",
+      "index_sha256": "b4937cc8f8273331ff415233949fda473aad63fa8a8d372355e3cc2ac7e6707e",
+      "pinned_native_binary": "runs/coherence-20261018/continuous-excitation-candidate",
+      "native_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+      "raw_run_root": "runs/coherence-20261018",
+      "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
+    },
+    "state_transition_ledger": "data/research_ledger.jsonl",
+    "frontier": "mechanistic continuity confirmed on limited development material; unprojected preservation falsified; combined offline control passes; fidelity and perceptual preference unestablished",
+    "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
+    "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
+    "verification": "artifacts/coherence-20261018/checkpoint_verification.json"
+  }
 }

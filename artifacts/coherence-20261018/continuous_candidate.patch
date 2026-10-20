@@ -1,0 +1,344 @@
+diff --git a/src/main.rs b/src/main.rs
+index 1c0ba70..f37f5dc 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -504,6 +504,12 @@ enum Commands {
+         chunk_seconds: f64,
+         #[arg(long, default_value_t = 2.0)]
+         overlap_seconds: f64,
++        /// Research only: continue excitation on the absolute input sample timeline.
++        #[arg(long)]
++        continuous_excitation: bool,
++        /// Absolute sample origin of a cropped input (used only with continuous excitation).
++        #[arg(long, default_value_t = 0)]
++        input_origin_samples: u64,
+         #[arg(long)]
+         denoise: bool,
+         #[arg(long)]
+@@ -1408,25 +1414,29 @@ fn run() -> Result<()> {
+             strength,
+             chunk_seconds,
+             overlap_seconds,
++            continuous_excitation,
++            input_origin_samples,
+             denoise,
+             auto_eq,
+             backend,
+             out,
+-        } => rich_mid::restore(
+-            &model,
+-            &input,
+-            mid_cutoff,
+-            mid_ceiling,
+-            controlled,
+-            steps,
+-            strength,
+-            chunk_seconds,
+-            overlap_seconds,
+-            denoise,
+-            auto_eq,
+-            &backend,
+-            &out,
+-        ),
++        } => {
++            anyhow::ensure!(continuous_excitation || input_origin_samples == 0,
++                "--input-origin-samples requires --continuous-excitation");
++            if continuous_excitation {
++                rich_mid::restore_with_continuous_excitation(
++                    &model, &input, mid_cutoff, mid_ceiling, controlled, steps,
++                    strength, chunk_seconds, overlap_seconds, denoise, auto_eq,
++                    &backend, &out, input_origin_samples,
++                )
++            } else {
++                rich_mid::restore(
++                    &model, &input, mid_cutoff, mid_ceiling, controlled, steps,
++                    strength, chunk_seconds, overlap_seconds, denoise, auto_eq,
++                    &backend, &out,
++                )
++            }
++        },
+         Commands::Master {
+             input,
+             target_lufs,
+diff --git a/src/rich_mid.rs b/src/rich_mid.rs
+index 231a829..8a4fc5c 100644
+--- a/src/rich_mid.rs
++++ b/src/rich_mid.rs
+@@ -629,6 +629,38 @@ pub fn restore_with_quiet_gate(
+     backend: &str,
+     out: &Path,
+     quiet_abstention: bool,
++) -> Result<()> {
++    restore_with_excitation_origin(
++        model_path, input_path, mid_cutoff, mid_ceiling, controlled, steps, strength,
++        chunk_seconds, overlap_seconds, denoise, auto_eq, backend, out,
++        quiet_abstention, None,
++    )
++}
++
++/// Opt-in research conditioning: index excitation on the input's absolute
++/// sample timeline, rather than restarting its deterministic stream per chunk.
++pub fn restore_with_continuous_excitation(
++    model_path: &Path, input_path: &Path, mid_cutoff: f32, mid_ceiling: f32,
++    controlled: bool, steps: usize, strength: f32, chunk_seconds: f64,
++    overlap_seconds: f64, denoise: bool, auto_eq: bool, backend: &str, out: &Path,
++    input_origin_samples: u64,
++) -> Result<()> {
++    if out.exists() {
++        ensure!(fs::read_dir(out)?.next().is_none(),
++            "continuous excitation requires a fresh output directory; existing caches are not authenticated");
++    }
++    restore_with_excitation_origin(
++        model_path, input_path, mid_cutoff, mid_ceiling, controlled, steps, strength,
++        chunk_seconds, overlap_seconds, denoise, auto_eq, backend, out,
++        false, Some(input_origin_samples),
++    )
++}
++
++fn restore_with_excitation_origin(
++    model_path: &Path, input_path: &Path, mid_cutoff: f32, mid_ceiling: f32,
++    controlled: bool, steps: usize, strength: f32, chunk_seconds: f64,
++    overlap_seconds: f64, denoise: bool, auto_eq: bool, backend: &str, out: &Path,
++    quiet_abstention: bool, excitation_origin: Option<u64>,
+ ) -> Result<()> {
+     let profiling = profile_requested(
+         std::env::var("ROACH_PROFILE_MID").as_deref() == Ok("1"),
+@@ -660,6 +692,11 @@ pub fn restore_with_quiet_gate(
+     };
+     let field = MidField::load(model_path)?;
+     let audio = native_audio::read_entire(input_path)?;
++    if let Some(origin) = excitation_origin {
++        ensure!(field.kind.mode() == 6, "continuous excitation research path requires Basis mode 6");
++        ensure!(origin.checked_add(audio.frames() as u64).is_some(),
++            "input origin plus clip duration overflows the absolute sample timeline");
++    }
+     let mut engine = Engine::new(&field.core, backend)?;
+     if profiling {
+         engine.set_profiling(true);
+@@ -724,7 +761,9 @@ pub fn restore_with_quiet_gate(
+         let chunk_t0 = Instant::now();
+         let c_end = (c_start + chunk_samples).min(total_samples);
+         let actual_chunk_len = c_end - c_start;
+-        let chunk_cache_file = if quiet_abstention {
++        let chunk_cache_file = if excitation_origin.is_some() {
++            chunk_dir.join(format!("chunk_continuous_{:04}.bin", idx))
++        } else if quiet_abstention {
+             chunk_dir.join(format!("chunk_q_{:04}.bin", idx))
+         } else {
+             chunk_dir.join(format!("chunk_{:04}.bin", idx))
+@@ -778,7 +817,11 @@ pub fn restore_with_quiet_gate(
+             };
+ 
+             let prepare_start = profiling.then(Instant::now);
+-            let p = scene_features::prepare(&chunk_input, d, 11);
++            let p = if let Some(origin) = excitation_origin {
++                scene_features::prepare_with_noise_origin(&chunk_input, d, 11, origin + c_start as u64)
++            } else {
++                scene_features::prepare(&chunk_input, d, 11)
++            };
+             prepare_ms = prepare_start.map(|start| start.elapsed().as_secs_f64() * 1000.0);
+             let prior_start = profiling.then(Instant::now);
+             let initial = scene_features::prior_state(&p, "harmonic");
+@@ -895,6 +938,12 @@ pub fn restore_with_quiet_gate(
+             "controlled": controlled,
+             "steps": steps,
+             "strength": strength,
++            "excitation_mode": if excitation_origin.is_some() { "continuous" } else { "restart_per_chunk" },
++            "input_origin_samples": excitation_origin.unwrap_or(0),
++            "noise_seed": 11,
++            "chunk_seconds": chunk_seconds,
++            "overlap_seconds": overlap_seconds,
++            "raw_chunk_prefix": if excitation_origin.is_some() { "chunk_continuous_" } else if quiet_abstention { "chunk_q_" } else { "chunk_" },
+             "total_seconds": total_samples as f64 / audio.rate as f64,
+             "denoise": denoise,
+             "auto_eq": auto_eq,
+@@ -1099,6 +1148,23 @@ pub fn evaluate_mid(
+ mod tests {
+     use super::*;
+     #[test]
++    fn continuous_excitation_rejects_existing_evidence_before_model_io() -> Result<()> {
++        let path = std::env::temp_dir().join(format!("roach-continuous-guard-{}", std::process::id()));
++        fs::create_dir_all(&path)?;
++        let evidence = path.join("keep.txt");
++        fs::write(&evidence, b"preserve")?;
++        let result = restore_with_continuous_excitation(
++            Path::new("missing-model.json"), Path::new("missing-input.wav"),
++            1500.0, 8000.0, false, 8, 1.0, 8.0, 2.0, false, false,
++            "cpu", &path, 0,
++        );
++        assert!(result.unwrap_err().to_string().contains("fresh output directory"));
++        assert_eq!(fs::read(&evidence)?, b"preserve");
++        fs::remove_file(evidence)?;
++        fs::remove_dir(path)?;
++        Ok(())
++    }
++    #[test]
+     fn mid_profile_gate_and_disk_cache_bypass_schema() -> Result<()> {
+         assert!(!profile_requested(false, false)?);
+         assert!(!profile_requested(false, true)?);
+diff --git a/src/scene_features.rs b/src/scene_features.rs
+index c4def70..4c334bd 100644
+--- a/src/scene_features.rs
++++ b/src/scene_features.rs
+@@ -135,7 +135,26 @@ fn band_rms(row: &[C]) -> f32 {
+ fn wrap(x: f32) -> f32 {
+     (x + std::f32::consts::PI).rem_euclid(TAU) - std::f32::consts::PI
+ }
++fn white_noise(sample_seed: u64, channel: usize, sample_origin: u64, samples: usize) -> Vec<f32> {
++    let mut rng = Rng(sample_seed ^ (channel as u64 * 0x71188435));
++    rng.advance(sample_origin);
++    (0..samples).map(|_| rng.signed()).collect()
++}
++
++/// Preserve the historical per-clip noise stream exactly (origin zero).
+ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
++    prepare_with_noise_origin(a, d, sample_seed, 0)
++}
++
++/// Research-only conditioning variant that continues the white-noise prior
++/// from an absolute sample origin. This changes chunk conditioning only; it
++/// changes neither learned weights nor the solver/ODE update semantics.
++pub fn prepare_with_noise_origin(
++    a: &Audio,
++    d: Damage,
++    sample_seed: u64,
++    sample_origin: u64,
++) -> Prepared {
+     let ms = a.mid_side();
+     let s = Stft::default();
+     let fine = Stft::new(256, 64);
+@@ -163,8 +182,7 @@ pub fn prepare(a: &Audio, d: Damage, sample_seed: u64) -> Prepared {
+     for c in 0..2 {
+         let fs = fine.analyze(&ms[c]);
+         let cs = coarse.analyze(&ms[c]);
+-        let mut rng = Rng(sample_seed ^ (c as u64 * 0x71188435));
+-        let white: Vec<_> = (0..a.frames()).map(|_| rng.signed()).collect();
++        let white = white_noise(sample_seed, c, sample_origin, a.frames());
+         let ns = s.analyze(&white);
+         for t in 0..frames {
+             let input = &mut encoder_features
+@@ -479,6 +497,60 @@ pub fn waveform(p: &Prepared, d: Damage, state: &[Vec<C>; 2], strength: f32) ->
+ #[cfg(test)]
+ mod tests {
+     use super::*;
++
++    fn assert_prepared_equal(a: &Prepared, b: &Prepared) {
++        assert_eq!(a.input.rate, b.input.rate);
++        assert_eq!(a.input.channels, b.input.channels);
++        assert_eq!(a.ms, b.ms);
++        assert_eq!(a.scale, b.scale);
++        assert_eq!(a.active, b.active);
++        assert_eq!(a.low_rms, b.low_rms);
++        assert_eq!(a.harmonic, b.harmonic);
++        assert_eq!(a.noise, b.noise);
++        assert_eq!(a.encoder_features, b.encoder_features);
++        assert_eq!(a.frames, b.frames);
++        for c in 0..2 {
++            assert_eq!(a.base[c].data, b.base[c].data);
++            assert_eq!(a.base[c].frames, b.base[c].frames);
++            assert_eq!(a.base[c].samples, b.base[c].samples);
++        }
++    }
++
++    #[test]
++    fn origin_zero_prepare_is_bit_exact_compatibility_path() {
++        let input = Audio {
++            rate: RATE,
++            channels: vec![(0..4096)
++                .map(|i| (TAU * 437.0 * i as f32 / RATE as f32).sin() * 0.23)
++                .collect()],
++        };
++        let d = Damage {
++            cutoff: 1800.0,
++            transition: 225.0,
++            power: 2.0,
++        };
++        let historical = prepare(&input, d, 11);
++        let explicit_zero = prepare_with_noise_origin(&input, d, 11, 0);
++        assert_prepared_equal(&historical, &explicit_zero);
++        for channel in 0..2 {
++            let mut old_rng = Rng(11 ^ (channel as u64 * 0x71188435));
++            let old_stream: Vec<_> = (0..input.frames()).map(|_| old_rng.signed()).collect();
++            assert_eq!(white_noise(11, channel, 0, input.frames()), old_stream);
++        }
++    }
++
++    #[test]
++    fn noise_prior_subsequence_matches_shared_absolute_stream() {
++        let seed = 11;
++        let origin = 1733u64;
++        let count = 257;
++        for channel in 0..2 {
++            let whole = white_noise(seed, channel, 0, 4096);
++            let chunk = white_noise(seed, channel, origin, count);
++            assert_eq!(chunk, whole[origin as usize..origin as usize + count]);
++        }
++    }
++
+     #[test]
+     fn sine_harmonic_phase_link() {
+         let input = Audio {
+diff --git a/src/synth.rs b/src/synth.rs
+index 450686f..ed05e73 100644
+--- a/src/synth.rs
++++ b/src/synth.rs
+@@ -4,14 +4,19 @@ use std::f32::consts::TAU;
+ 
+ #[derive(Clone)]
+ pub struct Rng(pub u64);
++const SPLITMIX64_GAMMA: u64 = 0x9e3779b97f4a7c15;
+ impl Rng {
+     pub fn next_u64(&mut self) -> u64 {
+-        self.0 = self.0.wrapping_add(0x9e3779b97f4a7c15);
++        self.0 = self.0.wrapping_add(SPLITMIX64_GAMMA);
+         let mut z = self.0;
+         z = (z ^ (z >> 30)).wrapping_mul(0xbf58476d1ce4e5b9);
+         z = (z ^ (z >> 27)).wrapping_mul(0x94d049bb133111eb);
+         z ^ (z >> 31)
+     }
++    /// Skip `draws` SplitMix64 outputs without evaluating their mixer.
++    pub fn advance(&mut self, draws: u64) {
++        self.0 = self.0.wrapping_add(SPLITMIX64_GAMMA.wrapping_mul(draws));
++    }
+     pub fn unit(&mut self) -> f32 {
+         ((self.next_u64() >> 40) as f32) / 16777216.0
+     }
+@@ -172,6 +177,38 @@ fn voice(family: usize, n: usize, rate: u32, rng: &mut Rng) -> Vec<f32> {
+ #[cfg(test)]
+ mod tests {
+     use super::*;
++    #[test]
++    fn advance_matches_iterative_draws() {
++        for seed in [0, 1, 0xdead_beef, u64::MAX] {
++            for draws in 0..=2048u64 {
++                let mut iterative = Rng(seed);
++                for _ in 0..draws {
++                    iterative.next_u64();
++                }
++                let mut advanced = Rng(seed);
++                advanced.advance(draws);
++                assert_eq!(advanced.0, iterative.0, "seed={seed} draws={draws}");
++                assert_eq!(advanced.next_u64(), iterative.next_u64());
++            }
++        }
++    }
++    #[test]
++    fn advance_composes_with_wrapping_state_arithmetic() {
++        for (seed, first, second) in [
++            (u64::MAX, 0, 1),
++            (0x1234_5678_9abc_def0, 17, 991),
++            (7, u64::MAX, 2),
++        ] {
++            let mut composed = Rng(seed);
++            composed.advance(first);
++            composed.advance(second);
++            let mut combined = Rng(seed);
++            combined.advance(first.wrapping_add(second));
++            assert_eq!(composed.0, combined.0);
++            assert_eq!(composed.next_u64(), combined.next_u64());
++        }
++    }
++
+     #[test]
+     fn deterministic_diverse_finite() {
+         for s in 0..12 {

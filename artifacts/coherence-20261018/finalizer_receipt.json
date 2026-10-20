@@ -1,0 +1,481 @@
+{
+  "schema": "coherence-finalizer-complete-v1",
+  "binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
+  "protocol_sha256": "055207a7a7a529774e1a0667554716c59348813a44db0c4d829935a7a9789b4f",
+  "completed_utc": "2026-10-19T03:05:45.775215+00:00",
+  "jobs": [
+    {
+      "arm": "restart",
+      "view": "view0",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/view0/restored.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/restart/view0"
+      ],
+      "input_sha256": "1831e7e8ee546b04bcf7da81f40d7e7b55b84c99676dd67331b4e6e3d65a3c5c",
+      "output_sha256": "40bcf00ffbca1050acb8164a5f27f8516c6c030b0ea4c2a2e5940bef688893e2",
+      "master_metadata_sha256": "dd820c48cef33564143f1054e9512e6e2beaa3a0895ff22323a6ab364c67fc1b",
+      "observed_memory_kib_max": 137636,
+      "before": {
+        "crest_factor_db": 12.198671340942383,
+        "lufs_integrated": -14.946383532156858,
+        "rms_dbfs": -17.272113800048828,
+        "sample_peak_dbfs": -5.0734429359436035,
+        "true_peak_dbtp": -5.0620341300964355
+      },
+      "after": {
+        "crest_factor_db": 11.056663513183594,
+        "lufs_integrated": -13.002889567080265,
+        "rms_dbfs": -15.033960342407227,
+        "sample_peak_dbfs": -3.9772965908050537,
+        "true_peak_dbtp": -3.9669084548950195
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.076513767242432,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.685005187988281,
+      "target_shortfall_lu": 0.0028895670802651097
+    },
+    {
+      "arm": "restart",
+      "view": "view3",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/view3/restored.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/restart/view3"
+      ],
+      "input_sha256": "011bb0c5308a999a60c9ee6d3e505e5a096cc7ea748d4703cf5019925dfdc759",
+      "output_sha256": "6dabb02df399500289d310ffba614b4cd76cf64ba8de3bcc21ae7cc7cbb5b350",
+      "master_metadata_sha256": "d1abc7479d473a8bd83ad92bbd7f87544ce4835dc4d8f073b3fc45d873be84cc",
+      "observed_memory_kib_max": 137568,
+      "before": {
+        "crest_factor_db": 12.33101749420166,
+        "lufs_integrated": -14.77939327532894,
+        "rms_dbfs": -17.50198745727539,
+        "sample_peak_dbfs": -5.1709699630737305,
+        "true_peak_dbtp": -5.1705474853515625
+      },
+      "after": {
+        "crest_factor_db": 11.28195571899414,
+        "lufs_integrated": -12.943210184155149,
+        "rms_dbfs": -15.182847023010254,
+        "sample_peak_dbfs": -3.9008917808532715,
+        "true_peak_dbtp": -3.9008917808532715
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.074000358581543,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.84930419921875,
+      "target_shortfall_lu": -0.05678981584485143
+    },
+    {
+      "arm": "continuous",
+      "view": "view0",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/view0/restored.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/continuous/view0"
+      ],
+      "input_sha256": "94b1a36e44af92c2bc7d6956d77fe4d2ceeb53cd91873ba3a3044fa88d1cacfd",
+      "output_sha256": "3beccd643c98bcacdde69a590e97a2a7d4f7c60f5e56c6804f8e192b646daf1a",
+      "master_metadata_sha256": "b725f1a21211800808e8079750678582a83246c4f7ddeba6c040b7f71c90173d",
+      "observed_memory_kib_max": 138184,
+      "before": {
+        "crest_factor_db": 12.132417678833008,
+        "lufs_integrated": -14.946287586322283,
+        "rms_dbfs": -17.272075653076172,
+        "sample_peak_dbfs": -5.139657974243164,
+        "true_peak_dbtp": -5.135724067687988
+      },
+      "after": {
+        "crest_factor_db": 10.988986015319824,
+        "lufs_integrated": -13.002890103043688,
+        "rms_dbfs": -15.034025192260742,
+        "sample_peak_dbfs": -4.045039176940918,
+        "true_peak_dbtp": -4.040630340576172
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.076399326324463,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.684898376464844,
+      "target_shortfall_lu": 0.002890103043688086
+    },
+    {
+      "arm": "continuous",
+      "view": "view3",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/view3/restored.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/continuous/view3"
+      ],
+      "input_sha256": "81e52f7882e69a84d559cb9fceb9978f8e261d0d24d51069b62a3add2f785c98",
+      "output_sha256": "5634c64c82acb8a2e1a3e35fd7ac6b5dd582b8da72cd578229dbd605ea2271b6",
+      "master_metadata_sha256": "c9663c2b1c9c5c3685a078855bf43fa5f6934d3ed6ef5de85dd94525befb8a57",
+      "observed_memory_kib_max": 138056,
+      "before": {
+        "crest_factor_db": 12.362821578979492,
+        "lufs_integrated": -14.779279462509008,
+        "rms_dbfs": -17.501941680908203,
+        "sample_peak_dbfs": -5.139119625091553,
+        "true_peak_dbtp": -5.135196685791016
+      },
+      "after": {
+        "crest_factor_db": 11.312019348144531,
+        "lufs_integrated": -12.943210350885169,
+        "rms_dbfs": -15.182907104492188,
+        "sample_peak_dbfs": -3.870887279510498,
+        "true_peak_dbtp": -3.8664846420288086
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.074127674102783,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.849224090576172,
+      "target_shortfall_lu": -0.05678964911483142
+    },
+    {
+      "arm": "restart_projected",
+      "view": "view0",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/view0/projected.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/restart_projected/view0"
+      ],
+      "input_sha256": "607e54ff6330bb8f53d84455112162a169ba4f6237446ab3cf170eb3c1df57bd",
+      "output_sha256": "846efdc63daeb6e17a9c4232102a9df1f1245626a97dc3af055752961b9e1784",
+      "master_metadata_sha256": "422e47143e73f1d867efde583a9fa767e9f04bae8aba8b4391e5d3b2e5bb3e57",
+      "observed_memory_kib_max": 137652,
+      "before": {
+        "crest_factor_db": 12.19866943359375,
+        "lufs_integrated": -14.94638325178338,
+        "rms_dbfs": -17.272113800048828,
+        "sample_peak_dbfs": -5.073444366455078,
+        "true_peak_dbtp": -5.062036991119385
+      },
+      "after": {
+        "crest_factor_db": 11.056663513183594,
+        "lufs_integrated": -13.002889319004685,
+        "rms_dbfs": -15.033960342407227,
+        "sample_peak_dbfs": -3.9772965908050537,
+        "true_peak_dbtp": -3.9669127464294434
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.076513767242432,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.685005187988281,
+      "target_shortfall_lu": 0.0028893190046854755
+    },
+    {
+      "arm": "restart_projected",
+      "view": "view3",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/view3/projected.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/restart_projected/view3"
+      ],
+      "input_sha256": "5b3080b936d5cbc9487a8f2591b9aea13d736c7b4e5c083444e541d9cfaa86ab",
+      "output_sha256": "0205a8ec1f65fda089e68d6f07e655c6bee13f6371845121b20037ca1c8d88d5",
+      "master_metadata_sha256": "6265b9ea08fb53a3b535a8977ecd166c0cc5ef6889e15f08fc096607548e5488",
+      "observed_memory_kib_max": 138000,
+      "before": {
+        "crest_factor_db": 12.331018447875977,
+        "lufs_integrated": -14.779393046613981,
+        "rms_dbfs": -17.501985549926758,
+        "sample_peak_dbfs": -5.170967102050781,
+        "true_peak_dbtp": -5.1705474853515625
+      },
+      "after": {
+        "crest_factor_db": 11.28195858001709,
+        "lufs_integrated": -12.94320997821814,
+        "rms_dbfs": -15.182847023010254,
+        "sample_peak_dbfs": -3.900888442993164,
+        "true_peak_dbtp": -3.900888442993164
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.074000358581543,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.84930419921875,
+      "target_shortfall_lu": -0.05679002178185932
+    },
+    {
+      "arm": "continuous_projected",
+      "view": "view0",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/view0/projected.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/continuous_projected/view0"
+      ],
+      "input_sha256": "719a05ff347ad9700cddf9d228c10a3cce66d6fdf61f0a79953d5c7dadcc21d4",
+      "output_sha256": "0cc842911ef42a04b4d4402aa46666bfb0ae54ec9628f7850fdd6da97889637f",
+      "master_metadata_sha256": "865c9e4425bd78461a5c83688ea2c852f5c548ae468f3df278b031888e1f3d22",
+      "observed_memory_kib_max": 138044,
+      "before": {
+        "crest_factor_db": 12.132418632507324,
+        "lufs_integrated": -14.946287304344025,
+        "rms_dbfs": -17.272075653076172,
+        "sample_peak_dbfs": -5.139657020568848,
+        "true_peak_dbtp": -5.1357221603393555
+      },
+      "after": {
+        "crest_factor_db": 10.98898696899414,
+        "lufs_integrated": -13.002889891452499,
+        "rms_dbfs": -15.034025192260742,
+        "sample_peak_dbfs": -4.04503870010376,
+        "true_peak_dbtp": -4.040628433227539
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.076400279998779,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.684898376464844,
+      "target_shortfall_lu": 0.0028898914524990715
+    },
+    {
+      "arm": "continuous_projected",
+      "view": "view3",
+      "command": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-excitation-candidate",
+        "master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/view3/projected.wav",
+        "--target-lufs",
+        "-13",
+        "--ceiling-db",
+        "-1",
+        "--glue-threshold-db",
+        "-20",
+        "--glue-ratio",
+        "1.6",
+        "--sidechain-hp-hz",
+        "90",
+        "--clock-transient-punch",
+        "--kick-transient-guard",
+        "--quiet-mid-denoise",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/finalizer-v1/continuous_projected/view3"
+      ],
+      "input_sha256": "d234aa5e5ec408242ba241c250e8fa17bbe5acdd1b4a81067729e5b8f4470cf4",
+      "output_sha256": "b3132bf4cc9b44150c7b3069901f8bb7d8ba21e1af15099e14be89cd78b73bc0",
+      "master_metadata_sha256": "7146631576e1df0486e8eb893abcd16285e414248bcb536adc674a06c54dcb3c",
+      "observed_memory_kib_max": 137964,
+      "before": {
+        "crest_factor_db": 12.362829208374023,
+        "lufs_integrated": -14.77927924913673,
+        "rms_dbfs": -17.501941680908203,
+        "sample_peak_dbfs": -5.13911247253418,
+        "true_peak_dbtp": -5.135188102722168
+      },
+      "after": {
+        "crest_factor_db": 11.312028884887695,
+        "lufs_integrated": -12.943209910728575,
+        "rms_dbfs": -15.182906150817871,
+        "sample_peak_dbfs": -3.870877742767334,
+        "true_peak_dbtp": -3.8664767742156982
+      },
+      "limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": -0.0,
+        "release_ms": 60.0
+      },
+      "glue": {
+        "attack_ms": 20.0,
+        "knee_db": 8.0,
+        "max_gain_reduction_db": 4.074129104614258,
+        "ratio": 1.600000023841858,
+        "release_ms": 160.0,
+        "threshold_db": -20.0
+      },
+      "pre_gain_db": 4.849224090576172,
+      "target_shortfall_lu": -0.05679008927142526
+    }
+  ],
+  "scope": "native finalizationquality; rawlogsretained; no speedqualification; before ispre-finalizer, notpre-limiter"
+}

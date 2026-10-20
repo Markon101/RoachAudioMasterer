@@ -1,0 +1,126 @@
+{
+  "schema": "projection-factorial-complete-v1",
+  "binary": "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+  "binary_sha256": "edb69f25b3d9c714f92cdabed891246459754307f347de3f8f241b8bcb314775",
+  "source_pins": [
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/examples/trusted_projection.rs",
+      "sha256": "db639b2e0949991ea46320fdcf8a4d908eb47c8b81622fbdd7f0216ecf374be2"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/dsp.rs",
+      "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/native_audio.rs",
+      "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+    }
+  ],
+  "protocol_sha256": "ef85afa12f8a06c198034b90131b1c880b3a2781bd7875ab3ba4bc5d62b7ab32",
+  "completed_utc": "2026-10-19T03:04:26.277887+00:00",
+  "jobs": [
+    {
+      "mode": "restart",
+      "id": "view0",
+      "command": [
+        "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/view0-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/view0/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/view0"
+      ],
+      "input_sha256": "235356df463c248d6ed23edf053074264faa91ef3ecf2d2de3e113ddb23fe229",
+      "proposal_sha256": "1831e7e8ee546b04bcf7da81f40d7e7b55b84c99676dd67331b4e6e3d65a3c5c",
+      "output_sha256": "607e54ff6330bb8f53d84455112162a169ba4f6237446ab3cf170eb3c1df57bd",
+      "projection_metadata_sha256": "77ee6af74c4dc8658d16dc1a7c068e962d899763ec61b8680cad2ca84ab0b2b6"
+    },
+    {
+      "mode": "restart",
+      "id": "view3",
+      "command": [
+        "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/view3-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/view3/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/view3"
+      ],
+      "input_sha256": "0d6c5f848e9a5a3aecdbca7fd43573427b4eb7af6c03b5f143140c77f924108a",
+      "proposal_sha256": "011bb0c5308a999a60c9ee6d3e505e5a096cc7ea748d4703cf5019925dfdc759",
+      "output_sha256": "5b3080b936d5cbc9487a8f2591b9aea13d736c7b4e5c083444e541d9cfaa86ab",
+      "projection_metadata_sha256": "ea293b7866c3bf96cf3a7e36276a21154c6e93bf5761da212f6bd179dda4a278"
+    },
+    {
+      "mode": "restart",
+      "id": "full",
+      "command": [
+        "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/input-full.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/native-baseline-v1/renders/full/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/restart/full"
+      ],
+      "input_sha256": "aca1d25d24092bde0e42c3fd243b6022bd41356d7fb48a2f5a859887ca02b150",
+      "proposal_sha256": "702d8dd95efc8e190acfd78641e0d12f1abea1e8556688f488cd77fdb217c966",
+      "output_sha256": "bb9757f90de3264dc835d341d906a0f0a6569572bd2ccfd66d731e99a540dfd3",
+      "projection_metadata_sha256": "69a56e3207ba53b1b6dc6aee4cecc7d0202fb33b033917c199367a8a146a3aaf"
+    },
+    {
+      "mode": "continuous",
+      "id": "view0",
+      "command": [
+        "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/view0-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/view0/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/view0"
+      ],
+      "input_sha256": "235356df463c248d6ed23edf053074264faa91ef3ecf2d2de3e113ddb23fe229",
+      "proposal_sha256": "94b1a36e44af92c2bc7d6956d77fe4d2ceeb53cd91873ba3a3044fa88d1cacfd",
+      "output_sha256": "719a05ff347ad9700cddf9d228c10a3cce66d6fdf61f0a79953d5c7dadcc21d4",
+      "projection_metadata_sha256": "3b918b68f3fbaf8f682aabe7b91abf76cb5321f0dc331a278d0492502e8b3206"
+    },
+    {
+      "mode": "continuous",
+      "id": "view3",
+      "command": [
+        "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/view3-input.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/view3/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/view3"
+      ],
+      "input_sha256": "0d6c5f848e9a5a3aecdbca7fd43573427b4eb7af6c03b5f143140c77f924108a",
+      "proposal_sha256": "81e52f7882e69a84d559cb9fceb9978f8e261d0d24d51069b62a3add2f785c98",
+      "output_sha256": "d234aa5e5ec408242ba241c250e8fa17bbe5acdd1b4a81067729e5b8f4470cf4",
+      "projection_metadata_sha256": "425dd5974e64f9ec70b08625b0c29ac41d1a88333abc11e6e5bd4d09ce643a8f"
+    },
+    {
+      "mode": "continuous",
+      "id": "full",
+      "command": [
+        "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/release/examples/trusted_projection",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-hopaligned-v1/input-full.wav",
+        "--proposal",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/continuous-gpu-v1/renders/full/restored.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/projection-factorial-v1/continuous/full"
+      ],
+      "input_sha256": "aca1d25d24092bde0e42c3fd243b6022bd41356d7fb48a2f5a859887ca02b150",
+      "proposal_sha256": "7d45a5849d20870df56191f572e3ba8167e8d5db5b84aa44b7f302b792bd5355",
+      "output_sha256": "2dbce2b84341a74d5287d85c30664c75ca9c502995c90f8877be566c3bf86e4a",
+      "projection_metadata_sha256": "791c316b02957295d4ce80d22142af4a332b45d1ad4bcafbf847cc0522554481"
+    }
+  ],
+  "scope": "postDSP quality counterfactual; no neural inference or speedqualification"
+}

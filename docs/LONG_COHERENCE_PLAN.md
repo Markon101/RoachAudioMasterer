@@ -7,8 +7,10 @@ is claimed by this plan. Preserve Smooth `493cdca`, weights and default Euler8.
 
 Implementation checkpoints are now recorded in
 [LONG_COHERENCE_RESULTS.md](LONG_COHERENCE_RESULTS.md): deterministic controls,
-continuous fixtures and a guarded native quality session. This updates progress,
-not the original decision gates or an audio-benefit claim.
+continuous fixtures, completed native measurements and an isolated excitation
+prototype. Its raw preservation gate failed; a separate projection control
+passes the development band gate. This updates progress, not the original gates
+or an audio-benefit claim. Adverse-family and subjective qualification remain open.
 
 ## Decisions this work must answer
 
