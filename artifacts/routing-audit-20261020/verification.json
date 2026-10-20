@@ -1,0 +1,19 @@
+{
+  "schema": "passive-routing-verification-v1",
+  "recorded_utc": "2026-10-20T06:52:11.198970+00:00",
+  "source_parent": "674a472",
+  "native_rows": 45,
+  "analysis_report": "analysis_v4.json",
+  "analysis_sha256": "91101e78046868e54ce17e4a02b3098c36d3fee9104c0741ce93c5ec0d4b1a41",
+  "complete_sha256": "d6c121b90b409e7d0d4d3d7f22a7f230e2b5f7c5422516b9ed353fb995830bf0",
+  "rows_jsonl_sha256": "293fb82cf8f187586421656a57efacfb2020052ab02b2e119338d464168bccec",
+  "all_waveforms_exact_f32_gain_verified": true,
+  "sampled_memory_rows": 45,
+  "max_process_hwm_mib": 92.63671875,
+  "memory_cap_mib": 384,
+  "speed_qualification": false,
+  "python_tests": 8,
+  "runner_review_fix": "active child now checks session/HALT rather than rows/HALT; mocked termination/partial preservation regression passes; historical run had no HALT",
+  "historical_runner_preserved": true,
+  "reviewer": "native gpt-6-luna bounded source/provenance analysis; root independent exact-waveform verification/containment review"
+}

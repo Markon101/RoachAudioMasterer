@@ -1,0 +1,36 @@
+{
+  "schema": "passive-routing-evidence-index-v1",
+  "parent_state_commit": "674a472",
+  "recorded_utc": "2026-10-20T06:52:11.198970+00:00",
+  "files": {
+    "analysis_history.json": {
+      "bytes": 1095,
+      "sha256": "aec12555d0e99571ac7bf9bcded4c0efc8af68f225098f6577db0b0ce6a4b263"
+    },
+    "analysis_v4.json": {
+      "bytes": 212369,
+      "sha256": "91101e78046868e54ce17e4a02b3098c36d3fee9104c0741ce93c5ec0d4b1a41"
+    },
+    "plan.json": {
+      "bytes": 21029,
+      "sha256": "85210dd93cf088f1180097125f63d7a64eefd02af13e8fe75f1628bfd382d274"
+    },
+    "protocol.json": {
+      "bytes": 1824,
+      "sha256": "3e31a14466bb8b80d8f21e12d33150e21e068940ce97c721f713d66a17ccd8cd"
+    },
+    "verification.json": {
+      "bytes": 1005,
+      "sha256": "3244a6b26bdc3e6289d58c03de8e06fc3b790f68139e79e4f39af7d105a6c953"
+    }
+  },
+  "source_sha256": {
+    "scripts/run_passive_routing_audit.py": "01e1702c7e8a80ee281197036c1cd1f2d59d5cbc99a7c270e2024d0059739731",
+    "scripts/analyze_passive_routing_audit.py": "ea673b69c6a217f37f967380e7a1247a069b92938ba1f551a80aa55847530fe5",
+    "scripts/test_run_passive_routing_audit.py": "a79fc06a635c82a9a81a041ab7dd3f44f69f526353e795349476b2e125450a31",
+    "scripts/test_analyze_passive_routing_audit.py": "df4029bba3ff7974d8363cebf46f8075cc094898a094f465d4ac375b5a8823cf"
+  },
+  "prior_evidence_index": "artifacts/assessment-band-observer-20261020/evidence_index.json",
+  "raw_run_root": "runs/stage-accountability-20261020/passive-routing-v1",
+  "signal_or_routing_changed": false
+}

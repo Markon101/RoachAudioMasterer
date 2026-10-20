@@ -1,9 +1,9 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-20T06:18:04.515056+00:00",
+  "date_utc": "2026-10-20T06:52:11.198970+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
-  "verified_source_commit": "238193df474ad180be1aa92375d44eb703061911",
+  "verified_source_commit": "674a472cc3f77da83edc8b66e6ec2d0b77864e04",
   "published_through_source_commit": true,
   "champion_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
   "frozen_alpha_peeled_commit": "652088782f1d64f62ee84a7c1d7cdda4a990ef15",
@@ -21,7 +21,8 @@
     "5": "not started; dynamics-v2 remains demoted",
     "long_coherence": "native baseline and isolated absolute-origin excitation measured; raw bandgate failed; separate projection+continuity development gates pass; no native integration/promotion",
     "adverse_mid": "7 native source pairs exported; short prior false-add quantified; long stopped negative retains96.319%layout reduction with1.14%false-energy growth; baseMidabstains; assessmentunitdefect verified",
-    "assessment_band_observer": "calibrateddigitalobserververified5knownanswer/realWAVtests+4actualprobes; legacyconsolelabelsqualified; no routingretune; fullstageledgerpending"
+    "assessment_band_observer": "calibrateddigitalobserververified5knownanswer/realWAVtests+4actualprobes; legacyconsolelabelsqualified; no routingretune; fullstageledgerpending",
+    "passive_routing": "45 repeatedconditionsverified;13authoritytransitions5legacy8artifact;cutoffhypothesisnotobserved;6basecardactiveflips;nothresholdchange"
   },
   "native_development": {
     "scene_seeds": [
@@ -61,7 +62,8 @@
     "actual_native_cpu_opencl": "96 canonical sample pairs compared",
     "long_coherence_checkpoint_python": 59,
     "coherence_native_focused": "21 passed1ignored;8helpertestexecutions; source isolated",
-    "assessment_band_observer": 5
+    "assessment_band_observer": 5,
+    "passive_routing": 8
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
@@ -73,14 +75,15 @@
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Calibrated digital band observations verified; legacy authorities preserved. Next passive healthy/damaged/quiet procedural routing matrix and actual pre-limiter observation before any opt-in routing policy. Coherence is not fidelity; owner listening pending.",
+  "next_action": "Actual pre-limiter borrowed observer and baseline-output parity in isolated WT; no policy retune. Coherence is not fidelity; owner listening pending.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
     "docs/HOST_BATCH_RESULTS_20261018.md",
     "docs/LISTENING_RESTORATION_20261018.md",
     "docs/LONG_COHERENCE_RESULTS.md",
-    "docs/ADVERSE_MID_CONTROLS_20261020.md"
+    "docs/ADVERSE_MID_CONTROLS_20261020.md",
+    "docs/PASSIVE_ROUTING_AUDIT_20261020.md"
   ],
   "delegation": [
     {
@@ -113,7 +116,7 @@
   "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
   "documentation_review_base_commit": "394fe30",
   "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary.",
-  "checkpoint_tool_parent_commit": "3122dd3cad3e60a3178e7c585a5a574bd2b047d9",
+  "checkpoint_tool_parent_commit": "674a472",
   "repo_object": {
     "identity": "Rust-first unified acoustic-scene restoration/correction/expansion with protected historical champions",
     "canonical_core": {
@@ -124,15 +127,15 @@
       "native_changes_since_numerical_baseline": "comments and console labels only; quantitative native behavior unchanged"
     },
     "local_realization": {
-      "evidence_index": "artifacts/assessment-band-observer-20261020/evidence_index.json",
-      "index_sha256": "a51d9b36ea6c1f72b696869fe022b4f00dd1f7f327adf46d0ae803e08f49ad47",
+      "evidence_index": "artifacts/routing-audit-20261020/evidence_index.json",
+      "index_sha256": "09c5aed172a2759b6acf7baafe479db006283fdf37a6b670a50ffa2cfd53f81c",
       "pinned_native_binary": "runs/coherence-20261018/continuous-excitation-candidate",
       "native_binary_sha256": "8e2ad9bc9074febdd5ccb05626e4795aed931f31c13e0e5dff377ec93e35123a",
       "raw_run_root": "runs/coherence-20261018",
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Calibrated digital band observations verified; legacy authorities preserved. Next passive healthy/damaged/quiet procedural routing matrix and actual pre-limiter observation before any opt-in routing policy. Coherence is not fidelity; owner listening pending.",
+    "frontier": "Actual pre-limiter borrowed observer and baseline-output parity in isolated WT; no policy retune. Coherence is not fidelity; owner listening pending.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"

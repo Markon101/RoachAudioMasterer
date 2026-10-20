@@ -1450,3 +1450,23 @@ Actual pre-limiter observation, full stage attribution and routing recalibration
 remain separate work. No production candidate or perceptual preference is promoted.
 
 
+### 31. Passive routing changes with level; cutoff explanation fails (2026-10-20)
+
+A frozen-baseline passive matrix assesses seven procedural target/degraded pairs
+and a 26-second identity source at 0/-20/-40 dB: 45 repeated-condition rows, not
+45 independent replications. Every source-derived float32 waveform, receipt and
+recorded authority rule is verified. Thirteen adjacent-gain Sub/Mid/High authority
+changes comprise five legacy-score threshold crossings and eight artifact
+threshold crossings. Seven High drops follow codec-swish changes while cutoff
+stays at 22 kHz; the suspected cutoff-change explanation fails here. Six base-card
+stage active-status flips occur. Exact silence receives nonzero Sub/Mid authority,
+which alone does not imply harmful rendered audio. Long identity has no such flips.
+
+[Full findings and reproducibility](docs/PASSIVE_ROUTING_AUDIT_20261020.md) retain
+nulls, calibrated band observations, source roles and limitations. Base assessment
+and TuningCard only were measured; no intent modulation, neural processing or
+threshold change occurred. Eight tool regressions pass, including an active-child
+HALT path repair. Sampled native HWM peaks at 92.64 MiB under a 384 MiB cap; no
+speed qualification or subjective result is claimed. Actual pre-limiter observation
+is the next causal-accountability step. Champion and frozen references are intact.
+

@@ -1,0 +1,22 @@
+{
+  "schema": "passive-analysis-revisions-v1",
+  "final": "analysis_v4.json",
+  "reason": "v2/v3 completed geometry/artifact attribution; v4 independently rechecks exact source-derived float32 gains and historical executed runner pin",
+  "retained_local_drafts": [
+    {
+      "path": "runs/stage-accountability-20261020/passive-routing-v1/analysis_drafts/analysis.json",
+      "sha256": "551d6d698586b90420cb50c26217c66e702421b797c61aac6d4520b2c3e029d6",
+      "status": "superseded analysis metadata; raw measurements unchanged"
+    },
+    {
+      "path": "runs/stage-accountability-20261020/passive-routing-v1/analysis_drafts/analysis_v2.json",
+      "sha256": "75d7476981725040103a594cbd3cb3b5cd24e4fa8df36d0f7f90b4077b531ae9",
+      "status": "superseded analysis metadata; raw measurements unchanged"
+    },
+    {
+      "path": "runs/stage-accountability-20261020/passive-routing-v1/analysis_drafts/analysis_v3.json",
+      "sha256": "26318b4db2bb58e6bc21d85eebb5971d41af438072da5f9658ac3ce0e3db1831",
+      "status": "superseded analysis metadata; raw measurements unchanged"
+    }
+  ]
+}

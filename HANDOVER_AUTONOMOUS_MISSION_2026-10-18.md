@@ -1,7 +1,7 @@
 # Mission continuation — 2026-10-18
 
 This is a partial research checkpoint. Read AGENTS, README, architecture,
-RESULTS Sections 24–30 and the relevant frozen plan before changing behavior.
+RESULTS Sections 24–31 and the relevant frozen plan before changing behavior.
 Recheck Git state, running jobs, storage and retained artifacts before resuming.
 The machine-readable checkpoint is
 `artifacts/mission-20261018/mission_state.json`.
@@ -29,9 +29,10 @@ is now verified: `scripts/audit_assessment_bands.py --audio WAV --out NEW.json`
 reports whole-clip physical digital band powers; optionally attach `--assessment`
 for legacy comparison. Five regressions and four actual file audits pass.
 No routing thresholds were retuned; native code changes are comments/console
-labels only. Next compare old authorities with the calibrated observations on
-separate procedural healthy/damaged/quiet controls before proposing an opt-in
-policy. Actual pre-limiter snapshots remain missing. Never substitute one fixed
+labels only. The [passive matrix](docs/PASSIVE_ROUTING_AUDIT_20261020.md) now
+verifies 45 repeated gain conditions: 13 authority changes, five legacy score
+and eight artifact threshold crossings. Cutoff stayed at 22 kHz in the seven
+High changes, falsifying that suspected explanation here. No policy is retuned. Actual pre-limiter snapshots remain missing. Never substitute one fixed
 offset for requalification, or treat authority scalars as learned probabilities.
 
 The [completed report](docs/LONG_COHERENCE_RESULTS.md) now supersedes the plan's

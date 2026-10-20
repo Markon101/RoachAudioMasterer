@@ -1,0 +1,393 @@
+{
+  "schema": "passive-routing-plan-v1",
+  "source_parent": "674a472",
+  "binary": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/baseline-674a472",
+  "binary_sha256": "1b474970ec278a7db41424d57fb709cf37034e1934b3a5cdf572d2490dca2828",
+  "bundle_manifest": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/manifest.json",
+  "bundle_sha256": "201eda8db166a5578ecc36a4429acc5114d3059a9768b3aeb5cf21fc9b4d825c",
+  "long_identity": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/view0-input.wav",
+  "long_identity_sha256": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158",
+  "gains_db": [
+    0,
+    -20,
+    -40
+  ],
+  "source_pins": [
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/scripts/run_passive_routing_audit.py",
+      "sha256": "76f4725a620244647d848a9de8d11f96a2a19d1734f5051c1ec4db414694c3d2"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/scripts/long_coherence_fixture.py",
+      "sha256": "2729cf89af5c141dbb416ec655acac25d8c413013e9038bac1b9d0bb4d8a0383"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/scripts/audit_assessment_bands.py",
+      "sha256": "4b60c5df51c0225f92b734aee01cfc4299b8e2077abb9c9247fe09a8c857014c"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/scripts/run_coherence_quality.py",
+      "sha256": "5863f3465b704c6504bf7715705be5dacabd760e38e9fd7ffc0748575d52d254"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/scripts/run_mid_profile.py",
+      "sha256": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/scripts/roach_ears/audio_io.py",
+      "sha256": "9bdb9c07bbf55bbafb8826c1cf8e55a978f25cd300838a2d21483a892bdc0bbc"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/coherence-20261018/fixture-881000-healthy-v1/view0-input.wav",
+      "sha256": "9b1f19142c28d63f1cb5314feb5bdba2a103dc806485142dc64500c56a50a158"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/routing-audit-20261020/protocol.json",
+      "sha256": "3e31a14466bb8b80d8f21e12d33150e21e068940ce97c721f713d66a17ccd8cd"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/acoustic_dynamics.rs",
+      "sha256": "201d8cacfdcbba76ffdf2d1486d60cf625ba81a9a1c9eacf2ead42901b81c492"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/assess.rs",
+      "sha256": "f93ab8ac84b0c76fcc8ca124949508ab7c79df26b3bf189168f9a65ac4addf1d"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/associative_landscape.rs",
+      "sha256": "b6b1b698d5536cea4ba8a2508d10de1773a93421e7f72126f7954e32a842dcda"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/audio.rs",
+      "sha256": "b900ab55648f1f75c8b51679046a30a15cf734fd5fdc29c69eab7b9a8dc57333"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/backend.rs",
+      "sha256": "37587c75107ee157947d8665d5ccbca1a0ebf07ab0d8dbb06c1b12c9dc457e6c"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/critics.rs",
+      "sha256": "6bddada456aff9f1ab14a22e29e93012249302c74e5cdc2934ca5e832acfbfb7"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/dsp.rs",
+      "sha256": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/dynamics.rs",
+      "sha256": "af00c07c4d43f14b6a4863e1403716440e0fe21c19da6cd9ca902c437da9bfff"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/dynamics_synth.rs",
+      "sha256": "d1cefe9ef0d85c3850bbd53f6f238c87ea571ebf03b2ace3e07fd3c994ecdb71"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/experiment.rs",
+      "sha256": "9ca4b7c785c622ae6bf77caaf314fba2a658819bf486d6ad9ca0726b57cebbff"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/flow.rs",
+      "sha256": "2aa149a678feddfe2d6c78b29b3c75a8f48eeec4be322a545307f3976eb02a98"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/flow_experiment.rs",
+      "sha256": "06d0746df4c6abe4885909bb515cdc83ee6fda691d484b27a1cb4ea3c469d8f5"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/gtf.rs",
+      "sha256": "c1407f93c00af37e04b6fba786fedcfc7c1bf08190673d816935eb3512556248"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/main.rs",
+      "sha256": "76649e6703d1f51efff192a628b80c371f4da8f242b3b24ae9a1accdf16e4465"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/master.rs",
+      "sha256": "5cfaec7483766370a6bdb0fc8be6cc86d4dfeb0941ad479cde4aff0560240867"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/metrics.rs",
+      "sha256": "d99ffc724d3aeabdc12dd3d10ce08e4a0995033bc7265612dab5f31c1039ef07"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/microstructure.rs",
+      "sha256": "1ed892522ba8ab3eddb88d85c87fedd1883cee4a26e0034d5dbbb93b7fc08e9c"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/mid_solver_audit.rs",
+      "sha256": "918848648cb06f7915e92022c9ce00bc2b73d41f033680d8abacaef2012350c3"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/model.rs",
+      "sha256": "35fe86f07132b11b331a1f65f866a6315dbabe2ef79ad5480522fd9fbd12583a"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/musical_intent.rs",
+      "sha256": "34c3987cc3d3d6605ec463858d336b156c7beabf45bc23c47589e7fbb32fa54a"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/native_audio.rs",
+      "sha256": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/native_dsp.rs",
+      "sha256": "aeaac57f069fc8ea0a2669fed1ae917d1902b6813daa15a52b6ed7cd08c6a8d8"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/opencl.rs",
+      "sha256": "e0cd6eca2a7799dc515fd798fd59ecbbdc32cd2612003f4302728ce4138dc783"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/reconstruction.rs",
+      "sha256": "ea90c971e27f1d7f59bcce8793002e595f54b6580f9d21c87096a31c9dec6827"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_allocation.rs",
+      "sha256": "80d65b7920a437c9635128dc727a10626aeb0df2970bf73c66f18d8a0c076c40"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_dynamics.rs",
+      "sha256": "8bf674f192d3fc056d90fc50ef500acbe2b2b7221c86f67f9c9465f6ff10b73c"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_experiment.rs",
+      "sha256": "8bb1c0dc729016ddbfb521c201858f2f5876c706df369082cbece831bd80336e"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_field.rs",
+      "sha256": "cbb1e2350472315f565b0d5cc4a29b93f8cbfdfec93a7673bfcd031df7248bd7"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_gate.rs",
+      "sha256": "ba6215206659b07b460fc65a0b270941c37ac9b21dc85563795602fa2a6d098f"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_gate_tests.rs",
+      "sha256": "4e8446a74dad3754b71bf6529fcb6f103beba97b3e2f2fed69762b3b7a48393a"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_low.rs",
+      "sha256": "a16cddcdd11525bbc255844aa6cf272a57d66cf056f161a56c86ab0b27a8c65b"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_mid.rs",
+      "sha256": "b0c82e11c302a819063231c06dd743ed80c821426bb3955b28ecd53375912f2a"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_oracle.rs",
+      "sha256": "09656d5a81f1216e808378b530549abe40ffc7e5e6ef9a7dbd267f131b362f6b"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/rich_synth.rs",
+      "sha256": "e0bc220a0b752df7e864c958f4e5fb24789d78299e6ed0b72401e34ee8eee364"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene.rs",
+      "sha256": "e4c645b249baadf19abb08668c85954fa782d39afec323fe2b323b78c9f774e5"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_adapter.rs",
+      "sha256": "24a855c5dc79e338d159bef1966c5411a7864f62c784c0c7c7cad1e63220eec2"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_clean.rs",
+      "sha256": "7ac46ea6ea9120cb57965322c39c52964581e07760ee829eb72f7c21173f482e"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_engine.rs",
+      "sha256": "555bcf47e3f216dba49c2dd9d28ea713a7fc0467a3f85fe131e00bced50068e5"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_experiment.rs",
+      "sha256": "514d89260fc18f468b90752e698e21097a5f7b4b96c56eb2876bcc69891b3074"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_features.rs",
+      "sha256": "4ea762fcc825b7101cdfb733edbb6742ad849934ac965c55edafb5038a019556"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_loss.rs",
+      "sha256": "323cd865cbcb86285477d661bef8a4d2c21842f782ffcccdf2841dbeb4c33ece"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_metrics.rs",
+      "sha256": "0b324b522961ebc5fe558aa75527ea1d2299f854e553736b9748c2ec66a130cd"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_model.rs",
+      "sha256": "54cb759c444a9e0562fe86845fd84fb71a5b1dbe82ad4b5470909060dc06dfb7"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_stats.rs",
+      "sha256": "b2e2b62e40b2f3adab9ded0961fa7dc1ba725b525035e7e484e59b24d79a59b6"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_synth.rs",
+      "sha256": "e87de84d82302ac1b87a937ec259c4243cae1112127708c127bb02c84553f104"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/scene_training_state.rs",
+      "sha256": "e7df65a4d0b5a2e38912057254edbad8334a651c9313f24f8bb26798dbc07a2c"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/sfht.rs",
+      "sha256": "32387fc988802d9e4b5aeb1c246b657cbae1d8b6b16766c689e0a3b5bdf91dcb"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/signal_time.rs",
+      "sha256": "039e95d205bc86585c8a53ce5698c4a0bc90786cef2a250223ee5566fddf36fe"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/spatial.rs",
+      "sha256": "d299533149761fd06f7f5348b4db42c4af5987898c3a44eca61466189411ed16"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/stft_hires.rs",
+      "sha256": "19245f311f146b7f4e65715c76ecb4033ebcd4a2230d1764bd2344d44c7ab43d"
+    },
+    {
+      "path": "/data/data/com.termux/files/usr/tmp/roach-routing-audit-20261020/src/synth.rs",
+      "sha256": "4e34f83bf9e06aef3be0f7368d7c037357cf6d698ad09b3c5bd398064a57f107"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860003/recipe.json",
+      "sha256": "c00ba7ffb455f1bfc57db0348b47729af191ea0a463568bad10b493431790e84"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860003/target.wav",
+      "sha256": "c9d910a4dba55da1104096ecd7f05c2789049195d0a7f81ed13e60e264ec54e0"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860003/target.planar-f32le",
+      "sha256": "3494b2aec6b676e3492dc888cc368083f5ec250afd3e166f0383f0b421642692"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860003/degraded_input.wav",
+      "sha256": "814b34e9725e4b63ec2a21fa4d1a5bf343009e33e48e4467511b771634c7ecb1"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860003/degraded_input.planar-f32le",
+      "sha256": "0d4d8467b3b7b0d959763018771c12a2ad3b00ba0e964259152693c779dc2cad"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860007/recipe.json",
+      "sha256": "789346ee06b3e63a37c5478894eb56e87248060c1903a22fa9d761c1257e2aa9"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860007/target.wav",
+      "sha256": "e3e7a5bbd345c8451a427dc21dd821076209cbecf3aee0cd46404521b5b87d94"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860007/target.planar-f32le",
+      "sha256": "f78b2e6aea7e6c01844e24742813187c7d4a5c43170af67562652085e14817fd"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860007/degraded_input.wav",
+      "sha256": "655148158591305ac919622d9b6521ce0cf03acd6425966710dbb768be52f6c1"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860007/degraded_input.planar-f32le",
+      "sha256": "35709cc45a8fffd81c4dc9fbd454d5b680bf6952e32e64be7ba0c9bdfbf9996e"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860002/recipe.json",
+      "sha256": "91f38b4019de8beb4ef3c64de45ea170ed57c69fc3213b38d6c720df85dc0381"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860002/target.wav",
+      "sha256": "272a4e5411c5ce56d9c2ee2fbbf23dfd91c9429f0b9ba13deade11fa4bc46c6a"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860002/target.planar-f32le",
+      "sha256": "4a8fae1ab26fc4015842fbc116f28513088706f4fd582858a5568cc078f1a220"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860002/degraded_input.wav",
+      "sha256": "cd36c23637db2fd6798c0810ea65eb27bc6ca478ca3009945b24d174baa2cbeb"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860002/degraded_input.planar-f32le",
+      "sha256": "46c64e8055843a58e6bc888175823de24ad24b2e5137b8b4f8dffc3f7e98378f"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860004/recipe.json",
+      "sha256": "63f97fd1a09ff4ecc52a910da3d5a773a2ab5b5aae91d74fb92ba5e599d343d0"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860004/target.wav",
+      "sha256": "48e9b9a7a4158047d9fe7e0a58ead96b4c20108b8565d4bd5a2012c342f97511"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860004/target.planar-f32le",
+      "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860004/degraded_input.wav",
+      "sha256": "48e9b9a7a4158047d9fe7e0a58ead96b4c20108b8565d4bd5a2012c342f97511"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860004/degraded_input.planar-f32le",
+      "sha256": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860005/recipe.json",
+      "sha256": "4476e565bc2337d84111a6b7d4eb7817872a1c15620d5e8668136187d055c8dd"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860005/target.wav",
+      "sha256": "ea0181d7c6885a8057f4a652a32cb404056116df2415d4277cc357102635ff20"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860005/target.planar-f32le",
+      "sha256": "6bf4827ed4a08c330e8ffa97cf79d6a3d654d2604b85e8754bd61d5baaa91e68"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860005/degraded_input.wav",
+      "sha256": "14960b8a9755ddf8d4ec3f3e213858c006b1002104cf942ef4810fb308addef3"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860005/degraded_input.planar-f32le",
+      "sha256": "b64661c1a6614611402f494ab1bc8618b7f2de896e73088fd3f5d07e2b2af548"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860015/recipe.json",
+      "sha256": "25de048ff2bb2ec36931d9e87372ffbc273183693bfef4a7f02b58cc1cbfdef8"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860015/target.wav",
+      "sha256": "ae5ec8dd34f19b94833dda4d048f7e47306182f88129f8643e4643f47ad024f5"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860015/target.planar-f32le",
+      "sha256": "fbb791930b4ff2c06d7bbd69b5a67ed4ab6c646fcf0d227911cd0c00eb23fce5"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860015/degraded_input.wav",
+      "sha256": "0147627ecf83076e77bfc7dcb9d7599e9f5a6c2382459e17d2cd921b0f0b018c"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860015/degraded_input.planar-f32le",
+      "sha256": "1fe70922392e7276404d4cfc38ec34739e4770bbd1002ee589adc84d83827c6e"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860019/recipe.json",
+      "sha256": "e04c25257dfa5551ec28c1954c994e5381163698a4ed9cb8579eee9c9f1a5945"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860019/target.wav",
+      "sha256": "eeeee557b61bb748b57158e31e3b6f775f4ec0f584e2c5a65b3826ffabbba0f0"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860019/target.planar-f32le",
+      "sha256": "ccb90bc9db67e71fc6533e3f5a5c17c2653958fcd8a33821e0751f2690d64693"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860019/degraded_input.wav",
+      "sha256": "c9646c9e4a5dbd5e0782d95a7db68a1f93f75cdbff61eae48bae941877dbc997"
+    },
+    {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/adverse-20261020/short-source-v1/seed-860019/degraded_input.planar-f32le",
+      "sha256": "1059a7cb8d44576834a3b575e71a0e7b45db95c85c284d52103d934a7660cb95"
+    }
+  ]
+}

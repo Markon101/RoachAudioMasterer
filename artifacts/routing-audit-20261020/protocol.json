@@ -1,0 +1,42 @@
+{
+  "schema": "passive-routing-protocol-v1",
+  "created_utc": "2026-10-20T06:34:39.909977+00:00",
+  "source_parent": "674a472",
+  "row_count": 45,
+  "gain_policy_db": [
+    0,
+    -20,
+    -40
+  ],
+  "inputs": "all7 recordedbundle target/degradedpairs x3gains; one26second no-added-lossidentitysource x3gains",
+  "source_roles": "target-as-input means no additional manufactured damage; no non-silent source is certified musically healthy",
+  "expected_seeds": [
+    860002,
+    860003,
+    860004,
+    860005,
+    860007,
+    860015,
+    860019
+  ],
+  "family_labels": "read actualmanifest/recipe, not remembered names.860002 ismultitrack_ambient_dense.",
+  "questions": [
+    "Do baseauthorities andbasecardactions changeunderfixedgain-only attenuation?",
+    "Does estimatedcutoff or highauthoritychange despite same spectralshape?",
+    "Do manufactured-loss/identity pairroles differ?",
+    "Do null/near-null inputs exposefloor-driven authorizations?"
+  ],
+  "falsifiers": [
+    "Noauthorityoractiontransitions weakensoperationalimpact inthismatrix.",
+    "Changesonlynear numerical/quietfloorsqualifyeffect aslevel-floor behavior, not damage evidence.",
+    "Waveform/hash/geometrymismatchinvalidatesrun; preserveHALTEDandcompletedrows."
+  ],
+  "invariants": [
+    "Same source samples eachgain; float32scalar once; no normalization/amplification/targetselection",
+    "Baseassessment/TuningCard only; musicalintent/manualmodulation notapplied",
+    "No routingthreshold changes, modelinference, training, speed experiment or productionpromotion",
+    "Final seeds870000..870047 untouched"
+  ],
+  "binary_sha256": "1b474970ec278a7db41424d57fb709cf37034e1934b3a5cdf572d2490dca2828",
+  "scope": "boundedpassive development diagnostic; no subjective preference, target recovery or autonomous intent correctness claim"
+}
