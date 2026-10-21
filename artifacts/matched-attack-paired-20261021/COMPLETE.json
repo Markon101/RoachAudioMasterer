@@ -1,0 +1,24 @@
+{
+  "schema": "roach-matched-attack-complete-v1",
+  "completed_utc": "2026-10-21T03:52:53.360988+00:00",
+  "paired_event_count": 320,
+  "artifacts_sha256": {
+    "design.json": "2ed18cd37095b78cb9f90581b865e01dde447f0404c04ef2579b96fb92603f71",
+    "invocation.json": "3b4d45ac8b7838092053bba0c8f67a6f23d54abefdafeab511b2288fd6253e9f",
+    "source_hashes.json": "35a1339a9b3419ba0b6441e5616a2c68ad8b829f00932a07b4f4243ec1d5c911",
+    "alignment.json": "2b230006abf09b14004ec709231697b2e71428ae89d853fd0d89632cb4d12cfb",
+    "selection.json": "9a37c5d8ec7027f68802200b22d691115822a10b7b9ab6b8c60d85d3fbc78787",
+    "paired_events_receipt.json": "9addde3e49f171f517af8cb45580a98127c4c6f11e04f720ef855edb0ca5fd2a",
+    "summary.json": "ebade8c10655c07698294951d3c254fc74084cebcef8f3af14eae313b30b7e9e"
+  },
+  "memory": {
+    "ru_maxrss_kib_linux": 156988,
+    "VmHWM_kib": 50188,
+    "VmRSS_kib": 48140,
+    "observed_hwm_mib": 153.30859375
+  },
+  "audio_rehashed_unchanged": true,
+  "tools_rehashed_unchanged": true,
+  "frozen_binary_invoked_or_modified": false,
+  "real_pair_runs": 1
+}

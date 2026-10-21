@@ -1,0 +1,194 @@
+{
+  "schema": "roach-matched-attack-paired-design-v2",
+  "declared_utc": "2026-10-21T03:51:04.875567+00:00",
+  "declaration_note": "V2 frozen before any source event analysis or real paired-event results. V1 stopped at source/output alignment, which remains failed; no definitions below are fitted to event results.",
+  "purpose": "Source-triggered descriptive comparison of existing final outputs only; no source-relative attack restoration, reconstruction, perceptual validation, stage-causation or promotion claims.",
+  "inputs": {
+    "source": {
+      "path": "/sdcard/Download/Chasing Horizons.wav",
+      "sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559"
+    },
+    "control": {
+      "path": "runs/listening-coherence-20261020/fullsong-v3/control/mastered.wav",
+      "sha256": "1df16adbf1b43a8c1aa964f816a98325448be4be472226ecde717d63b2d91b4f"
+    },
+    "candidate": {
+      "path": "runs/listening-coherence-20261020/fullsong-v3/candidate/mastered.wav",
+      "sha256": "82f522d0f4e429e50125a65b91f4bc2054bdfa0c94adad02c431e183d23a2195"
+    }
+  },
+  "geometry": {
+    "sample_rate": 48000,
+    "channels": 2,
+    "frames": 6739200,
+    "sample_origin": 0,
+    "resample_or_shift": false
+  },
+  "detector": {
+    "audio": "source only; stereo mean-square energy, no channel cancellation",
+    "frame_ms": 5,
+    "history_ms": 40,
+    "score": "20 log10(current frame RMS / RMS over the preceding 40 ms); amplitudes floored at 1e-15 only for the detector logarithm",
+    "rise_threshold_db": 3.0,
+    "activity_relative_to_max_block_rms_db": -60.0,
+    "local_peak_radius_frames": 2,
+    "plateau_rule": "strictly greater than the preceding two scores, greater than or equal to the following two; earliest plateau frame wins",
+    "minimum_spacing_ms": 200,
+    "selection": "Boundary-valid above-threshold local maxima, greedily accepted by descending score then earliest frame; suppress candidates within 200 ms of an already accepted stronger event; return accepted events in time order",
+    "onset_origin": "start sample of the selected 5 ms input frame; no output-dependent refinement",
+    "exclusions": "Reject incomplete frames, missing history/local-peak neighbors, low input activity, below-threshold rises, non-local maxima, insufficient filter/window boundary support, and NMS suppression. Store every above-threshold active local maximum and its acceptance/exclusion reason. No output-based event selection.",
+    "interpretation": "Energy-rise proxy; not an instrument detector. Dense events can be suppressed and windows can contain other musical activity. Adjacent events and excerpt/full-song summaries are dependent."
+  },
+  "windows_ms": {
+    "pre": [
+      -80,
+      -20
+    ],
+    "attack": [
+      -5,
+      35
+    ],
+    "sustain": [
+      60,
+      160
+    ]
+  },
+  "window_semantics": "Half-open sample ranges; ms are rounded to native sample counts once. The pre/attack gap and attack/sustain gap are deliberately unused. Require complete windows plus FIR half-support; no edge padding for accepted events.",
+  "bands_hz": {
+    "fullband": null,
+    "bass_30_200": [
+      30,
+      200
+    ],
+    "lowmid_200_2000": [
+      200,
+      2000
+    ],
+    "presence_2000_8000": [
+      2000,
+      8000
+    ],
+    "high_8000_20000": [
+      8000,
+      20000
+    ]
+  },
+  "filter": {
+    "taps": 4097,
+    "window": "Hamming",
+    "construction": "ideal bandpass impulse response (difference of normalized sinc lowpasses) times symmetric Hamming window, unity response normalized at band midpoint",
+    "application": "float64 linear FFT convolution on one event patch and one recording at a time; centered odd FIR with delay removed; same coefficients and support for all three recordings",
+    "caveat": "Finite-transition bands and symmetric FIR pre/post ringing are diagnostic definitions, not exact acoustic stems or continuous-time bands. Peaks are native-sample peaks of the filtered signal, not true-peak estimates."
+  },
+  "alignment": {
+    "band_hz": [
+      80,
+      1200
+    ],
+    "anchor_fractions": [
+      0.1,
+      0.3,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "anchor_seconds": 0.5,
+    "max_lag_ms": 10,
+    "minimum_correlation": 0.9,
+    "required_best_lag_samples": 0,
+    "outside_zero_neighborhood_ms": 1,
+    "minimum_peak_margin_outside_neighborhood": 0.001,
+    "pairs": [
+      "control/candidate"
+    ],
+    "gate": "Require the preexisting five control/candidate anchors only: best integer lag zero, correlation >=0.9, margin >=0.001 outside +/-1ms. No shifts. This 80-1200Hz check is below the Mid treatment and cannot validate treatment-band timing. V1 source/output alignment remains failed and source-relative claims are omitted."
+  },
+  "metrics": {
+    "channel_pooling": "RMS = sqrt(mean over both channels and samples); peak = max absolute over both channels and samples",
+    "each_window": [
+      "peak",
+      "rms",
+      "peak_dbfs",
+      "rms_dbfs",
+      "crest_db"
+    ],
+    "within_recording_ratios_db": [
+      "attack_to_sustain_rms_db",
+      "attack_to_sustain_peak_db",
+      "attack_peak_to_sustain_rms_db",
+      "attack_to_pre_rms_db",
+      "attack_crest_minus_pre_db"
+    ],
+    "paired": "candidate minus control for every window dB metric and within-recording ratio; raw amplitude deltas are level-dependent; ratios and crest differences are invariant to positive uniform gain within either recording",
+    "source_relative": "OMITTED in V2. Source waveform windows are retained only as source-mask/activity references; do not compute output-minus-source ratios or source-relative reconstruction/attack-restoration claims.",
+    "null_policy": "Source window activity threshold = maximum input block RMS * 1e-5 (-100 dB amplitude). For a given ratio require both referenced source window RMS values above this floor; otherwise retain raw metrics but null the ratio in all three recordings with an explicit shared source-null reason. Output exact-zero denominators are separately flagged and paired ratios null; no output event is removed. Never clamp a nonzero ratio denominator."
+  },
+  "summaries": {
+    "subsets": {
+      "all": "all accepted source events",
+      "prior_listening_excerpt_48_78s": "source onset in [48, 78) seconds; same previously used excerpt, not an independent sample"
+    },
+    "statistics": [
+      "count",
+      "mean",
+      "median",
+      "p10",
+      "p25",
+      "p75",
+      "p90",
+      "min",
+      "max",
+      "median_absolute_delta",
+      "negative_count",
+      "positive_count",
+      "near_zero_count_at_1e-9_db"
+    ],
+    "inference": "Descriptive paired distributions only. No event-level significance test, confidence interval, perceptual threshold, composite score, or superiority claim.",
+    "event_timing": "For every accepted event, summarize presence-band best lag samples and best/zero-lag correlation with count/null, min,p10,p25,median,p75,p90,max; count exact-zero vs nonzero integer lags and abs lag >=48 samples (1ms) descriptively. No event is excluded by these observations."
+  },
+  "resources": {
+    "process_hwm_aim_mib": 512,
+    "memory_check": "Read /proc/self/status VmHWM and resource.getrusage where available, stop if observed HWM exceeds 512 MiB",
+    "array_policy": "stream WAV in <=65536-frame blocks; one event/recording and one filtered band at a time; no full-song FFT or full-song float64 arrays",
+    "threads": "OPENBLAS_NUM_THREADS=1",
+    "dependencies": "Python standard library and NumPy; SciPy availability checked and absent; no new package installation",
+    "timing": "Timestamps for provenance only, no speed experiment or timing claim"
+  },
+  "stopping": "Any pin/geometry/finite/required-output-pair-alignment/memory error or artifact-local HALT/STOP latch stops and writes STOP.json. New V2 pair run once; preserve V1; no detector/threshold/window/band/FIR/null adjustments after results.",
+  "limitations": [
+    "One source song, final masters only; cannot localize an effect to coherence, glue, or limiter stages.",
+    "Source attack positions have 5 ms frame resolution; symmetric filtering changes local waveform shape.",
+    "Fixed windows need not correspond to isolated physical attacks or sustained instruments.",
+    "Sampled metrics do not establish perceived punch/coherence, restoration, continuous-time behavior, or generalization.",
+    "V1 source/control and source/candidate low-band alignment gate failed: source-triggered output windows cannot establish source-relative attack preservation or restoration.",
+    "The five required output-pair alignment anchors use 80-1200Hz, below the Mid treatment; separate 2-8kHz event timing is descriptive only.",
+    "A lower attack/sustain ratio can reflect higher sustain, lower attack, or both; separate output levels must be retained."
+  ],
+  "comparison_scope": "source_triggered_output_pair_v2",
+  "version_1_stop": {
+    "directory": "artifacts/matched-attack-20261021",
+    "design_sha256": "b055d3e29e9315326089ea13e501fe959a2c7605bce5183deb8d2fe3fecd95fc",
+    "stop_sha256": "d35f58b8d307a1bf93c72583545eed57246f49cb0908dfcce821fd3c64a6fdf8",
+    "status": "source-anchored diagnostic failed its predeclared alignment gate; no source events analyzed; preserved unchanged; exact script/tests committed at 5c55880"
+  },
+  "event_local_presence_timing": {
+    "band_name": "presence_2000_8000",
+    "band_hz": [
+      2000,
+      8000
+    ],
+    "reference": "control",
+    "second": "candidate",
+    "window": "attack",
+    "window_ms": [
+      -5,
+      35
+    ],
+    "max_lag_ms": 10,
+    "outside_zero_neighborhood_ms": 1,
+    "policy": "Descriptive best integer lag, best and zero-lag normalized correlations, and zero-lag peak margin outside +/-1ms for every accepted source event. No waveform shifts, fitted tolerances, gate, event dropping, or favorable exclusions. Exact-zero/degenerate windows are explicit nulls and events retained. A positive lag means candidate delayed relative to control.",
+    "interpretation": "Band-limited waveform correlation can mix phase, spectral and timing changes. A nonzero best lag is not proof of a physical transient delay; a zero lag is not proof of continuous-time or perceived timing identity."
+  },
+  "raw_event_path": "runs/matched-attack-paired-20261021/paired_events.jsonl",
+  "raw_event_retention": "Detailed paired events kept locally under ignored runs; artifact retains path/size/count/SHA256 receipt. Retain attack and sustain levels separately so a ratio change is not automatically called attack loss."
+}

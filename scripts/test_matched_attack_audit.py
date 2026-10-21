@@ -1,4 +1,5 @@
 """Known-answer controls for source-selected attack comparisons."""
+import copy
 import json
 import math
 from pathlib import Path
@@ -13,6 +14,7 @@ from scripts import matched_attack_audit as audit
 
 RATE = 48000
 DESIGN_PATH = Path(__file__).resolve().parents[1] / "artifacts/matched-attack-20261021/design.json"
+V2_DESIGN_PATH = DESIGN_PATH.parent.parent / "matched-attack-paired-20261021/design.json"
 
 
 def write_wav(path, audio, extensible=False):
@@ -191,6 +193,66 @@ class MatchedAttackTests(unittest.TestCase):
             pinned.write_text("changed")
             with self.assertRaisesRegex(ValueError, "pin changed"):
                 audit.check_pins(pins)
+
+    def test_v2_preregistered_detector_windows_bands_fir_and_nulls_match_v1(self):
+        v2 = json.loads(V2_DESIGN_PATH.read_text())
+        for key in ("detector", "windows_ms", "window_semantics", "bands_hz", "filter"):
+            self.assertEqual(v2[key], self.design[key])
+        self.assertEqual(v2["metrics"]["null_policy"], self.design["metrics"]["null_policy"])
+        self.assertEqual(v2["alignment"]["pairs"], ["control/candidate"])
+        self.assertEqual(audit.comparison_scope(self.design), audit.V1_SCOPE)
+        self.assertEqual(audit.comparison_scope(v2), audit.V2_SCOPE)
+        with self.assertRaises(ValueError):
+            audit.comparison_scope({"comparison_scope": "misspelled"})
+
+    def test_v2_omits_source_relative_ratios_while_v1_default_is_preserved(self):
+        observations = {name: audit.measure_event(ArrayReader(audio), self.onset, self.design, self.filters)
+                        for name, audio in (("source", self.audio), ("control", self.audio),
+                                            ("candidate", self.audio * 0.5))}
+        v1_row = audit.pair_event(self.event, observations, 1e-9, self.design)
+        v2 = copy.deepcopy(self.design)
+        v2["comparison_scope"] = audit.V2_SCOPE
+        v2_row = audit.pair_event(self.event, observations, 1e-9, v2)
+        for band in self.design["bands_hz"]:
+            self.assertIn("control_minus_source_ratios_db", v1_row["bands"][band])
+            self.assertIn("ratios_db", v1_row["bands"][band]["source"])
+            self.assertNotIn("control_minus_source_ratios_db", v2_row["bands"][band])
+            self.assertNotIn("candidate_minus_source_ratios_db", v2_row["bands"][band])
+            self.assertNotIn("ratios_db", v2_row["bands"][band]["source"])
+            self.assertEqual(v1_row["bands"][band]["candidate_minus_control_db"],
+                             v2_row["bands"][band]["candidate_minus_control_db"])
+
+    def test_v2_presence_shift_is_retained_descriptively_and_not_excluded(self):
+        v2 = json.loads(V2_DESIGN_PATH.read_text())
+        rng = np.random.default_rng(160731)
+        control = rng.normal(size=(RATE, 2))
+        candidate = np.roll(control, 7, axis=0)
+        readers = {"control": ArrayReader(control), "candidate": ArrayReader(candidate)}
+        timing = audit.event_presence_timing(readers, self.event, v2, self.filters)
+        self.assertTrue(timing["available"])
+        self.assertEqual(timing["best_lag_samples"], 7)
+        self.assertAlmostEqual(timing["best_correlation"], 1, places=10)
+        self.assertEqual(timing["waveform_shift_applied_samples"], 0)
+        self.assertTrue(timing["event_retained_regardless_of_timing"])
+        observations = {name: audit.measure_event(ArrayReader(audio), self.onset, v2, self.filters)
+                        for name, audio in (("source", self.audio), ("control", control), ("candidate", candidate))}
+        row = audit.pair_event(self.event, observations, 1e-9, v2)
+        row["event_local_presence_timing"] = timing
+        summary = audit.summarize([row], v2)
+        self.assertEqual(summary["all"]["paired_event_count"], 1)
+        self.assertEqual(summary["all"]["event_local_presence_timing"]["best_lag_samples"]["nonzero_count"], 1)
+        self.assertEqual(list(summary["all"]["bands"]["fullband"]), ["candidate_minus_control_db"])
+
+    def test_v2_degenerate_timing_is_null_and_event_is_retained(self):
+        v2 = json.loads(V2_DESIGN_PATH.read_text())
+        zero = ArrayReader(np.zeros_like(self.audio))
+        timing = audit.event_presence_timing({"control": zero, "candidate": zero}, self.event, v2, self.filters)
+        self.assertFalse(timing["available"])
+        self.assertIn("degenerate", timing["null_reason"])
+        self.assertTrue(timing["event_retained_regardless_of_timing"])
+        summary = audit.timing_summary([{"event_local_presence_timing": timing}])
+        self.assertEqual(summary["event_count"], 1)
+        self.assertEqual(summary["best_lag_samples"], {"count": 0, "null_count": 1})
 
 
 if __name__ == "__main__":

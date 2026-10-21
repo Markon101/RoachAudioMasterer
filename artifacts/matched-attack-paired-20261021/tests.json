@@ -1,0 +1,13 @@
+{
+  "recorded_utc": "2026-10-21T03:52:44.217987+00:00",
+  "argv": [
+    "/data/data/com.termux/files/usr/bin/python",
+    "-m",
+    "unittest",
+    "scripts.test_matched_attack_audit",
+    "-v"
+  ],
+  "exit_code": 0,
+  "tests_passed": 16,
+  "report_sha256": "d4255fdb784e3890060b6fcc0bdb4e73b0edb56e433667e6cc883cf6d34681b1"
+}

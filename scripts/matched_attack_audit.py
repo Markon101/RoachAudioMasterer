@@ -29,6 +29,15 @@ RATIO_WINDOWS = {
     "attack_to_pre_rms_db": ("attack", "pre"),
     "attack_crest_minus_pre_db": ("attack", "pre"),
 }
+V1_SCOPE = "source_anchored_v1"
+V2_SCOPE = "source_triggered_output_pair_v2"
+
+
+def comparison_scope(design):
+    scope = design.get("comparison_scope", V1_SCOPE)
+    if scope not in (V1_SCOPE, V2_SCOPE):
+        raise ValueError(f"unknown comparison_scope: {scope}")
+    return scope
 
 
 def utc_now():
@@ -388,6 +397,7 @@ def ratios(windows, source_windows, source_floor):
 def pair_event(event, observations, source_floor, design):
     onset = event["onset_sample"]
     rate = design["geometry"]["sample_rate"]
+    scope = comparison_scope(design)
     result = {key: event[key] for key in ("event_id", "onset_sample", "onset_seconds", "rise_db")}
     result["windows_samples"] = {key: [onset + ms_samples(t, rate) for t in interval]
                                  for key, interval in design["windows_ms"].items()}
@@ -397,6 +407,9 @@ def pair_event(event, observations, source_floor, design):
         row = {"source_window_active": {key: value["rms"] > source_floor
                                          for key, value in source_windows.items()}}
         for name, values in observations.items():
+            if scope == V2_SCOPE and name == "source":
+                row[name] = {"windows": values[band], "scope": "source-mask/activity reference only"}
+                continue
             ratio_values, exclusions = ratios(values[band], source_windows, source_floor)
             row[name] = {"windows": values[band], "ratios_db": ratio_values,
                          "ratio_null_reasons": exclusions}
@@ -408,11 +421,56 @@ def pair_event(event, observations, source_floor, design):
         for metric in RATIO_WINDOWS:
             paired[metric] = difference(row["candidate"]["ratios_db"][metric], row["control"]["ratios_db"][metric])
         row["candidate_minus_control_db"] = paired
-        for name in ("control", "candidate"):
-            row[f"{name}_minus_source_ratios_db"] = {
-                metric: difference(row[name]["ratios_db"][metric], row["source"]["ratios_db"][metric])
-                for metric in RATIO_WINDOWS}
+        if scope == V1_SCOPE:
+            for name in ("control", "candidate"):
+                row[f"{name}_minus_source_ratios_db"] = {
+                    metric: difference(row[name]["ratios_db"][metric], row["source"]["ratios_db"][metric])
+                    for metric in RATIO_WINDOWS}
         result["bands"][band] = row
+    return result
+
+
+def event_presence_timing(readers, event, design, filters):
+    cfg = design["event_local_presence_timing"]
+    rate = design["geometry"]["sample_rate"]
+    onset = event["onset_sample"]
+    start, end = [onset + ms_samples(t, rate) for t in cfg["window_ms"]]
+    lag = ms_samples(cfg["max_lag_ms"], rate)
+    coefficients = filters[cfg["band_name"]]
+    reference = filtered_patch(readers[cfg["reference"]], start, end, coefficients)
+    extended = filtered_patch(readers[cfg["second"]], start - lag, end + lag, coefficients)
+    result = {"band_hz": cfg["band_hz"], "window_samples": [start, end],
+              "descriptive_only": True, "waveform_shift_applied_samples": 0,
+              "event_retained_regardless_of_timing": True}
+    try:
+        result.update(normalized_lag_search(reference, extended, lag,
+                                            ms_samples(cfg["outside_zero_neighborhood_ms"], rate)))
+        result["available"] = True
+    except ValueError as error:
+        if "silent or degenerate alignment anchor" not in str(error):
+            raise
+        result.update(available=False, null_reason=str(error))
+    return result
+
+
+def timing_summary(records):
+    result = {"event_count": len(records), "descriptive_only": True}
+    fields = ("best_lag_samples", "best_correlation", "zero_lag_correlation",
+              "zero_peak_margin_outside_neighborhood")
+    for field in fields:
+        values = np.asarray([row["event_local_presence_timing"][field] for row in records
+                             if row["event_local_presence_timing"]["available"]], dtype=np.float64)
+        if not len(values):
+            result[field] = {"count": 0, "null_count": len(records)}
+            continue
+        q = np.percentile(values, [0, 10, 25, 50, 75, 90, 100])
+        stats = dict(zip(("min", "p10", "p25", "median", "p75", "p90", "max"), map(float, q)))
+        stats.update(count=len(values), null_count=len(records) - len(values))
+        if field == "best_lag_samples":
+            stats.update(exact_zero_count=int(np.sum(values == 0)),
+                         nonzero_count=int(np.sum(values != 0)),
+                         absolute_lag_at_least_48_samples_1ms_count=int(np.sum(np.abs(values) >= 48)))
+        result[field] = stats
     return result
 
 
@@ -431,19 +489,23 @@ def robust_summary(values, total):
 
 def summarize(records, design):
     result = {}
+    scope = comparison_scope(design)
     subsets = {"all": records,
                "prior_listening_excerpt_48_78s": [row for row in records if 48 <= row["onset_seconds"] < 78]}
     for name, rows in subsets.items():
         result[name] = {"paired_event_count": len(rows), "bands": {}}
         for band in design["bands_hz"]:
             band_result = {}
-            for group in ("candidate_minus_control_db", "control_minus_source_ratios_db",
-                          "candidate_minus_source_ratios_db"):
+            groups = ("candidate_minus_control_db",) if scope == V2_SCOPE else (
+                "candidate_minus_control_db", "control_minus_source_ratios_db", "candidate_minus_source_ratios_db")
+            for group in groups:
                 metrics = (next(iter(rows))["bands"][band][group].keys() if rows
                            else RATIO_WINDOWS.keys())
                 band_result[group] = {metric: robust_summary([row["bands"][band][group][metric] for row in rows], len(rows))
                                       for metric in metrics}
             result[name]["bands"][band] = band_result
+        if scope == V2_SCOPE:
+            result[name]["event_local_presence_timing"] = timing_summary(rows)
     return result
 
 
@@ -452,6 +514,7 @@ def run(design_path):
     output = design_path.parent
     check_latches(output)
     design = json.loads(design_path.read_text())
+    scope = comparison_scope(design)
     invocation = {"schema": "roach-matched-attack-invocation-v1", "started_utc": utc_now(),
                   "argv": sys.argv, "cwd": str(Path.cwd()), "design_path": str(design_path),
                   "design_sha256": sha256(design_path), "script_sha256": sha256(__file__),
@@ -507,7 +570,13 @@ def run(design_path):
         filters = {name: None if band is None else make_bandpass(rate, band, taps)
                    for name, band in design["bands_hz"].items()}
         records = []
-        with (output / "paired_events.jsonl").open("x", encoding="utf-8") as f:
+        raw_path = output / "paired_events.jsonl"
+        if scope == V2_SCOPE:
+            raw_path = Path(design["raw_event_path"]).resolve()
+            if not raw_path.is_relative_to(Path.cwd() / "runs"):
+                raise ValueError("V2 detailed events must stay in local runs/")
+            raw_path.parent.mkdir(parents=True, exist_ok=False)
+        with raw_path.open("x", encoding="utf-8") as f:
             for index, event in enumerate(selection["accepted"]):
                 check_latches(output)
                 if index % 25 == 0:
@@ -515,6 +584,8 @@ def run(design_path):
                 observations = {name: measure_event(reader, event["onset_sample"], design, filters)
                                 for name, reader in readers.items()}
                 record = pair_event(event, observations, source_floor, design)
+                if scope == V2_SCOPE:
+                    record["event_local_presence_timing"] = event_presence_timing(readers, event, design, filters)
                 f.write(json.dumps(record, allow_nan=False) + "\n")
                 f.flush()
                 records.append(record)
@@ -529,10 +600,18 @@ def run(design_path):
                    "subsets": summarize(records, design), "memory": memory_receipt(cap),
                    "limitations": design["limitations"] + [design["summaries"]["inference"],
                        "Gain invariance applies to ratios with the frozen source mask and nonzero output windows; absolute levels remain reported separately."]}
+        if scope == V2_SCOPE:
+            summary["schema"] = "roach-source-triggered-output-pair-summary-v2"
+            summary["comparison_scope"] = scope
+            write_json(output / "paired_events_receipt.json", {"path": str(raw_path),
+                       "sha256": sha256(raw_path), "size_bytes": raw_path.stat().st_size,
+                       "paired_event_count": len(records), "local_audio_content": False,
+                       "source_relative_output_claims": False})
         write_json(output / "summary.json", summary)
         check_pins(immutable_pins)
+        raw_artifact = "paired_events_receipt.json" if scope == V2_SCOPE else "paired_events.jsonl"
         files = ("design.json", "invocation.json", "source_hashes.json", "alignment.json", "selection.json",
-                 "paired_events.jsonl", "summary.json")
+                 raw_artifact, "summary.json")
         check_latches(output)
         write_json(output / "COMPLETE.json", {"schema": "roach-matched-attack-complete-v1",
                     "completed_utc": utc_now(), "paired_event_count": len(records),

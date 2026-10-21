@@ -1,0 +1,27 @@
+{
+  "recorded_utc": "2026-10-21T03:54:21.759699+00:00",
+  "checks": {
+    "complete_artifact_hashes_match": true,
+    "raw_hash_and_bytes_match": true,
+    "raw_count_matches_receipts": true,
+    "exact_source_selected_ids_and_order": true,
+    "all_declared_window_coordinates_match": true,
+    "no_output_minus_source_keys_or_source_ratios": true,
+    "paired_arithmetic_independently_matches": true,
+    "summaries_recompute_exactly_from_saved_rows": true,
+    "presence_timing_all_events_retained_no_shift": true,
+    "audio_hashes_match_after_completion": true,
+    "tool_hashes_match_invocation": true,
+    "v1_artifacts_unchanged_from_commit_5c55880": true,
+    "frozen_binary_matches_render_protocol": true
+  },
+  "maximum_paired_arithmetic_error_db": 0.0,
+  "null_paired_ratio_counts": {
+    "bass_30_200/attack_to_pre_rms_db": 1,
+    "bass_30_200/attack_crest_minus_pre_db": 1
+  },
+  "v1_artifact_files_checked": 9,
+  "raw_sha256": "0500a8aee8d4ca0d068386e2a45a2ddc7c54352095e22267b765990a573010f6",
+  "audited_pair_count": 320,
+  "scope": "artifact verification; no waveform rerender or repeat real analysis"
+}

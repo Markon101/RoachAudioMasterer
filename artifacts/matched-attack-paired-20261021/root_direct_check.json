@@ -1,0 +1,19 @@
+{
+  "schema": "root-paired-attack-direct-convolution-check-v1",
+  "method": "Independent centered linear direct convolution and RMS/peak calculation on adversarial saved events; no call to worker filtering/metric/summary helpers. WAV reader reused only.",
+  "checks": [
+    {
+      "event_id": "E0281",
+      "attack_rms_delta_db": -0.30817590921274274,
+      "sustain_rms_delta_db": -0.007457657561403153,
+      "direct_vs_fft_deltas_agree_within_db": 1e-09
+    },
+    {
+      "event_id": "E0315",
+      "attack_rms_delta_db": 0.04206986398207846,
+      "sustain_rms_delta_db": 0.41169931955224826,
+      "direct_vs_fft_deltas_agree_within_db": 1e-09
+    }
+  ],
+  "changes_to_audio_or_design": false
+}
