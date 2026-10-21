@@ -32,6 +32,54 @@ def save(path, value):
         f.write('\n')
 
 
+CONTROL_PREFIX_FILES = frozenset({
+    'stage2_in.wav', 'stage2_mid/restored.wav', 'stage3_clean.wav',
+    'stage3_5_microstructure.wav', 'stage4_spatial.wav',
+})
+
+
+def valid_sha256(value):
+    return (isinstance(value, str) and len(value) == 64 and
+            all(char in '0123456789abcdef' for char in value))
+
+
+def additional_parity_pins(plan, binary):
+    if 'additional_parity' not in plan:
+        return {}
+    declaration = plan['additional_parity']
+    if (not isinstance(declaration, dict) or
+        not isinstance(declaration.get('path'), str) or not declaration['path'] or
+        not valid_sha256(declaration.get('sha256'))):
+        raise RuntimeError('malformed additional parity declaration')
+    path = (ROOT / declaration['path']).resolve()
+    try:
+        if sha(path) != declaration['sha256']:
+            raise RuntimeError('additional parity pin mismatch')
+        proof = json.loads(path.read_text())
+    except (OSError, ValueError) as error:
+        raise RuntimeError('unreadable additional parity receipt') from error
+    flags = ['all_wav_sha256_equal', 'all_non_timing_report_fields_equal',
+             'complete_ph_audit_and_finalizer_metadata_exact',
+             'real10s_complete_ph_audit_and_finalizer_metadata_exact']
+    if not isinstance(proof, dict) or not all(proof.get(key) is True for key in flags):
+        raise RuntimeError('additional memory-fix parity qualification absent')
+    if (not isinstance(proof.get('pins'), dict) or
+        proof['pins'].get(str(binary)) != plan['binary_sha256']):
+        raise RuntimeError('additional parity receipt is not bound to planned binary')
+    return {str(path): declaration['sha256']}
+
+
+def control_prefix_pins(plan):
+    if 'control_prefix_sha256' not in plan:
+        return {}
+    pins = plan['control_prefix_sha256']
+    if (not isinstance(pins, dict) or not pins or
+        not all(name in CONTROL_PREFIX_FILES and valid_sha256(expected)
+                for name, expected in pins.items())):
+        raise RuntimeError('malformed control prefix pins')
+    return pins
+
+
 def main(plan_path=None):
     plan_path = Path(plan_path).resolve() if plan_path else Path(__file__).with_name('plan.json')
     plan = json.loads(plan_path.read_text())
@@ -73,6 +121,8 @@ def main(plan_path=None):
     if not all(proof[k] for k in ['all_wav_sha256_equal', 'all_non_timing_report_fields_equal',
                                   'complete_ph_audit_and_finalizer_metadata_exact']):
         raise RuntimeError('memory-fix parity qualification absent')
+    extra_pins = additional_parity_pins(plan, binary)
+    prefix_pins = control_prefix_pins(plan)
     run.mkdir(parents=True)
     env = os.environ.copy()
     env['LD_PRELOAD'] = '/data/data/com.termux/files/usr/lib/libc++_shared.so'
@@ -104,6 +154,8 @@ def main(plan_path=None):
                 '--no-export-sdcard']
         pins = {str(p): sha(p) for p in [original, source, binary, model, low, gate,
                                          parity, prerequisite, plan_path, Path(__file__)]}
+        # Retain the declared digest, including across decoder execution.
+        pins.update(extra_pins)
         if revision_path.exists():
             pins[str(revision_path)] = sha(revision_path)
         save(run / 'protocol.json', {'plan': plan, 'pins': pins, 'shared_args': args,
@@ -167,12 +219,21 @@ def main(plan_path=None):
                 raise RuntimeError('unexpected intervention application or Mid abstention')
             if Path(summary['mid_model']).resolve() != model.resolve():
                 raise RuntimeError('model path mismatch')
+            prefix_observed = {}
+            if name == 'control':
+                for filename, expected in prefix_pins.items():
+                    path = out / filename
+                    if not path.is_file() or sha(path) != expected:
+                        raise RuntimeError(f'control prefix mismatch: {filename}')
+                    prefix_observed[filename] = expected
             rows.append({'name': name, 'argv': command, 'settings': settings,
                          'stats': stats, 'preservation': checks,
                          'peak_sampled_process_hwm_mib': peak / 1024,
                          'mastered_sha256': sha(out / 'mastered.wav'),
                          'master_json_sha256': sha(out / 'master.json'),
                          'summary_sha256': sha(out / 'summary.json')})
+            if prefix_observed:
+                rows[-1]['control_prefix_sha256'] = prefix_observed
             check_halt()
             save(run / f'{name}-receipt.json', rows[-1])
         omit = {'mid_coherence_requested', 'mid_coherence_applied', 'explicit_cli_parameters'}

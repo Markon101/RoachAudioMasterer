@@ -89,6 +89,7 @@ class RenderListeningPairTests(unittest.TestCase):
         self.run = self.root / 'runs/listening-singularity-20261021/fullsong-v1'
         self.geometry = {k: self.plan['source'][k] for k in ('rate', 'channels', 'frames')}
         self.children = []
+        self.decode_calls = []
 
     @staticmethod
     def digest(path):
@@ -102,9 +103,39 @@ class RenderListeningPairTests(unittest.TestCase):
     def write_json(self, path, data):
         self.write(path, (json.dumps(data) + '\n').encode())
 
+    def save_plan(self):
+        self.write_json(Path(self.recipe.__file__).with_name('plan.json'), self.plan)
+
+    def add_parity(self):
+        path = self.root / 'artifacts/new-parity/COMPLETE.json'
+        proof = {key: True for key in (
+            'all_wav_sha256_equal', 'all_non_timing_report_fields_equal',
+            'complete_ph_audit_and_finalizer_metadata_exact',
+            'real10s_complete_ph_audit_and_finalizer_metadata_exact')}
+        proof['pins'] = {str(self.root / self.plan['binary']): self.plan['binary_sha256']}
+        self.write_json(path, proof)
+        self.plan['additional_parity'] = {
+            'path': str(path.relative_to(self.root)), 'sha256': self.digest(path)}
+        self.save_plan()
+        return path, proof
+
+    def add_prefix(self):
+        self.plan['control_prefix_sha256'] = {
+            name: hashlib.sha256(('control prefix: ' + name).encode()).hexdigest()
+            for name in sorted(self.recipe.CONTROL_PREFIX_FILES)}
+        self.save_plan()
+
+    def assert_refused_before_dispatch(self, reason):
+        with self.assertRaisesRegex(RuntimeError, reason):
+            self.execute()
+        self.assertEqual(self.decode_calls, [])
+        self.assertEqual(self.children, [])
+        self.assertFalse(self.run.exists())
+
     def execute(self, *, halt_at_exit=False, halt_during_validation=False,
                 mutate_final_pin=False, stop=None, require_kill=False,
-                preservation_failure=False, plan_path=None):
+                preservation_failure=False, plan_path=None,
+                mutate_parity_after_decode=False, missing_prefix=None):
         real_read_text = Path.read_text
         real_save = self.recipe.save
 
@@ -114,9 +145,13 @@ class RenderListeningPairTests(unittest.TestCase):
             return real_read_text(path, *args, **kwargs)
 
         def decode(command, **kwargs):
+            self.decode_calls.append(command)
             self.assertEqual(command[0], 'ffmpeg')
             self.assertTrue(kwargs['check'])
             self.write(Path(command[-1]), b'decoded input fixture')
+            if mutate_parity_after_decode:
+                path = self.root / self.plan['additional_parity']['path']
+                self.write(path, b'changed receipt during decoder')
 
         def spawn(command, **kwargs):
             self.assertEqual(kwargs['cwd'], self.root)
@@ -139,6 +174,10 @@ class RenderListeningPairTests(unittest.TestCase):
             self.write_json(out / 'summary.json', summary)
             self.write_json(out / 'master.json', {'fixture': out.name})
             self.write(out / 'mastered.wav', out.name.encode())
+            for name in self.recipe.CONTROL_PREFIX_FILES:
+                if not candidate and name == missing_prefix:
+                    continue
+                self.write(out / name, (out.name + ' prefix: ' + name).encode())
 
             def on_exit():
                 if candidate and halt_at_exit:
@@ -216,6 +255,107 @@ class RenderListeningPairTests(unittest.TestCase):
         self.assertEqual(execution['child_returncode'], 0)
         self.assertEqual(execution['peak_sampled_process_hwm_mib'], 100.)
         self.assertFalse(execution['speed_experiment'])
+        self.assertEqual(len(self.children), 1)
+        self.assertFalse((self.run / 'candidate').exists())
+
+    def test_optional_parity_is_verified_and_pinned(self):
+        path, _ = self.add_parity()
+        self.execute()
+        protocol = json.loads((self.run / 'protocol.json').read_text())
+        self.assertEqual(protocol['pins'][str(path)], self.plan['additional_parity']['sha256'])
+        self.assertTrue((self.run / 'COMPLETE.json').exists())
+
+    def test_malformed_additional_parity_declarations_refused(self):
+        for declaration in (None, [], {}, {'path': 'proof.json', 'sha256': 'bad'},
+                            {'path': '', 'sha256': '0' * 64}):
+            with self.subTest(declaration=declaration):
+                self.plan['additional_parity'] = declaration
+                self.save_plan()
+                self.assert_refused_before_dispatch('malformed additional parity')
+
+    def test_changed_additional_parity_refused_before_dispatch(self):
+        path, _ = self.add_parity()
+        self.write(path, b'changed receipt')
+        self.assert_refused_before_dispatch('additional parity pin mismatch')
+
+    def test_malformed_additional_parity_receipts_refused(self):
+        path, _ = self.add_parity()
+        for raw in (b'not JSON', b'[]', b'null'):
+            with self.subTest(raw=raw):
+                self.write(path, raw)
+                self.plan['additional_parity']['sha256'] = self.digest(path)
+                self.save_plan()
+                self.assert_refused_before_dispatch('additional.*parity')
+
+    def test_additional_parity_requires_every_flag_exactly_true(self):
+        path, proof = self.add_parity()
+        for key in tuple(key for key in proof if key != 'pins'):
+            for value in (False, 1, 'true', None):
+                with self.subTest(key=key, value=value):
+                    changed = {**proof, key: value}
+                    self.write_json(path, changed)
+                    self.plan['additional_parity']['sha256'] = self.digest(path)
+                    self.save_plan()
+                    self.assert_refused_before_dispatch('additional memory-fix parity')
+            with self.subTest(key=key, missing=True):
+                self.write_json(path, {name: value for name, value in proof.items() if name != key})
+                self.plan['additional_parity']['sha256'] = self.digest(path)
+                self.save_plan()
+                self.assert_refused_before_dispatch('additional memory-fix parity')
+
+    def test_additional_parity_requires_matching_binary_binding(self):
+        path, proof = self.add_parity()
+        for binding in (None, {}, {str(self.root / self.plan['binary']): '0' * 64},
+                        {self.plan['binary']: self.plan['binary_sha256']}):
+            with self.subTest(binding=binding):
+                self.write_json(path, {**proof, 'pins': binding})
+                self.plan['additional_parity']['sha256'] = self.digest(path)
+                self.save_plan()
+                self.assert_refused_before_dispatch('not bound to planned binary')
+
+    def test_parity_change_during_decode_blocks_first_native_child(self):
+        self.add_parity()
+        with self.assertRaisesRegex(RuntimeError, 'pin changed'):
+            self.execute(mutate_parity_after_decode=True)
+        self.assert_halted('pin changed')
+        self.assertEqual(len(self.decode_calls), 1)
+        self.assertEqual(len(self.children), 0)
+
+    def test_matching_control_prefix_allows_distinct_candidate_prefix(self):
+        self.add_parity()
+        self.add_prefix()
+        self.execute()
+        receipt = json.loads((self.run / 'COMPLETE.json').read_text())
+        self.assertEqual(receipt['rows'][0]['control_prefix_sha256'],
+                         self.plan['control_prefix_sha256'])
+        self.assertNotIn('control_prefix_sha256', receipt['rows'][1])
+        self.assertEqual(len(self.children), 2)
+
+    def test_malformed_prefix_names_and_digests_refused_before_dispatch(self):
+        for pins in (None, [], {}, {'../stage2_in.wav': '0' * 64},
+                     {'/stage2_in.wav': '0' * 64}, {'mastered.wav': '0' * 64},
+                     {'stage2_in.wav': 'bad'}):
+            with self.subTest(pins=pins):
+                self.plan['control_prefix_sha256'] = pins
+                self.save_plan()
+                self.assert_refused_before_dispatch('malformed control prefix')
+
+    def test_control_prefix_mismatch_halts_after_one_child(self):
+        self.add_prefix()
+        self.plan['control_prefix_sha256']['stage2_mid/restored.wav'] = '0' * 64
+        self.save_plan()
+        with self.assertRaisesRegex(RuntimeError, 'control prefix mismatch: stage2_mid/restored.wav'):
+            self.execute()
+        self.assert_halted('control prefix mismatch')
+        self.assertEqual(len(self.children), 1)
+        self.assertTrue((self.run / 'control-execution.json').exists())
+        self.assertFalse((self.run / 'candidate').exists())
+
+    def test_missing_control_prefix_halts_before_candidate(self):
+        self.add_prefix()
+        with self.assertRaisesRegex(RuntimeError, 'control prefix mismatch'):
+            self.execute(missing_prefix='stage4_spatial.wav')
+        self.assert_halted('control prefix mismatch')
         self.assertEqual(len(self.children), 1)
         self.assertFalse((self.run / 'candidate').exists())
 

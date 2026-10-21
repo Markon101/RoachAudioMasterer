@@ -1,0 +1,71 @@
+{
+  "schema": "same-source-after-memory-parity-v1",
+  "design_status": "declared before new-song master renders",
+  "purpose": "Cross-song exploratory evaluation of the unchanged qualified coherence intervention, after a matched-attack diagnostic on the prior masters.",
+  "source": {
+    "path": "/sdcard/Download/Feelin\u2019 Catchy ext v1.2.2.2.2.2.wav",
+    "sha256": "389c135020e0e831a9a1567b5c5b2a6e37f168334cb87f2fc65b3c22d08fdfb0",
+    "rate": 48000,
+    "channels": 2,
+    "frames": 8635314,
+    "bits": 16,
+    "selection": "Same complete Feelin source as the preserved memory-stop run; no source search, excerpts, tuning or cap increase. Fresh scope justified solely by independently reviewed and exact-parity-gated buffer lifetime changes."
+  },
+  "native_source_commit": "fc92ea14d0f467371645f20ed8d17a90d5a0ba84",
+  "binary": "runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+  "binary_sha256": "c2c5b14f77d0275f1b2f3fd94f028efd2253479a6477f94729d7366ebb37b511",
+  "model": "artifacts/rich-mid-v3/basis.json",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "shared_configuration": "Recorded Smooth-style settings: OpenCL, Euler8, 10s chunks/2s overlap, ph-lie-v2, clock-transient-punch, kick-transient-guard, quiet-mid-denoise, -13LUFS/-1dBTP; no auto-tune or force-specialists; default cache/host batch unchanged.",
+  "candidate_only_flag": "--mid-coherence",
+  "limits": {
+    "process_hwm_mib": 1536,
+    "child_timeout_seconds": 900,
+    "required_free_storage_gib": 3,
+    "required_available_memory_mib": 2560,
+    "candidate_count": 1,
+    "control_count": 1
+  },
+  "gates": [
+    "Completed narrower source-triggered paired diagnostic reviewed with independent criticism; no broad RMS contrast-loss finding, localized changes retained. V1 source alignment failure remains; no source fidelity or subjective punch claim. Native cross-song quality/resource gates unchanged.",
+    "Verify original input, decoded PCM geometry, frozen binary, model and prior qualification receipts.",
+    "Every output finite, exact rate/channel/frame geometry, native true peak <= -0.99dBTP and abs(target shortfall) <=0.1LU.",
+    "Native mono compatibility, known-band and transient-timing checks all true.",
+    "Settings identical except declared requested/applied flags and CLI provenance; same input/models/binary.",
+    "Control has no applied coherence; candidate actually applies coherence and differs from control; preserve routing abstention.",
+    "Any HALT, process failure, memory or time excess latches this fresh session; no automatic retry or cap increase."
+  ],
+  "listening": {
+    "mode": "equal_target_architecture",
+    "assignment_policy": "counterbalanced_pairs",
+    "short_start_sample": 2304000,
+    "short_frames": 1440000,
+    "full_frames": 8635314,
+    "selection": "Fixed 48..78s timestamp matching previous protocol convention; full song. No favorable passage search.",
+    "target_lufs_ceiling": -13.0,
+    "matching": "Existing attenuation-only matching_target with peak headroom; measured encoded paired difference <=0.15LU. No added limiter or remastering.",
+    "response": "Unchanged categorical CSV plus separate free-text notes, easy indistinguishable/abstain, comfortable playback-level check before fixed settings.",
+    "blinding": "Fresh private random seed and concealed assignments. Prior mechanism knowledge remains; no naive-expectation claim."
+  },
+  "interpretation": "Eligibility for exploratory owner listening only. Prior identity-control confound, post-reveal subjective tradeoff, procedural target-error conflict and false healthy edits remain. No production promotion, new model, solver, training or speed claim. Singularity control failed the existing known-band shape proxy before candidate; its latch remains immutable. This is a different preregistered full-song source, not a retry or threshold change.",
+  "run_root": "runs/listening-feelin-retry-20261021",
+  "declared_utc": "2026-10-21T05:43:43.585650+00:00",
+  "additional_parity": {
+    "path": "runs/ph-stereo-memory-20261021/parity-v1/COMPLETE.json",
+    "sha256": "785e2b18ab266fd58eb228a8c5a7c2c6079151152a86313f9331a70e3d37372a"
+  },
+  "control_prefix_sha256": {
+    "stage2_in.wav": "ef2e9e965f60092f0e57caf57e7724f42c199f54ddd5aed2292ab944830b4965",
+    "stage2_mid/restored.wav": "082dfb4be04d78759af3c032dd72923cfc66fa1c66c7d493272b85e26030324b",
+    "stage3_clean.wav": "dd1ede8daaadfb0fec9e9be698095583cd5b54adbb5aeda48c4ac4a2fe4e7169",
+    "stage3_5_microstructure.wav": "8f959a10fb396eb1a1da1364ae2988847055bd0923555fac3b73de4713038289",
+    "stage4_spatial.wav": "f5fccbd60da0cce16186a8f6e61bf49546535fc0265858ae8cfc0d10a9119c9c"
+  },
+  "memory_retry": {
+    "original_stop": "runs/listening-feelin-20261021/fullsong-v1/HALTED.json",
+    "original_stop_sha256": "310e73c815a3b563d9f283c5244deaf80a6336695e59a35fee02111d41a223fd",
+    "original_observed_hwm_mib": 1549.1171875,
+    "old_signal_recipe_unchanged": true,
+    "quality_thresholds_unchanged": true
+  }
+}
