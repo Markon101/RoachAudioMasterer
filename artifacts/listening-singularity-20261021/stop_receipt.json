@@ -1,0 +1,35 @@
+{
+  "schema": "cross-song-control-quality-stop-v1",
+  "recorded_utc": "2026-10-21T03:57:39.623401+00:00",
+  "status": "CONTROL_KNOWN_BAND_PROXY_FAILED_BEFORE_CANDIDATE",
+  "run_root": "runs/listening-singularity-20261021/fullsong-v1",
+  "halted_sha256": "0aaf4ec8c14aaf03b0adf97745a6342e5892823e302bfa81451d4778b52548d5",
+  "protocol_sha256": "6d59d1566df60de0c72973581e2f55f49004c3b0da23a57fee52a72e06b87140",
+  "binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+  "source_sha256": "87993dc798fe0faf36259a78d0adbd41cf978a61be41ed79c7dc02ceb32336da",
+  "control_summary_sha256": "fd24394d948b2c065b3475fb62c7252388a68dc81f3cf97708bc65caa4e9abb4",
+  "control_master_json_sha256": "8b01a179e7bc66b6cb54974dd2c8ca063ff7d932064bb09ce399f4f6d6db964d",
+  "control_audio_sha256": "749fce62d27755639e88339aa495069e0eabf77918bf425881ef533338b6e4da",
+  "preservation": {
+    "correlation_value": 0.8843905925750732,
+    "known_band_preserved": false,
+    "max_passband_deviation_db": 1.1413261890411377,
+    "mono_compatibility_passed": true,
+    "transient_correlation": 0.957648754119873,
+    "transient_timing_passed": true
+  },
+  "final_metrics": {
+    "crest_factor_db": 13.590539932250977,
+    "lufs_integrated": -13.049612041381566,
+    "rms_dbfs": -15.123331069946289,
+    "sample_peak_dbfs": -1.5327913761138916,
+    "true_peak_dbtp": -1.000008463859558
+  },
+  "candidate_count": 0,
+  "listening_package_created": false,
+  "gate_changed": false,
+  "process_peak_hwm_mib": null,
+  "memory_limitation": "Quality failure path did not persist sampled peak; no exact HWM claimed. Child reached quality validation without watchdog resource stop.",
+  "gate_semantics": "Native first-channel broadband-RMS-normalized filtered-RMS shape proxy with fixed <1dB gate; not literal maximum over passbands or Mid projection error. Full-chain cause pending stage trace.",
+  "production_promoted": false
+}

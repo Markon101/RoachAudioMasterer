@@ -1,0 +1,12 @@
+{
+  "schema": "cross-song-plan-prerequisite-revision-v2",
+  "declared_utc": "2026-10-21T03:50:33.439247+00:00",
+  "original_plan_sha256": "a737446ad176cc9cc96f4de8548a6cc86a9943155e0c443b8e5fc1ad71ba84fe",
+  "replaces_only_gate_index": 0,
+  "replacement_prerequisite": "Review the completed or stopped fixed-window diagnostic and its limitations with independent criticism before rendering. Inconclusive source-to-master alignment does not bar unchanged-settings cross-song listening; it must not be described as passed, explained punch loss, or source fidelity. All native quality/configuration/resource gates stay unchanged.",
+  "reason": "V1 stopped before event analysis: shared source/output differences fail exact-zero/correlation gate. Common-output anchors pass only below affected Mid band, so punch explanation remains unresolved. New-song exploratory listening addresses a separate question, using the same previously qualified binary and configuration.",
+  "independent_review": "balanced_listening: legitimate to proceed with unchanged-settings listening despite inconclusive diagnostic; additional fixed event-local 2\u20138kHz paired timing check recommended, with no shifts/exclusions/tolerance fitting.",
+  "configuration_and_audio_gates_unchanged": true,
+  "v1_stop_sha256": "d35f58b8d307a1bf93c72583545eed57246f49cb0908dfcce821fd3c64a6fdf8",
+  "interpretation": "Explicit post-stop prerequisite revision, not retroactive V1 success or a relaxed DSP tolerance."
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "prior-listening-attack-review-v1",
+  "eligible_to_continue_unchanged_cross_song": true,
+  "diagnostic_status": "STOPPED before real event metrics; source alignment gate failed",
+  "diagnostic_commit": "5c55880",
+  "diagnostic_stop_sha256": "d35f58b8d307a1bf93c72583545eed57246f49cb0908dfcce821fd3c64a6fdf8",
+  "alignment_receipt_sha256": "78c492759452fc6477a62aad19a2f34ebdc40d2079091fdd937c609e2c088d20",
+  "root_replicated_synthetic_tests": 12,
+  "source_alignment_validated": false,
+  "paired_anchor_band_hz": [
+    80,
+    1200
+  ],
+  "paired_anchors_pass": 5,
+  "paired_anchors_do_not_cover_treated_mid_band": true,
+  "punch_loss_explained": false,
+  "source_fidelity_established": false,
+  "further_paired_only_diagnostic": "separately preregistered; not a gate that can silently mutate candidate settings",
+  "reviewer": "native balanced_listening",
+  "approved_scope": "One fixed-settings new-song exploratory control/candidate pair under original native quality/containment/resource gates. No production promotion."
+}
