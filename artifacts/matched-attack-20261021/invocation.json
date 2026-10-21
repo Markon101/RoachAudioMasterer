@@ -1,0 +1,29 @@
+{
+  "schema": "roach-matched-attack-invocation-v1",
+  "started_utc": "2026-10-21T03:47:40.244446+00:00",
+  "argv": [
+    "scripts/matched_attack_audit.py",
+    "--design",
+    "artifacts/matched-attack-20261021/design.json"
+  ],
+  "cwd": "/data/data/com.termux/files/home/projects/RoachAudioMasterer",
+  "design_path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/matched-attack-20261021/design.json",
+  "design_sha256": "b055d3e29e9315326089ea13e501fe959a2c7605bce5183deb8d2fe3fecd95fc",
+  "script_sha256": "e09b7fd534ecf54f62159189636f1a9b527b6c4f5eb1c73eaf07f1e080738ede",
+  "test_script_sha256": "1605e32a9f968af06633f0d75d12f5d67e49caf5fc1b1adb73f726121ed10585",
+  "design_mtime_ns_before_run": 1792554114474770768,
+  "python": "3.14.8",
+  "numpy": "2.5.4",
+  "scipy_available": false,
+  "environment": {
+    "LD_PRELOAD": "/data/data/com.termux/files/usr/lib/libc++_shared.so",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "initial_memory": {
+    "ru_maxrss_kib_linux": 152352,
+    "VmHWM_kib": 33712,
+    "VmRSS_kib": 33712,
+    "observed_hwm_mib": 148.78125
+  },
+  "analysis_is_speed_experiment": false
+}

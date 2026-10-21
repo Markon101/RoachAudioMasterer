@@ -1,0 +1,12 @@
+{
+  "stopped_utc": "2026-10-21T03:47:40.947245+00:00",
+  "error_type": "ValueError",
+  "error": "uncertain alignment: predeclared zero-lag anchor gate failed",
+  "memory": {
+    "ru_maxrss_kib_linux": 152352,
+    "VmHWM_kib": 39336,
+    "VmRSS_kib": 34900,
+    "observed_hwm_mib": 148.78125
+  },
+  "retry_or_retuning_authorized": false
+}

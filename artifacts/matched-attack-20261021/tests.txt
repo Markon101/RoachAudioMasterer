@@ -1,0 +1,17 @@
+test_alignment_identity_and_known_integer_delay (scripts.test_matched_attack_audit.MatchedAttackTests.test_alignment_identity_and_known_integer_delay) ... ok
+test_containment_latches_and_changed_pins_stop_dispatch (scripts.test_matched_attack_audit.MatchedAttackTests.test_containment_latches_and_changed_pins_stop_dispatch) ... ok
+test_identity_all_bands_and_windows_have_exact_zero_paired_delta (scripts.test_matched_attack_audit.MatchedAttackTests.test_identity_all_bands_and_windows_have_exact_zero_paired_delta) ... ok
+test_independent_positive_gains_cancel_in_ratio_and_crest_differences (scripts.test_matched_attack_audit.MatchedAttackTests.test_independent_positive_gains_cancel_in_ratio_and_crest_differences) ... ok
+test_known_half_gain_attack_only_reduces_fullband_contrast_by_six_db (scripts.test_matched_attack_audit.MatchedAttackTests.test_known_half_gain_attack_only_reduces_fullband_contrast_by_six_db) ... ok
+test_linear_fir_is_centered_and_has_no_circular_wrap (scripts.test_matched_attack_audit.MatchedAttackTests.test_linear_fir_is_centered_and_has_no_circular_wrap) ... ok
+test_output_exact_zero_is_null_with_reason_without_event_removal (scripts.test_matched_attack_audit.MatchedAttackTests.test_output_exact_zero_is_null_with_reason_without_event_removal) ... ok
+test_robust_summary_retains_signs_quantiles_and_nulls (scripts.test_matched_attack_audit.MatchedAttackTests.test_robust_summary_retains_signs_quantiles_and_nulls) ... ok
+test_shared_source_sustain_null_prevents_output_driven_ratio_selection (scripts.test_matched_attack_audit.MatchedAttackTests.test_shared_source_sustain_null_prevents_output_driven_ratio_selection) ... ok
+test_source_boundary_and_stronger_event_exclusions_are_recorded (scripts.test_matched_attack_audit.MatchedAttackTests.test_source_boundary_and_stronger_event_exclusions_are_recorded) ... ok
+test_source_detector_finds_known_jump_despite_antiphase_channels (scripts.test_matched_attack_audit.MatchedAttackTests.test_source_detector_finds_known_jump_despite_antiphase_channels) ... ok
+test_wav_reader_extensible_and_simple_float_roundtrip_and_bound (scripts.test_matched_attack_audit.MatchedAttackTests.test_wav_reader_extensible_and_simple_float_roundtrip_and_bound) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.117s
+
+OK

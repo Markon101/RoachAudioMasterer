@@ -1,0 +1,50 @@
+{
+  "source": {
+    "path": "/storage/emulated/0/Download/Chasing Horizons.wav",
+    "sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559",
+    "size_bytes": 26970654,
+    "rate": 48000,
+    "channels": 2,
+    "frames": 6739200,
+    "encoding": "PCM16",
+    "data_offset": 172,
+    "frame_bytes": 4,
+    "global_validation": {
+      "all_samples_finite": true,
+      "sample_peak": 0.608795166015625,
+      "rms": 0.12534098410594602
+    }
+  },
+  "control": {
+    "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/fullsong-v3/control/mastered.wav",
+    "sha256": "1df16adbf1b43a8c1aa964f816a98325448be4be472226ecde717d63b2d91b4f",
+    "size_bytes": 53913668,
+    "rate": 48000,
+    "channels": 2,
+    "frames": 6739200,
+    "encoding": "IEEE-float32",
+    "data_offset": 68,
+    "frame_bytes": 8,
+    "global_validation": {
+      "all_samples_finite": true,
+      "sample_peak": 0.8882222175598145,
+      "rms": 0.1651401143527845
+    }
+  },
+  "candidate": {
+    "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/fullsong-v3/candidate/mastered.wav",
+    "sha256": "82f522d0f4e429e50125a65b91f4bc2054bdfa0c94adad02c431e183d23a2195",
+    "size_bytes": 53913668,
+    "rate": 48000,
+    "channels": 2,
+    "frames": 6739200,
+    "encoding": "IEEE-float32",
+    "data_offset": 68,
+    "frame_bytes": 8,
+    "global_validation": {
+      "all_samples_finite": true,
+      "sample_peak": 0.8878781795501709,
+      "rms": 0.16513297801651647
+    }
+  }
+}

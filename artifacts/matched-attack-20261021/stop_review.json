@@ -1,0 +1,28 @@
+{
+  "recorded_utc": "2026-10-21T03:48:47.212641+00:00",
+  "audio_pins_after_stop": {
+    "source": {
+      "path": "/sdcard/Download/Chasing Horizons.wav",
+      "sha256": "1ee053d29036ecba69ddbf0d7cf49483950c717c946a1ec45fd4cb34fc83b559",
+      "unchanged": true
+    },
+    "control": {
+      "path": "runs/listening-coherence-20261020/fullsong-v3/control/mastered.wav",
+      "sha256": "1df16adbf1b43a8c1aa964f816a98325448be4be472226ecde717d63b2d91b4f",
+      "unchanged": true
+    },
+    "candidate": {
+      "path": "runs/listening-coherence-20261020/fullsong-v3/candidate/mastered.wav",
+      "sha256": "82f522d0f4e429e50125a65b91f4bc2054bdfa0c94adad02c431e183d23a2195",
+      "unchanged": true
+    }
+  },
+  "design_unchanged": true,
+  "script_unchanged": true,
+  "tests_unchanged": true,
+  "frozen_binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+  "frozen_binary_matches_render_protocol": true,
+  "no_selection_file": true,
+  "no_paired_events_file": true,
+  "no_complete_file": true
+}
