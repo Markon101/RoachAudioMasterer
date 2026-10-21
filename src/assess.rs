@@ -76,10 +76,14 @@ pub struct PreservationReport {
     /// Interchannel correlation >= 0.20 (mono compatibility).
     pub mono_compatibility_passed: bool,
     pub correlation_value: f32,
-    /// Maximum deviation on declared trusted passbands (< 1e-4).
+    /// Legacy first-channel spectral-shape proxy: filtered 1–2.5 kHz RMS,
+    /// normalized by broadband RMS; passes for absolute deviation < 1 dB.
+    /// This is not a samplewise trusted-band invariance or fidelity guarantee.
     pub known_band_preserved: bool,
+    /// Absolute deviation for that one filtered-RMS ratio (legacy field name).
     pub max_passband_deviation_db: f32,
-    /// Transient onset timing preservation (correlation >= 0.95).
+    /// Non-centered cosine agreement of hop-256 first-channel block energies
+    /// >= 0.90; a timing proxy, not eventwise latency/phase preservation.
     pub transient_timing_passed: bool,
     pub transient_correlation: f32,
 }

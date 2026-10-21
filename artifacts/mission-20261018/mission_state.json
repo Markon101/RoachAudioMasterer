@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-21T03:37:10.450192+00:00",
+  "date_utc": "2026-10-21T05:34:23.712743+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "2146a43",
@@ -24,7 +24,10 @@
     "assessment_band_observer": "calibrateddigitalobserververified5knownanswer/realWAVtests+4actualprobes; legacyconsolelabelsqualified; no routingretune; fullstageledgerpending",
     "passive_routing": "45 repeatedconditionsverified;13authoritytransitions5legacy8artifact;cutoffhypothesisnotobserved;6basecardactiveflips;nothresholdchange",
     "agent_migration": "twoinstalledroutes+Hermesdefaultversioned;2livesmokes+4callpartialcodeworker;2counterexamplesfixed; scopeescape locallylatched;10offlineguardchecks",
-    "ph_memory": "fourlastusedrops;27Rusttests+48WAVparity+fullPHauditexact;fullpairmaxHWM1274.39MiBunder1536"
+    "ph_memory": "fourlastusedrops;27Rusttests+48WAVparity+fullPHauditexact;fullpairmaxHWM1274.39MiBunder1536",
+    "matched_attack": "V1sourcealignmentSTOPpreserved;V2paired-only320events/16tests;localizedpresencechanges;rootdirectconvolutionreplication;noaudibilityconclusion",
+    "cross_song_listening": "Singularitycontrolknownband1.141326dBfail;FeelincontrolPHmemory1549.117MiBvs1536cap;zeroextra candidates;stopsource search",
+    "preservation_shape_trace": "8cachedboundaries;firstanalyticalcrossingfinal1.140267dBvsnative1.141326;12tests;noDSPchange"
   },
   "native_development": {
     "scene_seeds": [
@@ -55,7 +58,7 @@
     "fixed_method_order": "descriptive timings only; not balanced speed qualification"
   },
   "tests": {
-    "listening_harness": 18,
+    "listening_harness": 24,
     "profile_runner": 8,
     "shared_scene_engine_cpu": 8,
     "native_audit": 5,
@@ -74,7 +77,11 @@
     "semantic_audit": 7,
     "hermes_offline_guard_root": 10,
     "ph_lifetime_rust": 27,
-    "ph_lifetime_wav_sha_exact": 48
+    "ph_lifetime_wav_sha_exact": 48,
+    "matched_attack": 16,
+    "render_listening_pair": 11,
+    "package_qualification": 5,
+    "preservation_shape_trace": 12
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
@@ -87,7 +94,7 @@
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Test possible owner-reported coherent-highs versus bass-punch tradeoff with fixed source-derived onset windows on existing masters; counterbalance any fresh blinded followup. No promotion, DSP retune or rerender justified yet.",
+  "next_action": "Reduce PH stereo audit buffer overlap without changing FFT/arithmetic order; demand exact waveform/audit parity before fresh Feelin same-source retry under1536MiB; no gate relaxation or additional source search.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -100,7 +107,8 @@
     "docs/REAL_COHERENCE_ELIGIBILITY_20261020.md",
     "docs/AGENT_MIGRATION_20261020.md",
     "docs/PH_MEMORY_RESULTS_20261021.md",
-    "docs/OWNER_LISTENING_RESULTS_20261021.md"
+    "docs/OWNER_LISTENING_RESULTS_20261021.md",
+    "docs/COHERENCE_FOLLOWUP_20261021.md"
   ],
   "delegation": [
     {
@@ -153,7 +161,7 @@
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Test possible owner-reported coherent-highs versus bass-punch tradeoff with fixed source-derived onset windows on existing masters; counterbalance any fresh blinded followup. No promotion, DSP retune or rerender justified yet.",
+    "frontier": "Reduce PH stereo audit buffer overlap without changing FFT/arithmetic order; demand exact waveform/audit parity before fresh Feelin same-source retry under1536MiB; no gate relaxation or additional source search.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"

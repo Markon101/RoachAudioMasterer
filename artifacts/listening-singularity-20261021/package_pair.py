@@ -23,8 +23,8 @@ def verify_qualification(run):
     return receipt, protocol
 
 
-def main():
-    base = ROOT / 'runs/listening-singularity-20261021'
+def main(base=None):
+    base = Path(base) if base else ROOT / 'runs/listening-singularity-20261021'
     run = base / 'fullsong-v1'
     for folder in [base, run]:
         if any((folder / name).exists() for name in ['HALT', 'HALTED.json']):
@@ -47,10 +47,12 @@ def main():
                 'qualification': 'Unchanged qualified native binary, same input/models/settings; candidate only --mid-coherence. Exploratory listening, no promotion. Prior mechanism knowledge; assignments concealed.'}})
     manifest = {'version': 1, 'mode': 'equal_target_architecture',
         'assignment_policy': 'counterbalanced_pairs', 'seed': secrets.randbits(63),
-        'target_lufs': -13.0, 'tracks': [{'id': 'track1', 'variants': variants,
+        'target_lufs': plan['listening']['target_lufs_ceiling'],
+        'tracks': [{'id': 'track1', 'variants': variants,
             'excerpts': [
-                {'id': 'fixed_short', 'kind': 'diagnostic', 'start_sample': 2304000,
-                 'frames': 1440000},
+                {'id': 'fixed_short', 'kind': 'diagnostic',
+                 'start_sample': plan['listening']['short_start_sample'],
+                 'frames': plan['listening']['short_frames']},
                 {'id': 'full_song', 'kind': 'long', 'start_sample': 0,
                  'frames': plan['source']['frames']}]}]}
     manifest_path = private / 'manifest.json'
@@ -98,12 +100,21 @@ def main():
 
 
 if __name__ == '__main__':
-    if (ROOT / 'runs/listening-singularity-20261021/LISTENING_READY.json').exists():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-root', default='runs/listening-singularity-20261021')
+    args = parser.parse_args()
+    base = (ROOT / args.run_root).resolve()
+    if not base.is_relative_to(ROOT / 'runs'):
+        raise SystemExit('Run root must remain inside local runs/.')
+    if any((folder / marker).exists() for folder in [base, base / 'fullsong-v1']
+           for marker in ['HALT', 'HALTED.json']):
+        raise SystemExit('Latched session is immutable; refusing packaging.')
+    if (base / 'LISTENING_READY.json').exists():
         raise SystemExit('Existing completed package is immutable; refusing repeat invocation.')
     try:
-        main()
+        main(base)
     except BaseException as error:
-        base = ROOT / 'runs/listening-singularity-20261021'
         if base.exists():
             marker = base / 'HALTED.json'
             if not marker.exists():

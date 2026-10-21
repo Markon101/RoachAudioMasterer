@@ -103,7 +103,8 @@ class RenderListeningPairTests(unittest.TestCase):
         self.write(path, (json.dumps(data) + '\n').encode())
 
     def execute(self, *, halt_at_exit=False, halt_during_validation=False,
-                mutate_final_pin=False, stop=None, require_kill=False):
+                mutate_final_pin=False, stop=None, require_kill=False,
+                preservation_failure=False, plan_path=None):
         real_read_text = Path.read_text
         real_save = self.recipe.save
 
@@ -133,6 +134,8 @@ class RenderListeningPairTests(unittest.TestCase):
                     'master_controls': {'quiet_mid_denoise': True},
                     'mid_coherence_requested': candidate, 'mid_coherence_applied': candidate,
                     'explicit_cli_parameters': ['mid_coherence'] if candidate else []}}
+            if preservation_failure and not candidate:
+                summary['preservation']['known_band_preserved'] = False
             self.write_json(out / 'summary.json', summary)
             self.write_json(out / 'master.json', {'fixture': out.name})
             self.write(out / 'mastered.wav', out.name.encode())
@@ -175,7 +178,7 @@ class RenderListeningPairTests(unittest.TestCase):
             stack.enter_context(patch.object(self.recipe, 'wav_info', return_value={}))
             stack.enter_context(patch.object(self.recipe, '_assert_finite_float_wav', side_effect=validate))
             stack.enter_context(patch.object(self.recipe, 'save', side_effect=save))
-            self.recipe.main()
+            self.recipe.main(plan_path)
 
     def assert_halted(self, reason):
         self.assertFalse((self.run / 'COMPLETE.json').exists())
@@ -204,6 +207,41 @@ class RenderListeningPairTests(unittest.TestCase):
         self.assertFalse((self.run / 'HALTED.json').exists())
         self.assertEqual(len(self.children), 2)
         self.assertTrue(all(not child.events for child in self.children))
+
+    def test_failed_control_preserves_execution_receipt_before_quality_gate(self):
+        with self.assertRaisesRegex(RuntimeError, 'native preservation gate failed'):
+            self.execute(preservation_failure=True)
+        self.assert_halted('native preservation gate failed')
+        execution = json.loads((self.run / 'control-execution.json').read_text())
+        self.assertEqual(execution['child_returncode'], 0)
+        self.assertEqual(execution['peak_sampled_process_hwm_mib'], 100.)
+        self.assertFalse(execution['speed_experiment'])
+        self.assertEqual(len(self.children), 1)
+        self.assertFalse((self.run / 'candidate').exists())
+
+    def test_explicit_plan_uses_its_own_prerequisite_and_run_root(self):
+        path = self.root / 'artifacts/second-source/plan.json'
+        self.plan['run_root'] = 'runs/second-source'
+        self.write_json(path, self.plan)
+        self.write_json(path.with_name('attack_prerequisite.json'),
+                        {'eligible_to_continue_unchanged_cross_song': True})
+        self.run = self.root / 'runs/second-source/fullsong-v1'
+        self.execute(plan_path=path)
+        protocol = json.loads((self.run / 'protocol.json').read_text())
+        self.assertEqual(protocol['plan']['run_root'], 'runs/second-source')
+        self.assertIn(str(path), protocol['pins'])
+        self.assertTrue((self.run / 'COMPLETE.json').exists())
+
+    def test_run_root_cannot_escape_local_runs(self):
+        path = Path(self.recipe.__file__).with_name('plan.json')
+        self.plan['run_root'] = '../outside-run'
+        self.write_json(path, self.plan)
+        with patch.object(self.recipe.subprocess, 'run') as decode, \
+                patch.object(self.recipe.subprocess, 'Popen') as spawn:
+            with self.assertRaisesRegex(RuntimeError, 'run root must remain inside local runs'):
+                self.recipe.main()
+            decode.assert_not_called()
+            spawn.assert_not_called()
 
     def test_valid_revision_is_pinned_and_changes_only_prerequisite_gate(self):
         plan_path = Path(self.recipe.__file__).with_name('plan.json')

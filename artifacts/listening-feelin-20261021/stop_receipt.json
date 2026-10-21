@@ -1,0 +1,48 @@
+{
+  "schema": "feelin-control-memory-stop-v1",
+  "run_root": "runs/listening-feelin-20261021/fullsong-v1",
+  "candidate_count": 0,
+  "execution": {
+    "argv": [
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1",
+      "auto-master",
+      "--input",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-feelin-20261021/fullsong-v1/input-decoded.wav",
+      "--sfht-model",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-low-sfht-v2/basis.json",
+      "--mid-model",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+      "--backend",
+      "opencl",
+      "--target-lufs",
+      "-13",
+      "--ceiling-db",
+      "-1",
+      "--steps",
+      "8",
+      "--chunk-seconds",
+      "10",
+      "--overlap-seconds",
+      "2",
+      "--morphic-mode",
+      "ph-lie-v2",
+      "--clock-transient-punch",
+      "--kick-transient-guard",
+      "--quiet-mid-denoise",
+      "--no-export-sdcard",
+      "--out",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-feelin-20261021/fullsong-v1/control"
+    ],
+    "child_returncode": -15,
+    "peak_sampled_process_hwm_mib": 1549.1171875,
+    "elapsed_seconds_watchdog_only": 193.06452029099455,
+    "speed_experiment": false
+  },
+  "halt": {
+    "reason": "resource/HALT stop: observed_peak_kib=1586296",
+    "completed_rows": []
+  },
+  "recorded_utc": "2026-10-21T05:34:23.712743+00:00",
+  "original_latch_sha256": "310e73c815a3b563d9f283c5244deaf80a6336695e59a35fee02111d41a223fd",
+  "next": "Exact-parity stereo-audit buffer lifetime optimization beforefreshsame-source retry; capunchanged."
+}

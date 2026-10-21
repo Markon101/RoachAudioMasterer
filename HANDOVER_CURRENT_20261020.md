@@ -1,9 +1,19 @@
 # Current continuation — owner responses recorded, superiority unresolved
 
-Read AGENTS, README, RESULTS Sections33–37,
+Read AGENTS, README, RESULTS Sections33–38,
 docs/OWNER_LISTENING_RESULTS_20261021.md and docs/PH_MEMORY_RESULTS_20261021.md.
-Do not restart completed investigations or rerender another candidate. Production
-champion remains Smooth493cdca; the research branch now has a delivered trial.
+Also read docs/COHERENCE_FOLLOWUP_20261021.md. The owner authorized the next song:
+Singularity control failed the native1dB shape proxy at1.141326dB; Feelin control
+stopped at1549.117MiB versus1536MiB in PH. Both latches remain preserved, with
+zero new candidates/packages. Stop further source search. Next bounded work:
+sequential stereo-audit buffers, exact frozen-binary audio/audit parity, then a
+fresh same-source retry under the unchanged cap. Do not weaken known-band gates.
+The cached Singularity stage trace localizes the first analytical crossing to
+final mastering; polish has the largest incremental drift. It is approximate
+float64 analysis, not a native-gate replacement or isolated causal ablation.
+The paired-only attack diagnostic completed320 events, retaining localized
+changes; it neither establishes nor refutes the owner's punch impression.
+The original source-alignment STOP remains valid. Production remains Smooth493cdca.
 
 The earlier PH memory block is resolved by four explicit drops after last use.
 27 GTF tests,48 WAV SHA comparisons across13 modes, non-timing comparison fields

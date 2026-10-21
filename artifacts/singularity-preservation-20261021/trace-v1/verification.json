@@ -1,0 +1,25 @@
+{
+  "schema": "preservation-shape-trace-verification-v1",
+  "verified_utc": "2026-10-21T05:28:19.888728+00:00",
+  "test_command": "LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s scripts -p test_trace_preservation_shape.py -v",
+  "test_exit_code": 0,
+  "tests_passed": 12,
+  "test_wall_seconds_reported_by_unittest": 0.081,
+  "test_script_sha256": "8811e0e829ce5e11626e78288464c4ed14e6e60d6cfd77ad7b4995b1be169d34",
+  "all_manifest_pins_reverified_after_completion": true,
+  "rows_match_summary": true,
+  "stage_count": 8,
+  "signed_increment_telescope_error_db": 2.220446049250313e-15,
+  "maximum_parseval_relative_closure_error": 3.957487287871921e-13,
+  "any_rms_floor_active": false,
+  "original_halt_sha256": "0aaf4ec8c14aaf03b0adf97745a6342e5892823e302bfa81451d4778b52548d5",
+  "unchanged_plan_sha256": "3d955f4447ddb1829517cb0a78045efc07f837ac189187371bbc397885fdd4c2",
+  "artifact_sha256": {
+    "manifest.json": "b1cdfef23cf5c124b54fee1ab67ba864efd1765a9be3984e3def2df4cbee599d",
+    "stages.jsonl": "be58444e9b2b84c2c0a9838333841df39266bb83128c73fad4d8801b97145b19",
+    "summary.json": "ffa592b480dee33d2021f1138f30da5d035c63dbd1e9142a7a0da9d830c8b78f",
+    "report.md": "626c16de1415c628e9511d52decda8f1512f0b241879a2a526c4a1b8604c2d43"
+  },
+  "trace_run_count": 1,
+  "speed_experiment": false
+}

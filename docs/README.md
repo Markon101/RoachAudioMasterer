@@ -10,6 +10,10 @@ but directional identity choices prevent a reliable superiority conclusion.
 See [the listening result](OWNER_LISTENING_RESULTS_20261021.md) and
 [the live handoff](../HANDOVER_CURRENT_20261020.md).
 
+The [current followup](COHERENCE_FOLLOWUP_20261021.md) records fixed attack windows,
+the stopped Singularity control, cached-stage attribution and one additional
+source trial. No coherence promotion or threshold change has occurred.
+
 Current production is v1.3.1 Smooth (`493cdca`) with frozen Euler8. Later research
 did not promote cache, host-batch or solver changes. Historical champion auditions
 remain pending; the separate coherence session has responses recorded above.

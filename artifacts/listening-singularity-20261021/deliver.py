@@ -13,8 +13,7 @@ def sha(path):
         return hashlib.file_digest(f, 'sha256').hexdigest()
 
 
-def main():
-    base = ROOT / 'runs/listening-singularity-20261021'
+def main(base, destination, receipt_path):
     ready = json.loads((base / 'LISTENING_READY.json').read_text())
     for parent in [base, base / 'fullsong-v1']:
         if any((parent / name).exists() for name in ['HALT', 'HALTED.json']):
@@ -28,7 +27,6 @@ def main():
         raise RuntimeError('unexpected listener payload')
     if any(p.is_symlink() or sha(p) != expected[name] for name, p in paths.items()):
         raise RuntimeError('listener payload changed')
-    destination = Path('/sdcard/Download/Roach Listening Singularity 20261021')
     destination.mkdir()  # fail on any existing path, including a partial copy
     # READY is last; interrupted delivery never carries a readiness marker.
     for name in sorted(allowed - {'READY'}):
@@ -44,7 +42,7 @@ def main():
     if sha(destination / 'READY') != expected['READY']:
         (destination / 'READY').unlink()
         raise RuntimeError('copied readiness marker mismatch')
-    with (Path(__file__).parent / 'delivery.json').open('x') as f:
+    with receipt_path.open('x') as f:
         json.dump({'schema': 'cross-song-listener-delivery-v1', 'destination': str(destination),
                    'source': str(source), 'files_sha256': expected,
                    'verified_copy_files': len(expected), 'source_assignments_or_metrics_in_payload': False,
@@ -54,4 +52,18 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-root', default='runs/listening-singularity-20261021')
+    parser.add_argument('--destination', type=Path,
+                        default=Path('/sdcard/Download/Roach Listening Singularity 20261021'))
+    parser.add_argument('--receipt', type=Path, default=Path(__file__).with_name('delivery.json'))
+    args = parser.parse_args()
+    base = (ROOT / args.run_root).resolve()
+    destination = args.destination.resolve()
+    receipt = args.receipt.resolve()
+    if not base.is_relative_to(ROOT / 'runs') or destination.parent != Path('/sdcard/Download').resolve():
+        raise SystemExit('Run root or delivery directory outside declared scope.')
+    if not receipt.is_relative_to(ROOT / 'artifacts') or receipt.exists():
+        raise SystemExit('Receipt must be a fresh local artifact.')
+    main(base, destination, receipt)

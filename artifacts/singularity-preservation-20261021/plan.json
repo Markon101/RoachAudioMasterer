@@ -1,0 +1,109 @@
+{
+  "schema": "first-channel-preservation-shape-trace-v1",
+  "declared_utc": "2026-10-21T03:57:28.683533+00:00",
+  "declaration": "Frozen after observing native final failure 1.1413261890411377 dB, before measuring any stage audio with this diagnostic. No threshold changes, rerenders, candidate run, or listening outputs.",
+  "geometry": {
+    "rate": 48000,
+    "channels": 2,
+    "frames": 6293504
+  },
+  "inputs": [
+    {
+      "id": "source",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/input-decoded.wav",
+      "role": "Native decoded input; source reference"
+    },
+    {
+      "id": "stage2_in",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/stage2_in.wav",
+      "role": "Cached input to learned Mid; includes any upstream low stage"
+    },
+    {
+      "id": "stage2_mid_restored",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/stage2_mid/restored.wav",
+      "role": "Mid restoration output selected by the native pipeline"
+    },
+    {
+      "id": "stage3_clean",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/stage3_clean.wav",
+      "role": "Adaptive clean polish: denoise and auto-EQ"
+    },
+    {
+      "id": "stage3_5_microstructure",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/stage3_5_microstructure.wav",
+      "role": "Microstructure, de-fizz and phase processing"
+    },
+    {
+      "id": "stage4_spatial",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/stage4_spatial.wav",
+      "role": "Spatial processing; first-channel spectrum can change through mixing"
+    },
+    {
+      "id": "stage4_5_morphic",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/stage4_5_morphic.wav",
+      "role": "PH/morphic controller"
+    },
+    {
+      "id": "mastered",
+      "path": "runs/listening-singularity-20261021/fullsong-v1/control/mastered.wav",
+      "role": "Final mastering bundle: no internal causal attribution"
+    }
+  ],
+  "pins": {
+    "runs/listening-singularity-20261021/fullsong-v1/input-decoded.wav": "2b516208b6944bed37c98c4aafb2cf6b91ab46edb73c50c0e7e441486b726e25",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage2_in.wav": "38e3737724fbec4e558e912c27e3f011ee6777a1706713b55e6cd37fabdc46e1",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage2_mid/restored.wav": "2f674dd5472a302f4cae76d1f408df040310a66675c2793fee40de96dbbeab89",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage3_clean.wav": "f3c687a1f75d566e8465a84991f598ffacb78d89d1c5e00a510bab90db2d0e95",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage3_5_microstructure.wav": "55a1f1114d605629ab8a727e11f91709a743905fd05382ea51492305829c8098",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage4_spatial.wav": "462ec59bd280ce5e822f395de05a0991a84fd7847fb6ae05c7d0c6576474850f",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage4_5_morphic.wav": "1175de036f0b0da207460153a689d89b0c37649ba3a3404fba6a670478786398",
+    "runs/listening-singularity-20261021/fullsong-v1/control/mastered.wav": "749fce62d27755639e88339aa495069e0eabf77918bf425881ef533338b6e4da",
+    "runs/listening-singularity-20261021/fullsong-v1/HALTED.json": "0aaf4ec8c14aaf03b0adf97745a6342e5892823e302bfa81451d4778b52548d5",
+    "runs/listening-singularity-20261021/fullsong-v1/protocol.json": "6d59d1566df60de0c72973581e2f55f49004c3b0da23a57fee52a72e06b87140",
+    "runs/listening-singularity-20261021/fullsong-v1/control/summary.json": "fd24394d948b2c065b3475fb62c7252388a68dc81f3cf97708bc65caa4e9abb4",
+    "runs/listening-singularity-20261021/fullsong-v1/control/master.json": "8b01a179e7bc66b6cb54974dd2c8ca063ff7d932064bb09ce399f4f6d6db964d",
+    "src/assess.rs": "f93ab8ac84b0c76fcc8ca124949508ab7c79df26b3bf189168f9a65ac4addf1d",
+    "src/dsp.rs": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54",
+    "src/main.rs": "ae59f5baa83f1d5dd0a11afbe9d0598b06d9b4a9edb4a1fdcdfcaf89ec44991b",
+    "scripts/matched_attack_audit.py": "ece7406495a6097bd31f1f4f729282756c3363f34535493c9b24852197d31345"
+  },
+  "native_reference": {
+    "summary_path": "runs/listening-singularity-20261021/fullsong-v1/control/summary.json",
+    "absolute_shape_deviation_db": 1.1413261890411377,
+    "known_band_preserved": false,
+    "threshold_db_strict_less_than": 1.0
+  },
+  "method": {
+    "channel": "first channel only, matching assess.rs; not stereo maximum or average",
+    "transform": "One whole-clip float64 NumPy real FFT per input, native-length periodic grid. Parseval weights: DC and even-N Nyquist one, all other bins two.",
+    "frequency_response": "Combined squared amplitude response of dsp::lowpass(cutoff=2500, transition=500, slope=2) then highpass(cutoff=1000, transition=300, slope=2). Each gain = max(0, 0.5+0.5*cos(pi*clip(t,0,1)))**2; t=(f-2500)/500 for LP and (1000-f)/300 for HP.",
+    "rms": "Broadband RMS from first-channel time samples; filtered RMS from Parseval. Both floored at 1e-8 as native before computing ratios.",
+    "signed_shape_db": "20 log10[(filtered_RMS_stage/full_RMS_stage)/(filtered_RMS_source/full_RMS_source)]",
+    "absolute_shape_db": "abs(signed_shape_db); compare descriptive crossing of unchanged native <1 dB rule",
+    "incremental": "Signed change from preceding cached boundary, with separate filtered-band and broadband RMS changes; signed increments telescope but absolute deviations do not.",
+    "numerics": "Analytical-response approximation only: NumPy complex128/float64 and Parseval differ from native sequential complex32 FFT/IFFT, f32 frequency/gain, and f32 reductions. Explicit final difference from native reported; no byte-native reproduction claim.",
+    "alignment": "Exact declared rate/channel/frame geometry only. No waveform/event alignment test, shifts or fitting; temporal alignment unsupported. Whole-clip circular Fourier-power diagnostic, not a temporal preservation measure."
+  },
+  "resources": {
+    "process_hwm_aim_mib": 512,
+    "minimum_available_memory_mib": 1024,
+    "input_block_frames": 65536,
+    "spectrum_block_bins": 65536,
+    "max_frames": 6293504,
+    "processing": "Sequential: one first-channel float64 vector and FFT at a time; release arrays before next file. No full stereo float64 clip, inverse FFT, rendering or training.",
+    "threads": "OPENBLAS_NUM_THREADS=1; numerical diagnostic only, no speed measurement or claim"
+  },
+  "outputs": [
+    "manifest.json",
+    "stages.jsonl",
+    "summary.json",
+    "report.md",
+    "STOP.json only on failure"
+  ],
+  "interpretation": [
+    "Attribute first crossing only to a cached boundary, not necessarily one algorithm within that boundary.",
+    "Global positive uniform gain cancels above the RMS floors; frequency-selective processing, nonlinear gain, or stereo redistribution can change this first-channel proxy.",
+    "A lower/higher normalized band fraction is shape change, not proof of audio damage, preference or protected-content fidelity.",
+    "Keep original HALTED and all input evidence byte-identical; gate failure remains binding. No candidate or listening package is earned by this diagnostic."
+  ]
+}

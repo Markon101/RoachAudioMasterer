@@ -1,0 +1,53 @@
+{
+  "schema": "roach-cross-song-coherence-listening-v2",
+  "design_status": "declared before new-song master renders",
+  "purpose": "Cross-song exploratory evaluation of the unchanged qualified coherence intervention, after a matched-attack diagnostic on the prior masters.",
+  "source": {
+    "path": "/sdcard/Download/Feelin\u2019 Catchy ext v1.2.2.2.2.2.wav",
+    "sha256": "389c135020e0e831a9a1567b5c5b2a6e37f168334cb87f2fc65b3c22d08fdfb0",
+    "rate": 48000,
+    "channels": 2,
+    "frames": 8635314,
+    "bits": 16,
+    "selection": "Next existing mission-priority reference, selected before any Feelin control/candidate render; full179.902375s, not a favorable excerpt search. One additional source only; stop further source trials if unchanged gates fail."
+  },
+  "native_source_commit": "2146a43b955d7e89a4033347eec92c27feaa5e6d",
+  "binary": "runs/ph-memory-20261021/lifetime-candidate-v1",
+  "binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+  "model": "artifacts/rich-mid-v3/basis.json",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "shared_configuration": "Recorded Smooth-style settings: OpenCL, Euler8, 10s chunks/2s overlap, ph-lie-v2, clock-transient-punch, kick-transient-guard, quiet-mid-denoise, -13LUFS/-1dBTP; no auto-tune or force-specialists; default cache/host batch unchanged.",
+  "candidate_only_flag": "--mid-coherence",
+  "limits": {
+    "process_hwm_mib": 1536,
+    "child_timeout_seconds": 900,
+    "required_free_storage_gib": 3,
+    "required_available_memory_mib": 2560,
+    "candidate_count": 1,
+    "control_count": 1
+  },
+  "gates": [
+    "Completed narrower source-triggered paired diagnostic reviewed with independent criticism; no broad RMS contrast-loss finding, localized changes retained. V1 source alignment failure remains; no source fidelity or subjective punch claim. Native cross-song quality/resource gates unchanged.",
+    "Verify original input, decoded PCM geometry, frozen binary, model and prior qualification receipts.",
+    "Every output finite, exact rate/channel/frame geometry, native true peak <= -0.99dBTP and abs(target shortfall) <=0.1LU.",
+    "Native mono compatibility, known-band and transient-timing checks all true.",
+    "Settings identical except declared requested/applied flags and CLI provenance; same input/models/binary.",
+    "Control has no applied coherence; candidate actually applies coherence and differs from control; preserve routing abstention.",
+    "Any HALT, process failure, memory or time excess latches this fresh session; no automatic retry or cap increase."
+  ],
+  "listening": {
+    "mode": "equal_target_architecture",
+    "assignment_policy": "counterbalanced_pairs",
+    "short_start_sample": 2304000,
+    "short_frames": 1440000,
+    "full_frames": 8635314,
+    "selection": "Fixed 48..78s timestamp matching previous protocol convention; full song. No favorable passage search.",
+    "target_lufs_ceiling": -13.0,
+    "matching": "Existing attenuation-only matching_target with peak headroom; measured encoded paired difference <=0.15LU. No added limiter or remastering.",
+    "response": "Unchanged categorical CSV plus separate free-text notes, easy indistinguishable/abstain, comfortable playback-level check before fixed settings.",
+    "blinding": "Fresh private random seed and concealed assignments. Prior mechanism knowledge remains; no naive-expectation claim."
+  },
+  "interpretation": "Eligibility for exploratory owner listening only. Prior identity-control confound, post-reveal subjective tradeoff, procedural target-error conflict and false healthy edits remain. No production promotion, new model, solver, training or speed claim. Singularity control failed the existing known-band shape proxy before candidate; its latch remains immutable. This is a different preregistered full-song source, not a retry or threshold change.",
+  "run_root": "runs/listening-feelin-20261021",
+  "declared_utc": "2026-10-21T05:25:58.053203+00:00"
+}

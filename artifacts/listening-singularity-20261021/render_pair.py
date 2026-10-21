@@ -32,22 +32,24 @@ def save(path, value):
         f.write('\n')
 
 
-def main():
-    plan_path = Path(__file__).with_name('plan.json')
+def main(plan_path=None):
+    plan_path = Path(plan_path).resolve() if plan_path else Path(__file__).with_name('plan.json')
     plan = json.loads(plan_path.read_text())
-    revision_path = Path(__file__).with_name('plan_revision_v2.json')
+    revision_path = plan_path.with_name('plan_revision_v2.json')
     if revision_path.exists():
         revision = json.loads(revision_path.read_text())
         if revision['original_plan_sha256'] != sha(plan_path):
             raise RuntimeError('revision does not match original frozen plan')
         plan['gates'][0] = revision['replacement_prerequisite']
     limits = plan['limits']
-    base = ROOT / 'runs/listening-singularity-20261021'
+    base = (ROOT / plan.get('run_root', 'runs/listening-singularity-20261021')).resolve()
+    if not base.is_relative_to(ROOT / 'runs'):
+        raise RuntimeError('run root must remain inside local runs/')
     run = base / 'fullsong-v1'
     if run.exists() or (base / 'HALT').exists() or (base / 'HALTED.json').exists():
         raise RuntimeError('existing run or latched session; no resume/retry')
     # This marker is produced after the separately scoped prior-song diagnostic.
-    prerequisite = Path(__file__).with_name('attack_prerequisite.json')
+    prerequisite = plan_path.with_name('attack_prerequisite.json')
     if json.loads(prerequisite.read_text())['eligible_to_continue_unchanged_cross_song'] is not True:
         raise RuntimeError('prior-song diagnostic not reviewed')
     if shutil.disk_usage(ROOT).free < limits['required_free_storage_gib'] * 1024**3:
@@ -136,6 +138,11 @@ def main():
                         except subprocess.TimeoutExpired:
                             child.kill()
                             child.wait()
+                    save(run / f'{name}-execution.json', {
+                        'argv': command, 'child_returncode': child.returncode,
+                        'peak_sampled_process_hwm_mib': peak / 1024 if observed else None,
+                        'elapsed_seconds_watchdog_only': time.monotonic() - start,
+                        'speed_experiment': False})
             if child.returncode != 0 or not observed:
                 raise RuntimeError(f'{name} failed or process memory unobserved: {child.returncode}')
             check_halt()
@@ -189,4 +196,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--plan', type=Path)
+    main(parser.parse_args().plan)

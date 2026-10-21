@@ -1579,3 +1579,22 @@ adequacy of listening level is an additional session limitation. Future packages
 should minimize attenuation within paired loudness/peak gates and check playback
 level before judgments, without remastering or changing this preserved session.
 
+### 38. Matched attacks and a failed cross-song control (2026-10-21)
+
+The source-anchored attack diagnostic stopped on its frozen alignment gate.
+A separately declared paired-output analysis retained the same source-derived
+windows and added treatment-band timing checks, with no source-relative fidelity
+claims. Across320 shared events, RMS contrast medians are near zero, but localized
+presence changes remain. Two adversarial rows were independently replicated by
+direct convolution. This does not settle the owner's perceived tradeoff.
+
+The next-song Singularity control failed its unchanged native <1dB shape gate at
+1.141326dB; no candidate was rendered. A cached-stage trace approximates that
+result within0.001060dB and first crosses at final mastering, with large increments
+at clean polish and finalization. The failure/latch remain binding. One additional
+mission-priority source, Feelin’ Catchy, then stopped at observed1549.117MiB in the
+PH stage against the1536MiB cap. Both sessions remain latched with zero candidates.
+No further source search; the next engineering step targets stereo-audit buffer
+lifetimes with exact parity before a fresh same-source retry. No DSP retune,
+weight change, new training or speed claim. See [the scoped evidence report](docs/COHERENCE_FOLLOWUP_20261021.md).
+
