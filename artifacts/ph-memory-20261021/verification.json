@@ -1,0 +1,22 @@
+{
+  "schema": "ph-lifetime-verification-v1",
+  "recorded_utc": "2026-10-21T02:53:14.327808+00:00",
+  "source_parent": "797f694",
+  "source_gtf_sha256": "8ee25582791063eab94a29ccff48cbd36ea75ab9273020dee291503196ad0dc5",
+  "binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+  "rust_tests_passed": 27,
+  "parity_wav_files": 48,
+  "morphic_modes": 13,
+  "all_audio_sha_exact": true,
+  "comparison_fields_except_elapsed_exact": true,
+  "complete_ph_audit_and_finalizer_metadata_exact": true,
+  "full_control_observed_hwm_mib": 1274.38671875,
+  "full_control_cap_mib": 1536,
+  "full_control_all_quality_gates_pass": true,
+  "baseline_before_fix_peak_censored_at_mib": 1583.9296875,
+  "no_exact_peak_reduction_percentage_claim": true,
+  "no_speed_qualification": true,
+  "quality_audits_disabled": false,
+  "production_promoted": false,
+  "candidate_render": "in progress; one; no preference/eligibility untilfullchecks"
+}

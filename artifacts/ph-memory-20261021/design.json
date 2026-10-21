@@ -1,0 +1,21 @@
+{
+  "schema": "ph-buffer-lifetime-plan-v1",
+  "declared_utc": "2026-10-21T02:45:39.202963+00:00",
+  "baseline_commit": "797f694",
+  "objective": "complete unchangedSmoothcontrolunderexisting1536MiBgatewithoutalteringaudioorqualityaudits",
+  "mutation": "dropfourfull-trackSpectrum Vecs afterlastuses; preservearithmetic/FFTcallorder",
+  "source_before": "797f694:src/gtf.rs",
+  "source_candidate_sha256": "8ee25582791063eab94a29ccff48cbd36ea75ab9273020dee291503196ad0dc5",
+  "independent_review": "nativecoherence_fixtureconfirmedownedVecoutputsandnolateruses; reviewers512/128geometryestimateoverriddenbylive1024/256constants",
+  "static_expected_live_storage_released_mib": 412.178466796875,
+  "static_estimate_is_measured_peak_reduction": false,
+  "gates": [
+    "27focusedRustGTFtests",
+    "all13modesexactWAVSHAandnontimingreportparity",
+    "completePHaudit/finalmetadataexactonsyntheticAutoMaster",
+    "fulltrackcontrol1536MiB900s withallnormalacousticgates; candidaterunonlyaftercontrolpass"
+  ],
+  "no_new_ram_increase": true,
+  "no_speed_claim": true,
+  "production_promotion": false
+}

@@ -1024,6 +1024,10 @@ pub fn audit_post_synthesis_audio(
     }
     let orig_low_synth = stft.synthesize(&orig_low_spec);
     let proc_low_synth = stft.synthesize(&proc_low_spec);
+    // These masked spectra are no longer needed; retain the synthesized signals.
+    // Release full-track buffers before stereo diagnostics allocate more spectra.
+    drop(orig_low_spec);
+    drop(proc_low_spec);
     let synth_len = orig_low_synth
         .len()
         .min(proc_low_synth.len())
@@ -4610,6 +4614,10 @@ pub fn process_morphic_audio_with_contrast(
     }
 
     let mut out_ms = [stft.synthesize(&spec_mid), stft.synthesize(&spec_side)];
+    // Synthesis owns its output. The controller spectra must not overlap the
+    // post-synthesis audit working set for the remainder of this full track.
+    drop(spec_mid);
+    drop(spec_side);
 
     if config.lock_passband {
         for c in 0..2 {

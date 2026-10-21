@@ -1,0 +1,97 @@
+{
+  "schema": "ph-lifetime-parity-complete-v1",
+  "exact_wav_files": 48,
+  "all_wav_sha256_equal": true,
+  "all_non_timing_report_fields_equal": true,
+  "complete_ph_audit_and_finalizer_metadata_exact": true,
+  "runs": [
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "morphic-compare",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/parity-v1/before",
+        "--target-lufs",
+        "-13"
+      ],
+      "log_sha256": "59bbf925380d3adf0e1722992795c82e4b0446c7f27e92b4db239ab33fa31159",
+      "sampled_hwm_mib": 47.1953125
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1",
+        "morphic-compare",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/parity-v1/after",
+        "--target-lufs",
+        "-13"
+      ],
+      "log_sha256": "68e71551e6af1252596588cca3ed4021761c0a0dbf00ffc802b55b3de2853f3a",
+      "sampled_hwm_mib": 41.3359375
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1",
+        "auto-master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/parity-v1/before-auto",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--quiet-mid-denoise",
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--target-lufs",
+        "-13",
+        "--no-export-sdcard"
+      ],
+      "log_sha256": "92c7edecea71235603eafd659cfbeeaa9e2bb843551432e2d2c41c05528a10e5",
+      "sampled_hwm_mib": 30.28125
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1",
+        "auto-master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/parity-v1/after-auto",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--quiet-mid-denoise",
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--target-lufs",
+        "-13",
+        "--no-export-sdcard"
+      ],
+      "log_sha256": "0b00cd27ec3b0129fa9163fc5e78f0bdc5fe510bb425b49b69e4e946be34f8ac",
+      "sampled_hwm_mib": 24.50390625
+    }
+  ],
+  "pins": {
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/coherence-candidate-v1": "cdbb2a3fb20c7662e3e0b39f46365301f105e3fd5a8f057635ecf24382dbbb93",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav": "a6c0a9510727b19b42973ce5e0fe531b24f277a1138bac6924b4f820c6eb70f6",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/gtf.rs": "8ee25582791063eab94a29ccff48cbd36ea75ab9273020dee291503196ad0dc5",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/ph-memory-20261021/qualify.py": "13fb77f9a6eff4f321295dbf935c691e9b79567a0437f6dab00f2e4ebc98c206"
+  },
+  "speed_qualification": false
+}

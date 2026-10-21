@@ -1517,3 +1517,15 @@ memory contributor, not measured allocation attribution. Test lifetime drops and
 sequential diagnostics with exact audio/metric parity before another full-track
 attempt. Do not skip audits, relax acoustic gates or raise the ceiling again.
 
+### 35. PH buffer lifetimes unblock the full-song control (2026-10-21)
+
+Releasing four spectra after last use preserves48 WAV hashes across13 Morphic
+modes, all non-timing comparison fields, and the complete PH/finalizer audit on
+a separate synthetic pipeline control. Twenty-seven focused Rust tests pass.
+The fresh140.4s Smooth-settings control completes below the same1536MiB guard,
+with observedHWM1274.39MiB and all existing peak/preservation gates passing.
+No audits were disabled and no speed qualification is claimed. The previous
+1583.93MiB stop is a censored peak, not an exact before/after memory percentage.
+[Report](docs/PH_MEMORY_RESULTS_20261021.md) records scope and reproduction.
+The single coherence candidate is now rendering; owner judgment remains pending.
+
