@@ -74,9 +74,9 @@ No further source search is authorized by this experiment if this control fails.
 Feelin's first control stopped in the existing PH stage at observed process HWM
 1549.117 MiB against the unchanged 1536 MiB cap. Its execution receipt survives
 the stop; no candidate or listening package exists. No more sources will be tried
-under this plan. The next bounded engineering step is sequential stereo-audit
-buffer preparation, with exact short audio/audit parity before any fresh retry of
-this same source. No cap increase or skipped quality audit was authorized.
+under this plan. That stop motivated sequential stereo-audit buffer preparation,
+with exact short audio/audit parity before the fresh retry of this same source.
+No cap increase or skipped quality audit was authorized.
 Any eventual package uses fresh counterbalanced source positions, transparent
 attenuation near native master loudness, categorical CSV plus optional notes,
 and a comfortable playback check. The 24-test listening harness preserves legacy
@@ -113,3 +113,36 @@ and [delivery](../artifacts/listening-feelin-retry-20261021/delivery.json) prese
 the exact binary/model/input/configuration and checks. Original stops, Chasing
 audio and raw responses remain intact. Owner Feelin judgments and preference are
 pending. No subjective production promotion occurred.
+
+## Independent clean-stage counterfactuals after delivery
+
+While the Feelin package stayed fixed, a bounded native example replayed the
+cached Singularity Mid input through the actual `clean_audio_v1_3` function.
+Its combined denoise+EQ output had to match the saved clean WAV **byte-for-byte**
+before any branch contrasts were accepted. It passed. The preregistered arms
+were raw identity, guard-only, denoise-only, EQ-only and combined; the global
+0.99 peak guard is distinguished from a true clean bypass. On this input the
+guard-only output equals identity exactly.
+
+Signed analytical shape increments versus Mid are +0.099314 dB for denoise,
++0.607245 dB for EQ and +0.714347 dB combined; the explicit factorial interaction
+is +0.007788 dB. These isolate effects on this local normalized-RMS proxy, not
+audible damage, preference or the final mastered spectrum. Denoise includes both
+high-band and dual-zone quiet-mid processing. EQ sees a different input after
+denoise; the finalizer is not included in these counterfactuals. Do not subtract
+these numbers from the failed final-master score to predict a new master.
+
+[Plan and report](../artifacts/singularity-clean-factorial-20261021/report.md),
+[verification](../artifacts/singularity-clean-factorial-20261021/verification.json)
+and [root reconciliation](../artifacts/singularity-clean-factorial-20261021/root_reconciliation.json)
+retain exact source/output hashes and all five controls. Nine focused Rust
+example/module tests and five Python tests pass; native child HWM stays below
+388.879 MiB and analysis below225.043 MiB. The original failure, production code
+and delivered listening package remain unchanged. Raw intermediate WAVs stay
+local; no additional master or listening candidate was generated.
+
+The strongest next independent engineering test is a matched native finalizer
+replay on the cached pre-master input, requiring exact baseline reproduction
+before glue/limiter counterfactuals. Declare it separately and preserve the
+unchanged native gate. The next perceptual decision remains the owner's Feelin
+judgments; do not promote or retune based on these proxy measurements alone.

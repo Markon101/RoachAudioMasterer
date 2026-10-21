@@ -1,0 +1,154 @@
+{
+  "schema": "singularity-clean-factorial-v1",
+  "declared_utc": "2026-10-21T06:14:30.687255+00:00",
+  "declaration": "Frozen before any full-source factorial output. Earlier trace observed Mid->clean +0.714347 dB; no parameter or threshold fitting is authorized.",
+  "baseline_commit": "83f11312caa2e7a93ed3538a4c0182e93a97bdd1",
+  "raw_decoded_source": "runs/listening-singularity-20261021/fullsong-v1/input-decoded.wav",
+  "raw_original_source": {
+    "path": "/sdcard/Download/Singularity Moment ext v1.1.2.1.1 remix v2.flac",
+    "sha256": "87993dc798fe0faf36259a78d0adbd41cf978a61be41ed79c7dc02ceb32336da",
+    "rate": 48000,
+    "channels": 2,
+    "frames": 6293504,
+    "bits": 16,
+    "selection": "Existing project reference from the mission priority list; 131.115s fits qualified <=180s geometry and previous 1536MiB resource ceiling. No candidate-output search. Contrast to the first song is exploratory, not a measured genre classification."
+  },
+  "mid_input": "runs/listening-singularity-20261021/fullsong-v1/control/stage2_mid/restored.wav",
+  "cached_combined": "runs/listening-singularity-20261021/fullsong-v1/control/stage3_clean.wav",
+  "pins": {
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage2_mid/restored.wav": "2f674dd5472a302f4cae76d1f408df040310a66675c2793fee40de96dbbeab89",
+    "runs/listening-singularity-20261021/fullsong-v1/control/stage3_clean.wav": "f3c687a1f75d566e8465a84991f598ffacb78d89d1c5e00a510bab90db2d0e95",
+    "runs/listening-singularity-20261021/fullsong-v1/input-decoded.wav": "2b516208b6944bed37c98c4aafb2cf6b91ab46edb73c50c0e7e441486b726e25",
+    "runs/listening-singularity-20261021/fullsong-v1/HALTED.json": "0aaf4ec8c14aaf03b0adf97745a6342e5892823e302bfa81451d4778b52548d5",
+    "runs/listening-singularity-20261021/fullsong-v1/protocol.json": "6d59d1566df60de0c72973581e2f55f49004c3b0da23a57fee52a72e06b87140",
+    "runs/listening-singularity-20261021/fullsong-v1/control/summary.json": "fd24394d948b2c065b3475fb62c7252388a68dc81f3cf97708bc65caa4e9abb4",
+    "artifacts/singularity-preservation-20261021/plan.json": "3d955f4447ddb1829517cb0a78045efc07f837ac189187371bbc397885fdd4c2",
+    "artifacts/singularity-preservation-20261021/trace-v1/summary.json": "ffa592b480dee33d2021f1138f30da5d035c63dbd1e9142a7a0da9d830c8b78f",
+    "Cargo.toml": "8ea807e2b5cb25c42e5628a2b2235f87e7eb25a349316ed037d869f5d5558854",
+    "Cargo.lock": "6714acafb87f26c670094efb8fb563d3df24a04045799da3ba235b1fc30409b8",
+    "src/dsp.rs": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54",
+    "src/scene.rs": "e4c645b249baadf19abb08668c85954fa782d39afec323fe2b323b78c9f774e5",
+    "src/native_audio.rs": "96aeee08cfe8b5b8d4ff60ef67027232e24b736d6d3ea8064fe1e1083c45204b",
+    "src/native_dsp.rs": "aeaac57f069fc8ea0a2669fed1ae917d1902b6813daa15a52b6ed7cd08c6a8d8",
+    "src/scene_clean.rs": "7ac46ea6ea9120cb57965322c39c52964581e07760ee829eb72f7c21173f482e",
+    "src/assess.rs": "76b04f336fc781547804863b3c58fbe47ac36f4818d07a792e25ef173f24cc7d",
+    "examples/clean_factorial.rs": "6cebeff2eccf0607097b660d29202e3a0f76c1fa8d220af4c2162b19d7fc557f",
+    "artifacts/singularity-clean-factorial-20261021/run.py": "47bbf5e5a66098ee388ae07f877fc025f0c48f200657617a16cfa07169952768",
+    "scripts/test_clean_factorial_analysis.py": "f770b913ab7e265aa42987c11141c0b7aab3e842c41081a400800dd28afbbac3",
+    "scripts/trace_preservation_shape.py": "653c6c61b874551395ca0092c68b5e55da22fe7fdf0b468a50941b9427c42b72",
+    "scripts/matched_attack_audit.py": "ece7406495a6097bd31f1f4f729282756c3363f34535493c9b24852197d31345",
+    "scripts/run_mid_profile.py": "708aafb640abe7305c7643a9f516aeeafd8c8edc39e65bb464e8e7aabd46b862",
+    "/sdcard/Download/Singularity Moment ext v1.1.2.1.1 remix v2.flac": "87993dc798fe0faf36259a78d0adbd41cf978a61be41ed79c7dc02ceb32336da"
+  },
+  "geometry": {
+    "rate": 48000,
+    "channels": 2,
+    "frames": 6293504
+  },
+  "run_root": "runs/singularity-clean-factorial-20261021/run-v1",
+  "arms_execution_order": [
+    {
+      "id": "combined",
+      "denoise": true,
+      "auto_eq": true,
+      "native_final_guard": true
+    },
+    {
+      "id": "identity",
+      "denoise": false,
+      "auto_eq": false,
+      "native_final_guard": false
+    },
+    {
+      "id": "guard",
+      "denoise": false,
+      "auto_eq": false,
+      "native_final_guard": true
+    },
+    {
+      "id": "denoise",
+      "denoise": true,
+      "auto_eq": false,
+      "native_final_guard": true
+    },
+    {
+      "id": "eq",
+      "denoise": false,
+      "auto_eq": true,
+      "native_final_guard": true
+    }
+  ],
+  "arms_report_order": [
+    "identity",
+    "guard",
+    "denoise",
+    "eq",
+    "combined"
+  ],
+  "fixed_parameters": {
+    "max_adjust_db": 1.0,
+    "quiet_mid_denoise": true,
+    "native_entrypoint": "scene_clean::clean_audio_v1_3",
+    "writer": "native_audio::write(...,false)",
+    "identity": "exact full-file bytecopy, not decode/reencode"
+  },
+  "limits": {
+    "child_hwm_mib": 512,
+    "child_timeout_seconds": 180,
+    "analysis_hwm_mib": 512,
+    "overall_timeout_seconds": 900,
+    "minimum_available_memory_mib": 1024,
+    "minimum_free_storage_gib": 3,
+    "sampling_seconds": 0.05,
+    "no_cap_increase": true,
+    "no_resume": true
+  },
+  "method": {
+    "channel": "first channel only, matching assess.rs; not stereo maximum or average",
+    "transform": "One whole-clip float64 NumPy real FFT per input, native-length periodic grid. Parseval weights: DC and even-N Nyquist one, all other bins two.",
+    "frequency_response": "Combined squared amplitude response of dsp::lowpass(cutoff=2500, transition=500, slope=2) then highpass(cutoff=1000, transition=300, slope=2). Each gain = max(0, 0.5+0.5*cos(pi*clip(t,0,1)))**2; t=(f-2500)/500 for LP and (1000-f)/300 for HP.",
+    "rms": "Broadband RMS from first-channel time samples; filtered RMS from Parseval. Both floored at 1e-8 as native before computing ratios.",
+    "signed_shape_db": "20 log10[(filtered_RMS_stage/full_RMS_stage)/(filtered_RMS_source/full_RMS_source)]",
+    "absolute_shape_db": "abs(signed_shape_db); compare descriptive crossing of unchanged native <1 dB rule",
+    "incremental": "Signed change from preceding cached boundary, with separate filtered-band and broadband RMS changes; signed increments telescope but absolute deviations do not.",
+    "numerics": "Analytical-response approximation only: NumPy complex128/float64 and Parseval differ from native sequential complex32 FFT/IFFT, f32 frequency/gain, and f32 reductions. Explicit final difference from native reported; no byte-native reproduction claim.",
+    "alignment": "Exact declared rate/channel/frame geometry only. No waveform/event alignment test, shifts or fitting; temporal alignment unsupported. Whole-clip circular Fourier-power diagnostic, not a temporal preservation measure."
+  },
+  "contrasts": {
+    "requested_interaction": "combined - denoise - EQ + raw_identity, separately for signed normalized shape dB, filtered-RMS change dB and broadband-RMS change dB",
+    "guarded_interaction": "same contrast with clean(false,false) guard-only baseline instead of raw identity, because all four function arms include final headroom protection",
+    "main_differences": "Each arm vs same cached Mid input, and vs decoded original source; no absolute-deviation arithmetic for interaction."
+  },
+  "gates": [
+    "All initial/source/module/tool/plan/build/binary hashes remain pinned; create-only outputs and artifact/run HALT/STOP latches.",
+    "Combined first: output.wav SHA must exactly equal frozen cached stage3_clean.wav before other arms or contrasts; otherwise STOP and preserve.",
+    "Raw identity byte hash equals Mid input; exact declared channel/rate/frame geometry; all samples finite; no shifts/resampling/search. Same-sample timeline is constructed by the native clean function; temporal preservation is not inferred from spectral metrics.",
+    "Native child sampled and self-reported HWM <=512 MiB, child <=180s, analysis <=512MiB, total <=900s. Native and numerical failures stop without retry.",
+    "Analytical Parseval closure relative error <=1e-10, finite/floored RMS status retained; original native gate never replaced."
+  ],
+  "interpretation": [
+    "One source/one frozen input, no population or audible-cause claim. D contains high-band plus quiet dual-zone mid denoise; EQ follows D and depends on its spectral/quietness statistics.",
+    "Every clean-function arm includes the final global 0.99 peak guard even when D=E=false, whereas native auto-master bypasses clean in that case. Global pre-guard peaks/gains in D/E/combined are not instrumented; raw/post peaks and guard-only known scale retained.",
+    "Uniform positive guard gain cancels above the RMS floors in the normalized analytical proxy, modulo f32 rounding; raw RMS changes remain guard-confounded.",
+    "No production change, training, speed experiment, parameter fitting, gate relaxation, mastering-candidate render or new listening package. Original failed run remains latched."
+  ],
+  "build": {
+    "target_dir": "/data/data/com.termux/files/usr/tmp/roach-native-solvers-target",
+    "test_command": "cargo test --locked -j 8 --example clean_factorial",
+    "build_command": "cargo build --release --locked -j 8 --example clean_factorial",
+    "environment": {
+      "LD_PRELOAD": "/data/data/com.termux/files/usr/lib/libc++_shared.so",
+      "OPENBLAS_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  "outputs": [
+    "build.json",
+    "manifest.json",
+    "executions.jsonl",
+    "summary.json",
+    "report.md",
+    "COMPLETE.json or STOP.json",
+    "raw ignored runs contain five WAVs, native receipts/logs and frozen example binary"
+  ]
+}

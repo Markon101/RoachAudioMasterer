@@ -1,0 +1,17 @@
+   Compiling roach-audio-masterer v1.0.0-alpha.1 (/data/data/com.termux/files/home/projects/RoachAudioMasterer)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.03s
+     Running unittests examples/clean_factorial.rs (/data/data/com.termux/files/usr/tmp/roach-native-solvers-target/debug/examples/clean_factorial-9df73057f18654c9)
+
+running 9 tests
+test native_audio::tests::native_stereo_seek_and_orthonormal_geometry ... ok
+test dsp::tests::degradation_and_lock ... ok
+test tests::disabled_clean_is_guard_only_on_hot_input ... ok
+test dsp::tests::roundtrip_edges_and_short_signal ... ok
+test scene_clean::tests::test_auto_eq_strict_bounds ... ok
+test native_dsp::tests::native_roundtrip_and_adjoint_checks ... ok
+test scene_clean::tests::test_denoise_invariance_below_14k ... ok
+test scene_clean::tests::test_quiet_mid_denoise_reduces_quiet_noise_and_preserves_active ... ok
+test scene_clean::tests::test_v1_3_clean_parity_when_quiet_disabled ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+

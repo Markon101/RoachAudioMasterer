@@ -1,0 +1,311 @@
+{
+  "schema": "singularity-clean-factorial-v1",
+  "completed_utc": "2026-10-21T06:15:43.330629+00:00",
+  "rows": {
+    "identity": {
+      "id": "identity",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/identity/output.wav",
+      "sha256": "2f674dd5472a302f4cae76d1f408df040310a66675c2793fee40de96dbbeab89",
+      "wav": {
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/identity/output.wav",
+        "rate": 48000,
+        "channels": 2,
+        "frames": 6293504,
+        "encoding": "IEEE-float32",
+        "data_offset": 68,
+        "frame_bytes": 8
+      },
+      "full_power": 0.033642685565312865,
+      "filtered_band_power": 0.0018216069788864746,
+      "spectral_full_power": 0.033642685565302304,
+      "parseval_relative_closure_error": 3.1391657188734266e-13,
+      "raw_full_rms": 0.18341942526709887,
+      "raw_filtered_band_rms": 0.04268028794287211,
+      "full_rms_native_floor": 0.18341942526709887,
+      "filtered_band_rms_native_floor": 0.04268028794287211,
+      "broadband_floor_active": false,
+      "filtered_band_floor_active": false,
+      "filtered_energy_fraction": 0.054145706511748694,
+      "normalized_filtered_rms": 0.23269230006974595,
+      "memory": {
+        "ru_maxrss_kib_linux": 230444,
+        "VmHWM_kib": 230444,
+        "VmRSS_kib": 33048,
+        "observed_hwm_mib": 225.04296875
+      },
+      "global_peak": 0.9885898232460022,
+      "channel_full_rms": [
+        0.1834194252670743,
+        0.17687542216655075
+      ],
+      "signed_shape_change_from_source_db": 0.01876854903078235,
+      "absolute_shape_deviation_from_source_db": 0.01876854903078235,
+      "analytical_below_unchanged_1db_threshold": true,
+      "signed_increment_from_previous_boundary_db": 0.0,
+      "filtered_band_rms_change_from_source_db": 0.02045755255417781,
+      "broadband_rms_change_from_source_db": 0.001689003523397733,
+      "filtered_band_rms_increment_db": 0.0,
+      "broadband_rms_increment_db": 0.0
+    },
+    "guard": {
+      "id": "guard",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/guard/output.wav",
+      "sha256": "2f674dd5472a302f4cae76d1f408df040310a66675c2793fee40de96dbbeab89",
+      "wav": {
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/guard/output.wav",
+        "rate": 48000,
+        "channels": 2,
+        "frames": 6293504,
+        "encoding": "IEEE-float32",
+        "data_offset": 68,
+        "frame_bytes": 8
+      },
+      "full_power": 0.033642685565312865,
+      "filtered_band_power": 0.0018216069788864746,
+      "spectral_full_power": 0.033642685565302304,
+      "parseval_relative_closure_error": 3.1391657188734266e-13,
+      "raw_full_rms": 0.18341942526709887,
+      "raw_filtered_band_rms": 0.04268028794287211,
+      "full_rms_native_floor": 0.18341942526709887,
+      "filtered_band_rms_native_floor": 0.04268028794287211,
+      "broadband_floor_active": false,
+      "filtered_band_floor_active": false,
+      "filtered_energy_fraction": 0.054145706511748694,
+      "normalized_filtered_rms": 0.23269230006974595,
+      "memory": {
+        "ru_maxrss_kib_linux": 230444,
+        "VmHWM_kib": 230444,
+        "VmRSS_kib": 33048,
+        "observed_hwm_mib": 225.04296875
+      },
+      "global_peak": 0.9885898232460022,
+      "channel_full_rms": [
+        0.1834194252670743,
+        0.17687542216655075
+      ],
+      "signed_shape_change_from_source_db": 0.01876854903078235,
+      "absolute_shape_deviation_from_source_db": 0.01876854903078235,
+      "analytical_below_unchanged_1db_threshold": true,
+      "signed_increment_from_previous_boundary_db": 0.0,
+      "filtered_band_rms_change_from_source_db": 0.02045755255417781,
+      "broadband_rms_change_from_source_db": 0.001689003523397733,
+      "filtered_band_rms_increment_db": 0.0,
+      "broadband_rms_increment_db": 0.0
+    },
+    "denoise": {
+      "id": "denoise",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/denoise/output.wav",
+      "sha256": "0af7ccc04fb2e9e96594d9526ac676216d1d9482f77d039a4a5a632a8497443a",
+      "wav": {
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/denoise/output.wav",
+        "rate": 48000,
+        "channels": 2,
+        "frames": 6293504,
+        "encoding": "IEEE-float32",
+        "data_offset": 68,
+        "frame_bytes": 8
+      },
+      "full_power": 0.03261444745115202,
+      "filtered_band_power": 0.0018067808447570217,
+      "spectral_full_power": 0.03261444745114145,
+      "parseval_relative_closure_error": 3.2423895346971716e-13,
+      "raw_full_rms": 0.1805947049366399,
+      "raw_filtered_band_rms": 0.04250624477364499,
+      "full_rms_native_floor": 0.1805947049366399,
+      "filtered_band_rms_native_floor": 0.04250624477364499,
+      "broadband_floor_active": false,
+      "filtered_band_floor_active": false,
+      "filtered_energy_fraction": 0.055398174304903076,
+      "normalized_filtered_rms": 0.23536816756924261,
+      "memory": {
+        "ru_maxrss_kib_linux": 230444,
+        "VmHWM_kib": 230444,
+        "VmRSS_kib": 33048,
+        "observed_hwm_mib": 225.04296875
+      },
+      "global_peak": 0.9896854758262634,
+      "channel_full_rms": [
+        0.18059470493661475,
+        0.17428607599686088
+      ],
+      "signed_shape_change_from_source_db": 0.11808282404374049,
+      "absolute_shape_deviation_from_source_db": 0.11808282404374049,
+      "analytical_below_unchanged_1db_threshold": true,
+      "signed_increment_from_previous_boundary_db": 0.0993142750129593,
+      "filtered_band_rms_change_from_source_db": -0.015034486277899477,
+      "broadband_rms_change_from_source_db": -0.133117310321641,
+      "filtered_band_rms_increment_db": -0.0354920388320781,
+      "broadband_rms_increment_db": -0.13480631384503772
+    },
+    "eq": {
+      "id": "eq",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/eq/output.wav",
+      "sha256": "edd7f0b02b67fdc29141d1e2fe718688daac81dd9aaf49ffdbad5fa26502aa4f",
+      "wav": {
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/eq/output.wav",
+        "rate": 48000,
+        "channels": 2,
+        "frames": 6293504,
+        "encoding": "IEEE-float32",
+        "data_offset": 68,
+        "frame_bytes": 8
+      },
+      "full_power": 0.026638100889638507,
+      "filtered_band_power": 0.0016587915554333195,
+      "spectral_full_power": 0.02663810088963132,
+      "parseval_relative_closure_error": 2.697348683851104e-13,
+      "raw_full_rms": 0.16321182827736017,
+      "raw_filtered_band_rms": 0.040728264822274464,
+      "full_rms_native_floor": 0.16321182827736017,
+      "filtered_band_rms_native_floor": 0.040728264822274464,
+      "broadband_floor_active": false,
+      "filtered_band_floor_active": false,
+      "filtered_energy_fraction": 0.06227138947726353,
+      "normalized_filtered_rms": 0.24954236008594521,
+      "memory": {
+        "ru_maxrss_kib_linux": 230444,
+        "VmHWM_kib": 230444,
+        "VmRSS_kib": 33048,
+        "observed_hwm_mib": 225.04296875
+      },
+      "global_peak": 0.9900000095367432,
+      "channel_full_rms": [
+        0.16321182827734193,
+        0.1576482916845122
+      ],
+      "signed_shape_change_from_source_db": 0.6260138634525012,
+      "absolute_shape_deviation_from_source_db": 0.6260138634525012,
+      "analytical_below_unchanged_1db_threshold": true,
+      "signed_increment_from_previous_boundary_db": 0.6072453144217195,
+      "filtered_band_rms_change_from_source_db": -0.3861711041724431,
+      "broadband_rms_change_from_source_db": -1.0121849676249446,
+      "filtered_band_rms_increment_db": -0.4066286567266213,
+      "broadband_rms_increment_db": -1.0138739711483407
+    },
+    "combined": {
+      "id": "combined",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/combined/output.wav",
+      "sha256": "f3c687a1f75d566e8465a84991f598ffacb78d89d1c5e00a510bab90db2d0e95",
+      "wav": {
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1/combined/output.wav",
+        "rate": 48000,
+        "channels": 2,
+        "frames": 6293504,
+        "encoding": "IEEE-float32",
+        "data_offset": 68,
+        "frame_bytes": 8
+      },
+      "full_power": 0.025825587659680477,
+      "filtered_band_power": 0.0016483483060166974,
+      "spectral_full_power": 0.02582558765967402,
+      "parseval_relative_closure_error": 2.5000944267633985e-13,
+      "raw_full_rms": 0.16070341520851533,
+      "raw_filtered_band_rms": 0.040599855985171886,
+      "full_rms_native_floor": 0.16070341520851533,
+      "filtered_band_rms_native_floor": 0.040599855985171886,
+      "broadband_floor_active": false,
+      "filtered_band_floor_active": false,
+      "filtered_energy_fraction": 0.06382616836209068,
+      "normalized_filtered_rms": 0.25263841426451894,
+      "memory": {
+        "ru_maxrss_kib_linux": 230444,
+        "VmHWM_kib": 230444,
+        "VmRSS_kib": 33048,
+        "observed_hwm_mib": 225.04296875
+      },
+      "global_peak": 0.9900000095367432,
+      "channel_full_rms": [
+        0.1607034152084989,
+        0.15533699460476771
+      ],
+      "signed_shape_change_from_source_db": 0.7331160346649889,
+      "absolute_shape_deviation_from_source_db": 0.7331160346649889,
+      "analytical_below_unchanged_1db_threshold": true,
+      "signed_increment_from_previous_boundary_db": 0.7143474856342071,
+      "filtered_band_rms_change_from_source_db": -0.41359940088888497,
+      "broadband_rms_change_from_source_db": -1.1467154355538725,
+      "filtered_band_rms_increment_db": -0.4340569534430634,
+      "broadband_rms_increment_db": -1.1484044390772694
+    }
+  },
+  "source_metrics": {
+    "wav": {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-singularity-20261021/fullsong-v1/input-decoded.wav",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 6293504,
+      "encoding": "PCM16",
+      "data_offset": 78,
+      "frame_bytes": 4
+    },
+    "full_power": 0.033629604218695,
+    "filtered_band_power": 0.0018130464308305804,
+    "spectral_full_power": 0.03362960421869498,
+    "parseval_relative_closure_error": 6.189987124543531e-16,
+    "raw_full_rms": 0.18338376214565727,
+    "raw_filtered_band_rms": 0.04257988293584871,
+    "full_rms_native_floor": 0.18338376214565727,
+    "filtered_band_rms_native_floor": 0.04257988293584871,
+    "broadband_floor_active": false,
+    "filtered_band_floor_active": false,
+    "filtered_energy_fraction": 0.05391221434068176,
+    "normalized_filtered_rms": 0.23219003927964213,
+    "memory": {
+      "ru_maxrss_kib_linux": 230444,
+      "VmHWM_kib": 230444,
+      "VmRSS_kib": 33008,
+      "observed_hwm_mib": 225.04296875
+    }
+  },
+  "mid_metrics": {
+    "wav": {
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-singularity-20261021/fullsong-v1/control/stage2_mid/restored.wav",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 6293504,
+      "encoding": "IEEE-float32",
+      "data_offset": 68,
+      "frame_bytes": 8
+    },
+    "full_power": 0.033642685565312865,
+    "filtered_band_power": 0.0018216069788864746,
+    "spectral_full_power": 0.033642685565302304,
+    "parseval_relative_closure_error": 3.1391657188734266e-13,
+    "raw_full_rms": 0.18341942526709887,
+    "raw_filtered_band_rms": 0.04268028794287211,
+    "full_rms_native_floor": 0.18341942526709887,
+    "filtered_band_rms_native_floor": 0.04268028794287211,
+    "broadband_floor_active": false,
+    "filtered_band_floor_active": false,
+    "filtered_energy_fraction": 0.054145706511748694,
+    "normalized_filtered_rms": 0.23269230006974595,
+    "memory": {
+      "ru_maxrss_kib_linux": 230444,
+      "VmHWM_kib": 230444,
+      "VmRSS_kib": 33048,
+      "observed_hwm_mib": 225.04296875
+    }
+  },
+  "raw_source_scan": {
+    "global_peak": 0.988433837890625,
+    "channel_full_rms": [
+      0.18338376214565727,
+      0.17683745364107029
+    ]
+  },
+  "interaction_with_raw_identity": {
+    "signed_shape_change_from_source_db": 0.007787896199529527,
+    "filtered_band_rms_change_from_source_db": 0.008063742115635437,
+    "broadband_rms_change_from_source_db": 0.0002758459161108474
+  },
+  "interaction_with_guard_only": {
+    "signed_shape_change_from_source_db": 0.007787896199529527,
+    "filtered_band_rms_change_from_source_db": 0.008063742115635437,
+    "broadband_rms_change_from_source_db": 0.0002758459161108474
+  },
+  "combined_matches_cached_wav_exactly": true,
+  "maximum_native_hwm_mib": 388.87890625,
+  "analysis_hwm_mib": 225.04296875,
+  "native_failure_remains_binding": true,
+  "speed_experiment": false
+}

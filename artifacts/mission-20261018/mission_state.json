@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-21T06:03:48.653414+00:00",
+  "date_utc": "2026-10-21T06:21:59.905233+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "fc92ea1",
@@ -27,7 +27,8 @@
     "ph_memory": "sequentialstereomasks+lastusedrops;27Rusttests/48proceduralWAVs+synthetic/real10s exactPH/masterparity;full179.9spairmaxHWM1057.277MiBunder1536;5fullprefixhashesexact",
     "matched_attack": "V1sourcealignmentSTOPpreserved;V2paired-only320events/16tests;localizedpresencechanges;rootdirectconvolutionreplication;noaudibilityconclusion",
     "cross_song_listening": "OriginalSIshapeFAILandFeelinmemorySTOPpreserved;freshsame-sourceFeelinpairpassesallgates;1candidate,1control;blindpackage12filesdelivered;ownerjudgmentspending",
-    "preservation_shape_trace": "8cachedboundaries;firstanalyticalcrossingfinal1.140267dBvsnative1.141326;12tests;noDSPchange"
+    "preservation_shape_trace": "8cachedboundaries;firstanalyticalcrossingfinal1.140267dBvsnative1.141326;12tests;noDSPchange",
+    "clean_factorial": "ExactnativecombinedcachedWAVreproduction;5arms;D/E/Cshapeincrements.099314/.607245/.714347dB;interaction.007788dB;guard=identity;9Rust+5Pythontests;noDSPchange"
   },
   "native_development": {
     "scene_seeds": [
@@ -83,7 +84,9 @@
     "package_qualification": 5,
     "preservation_shape_trace": 12,
     "ph_stereo_rust": 27,
-    "ph_stereo_comparison_wav_pairs": 48
+    "ph_stereo_comparison_wav_pairs": 48,
+    "clean_factorial_rust": 9,
+    "clean_factorial_python": 5
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
@@ -97,7 +100,7 @@
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Owner judge fixed Feelin package at comfortable playback level; no new render/promotion until actual decision. Independent engineering: preregister clean EQ/denoise and finalizer counterfactuals for preserved SIshape failure without threshold tuning.",
+  "next_action": "Owner judge fixed Feelin package. Independentnext: preregister cachedpre-master nativefinalizerreplay with exactbaselinebeforeglue/limitercounterfactuals; no threshold tuning or promotion.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -177,7 +180,7 @@
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Owner judge fixed Feelin package at comfortable playback level; no new render/promotion until actual decision. Independent engineering: preregister clean EQ/denoise and finalizer counterfactuals for preserved SIshape failure without threshold tuning.",
+    "frontier": "Owner judge fixed Feelin package. Independentnext: preregister cachedpre-master nativefinalizerreplay with exactbaselinebeforeglue/limitercounterfactuals; no threshold tuning or promotion.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"

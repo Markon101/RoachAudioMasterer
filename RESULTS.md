@@ -1618,3 +1618,17 @@ remain unchanged. [Memory qualification](docs/PH_STEREO_MEMORY_20261021.md) and
 [listening evidence](docs/COHERENCE_FOLLOWUP_20261021.md#same-source-retry-earns-a-new-listening-package)
 retain the two stopped runs, exact recipes, limitations and agent contributions.
 
+### 40. Native clean-stage controls reproduce the stopped scene (2026-10-21)
+
+A five-arm diagnostic on the cached Singularity Mid signal required exact
+combined-output equality with the original clean WAV before interpreting
+counterfactuals. It passed (Tier2). Signed analytic normalized-RMS shape increments
+versus Mid are0.099314dB denoise,0.607245dB EQ and0.714347dB combined, with
+interaction0.007788dB (Tier3). Guard-only equals raw identity for this input.
+Nine focused Rust and five Python tests pass. The principal investigator rehashed
+all outputs and independently recomputed the interaction; the original stop is
+unchanged. No production code, quality gate, master or listening file changed.
+These local branch effects do not establish audible harm or predict the failed
+final-master score after ablation. Finalizer attribution and owner Feelin preference
+remain open. See [the scoped report](docs/COHERENCE_FOLLOWUP_20261021.md#independent-clean-stage-counterfactuals-after-delivery).
+

@@ -1,6 +1,6 @@
 # Current continuation — Feelin listening package delivered
 
-Read AGENTS, README, RESULTS Sections33–39,
+Read AGENTS, README, RESULTS Sections33–40,
 docs/OWNER_LISTENING_RESULTS_20261021.md and docs/PH_MEMORY_RESULTS_20261021.md.
 Also read docs/COHERENCE_FOLLOWUP_20261021.md and docs/PH_STEREO_MEMORY_20261021.md.
 
@@ -119,9 +119,14 @@ do not flatten the feedback into a single preference claim or promotion.
 The remaining stereo-clone lifetime work is completed byfc92ea1 above. Do not
 repeat it, increase caps, skip audits or claim broad fidelity from this listening
 eligibility. Next perceptual decision is the owner judging the fixed Feelin
-package. Useful independent research remains isolating clean EQ/denoise versus
-finalizer contributions to the stopped Singularity shape proxy, with declared
-counterfactuals and no threshold retuning; current trace is boundary attribution only.
+package. The separate clean factorial is now complete: combined reproduces its
+cached WAV exactly before five-arm contrasts; guard equals identity on this input.
+Denoise/EQ/combined shape increments vs Mid are0.099314/0.607245/0.714347dB,
+interaction0.007788dB.9Rust+5Python tests pass; see
+`artifacts/singularity-clean-factorial-20261021/report.md`. These are local proxy
+effects, not perceptual damage or a final-master counterfactual. Native gate and
+Feelin files are unchanged. Next independent research: exact native finalizer
+baseline replay on the cached pre-master, then preregistered glue/limiter controls.
 No speed claim was made; any new speed experiment needs fresh foreground approval.
 
 DeepSeek helpers/Hermes main remain1017. A prior partial4-call worker supplied two

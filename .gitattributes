@@ -1,2 +1,4 @@
 # Unified patch evidence contains significant space-prefixed empty context lines.
 artifacts/ph-stereo-memory-20261021/native_change.patch -whitespace
+# Preserve byte-hashed tool output, including its original trailing newlines.
+artifacts/singularity-clean-factorial-20261021/*.log -whitespace

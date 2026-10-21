@@ -1,0 +1,10 @@
+{
+  "schema": "root-clean-factorial-reconciliation-v1",
+  "combined_output_rehashed_exact": true,
+  "all_five_arm_outputs_rehashed": true,
+  "interaction_independently_recomputed_db": 0.007787896199529527,
+  "original_stop_rehashed_unchanged": true,
+  "root_python_tests_passed": 5,
+  "perceptual_inference": false,
+  "new_listening_files_modified": false
+}

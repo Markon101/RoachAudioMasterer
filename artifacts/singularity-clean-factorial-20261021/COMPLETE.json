@@ -1,0 +1,9 @@
+{
+  "completed_utc": "2026-10-21T06:15:43.443700+00:00",
+  "summary_sha256": "7046d94f001b891046618c2ff16e9f341a06dd1f026f4688804967a097b04007",
+  "report_sha256": "ff1341c5931ce8aea75ef0284b4599aece5ead9855dce78775869e4932bf8989",
+  "manifest_sha256": "9978fdc05f3ecf0bbb0e008691ae93e00256cdbd94cabb0dcda5f1971d2a5262",
+  "pins_reverified": true,
+  "run_root": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/singularity-clean-factorial-20261021/run-v1",
+  "combined_matches_cached_wav_exactly": true
+}
