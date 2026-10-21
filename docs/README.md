@@ -4,9 +4,9 @@ Updated 2026-10-20. Start with [project policy](../AGENTS.md), [README](../READM
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
-Latest frontier: the real Mid screen passes, but two full-song Smooth-control
-attempts hit the legacy PH memory guard before a candidate. No new listening
-master exists. See [the live handoff](../HANDOVER_CURRENT_20261020.md).
+Latest frontier: PH buffer lifetimes now pass exact audio/audit parity and the
+full-song memory gate. One matched coherence listening candidate is delivered;
+owner judgments remain pending. See [the live handoff](../HANDOVER_CURRENT_20261020.md).
 
 Current production is v1.3.1 Smooth (`493cdca`) with frozen Euler8. Later research
 did not promote cache, host-batch or solver changes. Owner blind judgments remain
@@ -34,6 +34,7 @@ were not revalidated in this documentation pass.
 
 | Document | Role |
 | --- | --- |
+| [PH_MEMORY_RESULTS_20261021.md](PH_MEMORY_RESULTS_20261021.md) | Memory fix, full-song qualification and delivered listening package |
 | [REAL_COHERENCE_ELIGIBILITY_20261020.md](REAL_COHERENCE_ELIGIBILITY_20261020.md) | Real-song gate; full-song listening eligibility and pending finalization |
 | [AGENT_MIGRATION_20261020.md](AGENT_MIGRATION_20261020.md) | Versioned model routes, worker incidents and local containment |
 | [MASTER_STAGE_AUDIT_20261020.md](MASTER_STAGE_AUDIT_20261020.md) | Actual finalizer observations, active limiter controls and fixed-onset ledger |
@@ -46,7 +47,7 @@ were not revalidated in this documentation pass.
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) | Current continuation checkpoint |
 | [HANDOVER_NEXT_EVOLUTION.md](../HANDOVER_NEXT_EVOLUTION.md) | Historical snapshot with current pointer |
 | [README.md](../README.md) | Current entry point and scoped legacy examples |
-| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–34 |
+| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–36 |
 | [VALIDATION.md](../VALIDATION.md) | Versioned validation ledger |
 | [artifacts/README.md](../artifacts/README.md) | Historical artifact catalog/receipt |
 | [artifacts/next-evolution-v1/README.md](../artifacts/next-evolution-v1/README.md) | Historical artifact catalog/receipt |

@@ -1529,3 +1529,17 @@ No audits were disabled and no speed qualification is claimed. The previous
 [Report](docs/PH_MEMORY_RESULTS_20261021.md) records scope and reproduction.
 The single coherence candidate is now rendering; owner judgment remains pending.
 
+### 36. One full-song coherence listening candidate is ready (2026-10-21)
+
+The memory-fixed matched control and exactly one coherence candidate completed
+all native peak/preservation/configuration gates. Both use the same fixed binary,
+weights, Euler8, input and mastering settings; only the declared Mid intervention
+differs. Maximum observed process HWM is1274.39MiB under the existing1536MiB guard.
+A four-trial/eight-file blind comparison, including full-song and fixed excerpts
+plus identity controls, was verified and copied locally for owner evaluation.
+All11 delivered files match source hashes; independent review found no source
+labels, metrics or answer key in the listener payload. No perceptual result or
+production promotion is recorded. Source assignments are private; prior mechanism
+information prevents a claim of naive-expectation blinding. See the
+[full report](docs/PH_MEMORY_RESULTS_20261021.md#listening-package-delivered).
+

@@ -1,0 +1,10 @@
+{
+  "schema": "one-candidate-listening-ready-v1",
+  "listener_dir": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/listen/session1",
+  "instructions": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/listen/session1/INSTRUCTIONS.txt",
+  "responses": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-coherence-20261020/listen/session1/responses.csv",
+  "candidate_count": 1,
+  "full_song_complete_sha256": "b9617c663b80fd8937a7d17f7a908a67b31f79df25e01215d901469079a18106",
+  "owner_judgments_received": false,
+  "production_promoted": false
+}

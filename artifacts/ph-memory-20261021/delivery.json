@@ -1,0 +1,63 @@
+{
+  "schema": "blind-listening-delivery-v1",
+  "destination": "/sdcard/Download/Roach Listening 20261021",
+  "files": [
+    {
+      "path": "INSTRUCTIONS.txt",
+      "sha256": "59d68ce09fefa5ff50b51d24a3041761af01e9769ffacb6584b0fc3b3774500f",
+      "bytes": 1078
+    },
+    {
+      "path": "READY",
+      "sha256": "2b4e59057ec15efae6b21868519fa91a8d2f2b7ecf9f58df326edab83aed7051",
+      "bytes": 44
+    },
+    {
+      "path": "T0001/A.wav",
+      "sha256": "3c6c2410948ffd06379f85f97fe795f587ad3be98087814a4335bf8aaf636697",
+      "bytes": 40435268
+    },
+    {
+      "path": "T0001/B.wav",
+      "sha256": "3c6c2410948ffd06379f85f97fe795f587ad3be98087814a4335bf8aaf636697",
+      "bytes": 40435268
+    },
+    {
+      "path": "T0002/A.wav",
+      "sha256": "73bb7bdf2a65e536152b44c85386b68962f90ca411e6f08e4e06642174a430a1",
+      "bytes": 8640068
+    },
+    {
+      "path": "T0002/B.wav",
+      "sha256": "73bb7bdf2a65e536152b44c85386b68962f90ca411e6f08e4e06642174a430a1",
+      "bytes": 8640068
+    },
+    {
+      "path": "T0003/A.wav",
+      "sha256": "73bb7bdf2a65e536152b44c85386b68962f90ca411e6f08e4e06642174a430a1",
+      "bytes": 8640068
+    },
+    {
+      "path": "T0003/B.wav",
+      "sha256": "a5d9bcfd50658e5091179480541346ad77aaa9afad54e0e6b45672fba188a5a2",
+      "bytes": 8640068
+    },
+    {
+      "path": "T0004/A.wav",
+      "sha256": "3c6c2410948ffd06379f85f97fe795f587ad3be98087814a4335bf8aaf636697",
+      "bytes": 40435268
+    },
+    {
+      "path": "T0004/B.wav",
+      "sha256": "0d315476a718760ed095fc2a0d058820c7f6ed6e34f9200f45007acf63549a9a",
+      "bytes": 40435268
+    },
+    {
+      "path": "responses.csv",
+      "sha256": "1584a96ed0a0b0cfd0c6ea0ad5d2ec5c97060824070dba93127e43e219b3beb1",
+      "bytes": 113
+    }
+  ],
+  "private_key_copied": false,
+  "owner_judgments": null
+}

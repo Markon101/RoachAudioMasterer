@@ -1,9 +1,9 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-21T00:04:47.396096+00:00",
+  "date_utc": "2026-10-21T03:05:44.347106+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
-  "verified_source_commit": "707443ea3303c9db877f0b9640a6d4e72028cbb7",
+  "verified_source_commit": "2146a43",
   "published_through_source_commit": true,
   "champion_signal_commit": "493cdcad1b06b97297fb3837fc2a851c4533e326",
   "frozen_alpha_peeled_commit": "652088782f1d64f62ee84a7c1d7cdda4a990ef15",
@@ -19,11 +19,12 @@
     "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
     "4": "boundedactualfinalizerobserververified40nativeparityruns+20Rust/5Python; fullupstreamstageledgerpending",
     "5": "not started; dynamics-v2 remains demoted",
-    "long_coherence": "opt-incombinedimplementationcommitted707443e; real10/2+tailgatespass98.419%layoutreduction; fullsongchecksrequired; fullsongbaselinePHfailed1536MiBguardobserved1583.93MiB; no candidate",
+    "long_coherence": "defaultoffcombinedMidrealgatepassed;exactonefullsongcandidate+matchedcontrolpassallgates;blindpackagedeliveredownerresponsepending",
     "adverse_mid": "7 native source pairs exported; short prior false-add quantified; long stopped negative retains96.319%layout reduction with1.14%false-energy growth; baseMidabstains; assessmentunitdefect verified",
     "assessment_band_observer": "calibrateddigitalobserververified5knownanswer/realWAVtests+4actualprobes; legacyconsolelabelsqualified; no routingretune; fullstageledgerpending",
     "passive_routing": "45 repeatedconditionsverified;13authoritytransitions5legacy8artifact;cutoffhypothesisnotobserved;6basecardactiveflips;nothresholdchange",
-    "agent_migration": "twoinstalledroutes+Hermesdefaultversioned;2livesmokes+4callpartialcodeworker;2counterexamplesfixed; scopeescape locallylatched;10offlineguardchecks"
+    "agent_migration": "twoinstalledroutes+Hermesdefaultversioned;2livesmokes+4callpartialcodeworker;2counterexamplesfixed; scopeescape locallylatched;10offlineguardchecks",
+    "ph_memory": "fourlastusedrops;27Rusttests+48WAVparity+fullPHauditexact;fullpairmaxHWM1274.39MiBunder1536"
   },
   "native_development": {
     "scene_seeds": [
@@ -71,19 +72,22 @@
     "real_coherence_rust": 17,
     "real_coherence_gate": 12,
     "semantic_audit": 7,
-    "hermes_offline_guard_root": 10
+    "hermes_offline_guard_root": 10,
+    "ph_lifetime_rust": 27,
+    "ph_lifetime_wav_sha_exact": 48
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
     "runs/mission-20261018/listen/session2",
     "runs/mission-20261018/listen/session3",
-    "runs/coherence-20261018/listen/diagnostic1"
+    "runs/coherence-20261018/listen/diagnostic1",
+    "/sdcard/Download/Roach Listening 20261021"
   ],
   "owner_judgments_received": false,
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "FullsongbaselinePHmemoryblockslistening:twohalts1GiB/1.5GiB; candidatecount0. Preservefailedruns. Nextisolatedlifetime/diagnosticalocationoptimization in gtf.rs, exactwaveform ANDauditparity, thenboundedmatchedcontrolbeforeONEcandidate. No new capincrease/promotion/paidHermesjob.",
+  "next_action": "Fixedlisteningpackagedelivered; ownerA/Bjudgmentsnextsubjectivedecision. No rerenderorproductionpromotion. Furtherindependentwork: boundeddiagnosticclonestreamingwithaudio/metricparityforlongertracks; preserveoldHermesHALT.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -94,7 +98,8 @@
     "docs/PASSIVE_ROUTING_AUDIT_20261020.md",
     "docs/MASTER_STAGE_AUDIT_20261020.md",
     "docs/REAL_COHERENCE_ELIGIBILITY_20261020.md",
-    "docs/AGENT_MIGRATION_20261020.md"
+    "docs/AGENT_MIGRATION_20261020.md",
+    "docs/PH_MEMORY_RESULTS_20261021.md"
   ],
   "delegation": [
     {
@@ -135,24 +140,24 @@
       "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
       "production_ref": "493cdcad1b06b97297fb3837fc2a851c4533e326",
       "main_native_signal_path_unchanged": true,
-      "native_changes_since_numerical_baseline": "defaultoffcoherentMidpathplusfinalizerobserver; realshortgatespass; fullsongexistingPHmemoryhalt; productiondefaultunchanged",
+      "native_changes_since_numerical_baseline": "defaultoffMidcoherence+observer;fourlifetimeonlydropswithparity; fullsonggatespass; productionchampion/defaultunchanged",
       "experimental_mid_path": "default-off --mid-coherence; continuousorigin+wholeWOLAprojection; strictEuler8/10s2s/Basis/<=180s/quiet/noforce/freshdir"
     },
     "local_realization": {
-      "evidence_index": "artifacts/listening-coherence-20261020/evidence_index.json",
-      "index_sha256": "bd9c806377445ac5b4a6a5d66e82d68327bba8513886a9c76ed3a18a0e567618",
-      "pinned_native_binary": "runs/listening-coherence-20261020/coherence-candidate-v1",
-      "native_binary_sha256": "cdbb2a3fb20c7662e3e0b39f46365301f105e3fd5a8f057635ecf24382dbbb93",
+      "evidence_index": "artifacts/ph-memory-20261021/evidence_index.json",
+      "index_sha256": "e2a63170e076e1e0562ad4731f61f175dc6c2b16ed12957c9567bb0987e442da",
+      "pinned_native_binary": "runs/ph-memory-20261021/lifetime-candidate-v1",
+      "native_binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
       "raw_run_root": "runs/coherence-20261018",
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "FullsongbaselinePHmemoryblockslistening:twohalts1GiB/1.5GiB; candidatecount0. Preservefailedruns. Nextisolatedlifetime/diagnosticalocationoptimization in gtf.rs, exactwaveform ANDauditparity, thenboundedmatchedcontrolbeforeONEcandidate. No new capincrease/promotion/paidHermesjob.",
+    "frontier": "Fixedlisteningpackagedelivered; ownerA/Bjudgmentsnextsubjectivedecision. No rerenderorproductionpromotion. Furtherindependentwork: boundeddiagnosticclonestreamingwithaudio/metricparityforlongertracks; preserveoldHermesHALT.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"
   },
   "agent_model": "deepseek/deepseek-v4.1-flash-1017",
   "live_jobs": [],
-  "fullsong_verdict": "artifacts/listening-coherence-20261020/fullsong_verdict.json"
+  "fullsong_verdict": "artifacts/ph-memory-20261021/listening_milestone.json"
 }

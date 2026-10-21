@@ -1,0 +1,29 @@
+{
+  "schema": "listening-milestone-v1",
+  "recorded_utc": "2026-10-21T03:05:44.347106+00:00",
+  "source_commit": "2146a43",
+  "candidate_count": 1,
+  "control_count": 1,
+  "fullsong_source_frames": 6739200,
+  "source_rate": 48000,
+  "matched_settings_except_mid_coherence": true,
+  "all_native_preservation_and_peak_gates_pass": true,
+  "fullsong_complete_sha256": "b9617c663b80fd8937a7d17f7a908a67b31f79df25e01215d901469079a18106",
+  "listener_folder": "/sdcard/Download/Roach Listening 20261021",
+  "trials": 4,
+  "audio_files": 8,
+  "delivery_files": 11,
+  "hash_verified_delivery": true,
+  "independent_listener_boundary_review": "listener_boundary_review.json",
+  "scope": "one matched current Smooth-stylecontrol andoneexperimentalcoherenceversion; notbit-reproductionofhistoricaldirtybuild",
+  "blinding": "sourceassignmentprivate; nondeterministicseed drawnonceandpersistedprivate; mechanismmetricsalreadyseenbyowner, notnaiveexpectationblinding",
+  "private_key_published": false,
+  "owner_responses_received": false,
+  "production_promoted": false,
+  "unresolved": [
+    "whetheraudible",
+    "ownerpreference",
+    "broadfatigue/generalization",
+    "proceduraltargetcomplexerrorconflictandhealthyfalseedits"
+  ]
+}

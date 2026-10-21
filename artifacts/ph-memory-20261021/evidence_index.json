@@ -1,0 +1,22 @@
+{
+  "schema": "ph-memory-listening-evidence-v1",
+  "files": {
+    "qualify.py": "13fb77f9a6eff4f321295dbf935c691e9b79567a0437f6dab00f2e4ebc98c206",
+    "design.json": "0992e505272a5e74dcc441e8c517a7d8f33ae9ee54e367168c33d0a96349a776",
+    "render_fullsong.py": "b689cfcb97c547b01b4136f295cc39cca9d613f5ffdf30efdda7ed96e7abc81b",
+    "package_listening.py": "e041eb6a8e5d9b6db30d9995e4f116ac991e2c083fb68506d5e1ecbd11c6d47e",
+    "parity_complete.json": "2198134028d879b4c665d20e9299c4e08f65a13dabe0424c94aba5334666bb82",
+    "full_control_receipt.json": "8fd3d482913c6b363b8498e875dedc7d217a136a7d6fd3b7ad5334f50cd8eddc",
+    "verification.json": "51c21f5726a63bba87d64b75abddad5553ecdfcb9f6f00e19d58b24bc7d80cbc",
+    "delivery.json": "a2c429f5e819f1a3ac69596d43938122b0225c7bfe4c978f2c3f67945e270c2c",
+    "listener_boundary_review.json": "e21c6d1923021b2024e04c53f6c89161dd2484e959c0aa1991e68af74013ab11",
+    "fullsong_complete.json": "b9617c663b80fd8937a7d17f7a908a67b31f79df25e01215d901469079a18106",
+    "listening_ready.json": "30600f9229be57eeb140afbcc769f4cae58928107045c4eb4b800f65f5aab716",
+    "listening_milestone.json": "e381b7f077d82874a1f45a42b7551c5d0814d0d5f7787ebb564e6ebc253af54a"
+  },
+  "source_sha256": {
+    "src/gtf.rs": "8ee25582791063eab94a29ccff48cbd36ea75ab9273020dee291503196ad0dc5"
+  },
+  "private_assignments_included": false,
+  "audio_included": false
+}

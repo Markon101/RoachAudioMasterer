@@ -29,5 +29,37 @@ binary is `runs/ph-memory-20261021/lifetime-candidate-v1`; its SHA256 is
 `7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161`.
 
 One coherence candidate now uses that same binary and all matched settings,
-adding only `--mid-coherence`. It still requires its own full-song quality gates.
+adding only `--mid-coherence`. It passes its own full-song quality gates; the paired settings match exactly
+except the declared intervention.
 The production champion remains unchanged; the owner has not judged this candidate.
+
+## Listening package delivered
+
+Exactly one full-song candidate and one matched current control completed.
+Both pass native peak, known-band, mono and transient checks. Maximum observed
+process HWM across the pair is1274.39MiB. The candidate differs from the control
+and remains an experimental version; the archived dirty-build Smooth master is
+not claimed byte-reproduced. The pair uses one fixed binary and differs only by
+`--mid-coherence`. No production promotion has occurred.
+
+The owner package is at `/sdcard/Download/Roach Listening 20261021` (same content
+as `runs/listening-coherence-20261020/listen/session1`). It has four A/B trials:
+full-song and fixed30s excerpts, plus identity controls. Transparent attenuation
+matches playback loudness. Private source assignments remain outside the listener
+folder; the seed was drawn once and saved only privately. The owner has already
+seen mechanism measurements, so this is source-assignment blinding, not naive
+expectation blinding. The independent boundary audit verifies all11 delivered
+files, eight matching-format WAVs, paired lengths and no source/metric/key leaks.
+
+Follow INSTRUCTIONS.txt and fill responses.csv with A, B, indistinguishable or
+abstain. Preserve filenames/trial IDs. Perceptual results remain unrecorded until
+actual owner responses arrive; neither this package nor objective gates establish
+preference, prolonged-fatigue reduction or population-level benefit.
+
+[Full master receipts](../artifacts/ph-memory-20261021/fullsong_complete.json),
+[delivery hashes](../artifacts/ph-memory-20261021/delivery.json), and
+[independent boundary review](../artifacts/ph-memory-20261021/listener_boundary_review.json)
+provide organizer evidence. Do not consult technical diagnostics or private keys
+before completing listening judgments. Optional cover-art extraction found no
+image stream in the source WAV; audio FLAC encoding and all qualification gates
+completed normally.

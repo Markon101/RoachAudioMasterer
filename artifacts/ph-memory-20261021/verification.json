@@ -18,5 +18,7 @@
   "no_speed_qualification": true,
   "quality_audits_disabled": false,
   "production_promoted": false,
-  "candidate_render": "in progress; one; no preference/eligibility untilfullchecks"
+  "candidate_render": "complete; exactlyone; all full-song acoustic/configuration gates pass",
+  "candidate_sampled_hwm_mib": 1269.4453125,
+  "owner_judgment": null
 }

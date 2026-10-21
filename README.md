@@ -5,13 +5,13 @@ Generated content (sub-bass fundamentals, mid overtones, and high air) represent
 
 > **Project & Repository Identity**: The canonical project name and primary binary is **`roach-audio-masterer`** (repository: [`Markon101/RoachAudioMasterer`](https://github.com/Markon101/RoachAudioMasterer)). The legacy **`highband`** binary alias and CLI subcommands remain fully supported for backward compatibility with existing automation, scripts, and historical checkpoints.
 
-Research continuation: [2026-10-18 handoff](HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md)
-records the failed cache/host-batch gates, restored blind packages and mixed native
-solver diagnostic. The production champion and eight-step default are unchanged.
-Use the [documentation index](docs/README.md) for dated evidence and the
-[long-coherence report](docs/LONG_COHERENCE_RESULTS.md) for the measured continuity
-experiment, failed preservation gate and separate projection control. The native
-prototype stays isolated; a short blind diagnostic package is ready locally.
+Research continuation: [current handoff](HANDOVER_CURRENT_20261020.md) records
+verified gates and exact provenance. A default-off combined Mid-coherence path
+passes real-song checks; a buffer-lifetime fix lets the matched full-song control
+and one candidate complete under the memory guard. A controlled listening package
+is now ready locally; owner preference remains unknown. The production champion
+and default integration remain unchanged. Use the [documentation index](docs/README.md)
+and [current result](docs/PH_MEMORY_RESULTS_20261021.md) for evidence and limits.
 
 The core direction is a unified autonomous mastering and scene restoration engine:
 - **Autonomous Mastering (`auto-master`)**: Single-command mastering with content-aware specialist routing, ITU-R BS.1770-4 LUFS target matching (-11.0 LUFS), soft-knee glue compression, 4x polyphase FIR true-peak limiting (-1.0 dBTP), and automated lossless export to device storage.
