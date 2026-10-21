@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-21T03:05:44.347106+00:00",
+  "date_utc": "2026-10-21T03:33:57.419970+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "2146a43",
@@ -19,7 +19,7 @@
     "3": "native short development diagnostic complete; objective conflict and stopped-mid false-add; full PhaseA/WOLA/realtracks pending; no adaptive/distillation",
     "4": "boundedactualfinalizerobserververified40nativeparityruns+20Rust/5Python; fullupstreamstageledgerpending",
     "5": "not started; dynamics-v2 remains demoted",
-    "long_coherence": "defaultoffcombinedMidrealgatepassed;exactonefullsongcandidate+matchedcontrolpassallgates;blindpackagedeliveredownerresponsepending",
+    "long_coherence": "Owner submitted four B preferences; actual comparisons select control; both identities also directional. Superiority unresolved; candidate unpromoted.",
     "adverse_mid": "7 native source pairs exported; short prior false-add quantified; long stopped negative retains96.319%layout reduction with1.14%false-energy growth; baseMidabstains; assessmentunitdefect verified",
     "assessment_band_observer": "calibrateddigitalobserververified5knownanswer/realWAVtests+4actualprobes; legacyconsolelabelsqualified; no routingretune; fullstageledgerpending",
     "passive_routing": "45 repeatedconditionsverified;13authoritytransitions5legacy8artifact;cutoffhypothesisnotobserved;6basecardactiveflips;nothresholdchange",
@@ -55,7 +55,7 @@
     "fixed_method_order": "descriptive timings only; not balanced speed qualification"
   },
   "tests": {
-    "listening_harness": 13,
+    "listening_harness": 18,
     "profile_runner": 8,
     "shared_scene_engine_cpu": 8,
     "native_audit": 5,
@@ -83,11 +83,11 @@
     "runs/coherence-20261018/listen/diagnostic1",
     "/sdcard/Download/Roach Listening 20261021"
   ],
-  "owner_judgments_received": false,
+  "owner_judgments_received": true,
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Fixedlisteningpackagedelivered; ownerA/Bjudgmentsnextsubjectivedecision. No rerenderorproductionpromotion. Furtherindependentwork: boundeddiagnosticclonestreamingwithaudio/metricparityforlongertracks; preserveoldHermesHALT.",
+  "next_action": "Test possible owner-reported coherent-highs versus bass-punch tradeoff with fixed source-derived onset windows on existing masters; counterbalance any fresh blinded followup. No promotion, DSP retune or rerender justified yet.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -99,7 +99,8 @@
     "docs/MASTER_STAGE_AUDIT_20261020.md",
     "docs/REAL_COHERENCE_ELIGIBILITY_20261020.md",
     "docs/AGENT_MIGRATION_20261020.md",
-    "docs/PH_MEMORY_RESULTS_20261021.md"
+    "docs/PH_MEMORY_RESULTS_20261021.md",
+    "docs/OWNER_LISTENING_RESULTS_20261021.md"
   ],
   "delegation": [
     {
@@ -152,12 +153,14 @@
       "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Fixedlisteningpackagedelivered; ownerA/Bjudgmentsnextsubjectivedecision. No rerenderorproductionpromotion. Furtherindependentwork: boundeddiagnosticclonestreamingwithaudio/metricparityforlongertracks; preserveoldHermesHALT.",
+    "frontier": "Test possible owner-reported coherent-highs versus bass-punch tradeoff with fixed source-derived onset windows on existing masters; counterbalance any fresh blinded followup. No promotion, DSP retune or rerender justified yet.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
     "verification": "artifacts/assessment-band-observer-20261020/verification.json"
   },
   "agent_model": "deepseek/deepseek-v4.1-flash-1017",
   "live_jobs": [],
-  "fullsong_verdict": "artifacts/ph-memory-20261021/listening_milestone.json"
+  "fullsong_verdict": "artifacts/ph-memory-20261021/listening_milestone.json",
+  "listening_response_receipt": "artifacts/listening-results-20261021/receipt.json",
+  "listening_followup": "artifacts/listening-results-20261021/followup.json"
 }

@@ -26,15 +26,20 @@ unchanged. Standalone controls retain the historical unprojected path and expose
 explicit quiet/origin/final-lock settings. Model and conditioning receipts matter:
 the flag alone is not a universal qualification for arbitrary configurations.
 
-This earns one controlled full-song listening experiment, not restoration accuracy
-or promotion. Two matched Smooth-control attempts halted in the existing PH stage before a
+This earned one controlled full-song listening experiment, not restoration accuracy
+or promotion. Initially, two matched Smooth-control attempts halted in the existing PH stage before a
 candidate started: first at a1GiB guard, then at the documented1.5GiB retry.
-The second watchdog observed1583.93MiB at182.84s. No listening candidate or
-package exists. Final mastering eligibility remains unearned. See
+The second watchdog observed1583.93MiB at182.84s. At that checkpoint no listening candidate or
+package existed and final mastering eligibility was unearned. See
 [the stop and next experiment](../artifacts/listening-coherence-20261020/fullsong_verdict.json).
 The archived Smooth FLAC remains a historical comparison with incomplete original
 input/executable provenance; the newly rendered control supplies an exact anchor.
-No owner judgment is recorded. Procedural complex-error conflict and coherent
+The subsequent [parity-qualified lifetime fix](PH_MEMORY_RESULTS_20261021.md)
+allowed both full masters and a listening package under the unchanged memory cap.
+[Owner responses are now recorded](OWNER_LISTENING_RESULTS_20261021.md): the
+control was selected in both actual comparisons, but both identical-file trials
+also received directional choices; comparative superiority remains unestablished.
+Procedural complex-error conflict and coherent
 healthy-input false additions remain negative evidence. The 1e-6 protection gate
 applies to Mid output; ordinary downstream gain/EQ/dynamics intentionally changes
 bands, so no final-output relock is applied.

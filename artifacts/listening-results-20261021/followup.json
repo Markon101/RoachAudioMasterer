@@ -1,0 +1,75 @@
+{
+  "schema": "roach-listening-followup-v1",
+  "recorded_utc": "2026-10-21T03:32:40.628117+00:00",
+  "owner_followup_verbatim": "i think the preference was because A was less punchy than B ones so that makes sense. smoothed would likely loose a bit of punchiness.",
+  "followup_after_source_reveal": true,
+  "source_mapping": "T0003/T0004 candidate A; Smooth-style control B",
+  "hypothesis": "Candidate perceived less punchy; verify attacks with fixed input-derived onset windows before any DSP retune.",
+  "existing_native_receipts": {
+    "control": {
+      "source": "runs/listening-coherence-20261020/fullsong-v3/control/master.json",
+      "sha256": "df71202e4dcadb128104d763194749a1bb94e6eeda38f7a4c297f751247cd0d1",
+      "after": {
+        "crest_factor_db": 14.613380432128906,
+        "lufs_integrated": -13.000090954394265,
+        "rms_dbfs": -15.642948150634766,
+        "sample_peak_dbfs": -1.0295673608779907,
+        "true_peak_dbtp": -1.0000003576278687
+      },
+      "onset_audit": {
+        "air_transient_to_sustain_ratio_db": -0.030584294348955154,
+        "attack_crest_expansion_db": -0.7294392585754395,
+        "mean_attack_crest_db": 7.962019443511963,
+        "mean_attack_slew_db_per_ms": 0.7616254091262817,
+        "mean_pre_onset_crest_db": 8.691458702087402,
+        "num_onsets_detected": 518,
+        "snare_transient_to_sustain_ratio_db": 0.16699746251106262,
+        "sub_transient_to_sustain_ratio_db": -0.4108888506889343
+      },
+      "limiter_max_gain_reduction_db": 0.3241954445838928
+    },
+    "candidate": {
+      "source": "runs/listening-coherence-20261020/fullsong-v3/candidate/master.json",
+      "sha256": "7a24db45e6751b43479be623e71d0c0b56b4e36d50fe80d5c875cabba28c7bf9",
+      "after": {
+        "crest_factor_db": 14.610391616821289,
+        "lufs_integrated": -13.000345948949072,
+        "rms_dbfs": -15.64332389831543,
+        "sample_peak_dbfs": -1.0329322814941406,
+        "true_peak_dbtp": -1.0000009536743164
+      },
+      "onset_audit": {
+        "air_transient_to_sustain_ratio_db": -0.030497651547193527,
+        "attack_crest_expansion_db": -0.7347259521484375,
+        "mean_attack_crest_db": 7.964412689208984,
+        "mean_attack_slew_db_per_ms": 0.7790980935096741,
+        "mean_pre_onset_crest_db": 8.699138641357422,
+        "num_onsets_detected": 519,
+        "snare_transient_to_sustain_ratio_db": 0.1677556335926056,
+        "sub_transient_to_sustain_ratio_db": -0.4060717821121216
+      },
+      "limiter_max_gain_reduction_db": 0.3472825288772583
+    }
+  },
+  "onset_deltas_candidate_minus_control": {
+    "air_transient_to_sustain_ratio_db": 8.66428017616272e-05,
+    "attack_crest_expansion_db": -0.005286693572998047,
+    "mean_attack_crest_db": 0.0023932456970214844,
+    "mean_attack_slew_db_per_ms": 0.017472684383392334,
+    "mean_pre_onset_crest_db": 0.007679939270019531,
+    "num_onsets_detected": 1,
+    "snare_transient_to_sustain_ratio_db": 0.0007581710815429688,
+    "sub_transient_to_sustain_ratio_db": 0.004817068576812744
+  },
+  "limitations": [
+    "Existing onset windows are detected independently (518 control versus 519 candidate); not matched-event analysis.",
+    "attack_crest_expansion_db is attack minus pre-onset crest within the same output, not input-to-output expansion.",
+    "Aggregate metrics are mixed and do not establish the cause or existence of perceived punch loss.",
+    "No new render or speed experiment; post-hoc receipt inspection only."
+  ],
+  "owner_additional_feedback": {
+    "verbatim": "wait the highs are more coherent in A! i was so focused on the bass i didnt even realize. lol",
+    "after_source_reveal": true,
+    "interpretation": "Possible perceived high-band coherence / bass-punch tradeoff; original CSV preference preserved; mechanism and comparative superiority unestablished."
+  }
+}

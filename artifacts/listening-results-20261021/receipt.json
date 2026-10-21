@@ -1,0 +1,130 @@
+{
+  "schema": "roach-owner-listening-free-text-v1",
+  "recorded_utc": "2026-10-21T03:29:07.202312+00:00",
+  "submitted_filename": "responses (1).csv",
+  "raw_sha256": "f9c788751806ea62552d472c9d31d20bfd4dc7130d02f53dc5d5d3b431fa876f",
+  "raw_archive": "runs/listening-results-20261021/submission-v1/responses-original.csv",
+  "verification": {
+    "source": {
+      "trials": 4,
+      "audio_files": 8
+    },
+    "delivered": {
+      "trials": 4,
+      "audio_files": 8
+    }
+  },
+  "strict_categorical_reveal": "not applicable: prose aspects, percentage confidence, free-text fatigue",
+  "normalization": "none; every response value preserved verbatim",
+  "owner_clarification": "Owner explicitly confirmed listening to both A and B for every trial.",
+  "trials": [
+    {
+      "response_verbatim": {
+        "trial": "T0001",
+        "transient": "sharper not ear piercing - excellent",
+        "tonal": "very good",
+        "spatial": "very good",
+        "preference": "B",
+        "confidence": "75%",
+        "fatigue": "low"
+      },
+      "identity_audio": true,
+      "duration_seconds": 140.4,
+      "start_sample": 0,
+      "members": {
+        "A": {
+          "label": "candidate",
+          "audio_sha256": "3c6c2410948ffd06379f85f97fe795f587ad3be98087814a4335bf8aaf636697"
+        },
+        "B": {
+          "label": "candidate",
+          "audio_sha256": "3c6c2410948ffd06379f85f97fe795f587ad3be98087814a4335bf8aaf636697"
+        }
+      },
+      "selected_source": "candidate"
+    },
+    {
+      "response_verbatim": {
+        "trial": "T0002",
+        "transient": "nice and punchy, rich highs without additional noise",
+        "tonal": "very good",
+        "spatial": "good",
+        "preference": "B",
+        "confidence": "90%",
+        "fatigue": "low"
+      },
+      "identity_audio": true,
+      "duration_seconds": 30.0,
+      "start_sample": 2304000,
+      "members": {
+        "A": {
+          "label": "candidate",
+          "audio_sha256": "73bb7bdf2a65e536152b44c85386b68962f90ca411e6f08e4e06642174a430a1"
+        },
+        "B": {
+          "label": "candidate",
+          "audio_sha256": "73bb7bdf2a65e536152b44c85386b68962f90ca411e6f08e4e06642174a430a1"
+        }
+      },
+      "selected_source": "candidate"
+    },
+    {
+      "response_verbatim": {
+        "trial": "T0003",
+        "transient": "crisp and clean separation, punchy",
+        "tonal": "very good",
+        "spatial": "very good",
+        "preference": "B",
+        "confidence": "90%",
+        "fatigue": "low"
+      },
+      "identity_audio": false,
+      "duration_seconds": 30.0,
+      "start_sample": 2304000,
+      "members": {
+        "A": {
+          "label": "candidate",
+          "audio_sha256": "73bb7bdf2a65e536152b44c85386b68962f90ca411e6f08e4e06642174a430a1"
+        },
+        "B": {
+          "label": "control",
+          "audio_sha256": "a5d9bcfd50658e5091179480541346ad77aaa9afad54e0e6b45672fba188a5a2"
+        }
+      },
+      "selected_source": "control"
+    },
+    {
+      "response_verbatim": {
+        "trial": "T0004",
+        "transient": "crisp and clean, slight high end hum",
+        "tonal": "very good",
+        "spatial": "very good",
+        "preference": "B",
+        "confidence": "80%",
+        "fatigue": "lowish, slight high band hum"
+      },
+      "identity_audio": false,
+      "duration_seconds": 140.4,
+      "start_sample": 0,
+      "members": {
+        "A": {
+          "label": "candidate",
+          "audio_sha256": "3c6c2410948ffd06379f85f97fe795f587ad3be98087814a4335bf8aaf636697"
+        },
+        "B": {
+          "label": "control",
+          "audio_sha256": "0d315476a718760ed095fc2a0d058820c7f6ed6e34f9200f45007acf63549a9a"
+        }
+      },
+      "selected_source": "control"
+    }
+  ],
+  "identity_trials_with_directional_preference": 2,
+  "interpretation": "Control selected on both nonidentity comparisons; directional choices on both identical pairs confound discrimination. Neither version superiority established.",
+  "causal_hum_attribution": "unestablished; no per-member categorical attribution supplied",
+  "epistemic": {
+    "response_and_hash_receipt": "Tier 2 implementation checks and recorded observations",
+    "comparative_superiority": "Tier 7 unestablished/confounded"
+  },
+  "production_promoted": false
+}

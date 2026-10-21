@@ -31,7 +31,8 @@ binary is `runs/ph-memory-20261021/lifetime-candidate-v1`; its SHA256 is
 One coherence candidate now uses that same binary and all matched settings,
 adding only `--mid-coherence`. It passes its own full-song quality gates; the paired settings match exactly
 except the declared intervention.
-The production champion remains unchanged; the owner has not judged this candidate.
+The production champion remains unchanged. The owner has now judged the package;
+see [the response and limitations](OWNER_LISTENING_RESULTS_20261021.md).
 
 ## Listening package delivered
 
@@ -51,10 +52,12 @@ seen mechanism measurements, so this is source-assignment blinding, not naive
 expectation blinding. The independent boundary audit verifies all11 delivered
 files, eight matching-format WAVs, paired lengths and no source/metric/key leaks.
 
-Follow INSTRUCTIONS.txt and fill responses.csv with A, B, indistinguishable or
-abstain. Preserve filenames/trial IDs. Perceptual results remain unrecorded until
-actual owner responses arrive; neither this package nor objective gates establish
-preference, prolonged-fatigue reduction or population-level benefit.
+The owner returned `responses (1).csv`: B on all four trials. The two actual
+comparisons select the matched control; the two identical-file trials also
+receive B choices. Prose aspect/fatigue fields and percentage confidence are
+preserved verbatim in a separate receipt, without weakening categorical reveal
+validation. Comparative superiority, prolonged-fatigue reduction and population
+benefit remain unestablished. The revealed session cannot serve as fresh blind data.
 
 [Full master receipts](../artifacts/ph-memory-20261021/fullsong_complete.json),
 [delivery hashes](../artifacts/ph-memory-20261021/delivery.json), and

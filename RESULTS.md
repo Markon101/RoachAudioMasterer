@@ -1543,3 +1543,33 @@ production promotion is recorded. Source assignments are private; prior mechanis
 information prevents a claim of naive-expectation blinding. See the
 [full report](docs/PH_MEMORY_RESULTS_20261021.md#listening-package-delivered).
 
+### 37. Owner coherence responses recorded; identity controls limit inference (2026-10-21)
+
+The returned CSV records B on every trial, and the owner confirmed listening to
+both files each time. T0001/T0002 are exact candidate identity controls;
+T0003/T0004 compare candidate A against matched Smooth-style control B. The
+control was selected in both actual comparisons, but both identity pairs also
+received directional choices. These are recorded preferences, not reliable
+evidence of either version's superiority (Tier 7 unestablished/confounded).
+This does not qualify the candidate for production promotion.
+
+All eight delivered WAV hashes independently match the original private records
+(Tier 2 integrity checks). Prose aspects, percentage confidence, favorable
+impressions and the high-band hum note are preserved verbatim in an explicit
+free-text receipt; strict categorical reveal rules were not relaxed. Hum
+attribution and prolonged-fatigue effects remain unknown. Source mapping is now
+revealed; a future blind followup needs fresh counterbalanced assignments using
+the existing masters. No DSP mutation, rerender, speed claim or new paid call
+was needed to record the result. See the [report](docs/OWNER_LISTENING_RESULTS_20261021.md)
+and [receipt](artifacts/listening-results-20261021/receipt.json).
+After reveal, the owner explained that A sounded less punchy. Existing native
+final-master onset metrics are mixed and independently detect519 versus518 events;
+they do not establish or refute that impression. A fixed source-derived onset
+comparison using the existing masters is the next cheap diagnostic, before DSP
+retuning or another render. The [followup](artifacts/listening-results-20261021/followup.json)
+preserves the exact explanation and metric receipts.
+The owner subsequently heard more coherent highs in A after focusing initially
+on bass. This post-reveal impression and B's perceived punch suggest a possible
+band-specific tradeoff, not demonstrated overall superiority or permission to
+promote. Original CSV choices remain unchanged.
+

@@ -9,7 +9,10 @@ Research continuation: [current handoff](HANDOVER_CURRENT_20261020.md) records
 verified gates and exact provenance. A default-off combined Mid-coherence path
 passes real-song checks; a buffer-lifetime fix lets the matched full-song control
 and one candidate complete under the memory guard. A controlled listening package
-is now ready locally; owner preference remains unknown. The production champion
+was judged by the owner: the control was selected in both actual comparisons,
+but both identical-file controls also received directional choices, leaving
+comparative superiority unestablished. See the [listening receipt and limits](docs/OWNER_LISTENING_RESULTS_20261021.md).
+The production champion
 and default integration remain unchanged. Use the [documentation index](docs/README.md)
 and [current result](docs/PH_MEMORY_RESULTS_20261021.md) for evidence and limits.
 
