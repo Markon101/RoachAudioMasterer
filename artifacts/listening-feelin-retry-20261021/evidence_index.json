@@ -1,0 +1,19 @@
+{
+  "schema": "roach-evidence-index-v1",
+  "recorded_utc": "2026-10-21T06:03:48.653414+00:00",
+  "native_source_commit": "fc92ea1",
+  "owner_audio_and_private_keys_excluded": true,
+  "files": {
+    "artifacts/listening-feelin-retry-20261021/plan.json": "d28b8ca194205393a8a92d9cf9fb865a5245b080efa1fe2a464251c9f171937a",
+    "artifacts/listening-feelin-retry-20261021/attack_prerequisite.json": "99bc07f650ed4be6bcd6cd82ff0473f32e3bb5c8cf785207290b02e5884f310f",
+    "artifacts/listening-feelin-retry-20261021/milestone.json": "f3dad50b894aba230dadf7f86c34ba9ab1ef2e18fa8d0b50a6de25e1118b4ffb",
+    "artifacts/listening-feelin-retry-20261021/fullsong_complete.json": "ae100f8488a0176e725e2869dda85730dbe60d482771c7fdc3ebd59928840259",
+    "artifacts/listening-feelin-retry-20261021/listener_boundary_review.json": "acde621adff8a532ee71ac66918d1045ec2e9d2e408a7b5d3cea9cc020d10023",
+    "artifacts/listening-feelin-retry-20261021/delivery.json": "21b0865ce159a948185cd8665a2cd7452c18ee6d71acf8fbc1aad40640518fa1",
+    "artifacts/ph-stereo-memory-20261021/build.json": "8dc26e1a9aaa73e2f7e86060ee444eb8a9841d63d4bf4525fd49b661527d8d71",
+    "artifacts/ph-stereo-memory-20261021/design.json": "5aab1c3d0f41f508cfa180b782331a1ad6d92bd2ce6c0e53a1814071c58ddfeb",
+    "artifacts/ph-stereo-memory-20261021/parity_complete.json": "785e2b18ab266fd58eb228a8c5a7c2c6079151152a86313f9331a70e3d37372a",
+    "artifacts/ph-stereo-memory-20261021/static_review.json": "1ffde15ac635b5d68677ae67808eea1b093c1afcbf663b0425c0fc299563cd49",
+    "artifacts/ph-stereo-memory-20261021/procedural_fixture_reproduction.json": "c3771f6d79d1dbf61a38c2c4745b8292a9ea26d925a0299a208db3deee135a98"
+  }
+}

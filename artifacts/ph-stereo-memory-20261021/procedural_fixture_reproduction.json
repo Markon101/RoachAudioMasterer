@@ -1,0 +1,9 @@
+{
+  "schema": "portable-procedural-parity-fixture-check-v1",
+  "generator": "artifacts/ph-stereo-memory-20261021/make_procedural_control.py",
+  "regenerated_sha256": "a6c0a9510727b19b42973ce5e0fe531b24f277a1138bac6924b4f820c6eb70f6",
+  "original_sha256": "a6c0a9510727b19b42973ce5e0fe531b24f277a1138bac6924b4f820c6eb70f6",
+  "exact_match": true,
+  "historical_render_suite_invoked": false,
+  "original_untouched": true
+}

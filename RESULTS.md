@@ -1598,3 +1598,23 @@ No further source search; the next engineering step targets stereo-audit buffer
 lifetimes with exact parity before a fresh same-source retry. No DSP retune,
 weight change, new training or speed claim. See [the scoped evidence report](docs/COHERENCE_FOLLOWUP_20261021.md).
 
+### 39. Stereo-audit memory fix earns the Feelin listening pair (2026-10-21)
+
+Sequential masked stereo synthesis and last-use drops preserve all FFT and metric
+reduction order. Twenty-seven GTF Rust tests pass;48 comparison WAVs across13
+modes and separate synthetic/real10s complete PH/finalizer audio and metadata
+match exactly (Tier2). The same-source179.902375s Feelin control and one candidate
+then complete under the unchanged1536MiB cap; maximum observed HWM is1057.277MiB
+(Tier3). Five full-track pre-PH stage hashes match the original stopped control.
+The old run's peak is censored and it has no complete final output; no full-run
+bit-parity claim, exact percentage memory reduction or speedup follows.
+
+Both new masters pass all original native quality/configuration/geometry/peak
+gates. One near-native-level, counterbalanced blind package is independently
+verified and copied locally. All12 files match source hashes; no private keys,
+source labels or metrics are in the listener payload. Owner judgments are pending
+and subjective superiority remains Tier7. Defaults, weights and champion493cdca
+remain unchanged. [Memory qualification](docs/PH_STEREO_MEMORY_20261021.md) and
+[listening evidence](docs/COHERENCE_FOLLOWUP_20261021.md#same-source-retry-earns-a-new-listening-package)
+retain the two stopped runs, exact recipes, limitations and agent contributions.
+

@@ -4,15 +4,18 @@ Updated 2026-10-21. Start with [project policy](../AGENTS.md), [README](../READM
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
-Latest frontier: PH buffer lifetimes now pass exact audio/audit parity and the
-full-song memory gate. Owner responses select the control in both real comparisons,
-but directional identity choices prevent a reliable superiority conclusion.
-See [the listening result](OWNER_LISTENING_RESULTS_20261021.md) and
+Latest frontier: the full Feelin comparison is delivered after exact short
+audio/audit parity and full-song memory/quality gates. Its owner judgments remain
+pending. Earlier Chasing responses selected the control in both real comparisons,
+with directional identity choices limiting inference. See
+[that listening result](OWNER_LISTENING_RESULTS_20261021.md) and
 [the live handoff](../HANDOVER_CURRENT_20261020.md).
 
 The [current followup](COHERENCE_FOLLOWUP_20261021.md) records fixed attack windows,
 the stopped Singularity control, cached-stage attribution and one additional
-source trial. No coherence promotion or threshold change has occurred.
+source trial. The [stereo-audit memory fix](PH_STEREO_MEMORY_20261021.md) now permits
+the full Feelin pair under the same cap; its new blind package is delivered and
+awaits owner judgments. No coherence promotion or threshold change has occurred.
 
 Current production is v1.3.1 Smooth (`493cdca`) with frozen Euler8. Later research
 did not promote cache, host-batch or solver changes. Historical champion auditions

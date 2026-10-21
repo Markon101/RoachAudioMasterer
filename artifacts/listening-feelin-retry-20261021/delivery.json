@@ -1,0 +1,22 @@
+{
+  "schema": "cross-song-listener-delivery-v1",
+  "destination": "/storage/emulated/0/Download/Roach Listening Feelin Catchy 20261021",
+  "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-feelin-retry-20261021/listen/session1",
+  "files_sha256": {
+    "INSTRUCTIONS.txt": "c56885fc43f15264d93d00e4fbad5fe0ea32bcb97acfeb32432e4f95d9779d94",
+    "READY": "2b4e59057ec15efae6b21868519fa91a8d2f2b7ecf9f58df326edab83aed7051",
+    "T0001/A.wav": "7c9efc61ec796fe8734a6b6539cb98db9f01e5c69a2d8cbb86498c7cb4c5390d",
+    "T0001/B.wav": "4f41eb7ff8074e8fd00bde372fe905106dc5a1342fee065b719069eedfa6a673",
+    "T0002/A.wav": "7c9efc61ec796fe8734a6b6539cb98db9f01e5c69a2d8cbb86498c7cb4c5390d",
+    "T0002/B.wav": "7c9efc61ec796fe8734a6b6539cb98db9f01e5c69a2d8cbb86498c7cb4c5390d",
+    "T0003/A.wav": "2699ef253a47a73e913912ef3b0f6aad3ceb7e8c7a51c0bca59a0033e8767c99",
+    "T0003/B.wav": "245f8e96a592a797df34b2807472837804f16b16cdc9509ebb285523f53405fc",
+    "T0004/A.wav": "245f8e96a592a797df34b2807472837804f16b16cdc9509ebb285523f53405fc",
+    "T0004/B.wav": "245f8e96a592a797df34b2807472837804f16b16cdc9509ebb285523f53405fc",
+    "notes.txt": "f179c4dc2004b4d8e5e36ee06af301bd75da68b64e1b1a59c4a1ef5ff8e922a4",
+    "responses.csv": "1584a96ed0a0b0cfd0c6ea0ad5d2ec5c97060824070dba93127e43e219b3beb1"
+  },
+  "verified_copy_files": 12,
+  "source_assignments_or_metrics_in_payload": false,
+  "readiness_copied_last": true
+}

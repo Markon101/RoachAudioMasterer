@@ -37,8 +37,34 @@ retain commands and hashes. The new binary is
 The original fixed binary7e4c47fe… remains unchanged. Rust1.99.1, locked release
 OpenCL build and Cargo-j8 are recorded in [build.json](../artifacts/ph-stereo-memory-20261021/build.json).
 
-Next is a fresh same-source full-track control with this binary, the additional
-parity receipt pinned by the runner, and exact cached pre-PH stage equality
-against the stopped run. A candidate may follow only after native quality and
-memory gates pass. The old peak is censored; no exact percentage full-track
-memory reduction or speedup is claimed. No production sound was promoted.
+For a clone without the old procedural WAV, the
+[fixture-only generator](../artifacts/ph-stereo-memory-20261021/make_procedural_control.py)
+reuses its original formula and canonical WAV writer, with create-only output.
+It regenerates the current device's reference SHA exactly
+([check](../artifacts/ph-stereo-memory-20261021/procedural_fixture_reproduction.json)):
+
+```sh
+LD_PRELOAD=/data/data/com.termux/files/usr/lib/libc++_shared.so \
+OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 \
+python artifacts/ph-stereo-memory-20261021/make_procedural_control.py \
+  --output runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav
+```
+
+It does not invoke old renders or need their binaries. Historical binary hashes
+are local receipts; another environment must rebuild and repin both reference
+and candidate explicitly before reproducing numerical comparisons.
+
+The fresh same-source full-track control and one coherence candidate now complete
+under the unchanged cap. Maximum observed process HWM across the pair is
+1057.277MiB; all native quality gates pass. All five full-track pre-PH stage WAV
+hashes match the old stopped control exactly. The additional parity receipt and
+its binary binding are checked before dispatch; prefix equality is checked before
+starting the candidate. Twenty-two runner tests cover these gates and containment.
+
+The old full control never completed, so no full old final waveform exists for
+comparison. Exact short audio/audit parity plus full-prefix equality must not be
+called whole-track before/after waveform parity. The old1549.117MiB peak is
+censored; no exact percentage peak-memory reduction or speedup is claimed.
+[Full pair and listening receipts](../artifacts/listening-feelin-retry-20261021/milestone.json)
+record provenance and the delivered blind package. Owner preference is pending;
+production sound remains unpromoted.

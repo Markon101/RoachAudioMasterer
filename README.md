@@ -12,6 +12,9 @@ and one candidate complete under the memory guard. A controlled listening packag
 was judged by the owner: the control was selected in both actual comparisons,
 but both identical-file controls also received directional choices, leaving
 comparative superiority unestablished. See the [listening receipt and limits](docs/OWNER_LISTENING_RESULTS_20261021.md).
+The next [Feelin’ Catchy comparison](docs/COHERENCE_FOLLOWUP_20261021.md#same-source-retry-earns-a-new-listening-package)
+is now delivered for owner listening after a parity-qualified stereo-audit memory
+fix. Its source assignments remain private and judgments are pending.
 The production champion
 and default integration remain unchanged. Use the [documentation index](docs/README.md)
 and [current result](docs/PH_MEMORY_RESULTS_20261021.md) for evidence and limits.

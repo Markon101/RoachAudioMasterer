@@ -71,14 +71,45 @@ and preserves child execution/memory receipts even when quality validation fails
 Eleven containment/plan/execution tests and five package-provenance tests pass.
 No further source search is authorized by this experiment if this control fails.
 
-Feelin's control stopped in the existing PH stage at observed process HWM
+Feelin's first control stopped in the existing PH stage at observed process HWM
 1549.117 MiB against the unchanged 1536 MiB cap. Its execution receipt survives
 the stop; no candidate or listening package exists. No more sources will be tried
 under this plan. The next bounded engineering step is sequential stereo-audit
 buffer preparation, with exact short audio/audit parity before any fresh retry of
-this same source. No cap increase or skipped quality audit is authorized.
+this same source. No cap increase or skipped quality audit was authorized.
 Any eventual package uses fresh counterbalanced source positions, transparent
 attenuation near native master loudness, categorical CSV plus optional notes,
 and a comfortable playback check. The 24-test listening harness preserves legacy
 seeded assignments by default. Every new speed experiment still needs fresh
 foreground confirmation; these are quality runs, with no speedup claim.
+
+## Same-source retry earns a new listening package
+
+The [sequential stereo-audit memory change](PH_STEREO_MEMORY_20261021.md), commit
+`fc92ea1`, passed27 focused Rust tests,48 procedural WAV comparisons across13 modes
+and exact synthetic/real10s PH/finalizer audit and audio parity. A fresh Feelin
+control then passed all native quality gates under the same1536MiB cap; its five
+full pre-PH stage hashes match the stopped run. Only after those checks did the
+single coherence candidate run; it also passed. Maximum observed process HWM
+across the completed pair is1057.277MiB. The old stopped peak is censored, so no
+exact percentage full-run memory reduction is reported. No complete old final
+waveform exists; bounded parity is not whole-track before/after waveform parity.
+
+The verified package is delivered locally at
+`/sdcard/Download/Roach Listening Feelin Catchy 20261021`: four trials/eight48k
+stereo PCM24 WAVs, categorical CSV, optional notes and neutral instructions.
+Fresh source positions are counterbalanced; the old Chasing trial mapping does
+not apply. Matching uses transparent attenuation near the native master level,
+without remastering or added limiting. The owner should lower the previous
+max-volume setting before the playback-level check. All12 delivered files match
+source hashes. Independent review verifies real audio formats, lengths, identity
+controls, source-position balance, receipt chain and absence of source labels or
+technical metrics in the listener payload.
+
+[Milestone](../artifacts/listening-feelin-retry-20261021/milestone.json),
+[full native receipts](../artifacts/listening-feelin-retry-20261021/fullsong_complete.json),
+[boundary audit](../artifacts/listening-feelin-retry-20261021/listener_boundary_review.json)
+and [delivery](../artifacts/listening-feelin-retry-20261021/delivery.json) preserve
+the exact binary/model/input/configuration and checks. Original stops, Chasing
+audio and raw responses remain intact. Owner Feelin judgments and preference are
+pending. No subjective production promotion occurred.

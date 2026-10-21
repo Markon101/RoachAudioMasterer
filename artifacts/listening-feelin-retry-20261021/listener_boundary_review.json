@@ -1,0 +1,19 @@
+{
+  "schema": "listener-boundary-review-v1",
+  "verdict": "eligible",
+  "readiness_observed": true,
+  "halt_marker_present": false,
+  "listener_payload_files": 12,
+  "trials": 4,
+  "audio_files": 8,
+  "identity_trials_byte_equal": 2,
+  "actual_pairs": 2,
+  "actual_pair_positions_counterbalanced": true,
+  "readiness_inventory_and_private_key_audio_hashes_match": true,
+  "audio_format_duration_headers_pass": true,
+  "payload_text_and_blank_response_schema_pass": true,
+  "source_receipts_settings_binary_prefix_and_applied_candidate_pass": true,
+  "preservation_and_peak_gates_pass": true,
+  "owner_judgments_received": false,
+  "production_promoted": false
+}
