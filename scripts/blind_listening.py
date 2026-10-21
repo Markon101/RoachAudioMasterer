@@ -18,7 +18,10 @@ from fractions import Fraction
 FIELDS = ['trial', 'transient', 'tonal', 'spatial', 'preference',
           'confidence', 'fatigue']
 CHOICES = {'A', 'B', 'indistinguishable', 'abstain'}
-INSTRUCTIONS = """Listen using the same playback device, settings and comfortable volume throughout.
+ASSIGNMENT_POLICIES = ('independent', 'counterbalanced_pairs')
+INSTRUCTIONS = """Before judging, check playback at a comfortable listening level.
+If the files remain too quiet, stop and report that before recording judgments.
+Then keep the same playback device, settings and volume throughout.
 Disable playback enhancement, normalization and crossfade. Follow trial order.
 Compare A.wav and B.wav freely, then enter one responses.csv row per trial.
 For transient, tonal, spatial and preference choose A, B, indistinguishable,
@@ -30,10 +33,14 @@ Use not_assessed when fatigue cannot be judged, including short trials. Short
 trials cannot establish prolonged fatigue; longer trials provide only a limited
 session impression. Take breaks whenever needed. Use listening only; save file
 comparisons and diagnostics until judgments are recorded. Do not change file names or trial identifiers.
-Return the completed CSV to the organizer. Do not seek the answer key while judging.
+Keep free-prose comments in a separate notes.txt, keyed by trial identifier;
+keep responses.csv columns and categorical choices unchanged. Return the completed
+CSV and any notes.txt to the organizer. Do not seek the answer key while judging.
 """
 PROCEDURAL_DIAGNOSTIC_INSTRUCTIONS = """This is a short procedural diagnostic comparison, not a fatigue or long-session study.
-Listen using the same playback device, settings and comfortable volume throughout.
+Before judging, check playback at a comfortable listening level.
+If the files remain too quiet, stop and report that before recording judgments.
+Then keep the same playback device, settings and volume throughout.
 Disable playback enhancement, normalization and crossfade. Follow trial order.
 Compare A.wav and B.wav freely, then enter one responses.csv row per trial.
 For transient, tonal, spatial and preference choose A, B, indistinguishable,
@@ -43,7 +50,9 @@ audible difference; 'abstain' means you cannot judge this aspect. Preference is
 your overall choice. Confidence: low, medium, high. Leave fatigue as not_assessed;
 these 8-to-48-second excerpts do not assess fatigue or support long-session claims.
 Use listening only; save file comparisons and diagnostics until judgments are
-recorded. Do not change file names or trial identifiers. Return the completed CSV
+recorded. Do not change file names or trial identifiers. Keep free-prose comments
+in a separate notes.txt, keyed by trial identifier; keep responses.csv columns
+and categorical choices unchanged. Return the completed CSV and any notes.txt
 to the organizer. Do not seek the answer key while judging.
 """
 
@@ -126,6 +135,8 @@ def validate(manifest, base):
     mode = manifest.get('mode')
     require(mode in {'historical_playback', 'equal_target_architecture', 'procedural_diagnostic'}, 'choose one mode; pooling prohibited')
     require(integer(manifest.get('seed')), 'private integer seed required')
+    require(manifest.get('assignment_policy', 'independent') in ASSIGNMENT_POLICIES,
+            'unknown assignment_policy')
     require(isinstance(manifest.get('target_lufs'), (int, float)) and
             math.isfinite(manifest['target_lufs']), 'finite target_lufs ceiling required')
     require(isinstance(manifest.get('tracks'), list) and manifest['tracks'], 'tracks required')
@@ -204,14 +215,26 @@ def validate(manifest, base):
     return tracks
 
 
-def assignments(tracks, seed):
+def assignments(tracks, seed, policy='independent'):
+    """Optionally alternate each track/pair's orientation across its excerpts."""
+    require(policy in ASSIGNMENT_POLICIES, 'unknown assignment_policy')
     rng, trials = random.Random(seed), []
     for track in tracks:
+        # Scope orientations to each track and unordered pair. Leave the legacy
+        # branch's random draw order untouched for existing private manifests.
+        orientations = ({pair: rng.getrandbits(1) for pair in
+                         itertools.combinations(range(len(track['variants'])), 2)}
+                        if policy == 'counterbalanced_pairs' else {})
         for excerpt in track['excerpts']:
             pairs = list(itertools.combinations(range(len(track['variants'])), 2))
             identity = rng.randrange(len(track['variants']))
             for a, b in pairs + [(identity, identity)]:
-                if rng.getrandbits(1):
+                if policy == 'counterbalanced_pairs' and a != b:
+                    reverse = orientations[(a, b)]
+                    orientations[(a, b)] ^= 1
+                else:
+                    reverse = rng.getrandbits(1)
+                if reverse:
                     a, b = b, a
                 trials.append((track, excerpt, a, b))
     rng.shuffle(trials)
@@ -265,7 +288,8 @@ def prepare(manifest_path, listener, organizer):
     dump(organizer / 'manifest.private.json', manifest)
     key, cache = [], {}
     try:
-        for number, (track, excerpt, a, b) in enumerate(assignments(tracks, manifest['seed']), 1):
+        for number, (track, excerpt, a, b) in enumerate(assignments(
+                tracks, manifest['seed'], manifest.get('assignment_policy', 'independent')), 1):
             trial_id = f'T{number:04d}'
             folder = listener / trial_id
             folder.mkdir()

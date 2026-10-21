@@ -1,6 +1,7 @@
 """Bounded local tests; real FFmpeg smoke uses procedural audio only."""
 import copy
 import csv
+from collections import Counter, defaultdict
 from contextlib import redirect_stdout
 from io import StringIO
 import json
@@ -91,6 +92,110 @@ class ListeningTests(unittest.TestCase):
         self.fake_prepare()
         rerun_key = json.loads((self.organizer / 'key.private.json').read_text())
         self.assertEqual(key, rerun_key)
+
+    def test_legacy_assignments_remain_exactly_compatible(self):
+        tracks = [{'id': 'fixture', 'variants': [{}, {}, {}],
+                   'excerpts': [{'id': 'first'}, {'id': 'second'}]}]
+        # Frozen from the original independent assignment algorithm.
+        expected = [('first', 0, 2), ('second', 1, 1), ('first', 1, 0),
+                    ('second', 1, 2), ('second', 2, 0), ('first', 2, 1),
+                    ('first', 2, 2), ('second', 1, 0)]
+        for policy in (None, 'independent'):
+            args = () if policy is None else (policy,)
+            actual = [(e['id'], a, b) for _, e, a, b in blind.assignments(tracks, 219, *args)]
+            self.assertEqual(actual, expected)
+
+    def test_counterbalanced_manifest_reaches_packager(self):
+        self.manifest['assignment_policy'] = 'counterbalanced_pairs'
+        self.fake_prepare()
+        key = json.loads((self.organizer / 'key.private.json').read_text())
+        pairs = [t for t in key['trials'] if not t['identity']]
+        self.assertEqual(Counter(t['members']['A']['variant']['label'] for t in pairs),
+                         Counter({'secret_old': 1, 'secret_new': 1}))
+        self.assertEqual(Counter(t['excerpt']['id'] for t in key['trials'] if t['identity']),
+                         Counter({'onsets': 1, 'context': 1}))
+
+    def test_counterbalanced_pairs_alternate_independently_per_track_and_pair(self):
+        for excerpt_count in (2, 5):
+            tracks = [{'id': f'track-{n}', 'variants': [{} for _ in range(variant_count)],
+                       'excerpts': [{'id': str(e)} for e in range(excerpt_count)]}
+                      for n, variant_count in enumerate((3, 4))]
+            trials = blind.assignments(tracks, 219, 'counterbalanced_pairs')
+            groups, identities = defaultdict(dict), Counter()
+            for track, excerpt, a, b in trials:
+                if a == b:
+                    identities[(track['id'], excerpt['id'])] += 1
+                else:
+                    pair = (track['id'], min(a, b), max(a, b))
+                    self.assertNotIn(int(excerpt['id']), groups[pair])
+                    groups[pair][int(excerpt['id'])] = a < b
+            self.assertEqual(len(groups), 3 + 6)
+            self.assertEqual(identities, Counter({(t['id'], e['id']): 1
+                                                 for t in tracks for e in t['excerpts']}))
+            for orientations in groups.values():
+                ordered = [orientations[e] for e in range(excerpt_count)]
+                self.assertTrue(all(a != b for a, b in zip(ordered, ordered[1:])))
+                self.assertLessEqual(abs(2 * sum(ordered) - excerpt_count), 1)
+            expected_count = excerpt_count * ((3 + 1) + (6 + 1))
+            self.assertEqual(len(trials), expected_count)
+
+    def test_counterbalanced_seed_reproducibility_and_shuffled_trial_order(self):
+        tracks = self.manifest['tracks']
+        def signature(seed):
+            return [(t['id'], e['id'], a, b) for t, e, a, b in
+                    blind.assignments(tracks, seed, 'counterbalanced_pairs')]
+        self.assertEqual(signature(219), signature(219))
+        signatures = [signature(seed) for seed in range(16)]
+        self.assertGreater(len({tuple(s) for s in signatures}), 1)
+        first_orientations = {next((a, b) for _, e, a, b in s
+                                   if e == 'onsets' and a != b) for s in signatures}
+        self.assertEqual(first_orientations, {(0, 1), (1, 0)})
+        # At least one order interleaves excerpts, proving ordering is shuffled
+        # after creating their comparisons and identity controls.
+        self.assertTrue(any(s[0][1] != s[1][1] for s in signatures))
+
+    def test_unknown_assignment_policy_rejected_before_output(self):
+        for policy in ('counterbalanced', '', None, [], {}):
+            self.manifest['assignment_policy'] = policy
+            self.write_manifest()
+            with self.assertRaisesRegex(ValueError, 'assignment_policy'):
+                blind.prepare(self.manifest_path, self.listener, self.organizer)
+            self.assertFalse(self.listener.exists())
+            self.assertFalse(self.organizer.exists())
+            with self.assertRaisesRegex(ValueError, 'assignment_policy'):
+                blind.assignments(self.manifest['tracks'], 219, policy)
+
+    def test_listener_notes_guidance_keeps_categorical_response_schema(self):
+        for instructions in (blind.INSTRUCTIONS, blind.PROCEDURAL_DIAGNOSTIC_INSTRUCTIONS):
+            self.assertIn('comfortable listening level', instructions)
+            self.assertIn('If the files remain too quiet, stop and report that before recording judgments.',
+                          instructions)
+            self.assertIn('keep the same playback device, settings and volume', instructions)
+            self.assertIn('notes.txt', instructions)
+            self.assertIn('categorical choices unchanged', instructions)
+        self.fake_prepare()
+        (self.listener / 'notes.txt').write_text('T0001: Free prose stays here.\n')
+        response_path = self.listener / 'responses.csv'
+        with response_path.open(newline='') as source:
+            reader = csv.DictReader(source)
+            self.assertEqual(reader.fieldnames, blind.FIELDS)
+            rows = list(reader)
+        for row in rows:
+            row.update({k: 'indistinguishable' for k in blind.FIELDS[1:5]})
+            row.update(confidence='low', fatigue='not_assessed')
+        rows[0]['preference'] = 'A because it sounds clearer'
+        with response_path.open('w', newline='') as destination:
+            writer = csv.DictWriter(destination, fieldnames=blind.FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+        with self.assertRaisesRegex(ValueError, 'categorical'):
+            blind.reveal(self.organizer, response_path)
+        rows[0]['preference'] = 'A'
+        with response_path.open('w', newline='') as destination:
+            writer = csv.DictWriter(destination, fieldnames=blind.FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+        self.assertTrue(blind.reveal(self.organizer, response_path).is_file())
 
     def test_refuse_overwrite_and_nested_private(self):
         self.listener.mkdir()

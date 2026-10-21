@@ -162,6 +162,16 @@ identity controls necessarily have equal samples and hashes; file comparison can
 identify them. Participants must defer file comparisons and diagnostics until
 judgments are frozen. The private key is not a technical barrier on a shared account.
 
+For new sessions, the optional private manifest field
+`"assignment_policy": "counterbalanced_pairs"` randomizes each track/pair's
+initial A/B orientation and alternates it across excerpts before shuffling trial
+order. Two excerpts expose each variant once in each slot; an odd number leaves
+an imbalance of at most one per pair. Identity pairs remain one randomly selected
+variant per excerpt. This controls source-position imbalance, not expectations or
+independent replication. Omitting the field, or specifying `"independent"`,
+preserves the legacy seeded assignment sequence exactly. Other values are
+rejected. Draw a private seed once; do not reroll it for a favored order.
+
 For each pair, FFmpeg `ebur128` measures integrated loudness and true peak. The
 shared playback target is no higher than the manifest ceiling, either member's
 measured loudness, or the level needed to leave peak headroom. Each member receives
@@ -175,6 +185,14 @@ marker is left and incomplete listener output is removed. Failed private materia
 is retained, so retry with fresh directory names. The tool checks free storage for the
 planned uncompressed pairs plus a safety margin; monitor phone storage during larger
 sessions. Each pair contains two uncompressed excerpts.
+
+The manifest target is a ceiling, not a requirement to use -23 LUFS. Minimize
+attenuation when matching comparable masters, retaining encoded loudness/peak
+checks. An earlier owner session required maximum M50x playback volume at
+-23 LUFS, so check a comfortable listening level before judgments. If files remain
+too quiet, report that and stop instead of silently accepting an inadequate
+level. Then keep playback settings fixed. Do not remaster or add limiting just
+to raise listening copies.
 
 `READY` records successful package creation; it does not prove the WAVs still
 exist. External cleanup can remove audio while leaving this marker behind. Before
@@ -212,6 +230,8 @@ These are categorical subjective judgments. Confidence and fatigue apply to the
 whole trial. In `procedural_diagnostic`, fatigue is prefilled as `not_assessed`
 and cannot be changed; the mode does not collect fatigue judgments.
 The generated instructions give the same definitions without identifying controls.
+Keep free-text comments in a separate `notes.txt`, keyed by trial identifier;
+do not replace categorical CSV values with prose or percentage confidence.
 
 ```sh
 python scripts/blind_listening.py reveal \
