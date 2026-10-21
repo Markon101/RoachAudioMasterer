@@ -1504,3 +1504,16 @@ prior metadata-validation stops are retained without changing acoustic gates.
 this result from fidelity, listening preference and production promotion. The
 matched full-song control/candidate still require final mastering checks.
 
+### 34. Full-song control resource gate stops before candidate (2026-10-20)
+
+The unchanged matched Smooth control crossed a1GiB watchdog in its existing PH
+stage. One documented1.5GiB retry started with~3.25GiB available and retained all
+acoustic gates; it also stopped before any candidate, at observed1583.93MiB HWM
+and182.84s (900s timeout, no manualHALT). No candidate or listening package was
+produced. The real Mid screen remains positive; full-song eligibility is unmet.
+[Stop receipts and source-specific next experiment](artifacts/listening-coherence-20261020/fullsong_verdict.json)
+retain both failures. Visible full-spectrum diagnostic clones are a plausible
+memory contributor, not measured allocation attribution. Test lifetime drops and
+sequential diagnostics with exact audio/metric parity before another full-track
+attempt. Do not skip audits, relax acoustic gates or raise the ceiling again.
+

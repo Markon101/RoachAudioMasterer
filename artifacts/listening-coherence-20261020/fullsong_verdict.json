@@ -1,0 +1,35 @@
+{
+  "schema": "fullsong-eligibility-stop-v1",
+  "date_utc": "2026-10-21T00:04:47.396096+00:00",
+  "source_commit": "707443e",
+  "real_mid_screen_passed": true,
+  "fullsong_eligible": false,
+  "candidate_render_count": 0,
+  "control_attempts": 2,
+  "failure_stage": "unchangedlegacyPHcontrolbeforecandidate",
+  "v2_observed_process_hwm_kib": 1621944,
+  "v2_observed_process_hwm_mib": 1583.9296875,
+  "v2_guard_mib": 1536,
+  "v2_elapsed_seconds": 182.83821503499348,
+  "manual_halt": false,
+  "listening_package_created": false,
+  "owner_judgments": null,
+  "no_further_cap_increases": true,
+  "source_level_memory_hypothesis": {
+    "classification": "Tier5staticallocationhypothesis, notmeasuredallocationattribution",
+    "stft_fft": 1024,
+    "hop": 256,
+    "bins": 513,
+    "full_track_frames": 26328,
+    "one_complex32_spectrum_mib": 103.04461669921875,
+    "possible_simultaneously_retained_spectra": 12,
+    "candidate_sites": [
+      "src/gtf.rs:4082 outerMid/Side spectra retained through postaudit",
+      "src/gtf.rs:1010 orig/proc+masked low-band spectrum clones",
+      "src/gtf.rs:1134 stereo low/high clones all live together"
+    ],
+    "first_discriminating_change": "explicitdrop outerMid/Side spectra aftersynthesis and maskedlow spectra aftersynthesis; sequentialstereo clones onlyifneeded",
+    "required_verification": "bitidenticalwaveforms AND allMorphicAuditReport metrics on CPU againstpinnedbeforebinary, thenfulltrackHWM<=1536MiB; no skippedqualityaudits/newcap/modeltraining"
+  },
+  "next_action": "isolatePHmemorylifetimesoptimization; preservebothfailedrunsandstages; rerenderonecandidateonlyaftermatchedcontrolpassesunchangedgates"
+}

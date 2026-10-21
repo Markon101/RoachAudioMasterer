@@ -27,9 +27,11 @@ explicit quiet/origin/final-lock settings. Model and conditioning receipts matte
 the flag alone is not a universal qualification for arbitrary configurations.
 
 This earns one controlled full-song listening experiment, not restoration accuracy
-or promotion. A matched Smooth-settings control and exactly one candidate are
-rendering under a 1 GiB process-memory/900-second guard. Final native peak,
-geometry, preservation and matched-setting checks must pass before delivery.
+or promotion. Two matched Smooth-control attempts halted in the existing PH stage before a
+candidate started: first at a1GiB guard, then at the documented1.5GiB retry.
+The second watchdog observed1583.93MiB at182.84s. No listening candidate or
+package exists. Final mastering eligibility remains unearned. See
+[the stop and next experiment](../artifacts/listening-coherence-20261020/fullsong_verdict.json).
 The archived Smooth FLAC remains a historical comparison with incomplete original
 input/executable provenance; the newly rendered control supplies an exact anchor.
 No owner judgment is recorded. Procedural complex-error conflict and coherent

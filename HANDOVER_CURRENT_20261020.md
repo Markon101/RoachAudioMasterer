@@ -22,8 +22,10 @@ Check these before any new work:
 
 The unchanged full-song Smooth control crossed the first1GiB guard in PH, before
 any candidate. The preserved v1 stopped after~183s, well before900s, with noHALT.
-Exact peak was not captured. One predeclared1.5GiB retry is active, starting with
-~3.25GiB available and retaining the same acoustic gates. No further automatic
+Exact peak was not captured. The predeclared1.5GiB retry also halted in the control PH stage. It started with
+~3.25GiB available and retained the same acoustic gates. The watchdog observed
+1583.93MiB at182.84s and terminated it. No candidate or package was produced.
+No jobs remain running. No further automatic
 RAM increases. If v2 fails, preserve it and diagnose/partition the legacy PH memory
 path; do not rerender another candidate just to deliver audio.
 
@@ -50,3 +52,11 @@ stay ignored/mode600. No new credits were bought; observed API delta~$0.01344.
 Speed experiments still need fresh foreground confirmation. Current work is
 quality verification, not speed qualification. No training/adaptive NFE/new DSP
 controller is authorized by these results. Continue from evidence, not labels.
+
+Current strongest next experiment is now source-specific: `gtf.rs` keeps outer
+Mid/Side spectra alive through `audit_post_synthesis_audio`, which clones full
+spectra for low-band and stereo diagnostics. A140.4s spectrum is~103MiB; up to
+twelve visible allocations imply a large live working set (static hypothesis,
+not allocation attribution). First try explicit drops after last use; preserve
+all metrics and demand exact waveform/audit parity. Stream stereo-band clones
+only if needed. Do not disable audits or increase the ceiling again.

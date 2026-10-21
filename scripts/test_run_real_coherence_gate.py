@@ -32,6 +32,25 @@ class FakeProcess:
 
 
 class RealCoherenceGateTests(unittest.TestCase):
+    def test_native_f32_parameters_and_older_receipt_fields(self):
+        cond = {"steps": 8, "strength": 0.6, "mid_cutoff": 1500,
+                "mid_ceiling": 8000, "chunk_seconds": 10.0, "overlap_seconds": 2.0}
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td)
+            gate._write_float_wav(out/"restored.wav", np.zeros((16, 2), np.float32))
+            meta = {"steps": 8, "strength": float(np.float32(0.6)),
+                    "mid_cutoff": 1500.0, "mid_ceiling": 8000.0,
+                    "controlled": False, "denoise": False, "auto_eq": False}
+            job = {"name": "baseline857-plain-probe", "frames": 16,
+                   "arm": "restart", "origin": 0, "quiet_abstention": False}
+            (out/"restoration.json").write_text(json.dumps(meta))
+            gate._check_render(job, out, cond)
+            # Adjacent representable strengths remain a configuration mismatch.
+            meta["strength"] = float(np.nextafter(np.float32(0.6), np.float32(1)))
+            (out/"restoration.json").write_text(json.dumps(meta))
+            with self.assertRaises(gate.GateStop):
+                gate._check_render(job, out, cond)
+
     def test_parseval_dc_nyquist_and_odd_length(self):
         dc = np.ones(8, dtype=np.float64) * 0.25
         nyq = np.array([1, -1] * 4, dtype=np.float64) * 0.4

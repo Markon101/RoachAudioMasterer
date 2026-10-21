@@ -4,6 +4,10 @@ Updated 2026-10-20. Start with [project policy](../AGENTS.md), [README](../READM
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
+Latest frontier: the real Mid screen passes, but two full-song Smooth-control
+attempts hit the legacy PH memory guard before a candidate. No new listening
+master exists. See [the live handoff](../HANDOVER_CURRENT_20261020.md).
+
 Current production is v1.3.1 Smooth (`493cdca`) with frozen Euler8. Later research
 did not promote cache, host-batch or solver changes. Owner blind judgments remain
 pending. [Long-duration coherence](LONG_COHERENCE_RESULTS.md) now has procedural
@@ -42,7 +46,7 @@ were not revalidated in this documentation pass.
 | [HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md](../HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md) | Current continuation checkpoint |
 | [HANDOVER_NEXT_EVOLUTION.md](../HANDOVER_NEXT_EVOLUTION.md) | Historical snapshot with current pointer |
 | [README.md](../README.md) | Current entry point and scoped legacy examples |
-| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–33 |
+| [RESULTS.md](../RESULTS.md) | Versioned evidence ledger; latest Sections24–34 |
 | [VALIDATION.md](../VALIDATION.md) | Versioned validation ledger |
 | [artifacts/README.md](../artifacts/README.md) | Historical artifact catalog/receipt |
 | [artifacts/next-evolution-v1/README.md](../artifacts/next-evolution-v1/README.md) | Historical artifact catalog/receipt |

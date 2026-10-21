@@ -1,0 +1,4 @@
+{
+  "reason": "{\"reason\": \"resource_or_HALT_stop\", \"peak_hwm_kib\": 1621944, \"elapsed_seconds\": 182.83821503499348, \"halt_present\": false, \"cap_mib\": 1536}",
+  "completed_rows": []
+}

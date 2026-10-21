@@ -1,0 +1,30 @@
+{
+  "schema": "coherence-listening-evidence-v1",
+  "files": {
+    "eligibility_protocol.json": "be1a6d2afb33190f6ed5c05bd9219902f55a2254a512e90d21ff536c32669a30",
+    "listening_eligibility_review.json": "2224ed7415c8086f834c0445712467c5858d6656f12bc9d5a921007e4bb0e95b",
+    "claim_review_response.json": "a6c00ef596b496bc39d91a009c9160db945b492cd00c8ac6d80f699b4e9a38c2",
+    "real_gate_plan.json": "784fbef1d9452ea75576d01fc35b8fe05754712bb0ea95181fc26d2d8cd15546",
+    "stopped_run_v1.json": "55978f4fab1e835fb85b1c700fb08cb321e288b420d3d6aebac4b986dd0d007e",
+    "render_fullsong.py": "8fe21d8df9a85e324a6dce8962278acc505aed294af44bb3d9038d9a78514f65",
+    "real_gate_complete.json": "03b4c253c45c57e3e57d1e5edc20eb5ee3874e689ae343df48c7dfd0be11d909",
+    "render_fullsong_v2.py": "9e2cbbb5ec31a2e606e3c683b4815dbc03d894a54a69749cba66968cec7474c9",
+    "milestone.json": "a755d6719a71251b1206bb129ef1f17e3a2f2753f6cee468150284fdf3f3dbb4",
+    "package_listening.py": "6f9ace0a3fa3fe3b44acd6a3030881a81e0ce56d897d3d92e21e4c4a962451db",
+    "fullsong_resource_revision.json": "09ba604d0ab1e9ec73563027cb322812532e1381c4030f169d04a89dc091fb0e",
+    "fullsong_v1_halted.json": "b24dab99e606e95b51140c8855364245e16b087dd26d5a8127994d1ae358cc79",
+    "fullsong_v2_halted.json": "6e893cd46bb8553ca42f8e9e48b3a3e8dbfa6c7844650eab56f98d2e75bf4441",
+    "fullsong_verdict.json": "b08d3cafc1ec0adc32ff1e48577fb37a4bfa49d1ef2cf31a5e1b0811348e7644"
+  },
+  "source_sha256": {
+    "src/main.rs": "ae59f5baa83f1d5dd0a11afbe9d0598b06d9b4a9edb4a1fdcdfcaf89ec44991b",
+    "src/rich_mid.rs": "8f9be1e6cd0f1b36f93b54f062897c2e758a97d9f0fb24d5ed7113b039d1bbe1",
+    "src/scene_features.rs": "60acb368428fb611bfe17c883443182b83836298e5bb65d3eb6148e774a65cc2",
+    "src/synth.rs": "405f7c281c4ad3c543b6c3605e0ad52cc96e3fa9fb64dc96faa026c61bf521be",
+    "scripts/run_real_coherence_gate.py": "5b81a8ba03c9ccbe515f78176483986c1125ca1e4457d68fcdd3c7d59917c653",
+    "scripts/test_run_real_coherence_gate.py": "383fbcf1b9029436f20948b2176dfe5df066a0c59d9b6126460a8955a4c66dfe"
+  },
+  "raw_runs": "runs/listening-coherence-20261020",
+  "listening_ready": false,
+  "champion_unchanged": true
+}
