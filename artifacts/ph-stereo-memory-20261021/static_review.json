@@ -1,0 +1,13 @@
+{
+  "schema": "ph-stereo-memory-static-review-v1",
+  "reviewer": "native preservation_trace_resume",
+  "structural_review": "No counterexample: masked predicates/crossover edges/FFT call order/reductions/owned output lifetimes preserved; exact parity still required.",
+  "rust_tests": {
+    "command": "CARGO_TARGET_DIR=/data/data/com.termux/files/usr/tmp/roach-native-solvers-target cargo test --locked -j8 --bin roach-audio-masterer gtf::tests",
+    "passed": 27,
+    "failed": 0
+  },
+  "gtf_sha256": "33833397ab83a4951a582fc26e7cd21308c94bc7ad59d221c436ce3f8e46f97e",
+  "frozen_baseline_binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+  "speed_experiment": false
+}

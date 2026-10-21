@@ -1,0 +1,36 @@
+{
+  "schema": "ph-stereo-audit-memory-design-v1",
+  "declared_before_implementation": true,
+  "baseline_source_commit": "96db18b",
+  "baseline_binary": "runs/ph-memory-20261021/lifetime-candidate-v1",
+  "baseline_binary_sha256": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+  "trigger": "Feelin Catchy 179.902375s control stopped in PH at observed1549.1171875MiB against unchanged1536MiB cap; no candidate rendered.",
+  "hypothesis": "Four simultaneous masked stereo spectra and dead source waveforms overlap the audit workspace. Prepare masks sequentially while preserving all FFT calls, synthesis order and metric reductions.",
+  "planned_change": [
+    "Release orig_low_synth/proc_low_synth after their last error-reduction use.",
+    "Keep repeated processedL/R analyses unchanged. Clone/mask/synthesize one band at a time in original Llow,Rlow,Lhi,Rhi order, releasing each temporary mask on return.",
+    "Release processedL spectrum after Lhi synthesis and processedR after Rhi.",
+    "Release caller original ms vectors after the final optional passband lock; output conversion owns independent data."
+  ],
+  "invariants": [
+    "Same weights, model conditioning, solver, sample order, FFT and metric-reduction order.",
+    "No high=full-low shortcut; no skipped audit or removed original spectra needed for LSD.",
+    "Exact WAV hashes and complete PH/finalizer metrics must match baseline on bounded controls.",
+    "Original failure latches preserved, no cap increase or speed claim."
+  ],
+  "verification": [
+    "Existing focused GTF Rust tests, cargo -j8.",
+    "Pinned-before/after13-mode procedural comparison, all WAV and non-timing report fields identical.",
+    "Synthetic complete auto-master PH/master metadata and WAV parity.",
+    "One matched10s real PH-stage input CPU comparison; preserve complete audit and finalizer metadata.",
+    "Only after parity: fresh same-source full Feelin control under1536MiB; candidate only if every original quality gate passes."
+  ],
+  "static_budget": {
+    "frames": 33735,
+    "bins": 513,
+    "spectrum_mib": 132.03472137451172,
+    "waveform_mib": 32.94110870361328,
+    "classification": "Static liveness estimate only; not a measured peak or speedup."
+  },
+  "stop": "Any parity/quality/resource/HALT failure stops the fresh run and preserves its evidence. Do not tune source material or raise thresholds to obtain listening eligibility."
+}

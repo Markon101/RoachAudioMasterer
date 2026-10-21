@@ -1,0 +1,75 @@
+diff --git a/src/gtf.rs b/src/gtf.rs
+index 9e5a7ff..e671925 100644
+--- a/src/gtf.rs
++++ b/src/gtf.rs
+@@ -1050,6 +1050,9 @@ pub fn audit_post_synthesis_audio(
+     } else {
+         0.0
+     };
++    // All low-band waveform reductions are complete before stereo allocation.
++    drop(orig_low_synth);
++    drop(proc_low_synth);
+ 
+     // 3. Reconstructed spectral leakage in base band (< crossover_bin)
+     let mut leak_err = 0.0f64;
+@@ -1134,31 +1137,29 @@ pub fn audit_post_synthesis_audio(
+     {
+         let proc_l_spec = stft.analyze(&processed.channels[0][..n_samples]);
+         let proc_r_spec = stft.analyze(&processed.channels[1][..n_samples]);
+-        let copy_spec = |s: &Spectrum| Spectrum {
+-            data: s.data.clone(),
+-            frames: s.frames,
+-            samples: s.samples,
+-        };
+-        let mut l_low_spec = copy_spec(&proc_l_spec);
+-        let mut r_low_spec = copy_spec(&proc_r_spec);
+-        let mut l_hi_spec = copy_spec(&proc_l_spec);
+-        let mut r_hi_spec = copy_spec(&proc_r_spec);
+-
+-        for t in 0..frames {
+-            for k in 0..BINS {
+-                if k < crossover_bin {
+-                    l_hi_spec.data[t * BINS + k] = C::new(0.0, 0.0);
+-                    r_hi_spec.data[t * BINS + k] = C::new(0.0, 0.0);
+-                } else {
+-                    l_low_spec.data[t * BINS + k] = C::new(0.0, 0.0);
+-                    r_low_spec.data[t * BINS + k] = C::new(0.0, 0.0);
++        // Synthesis returns owned samples. Keep only one masked full-track
++        // spectrum alive; retain the original analyses and FFT call order.
++        let synthesize_band = |s: &Spectrum, keep_low: bool| {
++            let mut masked = Spectrum {
++                data: s.data.clone(),
++                frames: s.frames,
++                samples: s.samples,
++            };
++            for t in 0..frames {
++                for k in 0..BINS {
++                    if (k < crossover_bin) != keep_low {
++                        masked.data[t * BINS + k] = C::new(0.0, 0.0);
++                    }
+                 }
+             }
+-        }
+-        let l_low = stft.synthesize(&l_low_spec);
+-        let r_low = stft.synthesize(&r_low_spec);
+-        let l_hi = stft.synthesize(&l_hi_spec);
+-        let r_hi = stft.synthesize(&r_hi_spec);
++            stft.synthesize(&masked)
++        };
++        let l_low = synthesize_band(&proc_l_spec, true);
++        let r_low = synthesize_band(&proc_r_spec, true);
++        let l_hi = synthesize_band(&proc_l_spec, false);
++        drop(proc_l_spec);
++        let r_hi = synthesize_band(&proc_r_spec, false);
++        drop(proc_r_spec);
+ 
+         let c_low = crate::spatial::correlation_coefficient(&l_low, &r_low);
+         let c_hi = crate::spatial::correlation_coefficient(&l_hi, &r_hi);
+@@ -4633,6 +4634,7 @@ pub fn process_morphic_audio_with_contrast(
+         }
+     }
+ 
++    drop(ms);
+     let out_audio = Audio::from_mid_side(RATE, out_ms, is_stereo);
+ 
+     let n_frames = frames.max(1) as f32;

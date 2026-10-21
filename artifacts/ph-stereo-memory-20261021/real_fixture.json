@@ -1,0 +1,30 @@
+{
+  "schema": "ph-stereo-memory-real-fixture-v1",
+  "source": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-feelin-20261021/fullsong-v1/control/stage4_spatial.wav",
+  "source_sha256": "f5fccbd60da0cce16186a8f6e61bf49546535fc0265858ae8cfc0d10a9119c9c",
+  "fixture": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/real-spatial-10s.wav",
+  "fixture_sha256": "4ba2691243be5d3fca069ad58bad26ec0c16b5c31220f0b398a7a6f6cf91bf17",
+  "sample_interval": [
+    2880000,
+    3360000
+  ],
+  "selection": "Fixed60..70s cached Feelin pre-PH signal, declared before candidate outputs; procedural controls remain separate.",
+  "decode_argv": [
+    "ffmpeg",
+    "-nostdin",
+    "-v",
+    "error",
+    "-n",
+    "-i",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/listening-feelin-20261021/fullsong-v1/control/stage4_spatial.wav",
+    "-map",
+    "0:a:0",
+    "-af",
+    "atrim=start_sample=2880000:end_sample=3360000,asetpts=PTS-STARTPTS",
+    "-map_metadata",
+    "-1",
+    "-c:a",
+    "pcm_f32le",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/real-spatial-10s.wav"
+  ]
+}

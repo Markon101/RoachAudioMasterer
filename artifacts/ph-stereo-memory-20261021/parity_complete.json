@@ -1,0 +1,151 @@
+{
+  "schema": "ph-lifetime-parity-complete-v1",
+  "exact_wav_files": 48,
+  "all_wav_sha256_equal": true,
+  "all_non_timing_report_fields_equal": true,
+  "complete_ph_audit_and_finalizer_metadata_exact": true,
+  "real10s_complete_ph_audit_and_finalizer_metadata_exact": true,
+  "runs": [
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1",
+        "morphic-compare",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/before",
+        "--target-lufs",
+        "-13"
+      ],
+      "log_sha256": "bee0ae2e22034d1daf8cd1236d42c561209d137e88a065932723ba8f27b44659",
+      "sampled_hwm_mib": 40.75
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+        "morphic-compare",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/after",
+        "--target-lufs",
+        "-13"
+      ],
+      "log_sha256": "737860635990cc2d40aac9e8ddfc90d9533893538ab70ad0027fee3cf19a88a3",
+      "sampled_hwm_mib": 34.33984375
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1",
+        "auto-master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/before-auto",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--quiet-mid-denoise",
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--target-lufs",
+        "-13",
+        "--no-export-sdcard"
+      ],
+      "log_sha256": "a89ce3cbcbd61ef8715ccaf076c4e0e5cb8893debb2878f8400fb505b0487d64",
+      "sampled_hwm_mib": 24.09375
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+        "auto-master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/after-auto",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--quiet-mid-denoise",
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--target-lufs",
+        "-13",
+        "--no-export-sdcard"
+      ],
+      "log_sha256": "c49c432b66c37170d5a591f0b3c1dbee58fb8129aa51053b0498ccb19d194cae",
+      "sampled_hwm_mib": 17.56640625
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1",
+        "auto-master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/real-spatial-10s.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/before-real-auto",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--quiet-mid-denoise",
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--target-lufs",
+        "-13",
+        "--no-export-sdcard"
+      ],
+      "log_sha256": "d2dd80a9d62657124b7374fb8f3e2c53cea34e2031089f9bfc8288c0a1b8e44e",
+      "sampled_hwm_mib": 94.29296875
+    },
+    {
+      "argv": [
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+        "auto-master",
+        "--input",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/real-spatial-10s.wav",
+        "--out",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/after-real-auto",
+        "--no-sfht",
+        "--no-mid",
+        "--no-denoise",
+        "--no-auto-eq",
+        "--no-spatial",
+        "--no-defizz",
+        "--morphic-mode",
+        "ph-lie-v2",
+        "--quiet-mid-denoise",
+        "--kick-transient-guard",
+        "--clock-transient-punch",
+        "--target-lufs",
+        "-13",
+        "--no-export-sdcard"
+      ],
+      "log_sha256": "d201e70920fc88892606e3481f4836deced305dae37ceacf8ece33ec31fa557a",
+      "sampled_hwm_mib": 62.984375
+    }
+  ],
+  "pins": {
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-memory-20261021/lifetime-candidate-v1": "7e4c47fe19e589553a8c4e999f988b76683de2967c7b5547f2b58fb9484cf161",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1": "c2c5b14f77d0275f1b2f3fd94f028efd2253479a6477f94729d7366ebb37b511",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/stage-accountability-20261020/master-observer-engaged-v1/known-peak-control.wav": "a6c0a9510727b19b42973ce5e0fe531b24f277a1138bac6924b4f820c6eb70f6",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/real-spatial-10s.wav": "4ba2691243be5d3fca069ad58bad26ec0c16b5c31220f0b398a7a6f6cf91bf17",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/gtf.rs": "33833397ab83a4951a582fc26e7cd21308c94bc7ad59d221c436ce3f8e46f97e",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/ph-stereo-memory-20261021/qualify.py": "0943aabf22cd9061477149a4845131f4f8a1eea530344a39eeea33db1be94717"
+  },
+  "speed_qualification": false
+}
