@@ -63,6 +63,23 @@ a possible perceptual tradeoff to investigate (Tier 5 hypothesis), without
 rewriting the original B preferences or asserting a replicated mechanism effect.
 The later high-band observation was made after the source reveal.
 
+The owner subsequently reported that all samples were quiet and required turning
+the M50x playback volume all the way up. Packaging receipts confirm all eight
+listening copies measured -23 LUFS: full-song files were attenuated 10 dB and
+excerpt files 10.4 dB. Native masters target -13 LUFS. This establishes the
+file-level reduction; the playback device/amp, normalization state and acoustic
+listening level were not measured. Equal file loudness did not establish an
+adequate listening level. Low playback level is a possible additional limitation,
+with its impact on these judgments unknown.
+
+For a future package, choose the least attenuation that achieves paired matching
+within existing peak gates, closer to native master loudness where feasible,
+and include an unlabeled playback-level check before judgments. Use transparent
+gain on existing masters and verify encoded loudness/peaks. Preserve this session
+unchanged; no remastering or added limiting is required for louder listening
+copies. [Playback-level receipt](../artifacts/listening-results-20261021/playback_level_note.json)
+records the owner's wording and measured packaging gains.
+
 [Followup receipt](../artifacts/listening-results-20261021/followup.json) checks
 the existing native final-master diagnostics without rerendering. Candidate minus
 control mean attack crest is +0.00239 dB, attack-minus-pre-onset crest is -0.00529 dB,

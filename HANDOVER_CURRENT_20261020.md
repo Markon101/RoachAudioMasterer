@@ -26,6 +26,11 @@ Four trials/eight24bit48kstereoWAVs include full-song and fixed30s excerpts plus
 identity controls. All11 delivery files match by SHA; independent boundary review
 found no source labels, diagnostics or private keys. Give only the listener folder
 to the owner. Responses go in responses.csv; A/B/indistinguishable/abstain allowed.
+Owner reports all files were quiet, requiring maximum M50x playback volume.
+Listening copies are -23LUFS (10/10.4dB attenuation from the existing masters),
+not native -13LUFS master level. See playback_level_note.json. For future trials
+minimize attenuation subject to matching/peak gates and check playback level
+before judgments; do not overwrite this session or remaster for louder copies.
 
 The original private source key and once-drawn seed remain in
 `runs/listening-coherence-20261020/listening-private-v1`.

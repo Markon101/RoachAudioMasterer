@@ -1,0 +1,74 @@
+{
+  "schema": "roach-owner-playback-level-note-v1",
+  "recorded_utc": "2026-10-21T03:37:10.450192+00:00",
+  "owner_verbatim": "oh just one more note i have on these. it seems all samples were on quiet side. i had to turn my m50x up all the way. i forgot to mention that.",
+  "reported_headphones": "M50x",
+  "reported_volume_setting": "maximum",
+  "after_source_reveal": true,
+  "native_master_target_lufs": -13,
+  "packaging": [
+    {
+      "trial": "T0001",
+      "members": {
+        "A": {
+          "gain_db": -10.0,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.0
+        },
+        "B": {
+          "gain_db": -10.0,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.0
+        }
+      }
+    },
+    {
+      "trial": "T0002",
+      "members": {
+        "A": {
+          "gain_db": -10.4,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.8
+        },
+        "B": {
+          "gain_db": -10.4,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.8
+        }
+      }
+    },
+    {
+      "trial": "T0003",
+      "members": {
+        "A": {
+          "gain_db": -10.4,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.8
+        },
+        "B": {
+          "gain_db": -10.4,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.8
+        }
+      }
+    },
+    {
+      "trial": "T0004",
+      "members": {
+        "A": {
+          "gain_db": -10.0,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.0
+        },
+        "B": {
+          "gain_db": -10.0,
+          "encoded_lufs": -23.0,
+          "encoded_true_peak_dbfs": -11.0
+        }
+      }
+    }
+  ],
+  "acoustic_playback_level": "unmeasured",
+  "impact_on_judgments": "unknown; possible additional limitation",
+  "future_package_policy": "Minimize transparent attenuation within loudness-match and peak gates; verify encoded outputs and check playback level before judging. Preserve original session. No remastering or added limiting."
+}

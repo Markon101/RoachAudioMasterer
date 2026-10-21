@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-21T03:33:57.419970+00:00",
+  "date_utc": "2026-10-21T03:37:10.450192+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "2146a43",
@@ -162,5 +162,6 @@
   "live_jobs": [],
   "fullsong_verdict": "artifacts/ph-memory-20261021/listening_milestone.json",
   "listening_response_receipt": "artifacts/listening-results-20261021/receipt.json",
-  "listening_followup": "artifacts/listening-results-20261021/followup.json"
+  "listening_followup": "artifacts/listening-results-20261021/followup.json",
+  "listening_playback_level_note": "artifacts/listening-results-20261021/playback_level_note.json"
 }

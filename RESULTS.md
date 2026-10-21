@@ -1572,4 +1572,10 @@ The owner subsequently heard more coherent highs in A after focusing initially
 on bass. This post-reveal impression and B's perceived punch suggest a possible
 band-specific tradeoff, not demonstrated overall superiority or permission to
 promote. Original CSV choices remain unchanged.
+The owner also reported all listening samples were quiet and required maximum
+M50x playback volume. Packaging receipts confirm -23LUFS listening copies with
+10/10.4dB attenuation from the native masters. Acoustic playback level is unknown;
+adequacy of listening level is an additional session limitation. Future packages
+should minimize attenuation within paired loudness/peak gates and check playback
+level before judgments, without remastering or changing this preserved session.
 
