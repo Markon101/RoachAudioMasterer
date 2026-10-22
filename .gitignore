@@ -1,4 +1,6 @@
 /target/
 /runs/
 *.wav
+__pycache__/
+*.py[cod]
 

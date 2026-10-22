@@ -1,0 +1,18 @@
+{
+  "renderer": "librsvg rsvg-convert plus Pillow tiling; originalSVGpoints retained",
+  "owner_waveforms_local_only": true,
+  "plots": [
+    {
+      "version": "v1",
+      "panels": 7,
+      "overview": "runs/around-analysis-20261022/v1/figures/overview.png",
+      "sha256": "99b5adb0f39b9ec5ac7091131112f92868fb25ad35d501beaaffe3dad511c128"
+    },
+    {
+      "version": "v2",
+      "panels": 7,
+      "overview": "runs/around-analysis-20261022/v2/figures/overview.png",
+      "sha256": "039e1368a506e6d78f84a00625cb0d5a5a2e1ec8a75ccee2f7badf1287306108"
+    }
+  ]
+}

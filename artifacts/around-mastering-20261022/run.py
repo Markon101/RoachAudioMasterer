@@ -29,8 +29,8 @@ def available_mib():
                     if line.startswith('MemAvailable:'))) / 1024
 
 
-def main():
-    plan_path = HERE / 'plan.json'
+def main(plan_path=None):
+    plan_path = Path(plan_path).resolve() if plan_path else HERE / 'plan.json'
     plan = json.loads(plan_path.read_text())
     if plan['target_lufs'] != -14 or plan['ceiling_dbtp'] != -1:
         raise RuntimeError('this experiment requires requested -14 LUFS / -1 dBTP plan')
@@ -80,9 +80,14 @@ def main():
     try:
         for track in plan['tracks']:
             check()
-            if shutil.disk_usage(ROOT).free < limits['minimum_free_storage_gib'] * 1024**3:
+            free_bytes = shutil.disk_usage(ROOT).free
+            available = available_mib()
+            save(run / (track['id'] + '-preflight.json'), {
+                'phone_available_mib': available, 'free_storage_bytes': free_bytes,
+                'limits': limits, 'native_child_started': False})
+            if free_bytes < limits['minimum_free_storage_gib'] * 1024**3:
                 raise RuntimeError('storage reserve failed')
-            if available_mib() < limits['minimum_memavailable_mib']:
+            if available < limits['minimum_memavailable_mib']:
                 raise RuntimeError('available-memory reserve failed')
             out = run / track['id']
             command = [str(binary), 'auto-master', '--input', track['path'], '--out', str(out),
@@ -162,4 +167,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--plan', type=Path)
+    main(parser.parse_args().plan)

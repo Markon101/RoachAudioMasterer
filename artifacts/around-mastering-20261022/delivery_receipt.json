@@ -1,0 +1,56 @@
+{
+  "schema": "around-listening-delivery-v1",
+  "destination": "/sdcard/Download/AROUND Roach -14 LUFS 20261022",
+  "plan_sha256": "9aa153e16f1c099b17a5bc85965f0393671936e362401b7eb9552dd243562166",
+  "files": [
+    {
+      "filename": "AROUND v1 - Roach -14 LUFS.flac",
+      "sha256": "b2d5519326cd4b9f314f3d158485eb198e9b33e06a85633dc50d08b3838b31cc",
+      "bytes": 62325636
+    },
+    {
+      "filename": "AROUND v1 analysis.html",
+      "sha256": "a1b46831faea1de5b25026c39ef24604827d31bf53efd292a36c18c80cea1d0c",
+      "bytes": 2403124
+    },
+    {
+      "filename": "AROUND v1 waveforms.png",
+      "sha256": "99b5adb0f39b9ec5ac7091131112f92868fb25ad35d501beaaffe3dad511c128",
+      "bytes": 336761
+    },
+    {
+      "filename": "AROUND v2 - Roach -14 LUFS - DIAGNOSTIC.flac",
+      "sha256": "a6af0530fc64c1e3cc0dba0919e193121ea5ea5ae563660d5b57d15f8c45f3f9",
+      "bytes": 67408166
+    },
+    {
+      "filename": "AROUND v2 analysis.html",
+      "sha256": "ea31bbcd1171fa59f3ecbc8f42e2f8e6f32324413ac8b3eedb6a370e051fbb8b",
+      "bytes": 2538747
+    },
+    {
+      "filename": "AROUND v2 waveforms.png",
+      "sha256": "039e1368a506e6d78f84a00625cb0d5a5a2e1ec8a75ccee2f7badf1287306108",
+      "bytes": 315355
+    },
+    {
+      "filename": "START_HERE.html",
+      "sha256": "a3760d360f284203d514344bd77040e1384e9a15ceb991449a4a1d79ef8b4e50",
+      "bytes": 4199
+    },
+    {
+      "filename": "metrics.csv",
+      "sha256": "b0e2261d0c90def1562d9dcd5b6363a01bbda5291e1f42b49f4aba7358ecf1b4",
+      "bytes": 695
+    },
+    {
+      "filename": "Full results.md",
+      "sha256": "a31d119db1ffd3c316652a2034a151c97cdf5ef0638d405628f11cdfd0f68862",
+      "bytes": 9712
+    }
+  ],
+  "all_hashes_match": true,
+  "v2_is_diagnostic": true,
+  "audio_modified_during_delivery": false,
+  "production_promoted": false
+}

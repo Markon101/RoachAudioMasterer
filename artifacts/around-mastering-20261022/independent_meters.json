@@ -1,0 +1,109 @@
+{
+  "schema": "around-independent-ebu-meter-v1",
+  "rows": [
+    {
+      "id": "around-v1",
+      "kind": "source",
+      "path": "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+      "sha256": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+      "lufs_integrated": -16.0,
+      "lra_lu": 7.0,
+      "true_peak_dbtp": -3.8,
+      "argv": [
+        "ffmpeg",
+        "-nostdin",
+        "-hide_banner",
+        "-nostats",
+        "-i",
+        "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+        "-map",
+        "0:a:0",
+        "-af",
+        "ebur128=peak=true:framelog=verbose",
+        "-f",
+        "null",
+        "-"
+      ],
+      "log_sha256": "c564857e4e4c8806236189009dd7887e9f2fcae2c840665483beb4f2cdf51efc"
+    },
+    {
+      "id": "around-v1",
+      "kind": "exported_flac",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1/mastered.flac",
+      "sha256": "b2d5519326cd4b9f314f3d158485eb198e9b33e06a85633dc50d08b3838b31cc",
+      "lufs_integrated": -14.0,
+      "lra_lu": 6.8,
+      "true_peak_dbtp": -1.0,
+      "argv": [
+        "ffmpeg",
+        "-nostdin",
+        "-hide_banner",
+        "-nostats",
+        "-i",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1/mastered.flac",
+        "-map",
+        "0:a:0",
+        "-af",
+        "ebur128=peak=true:framelog=verbose",
+        "-f",
+        "null",
+        "-"
+      ],
+      "log_sha256": "dff9120fbe7a3db50d97e393eef9ecdd1dbead2609d609317b27290629d9a606"
+    },
+    {
+      "id": "around-v2",
+      "kind": "source",
+      "path": "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+      "sha256": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+      "lufs_integrated": -15.3,
+      "lra_lu": 6.6,
+      "true_peak_dbtp": -2.7,
+      "argv": [
+        "ffmpeg",
+        "-nostdin",
+        "-hide_banner",
+        "-nostats",
+        "-i",
+        "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+        "-map",
+        "0:a:0",
+        "-af",
+        "ebur128=peak=true:framelog=verbose",
+        "-f",
+        "null",
+        "-"
+      ],
+      "log_sha256": "617be7a652460b5ce71091425dd0edf95c5752df00d6753b876d2de91219be79"
+    },
+    {
+      "id": "around-v2",
+      "kind": "exported_flac",
+      "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.flac",
+      "sha256": "a6af0530fc64c1e3cc0dba0919e193121ea5ea5ae563660d5b57d15f8c45f3f9",
+      "lufs_integrated": -14.0,
+      "lra_lu": 6.2,
+      "true_peak_dbtp": -1.0,
+      "argv": [
+        "ffmpeg",
+        "-nostdin",
+        "-hide_banner",
+        "-nostats",
+        "-i",
+        "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.flac",
+        "-map",
+        "0:a:0",
+        "-af",
+        "ebur128=peak=true:framelog=verbose",
+        "-f",
+        "null",
+        "-"
+      ],
+      "log_sha256": "94a9398051d06b10f53c989219d61d01a80026236221acf56b226f0dc9b11d61"
+    }
+  ],
+  "tool_version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "precision_note": "Installed FFmpeg scanner reports summary to0.1LU/dB; finite oversampled estimate, not continuous-time guarantee.",
+  "native_results_separate": true,
+  "audio_changed": false
+}

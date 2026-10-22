@@ -1,10 +1,16 @@
 # Documentation index and source of truth
 
-Updated 2026-10-21. Start with [project policy](../AGENTS.md), [README](../README.md),
+Updated 2026-10-22. Start with [project policy](../AGENTS.md), [README](../README.md),
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
-Latest frontier: the full Feelin comparison is delivered after exact short
+Latest frontier: [two full AROUND masters at -14 LUFS](AROUND_MASTERING_RESULTS_20261022.md)
+and waveform/numeric analyses are delivered. V1 passes all native checks; v2 is
+diagnostic after a preserved shape-gate failure. Its cached trace first crosses
+at combined clean polish. Exact native replay before denoise/EQ counterfactuals
+is next; no production change or subjective quality conclusion follows.
+
+The full Feelin comparison is delivered after exact short
 audio/audit parity and full-song memory/quality gates. Its owner judgments remain
 pending. Earlier Chasing responses selected the control in both real comparisons,
 with directional identity choices limiting inference. See

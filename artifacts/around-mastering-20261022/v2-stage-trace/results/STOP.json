@@ -1,0 +1,12 @@
+{
+  "stopped_utc": "2026-10-22T05:19:31.099836+00:00",
+  "error_type": "KeyError",
+  "reason": "'runs/around-mastering-20261022/session2/around-v2/stage2_in.wav'",
+  "completed_rows": 1,
+  "memory": {
+    "ru_maxrss_kib_linux": 498184,
+    "VmHWM_kib": 498184,
+    "VmRSS_kib": 33236,
+    "observed_hwm_mib": 486.5078125
+  }
+}

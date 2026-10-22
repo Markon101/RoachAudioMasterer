@@ -1,6 +1,6 @@
 {
   "schema": "roach-mission-checkpoint-v2",
-  "date_utc": "2026-10-21T06:21:59.905233+00:00",
+  "date_utc": "2026-10-22T05:29:21.302181+00:00",
   "research_branch": "experiment/phase3-geometric-moonshot",
   "entry_commit": "55fddfe",
   "verified_source_commit": "fc92ea1",
@@ -28,7 +28,9 @@
     "matched_attack": "V1sourcealignmentSTOPpreserved;V2paired-only320events/16tests;localizedpresencechanges;rootdirectconvolutionreplication;noaudibilityconclusion",
     "cross_song_listening": "OriginalSIshapeFAILandFeelinmemorySTOPpreserved;freshsame-sourceFeelinpairpassesallgates;1candidate,1control;blindpackage12filesdelivered;ownerjudgmentspending",
     "preservation_shape_trace": "8cachedboundaries;firstanalyticalcrossingfinal1.140267dBvsnative1.141326;12tests;noDSPchange",
-    "clean_factorial": "ExactnativecombinedcachedWAVreproduction;5arms;D/E/Cshapeincrements.099314/.607245/.714347dB;interaction.007788dB;guard=identity;9Rust+5Pythontests;noDSPchange"
+    "clean_factorial": "ExactnativecombinedcachedWAVreproduction;5arms;D/E/Cshapeincrements.099314/.607245/.714347dB;interaction.007788dB;guard=identity;9Rust+5Pythontests;noDSPchange",
+    "around_full_master": "Two different owner sources at-14LUFS; v1allnativePASS,v2shapeFAIL1.403972dBdiagnostic;nativeFLACs+7analysisfiles9hashesverifiedDownload;noDSPmutation",
+    "around_trace": "8cachedboundaries;firstanalyticcrossingclean1.018849dB;final1.396267vsnative1.403972;twoharmlesspathSTOPspreserved;noEQ/denoiseisolation"
   },
   "native_development": {
     "scene_seeds": [
@@ -86,7 +88,8 @@
     "ph_stereo_rust": 27,
     "ph_stereo_comparison_wav_pairs": 48,
     "clean_factorial_rust": 9,
-    "clean_factorial_python": 5
+    "clean_factorial_python": 5,
+    "around_analyzer_and_runner": 23
   },
   "listening_paths": [
     "runs/mission-20261018/listen/session1",
@@ -94,13 +97,14 @@
     "runs/mission-20261018/listen/session3",
     "runs/coherence-20261018/listen/diagnostic1",
     "/sdcard/Download/Roach Listening 20261021",
-    "/storage/emulated/0/Download/Roach Listening Feelin Catchy 20261021"
+    "/storage/emulated/0/Download/Roach Listening Feelin Catchy 20261021",
+    "/sdcard/Download/AROUND Roach -14 LUFS 20261022"
   ],
   "owner_judgments_received": true,
   "future_speed_experiment_requires_fresh_foreground_confirmation": true,
   "last_foreground_confirmation_scope": "completed CPU/OpenCL12-scene diagnostic only",
   "jobs_running_at_checkpoint": 0,
-  "next_action": "Owner judge fixed Feelin package. Independentnext: preregister cachedpre-master nativefinalizerreplay with exactbaselinebeforeglue/limitercounterfactuals; no threshold tuning or promotion.",
+  "next_action": "Owner can listen to AROUND v1 and explicitly diagnostic v2. Next independentengineering: preregister AROUNDv2cachedclean nativeexactcombinedreplay beforedenoise/EQcounterfactuals;retainnativefailure,nogaterelaxation. PriorFeelinblindjudgmentspending;do notrevealkey.",
   "reports": [
     "HANDOVER_AUTONOMOUS_MISSION_2026-10-18.md",
     "docs/NATIVE_MID_SOLVER_DEV_RESULTS_20261018.md",
@@ -115,7 +119,8 @@
     "docs/PH_MEMORY_RESULTS_20261021.md",
     "docs/OWNER_LISTENING_RESULTS_20261021.md",
     "docs/COHERENCE_FOLLOWUP_20261021.md",
-    "docs/PH_STEREO_MEMORY_20261021.md"
+    "docs/PH_STEREO_MEMORY_20261021.md",
+    "docs/AROUND_MASTERING_RESULTS_20261022.md"
   ],
   "delegation": [
     {
@@ -153,6 +158,18 @@
       "model": "gpt-6-luna",
       "integration": "native collaboration",
       "purpose": "Inexpensive independent actual-file/provenance/identity/blinding audit; concrete hash/header checks, no perceptual inference."
+    },
+    {
+      "agent": "around_analysis_tool",
+      "model": "inherited native model",
+      "integration": "native collaboration",
+      "purpose": "Boundedstreaminganalyzerimplementation+17synthetictests;source/masterartifactssequential;rootreranall23tests."
+    },
+    {
+      "agent": "around_runner_review",
+      "model": "gpt-6-luna",
+      "integration": "native collaboration",
+      "purpose": "Independentcachedv2traceandclaimchallenge;pathSTOPsretained;rootrehashandtracearithmetic."
     }
   ],
   "external_paid_api_calls_in_this_continuation": 6,
@@ -160,7 +177,7 @@
   "documentation_audit": "artifacts/mission-20261018/documentation_audit.json",
   "documentation_review_base_commit": "394fe30",
   "owner_priority": "Audio output quality and coherence over longer passages; cache/solver speed work is secondary.",
-  "checkpoint_tool_parent_commit": "707443ea3303c9db877f0b9640a6d4e72028cbb7",
+  "checkpoint_tool_parent_commit": "cf0875a",
   "repo_object": {
     "identity": "Rust-first unified acoustic-scene restoration/correction/expansion with protected historical champions",
     "canonical_core": {
@@ -177,13 +194,31 @@
       "pinned_native_binary": "runs/ph-stereo-memory-20261021/sequential-candidate-v1",
       "native_binary_sha256": "c2c5b14f77d0275f1b2f3fd94f028efd2253479a6477f94729d7366ebb37b511",
       "raw_run_root": "runs/coherence-20261018",
-      "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization"
+      "environment_changes": "finalverificationPython3.14.8; originalrenders3.14.6; no new speed authorization",
+      "latest_owner_workload": "artifacts/around-mastering-20261022/plan_session2.json",
+      "latest_delivery_receipt": "artifacts/around-mastering-20261022/delivery_receipt.json"
     },
     "state_transition_ledger": "data/research_ledger.jsonl",
-    "frontier": "Owner judge fixed Feelin package. Independentnext: preregister cachedpre-master nativefinalizerreplay with exactbaselinebeforeglue/limitercounterfactuals; no threshold tuning or promotion.",
+    "frontier": "Owner can listen to AROUND v1 and explicitly diagnostic v2. Next independentengineering: preregister AROUNDv2cachedclean nativeexactcombinedreplay beforedenoise/EQcounterfactuals;retainnativefailure,nogaterelaxation. PriorFeelinblindjudgmentspending;do notrevealkey.",
     "containment": "Existing run-local HALT/HALTED.json latches the quality session; preserves partial evidence; no automatic resume/global shutdown",
     "reproduce": "Current tools + isolated b031c41 native patch; regenerate/re-pin fresh plans for local environment, preserve canonical core and hashes",
-    "verification": "artifacts/assessment-band-observer-20261020/verification.json"
+    "verification": "artifacts/assessment-band-observer-20261020/verification.json",
+    "around_state_transition": {
+      "parent_commit": "cf0875a",
+      "native_source_commit": "fc92ea1",
+      "local_plan": "artifacts/around-mastering-20261022/plan_session2.json",
+      "numeric_evidence": "artifacts/around-mastering-20261022/results.json",
+      "containment": "initialsession1zerochildSTOPpreserved;session2complete;newlargerinput2048MiBcap,notpriorcapschanged",
+      "qualified_tracks": [
+        "around-v1"
+      ],
+      "diagnostic_tracks": [
+        "around-v2"
+      ],
+      "portable_core_changed": false,
+      "owner_audio_and_waveform_samples_local_only": true,
+      "earned_machinery": "streamingtestedsource/mastermetrics;createonlyhasheddelivery;existingledgerandHALTreused"
+    }
   },
   "agent_model": "deepseek/deepseek-v4.1-flash-1017",
   "live_jobs": [],
@@ -192,5 +227,7 @@
   "listening_followup": "artifacts/listening-results-20261021/followup.json",
   "listening_playback_level_note": "artifacts/listening-results-20261021/playback_level_note.json",
   "feelin_owner_judgments_received": false,
-  "feelin_listening_path": "/storage/emulated/0/Download/Roach Listening Feelin Catchy 20261021"
+  "feelin_listening_path": "/storage/emulated/0/Download/Roach Listening Feelin Catchy 20261021",
+  "around_owner_judgments_received": false,
+  "around_delivery_receipt": "artifacts/around-mastering-20261022/delivery_receipt.json"
 }

@@ -1,0 +1,996 @@
+{
+  "schema": "around-full-master-analysis-v1",
+  "entry_commit": "7fc6353",
+  "native_source_commit": "fc92ea1",
+  "plan_sha256": "1e9f2a5bb1c5dcaf428a0f20a9a2cadba0b4171ce309545930ef614bec493583",
+  "tracks": [
+    {
+      "id": "around-v1",
+      "geometry": {
+        "sample_rate": 48000,
+        "channels": 2,
+        "frames": 13704960,
+        "duration_seconds": 285.52
+      },
+      "render": {
+        "id": "around-v1",
+        "argv": [
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+          "auto-master",
+          "--input",
+          "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+          "--out",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1",
+          "--auto-tune",
+          "--backend",
+          "opencl",
+          "--sfht-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-low-sfht-v2/basis.json",
+          "--mid-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+          "--target-lufs",
+          "-14",
+          "--ceiling-db",
+          "-1",
+          "--steps",
+          "8",
+          "--chunk-seconds",
+          "10",
+          "--overlap-seconds",
+          "2",
+          "--morphic-mode",
+          "ph-lie-v2",
+          "--clock-transient-punch",
+          "--kick-transient-guard",
+          "--quiet-mid-denoise",
+          "--phase-consistency",
+          "0.5",
+          "--no-export-sdcard"
+        ],
+        "source_sha256": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+        "mastered_sha256": "d41c7ec6d4eb5336f2e5bb59fcc8078ee1f9ec8bd7807f6051a81497c9ba52b4",
+        "flac_sha256": "b2d5519326cd4b9f314f3d158485eb198e9b33e06a85633dc50d08b3838b31cc",
+        "summary_sha256": "570f2b5067d2538b5df06224de25212bf2099be5c8edb6fad492a7ff091633a3",
+        "native_stats": {
+          "crest_factor_db": 15.314858436584473,
+          "lufs_integrated": -14.00163284135141,
+          "rms_dbfs": -16.337162017822266,
+          "sample_peak_dbfs": -1.0223032236099243,
+          "true_peak_dbtp": -1.000009536743164
+        },
+        "preservation": {
+          "correlation_value": 0.7900636792182922,
+          "known_band_preserved": true,
+          "max_passband_deviation_db": 0.4082065224647522,
+          "mono_compatibility_passed": true,
+          "transient_correlation": 0.9773162007331848,
+          "transient_timing_passed": true
+        },
+        "quality_checks": {
+          "mono_compatibility_passed": true,
+          "known_band_preserved": true,
+          "transient_timing_passed": true,
+          "true_peak": true,
+          "target_loudness": true
+        },
+        "qualified": true,
+        "observed_process_hwm_mib": 1704.05078125,
+        "settings": {
+          "applied_dynamics": null,
+          "applied_morphic": {
+            "crossover_hz": 8000.0,
+            "enable_confidence_gating": true,
+            "lock_passband": true,
+            "microtexture_authority": 0.15630079805850983,
+            "mode": "PortHamiltonianLieV2",
+            "ph_adaptive_coupling": false,
+            "ph_coupling_kappa": 5.5,
+            "ph_quartic_beta": 1.2000000476837158,
+            "ph_shelf_db": 0.25,
+            "ph_split_hz": 12000.0,
+            "sub_bass_damping_authority": 0.2391461730003357
+          },
+          "applied_spatial": {
+            "authority": 0.8999999761581421,
+            "contrast_budget": false,
+            "mono_bass_hz": 80.0,
+            "mono_bass_strength": 0.8500000238418579,
+            "room_depth": 0.053999997675418854,
+            "width_factor": 1.1147500276565552
+          },
+          "auto_eq": true,
+          "auto_tune": true,
+          "backend": "opencl",
+          "ceiling_db": -1.0,
+          "contrast_budget": false,
+          "coupled_clocks": false,
+          "denoise": true,
+          "dynamics_model": null,
+          "dynamics_preservation_note": "When dynamics is requested, full-band amplitude changes are authorized; the legacy band-energy proxy is advisory for that task",
+          "dynamics_strength": 1.0,
+          "effective_glue_ratio": 1.1274999380111694,
+          "explicit_cli_parameters": [
+            "morphic_mode"
+          ],
+          "force_specialists": false,
+          "fractal_tendrils": 0.0,
+          "glue_ratio": 1.149999976158142,
+          "glue_threshold_db": -14.0,
+          "low_cutoff": 200.0,
+          "master_controls": {
+            "clock_transient_punch": true,
+            "glue_attack_ms": 20.0,
+            "kick_transient_guard": true,
+            "max_limiter_gr_db": null,
+            "no_glue": false,
+            "quiet_mid_denoise": true
+          },
+          "mid_ceiling": 8000.0,
+          "mid_coherence_applied": false,
+          "mid_coherence_requested": false,
+          "mid_cutoff": 1500.0,
+          "mono_bass_hz": 80.0,
+          "parameter_sources": {
+            "glue_attack_ms": "legacy-default",
+            "glue_ratio": "auto-tune-and-intent",
+            "glue_threshold_db": "auto-tune-and-intent",
+            "morphic_coupling": "auto-tune-and-intent",
+            "morphic_mode": "cli",
+            "morphic_quartic": "auto-tune-and-intent",
+            "morphic_shelf_db": "auto-tune-and-intent",
+            "strength": "auto-tune-and-intent"
+          },
+          "room_depth": 0.11999999731779099,
+          "sidechain_hp_hz": 90.0,
+          "spatial": true,
+          "steps": 8,
+          "strength": 1.0,
+          "target_lufs": -14.0,
+          "width_factor": 1.149999976158142
+        }
+      },
+      "execution": {
+        "argv": [
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+          "auto-master",
+          "--input",
+          "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+          "--out",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1",
+          "--auto-tune",
+          "--backend",
+          "opencl",
+          "--sfht-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-low-sfht-v2/basis.json",
+          "--mid-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+          "--target-lufs",
+          "-14",
+          "--ceiling-db",
+          "-1",
+          "--steps",
+          "8",
+          "--chunk-seconds",
+          "10",
+          "--overlap-seconds",
+          "2",
+          "--morphic-mode",
+          "ph-lie-v2",
+          "--clock-transient-punch",
+          "--kick-transient-guard",
+          "--quiet-mid-denoise",
+          "--phase-consistency",
+          "0.5",
+          "--no-export-sdcard"
+        ],
+        "returncode": 0,
+        "observed_process_hwm_mib": 1704.05078125,
+        "minimum_observed_phone_available_mib": 1821.55859375,
+        "elapsed_seconds_watchdog_only": 272.3605416149994,
+        "speed_experiment": false
+      },
+      "analysis": {
+        "source": {
+          "rms": 0.12434232508990363,
+          "rms_dbfs": -18.107620319496544,
+          "sample_peak": 0.6483154296875,
+          "sample_peak_dbfs": -3.764272844252367,
+          "crest_db": 14.343347475244174,
+          "dc_per_channel": [
+            0.00011540085614490233,
+            2.3814212755962302e-05
+          ],
+          "near_fullscale_counts_per_channel": [
+            0,
+            0
+          ],
+          "lr_correlation": 0.8017453728714925,
+          "mid_mean_square": 0.013926793576809125,
+          "side_mean_square": 0.0015342202319541531,
+          "side_to_mid_db": -9.57963432977442,
+          "side_energy_fraction": 0.09923154140671937
+        },
+        "master": {
+          "rms": 0.15245510138589635,
+          "rms_dbfs": -16.337160777670622,
+          "sample_peak": 0.888965368270874,
+          "sample_peak_dbfs": -1.0223031531901194,
+          "crest_db": 15.314857624480503,
+          "dc_per_channel": [
+            -1.972396191754153e-07,
+            -5.986814499799666e-07
+          ],
+          "near_fullscale_counts_per_channel": [
+            0,
+            0
+          ],
+          "lr_correlation": 0.7900636641588059,
+          "mid_mean_square": 0.02079670099023642,
+          "side_mean_square": 0.002445856948347515,
+          "side_to_mid_db": -9.295633949688174,
+          "side_energy_fraction": 0.10523183183238437
+        },
+        "paired": {
+          "best_nonnegative_global_gain": 1.186690755332965,
+          "gain_constraint_boundary": false,
+          "unconstrained_gain": 1.186690755332965,
+          "gain_db": 1.486751181951938,
+          "waveform_correlation_per_channel_dc_removed": 0.9678647655367778,
+          "raw_difference_rms": 0.044818382807480184,
+          "gain_adjusted_residual_rms": 0.03833820482647279,
+          "residual_to_master_rms_db": -11.990203755823236,
+          "global_rms_delta_db": 1.7704595418259217,
+          "global_crest_delta_db": 0.9715101492363285,
+          "transient_crest_delta_db_distribution": {
+            "count": 2855,
+            "valid_count": 2855,
+            "null_count": 0,
+            "min": -1.8771579094010562,
+            "p10": -0.17510124704370955,
+            "median": 0.42530574100955043,
+            "p90": 1.052731963180443,
+            "max": 3.1124795287672278
+          },
+          "source_one_second_rms_dbfs_distribution": {
+            "count": 285,
+            "valid_count": 285,
+            "null_count": 0,
+            "min": -34.849900418867634,
+            "p10": -24.312748486748724,
+            "median": -18.059592590653498,
+            "p90": -15.60841591283554,
+            "max": -13.573097865261532,
+            "p90_minus_p10_db": 8.704332573913184
+          },
+          "source_100ms_crest_db_distribution": {
+            "count": 2855,
+            "valid_count": 2855,
+            "null_count": 0,
+            "min": 4.439686304918869,
+            "p10": 8.165370405039031,
+            "median": 10.53323283322715,
+            "p90": 14.452007255041435,
+            "max": 24.529818040404592
+          },
+          "master_one_second_rms_dbfs_distribution": {
+            "count": 285,
+            "valid_count": 285,
+            "null_count": 0,
+            "min": -32.753772118929454,
+            "p10": -22.492629946052663,
+            "median": -16.069564559766413,
+            "p90": -13.980268027830794,
+            "max": -12.502081018180958,
+            "p90_minus_p10_db": 8.512361918221869
+          },
+          "master_100ms_crest_db_distribution": {
+            "count": 2855,
+            "valid_count": 2855,
+            "null_count": 0,
+            "min": 4.533655502268149,
+            "p10": 8.641139977173133,
+            "median": 10.877631585607851,
+            "p90": 14.946108648806606,
+            "max": 25.29415509036939
+          }
+        },
+        "spectrum": {
+          "window_count": 6690,
+          "trailing_unanalyzed_frames": 1792,
+          "source_broadband_mean_square": 0.01544867274902684,
+          "master_broadband_mean_square": 0.023223498112731368,
+          "normalization_pooled_rms_gain_db": 1.7704595418259217,
+          "bass_20_80_ms": {
+            "low_hz": 20,
+            "high_hz": 80,
+            "frequency_resolution_hz": 11.71875,
+            "available_bin_count": 5,
+            "scope": "coarse bin-integrated energy, not coherence or a mono guarantee; reduced side energy is not automatically better; intentional width may be affected",
+            "source": {
+              "pooled_mean_square": 0.005268682923220087,
+              "mid_mean_square": 0.005202706359687704,
+              "side_mean_square": 6.597656353238511e-05,
+              "side_energy_fraction": 0.012522401612291723,
+              "side_to_mid_db": -18.968396239885557
+            },
+            "master": {
+              "pooled_mean_square": 0.006943705400828473,
+              "mid_mean_square": 0.006933066186020628,
+              "side_mean_square": 1.063921480784448e-05,
+              "side_energy_fraction": 0.0015322099936116364,
+              "side_to_mid_db": -28.140157687097954
+            }
+          },
+          "bands": [
+            {
+              "low_hz": 20,
+              "high_hz": 120,
+              "available_bin_count": 9,
+              "source_mean_square": 0.007399004183885374,
+              "master_mean_square": 0.010427542436572975,
+              "raw_energy_shift_db": 1.4900869305268518,
+              "broadband_normalized_shift_db": -0.2803726112990699
+            },
+            {
+              "low_hz": 120,
+              "high_hz": 500,
+              "available_bin_count": 32,
+              "source_mean_square": 0.003214165377859747,
+              "master_mean_square": 0.004916506882510541,
+              "raw_energy_shift_db": 1.8458843278164452,
+              "broadband_normalized_shift_db": 0.07542478599052349
+            },
+            {
+              "low_hz": 500,
+              "high_hz": 2000,
+              "available_bin_count": 128,
+              "source_mean_square": 0.0037248608067751796,
+              "master_mean_square": 0.005923464750095443,
+              "raw_energy_shift_db": 2.0146575999481318,
+              "broadband_normalized_shift_db": 0.24419805812221007
+            },
+            {
+              "low_hz": 2000,
+              "high_hz": 8000,
+              "available_bin_count": 512,
+              "source_mean_square": 0.0007553947492614921,
+              "master_mean_square": 0.0012508627339177384,
+              "raw_energy_shift_db": 2.1903569235257034,
+              "broadband_normalized_shift_db": 0.41989738169978175
+            },
+            {
+              "low_hz": 8000,
+              "high_hz": 20000,
+              "available_bin_count": 1024,
+              "source_mean_square": 0.00034206184339101404,
+              "master_mean_square": 0.000703338623010438,
+              "raw_energy_shift_db": 3.130598350050775,
+              "broadband_normalized_shift_db": 1.3601388082248533
+            }
+          ]
+        },
+        "memory": {
+          "ru_maxrss_kib_linux": 83364,
+          "VmHWM_kib": 83364,
+          "VmRSS_kib": 75840,
+          "observed_hwm_mib": 81.41015625
+        },
+        "provenance": {
+          "source": {
+            "path": "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+            "rate": 48000,
+            "channels": 2,
+            "frames": 13704960,
+            "encoding": "PCM16",
+            "data_offset": 172,
+            "frame_bytes": 4
+          },
+          "master": {
+            "path": "runs/around-mastering-20261022/session2/around-v1/mastered.wav",
+            "rate": 48000,
+            "channels": 2,
+            "frames": 13704960,
+            "encoding": "IEEE-float32",
+            "data_offset": 68,
+            "frame_bytes": 8
+          },
+          "sha256": {
+            "/storage/emulated/0/Download/AROUND (The Absence of Ladder).wav": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1/mastered.wav": "d41c7ec6d4eb5336f2e5bb59fcc8078ee1f9ec8bd7807f6051a81497c9ba52b4",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/analyze_master_pair.py": "cee8a820c05f2d340c62736188fb0c11cc0558fded7a14397db8edce6b9c7a08",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/matched_attack_audit.py": "ece7406495a6097bd31f1f4f729282756c3363f34535493c9b24852197d31345"
+          },
+          "python": "3.14.8 (main, Oct 18 2026, 13:48:52) [Clang 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 9f872551d",
+          "numpy": "2.5.4",
+          "platform": "Android-17-aarch64-64bit",
+          "matplotlib_available": false,
+          "plot_backend": "local standalone SVG/HTML",
+          "argv": [
+            "scripts/analyze_master_pair.py",
+            "--source",
+            "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+            "--master",
+            "runs/around-mastering-20261022/session2/around-v1/mastered.wav",
+            "--out",
+            "runs/around-analysis-20261022/v1",
+            "--excerpt-plan",
+            "runs/around-analysis-20261022/source-plan-v1/excerpts.json"
+          ]
+        }
+      },
+      "analysis_summary_sha256": "bbd90194f90043b7f88995ba78ec0a835c0ef502a2ddfe02b20859c51577bb80",
+      "finalizer_glue": {
+        "attack_ms": 20.0,
+        "max_gain_reduction_db": 0.4290546178817749,
+        "ratio": 1.1274999380111694,
+        "release_ms": 160.0,
+        "requested_ratio": 1.149999976158142,
+        "sidechain_hp_hz": 90.0,
+        "threshold_db": -14.0
+      },
+      "finalizer_limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": 0.7968692779541016,
+        "release_ms": 60.0
+      }
+    },
+    {
+      "id": "around-v2",
+      "geometry": {
+        "sample_rate": 48000,
+        "channels": 2,
+        "frames": 14899200,
+        "duration_seconds": 310.4
+      },
+      "render": {
+        "id": "around-v2",
+        "argv": [
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+          "auto-master",
+          "--input",
+          "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+          "--out",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2",
+          "--auto-tune",
+          "--backend",
+          "opencl",
+          "--sfht-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-low-sfht-v2/basis.json",
+          "--mid-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+          "--target-lufs",
+          "-14",
+          "--ceiling-db",
+          "-1",
+          "--steps",
+          "8",
+          "--chunk-seconds",
+          "10",
+          "--overlap-seconds",
+          "2",
+          "--morphic-mode",
+          "ph-lie-v2",
+          "--clock-transient-punch",
+          "--kick-transient-guard",
+          "--quiet-mid-denoise",
+          "--phase-consistency",
+          "0.5",
+          "--no-export-sdcard"
+        ],
+        "source_sha256": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+        "mastered_sha256": "9b8657fadeebc3c8ebd768ba44a3c1191af90f82a15a82188bfc78d86bc76183",
+        "flac_sha256": "a6af0530fc64c1e3cc0dba0919e193121ea5ea5ae563660d5b57d15f8c45f3f9",
+        "summary_sha256": "08dd0d7e5b80e2a88e146e406d051f2074434513e672a94f40c3654978b9b691",
+        "native_stats": {
+          "crest_factor_db": 14.767083168029785,
+          "lufs_integrated": -14.00206965381551,
+          "rms_dbfs": -15.829439163208008,
+          "sample_peak_dbfs": -1.062355637550354,
+          "true_peak_dbtp": -1.000009536743164
+        },
+        "preservation": {
+          "correlation_value": 0.8030247092247009,
+          "known_band_preserved": false,
+          "max_passband_deviation_db": 1.4039719104766846,
+          "mono_compatibility_passed": true,
+          "transient_correlation": 0.9611737132072449,
+          "transient_timing_passed": true
+        },
+        "quality_checks": {
+          "mono_compatibility_passed": true,
+          "known_band_preserved": false,
+          "transient_timing_passed": true,
+          "true_peak": true,
+          "target_loudness": true
+        },
+        "qualified": false,
+        "observed_process_hwm_mib": 1955.8671875,
+        "settings": {
+          "applied_dynamics": null,
+          "applied_morphic": {
+            "crossover_hz": 8000.0,
+            "enable_confidence_gating": true,
+            "lock_passband": true,
+            "microtexture_authority": 0.15637584030628204,
+            "mode": "PortHamiltonianLieV2",
+            "ph_adaptive_coupling": false,
+            "ph_coupling_kappa": 5.5,
+            "ph_quartic_beta": 1.2000000476837158,
+            "ph_shelf_db": 0.25,
+            "ph_split_hz": 12000.0,
+            "sub_bass_damping_authority": 0.2379557490348816
+          },
+          "applied_spatial": {
+            "authority": 0.8999999761581421,
+            "contrast_budget": false,
+            "mono_bass_hz": 80.0,
+            "mono_bass_strength": 0.8500000238418579,
+            "room_depth": 0.053999997675418854,
+            "width_factor": 1.1147500276565552
+          },
+          "auto_eq": true,
+          "auto_tune": true,
+          "backend": "opencl",
+          "ceiling_db": -1.0,
+          "contrast_budget": false,
+          "coupled_clocks": false,
+          "denoise": true,
+          "dynamics_model": null,
+          "dynamics_preservation_note": "When dynamics is requested, full-band amplitude changes are authorized; the legacy band-energy proxy is advisory for that task",
+          "dynamics_strength": 1.0,
+          "effective_glue_ratio": 1.1274999380111694,
+          "explicit_cli_parameters": [
+            "morphic_mode"
+          ],
+          "force_specialists": false,
+          "fractal_tendrils": 0.0,
+          "glue_ratio": 1.149999976158142,
+          "glue_threshold_db": -14.0,
+          "low_cutoff": 200.0,
+          "master_controls": {
+            "clock_transient_punch": true,
+            "glue_attack_ms": 20.0,
+            "kick_transient_guard": true,
+            "max_limiter_gr_db": null,
+            "no_glue": false,
+            "quiet_mid_denoise": true
+          },
+          "mid_ceiling": 8000.0,
+          "mid_coherence_applied": false,
+          "mid_coherence_requested": false,
+          "mid_cutoff": 1500.0,
+          "mono_bass_hz": 80.0,
+          "parameter_sources": {
+            "glue_attack_ms": "legacy-default",
+            "glue_ratio": "auto-tune-and-intent",
+            "glue_threshold_db": "auto-tune-and-intent",
+            "morphic_coupling": "auto-tune-and-intent",
+            "morphic_mode": "cli",
+            "morphic_quartic": "auto-tune-and-intent",
+            "morphic_shelf_db": "auto-tune-and-intent",
+            "strength": "auto-tune-and-intent"
+          },
+          "room_depth": 0.11999999731779099,
+          "sidechain_hp_hz": 90.0,
+          "spatial": true,
+          "steps": 8,
+          "strength": 1.0,
+          "target_lufs": -14.0,
+          "width_factor": 1.149999976158142
+        }
+      },
+      "execution": {
+        "argv": [
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+          "auto-master",
+          "--input",
+          "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+          "--out",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2",
+          "--auto-tune",
+          "--backend",
+          "opencl",
+          "--sfht-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-low-sfht-v2/basis.json",
+          "--mid-model",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json",
+          "--target-lufs",
+          "-14",
+          "--ceiling-db",
+          "-1",
+          "--steps",
+          "8",
+          "--chunk-seconds",
+          "10",
+          "--overlap-seconds",
+          "2",
+          "--morphic-mode",
+          "ph-lie-v2",
+          "--clock-transient-punch",
+          "--kick-transient-guard",
+          "--quiet-mid-denoise",
+          "--phase-consistency",
+          "0.5",
+          "--no-export-sdcard"
+        ],
+        "returncode": 0,
+        "observed_process_hwm_mib": 1955.8671875,
+        "minimum_observed_phone_available_mib": 1670.3046875,
+        "elapsed_seconds_watchdog_only": 427.75054395200004,
+        "speed_experiment": false
+      },
+      "analysis": {
+        "source": {
+          "rms": 0.14917515367133768,
+          "rms_dbfs": -16.526070121987715,
+          "sample_peak": 0.72857666015625,
+          "sample_peak_dbfs": -2.75049490859372,
+          "crest_db": 13.775575213393994,
+          "dc_per_channel": [
+            8.732414737190168e-05,
+            -8.76525976403882e-05
+          ],
+          "near_fullscale_counts_per_channel": [
+            0,
+            0
+          ],
+          "lr_correlation": 0.8353556449583807,
+          "mid_mean_square": 0.020421285315819316,
+          "side_mean_square": 0.001831941157047899,
+          "side_to_mid_db": -10.471715533288892,
+          "side_energy_fraction": 0.08232249643805753
+        },
+        "master": {
+          "rms": 0.16163227107117,
+          "rms_dbfs": -15.829438496361396,
+          "sample_peak": 0.8848755955696106,
+          "sample_peak_dbfs": -1.0623556471817241,
+          "crest_db": 14.76708284917967,
+          "dc_per_channel": [
+            -1.8869976745175788e-06,
+            -2.029708447079098e-06
+          ],
+          "near_fullscale_counts_per_channel": [
+            0,
+            0
+          ],
+          "lr_correlation": 0.8030247063390118,
+          "mid_mean_square": 0.023551687256730788,
+          "side_mean_square": 0.0025733037948933992,
+          "side_to_mid_db": -9.615309652265026,
+          "side_energy_fraction": 0.09849970052844927
+        },
+        "paired": {
+          "best_nonnegative_global_gain": 1.0422643184374807,
+          "gain_constraint_boundary": false,
+          "unconstrained_gain": 1.0422643184374807,
+          "gain_db": 0.35955740195707436,
+          "waveform_correlation_per_channel_dc_removed": 0.9619364100102924,
+          "raw_difference_rms": 0.044617593827281685,
+          "gain_adjusted_residual_rms": 0.0441698918941089,
+          "residual_to_master_rms_db": -11.268034777175522,
+          "global_rms_delta_db": 0.6966316256263188,
+          "global_crest_delta_db": 0.9915076357856769,
+          "transient_crest_delta_db_distribution": {
+            "count": 3104,
+            "valid_count": 3104,
+            "null_count": 0,
+            "min": -1.7161873984971283,
+            "p10": -0.03212016703937301,
+            "median": 0.6526580565137263,
+            "p90": 1.5308187714728663,
+            "max": 3.1740352984822042
+          },
+          "source_one_second_rms_dbfs_distribution": {
+            "count": 310,
+            "valid_count": 310,
+            "null_count": 0,
+            "min": -34.239008989956005,
+            "p10": -23.274193948508486,
+            "median": -16.843317619993822,
+            "p90": -13.699793307203727,
+            "max": -12.42240968494394,
+            "p90_minus_p10_db": 9.57440064130476
+          },
+          "source_100ms_crest_db_distribution": {
+            "count": 3104,
+            "valid_count": 3104,
+            "null_count": 0,
+            "min": 3.955968038142565,
+            "p10": 7.06238721789758,
+            "median": 9.627518158248254,
+            "p90": 13.934002771240745,
+            "max": 26.79393433351562
+          },
+          "master_one_second_rms_dbfs_distribution": {
+            "count": 310,
+            "valid_count": 310,
+            "null_count": 0,
+            "min": -32.753115538958234,
+            "p10": -21.57382923494027,
+            "median": -15.938615502570572,
+            "p90": -13.34006515803573,
+            "max": -12.349766381870973,
+            "p90_minus_p10_db": 8.23376407690454
+          },
+          "master_100ms_crest_db_distribution": {
+            "count": 3104,
+            "valid_count": 3104,
+            "null_count": 0,
+            "min": 4.589610158773873,
+            "p10": 8.007832149196913,
+            "median": 10.319272428700621,
+            "p90": 14.574432960408336,
+            "max": 26.098620719674187
+          }
+        },
+        "spectrum": {
+          "window_count": 7274,
+          "trailing_unanalyzed_frames": 0,
+          "source_broadband_mean_square": 0.022277875535686324,
+          "master_broadband_mean_square": 0.026157990226413616,
+          "normalization_pooled_rms_gain_db": 0.6966316256263188,
+          "bass_20_80_ms": {
+            "low_hz": 20,
+            "high_hz": 80,
+            "frequency_resolution_hz": 11.71875,
+            "available_bin_count": 5,
+            "scope": "coarse bin-integrated energy, not coherence or a mono guarantee; reduced side energy is not automatically better; intentional width may be affected",
+            "source": {
+              "pooled_mean_square": 0.012009188450565053,
+              "mid_mean_square": 0.011880919693185388,
+              "side_mean_square": 0.00012826875737966163,
+              "side_energy_fraction": 0.010680884716537728,
+              "side_to_mid_db": -19.667291728858363
+            },
+            "master": {
+              "pooled_mean_square": 0.011732012464205663,
+              "mid_mean_square": 0.01172037288016645,
+              "side_mean_square": 1.1639584039213886e-05,
+              "side_energy_fraction": 0.0009921216905220843,
+              "side_to_mid_db": -30.030039685289477
+            }
+          },
+          "bands": [
+            {
+              "low_hz": 20,
+              "high_hz": 120,
+              "available_bin_count": 9,
+              "source_mean_square": 0.013824413235493422,
+              "master_mean_square": 0.013895209628652963,
+              "raw_energy_shift_db": 0.022183959638940973,
+              "broadband_normalized_shift_db": -0.6744476659873778
+            },
+            {
+              "low_hz": 120,
+              "high_hz": 500,
+              "available_bin_count": 32,
+              "source_mean_square": 0.003948881699550605,
+              "master_mean_square": 0.005179589559312938,
+              "raw_energy_shift_db": 1.178212234209257,
+              "broadband_normalized_shift_db": 0.48158060858293816
+            },
+            {
+              "low_hz": 500,
+              "high_hz": 2000,
+              "available_bin_count": 128,
+              "source_mean_square": 0.00330545875958842,
+              "master_mean_square": 0.005060473782139265,
+              "raw_energy_shift_db": 1.849594360845451,
+              "broadband_normalized_shift_db": 1.1529627352191323
+            },
+            {
+              "low_hz": 2000,
+              "high_hz": 8000,
+              "available_bin_count": 512,
+              "source_mean_square": 0.0008565137397782591,
+              "master_mean_square": 0.0013894491964175663,
+              "raw_energy_shift_db": 2.1010833783565666,
+              "broadband_normalized_shift_db": 1.4044517527302478
+            },
+            {
+              "low_hz": 8000,
+              "high_hz": 20000,
+              "available_bin_count": 1024,
+              "source_mean_square": 0.0003235848331350349,
+              "master_mean_square": 0.0006302140109874041,
+              "raw_energy_shift_db": 2.8949989678891344,
+              "broadband_normalized_shift_db": 2.1983673422628156
+            }
+          ]
+        },
+        "memory": {
+          "ru_maxrss_kib_linux": 122432,
+          "VmHWM_kib": 87208,
+          "VmRSS_kib": 77500,
+          "observed_hwm_mib": 119.5625
+        },
+        "provenance": {
+          "source": {
+            "path": "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+            "rate": 48000,
+            "channels": 2,
+            "frames": 14899200,
+            "encoding": "PCM16",
+            "data_offset": 172,
+            "frame_bytes": 4
+          },
+          "master": {
+            "path": "runs/around-mastering-20261022/session2/around-v2/mastered.wav",
+            "rate": 48000,
+            "channels": 2,
+            "frames": 14899200,
+            "encoding": "IEEE-float32",
+            "data_offset": 68,
+            "frame_bytes": 8
+          },
+          "sha256": {
+            "/storage/emulated/0/Download/AROUND (The Absence of Ladder)v2.wav": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.wav": "9b8657fadeebc3c8ebd768ba44a3c1191af90f82a15a82188bfc78d86bc76183",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/analyze_master_pair.py": "cee8a820c05f2d340c62736188fb0c11cc0558fded7a14397db8edce6b9c7a08",
+            "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/matched_attack_audit.py": "ece7406495a6097bd31f1f4f729282756c3363f34535493c9b24852197d31345"
+          },
+          "python": "3.14.8 (main, Oct 18 2026, 13:48:52) [Clang 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 9f872551d",
+          "numpy": "2.5.4",
+          "platform": "Android-17-aarch64-64bit",
+          "matplotlib_available": false,
+          "plot_backend": "local standalone SVG/HTML",
+          "argv": [
+            "scripts/analyze_master_pair.py",
+            "--source",
+            "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+            "--master",
+            "runs/around-mastering-20261022/session2/around-v2/mastered.wav",
+            "--out",
+            "runs/around-analysis-20261022/v2",
+            "--excerpt-plan",
+            "runs/around-analysis-20261022/source-plan-v2/excerpts.json",
+            "--compare-summary",
+            "runs/around-analysis-20261022/v1/summary.json"
+          ]
+        }
+      },
+      "analysis_summary_sha256": "c70140b97729e79fc943211a2b8a2006ee9faff3a081cfdbb364cf000ed7815d",
+      "finalizer_glue": {
+        "attack_ms": 20.0,
+        "max_gain_reduction_db": 0.39008861780166626,
+        "ratio": 1.1274999380111694,
+        "release_ms": 160.0,
+        "requested_ratio": 1.149999976158142,
+        "sidechain_hp_hz": 90.0,
+        "threshold_db": -14.0
+      },
+      "finalizer_limiter": {
+        "budget_db": null,
+        "lookahead_samples": 96,
+        "max_gain_reduction_db": 1.5442864894866943,
+        "release_ms": 60.0
+      }
+    }
+  ],
+  "independent_meters": {
+    "schema": "around-independent-ebu-meter-v1",
+    "rows": [
+      {
+        "id": "around-v1",
+        "kind": "source",
+        "path": "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+        "sha256": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+        "lufs_integrated": -16.0,
+        "lra_lu": 7.0,
+        "true_peak_dbtp": -3.8,
+        "argv": [
+          "ffmpeg",
+          "-nostdin",
+          "-hide_banner",
+          "-nostats",
+          "-i",
+          "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+          "-map",
+          "0:a:0",
+          "-af",
+          "ebur128=peak=true:framelog=verbose",
+          "-f",
+          "null",
+          "-"
+        ],
+        "log_sha256": "c564857e4e4c8806236189009dd7887e9f2fcae2c840665483beb4f2cdf51efc"
+      },
+      {
+        "id": "around-v1",
+        "kind": "exported_flac",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1/mastered.flac",
+        "sha256": "b2d5519326cd4b9f314f3d158485eb198e9b33e06a85633dc50d08b3838b31cc",
+        "lufs_integrated": -14.0,
+        "lra_lu": 6.8,
+        "true_peak_dbtp": -1.0,
+        "argv": [
+          "ffmpeg",
+          "-nostdin",
+          "-hide_banner",
+          "-nostats",
+          "-i",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v1/mastered.flac",
+          "-map",
+          "0:a:0",
+          "-af",
+          "ebur128=peak=true:framelog=verbose",
+          "-f",
+          "null",
+          "-"
+        ],
+        "log_sha256": "dff9120fbe7a3db50d97e393eef9ecdd1dbead2609d609317b27290629d9a606"
+      },
+      {
+        "id": "around-v2",
+        "kind": "source",
+        "path": "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+        "sha256": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+        "lufs_integrated": -15.3,
+        "lra_lu": 6.6,
+        "true_peak_dbtp": -2.7,
+        "argv": [
+          "ffmpeg",
+          "-nostdin",
+          "-hide_banner",
+          "-nostats",
+          "-i",
+          "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+          "-map",
+          "0:a:0",
+          "-af",
+          "ebur128=peak=true:framelog=verbose",
+          "-f",
+          "null",
+          "-"
+        ],
+        "log_sha256": "617be7a652460b5ce71091425dd0edf95c5752df00d6753b876d2de91219be79"
+      },
+      {
+        "id": "around-v2",
+        "kind": "exported_flac",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.flac",
+        "sha256": "a6af0530fc64c1e3cc0dba0919e193121ea5ea5ae563660d5b57d15f8c45f3f9",
+        "lufs_integrated": -14.0,
+        "lra_lu": 6.2,
+        "true_peak_dbtp": -1.0,
+        "argv": [
+          "ffmpeg",
+          "-nostdin",
+          "-hide_banner",
+          "-nostats",
+          "-i",
+          "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.flac",
+          "-map",
+          "0:a:0",
+          "-af",
+          "ebur128=peak=true:framelog=verbose",
+          "-f",
+          "null",
+          "-"
+        ],
+        "log_sha256": "94a9398051d06b10f53c989219d61d01a80026236221acf56b226f0dc9b11d61"
+      }
+    ],
+    "tool_version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+    "precision_note": "Installed FFmpeg scanner reports summary to0.1LU/dB; finite oversampled estimate, not continuous-time guarantee.",
+    "native_results_separate": true,
+    "audio_changed": false
+  },
+  "stage_trace_summary_sha256": "e3857132b2466832e9ece8d5bb927d6f52e12c353f3573d17adb0c7e470aff86",
+  "verification": {
+    "focused_python_tests": 23,
+    "all_content_pins_rechecked": true,
+    "trace_increment_arithmetic_rechecked": true
+  },
+  "interpretation": {
+    "implementation_evidence_tier": 2,
+    "measurements_tier": 3,
+    "subjective_preference_tier": 7,
+    "speed_experiment": false,
+    "different_sources_not_treatment_replicates": true,
+    "production_promoted": false,
+    "v2_delivery_is_diagnostic": true
+  }
+}

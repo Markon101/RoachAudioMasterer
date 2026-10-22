@@ -1,0 +1,163 @@
+{
+  "schema": "first-channel-preservation-shape-trace-v1",
+  "plan": {
+    "schema": "first-channel-preservation-shape-trace-v1",
+    "declared_utc": "2026-10-22T05:20:35.697156+00:00",
+    "declaration": "Preregistered offline stage trace after native AROUND v2 preservation proxy failed at 1.4039719104766846 dB. This measures a first-channel whole-clip analytical proxy at cached boundaries only. No gate change, retuning, rerender, listening artifact, or promotion is authorized by this diagnostic. A first harness invocation completed only the source-reference row and stopped before any cached stage because relative input paths did not match absolute pin keys. This corrected frozen plan changes only path representation; it preserves input identities/order, geometry, formula, native value, threshold and resource cap.",
+    "geometry": {
+      "rate": 48000,
+      "channels": 2,
+      "frames": 14899200
+    },
+    "inputs": [
+      {
+        "id": "source",
+        "path": "/storage/emulated/0/Download/AROUND (The Absence of Ladder)v2.wav",
+        "role": "Original v2 source, independent source reference"
+      },
+      {
+        "id": "stage2_in",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage2_in.wav",
+        "role": "Cached input to learned Mid stage"
+      },
+      {
+        "id": "stage2_mid_restored",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage2_mid/restored.wav",
+        "role": "Selected Mid restoration output"
+      },
+      {
+        "id": "stage3_clean",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage3_clean.wav",
+        "role": "Combined clean polish boundary (denoise and auto-EQ)"
+      },
+      {
+        "id": "stage3_5_microstructure",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage3_5_microstructure.wav",
+        "role": "Microstructure, de-fizz and phase boundary"
+      },
+      {
+        "id": "stage4_spatial",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage4_spatial.wav",
+        "role": "Spatial boundary; first-channel spectrum can change through mixing"
+      },
+      {
+        "id": "stage4_5_morphic",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage4_5_morphic.wav",
+        "role": "PH/morphic controller boundary"
+      },
+      {
+        "id": "mastered",
+        "path": "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.wav",
+        "role": "Final mastering output; no internal causal attribution"
+      }
+    ],
+    "pins": {
+      "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage2_in.wav": "8184c2381545aad78220f6d1469c54149570a8a54ff3968817348a01d6b2bd4d",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage2_mid/restored.wav": "b54be34219c5816bc89f944c241d5bb1a326d192674c9dda373133d95798b09d",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage3_clean.wav": "869d094b68220a46954d38ed93e90c99de86ac82b81ff8e46a968607c8eee6aa",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage3_5_microstructure.wav": "64111f9cdfcf67c4637bbe7243eb628964d341f750983f8b379e5f315eb0778a",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage4_spatial.wav": "1c7787970c2212c80560d81385d1afd979dad820037973ff767fd9245d509a21",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage4_5_morphic.wav": "8e355cc02019df07f20d0c845e1c963ced506ec63367333ebbaffde85904c4ca",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.wav": "9b8657fadeebc3c8ebd768ba44a3c1191af90f82a15a82188bfc78d86bc76183",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/summary.json": "08dd0d7e5b80e2a88e146e406d051f2074434513e672a94f40c3654978b9b691",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2-receipt.json": "6f7b12f4049b1ba143924e93a6531ef09c1d774718f575625a522511a243126b",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session1/HALTED.json": "236d42e20436422dddb40f5e55a3f6656384b64fff30c87119d33289f61cb847",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/preflight_stop.json": "ba7cbb957d617a0ea183b0db16f34e44d0be4ba859699a99436f7f2b8993a9eb",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/plan_session2.json": "1e9f2a5bb1c5dcaf428a0f20a9a2cadba0b4171ce309545930ef614bec493583",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/run.py": "ace7912aae18c229e51c9796d33a446f6ef2100569f601997ee3575c22d18ee2",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/trace_preservation_shape.py": "653c6c61b874551395ca0092c68b5e55da22fe7fdf0b468a50941b9427c42b72",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/matched_attack_audit.py": "ece7406495a6097bd31f1f4f729282756c3363f34535493c9b24852197d31345",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/assess.rs": "76b04f336fc781547804863b3c58fbe47ac36f4818d07a792e25ef173f24cc7d",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/dsp.rs": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54"
+    },
+    "external_provenance_pins": {
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/protocol.json": "139ab449924b08860865e13a6b0fcc75e9dcd8d5f53342b6e9bfdf3ecbe5c976"
+    },
+    "native_reference": {
+      "summary_path": "runs/around-mastering-20261022/session2/around-v2/summary.json",
+      "absolute_shape_deviation_db": 1.4039719104766846,
+      "known_band_preserved": false,
+      "threshold_db_strict_less_than": 1.0,
+      "receipt_path": "runs/around-mastering-20261022/session2/around-v2-receipt.json"
+    },
+    "method": {
+      "channel": "first channel only, matching native assess.rs; not stereo maximum or average",
+      "transform": "One whole-clip float64 NumPy real FFT per input on native-length periodic grid. Parseval weights DC and even-N Nyquist once, other bins twice.",
+      "frequency_response": "Combined squared amplitude response of native lowpass(cutoff=2500, transition=500, slope=2) then highpass(cutoff=1000, transition=300, slope=2); gain=max(0,0.5+0.5*cos(pi*clip(t,0,1)))**2, t=(f-2500)/500 for LP and (1000-f)/300 for HP.",
+      "rms": "Broadband RMS from first-channel time samples; filtered RMS from Parseval. Both floored at 1e-8 as native before ratios.",
+      "signed_shape_db": "20*log10[(filtered_RMS_stage/full_RMS_stage)/(filtered_RMS_source/full_RMS_source)]",
+      "absolute_shape_db": "Absolute signed deviation; descriptive crossing of unchanged native strict <1 dB rule.",
+      "incremental": "Signed change from previous cached boundary, plus filtered-band and broadband RMS changes. Signed increments telescope; absolute deviations do not.",
+      "numerics": "Analytical float64/complex128 NumPy and Parseval approximation. Native sequential complex32 FFT/IFFT, f32 frequency/gain evaluation and f32 reductions are not reproduced byte-for-byte; report explicit final delta from native.",
+      "alignment": "Exact declared rate/channel/frame geometry only. No temporal alignment, shifting or fitting; no temporal preservation claim. Whole-clip circular Fourier-power diagnostic."
+    },
+    "resources": {
+      "process_hwm_aim_mib": 768,
+      "minimum_available_memory_mib": 1024,
+      "input_block_frames": 65536,
+      "spectrum_block_bins": 65536,
+      "max_frames": 14899200,
+      "processing": "Sequential first-channel float64 vector and one FFT at a time; release arrays before next file. No stereo float64 clip, inverse FFT, rendering, training or native child.",
+      "threads": "OPENBLAS_NUM_THREADS=1; bounded offline numerical diagnostic only; no speed claim.",
+      "resource_change": "Raised analysis-only process HWM aim from prior 512 MiB to 768 MiB for 14,899,200-frame source. Original native 2 GiB process cap and other run limits are unchanged."
+    },
+    "outputs": [
+      "manifest.json",
+      "stages.jsonl",
+      "summary.json",
+      "report.md",
+      "STOP.json only on failure"
+    ],
+    "halt_provenance": {
+      "path": "runs/around-mastering-20261022/session1/HALTED.json",
+      "sha256": "236d42e20436422dddb40f5e55a3f6656384b64fff30c87119d33289f61cb847",
+      "meaning": "Original AROUND session1 stopped before any native child because initial available-memory reserve failed; completed_tracks is empty. Session2 is a fresh run and completed independently. This is not the Singularity preservation HALT."
+    },
+    "interpretation": [
+      "First crossing names a cached observation boundary, not one isolated algorithm. Clean polish combines denoise and auto-EQ; final mastering combines nonlinear dynamics and other controls.",
+      "Positive uniform gain cancels above RMS floors; frequency-selective processing, signal-dependent gain and stereo redistribution can change this first-channel proxy.",
+      "This normalized band fraction is a shape proxy, not proof of damage, preference, fidelity or each-bin protection. The native quality failure remains binding; no retuning or promotion follows.",
+      "Analytical float64 approximation uncertainty, own-source comparison only, no sample alignment or statistical inference. Distinct AROUND versions are not sample-aligned."
+    ],
+    "execution_correction": {
+      "prior_attempt": "results/STOP.json; KeyError after one source reference row, zero cached-stage rows",
+      "correction": "Input paths are now absolute to match the absolute entries in pins, as required by trace_preservation_shape.py row lookup.",
+      "scientific_plan_changed": false
+    }
+  },
+  "pins": {
+    "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage2_in.wav": "8184c2381545aad78220f6d1469c54149570a8a54ff3968817348a01d6b2bd4d",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage2_mid/restored.wav": "b54be34219c5816bc89f944c241d5bb1a326d192674c9dda373133d95798b09d",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage3_clean.wav": "869d094b68220a46954d38ed93e90c99de86ac82b81ff8e46a968607c8eee6aa",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage3_5_microstructure.wav": "64111f9cdfcf67c4637bbe7243eb628964d341f750983f8b379e5f315eb0778a",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage4_spatial.wav": "1c7787970c2212c80560d81385d1afd979dad820037973ff767fd9245d509a21",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/stage4_5_morphic.wav": "8e355cc02019df07f20d0c845e1c963ced506ec63367333ebbaffde85904c4ca",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/mastered.wav": "9b8657fadeebc3c8ebd768ba44a3c1191af90f82a15a82188bfc78d86bc76183",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2/summary.json": "08dd0d7e5b80e2a88e146e406d051f2074434513e672a94f40c3654978b9b691",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session2/around-v2-receipt.json": "6f7b12f4049b1ba143924e93a6531ef09c1d774718f575625a522511a243126b",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/around-mastering-20261022/session1/HALTED.json": "236d42e20436422dddb40f5e55a3f6656384b64fff30c87119d33289f61cb847",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/preflight_stop.json": "ba7cbb957d617a0ea183b0db16f34e44d0be4ba859699a99436f7f2b8993a9eb",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/plan_session2.json": "1e9f2a5bb1c5dcaf428a0f20a9a2cadba0b4171ce309545930ef614bec493583",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/run.py": "ace7912aae18c229e51c9796d33a446f6ef2100569f601997ee3575c22d18ee2",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/trace_preservation_shape.py": "653c6c61b874551395ca0092c68b5e55da22fe7fdf0b468a50941b9427c42b72",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/matched_attack_audit.py": "ece7406495a6097bd31f1f4f729282756c3363f34535493c9b24852197d31345",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/assess.rs": "76b04f336fc781547804863b3c58fbe47ac36f4818d07a792e25ef173f24cc7d",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/src/dsp.rs": "29f4616b896a09db4f098bb00635b05b63d298fcdbe78971c2affd38c3a1bb54",
+    "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/v2-stage-trace/plan_corrected.json": "38106956c9b287b41af872f06a2d31a5dbdc3357aa2c9667e8615f46ef2d677b"
+  },
+  "started_utc": "2026-10-22T05:20:36.947603+00:00",
+  "argv": [
+    "scripts/trace_preservation_shape.py",
+    "--plan",
+    "artifacts/around-mastering-20261022/v2-stage-trace/plan_corrected.json",
+    "--out",
+    "artifacts/around-mastering-20261022/v2-stage-trace/results-corrected"
+  ],
+  "raw_source_from_frozen_protocol": null,
+  "python_version": "3.14.8 (main, Oct 18 2026, 13:48:52) [Clang 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 9f872551d",
+  "numpy_version": "2.5.4",
+  "platform": "Android-17-aarch64-64bit",
+  "openblas_num_threads": "1"
+}

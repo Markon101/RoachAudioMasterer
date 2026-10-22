@@ -1632,3 +1632,33 @@ These local branch effects do not establish audible harm or predict the failed
 final-master score after ablation. Finalizer attribution and owner Feelin preference
 remain open. See [the scoped report](docs/COHERENCE_FOLLOWUP_20261021.md#independent-clean-stage-counterfactuals-after-delivery).
 
+### 41. Two full AROUND masters at −14 LUFS; one preserved failure (2026-10-22)
+
+Both owner-provided versions complete with their original285.52/310.40s geometry
+using the pinned memory-qualified Smooth-style native path, OpenCL/Euler8 and
+per-song auto-tuning. Experimental Mid coherence stays off beyond its180s scope.
+Independent exported-FLAC scans confirm -14.0LUFS/-1.0dBTP for both (Tier3).
+V1 passes all native checks; v2 fails the unchanged first-channel normalized
+shape proxy at1.403972dB versus strict<1dB and remains **diagnostic**. No gate
+relaxation, new DSP, solver/weight change or production promotion occurred.
+
+Global crest rises0.972/0.992dB and median paired100ms crest rises0.425/0.653dB,
+but some windows lose crest. V2 shows larger source-relative mid/air changes
+and1s RMS-spread narrowing1.341dB versus0.192dB in v1. Different inputs and
+auto-tuning prevent causal cross-version comparison; these are descriptive
+measurements, not recovered transient quality or subjective preference.
+
+The post-hoc eight-boundary v2 trace first crosses at combined clean polish,
+with1.008969dB increment. Final analytical1.396267dB differs from the binding
+native score by-0.007705dB; denoise versus EQ remains unresolved. Two path-only
+harness failures, the initial zero-child memory STOP, and final native failure
+are retained.23focused Python tests pass (Tier2); source/stage/model/tool/output
+pins and trace arithmetic were independently rechecked. HWM1704.05/1955.87MiB
+is below the declared2048MiB larger-input cap; no speed comparison was run.
+
+Both native FLACs plus local waveform/analysis files are copied into Download;
+all9 delivery hashes match. V2's filename and listening summary explicitly
+identify its diagnostic status. Owner judgments remain pending (Tier7).
+See [the full result and interpretation limits](docs/AROUND_MASTERING_RESULTS_20261022.md)
+and [compact numeric provenance](artifacts/around-mastering-20261022/results.json).
+

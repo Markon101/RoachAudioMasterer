@@ -15,6 +15,10 @@ comparative superiority unestablished. See the [listening receipt and limits](do
 The next [Feelin’ Catchy comparison](docs/COHERENCE_FOLLOWUP_20261021.md#same-source-retry-earns-a-new-listening-package)
 is now delivered for owner listening after a parity-qualified stereo-audit memory
 fix. Its source assignments remain private and judgments are pending.
+The owner's two full [AROUND -14 LUFS tests](docs/AROUND_MASTERING_RESULTS_20261022.md)
+are also delivered with local waveform reports. V1 passes the native checks;
+v2 is explicitly diagnostic after a spectral-shape proxy failure. Both meet
+loudness/peak targets; subjective improvement remains unestablished.
 The production champion
 and default integration remain unchanged. Use the [documentation index](docs/README.md)
 and [current result](docs/PH_MEMORY_RESULTS_20261021.md) for evidence and limits.

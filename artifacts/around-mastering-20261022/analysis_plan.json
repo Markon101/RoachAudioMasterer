@@ -1,0 +1,144 @@
+{
+  "schema": "around-post-master-analysis-registration-v1",
+  "recorded_utc": "2026-10-22T05:10:36.560542+00:00",
+  "analyzer_sha256": "cee8a820c05f2d340c62736188fb0c11cc0558fded7a14397db8edce6b9c7a08",
+  "tests_sha256": "c02d8481776b2ab981e0041c21bb38e6c29b1b41a1b59aec26529b1ec819b194",
+  "synthetic_tests_passed": 17,
+  "definitions": {
+    "version": 1,
+    "amplitude_floor": 1e-12,
+    "near_fullscale_absolute_threshold": 0.999,
+    "envelope_ms": 10,
+    "transient_window_ms": 100,
+    "contrast_window_ms": 1000,
+    "grid": "round(k * sample_rate * seconds), origin sample zero; final partial retained",
+    "percentiles": "NumPy percentile method=linear, descriptive time-window distribution",
+    "contrast": "p90 minus p10 of dBFS RMS of complete 1 s windows above amplitude floor",
+    "transient_proxy": "peak/RMS crest in source-fixed 100 ms windows; never an attack fidelity score",
+    "excerpt_selection": "up to 3 largest positive successive complete 100 ms source RMS rises; both above floor; descending rise then earliest index; >=2 s separation; fallback first eligible complete window; +/-50 ms excerpt",
+    "spectrum": {
+      "nfft": 4096,
+      "hop": 2048,
+      "window": "np.hanning(4096), symmetric Hann",
+      "detrend": false,
+      "padding": false,
+      "channels": "mean of channel powers",
+      "normalization": "one-sided PSD, |FFT|^2/(sample_rate*sum(window^2)); double interior bins; mean over complete windows",
+      "bands_hz": [
+        [
+          20,
+          120
+        ],
+        [
+          120,
+          500
+        ],
+        [
+          500,
+          2000
+        ],
+        [
+          2000,
+          8000
+        ],
+        [
+          8000,
+          20000
+        ]
+      ],
+      "band_edges": "lower inclusive, upper exclusive; truncate at Nyquist",
+      "bass_ms_band_hz": [
+        20,
+        80
+      ],
+      "bass_ms": "M=(L+R)/2 and S=(L-R)/2 complex FFT; same one-sided PSD scaling; M power plus S power equals pooled channel power; coarse energy diagnostic only",
+      "broadband": "all available one-sided bins including DC and Nyquist"
+    },
+    "spectral_shape_normalization": "band/bin raw power dB shift minus whole-track pooled RMS dB gain; never least-squares gain",
+    "gain": "g=max(0,sum(source*master)/sum(source^2)), pooled channels, no intercept; zero-source denominator -> null; zero is constrained boundary if dot<=0",
+    "residual": "master-g*source, no alignment fit; RMS uses explicit second streaming pass",
+    "correlation": "pooled Pearson after separate per-channel DC centering, original sample grid",
+    "mid_side": "M=(L+R)/2, S=(L-R)/2; side fraction=S_energy/(M_energy+S_energy)",
+    "nulls": "dB and ratios null if any amplitude operand<=1e-12 (power<=1e-24); no epsilon inserted into ratios; null windows remain in raw data",
+    "memory_cap_mib": 384
+  },
+  "source_excerpt_plans": {
+    "v1": {
+      "path": "runs/around-analysis-20261022/source-plan-v1/excerpts.json",
+      "sha256": "dda0a4658ce521a49d90a4053a6188c47f8158fc4c7844c1d072a7b1875b25a8",
+      "source_only_selection": {
+        "source_sha256": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+        "source": {
+          "path": "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 13704960,
+          "encoding": "PCM16",
+          "data_offset": 172,
+          "frame_bytes": 4
+        },
+        "excerpts": [
+          {
+            "window_index": 2793,
+            "start_seconds": 279.3,
+            "source_rise_db": 75.18310679225453
+          },
+          {
+            "window_index": 1,
+            "start_seconds": 0.1,
+            "source_rise_db": 34.39188192893979
+          },
+          {
+            "window_index": 1132,
+            "start_seconds": 113.2,
+            "source_rise_db": 29.94132452019969
+          }
+        ],
+        "selection": "up to 3 largest positive successive complete 100 ms source RMS rises; both above floor; descending rise then earliest index; >=2 s separation; fallback first eligible complete window; +/-50 ms excerpt",
+        "analyzer_sha256": "cee8a820c05f2d340c62736188fb0c11cc0558fded7a14397db8edce6b9c7a08",
+        "created_utc": "2026-10-22T05:03:40.670272+00:00"
+      }
+    },
+    "v2": {
+      "path": "runs/around-analysis-20261022/source-plan-v2/excerpts.json",
+      "sha256": "d52ce41d5e72fefcf357220782d1adfd2c83cbd4e8b5cf72cb0097039e4ae260",
+      "source_only_selection": {
+        "source_sha256": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+        "source": {
+          "path": "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 14899200,
+          "encoding": "PCM16",
+          "data_offset": 172,
+          "frame_bytes": 4
+        },
+        "excerpts": [
+          {
+            "window_index": 166,
+            "start_seconds": 16.6,
+            "source_rise_db": 55.45297189637534
+          },
+          {
+            "window_index": 2088,
+            "start_seconds": 208.8,
+            "source_rise_db": 46.768473100303005
+          },
+          {
+            "window_index": 1,
+            "start_seconds": 0.1,
+            "source_rise_db": 40.53684196793587
+          }
+        ],
+        "selection": "up to 3 largest positive successive complete 100 ms source RMS rises; both above floor; descending rise then earliest index; >=2 s separation; fallback first eligible complete window; +/-50 ms excerpt",
+        "analyzer_sha256": "cee8a820c05f2d340c62736188fb0c11cc0558fded7a14397db8edce6b9c7a08",
+        "created_utc": "2026-10-22T05:03:41.787115+00:00"
+      }
+    }
+  },
+  "real_source_master_pair_analysis_started": false,
+  "independent_meter": "Installed FFmpeg ebur128 integratedLUFS/LRA/oversampledtruepeak on each source and exportedFLAC; originalnativeJSONseparate.",
+  "statistics": "Two recordings, no population or samplewise significance inference. Within-song windowsdependent; percentile distributions descriptive.",
+  "plots_local_only": true,
+  "owner_audio_stays_local": true
+}

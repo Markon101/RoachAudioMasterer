@@ -1,4 +1,29 @@
-# Current continuation — Feelin listening package delivered
+# Current continuation — AROUND masters and analysis delivered
+
+Latest checkpoint2026-10-22: the owner requested full mastering of both Download
+AROUND sources at -14LUFS and numerical/waveform analysis. Both exports and seven
+analysis files are now in `/sdcard/Download/AROUND Roach -14 LUFS 20261022`;
+all9 hashes match the originals, with READY written last. Open START_HERE.html.
+V1 passes every native check. **V2 is DIAGNOSTIC**, failing the unchanged1dB
+normalized first-channel shape proxy at1.403972dB; no retuning or promotion.
+Both FLACs independently meter -14.0LUFS/-1.0dBTP. The input versions differ in
+length/content and cannot be treated as matched pipeline treatments.
+
+Read [the AROUND result](docs/AROUND_MASTERING_RESULTS_20261022.md), RESULTS41,
+and `artifacts/around-mastering-20261022/results.json`. Native binary/source and
+models remain pinned to the preceding parity-qualified memory fix, Euler8,
+10s/2s OpenCL and Smooth-style auto-tuning. Experimental Mid coherence stays OFF
+because both sources exceed180s. Observed native HWM1704.05/1955.87MiB fits the
+explicit new2048MiB larger-input scope; earlier1536MiB experiment caps stand.
+The initial zero-child available-memory STOP and both failed trace path attempts
+remain preserved.23focused Python tests pass; no speed experiment was run.
+
+Strongest next engineering experiment: preregister same-input native clean-stage
+replay for AROUND v2 with exact cached combined reproduction before denoise/EQ
+counterfactuals. Its eight-boundary analytic trace first crosses at clean polish,
+not Mid; finalizer also contributes. Do not change thresholds or search sources.
+Owner AROUND and prior blind Feelin judgments remain pending. Prior Feelin key
+must remain private. No active native render/analysis jobs at this checkpoint.
 
 Read AGENTS, README, RESULTS Sections33–40,
 docs/OWNER_LISTENING_RESULTS_20261021.md and docs/PH_MEMORY_RESULTS_20261021.md.

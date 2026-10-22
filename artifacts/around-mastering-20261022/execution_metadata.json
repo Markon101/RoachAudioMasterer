@@ -1,0 +1,117 @@
+{
+  "schema": "around-execution-metadata-v1",
+  "native_source_commit": "fc92ea1",
+  "protocol": {
+    "schema": "around-run-protocol-v1",
+    "plan": {
+      "schema": "around-full-mastering-tests-v1",
+      "declared_utc": "2026-10-22T04:59:07.399294+00:00",
+      "source_parent": "7fc6353",
+      "run_root": "runs/around-mastering-20261022/session2",
+      "binary": "runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+      "binary_sha256": "c2c5b14f77d0275f1b2f3fd94f028efd2253479a6477f94729d7366ebb37b511",
+      "native_source_commit": "fc92ea1",
+      "model": "artifacts/rich-mid-v3/basis.json",
+      "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+      "low_model": "artifacts/rich-low-sfht-v2/basis.json",
+      "low_model_sha256": "cde4e124085341fb0e145fed48561f182245462a9135dcd40303e048e845da6a",
+      "additional_parity": {
+        "path": "runs/ph-stereo-memory-20261021/parity-v1/COMPLETE.json",
+        "sha256": "785e2b18ab266fd58eb228a8c5a7c2c6079151152a86313f9331a70e3d37372a"
+      },
+      "target_lufs": -14.0,
+      "ceiling_dbtp": -1.0,
+      "recipe": "README Smooth-style recommended pipeline, with parity-qualified memory fixed binary; auto-tune, explicit models, OpenCL, Euler8/10s2s, ph-lie-v2, transient-punch/kickguard/quietmid, phase-consistency0.5. ExperimentalmidcoherenceOFF, no forcedspecialists.",
+      "tracks": [
+        {
+          "id": "around-v1",
+          "path": "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+          "sha256": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 13704960
+        },
+        {
+          "id": "around-v2",
+          "path": "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+          "sha256": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 14899200
+        }
+      ],
+      "limits": {
+        "process_hwm_mib": 2048,
+        "minimum_memavailable_mib": 2816,
+        "emergency_memavailable_mib": 512,
+        "child_timeout_s": 1200,
+        "minimum_free_storage_gib": 4
+      },
+      "memory_scope": "New longer285/310second sources, not a retry or change to earlier1536MiB experiment gates. Owner previously authorized modest extraRAM.2GiB ceiling, sequential children and >=768MiB initialreserve; stoponemergencymemory orHALT.",
+      "validation": {
+        "max_native_true_peak_dbtp": -0.99,
+        "max_target_error_lu": 0.1,
+        "geometry_exact": true,
+        "finite_required": true,
+        "native_preservation_flags_recorded_individually": true,
+        "quality_failure_policy": "Preservefailedqualityflags asdiagnostic; do not silentlypromote/exportasqualified. Otherindependentsource mayrun afterresource/geometry/finitevalid completion. Resource,HALT,process orpinerrorstopsession."
+      },
+      "analysis_design": {
+        "compare_each_master_to_own_source": true,
+        "different_versions_not_sample_aligned": true,
+        "source_defined_timewindows": true,
+        "no_fitted_alignment_shift": true,
+        "gain_normalized_residual_is_change_not_distortion": true,
+        "no_sample_as_independent_replication_pvalues": true,
+        "native_and_independent_ffmpeg_lufs_truepeak": true,
+        "plots": "local standalone envelope/spectral/crest/waveform charts; source-only passage selection; standardNumPy calculations plusdisclosedSVGfallbackifplottinglibsabsent"
+      },
+      "owner_audio_stays_local": true,
+      "production_promoted": false,
+      "speed_experiment": false,
+      "preflight_retry": {
+        "old_run": "runs/around-mastering-20261022/session1",
+        "old_halt_sha256": "236d42e20436422dddb40f5e55a3f6656384b64fff30c87119d33289f61cb847",
+        "reason": "Phone availablememory has recovered above originalreserve; no originalnativechildstarted. Fresh scope; all resource/settings/quality thresholds unchanged."
+      }
+    },
+    "pins": {
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/plan_session2.json": "1e9f2a5bb1c5dcaf428a0f20a9a2cadba0b4171ce309545930ef614bec493583",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/around-mastering-20261022/run.py": "ace7912aae18c229e51c9796d33a446f6ef2100569f601997ee3575c22d18ee2",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/sequential-candidate-v1": "c2c5b14f77d0275f1b2f3fd94f028efd2253479a6477f94729d7366ebb37b511",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-mid-v3/basis.json": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/rich-low-sfht-v2/basis.json": "cde4e124085341fb0e145fed48561f182245462a9135dcd40303e048e845da6a",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/artifacts/listening-singularity-20261021/render_pair.py": "0b778c185bcd067cceba62cf94947ab0282a586552fbcc08a5e49f967f40c7fe",
+      "/data/data/com.termux/files/home/projects/RoachAudioMasterer/runs/ph-stereo-memory-20261021/parity-v1/COMPLETE.json": "785e2b18ab266fd58eb228a8c5a7c2c6079151152a86313f9331a70e3d37372a",
+      "/sdcard/Download/AROUND (The Absence of Ladder).wav": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+      "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026"
+    }
+  },
+  "preflight_snapshots": {
+    "v1": {
+      "phone_available_mib": 3684.8046875,
+      "free_storage_bytes": 14893748224,
+      "limits": {
+        "process_hwm_mib": 2048,
+        "minimum_memavailable_mib": 2816,
+        "emergency_memavailable_mib": 512,
+        "child_timeout_s": 1200,
+        "minimum_free_storage_gib": 4
+      },
+      "native_child_started": false
+    },
+    "v2": {
+      "phone_available_mib": 4201.69140625,
+      "free_storage_bytes": 13694898176,
+      "limits": {
+        "process_hwm_mib": 2048,
+        "minimum_memavailable_mib": 2816,
+        "emergency_memavailable_mib": 512,
+        "child_timeout_s": 1200,
+        "minimum_free_storage_gib": 4
+      },
+      "native_child_started": false
+    }
+  },
+  "complete_sha256": "34cc78e07a1f91d15987b25647bf64d707f687b3b4f2cc577d4e954a0b7fc6b5"
+}
