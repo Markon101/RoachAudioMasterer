@@ -1,0 +1,67 @@
+{
+  "schema": "around-full-mastering-tests-v1",
+  "declared_utc": "2026-10-22T04:53:23.981597+00:00",
+  "source_parent": "7fc6353",
+  "run_root": "runs/around-mastering-20261022/session1",
+  "binary": "runs/ph-stereo-memory-20261021/sequential-candidate-v1",
+  "binary_sha256": "c2c5b14f77d0275f1b2f3fd94f028efd2253479a6477f94729d7366ebb37b511",
+  "native_source_commit": "fc92ea1",
+  "model": "artifacts/rich-mid-v3/basis.json",
+  "model_sha256": "e2ca85b64521ca62d72278b33177b426d4386bc0add0ff2d94526f76a5d09ae3",
+  "low_model": "artifacts/rich-low-sfht-v2/basis.json",
+  "low_model_sha256": "cde4e124085341fb0e145fed48561f182245462a9135dcd40303e048e845da6a",
+  "additional_parity": {
+    "path": "runs/ph-stereo-memory-20261021/parity-v1/COMPLETE.json",
+    "sha256": "785e2b18ab266fd58eb228a8c5a7c2c6079151152a86313f9331a70e3d37372a"
+  },
+  "target_lufs": -14.0,
+  "ceiling_dbtp": -1.0,
+  "recipe": "README Smooth-style recommended pipeline, with parity-qualified memory fixed binary; auto-tune, explicit models, OpenCL, Euler8/10s2s, ph-lie-v2, transient-punch/kickguard/quietmid, phase-consistency0.5. ExperimentalmidcoherenceOFF, no forcedspecialists.",
+  "tracks": [
+    {
+      "id": "around-v1",
+      "path": "/sdcard/Download/AROUND (The Absence of Ladder).wav",
+      "sha256": "f49f8975903f2232ee3a471a1dd69898fda9b0fd71a4479f6361041a47e4dbd3",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 13704960
+    },
+    {
+      "id": "around-v2",
+      "path": "/sdcard/Download/AROUND (The Absence of Ladder)v2.wav",
+      "sha256": "cad6b5725121914b6f0f1e932e14d6c394b68e2df9d2f472b6f0675a3e92e026",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 14899200
+    }
+  ],
+  "limits": {
+    "process_hwm_mib": 2048,
+    "minimum_memavailable_mib": 2816,
+    "emergency_memavailable_mib": 512,
+    "child_timeout_s": 1200,
+    "minimum_free_storage_gib": 4
+  },
+  "memory_scope": "New longer285/310second sources, not a retry or change to earlier1536MiB experiment gates. Owner previously authorized modest extraRAM.2GiB ceiling, sequential children and >=768MiB initialreserve; stoponemergencymemory orHALT.",
+  "validation": {
+    "max_native_true_peak_dbtp": -0.99,
+    "max_target_error_lu": 0.1,
+    "geometry_exact": true,
+    "finite_required": true,
+    "native_preservation_flags_recorded_individually": true,
+    "quality_failure_policy": "Preservefailedqualityflags asdiagnostic; do not silentlypromote/exportasqualified. Otherindependentsource mayrun afterresource/geometry/finitevalid completion. Resource,HALT,process orpinerrorstopsession."
+  },
+  "analysis_design": {
+    "compare_each_master_to_own_source": true,
+    "different_versions_not_sample_aligned": true,
+    "source_defined_timewindows": true,
+    "no_fitted_alignment_shift": true,
+    "gain_normalized_residual_is_change_not_distortion": true,
+    "no_sample_as_independent_replication_pvalues": true,
+    "native_and_independent_ffmpeg_lufs_truepeak": true,
+    "plots": "local standalone envelope/spectral/crest/waveform charts; source-only passage selection; standardNumPy calculations plusdisclosedSVGfallbackifplottinglibsabsent"
+  },
+  "owner_audio_stays_local": true,
+  "production_promoted": false,
+  "speed_experiment": false
+}

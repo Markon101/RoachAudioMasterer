@@ -1,0 +1,10 @@
+{
+  "schema": "around-preflight-stop-v1",
+  "recorded_utc": "2026-10-22T04:59:05.485703+00:00",
+  "run": "runs/around-mastering-20261022/session1",
+  "status": "AVAILABLE_MEMORY_RESERVE_FAILED_BEFORE_ANY_NATIVE_CHILD",
+  "halt_sha256": "236d42e20436422dddb40f5e55a3f6656384b64fff30c87119d33289f61cb847",
+  "completed_tracks": 0,
+  "original_inputs_untouched": true,
+  "failed_instant_memory_value_not_persisted": true
+}
