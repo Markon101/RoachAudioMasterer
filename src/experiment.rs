@@ -331,7 +331,13 @@ pub fn evaluate_wav(
     Ok(())
 }
 
-pub fn benchmark(model_path: &Path, out: &Path, repeats: usize, foreground: bool) -> Result<()> {
+pub fn benchmark(
+    model_path: &Path,
+    out: &Path,
+    repeats: usize,
+    foreground: bool,
+    backend_name: &str,
+) -> Result<()> {
     ensure!(foreground,"pass --foreground-confirmed after putting Termux in foreground; background performance can differ");
     let model = Model::load(model_path)?;
     new_run(out)?;
@@ -341,7 +347,7 @@ pub fn benchmark(model_path: &Path, out: &Path, repeats: usize, foreground: bool
     let input = d.apply(&target);
     let p = reconstruction::prepare(&stft, &input, d);
     let begin = Instant::now();
-    let mut gpu = backend::create(&model, "opencl", 4096)?;
+    let mut gpu = backend::create(&model, backend_name, 4096)?;
     let gpu_init_ms = begin.elapsed().as_secs_f64() * 1000.0;
     let mut cpu = backend::Cpu::new(&model);
     let mut rows = Vec::new();
@@ -381,7 +387,15 @@ pub fn benchmark(model_path: &Path, out: &Path, repeats: usize, foreground: bool
                 c.push(t.elapsed().as_secs_f64() * 1000.0);
             }
         }
-        rows.push(json!({"frames":frames,"cpu_ms":c,"opencl_total_ms":g,"opencl_kernel_ms":kernels,"max_residual_error":max}));
+        // Keys keep the historical opencl_* names for that backend so existing
+        // benchmark.json files stay comparable, and name any other backend after
+        // itself rather than pretending it is OpenCL.
+        let mut row = json!({"frames":frames,"cpu_ms":c,"max_residual_error":max});
+        if let Some(o) = row.as_object_mut() {
+            o.insert(format!("{backend_name}_total_ms"), json!(g));
+            o.insert(format!("{backend_name}_kernel_ms"), json!(kernels));
+        }
+        rows.push(row);
     }
     let mut transforms = Vec::new();
     let mut inference = Vec::new();
@@ -403,7 +417,7 @@ pub fn benchmark(model_path: &Path, out: &Path, repeats: usize, foreground: bool
         std::hint::black_box(synth::generate(999000 + i as u64, 16384, RATE));
         generators.push(t.elapsed().as_secs_f64() * 1000.0);
     }
-    let report = json!({"provenance":provenance(),"foreground_confirmed":true,"repeats":repeats,"device":gpu.name(),"opencl_initialization_ms":gpu_init_ms,"model_batches":rows,"audio_samples":16384,"stft_ms":transforms,"cpu_end_to_end_restore_ms":inference,"synthetic_example_ms":generators,"scope":"single-thread CPU; persistent GPU weights and buffers; total includes transfers, output allocation and synchronization; kernel times are device event durations; init is separate; short-run observations, not sustained thermals"});
+    let report = json!({"provenance":provenance(),"foreground_confirmed":true,"repeats":repeats,"device":gpu.name(),"backend":backend_name,format!("{backend_name}_initialization_ms"):gpu_init_ms,"model_batches":rows,"audio_samples":16384,"stft_ms":transforms,"cpu_end_to_end_restore_ms":inference,"synthetic_example_ms":generators,"scope":"single-thread CPU; persistent GPU weights and buffers; total includes transfers, output allocation and synchronization; kernel times are device event durations; init is separate; short-run observations, not sustained thermals"});
     println!("{}", serde_json::to_string_pretty(&report)?);
     write_json(&out.join("benchmark.json"), &report)?;
     Ok(())

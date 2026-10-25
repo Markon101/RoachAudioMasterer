@@ -55,6 +55,22 @@ OCL_ICD_ASSUME_ICD_EXTENSION=1 ./target/release/highband benchmark \
   --model runs/train/model.json --out runs/bench --foreground-confirmed
 ```
 
+On a machine with an NVIDIA GPU and a `libnvrtc` that still targets it:
+
+```sh
+cargo build --release --locked --features cuda
+cargo test --locked --features cuda -- --ignored --nocapture gpu_matches_cpu
+./target/release/highband evaluate \
+  --model runs/train/model/model.json --backend cuda --out runs/eval-cuda
+```
+
+`HIGHBAND_CUDA_DEVICE` selects the ordinal (default 0) and `HIGHBAND_CUDA_FMAD=0`
+repeats the FMA audit with `--fmad=false`. CUDA is explicit opt-in, is dlopened
+at run time (no toolkit needed to build), and reports device, capability, NVRTC
+target/version and FMA setting in the backend string. See
+[NVIDIA CUDA backend](docs/CUDA.md), including why an old card needs an old
+NVRTC.
+
 Use `HIGHBAND_OPENCL_DEVICE='Adreno'` (or another name substring) to choose a GPU.
 OpenCL is explicit opt-in; discovery/build errors fail visibly. CPU-only builds
 do not load OpenCL. `--help` lists options for each command. FFmpeg is useful
@@ -124,7 +140,11 @@ meaningful optional GPU path: both MLP dense layers batched across frames.
 GPU weights, input, hidden and output buffers persist; inference chunks to a
 bounded capacity and reads back only final output. Kernels use portable CL1.2
 scalar operations and f32, with driver-chosen workgroups and no relaxed math.
-The same layout and dense loops can support CUDA or other backends later.
+The same seam now has a CUDA implementation over the identical kernels, compiled
+by NVRTC for the running card's own capability and gated on the same CPU f32
+parity; see [docs/CUDA.md](docs/CUDA.md). Backend names are one shared list
+(`backend::NAMES`), so `--backend` accepts `cpu`, `opencl` and `cuda` everywhere
+and a name that is not compiled in reports the feature to rebuild with.
 
 This follows Titan Image's validated engineering patterns: dynamic `opencl3`,
 Termux ICD environment, context/queue ownership, in-order dependencies, explicit

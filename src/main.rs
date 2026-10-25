@@ -831,7 +831,7 @@ enum Commands {
         #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
     },
-    /// Short CPU/OpenCL measurements. Keep Termux foregrounded, explicitly confirm.
+    /// Short CPU/GPU measurements. Keep Termux foregrounded, explicitly confirm.
     Benchmark {
         #[arg(long)]
         model: PathBuf,
@@ -841,6 +841,9 @@ enum Commands {
         repeats: usize,
         #[arg(long)]
         foreground_confirmed: bool,
+        /// GPU backend to measure against the CPU reference.
+        #[arg(long, default_value = "opencl", value_parser = crate::backend::NAMES)]
+        backend: String,
     },
 }
 fn validate_samples(n: usize) -> Result<()> {
@@ -1779,9 +1782,11 @@ fn run() -> Result<()> {
             out,
             repeats,
             foreground_confirmed,
+            backend,
         } => {
             ensure!((1..=100).contains(&repeats), "repeats must be 1..100");
-            experiment::benchmark(&model, &out, repeats, foreground_confirmed)
+            ensure!(backend != "cpu", "benchmark compares a GPU backend to the CPU reference");
+            experiment::benchmark(&model, &out, repeats, foreground_confirmed, &backend)
         }
     }
 }

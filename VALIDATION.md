@@ -96,3 +96,33 @@ flow+song-adapter quality test have not been completed.
   `fcec1ea`, and the subsequent aligned scoring command is `f4c4e82`.
 - No speed experiment. Affinity changes from four to eight allowed cores are
   logged as uncontrolled endpoint observations; training timing is not a benchmark.
+
+## CUDA backend, 2026-10-24 (x86_64 Linux desktop, not Termux)
+
+Opt-in `cuda` feature implementing the third `Predictor`. Recorded here for
+completeness; it is not a Termux delivery and it makes no Android claim. Full
+detail and references: `docs/CUDA.md`.
+
+- Default (no features): 91 passed, 2 ignored. `--features cuda`: 93 passed,
+  3 ignored (the extra ignored test is the opt-in CUDA device gate). The
+  `opencl` feature set still compiles; the added OpenCL device test was not run
+  here because this machine has no OpenCL device.
+- CUDA device parity (GTX 1080 Ti, sm_61, NVRTC 11.8, driver 580): maximum
+  residual 2.4e-7 against the CPU f32 reference over 71 frames at capacity 32
+  (three chunks). Gate is 2e-5. Identical residual with `--fmad=false`, so the
+  FMA audit is measured under both settings rather than assumed.
+- Negative result: NVRTC 13.4.92 only emits `compute_75` or newer and its PTX
+  fails module load on this card with driver error 222 ("unsupported
+  toolchain"). Runtime arch selection therefore comes from the device
+  capability, and the constructor names the NVRTC version in use on failure.
+- End-to-end, correctness only: `train --steps 12`, then `evaluate --count 8`
+  on the same checkpoint with `--backend cpu` and `--backend cuda`. Of 417
+  reported numeric fields, all agree except the `learned` method's metrics,
+  whose absolute difference is ~3e-8 on values of order 1e-7. DSP baselines are
+  bit-identical because they do not touch the backend.
+- `cargo build --locked --offline` succeeds with and without `--features cuda`
+  (cudarc uses dlopen: no toolkit needed to build). No speed experiment was
+  run; no latency claim is made.
+- Not verified here: Termux `--locked --offline` regression for the default and
+  `opencl` feature sets, and any Adreno parity. Those remain outstanding before
+  a merge that touches shared backend code reaches the phone.

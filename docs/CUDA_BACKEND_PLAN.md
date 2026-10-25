@@ -1,7 +1,25 @@
 # Roach CUDA Backend — Implementation Plan
 
-**Status:** proposed, not implemented. Nothing in this document is a working
-feature. Written 2026-10-24 against `main` @ `3876641` (v1.0.0-alpha.1).
+**Status:** **phases 0-4 implemented** on branch `feature/cuda-backend`; phase 5
+(Termux regression) outstanding. Written 2026-10-24 against `main` @ `3876641`
+(v1.0.0-alpha.1) as a proposal; the implementation and measured numbers are in
+[`docs/CUDA.md`](CUDA.md), and the validation record is in `VALIDATION.md`.
+
+Delivered as planned: pinned `cudarc` behind an off-by-default `cuda` feature,
+`src/kernels.cu` as a line-for-line port of `src/kernels.cl`, `src/cuda.rs` with
+NVRTC arch selection from the device capability, dispatch in all three
+`Predictor` factories, and CPU-f32 parity gated at 2e-5 (measured 2.4e-7 on a
+GTX 1080 Ti, sm_61) under both `fmad` settings.
+
+Two corrections the implementation produced, kept here because the plan is the
+record of intent:
+
+- Phase 1's "shared `backend::NAMES`" also became the provenance validator and
+  the `benchmark` backend selector; `benchmark` gained `--backend` defaulting to
+  `opencl` so existing output stays comparable (`cuda_total_ms` etc. otherwise).
+- `memcpy_dtoh` requires a host slice at least as large as the device source, so
+  chunked read-back copies `y.slice(0..n*outputs)` rather than passing the
+  capacity-sized buffer against a short destination.
 
 **Goal:** add an opt-in NVIDIA CUDA inference backend behind a new `cuda` Cargo
 feature that is numerically parity-gated against the existing CPU f32 reference,

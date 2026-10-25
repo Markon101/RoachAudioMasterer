@@ -87,7 +87,12 @@ shapes already permit both magnitude and complex-flow predictors. Future
 convolution, envelope, overlap-add and refinement operations should gain small
 backend interfaces when implemented, without scattering OpenCL/CUDA assumptions.
 Use contiguous documented layouts, CPU numerical references, reusable bounded
-GPU buffers and opt-in backends. Whole-clip mono 24 kHz v0 does not satisfy native
+GPU buffers and opt-in backends. Two GPU backends now exist behind `Predictor`:
+OpenCL (`src/opencl.rs`, `src/kernels.cl`) and CUDA (`src/cuda.rs`,
+`src/kernels.cu`, NVRTC-compiled for the running card). Both are off by default
+and both gate on the same CPU f32 residual. Backend names live in one list
+(`backend::NAMES`) shared by the CLI parsers and the provenance validators, so
+adding a backend does not mean editing twenty-eight argument lists. Whole-clip mono 24 kHz v0 does not satisfy native
 stereo/streaming goals; these limitations remain explicit.
 
 Implement only supported stages. Keep model/loss/schema changes opt-in and
