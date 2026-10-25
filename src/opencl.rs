@@ -46,20 +46,11 @@ impl OpenCl {
         outputs: usize,
         capacity: usize,
     ) -> Result<Self> {
-        ensure!(
-            (1..=4096).contains(&inputs)
-                && (1..=128).contains(&hidden)
-                && (1..=1024).contains(&outputs),
-            "unsupported dense shape"
-        );
+        crate::backend::validate_dense(inputs, hidden, outputs, capacity)?;
         let count = inputs * hidden + hidden + hidden * outputs + outputs;
         ensure!(
             payload.len() == count && payload.iter().all(|x| x.is_finite()),
             "invalid dense weights"
-        );
-        ensure!(
-            (1..=16384).contains(&capacity),
-            "GPU frame capacity must be 1..16384"
         );
         let devices = get_all_devices(CL_DEVICE_TYPE_GPU)
             .context("OpenCL discovery failed; on Termux try OCL_ICD_ASSUME_ICD_EXTENSION=1")?;

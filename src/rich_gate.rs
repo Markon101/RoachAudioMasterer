@@ -150,7 +150,7 @@ impl State {
     pub fn save(&self, path: &Path) -> Result<()> {
         ensure!(
             self.schema == "rich-gate-state-v1"
-                && matches!(self.frozen_backend.as_str(), "cpu" | "opencl")
+                && crate::backend::is_known(&self.frozen_backend)
                 && self.gate.validate()
                 && self
                     .adam
@@ -169,7 +169,7 @@ impl State {
         let s: Self = serde_json::from_slice(&fs::read(path)?)?;
         ensure!(
             s.schema == "rich-gate-state-v1"
-                && matches!(s.frozen_backend.as_str(), "cpu" | "opencl")
+                && crate::backend::is_known(&s.frozen_backend)
                 && s.gate.validate()
                 && s.adam.validate(s.gate.head.weights.len(), s.gate.steps),
             "invalid gate optimizer state"

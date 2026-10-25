@@ -53,7 +53,7 @@ impl TrainingState {
                     .head_adam
                     .validate(m.head.weights.len(), m.optimizer_steps)
                 && self.learning_rate == 0.001
-                && matches!(self.prior_backend.as_str(), "cpu" | "opencl"),
+                && crate::backend::is_known(&self.prior_backend),
             "invalid native training state, optimizer shape/counter, or recipe"
         );
         Ok(())

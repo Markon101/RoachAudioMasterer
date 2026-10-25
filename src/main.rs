@@ -112,7 +112,7 @@ enum Commands {
         glue_ratio: f32,
         #[arg(long, default_value_t = 90.0)]
         sidechain_hp_hz: f32,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long, default_value_t = true, action = clap::ArgAction::Set)]
         export_sdcard: bool,
@@ -221,7 +221,7 @@ enum Commands {
         seed: u64,
         #[arg(long, default_value_t = 48)]
         count: usize,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -243,7 +243,7 @@ enum Commands {
         cap_h_boost: bool,
         #[arg(long)]
         cap_n_boost: bool,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -265,7 +265,7 @@ enum Commands {
         cap_h_boost: bool,
         #[arg(long)]
         cap_n_boost: bool,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -297,7 +297,7 @@ enum Commands {
         denoise: bool,
         #[arg(long)]
         auto_eq: bool,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -333,7 +333,7 @@ enum Commands {
         denoise: bool,
         #[arg(long)]
         auto_eq: bool,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -347,7 +347,7 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -375,7 +375,7 @@ enum Commands {
         denoise: bool,
         #[arg(long)]
         auto_eq: bool,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -413,7 +413,7 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -435,7 +435,7 @@ enum Commands {
         chunk_seconds: f64,
         #[arg(long, default_value_t = 2.0)]
         overlap_seconds: f64,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -447,7 +447,7 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -463,7 +463,7 @@ enum Commands {
         steps: usize,
         #[arg(long, default_value_t = 1.0)]
         strength: f32,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -477,7 +477,7 @@ enum Commands {
         count: usize,
         #[arg(long, default_value_t = 8)]
         steps: usize,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -511,7 +511,7 @@ enum Commands {
         auto_eq: bool,
         #[arg(long)]
         spatial: bool,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -523,7 +523,7 @@ enum Commands {
         flow: PathBuf,
         #[arg(long)]
         gate: PathBuf,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -541,7 +541,7 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -557,7 +557,7 @@ enum Commands {
         seed: u64,
         #[arg(long)]
         resume: Option<PathBuf>,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -579,7 +579,7 @@ enum Commands {
         legacy: bool,
         #[arg(long)]
         independent_damage: bool,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -603,7 +603,7 @@ enum Commands {
         cap_h_boost: bool,
         #[arg(long)]
         cap_n_boost: bool,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -635,7 +635,7 @@ enum Commands {
         gate: PathBuf,
         #[arg(long, default_value_t = 400)]
         steps: usize,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -657,7 +657,7 @@ enum Commands {
         /// Frozen native deterministic prior; supplied only for flow training.
         #[arg(long)]
         flow_prior: Option<PathBuf>,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -672,7 +672,7 @@ enum Commands {
         seed: u64,
         #[arg(long, default_value_t = 24)]
         count: usize,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -706,7 +706,7 @@ enum Commands {
         /// Manufacture low-pass damage from the provided reference region.
         #[arg(long)]
         controlled: bool,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -730,7 +730,7 @@ enum Commands {
         seed: u64,
         #[arg(long, default_value_t = 48)]
         count: usize,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -750,7 +750,7 @@ enum Commands {
         transition: f32,
         #[arg(long, default_value_t = 1.0)]
         strength: f32,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -787,7 +787,7 @@ enum Commands {
         count: usize,
         #[arg(long, default_value_t = 8192)]
         samples: usize,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
         #[arg(long, default_value_t = 3)]
         export: usize,
@@ -804,7 +804,7 @@ enum Commands {
         cutoff: f32,
         #[arg(long, default_value_t = 500.0)]
         transition: f32,
-        #[arg(long, default_value = "cpu", value_parser = ["cpu", "opencl"])]
+        #[arg(long, default_value = "cpu", value_parser = crate::backend::NAMES)]
         backend: String,
         #[arg(long)]
         out: PathBuf,
@@ -826,7 +826,7 @@ enum Commands {
         strength: f32,
         #[arg(long)]
         model: Option<PathBuf>,
-        #[arg(long,default_value="cpu",value_parser=["cpu","opencl"])]
+        #[arg(long,default_value="cpu",value_parser=crate::backend::NAMES)]
         backend: String,
     },
     /// Short CPU/OpenCL measurements. Keep Termux foregrounded, explicitly confirm.
