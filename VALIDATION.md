@@ -119,7 +119,9 @@ detail and references: `docs/CUDA.md`.
   on the same checkpoint with `--backend cpu` and `--backend cuda`. Of 417
   reported numeric fields, all agree except the `learned` method's metrics,
   whose absolute difference is ~3e-8 on values of order 1e-7. DSP baselines are
-  bit-identical because they do not touch the backend.
+  bit-identical because they do not touch the backend. Of the 18 float32 WAVs
+  written per run, 15 are byte-identical and the three learned reconstructions
+  differ by at most 1.19e-7 absolute (−138.5 dBFS).
 - `cargo build --locked --offline` succeeds with and without `--features cuda`
   (cudarc uses dlopen: no toolkit needed to build). No speed experiment was
   run; no latency claim is made.

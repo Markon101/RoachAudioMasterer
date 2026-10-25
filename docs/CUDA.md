@@ -97,6 +97,13 @@ agree except the `learned` method's metrics, whose absolute difference is
 metrics, not a different algorithm. DSP baselines are bit-identical because
 they never touch the backend.
 
+The rendered audio agrees too: of the 18 float32 WAVs each run wrote, 15 are
+byte-identical between the CPU and CUDA runs, and the three `learned`
+reconstructions differ by at most 1.19e-7 absolute (−138.5 dBFS). Attenuating
+that residual would be inaudible; it is a floating-point ordering difference,
+not degraded restoration, and it is not presented as evidence of any
+perceptual improvement.
+
 ## Deliberately not implemented
 
 Named non-goals with entry criteria in `docs/CUDA_BACKEND_PLAN.md` §11:
