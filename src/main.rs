@@ -2,6 +2,8 @@ pub mod assess;
 mod audio;
 mod backend;
 pub mod critics;
+#[cfg(feature = "cuda")]
+mod cuda;
 mod dsp;
 mod experiment;
 mod flow;

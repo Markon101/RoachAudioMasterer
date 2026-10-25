@@ -180,6 +180,10 @@ pub fn backend(d: &Dense, name: &str) -> Result<Box<dyn Predictor>> {
         "opencl" => Ok(Box::new(crate::opencl::OpenCl::new_dense(
             &d.weights, d.input, d.hidden, d.output, 8192,
         )?)),
+        #[cfg(feature = "cuda")]
+        "cuda" => Ok(Box::new(crate::cuda::Cuda::new_dense(
+            &d.weights, d.input, d.hidden, d.output, 8192,
+        )?)),
         _ => anyhow::bail!("scene backend {name} unavailable"),
     }
 }

@@ -119,6 +119,10 @@ pub fn create(m: &FlowModel, backend: &str) -> Result<Box<dyn Predictor>> {
         "opencl" => Ok(Box::new(crate::opencl::OpenCl::new_dense(
             &m.weights, INPUT, WIDTH, OUTPUT, 2048,
         )?)),
+        #[cfg(feature = "cuda")]
+        "cuda" => Ok(Box::new(crate::cuda::Cuda::new_dense(
+            &m.weights, INPUT, WIDTH, OUTPUT, 2048,
+        )?)),
         _ => anyhow::bail!("flow backend {backend} unavailable"),
     }
 }

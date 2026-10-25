@@ -74,6 +74,8 @@ pub fn create(model: &Model, name: &str, capacity: usize) -> Result<Box<dyn Pred
         "cpu" => Ok(Box::new(Cpu::new(model))),
         #[cfg(feature = "opencl")]
         "opencl" => Ok(Box::new(crate::opencl::OpenCl::new(model, capacity)?)),
+        #[cfg(feature = "cuda")]
+        "cuda" => Ok(Box::new(crate::cuda::Cuda::new(model, capacity)?)),
         other => {
             let _ = capacity;
             if NAMES.contains(&other) {
