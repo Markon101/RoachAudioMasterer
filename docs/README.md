@@ -4,6 +4,8 @@ Updated 2026-11-09. Start with [project policy](../AGENTS.md), [README](../READM
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
+A new [isolated EQ listening package](EQ_LISTENING_20261109.md) is verified and delivered; owner responses are pending.
+
 Latest [revision results](REVISION_RESULTS_20261109.md) record exact baseline parity, optional high-field integration, and negative short-training identity comparisons. No new champion.
 
 Pipeline reference: [command catalog](PIPELINE_CATALOG.md), [optional high field](OPT_IN_HIGH_FIELD_PIPELINE.md), [correctness candidates](CORRECTNESS_REVISION_20261109.md), and [independent synthetic training](SYNTHETIC_REVISION_20261109.md).

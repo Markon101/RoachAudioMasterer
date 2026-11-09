@@ -191,7 +191,7 @@ pub fn dual_zone_quiet_mid_denoise(audio: &Audio, max_suppression_db: f32) -> Au
 /// Bounded Auto-EQ (Acoustic Scene Tonal Balance Correction).
 ///
 /// Analyzes running long-term spectral profile against a natural acoustic reference slope
-/// (-3.5 to -4.5 dB/octave) across 8 critical psychoacoustic bands.
+/// (-3.5 to -4.5 dB/octave) across 8 hand-selected analysis bands.
 /// Computes smooth raised-cosine corrections strictly clamped to [-max_db, +max_db].
 pub fn bounded_auto_eq(audio: &Audio, max_adjust_db: f32) -> Audio {
     bounded_auto_eq_with_quiet_gate(audio, max_adjust_db, false)
@@ -217,7 +217,7 @@ fn bounded_auto_eq_with_mode(audio: &Audio, max_adjust_db: f32, quiet_gate: bool
     let max_adj = max_adjust_db.clamp(0.5, 2.5);
     let stft = Stft::default();
 
-    // 8 Critical Psychoacoustic Bands:
+    // Eight hand-selected analysis bands, not an auditory critical-band model.
     // (center_freq, min_freq, max_freq)
     let bands: [(f32, f32, f32); 8] = [
         (45.0, 20.0, 60.0),          // Sub
@@ -466,6 +466,76 @@ mod tests {
         assert_ne!(legacy.channels, candidate.channels);
         let bypass = clean_audio_v1_3_with_eq_mode(&input, false, false, 1.0, false, true);
         assert_eq!(bypass.channels, input.channels);
+    }
+
+    #[test]
+    fn smooth_eq_opposing_band_deltas_remain_bounded_at_support_edges() {
+        let centers = [45.0f32, 120.0, 400.0, 1000.0, 3000.0, 6000.0, 10500.0, 17000.0];
+        let deltas = [1.0f32, -1.0, 1.0, -1.0, 1.0, -1.0, 1.0, -1.0];
+        let curve = |f: f32| {
+            let mut weighted = 0.0;
+            let mut total = 0.0;
+            for (&center, &delta) in centers.iter().zip(&deltas) {
+                let w = smooth_eq_weight((f / center).log2().abs());
+                weighted += delta * w;
+                total += w;
+            }
+            if total > 1e-6 { weighted / total } else { 0.0 }
+        };
+        for i in 0..=10000 {
+            let f = 20.0 * (1200.0f32).powf(i as f32 / 10000.0);
+            assert!(curve(f).abs() <= 1.000001);
+        }
+        for center in centers {
+            for edge in [center * 2.0f32.powf(-1.5), center * 2.0f32.powf(1.5)] {
+                if (20.0..=24000.0).contains(&edge) {
+                    let before = curve(edge * (1.0 - 1e-5));
+                    let after = curve(edge * (1.0 + 1e-5));
+                    assert!((before - after).abs() < 0.001, "edge {edge} Hz: {before} to {after}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn smooth_eq_quiet_to_loud_channel_swap_and_equal_channel_symmetry() {
+        let n = 8192;
+        let left: Vec<f32> = (0..n).map(|i| {
+            let level = if i < n / 2 { 0.001 } else { 0.12 };
+            level * (2.0 * std::f32::consts::PI * 1000.0 * i as f32 / RATE as f32).sin()
+        }).collect();
+        let right: Vec<f32> = (0..n).map(|i| {
+            let level = if i < n / 2 { 0.002 } else { 0.08 };
+            level * (2.0 * std::f32::consts::PI * 7400.0 * i as f32 / RATE as f32).sin()
+        }).collect();
+        let input = Audio { rate: RATE, channels: vec![left.clone(), right.clone()] };
+        let swapped = Audio { rate: RATE, channels: vec![right, left.clone()] };
+        let a = clean_audio_v1_3_with_eq_mode(&input, false, true, 1.0, true, true);
+        let b = clean_audio_v1_3_with_eq_mode(&swapped, false, true, 1.0, true, true);
+        // Averaging order can change f32 rounding; the processing should be equivariant within precision.
+        for (x, y) in a.channels[0].iter().zip(&b.channels[1]).chain(a.channels[1].iter().zip(&b.channels[0])) {
+            assert!((x - y).abs() < 2e-6);
+        }
+        let mono = Audio { rate: RATE, channels: vec![left.clone()] };
+        let dual = Audio { rate: RATE, channels: vec![left.clone(), left] };
+        let m = clean_audio_v1_3_with_eq_mode(&mono, false, true, 1.0, true, true);
+        let d = clean_audio_v1_3_with_eq_mode(&dual, false, true, 1.0, true, true);
+        assert_eq!(d.channels[0], d.channels[1]);
+        for (x, y) in m.channels[0].iter().zip(&d.channels[0]) { assert!((x - y).abs() < 2e-6); }
+    }
+
+    #[test]
+    fn smooth_eq_silence_and_impulse_are_finite_and_keep_geometry() {
+        let mut impulse = vec![0.0f32; 4096];
+        impulse[2048] = 0.2;
+        let input = Audio { rate: RATE, channels: vec![impulse, vec![0.0; 4096]] };
+        for audio in [&input, &Audio { rate: RATE, channels: vec![vec![0.0; 4096]] }] {
+            let out = clean_audio_v1_3_with_eq_mode(audio, false, true, 1.0, true, true);
+            assert_eq!(out.rate, audio.rate);
+            assert_eq!(out.channels.len(), audio.channels.len());
+            assert!(out.channels.iter().zip(&audio.channels).all(|(a, b)| a.len() == b.len() && a.iter().all(|x| x.is_finite())));
+            if audio.channels.len() == 1 { assert!(out.channels[0].iter().all(|x| *x == 0.0)); }
+        }
     }
 
     #[test]

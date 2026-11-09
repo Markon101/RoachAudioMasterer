@@ -1,0 +1,17 @@
+======================================================================
+FAIL: test_procedural_mode_requires_declared_provenance_not_metadata_claims (test_blind_listening.ListeningTests.test_procedural_mode_requires_declared_provenance_not_metadata_claims)
+----------------------------------------------------------------------
+ValueError: diagnostic provenance must match recording or procedural mode
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/projects/RoachAudioMasterer/scripts/test_blind_listening.py", line 397, in test_procedural_mode_requires_declared_provenance_not_metadata_claims
+    with self.assertRaisesRegex(ValueError, 'procedural diagnostic requires'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "procedural diagnostic requires" does not match "diagnostic provenance must match recording or procedural mode"
+
+----------------------------------------------------------------------
+Ran 25 tests in 9.611s
+
+FAILED (failures=1)

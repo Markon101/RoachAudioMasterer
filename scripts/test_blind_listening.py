@@ -315,6 +315,26 @@ class ListeningTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, '30s diagnostic|>=120s long'):
                     blind.validate(manifest, self.root)
 
+    def test_recording_diagnostic_requires_nonprocedural_same_source_and_target(self):
+        manifest = self.procedural_manifest()
+        manifest['mode'] = 'recording_diagnostic'
+        for variant in manifest['tracks'][0]['variants']:
+            variant['provenance'].update(procedural=False, target_lufs=-14.0)
+        self.manifest = manifest
+        self.write_manifest()
+        self.fake_prepare()
+        self.assertIn('recording diagnostic', (self.listener / 'INSTRUCTIONS.txt').read_text())
+        with (self.listener / 'responses.csv').open() as f:
+            self.assertTrue(all(row['fatigue'] == 'not_assessed' for row in csv.DictReader(f)))
+        blind.verify(self.organizer)
+        spec = {'rate': 8000, 'channels': 1, 'frames': 200 * 8000}
+        for field, value in [('procedural', True), ('source_sha256', 'c' * 64), ('target_lufs', -12.0)]:
+            bad = copy.deepcopy(manifest)
+            bad['tracks'][0]['variants'][0]['provenance'][field] = value
+            with patch.object(blind, 'probe', return_value=spec):
+                with self.assertRaises(ValueError):
+                    blind.validate(bad, self.root)
+
     def test_procedural_diagnostic_accepts_13_and_26_seconds(self):
         self.manifest = self.procedural_manifest()
         self.write_manifest()

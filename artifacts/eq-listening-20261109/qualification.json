@@ -1,0 +1,168 @@
+{
+  "eligible_numeric_checks": true,
+  "records": [
+    {
+      "track": 0,
+      "arm": "bypass",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -3.5
+      },
+      "native_meter": {
+        "crest_factor_db": 16.66231918334961,
+        "lufs_integrated": -18.000000316084282,
+        "rms_dbfs": -20.18541717529297,
+        "sample_peak_dbfs": -3.523097515106201,
+        "true_peak_dbtp": -3.5230777263641357
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.7662986994632279,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 0,
+      "arm": "legacy",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -3.7
+      },
+      "native_meter": {
+        "crest_factor_db": 16.48526954650879,
+        "lufs_integrated": -18.00000065594357,
+        "rms_dbfs": -20.182994842529297,
+        "sample_peak_dbfs": -3.697725534439087,
+        "true_peak_dbtp": -3.6952691078186035
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.7632943281605074,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 0,
+      "arm": "smooth",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -3.9
+      },
+      "native_meter": {
+        "crest_factor_db": 16.273273468017578,
+        "lufs_integrated": -17.999999898380526,
+        "rms_dbfs": -20.18221664428711,
+        "sample_peak_dbfs": -3.9089436531066895,
+        "true_peak_dbtp": -3.9064276218414307
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.7591887344044043,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 1,
+      "arm": "bypass",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -4.3
+      },
+      "native_meter": {
+        "crest_factor_db": 16.978900909423828,
+        "lufs_integrated": -18.000000339936907,
+        "rms_dbfs": -21.336631774902344,
+        "sample_peak_dbfs": -4.357731819152832,
+        "true_peak_dbtp": -4.332217693328857
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.7583228415348819,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 1,
+      "arm": "legacy",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -4.3
+      },
+      "native_meter": {
+        "crest_factor_db": 16.96141815185547,
+        "lufs_integrated": -17.99999999903229,
+        "rms_dbfs": -21.341583251953125,
+        "sample_peak_dbfs": -4.38016414642334,
+        "true_peak_dbtp": -4.34804630279541
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.7630509770186826,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 1,
+      "arm": "smooth",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -4.3
+      },
+      "native_meter": {
+        "crest_factor_db": 16.954166412353516,
+        "lufs_integrated": -18.000000048375373,
+        "rms_dbfs": -21.33542251586914,
+        "sample_peak_dbfs": -4.381255626678467,
+        "true_peak_dbtp": -4.350034713745117
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.7649800281195901,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 2,
+      "arm": "bypass",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -6.1
+      },
+      "native_meter": {
+        "crest_factor_db": 14.092154502868652,
+        "lufs_integrated": -18.00000026816211,
+        "rms_dbfs": -20.256153106689453,
+        "sample_peak_dbfs": -6.163998603820801,
+        "true_peak_dbtp": -6.1075310707092285
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.8503067027448409,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 2,
+      "arm": "legacy",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -5.8
+      },
+      "native_meter": {
+        "crest_factor_db": 14.472984313964844,
+        "lufs_integrated": -17.999999723006997,
+        "rms_dbfs": -20.330230712890625,
+        "sample_peak_dbfs": -5.857245922088623,
+        "true_peak_dbtp": -5.7985992431640625
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.8489745625754354,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    },
+    {
+      "track": 2,
+      "arm": "smooth",
+      "independent_meter": {
+        "lufs": -18.0,
+        "true_peak_dbfs": -5.8
+      },
+      "native_meter": {
+        "crest_factor_db": 14.427972793579102,
+        "lufs_integrated": -18.000000241532398,
+        "rms_dbfs": -20.273801803588867,
+        "sample_peak_dbfs": -5.845828533172607,
+        "true_peak_dbtp": -5.793551921844482
+      },
+      "relative_band_timing_lag_samples": 0,
+      "lr_correlation": 0.8518127761037128,
+      "scope": "local 800..2500Hz timing proxy, not sub-sample or perceptual proof"
+    }
+  ],
+  "note": "Requires separate corrected EQ test suite pass before listener delivery"
+}

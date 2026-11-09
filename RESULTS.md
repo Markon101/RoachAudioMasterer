@@ -1667,3 +1667,8 @@ and [compact numeric provenance](artifacts/around-mastering-20261022/results.jso
 ## 2026-11-09 — Opt-in correctness and high-field integration revision
 
 Fresh CPU release validation: 179 passed / 3 ignored; unchanged-flags and zero-high-field float masters match the pinned unchanged binary on one procedural fixture. Corrected EQ and dynamics objectives are versioned opt-ins; independent Mid damage is a new experimental path. A fresh 100-update paired training pilot improves some errors over legacy training but both models lose to identity on pooled complex NMSE; neither is promoted. Active high-field and combined fresh-Mid/high-field/EQ excerpt runs complete; full-song and listening qualification remain open. See [complete results and limitations](docs/REVISION_RESULTS_20261109.md) and [pipeline catalog](docs/PIPELINE_CATALOG.md). No speed claim.
+
+
+## 2026-11-09 — Isolated corrected-EQ listening eligibility
+
+Nine focused CPU EQ tests and 25 listening-tool tests pass. Nine fixed real-excerpt renders meet the declared finite/geometry/level/peak/timing-proxy gates. Twelve blinded short recording A/B trials, including identity controls, are verified and delivered locally. Human responses are pending; no preference or new champion follows. See [protocol, limits and delivery](docs/EQ_LISTENING_20261109.md).

@@ -45,6 +45,19 @@ fatigue value in this mode.
 Keep these modes in separate sessions and interpret them separately; do not pool
 their responses.
 
+## Short real-recording comparisons
+
+`recording_diagnostic` accepts fixed real-recording excerpts from 8 through 48
+seconds. It uses the short-diagnostic fatigue restriction and the same-source,
+same-render-target provenance declarations from `equal_target_architecture`.
+Declare `procedural: false` for every variant, a run record, full source commit,
+source SHA-256 and finite requested `target_lufs`. Each track needs diagnostic
+excerpts only; no long excerpt is required. This is a bounded mechanism/preference
+comparison, not a fatigue study or a full-track quality qualification. It must
+not be pooled with procedural or long historical listening. Blinding, attenuation,
+24-bit output, encoded verification, private key and response/reveal checks below
+apply without change.
+
 ## Private manifest
 
 Use a fresh output directory pair for every preparation. Paths below are illustrative;

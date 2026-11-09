@@ -1,0 +1,104 @@
+================================================================================
+             HIGHBAND AUTONOMOUS MASTERING ENGINE (v1)
+================================================================================
+Input:            runs/eq-listening-20261109/source-2.wav
+Duration:         12.00s (576000 frames @ 48000 Hz, 2 ch)
+Output Run Dir:   runs/eq-listening-20261109/2-legacy
+Mastering Target: -18.0 LUFS | Ceiling: -1.0 dBTP | Glue Sidechain HP: 90.0 Hz
+Spatial Dynamics: Mono Sub-Bass <= 80.0 Hz | Width: 1.15x | Room Depth: 0.12
+Backend:          cpu
+================================================================================
+
+--- Stage 0: Acoustic-Scene Pre-Assessment & Specialist Routing ---
+  Legacy spectral scores (uncalibrated): Sub: 35.3 | Low-Mid: 24.8 | Mid: 16.7 | High: 3.3
+  Spatial:  Correlation: 0.850 | Side/Mid Ratio: 0.284 | Sub Side Leakage: 0.040
+  Dynamics: Integrated LUFS: -11.84 | True Peak: 0.06 dBTP | Crest Factor: 14.09 dB
+  Critics:  AI Shimmer: 1.000 | Metallic Grain: 1.000 | Sub Instability: 0.019 | CDI: 0.502
+  Authorities: Sub: 0.00 [ABSTAIN] | Mid: 0.60 [ACTIVE] | Spatial: 0.35 [ACTIVE] | De-fizz: 1.00 [ACTIVE] | Glue: 0.85
+========================================================================================================
+                                ROACH AUDIO MASTERER - AUTONOMOUS TUNING CARD           
+========================================================================================================
+-- ACOUSTIC SCENE DEEP STATISTICS --
+  Spectral Tilt & Flatness:
+    - sub                (   20-  120 Hz): Slope =  -2.87 dB/oct | Wiener Flatness = 0.8829
+    - low_mid            (  120-  500 Hz): Slope =  -5.47 dB/oct | Wiener Flatness = 0.7317
+    - mid                (  500- 6000 Hz): Slope =  -5.67 dB/oct | Wiener Flatness = 0.3835
+    - high               ( 6000-20000 Hz): Slope = -14.29 dB/oct | Wiener Flatness = 0.3681
+    - global             (   20-20000 Hz): Slope =  -6.98 dB/oct | Wiener Flatness = 0.0350
+
+  Dynamics & Headroom:
+    - Peak Level:         -0.00 dBFS | True Headroom:  +0.00 dB
+    - RMS Percentiles:   L10:  -7.80 dBFS | L50: -12.26 dBFS | L90: -19.54 dBFS
+    - Dynamic Spread:     11.74 dB (L10 - L90 Macro Range)
+    - Crest Factor:      L10:  7.32 dB | L50:  9.59 dB | L90: 11.72 dB | Transient: 22.00 dB
+
+  Entropy & Harmonics:
+    - Spectral Entropy:  0.507 (Sub: 0.692, Mid: 0.804, High: 0.897)
+    - Harmonic/Noise:    HNR: +8.02 dB | Harmonic Fraction: 86.4%
+
+  Phase Coherence & Jitter:
+    - sub                (   20-  120 Hz): Angular Var = 0.3675 | Phase Jitter = 1.008 rad
+    - low_mid            (  120-  500 Hz): Angular Var = 0.4602 | Phase Jitter = 1.153 rad
+    - mid                (  500- 6000 Hz): Angular Var = 0.3646 | Phase Jitter = 1.024 rad
+    - high               ( 6000-20000 Hz): Angular Var = 0.3611 | Phase Jitter = 1.010 rad
+    - global             (   20-20000 Hz): Angular Var = 0.3722 | Phase Jitter = 1.022 rad
+--------------------------------------------------------------------------------------------------------
+-- RECOMMENDED SELF-TUNED STAGE PARAMETERS & ACTIONS --
+  Stage 1 (SFHT Sub):       ABSTAIN (sub-bass balanced & focused)
+  Stage 2 (CFM Mid):        ACTIVE (auth=0.75, strength=0.85)
+  Stage 3 (Clean Polish):   ACTIVE (adaptive auto-eq & polish)
+  Stage 3.5 (De-fizz):      ACTIVE (defizz_auth=1.00, phase_cont=0.25, desmear=0.25)
+  Stage 4 (3D Spatial):     ACTIVE (auth=0.35, mono bass guard active)
+  Stage 4.5 (Port-Ham J/R): Mode: port-hamiltonian-calibrated | J/Kappa: 6.17 | Beta: 1.60 | Shelf: +1.50 dB
+  Stage 5 (Glue Master):    Threshold: -14.0 dBFS | Ratio: 1.42:1 | Authority: 0.85
+========================================================================================================
+
+DEBUG high_slope: -14.289379, high_flatness: 0.36808836
+
+================================================================================
+                   ROACH AUDIO - MUSICAL INTENT DIRECTIVE                       
+================================================================================
+Operational Regime: PRESERVE (Artistic Identity & Warmth Guard)
+Intent Scores:      Intimacy: 0.61 | Dynamic Budget: 0.97 | Tonal Deliberation: 0.79 | Warmth: 0.90
+Rationale:          High organic cohesion & acoustic dynamic range detected. Guarding warm tonal balance and natural transient dynamics.
+================================================================================
+
+--- Stage 1: Sub-bass restoration skipped (disabled or model not found) ---
+
+--- Stage 2: Mid-band restoration skipped (disabled or model not found) ---
+
+--- Stage 3: Clean Polish (denoise=false, auto_eq=true, max_eq_db=1.00, quiet_denoise=false) ---
+  Completed in 0.11s
+
+--- Stage 3.5: Microstructure De-Fizz ABSTAINED (defizz_auth=1.00: shimmer & metallic grain within pristine bounds) ---
+
+--- Stage 5: Dynamic Post-Mastering (Target: -18.0 LUFS, Ceiling: -1.0 dBTP, Glue Ratio: 1.00) ---
+iter 0: pre_gain -5.77 dB, LUFS -18.00, true peak -5.80 dBTP, max limiter GR 0.00 dB
+  Completed in 0.55s | Glue GR: 0.00 dB | Limiter GR: 0.00 dB | Pre-Gain: -5.77 dB
+
+--- Stage 6: Post-Assessment & Preservation Verification ---
+================================================================================
+                       BEFORE / AFTER MASTERING SUMMARY                        
+================================================================================
+Metric                         |           Before |            After |      Delta
+-------------------------------+------------------+------------------+----------
+Integrated Loudness            |         -11.84 LU |         -18.00 LU |   -6.16 LU
+True Peak (dBTP)               |           0.06 dB |          -5.80 dB |   -5.85 dB
+Crest Factor                   |          14.09 dB |          14.47 dB |   +0.38 dB
+Inter-Channel Correlation      |            0.850 |            0.849 |     -0.001
+Sub-Bass Side Leak Ratio       |            0.040 |            0.040 |    +0.4%
+Sub Instability Critic         |            0.019 |            0.019 |     -0.000
+AI Phase Shimmer Critic        |            1.000 |            1.000 |     +0.000
+Metallic Grain Critic          |            1.000 |            1.000 |     +0.000
+Composite Defect Index (CDI)   |            0.502 |            0.502 |     -0.000
+-------------------------------+------------------+------------------+----------
+Preservation Guardrails: Mono Compat: [PASS] | Known Band: [PASS] | Transients: [PASS]
+================================================================================
+
+--- Stage 7: Lossless Audio Export & Phone Storage Sync ---
+[out#0/image2 @ 0xb400007d1cea86d0] Output file does not contain any stream
+Error opening output file runs/eq-listening-20261109/2-legacy/cover.jpg.
+Error opening output files: Invalid argument
+Rendered FLAC:        runs/eq-listening-20261109/2-legacy/mastered.flac
+
+=== Auto-Master Pipeline complete in 2.5s -> runs/eq-listening-20261109/2-legacy ===

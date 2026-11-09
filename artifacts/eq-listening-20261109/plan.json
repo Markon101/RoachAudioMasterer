@@ -1,0 +1,15 @@
+{
+ "schema":"isolated-eq-listening-v1",
+ "purpose":"Decide whether corrected auto-EQ is worth further investigation, not promote a master",
+ "binary":"runs/revision-20261109/candidate-bin",
+ "source_commit":"56a3275",
+ "source_selection":"Three already available distinct local recordings, fixed 48..60 seconds from each, before candidate rendering; no favorable-output search",
+ "sources":["/sdcard/Download/Singularity Moment ext v1.1.2.1.1 remix v2.flac","/sdcard/Download/Feelin’ Catchy ext v1.2.2.2.2.2.wav","/sdcard/Download/FLAC/Brain Candy.flac"],
+ "start_seconds":48,"duration_seconds":12,
+ "arms":["no EQ","legacy EQ","corrected EQ"],
+ "shared":"No neural, microstructure, spatial, morphic, denoise or glue; zero limiter budget, -18 LUFS target, native 48k stereo; compare same excerpt with identical finalization",
+ "gates":["new EQ unit gates pass", "finite native 48k stereo exact sample count", "native and independent peak at most -0.99 dBTP", "achieved LUFS within 0.15 of -18", "zero integer-sample relative timing lag on protected-band cross-correlation", "all renders retained, no parameter tuning"],
+ "bounds":{"child_timeout_seconds":180,"free_disk_gib":4,"available_memory_mib":1536},
+ "listening":{"mode":"recording_diagnostic","target_lufs_ceiling":-18,"trials":12,"identity_controls":3,"frames":576000,"matching":"attenuation only; encoded precision 0.15LU, no new limiting","fatigue":"not assessed","responses":"human judgments pending; never synthesize responses"},
+ "limits":"Excerpt-conditioned EQ only, different global decisions from full tracks; three local recordings do not cover pristine/commercial or all artistic styles. No-EQ is same finalizer without EQ, not untouched source. Failed Mid pilots and high-field synthesis excluded."
+}

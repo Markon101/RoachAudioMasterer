@@ -1,0 +1,27 @@
+{
+  "command": [
+    "runs/revision-20261109/candidate-bin",
+    "auto-master",
+    "--input",
+    "runs/eq-listening-20261109/source-0.wav",
+    "--no-sfht",
+    "--no-mid",
+    "--no-spatial",
+    "--no-morphic-gtf",
+    "--no-defizz",
+    "--no-denoise",
+    "--no-export-sdcard",
+    "--no-glue",
+    "--max-limiter-gr-db",
+    "0",
+    "--target-lufs",
+    "-18",
+    "--out",
+    "runs/eq-listening-20261109/0-legacy"
+  ],
+  "binary_sha256": "c245db19c7ac91b7aa724326c7211fb49a5c7d768e232d385d6d05c7f069eee2",
+  "timeout_seconds": 180,
+  "scope": "correctness/training pilot; elapsed is not benchmark",
+  "complete": true,
+  "returncode": 0
+}

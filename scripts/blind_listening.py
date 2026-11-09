@@ -133,7 +133,7 @@ def integer(value):
 def validate(manifest, base):
     require(manifest.get('version') == 1, 'manifest version must be 1')
     mode = manifest.get('mode')
-    require(mode in {'historical_playback', 'equal_target_architecture', 'procedural_diagnostic'}, 'choose one mode; pooling prohibited')
+    require(mode in {'historical_playback', 'equal_target_architecture', 'procedural_diagnostic', 'recording_diagnostic'}, 'choose one mode; pooling prohibited')
     require(integer(manifest.get('seed')), 'private integer seed required')
     require(manifest.get('assignment_policy', 'independent') in ASSIGNMENT_POLICIES,
             'unknown assignment_policy')
@@ -154,10 +154,10 @@ def validate(manifest, base):
             require(path.suffix.lower() in {'.wav', '.flac'} and path.is_file(), 'local WAV/FLAC required')
             v['path'] = str(path)
             require(isinstance(v.get('provenance'), dict) and v['provenance'], 'explicit provenance required')
-            if mode == 'procedural_diagnostic':
+            if mode in {'procedural_diagnostic', 'recording_diagnostic'}:
                 provenance = v['provenance']
-                require(provenance.get('procedural') is True,
-                        'procedural diagnostic requires procedural provenance true')
+                require(provenance.get('procedural') is (mode == 'procedural_diagnostic'),
+                        'procedural diagnostic requires procedural provenance true' if mode == 'procedural_diagnostic' else 'recording diagnostic requires procedural provenance false')
                 require(isinstance(provenance.get('run_record'), str) and provenance['run_record'].strip(),
                         'procedural diagnostic requires a declared run_record')
                 require(isinstance(provenance.get('git_commit'), str) and
@@ -177,7 +177,7 @@ def validate(manifest, base):
                     all(trim['start_sample'] + trim['frames'] <= s['frames'] for s in specs), 'invalid common trim')
         else:
             require(len({s['frames'] for s in specs}) == 1, 'duration mismatch requires declared common trim')
-        if manifest['mode'] == 'equal_target_architecture':
+        if manifest['mode'] in {'equal_target_architecture', 'recording_diagnostic'}:
             provenances = [v['provenance'] for v in variants]
             require(all(re.fullmatch(r'[0-9a-f]{40}', p.get('git_commit', '')) and
                         re.fullmatch(r'[0-9a-f]{64}', p.get('source_sha256', '')) and
@@ -186,7 +186,7 @@ def validate(manifest, base):
             require(len({p['source_sha256'] for p in provenances}) == 1 and
                     len({p['target_lufs'] for p in provenances}) == 1,
                     'architecture mode requires same original source and render target')
-        if mode == 'procedural_diagnostic':
+        if mode in {'procedural_diagnostic', 'recording_diagnostic'}:
             provenances = [v['provenance'] for v in variants]
             require(len({p['source_sha256'] for p in provenances}) == 1,
                     'procedural diagnostic variants must declare the same procedural source hash')
@@ -196,7 +196,7 @@ def validate(manifest, base):
             excerpt_ids.add(e['id'])
             require(integer(e.get('start_sample')) and e['start_sample'] >= 0 and
                     integer(e.get('frames')) and e['frames'] > 0, 'sample interval must be positive integers')
-            if mode == 'procedural_diagnostic':
+            if mode in {'procedural_diagnostic', 'recording_diagnostic'}:
                 require(e.get('kind') == 'diagnostic' and 8 * rate <= e['frames'] <= 48 * rate,
                         'procedural diagnostic requires diagnostic excerpts from 8 to 48 seconds')
             else:
@@ -205,7 +205,7 @@ def validate(manifest, base):
             low, high = (trim['start_sample'], trim['start_sample'] + trim['frames']) if trim else (0, specs[0]['frames'])
             require(low <= e['start_sample'] and e['start_sample'] + e['frames'] <= high, 'excerpt outside common interval')
             kinds.add(e['kind'])
-        if mode == 'procedural_diagnostic':
+        if mode in {'procedural_diagnostic', 'recording_diagnostic'}:
             require(kinds == {'diagnostic'}, 'procedural diagnostic accepts diagnostic excerpts only; no long or fatigue study')
         else:
             require(kinds == {'diagnostic', 'long'}, 'each track needs diagnostic and long excerpts')
@@ -327,10 +327,12 @@ def prepare(manifest_path, listener, organizer):
             writer = csv.DictWriter(f, fieldnames=FIELDS)
             writer.writeheader()
             writer.writerows({'trial': row['trial'],
-                              **({'fatigue': 'not_assessed'} if manifest['mode'] == 'procedural_diagnostic' else {})}
+                              **({'fatigue': 'not_assessed'} if manifest['mode'] in {'procedural_diagnostic', 'recording_diagnostic'} else {})}
                              for row in key)
         instructions = (PROCEDURAL_DIAGNOSTIC_INSTRUCTIONS
-                        if manifest['mode'] == 'procedural_diagnostic' else INSTRUCTIONS)
+                        if manifest['mode'] == 'procedural_diagnostic' else
+                        PROCEDURAL_DIAGNOSTIC_INSTRUCTIONS.replace('procedural diagnostic', 'recording diagnostic')
+                        if manifest['mode'] == 'recording_diagnostic' else INSTRUCTIONS)
         (listener / 'INSTRUCTIONS.txt').write_text(instructions)
         dump(organizer / 'session.private.json', {
             'listener': str(listener), 'responses': 'responses.csv',
@@ -359,7 +361,7 @@ def reveal(organizer, responses):
                 row['confidence'] in {'low', 'medium', 'high'} and
                 row['fatigue'] in {'none', 'mild', 'high', 'not_assessed'} and None not in row,
                 'invalid or incomplete categorical responses')
-    if key.get('mode') == 'procedural_diagnostic':
+    if key.get('mode') in {'procedural_diagnostic', 'recording_diagnostic'}:
         require(all(row['fatigue'] == 'not_assessed' for row in rows),
                 'procedural diagnostic fatigue must remain not_assessed')
     session = json.loads((organizer / 'session.private.json').read_text())

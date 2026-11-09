@@ -1,0 +1,26 @@
+   Compiling roach-audio-masterer v1.0.0-alpha.1 (/data/data/com.termux/files/home/projects/RoachAudioMasterer)
+warning: function `train` is never used
+   --> src/dynamics.rs:718:8
+    |
+718 | pub fn train(
+    |        ^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `roach-audio-masterer` (bin "roach-audio-masterer" test) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 2m 23s
+     Running unittests src/main.rs (runs/revision-20261109/baseline-src/target/release/deps/roach_audio_masterer-5447946d6b5c6ce4)
+
+running 9 tests
+test scene_clean::tests::experimental_eq_is_opt_in_and_disabled_eq_ignores_mode ... ok
+test scene_clean::tests::smooth_eq_opposing_band_deltas_remain_bounded_at_support_edges ... ok
+test scene_clean::tests::smooth_eq_quiet_to_loud_channel_swap_and_equal_channel_symmetry ... ok
+test scene_clean::tests::smooth_eq_silence_and_impulse_are_finite_and_keep_geometry ... ok
+test scene_clean::tests::smooth_eq_weight_is_centered_continuous_and_bounded ... ok
+test scene_clean::tests::test_auto_eq_strict_bounds ... ok
+test scene_clean::tests::test_denoise_invariance_below_14k ... ok
+test scene_clean::tests::test_quiet_mid_denoise_reduces_quiet_noise_and_preserves_active ... ok
+test scene_clean::tests::test_v1_3_clean_parity_when_quiet_disabled ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 176 filtered out; finished in 0.06s
+
