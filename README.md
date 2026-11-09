@@ -5,6 +5,8 @@ Generated content (sub-bass fundamentals, mid overtones, and high air) represent
 
 > **Project & Repository Identity**: The canonical project name and primary binary is **`roach-audio-masterer`** (repository: [`Markon101/RoachAudioMasterer`](https://github.com/Markon101/RoachAudioMasterer)). The legacy **`highband`** binary alias and CLI subcommands remain fully supported for backward compatibility with existing automation, scripts, and historical checkpoints.
 
+Current revision: [architecture dossier](RoachAudioMasterer_Deep_Architecture_Research.md) and [baseline-first engineering plan](docs/REVISION_20261109.md). New high-band integration and correctness repairs remain experimental until their declared checks pass.
+
 Research continuation: [current handoff](HANDOVER_CURRENT_20261020.md) records
 verified gates and exact provenance. A default-off combined Mid-coherence path
 passes real-song checks; a buffer-lifetime fix lets the matched full-song control

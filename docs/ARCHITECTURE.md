@@ -28,7 +28,7 @@ head may legitimately change amplitude in low bands, so low-band immutability
 must not become a universal invariant for every restoration task. Eventually
 confidence/protection can vary across time, frequency and channels.
 
-No automatic damage estimator currently exists. Low crest factor, dense spectrum
+Input-only heuristic assessment and specialist routing now exist (`assess.rs`); no validated general automatic damage estimator exists. Low crest factor, dense spectrum
 or narrow stereo are not automatically defects: they may be intended style.
 Assessment must distinguish supported repair from uncertain interpretation and
 retain user control. Record damage assumptions, active heads, strength, sampling

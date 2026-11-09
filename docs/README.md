@@ -1,10 +1,12 @@
 # Documentation index and source of truth
 
-Updated 2026-10-22. Start with [project policy](../AGENTS.md), [README](../README.md),
+Updated 2026-11-09. Start with [project policy](../AGENTS.md), [README](../README.md),
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
-Latest frontier: [two full AROUND masters at -14 LUFS](AROUND_MASTERING_RESULTS_20261022.md)
+Current engineering program: [deep architecture audit](../RoachAudioMasterer_Deep_Architecture_Research.md) and [revision plan](REVISION_20261109.md). The audit is observational; fixes, high-band integration and bounded procedural retraining require the gates in the new plan. Historical plans retain their original budgets; current policy requires Cargo `-j 8`.
+
+Previous frontier: [two full AROUND masters at -14 LUFS](AROUND_MASTERING_RESULTS_20261022.md)
 and waveform/numeric analyses are delivered. V1 passes all native checks; v2 is
 diagnostic after a preserved shape-gate failure. Its cached trace first crosses
 at combined clean polish. Exact native replay before denoise/EQ counterfactuals
