@@ -82,6 +82,8 @@ enum Commands {
         #[arg(long, default_value_t=1800)] steps: usize,
         #[arg(long)] shuffled: bool,
         #[arg(long)] frozen_landscape: bool,
+        /// Opt into corrected v3 objective; legacy checkpoint resume is unsupported.
+        #[arg(long)] corrected_objective: bool,
         #[arg(long)] resume: Option<PathBuf>,
         #[arg(long)] out: PathBuf,
     },
@@ -109,6 +111,26 @@ enum Commands {
         sfht_model: Option<PathBuf>,
         #[arg(long)]
         mid_model: Option<PathBuf>,
+        /// Opt in to learned high-band residual with this field checkpoint.
+        #[arg(long)]
+        high_model: Option<PathBuf>,
+        #[arg(long, default_value = "artifacts/native-v2/deterministic.json")]
+        high_det: PathBuf,
+        #[arg(long, default_value = "artifacts/native-longer-v2/flow3000.json")]
+        high_flow: PathBuf,
+        #[arg(long, default_value = "artifacts/rich-gate-v1/gate4000/evidence.json")]
+        high_gate: PathBuf,
+        /// Added high-band residual strength; zero bypasses the stage.
+        #[arg(long, default_value_t = 1.0)]
+        high_strength: f32,
+        /// Assumed trusted-band cutoff in Hz (training support 3500..8000).
+        #[arg(long, default_value_t = 6000.0)]
+        high_cutoff: f32,
+        #[arg(long, default_value_t = 0.5)]
+        high_richness: f32,
+        /// Use the experimental continuous auto-EQ interpolation.
+        #[arg(long)]
+        smooth_auto_eq: bool,
         #[arg(long)]
         no_sfht: bool,
         #[arg(long)]
@@ -451,6 +473,9 @@ enum Commands {
         steps: usize,
         #[arg(long, default_value_t = 700010)]
         seed: u64,
+        /// Independent degradation seed; requires fresh training (no resume).
+        #[arg(long, conflicts_with = "resume")]
+        damage_seed: Option<u64>,
         #[arg(long)]
         resume: Option<PathBuf>,
         #[arg(long)]
@@ -480,6 +505,9 @@ enum Commands {
         model: PathBuf,
         #[arg(long, default_value_t = 850000)]
         seed: u64,
+        /// Independently sampled degradation seed for an out-of-distribution evaluation.
+        #[arg(long)]
+        damage_seed: Option<u64>,
         #[arg(long, default_value_t = 16)]
         count: usize,
         #[arg(long, default_value_t = 8)]
@@ -1108,8 +1136,8 @@ fn run() -> Result<()> {
             experiment::write_json(&out.join("associative-check.json"),&associative_landscape::Landscape::associative_check())
         },
         Commands::LandscapeAnalyze {input,out}=>dynamics::analyze_landscape(&input,&out),
-        Commands::DynamicsTrain {model_seed,data_seed,steps,shuffled,frozen_landscape,resume,out} =>
-            dynamics::train(model_seed,data_seed,steps,shuffled,frozen_landscape,resume.as_deref(),&out),
+        Commands::DynamicsTrain {model_seed,data_seed,steps,shuffled,frozen_landscape,resume,out,corrected_objective} =>
+            dynamics::train_corrected(model_seed,data_seed,steps,shuffled,frozen_landscape,resume.as_deref(),&out,corrected_objective),
         Commands::DynamicsEvaluate {model,seed,count,out} => dynamics::evaluate(&model,seed,count,&out),
         Commands::DynamicsRestore {model,input,strength,out} => dynamics::restore_cli(&model,&input,strength,&out),
         Commands::AutoMaster {
@@ -1117,6 +1145,14 @@ fn run() -> Result<()> {
             out,
             sfht_model,
             mid_model,
+            high_model,
+            high_det,
+            high_flow,
+            high_gate,
+            high_strength,
+            high_cutoff,
+            high_richness,
+            smooth_auto_eq,
             no_sfht,
             no_mid,
             mid_coherence,
@@ -1174,6 +1210,8 @@ fn run() -> Result<()> {
             out.as_deref(),
             sfht_model.as_deref(),
             mid_model.as_deref(),
+            high_model.as_deref(), &high_det, &high_flow, &high_gate,
+            high_strength, high_cutoff, high_richness, smooth_auto_eq,
             no_sfht,
             no_mid,
             mid_coherence,
@@ -1419,6 +1457,7 @@ fn run() -> Result<()> {
             kind,
             steps,
             seed,
+            damage_seed,
             resume,
             endpoint_anchored,
             backend,
@@ -1430,7 +1469,11 @@ fn run() -> Result<()> {
                 "transport" => rich_dynamics::Kind::Transport,
                 _ => rich_dynamics::Kind::Basis,
             };
-            rich_mid::train(k, steps, seed, resume.as_deref(), &backend, &out, endpoint_anchored)
+            if let Some(damage_seed) = damage_seed {
+                rich_mid::train_independent(k, steps, seed, damage_seed, &backend, &out, endpoint_anchored)
+            } else {
+                rich_mid::train(k, steps, seed, resume.as_deref(), &backend, &out, endpoint_anchored)
+            }
         }
         Commands::MidSolverAudit {
             model,
@@ -1443,12 +1486,17 @@ fn run() -> Result<()> {
         Commands::RichMidEvaluate {
             model,
             seed,
+            damage_seed,
             count,
             steps,
             mid_ceiling,
             backend,
             out,
-        } => rich_mid::evaluate_mid(&model, seed, count, steps, mid_ceiling, &backend, &out),
+        } => if let Some(damage_seed) = damage_seed {
+            rich_mid::evaluate_mid_independent(&model, seed, damage_seed, count, steps, mid_ceiling, &backend, &out)
+        } else {
+            rich_mid::evaluate_mid(&model, seed, count, steps, mid_ceiling, &backend, &out)
+        },
         Commands::RichMidRestore {
             model,
             input,
@@ -2291,6 +2339,14 @@ fn auto_master_pipeline(
     out: Option<&std::path::Path>,
     sfht_model: Option<&std::path::Path>,
     mid_model: Option<&std::path::Path>,
+    high_model: Option<&std::path::Path>,
+    high_det: &std::path::Path,
+    high_flow: &std::path::Path,
+    high_gate: &std::path::Path,
+    high_strength: f32,
+    high_cutoff: f32,
+    high_richness: f32,
+    smooth_auto_eq: bool,
     no_sfht: bool,
     no_mid: bool,
     mid_coherence: bool,
@@ -2341,6 +2397,12 @@ fn auto_master_pipeline(
     dynamics_strength: f32,
 ) -> Result<()> {
     master_controls.validate()?;
+    if let Some(field) = high_model {
+        rich_field::validate_auto(high_cutoff, high_strength, high_richness, chunk_seconds, overlap_seconds)?;
+        if high_strength > 0.0 {
+            rich_field::validate_auto_models(high_det, high_flow, high_gate, field)?;
+        }
+    }
     validate_mid_coherence_request(
         mid_coherence, no_mid, mid_cutoff, mid_ceiling, steps, chunk_seconds, overlap_seconds,
         master_controls.quiet_mid_denoise, force_specialists,
@@ -2376,9 +2438,9 @@ fn auto_master_pipeline(
         }
     };
     master_audit.validate_for_output(&out_dir)?;
-    if mid_coherence {
+    if mid_coherence || (high_model.is_some() && high_strength > 0.0) {
         ensure!(!out_dir.exists(),
-            "--mid-coherence requires a fresh run directory; existing caches/evidence are not authenticated");
+            "--mid-coherence and active --high-model require a fresh run directory; caches/evidence are not authenticated");
     }
     if !out_dir.exists() {
         experiment::new_run(&out_dir)?;
@@ -2430,6 +2492,12 @@ fn auto_master_pipeline(
         }
     };
 
+    if high_model.is_some() && high_strength > 0.0 {
+        ensure!(current_audio.rate == 48000 && (1..=2).contains(&current_audio.channels.len())
+            && current_audio.frames() > 0 && current_audio.frames() <= 48 * 48000
+            && current_audio.channels.iter().all(|c| c.len() == current_audio.frames() && c.iter().all(|x| x.is_finite())),
+            "experimental high-band requires finite 48 kHz mono/stereo input of at most 48 seconds");
+    }
     if master_audit.stage_audit_dir.is_some() {
         master_audit::MasterAuditArgs::validate_audio(&current_audio)?;
     }
@@ -2727,6 +2795,16 @@ fn auto_master_pipeline(
         println!("\n--- Stage 2: Mid-band restoration skipped (disabled or model not found) ---");
     }
 
+    // Stage 2.5: optional learned residual; never manufacture bandwidth loss.
+    let high_applied = high_model.is_some() && high_strength > 0.0;
+    if let Some(field) = high_model.filter(|_| high_applied) {
+        println!("\n--- Stage 2.5: Experimental high-band field (cutoff={:.1}Hz, strength={:.2}) ---", high_cutoff, high_strength);
+        current_audio = rich_field::restore_auto(high_det, high_flow, high_gate, field,
+            &current_audio, high_cutoff, high_strength, high_richness,
+            chunk_seconds, overlap_seconds, backend)?;
+        native_audio::write(&out_dir.join("stage2_5_high.wav"), &current_audio, false)?;
+    }
+
     // Stage 3: Clean Polish (Adaptive High-Band Denoise & Auto-EQ)
     if denoise || auto_eq {
         println!(
@@ -2734,12 +2812,13 @@ fn auto_master_pipeline(
             denoise, auto_eq, auto_eq_max_db, master_controls.quiet_mid_denoise
         );
         let t0 = std::time::Instant::now();
-        current_audio = scene_clean::clean_audio_v1_3(
+        current_audio = scene_clean::clean_audio_v1_3_with_eq_mode(
             &current_audio,
             denoise,
             auto_eq,
             auto_eq_max_db,
             master_controls.quiet_mid_denoise,
+            smooth_auto_eq,
         );
         println!("  Completed in {:.2}s", t0.elapsed().as_secs_f64());
         native_audio::write(&out_dir.join("stage3_clean.wav"), &current_audio, false)?;
@@ -3224,6 +3303,15 @@ fn auto_master_pipeline(
     }
 
     let runtime_provenance = experiment::provenance();
+    let high_field_settings = serde_json::json!({
+        "requested": high_model.is_some(), "applied": high_applied,
+        "field": high_model.map(|p| p.display().to_string()),
+        "det": high_det.display().to_string(), "flow": high_flow.display().to_string(),
+        "gate": high_gate.display().to_string(), "strength": high_strength,
+        "cutoff_hz": high_cutoff, "transition_hz": 500.0, "richness": high_richness,
+        "field_steps": 8, "chunk_seconds": chunk_seconds, "overlap_seconds": overlap_seconds,
+        "sample_seed": 11, "controlled_lowpass": false, "chunk_cache": false
+    });
     let mut summary_meta = serde_json::json!({
         "schema": "highband-auto-master-v1",
         "runtime_checkout": {
@@ -3280,6 +3368,9 @@ fn auto_master_pipeline(
             "after": master_res.after_metrics,
         }
     });
+    summary_meta["settings"]["smooth_auto_eq_requested"] = serde_json::json!(smooth_auto_eq);
+    summary_meta["settings"]["smooth_auto_eq_applied"] = serde_json::json!(smooth_auto_eq && auto_eq);
+    summary_meta["settings"]["high_field"] = high_field_settings;
     let signal_clock=signal_time::SignalClock {sample_rate:original_input_audio.rate};
     summary_meta["onset_audit"]=serde_json::to_value(&master_res.onset_audit)?;
     summary_meta["signal_clock"]=serde_json::to_value(signal_clock)?;

@@ -1,0 +1,4 @@
+Mid-flow [basis] step 1/100 loss 0.020003 cutoff 842.9Hz (elapsed 0.1s)
+Mid-flow [basis] step 50/100 loss 0.008517 cutoff 2343.4Hz (elapsed 1.4s)
+Mid-flow [basis] step 100/100 loss 0.017301 cutoff 1314.7Hz (elapsed 2.8s)
+Mid-flow [basis] finished 100 steps in 2.8s. Checkpoint saved to runs/revision-20261109/candidate-training

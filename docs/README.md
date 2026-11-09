@@ -4,6 +4,10 @@ Updated 2026-11-09. Start with [project policy](../AGENTS.md), [README](../READM
 [the current checkpoint](../HANDOVER_CURRENT_20261020.md),
 [architecture](ARCHITECTURE.md), and [evidence standards](EPISTEMIC_STANDARDS.md).
 
+Latest [revision results](REVISION_RESULTS_20261109.md) record exact baseline parity, optional high-field integration, and negative short-training identity comparisons. No new champion.
+
+Pipeline reference: [command catalog](PIPELINE_CATALOG.md), [optional high field](OPT_IN_HIGH_FIELD_PIPELINE.md), [correctness candidates](CORRECTNESS_REVISION_20261109.md), and [independent synthetic training](SYNTHETIC_REVISION_20261109.md).
+
 Current engineering program: [deep architecture audit](../RoachAudioMasterer_Deep_Architecture_Research.md) and [revision plan](REVISION_20261109.md). The audit is observational; fixes, high-band integration and bounded procedural retraining require the gates in the new plan. Historical plans retain their original budgets; current policy requires Cargo `-j 8`.
 
 Previous frontier: [two full AROUND masters at -14 LUFS](AROUND_MASTERING_RESULTS_20261022.md)
@@ -52,6 +56,8 @@ were not revalidated in this documentation pass.
 
 | Document | Role |
 | --- | --- |
+| [OPT_IN_HIGH_FIELD_PIPELINE.md](OPT_IN_HIGH_FIELD_PIPELINE.md) | Experimental high-field auto-master stage, controls and limits |
+| [PIPELINE_CATALOG.md](PIPELINE_CATALOG.md) | Command families, execution paths and trust boundaries |
 | [PH_MEMORY_RESULTS_20261021.md](PH_MEMORY_RESULTS_20261021.md) | Memory fix, full-song qualification and delivered listening package |
 | [OWNER_LISTENING_RESULTS_20261021.md](OWNER_LISTENING_RESULTS_20261021.md) | Submitted choices, identity-control confound and revealed source mapping |
 | [REAL_COHERENCE_ELIGIBILITY_20261020.md](REAL_COHERENCE_ELIGIBILITY_20261020.md) | Real-song gate; full-song listening eligibility and pending finalization |

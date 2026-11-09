@@ -1006,6 +1006,23 @@ pub fn generate_mid_multitrack(seed: u64) -> (Audio, Recipe) {
     )
 }
 
+/// Crossed experimental curriculum: source generation is unchanged and depends
+/// only on `source_seed`; the actual applied damage comes from `damage_seed`.
+/// The legacy source's cutoff-shaped parameter remains part of the source
+/// distribution, but is no longer the actual degradation cutoff.
+pub fn generate_mid_multitrack_independent(source_seed: u64, damage_seed: u64) -> (Audio, Recipe) {
+    let (audio, mut recipe) = generate_mid_multitrack(source_seed);
+    recipe.version = 7;
+    recipe.damage = Damage::mid_range(damage_seed);
+    (audio, recipe)
+}
+
+/// Deterministically draw a damage seed from a separate schedule.
+pub fn independent_damage_seed(base: u64, index: usize) -> u64 {
+    let mut rng = Rng(base ^ (index as u64).wrapping_mul(0x9e3779b97f4a7c15));
+    rng.next_u64()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1118,6 +1135,26 @@ mod tests {
                     .map(|(a, b)| (a - b).abs())
                     .fold(0.0f32, f32::max);
                 assert!(diff < 2e-6, "stopped mid target has high energy {diff}");
+            }
+        }
+    }
+
+    #[test]
+    fn independent_mid_damage_never_changes_the_source() {
+        // Include the historical stopped family, whose source directly used
+        // the old source-derived cutoff, and an active full-band family.
+        for source_seed in [700_007u64, 700_004u64] {
+            let (legacy, legacy_recipe) = generate_mid_multitrack(source_seed);
+            let (a, ar) = generate_mid_multitrack_independent(source_seed, 123);
+            let (b, br) = generate_mid_multitrack_independent(source_seed, 987_654);
+            assert_eq!(a.channels, legacy.channels);
+            assert_eq!(a.channels, b.channels);
+            assert_eq!(legacy_recipe.version, 6);
+            assert_eq!(ar.version, 7);
+            assert_eq!(br.version, 7);
+            assert_ne!(ar.damage.cutoff, br.damage.cutoff);
+            if source_seed % 12 == 8 {
+                assert_ne!(ar.damage.apply(&a).channels, br.damage.apply(&b).channels);
             }
         }
     }

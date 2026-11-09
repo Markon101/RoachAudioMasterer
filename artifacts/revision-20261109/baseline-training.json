@@ -1,0 +1,21 @@
+{
+  "command": [
+    "runs/revision-20261109/baseline-src/target/release/roach-audio-masterer",
+    "rich-mid-train",
+    "--kind",
+    "basis",
+    "--steps",
+    "100",
+    "--seed",
+    "9100100",
+    "--backend",
+    "cpu",
+    "--out",
+    "runs/revision-20261109/baseline-training"
+  ],
+  "binary_sha256": "fc81abd14b7d3a085304bd43b1c6e24bcf22fc46469822ec114409aa308a04df",
+  "timeout_seconds": 600,
+  "scope": "correctness/training pilot; elapsed is not benchmark",
+  "complete": true,
+  "returncode": 0
+}

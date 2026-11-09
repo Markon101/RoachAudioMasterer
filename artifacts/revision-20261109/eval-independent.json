@@ -1,0 +1,27 @@
+{
+  "command": [
+    "runs/revision-20261109/candidate-bin",
+    "rich-mid-evaluate",
+    "--model",
+    "runs/revision-20261109/candidate-training/basis.json",
+    "--seed",
+    "9300100",
+    "--damage-seed",
+    "9400100",
+    "--count",
+    "12",
+    "--steps",
+    "8",
+    "--mid-ceiling",
+    "8000",
+    "--backend",
+    "cpu",
+    "--out",
+    "runs/revision-20261109/eval-independent"
+  ],
+  "binary_sha256": "c245db19c7ac91b7aa724326c7211fb49a5c7d768e232d385d6d05c7f069eee2",
+  "timeout_seconds": 600,
+  "scope": "correctness/training pilot; elapsed is not benchmark",
+  "complete": true,
+  "returncode": 0
+}

@@ -437,6 +437,33 @@ pub fn train(
     out: &Path,
     endpoint_anchored: bool,
 ) -> Result<()> {
+    train_impl(kind, steps, seed, resume, backend, out, endpoint_anchored, None)
+}
+
+/// Fresh opt-in crossed-source training; old checkpoints and CLI remain unchanged.
+pub fn train_independent(
+    kind: Kind,
+    steps: usize,
+    seed: u64,
+    damage_seed: u64,
+    backend: &str,
+    out: &Path,
+    endpoint_anchored: bool,
+) -> Result<()> {
+    train_impl(kind, steps, seed, None, backend, out, endpoint_anchored, Some(damage_seed))
+}
+
+fn train_impl(
+    kind: Kind,
+    steps: usize,
+    seed: u64,
+    resume: Option<&Path>,
+    backend: &str,
+    out: &Path,
+    endpoint_anchored: bool,
+    damage_seed: Option<u64>,
+) -> Result<()> {
+    ensure!(seed.checked_add((steps / 4) as u64).is_some(), "source seed overflow");
     let (mut m, mut ea, mut ha) = if let Some(dir) = resume {
         let s = MidState::load(&dir.join(format!("state-{}.json", kind.name())))?;
         ensure!(
@@ -470,7 +497,11 @@ pub fn train(
     for step in start_step..steps {
         let scene_seed = seed + (step / 4) as u64;
         if cached.as_ref().map(|x| x.0) != Some(scene_seed) {
-            let (target, recipe) = rich_synth::generate_mid_multitrack(scene_seed);
+            let (target, recipe) = if let Some(base) = damage_seed {
+                rich_synth::generate_mid_multitrack_independent(scene_seed, rich_synth::independent_damage_seed(base, step / 4))
+            } else {
+                rich_synth::generate_mid_multitrack(scene_seed)
+            };
             let d = recipe.damage;
             let input = d.apply(&target);
             let p = scene_features::prepare(&input, d, scene_seed ^ 0x55821333);
@@ -533,6 +564,8 @@ pub fn train(
         records.push(json!({
             "step": step + 1,
             "scene_seed": scene_seed,
+            "damage_seed": damage_seed.map(|base| rich_synth::independent_damage_seed(base, step / 4)),
+            "source_shape_cutoff_hz": if damage_seed.is_some() { Some(Damage::mid_range(scene_seed ^ 0x91884730).cutoff) } else { None },
             "loss": loss,
             "cutoff_hz": recipe.damage.cutoff,
             "time": time,
@@ -553,7 +586,7 @@ pub fn train(
 
     m.save(&out.join(format!("{}.json", kind.name())))?;
     MidState {
-        schema: "rich-mid-state-v1".into(),
+        schema: if damage_seed.is_some() { "rich-mid-crossed-state-v1" } else { "rich-mid-state-v1" }.into(),
         field: m.clone(),
         encoder: ea,
         head: ha,
@@ -565,11 +598,14 @@ pub fn train(
         &out.join("training.json"),
         &json!({
             "kind": kind.name(),
-            "schema": if endpoint_anchored { "rich-mid-field-v2" } else { "rich-mid-field-v1" },
+            "schema": if damage_seed.is_some() { "rich-mid-crossed-training-v1" } else if endpoint_anchored { "rich-mid-field-v2" } else { "rich-mid-field-v1" },
             "endpoint_anchored": endpoint_anchored,
             "gradient_rule": "mid-dual-band-adjoint-v2",
             "provenance": crate::experiment::provenance(),
             "seed": seed,
+            "source_damage_mode": if damage_seed.is_some() { "crossed-mid-v1" } else { "legacy" },
+            "damage_seed_start": damage_seed,
+            "actual_architecture": if damage_seed.is_some() { Some(json!({"encoder":[3098,32,32],"head":[184,32,6],"parameters":106342,"sample_rate":48000,"fft":1024})) } else { None },
             "start_step": start_step,
             "steps": steps,
             "elapsed_seconds": start_time.elapsed().as_secs_f64(),
@@ -1086,6 +1122,37 @@ pub fn evaluate_mid(
     backend: &str,
     out: &Path,
 ) -> Result<()> {
+    evaluate_mid_impl(model_path, seed, count, steps, mid_ceiling, backend, out, None)
+}
+
+/// Evaluate on fixed source/damage seed pairs independent of the legacy pairing.
+pub fn evaluate_mid_independent(
+    model_path: &Path,
+    seed: u64,
+    damage_seed: u64,
+    count: usize,
+    steps: usize,
+    mid_ceiling: f32,
+    backend: &str,
+    out: &Path,
+) -> Result<()> {
+    evaluate_mid_impl(model_path, seed, count, steps, mid_ceiling, backend, out, Some(damage_seed))
+}
+
+fn evaluate_mid_impl(
+    model_path: &Path,
+    seed: u64,
+    count: usize,
+    steps: usize,
+    mid_ceiling: f32,
+    backend: &str,
+    out: &Path,
+    damage_seed: Option<u64>,
+) -> Result<()> {
+    ensure!(count > 0 && seed.checked_add((count - 1) as u64).is_some(), "invalid source seed range");
+    if damage_seed.is_some() {
+        ensure!(!out.exists(), "independent evaluation requires a fresh output directory");
+    }
     if !out.exists() {
         new_run(out)?;
     }
@@ -1112,12 +1179,22 @@ pub fn evaluate_mid(
 
     for idx in 0..count {
         let scene_seed = seed + idx as u64;
-        let (audio, recipe) = rich_synth::generate_mid_multitrack(scene_seed);
+        let (audio, recipe) = if let Some(base) = damage_seed {
+            rich_synth::generate_mid_multitrack_independent(scene_seed, rich_synth::independent_damage_seed(base, idx))
+        } else {
+            rich_synth::generate_mid_multitrack(scene_seed)
+        };
         let degraded = recipe.damage.apply(&audio);
 
         let t0 = Instant::now();
         let p = scene_features::prepare(&degraded, recipe.damage, 11);
         let initial = scene_features::prior_state(&p, "harmonic");
+        let prior_spec = if damage_seed.is_some() {
+            let prior = mid_waveform(&p, recipe.damage, mid_ceiling, &initial, 1.0);
+            Some(s.analyze(&prior.channels[0]))
+        } else {
+            None
+        };
         let ceil_bin = ((mid_ceiling * FFT as f32 / RATE as f32).floor() as usize).min(BINS - 1);
         let state = engine.refine_mode_bounded(
             &p,
@@ -1150,9 +1227,11 @@ pub fn evaluate_mid(
         }
 
         // 2. Missing-band metrics (cut_bin + 1 ..= ceil_bin)
-        let is_abstention = (scene_seed % 12) == 11; // stopped_mid_abstention
+        let legacy_abstention = (scene_seed % 12) == 11;
         let mut diff_p = 0.0f64;
         let mut target_p = 0.0f64;
+        let mut identity_diff_p = 0.0f64;
+        let mut prior_diff_p = 0.0f64;
         let mut sum_lsd_sq = 0.0f64;
         let mut lsd_bins = 0usize;
 
@@ -1160,7 +1239,12 @@ pub fn evaluate_mid(
             for k in cut_bin + 1..=ceil_bin {
                 let ot = orig_spec.data[t * BINS + k];
                 let rt = recon_spec.data[t * BINS + k];
+                let dt = deg_spec.data[t * BINS + k];
                 diff_p += (ot - rt).norm_sqr() as f64;
+                identity_diff_p += (ot - dt).norm_sqr() as f64;
+                if let Some(prior) = &prior_spec {
+                    prior_diff_p += (ot - prior.data[t * BINS + k]).norm_sqr() as f64;
+                }
                 target_p += ot.norm_sqr() as f64;
 
                 let p_orig = (ot.norm_sqr() as f64).max(1e-10);
@@ -1177,6 +1261,9 @@ pub fn evaluate_mid(
             0.0
         };
 
+        // A source-defined lowpass does not imply absence above an independently
+        // drawn degradation cutoff. Classify by actual measured target energy.
+        let is_abstention = if damage_seed.is_some() { target_p <= 1e-12 } else { legacy_abstention };
         if is_abstention {
             let full_p = orig_spec.data.iter().map(|z| z.norm_sqr() as f64).sum::<f64>().max(1e-12);
             let recon_added_p = recon_spec.data.iter().enumerate().filter(|(i, _)| {
@@ -1199,7 +1286,12 @@ pub fn evaluate_mid(
             results.push(json!({
                 "index": idx + 1,
                 "seed": scene_seed,
-                "family": "stopped_mid_abstention",
+                "damage_seed": damage_seed.map(|base| rich_synth::independent_damage_seed(base, idx)),
+                "family": rich_synth::MID_MULTITRACK_FAMILIES[(scene_seed % 12) as usize],
+                "target_missing_power": target_p,
+                "candidate_error_power": diff_p,
+                "identity_error_power": identity_diff_p,
+                "prior_error_power": prior_spec.as_ref().map(|_| prior_diff_p),
                 "false_add_nmse": false_add_nmse,
                 "lsd_db": lsd,
                 "elapsed_ms": elapsed_ms,
@@ -1222,7 +1314,14 @@ pub fn evaluate_mid(
             results.push(json!({
                 "index": idx + 1,
                 "seed": scene_seed,
+                "damage_seed": damage_seed.map(|base| rich_synth::independent_damage_seed(base, idx)),
                 "family": rich_synth::MID_MULTITRACK_FAMILIES[(scene_seed % 12) as usize],
+                "target_missing_power": target_p,
+                "candidate_error_power": diff_p,
+                "identity_error_power": identity_diff_p,
+                "prior_error_power": prior_spec.as_ref().map(|_| prior_diff_p),
+                "prior_nmse": if prior_spec.is_some() && target_p > 1e-12 { Some(prior_diff_p / target_p) } else { None },
+                "identity_nmse": if target_p > 1e-12 { Some(identity_diff_p / target_p) } else { None },
                 "nmse": nmse,
                 "lsd_db": lsd,
                 "elapsed_ms": elapsed_ms,
@@ -1245,6 +1344,8 @@ pub fn evaluate_mid(
             "model": model_path.display().to_string(),
             "count": count,
             "seed": seed,
+            "source_damage_mode": if damage_seed.is_some() { "crossed-mid-v1" } else { "legacy" },
+            "damage_seed_start": damage_seed,
             "steps": steps,
             "mid_ceiling": mid_ceiling,
             "mean_missing_nmse": mean_missing_nmse,

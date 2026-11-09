@@ -18,6 +18,13 @@ const HIDDEN: usize = 32;
 const K: f64 = std::f64::consts::LN_10 / 20.0;
 const MAX_DB: f64 = 3.0;
 
+// Smooth, odd deadband; derivative is with respect to input dB.
+fn smooth_gate(z: f64) -> (f64, f64) {
+    let e2 = 0.08f64.powi(2);
+    let z2 = z * z;
+    (z * z2 / (z2 + e2), z2 * (z2 + 3.0 * e2) / (z2 + e2).powi(2))
+}
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Model {
     pub schema: String,
@@ -40,8 +47,19 @@ impl Model {
             frozen_landscape: false,
         }
     }
+    // The smooth gate has zero slope at zero: deterministic nonzero output
+    // weights are necessary for the new objective to start learning.
+    fn new_corrected(model_seed: u64, data_seed: u64, shuffled: bool) -> Self {
+        let mut model = Self::new(model_seed, data_seed, shuffled);
+        model.schema = "roach-dynamics-gain-v3".into();
+        let mut rng = Rng(model_seed ^ 0xd19a_31c5_773b_5921);
+        let start = model.dense.w2();
+        let end = model.dense.b2();
+        for w in &mut model.dense.weights[start..end] { *w = 0.03 * rng.signed(); }
+        model
+    }
     fn valid(&self) -> bool {
-        (self.schema == "roach-dynamics-gain-v1" || self.schema == "roach-dynamics-gain-v2")
+        (self.schema == "roach-dynamics-gain-v1" || self.schema == "roach-dynamics-gain-v2" || self.schema == "roach-dynamics-gain-v3")
             && self.dense.input == INPUTS
             && self.dense.hidden == HIDDEN
             && self.dense.output == 1
@@ -69,7 +87,9 @@ impl Model {
                 let mut y = [0.0];
                 self.dense.forward(x, &mut h, &mut y);
                 let z_db = MAX_DB * (y[0] as f64).tanh();
-                let gated_db = if z_db.abs() <= deadzone_db {
+                let gated_db = if self.schema == "roach-dynamics-gain-v3" {
+                    smooth_gate(z_db).0
+                } else if z_db.abs() <= deadzone_db {
                     0.0
                 } else {
                     let z2 = z_db * z_db;
@@ -102,7 +122,8 @@ impl State {
         );
         let s: Self = serde_json::from_slice(&fs::read(path)?)?;
         ensure!(
-            (s.schema == "dynamics-state-v1" || s.schema == "dynamics-state-v2")
+            (s.schema == "dynamics-state-v1" || s.schema == "dynamics-state-v2" || s.schema == "dynamics-state-v3")
+                && (s.schema == "dynamics-state-v3") == (s.model.schema == "roach-dynamics-gain-v3")
                 && s.model.valid()
                 && s.optimizer
                     .validate(s.model.dense.weights.len(), s.model.steps),
@@ -450,17 +471,26 @@ fn loss_gradient(model: &Model, p: &Prepared) -> (f64, Vec<f32>) {
     let mut hidden = Vec::with_capacity(p.features.len());
     let mut z = Vec::new();
     let mut q = Vec::new();
+    let mut gate_derivatives = Vec::new();
     for x in &p.features {
         let mut h = [0.0; HIDDEN];
         let mut y = [0.0];
         model.dense.forward(x, &mut h, &mut y);
         hidden.push(h);
         let tanh_val = (y[0] as f64).tanh();
-        z.push(tanh_val);
-        q.push((K * MAX_DB * tanh_val).exp());
+        if model.schema == "roach-dynamics-gain-v3" {
+            let (gated_db, derivative) = smooth_gate(MAX_DB * tanh_val);
+            z.push(gated_db / MAX_DB);
+            gate_derivatives.push(derivative);
+            q.push((K * gated_db).exp());
+        } else {
+            z.push(tanh_val);
+            gate_derivatives.push(1.0);
+            q.push((K * MAX_DB * tanh_val).exp());
+        }
     }
     let (mut loss, dq) = p.gram.loss_gradient(&q);
-    let weight = if p.healthy { 4.0 } else { 1.0 };
+    let weight = if p.healthy { if model.schema == "roach-dynamics-gain-v3" { 6.0 } else { 4.0 } } else { 1.0 };
     loss *= weight;
     let mut dp = vec![0.0; q.len()];
     let penalty = 0.001 / (q.len().saturating_sub(1).max(1) as f64);
@@ -472,8 +502,14 @@ fn loss_gradient(model: &Model, p: &Prepared) -> (f64, Vec<f32>) {
     }
     let mut gradient = vec![0.0; model.dense.weights.len()];
     for i in 0..q.len() {
-        let d_tanh = 1.0 - z[i] * z[i];
-        let dy = ((weight * dq[i] * q[i] * K + dp[i]) * MAX_DB * d_tanh) as f32;
+        let mut y = [0.0];
+        if model.schema == "roach-dynamics-gain-v3" {
+            let mut h = [0.0; HIDDEN];
+            model.dense.forward(&p.features[i], &mut h, &mut y);
+        }
+        let raw_tanh = if model.schema == "roach-dynamics-gain-v3" { (y[0] as f64).tanh() } else { z[i] };
+        let d_tanh = 1.0 - raw_tanh * raw_tanh;
+        let dy = ((weight * dq[i] * q[i] * K + dp[i]) * MAX_DB * d_tanh * gate_derivatives[i]) as f32;
         model.dense.backward(
             &p.features[i],
             &hidden[i],
@@ -688,6 +724,20 @@ pub fn train(
     resume: Option<&Path>,
     out: &Path,
 ) -> Result<()> {
+    train_corrected(model_seed, data_seed, steps, shuffled, frozen_landscape, resume, out, false)
+}
+
+/// Versioned opt-in objective; legacy checkpoints never resume under new semantics.
+pub fn train_corrected(
+    model_seed: u64,
+    data_seed: u64,
+    steps: usize,
+    shuffled: bool,
+    frozen_landscape: bool,
+    resume: Option<&Path>,
+    out: &Path,
+    corrected: bool,
+) -> Result<()> {
     ensure!(
         steps > 0 && steps <= 10000,
         "dynamics steps must be1..10000"
@@ -699,16 +749,17 @@ pub fn train(
     let mut state = if let Some(path) = resume {
         State::load(path)?
     } else {
-        let mut model = Model::new(model_seed, data_seed, shuffled);
+        let mut model = if corrected { Model::new_corrected(model_seed, data_seed, shuffled) } else { Model::new(model_seed, data_seed, shuffled) };
         model.frozen_landscape = frozen_landscape;
         State {
-            schema: "dynamics-state-v2".into(),
+            schema: if corrected { "dynamics-state-v3" } else { "dynamics-state-v2" }.into(),
             optimizer: Adam::new(model.dense.weights.len()),
             model,
         }
     };
     ensure!(
         state.model.model_seed == model_seed
+            && (state.model.schema == "roach-dynamics-gain-v3") == corrected
             && state.model.data_seed == data_seed
             && state.model.shuffled == shuffled
             && state.model.frozen_landscape == frozen_landscape
@@ -748,11 +799,12 @@ pub fn train(
     let provenance = crate::experiment::provenance();
     write_json(
         &out.join("training.json"),
-        &json!({"schema":"dynamics-training-v2","model_seed":model_seed,
+        &json!({"schema":if corrected {"dynamics-training-v3"} else {"dynamics-training-v2"},"model_seed":model_seed,
         "data_seed":data_seed,"source_seeds":[data_seed,data_seed+47],"cases":96,"source_seconds":4,
         "start":start,"steps":steps,"shuffled":shuffled,"parameters":state.model.dense.weights.len(),
         "frozen_landscape":frozen_landscape,"context_rule":"input-associative-mixture-v2",
-        "loss":"exact smooth RMS-normalized waveform NMSE +0.001 adjacent knot dB penalty; healthy weight 6 + deadzone gate",
+        "head_initialization":if corrected {"deterministic seed-xor output weights uniform signed up to 0.03; bias zero"} else {"legacy zero output weights and bias"},
+        "loss":if corrected {"exact RMS-normalized waveform NMSE +0.001 adjacent gated-knot dB penalty; healthy weight 6; smooth gate shared with inference"} else {"exact RMS-normalized waveform NMSE +0.001 adjacent raw-knot dB penalty; healthy weight 4; ungated training"},
         "gradient_rule":"normalized-tridiagonal-gram-v2","runtime_checkout":{"git_commit":provenance["git_commit"],"git_dirty":provenance["git_dirty"]},"rows":rows}),
     )?;
     Ok(())
@@ -1006,6 +1058,73 @@ mod tests {
                 g[i]
             );
         }
+    }
+
+    #[test]
+    fn v3_gate_derivative_and_inference_objective_agree() {
+        for z in [-1.0, -0.08, -0.03, -0.001, 0.0, 0.001, 0.03, 0.08, 1.0] {
+            let h = 1e-6;
+            let numerical = (smooth_gate(z + h).0 - smooth_gate(z - h).0) / (2.0 * h);
+            assert!((numerical - smooth_gate(z).1).abs() < 1e-7);
+        }
+        let (input, target) = fixture();
+        let p = prepare(&input, &target, false);
+        let mut m = Model::new(17, 2100000, false);
+        m.schema = "roach-dynamics-gain-v3".into();
+        let first = m.dense.w2();
+        for (i, w) in m.dense.weights[first..].iter_mut().enumerate() {
+            *w = 0.07 * (i as f32 + 1.0).sin();
+        }
+        let predictions = m.predict(&p.features, 1.0);
+        for (features, &q) in p.features.iter().zip(&predictions) {
+            let mut h = [0.0; HIDDEN];
+            let mut y = [0.0];
+            m.dense.forward(features, &mut h, &mut y);
+            assert_eq!(q, (K * smooth_gate(MAX_DB * (y[0] as f64).tanh()).0).exp());
+        }
+        let (_, g) = loss_gradient(&m, &p);
+        for i in [0, m.dense.b1() + 3, m.dense.w2() + 5, m.dense.b2()] {
+            let old = m.dense.weights[i];
+            m.dense.weights[i] = old + 0.002;
+            let plus = loss_gradient(&m, &p).0;
+            m.dense.weights[i] = old - 0.002;
+            let minus = loss_gradient(&m, &p).0;
+            m.dense.weights[i] = old;
+            let fd = (plus - minus) / 0.004;
+            assert!((fd - g[i] as f64).abs() < 1e-5 + 0.02 * fd.abs(), "index {i}: fd={fd}, grad={}", g[i]);
+        }
+    }
+
+    #[test]
+    fn legacy_prediction_retains_original_deadzone_formula() {
+        let mut m = Model::new(17, 2100000, false);
+        let x = [[0.0f32; INPUTS]];
+        for bias in [-0.20f32, -0.009, 0.0, 0.009, 0.20] {
+            let b = m.dense.b2();
+            m.dense.weights[b] = bias;
+            let z = MAX_DB * (bias as f64).tanh();
+            let expected_db = if z.abs() <= 0.03 { 0.0 } else {
+                let z2 = z * z;
+                z * z2 / (z2 + 0.08f64 * 0.08f64)
+            };
+            assert_eq!(m.predict(&x, 1.0)[0], (K * expected_db).exp());
+        }
+    }
+
+    #[test]
+    fn v3_seeded_head_has_first_step_gradient_and_updates() {
+        let (input, target) = fixture();
+        let data = vec![prepare(&input, &target, false)];
+        let model = Model::new_corrected(17, 2100000, false);
+        assert_eq!(model.dense.weights, Model::new_corrected(17, 2100000, false).dense.weights);
+        assert!(model.dense.weights[model.dense.w2()..model.dense.b2()].iter().any(|w| *w != 0.0));
+        let (_, gradient) = loss_gradient(&model, &data[0]);
+        assert!(gradient.iter().any(|g| g.is_finite() && *g != 0.0));
+        let before = model.dense.weights.clone();
+        let mut state = State { schema: "dynamics-state-v3".into(), optimizer: Adam::new(before.len()), model };
+        assert!(update(&mut state, &data).is_finite());
+        assert_ne!(before, state.model.dense.weights);
+        assert_eq!(state.model.steps, 1);
     }
     #[test]
     fn rms_budget_stereo_silence_and_exact_bypasses() {

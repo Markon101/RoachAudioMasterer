@@ -926,3 +926,154 @@ pub fn restore_song(
     );
     Ok(())
 }
+
+/// Explicitly requested, uncached high-band residual for auto-master. The source
+/// is never low-passed; reconstruction is added to the observed signal.
+#[allow(clippy::too_many_arguments)]
+pub fn restore_auto(
+    det_path: &Path, flow_path: &Path, gate_path: &Path, field_path: &Path,
+    audio: &Audio, cutoff: f32, strength: f32, richness: f32,
+    chunk_seconds: f64, overlap_seconds: f64, backend: &str,
+) -> Result<Audio> {
+    validate_auto(cutoff, strength, richness, chunk_seconds, overlap_seconds)?;
+    if strength == 0.0 { return Ok(audio.clone()); }
+    ensure!(audio.rate == RATE && (1..=2).contains(&audio.channels.len()) && audio.frames() > 0
+        && audio.channels.iter().all(|c| c.len() == audio.frames() && c.iter().all(|x| x.is_finite())),
+        "high-band input must be nonempty finite 48 kHz mono/stereo audio");
+    ensure!(audio.frames() <= RATE as usize * 48, "experimental high-band currently supports at most 48 seconds");
+    let det = Model::load(det_path)?;
+    let flow = Model::load(flow_path)?;
+    let gate = Gate::load(gate_path)?;
+    let field = Field::load(field_path)?;
+    validate_auto_identities(&det, &flow, &gate, &field)?;
+    let mut frozen = Frozen::new(&det, &flow, backend)?;
+    let mut engine = Engine::new(&field.core, backend)?;
+    let d = Damage { cutoff, transition: 500.0, power: 2.0 };
+    let total = audio.frames();
+    let chunk = ((chunk_seconds * RATE as f64).round() as usize).min(total);
+    let overlap = ((overlap_seconds * RATE as f64).round() as usize).min(chunk.saturating_sub(1));
+    let step = chunk - overlap;
+    let mut starts = vec![0];
+    while starts.last().unwrap() + chunk < total {
+        let next = (starts.last().unwrap() + step).min(total - chunk);
+        if next == *starts.last().unwrap() { break; }
+        starts.push(next);
+    }
+    let mut residual = vec![vec![0.0f32; total]; audio.channels.len()];
+    let mut weights = vec![0.0f32; total];
+    for (idx, &start) in starts.iter().enumerate() {
+        let segment = Audio { rate: audio.rate, channels: audio.channels.iter().map(|c| c[start..start + chunk].to_vec()).collect() };
+        let mut p = scene_features::prepare_with_noise_origin(&segment, d, 11, start as u64);
+        let parts = frozen.components(&p, d)?;
+        let f = rich_gate::inference_tiled(&gate, &p, d, &parts, richness, backend)?;
+        for c in 0..2 { for i in 0..p.frames * BINS {
+            p.harmonic[c][i] = parts.parts[0][c][i] * f.gates[0][c][i];
+            p.noise[c][i] = parts.parts[1][c][i] * f.gates[1][c][i];
+        }}
+        let state = engine.refine_mode(&p, d, &f.field, 8, field.kind.mode())?;
+        let y = scene_features::waveform(&p, d, &state, strength);
+        ensure!(y.channels.iter().flatten().all(|x| x.is_finite()), "nonfinite high-band output");
+        let prev_overlap = if idx > 0 { starts[idx-1] + chunk - start } else { 0 };
+        let next_overlap = if idx + 1 < starts.len() { start + chunk - starts[idx+1] } else { 0 };
+        for j in 0..chunk {
+            let w = auto_wola_weight(j, chunk, prev_overlap, next_overlap);
+            weights[start+j] += w;
+            for c in 0..audio.channels.len() { residual[c][start+j] += (y.channels[c][j] - segment.channels[c][j]) * w; }
+        }
+    }
+    ensure!(weights.iter().all(|w| *w > 1e-8), "high-band overlap-add left uncovered samples");
+    let mut result = audio.clone();
+    for c in 0..result.channels.len() { for t in 0..total { result.channels[c][t] += residual[c][t] / weights[t]; }}
+    for c in 0..result.channels.len() {
+        result.channels[c] = crate::dsp::lock_known_bands(&audio.channels[c], &result.channels[c], RATE,
+            &[crate::scene::TrustedBand { min_hz: 0.0, max_hz: cutoff }]);
+    }
+    ensure!(result.channels.iter().flatten().all(|x| x.is_finite()), "nonfinite high-band overlap-add output");
+    Ok(result)
+}
+
+fn auto_wola_weight(j: usize, chunk: usize, prev_overlap: usize, next_overlap: usize) -> f32 {
+    let mut w = 1.0;
+    if j < prev_overlap { w *= (std::f32::consts::FRAC_PI_2 * j as f32 / prev_overlap as f32).sin().powi(2); }
+    if next_overlap > 0 && j >= chunk - next_overlap { w *= (std::f32::consts::FRAC_PI_2 * (j - (chunk-next_overlap)) as f32 / next_overlap as f32).cos().powi(2); }
+    w
+}
+
+pub fn validate_auto(cutoff: f32, strength: f32, richness: f32, chunk: f64, overlap: f64) -> Result<()> {
+    ensure!((3500.0..=8000.0).contains(&cutoff), "high cutoff must be 3500..8000 Hz (training support)");
+    ensure!((0.0..=1.0).contains(&strength), "high strength must be 0..1");
+    ensure!((0.0..=1.0).contains(&richness), "high richness must be 0..1");
+    ensure!((2.0..=12.0).contains(&chunk) && overlap.is_finite() && overlap >= 0.5 && overlap < chunk,
+        "high-band requires chunk seconds 2..12 and overlap >= 0.5 and < chunk");
+    Ok(())
+}
+
+pub fn validate_auto_models(det_path: &Path, flow_path: &Path, gate_path: &Path, field_path: &Path) -> Result<()> {
+    let det = Model::load(det_path)?;
+    let flow = Model::load(flow_path)?;
+    let gate = Gate::load(gate_path)?;
+    let field = Field::load(field_path)?;
+    validate_auto_identities(&det, &flow, &gate, &field)
+}
+
+fn validate_auto_identities(det: &Model, flow: &Model, gate: &Gate, field: &Field) -> Result<()> {
+    ensure!(gate.det_fingerprint == det.fingerprint() && gate.flow_fingerprint == flow.fingerprint()
+        && flow.prior_fingerprint.as_ref() == Some(&det.fingerprint())
+        && field.gate_fingerprint == gate.fingerprint() && field.original_flow_fingerprint == flow.fingerprint(),
+        "high-band model parent fingerprint mismatch");
+    Ok(())
+}
+
+#[cfg(test)]
+mod auto_tests {
+    use super::*;
+    #[test]
+    fn zero_strength_bypasses_without_loading_models_and_preserves_existing_highs() {
+        let input = Audio { rate: RATE, channels: vec![(0..4096).map(|i| (i as f32 * 2.0 * std::f32::consts::PI * 10000.0 / RATE as f32).sin() * 0.1).collect()] };
+        let missing = Path::new("this-model-must-not-be-loaded.json");
+        let out = restore_auto(missing, missing, missing, missing, &input, 6000.0, 0.0, 0.5, 10.0, 2.0, "cpu").unwrap();
+        assert_eq!(out.channels, input.channels);
+    }
+    #[test]
+    fn active_field_keeps_observed_high_tone_and_low_band() {
+        let n = 4096;
+        let input = Audio { rate: RATE, channels: vec![(0..n).map(|i| {
+            let t = i as f32 / RATE as f32;
+            0.12 * (2.0 * std::f32::consts::PI * 1500.0 * t).sin()
+                + 0.08 * (2.0 * std::f32::consts::PI * 10000.0 * t).sin()
+        }).collect()] };
+        let out = restore_auto(Path::new("artifacts/native-v2/deterministic.json"),
+            Path::new("artifacts/native-longer-v2/flow3000.json"),
+            Path::new("artifacts/rich-gate-v1/gate4000/evidence.json"),
+            Path::new("artifacts/rich-field-v1/basis.json"),
+            &input, 6000.0, 0.5, 0.5, 2.0, 0.5, "cpu").unwrap();
+        assert!(crate::native_dsp::low_error(&input.channels[0], &out.channels[0], 6000.0) < 2e-6);
+        let projection = |x: &[f32]| -> f32 { x.iter().enumerate().map(|(i,v)| v * (2.0 * std::f32::consts::PI * 10000.0 * i as f32 / RATE as f32).sin()).sum::<f32>() };
+        assert!(projection(&out.channels[0]) > 0.5 * projection(&input.channels[0]));
+        assert!(out.channels[0].iter().all(|x| x.is_finite()));
+    }
+    #[test]
+    fn mismatched_parent_checkpoint_is_rejected() {
+        assert!(validate_auto_models(Path::new("artifacts/native-v2/deterministic.json"),
+            Path::new("artifacts/native-v2/flow.json"),
+            Path::new("artifacts/rich-gate-v1/gate4000/evidence.json"),
+            Path::new("artifacts/rich-field-v1/basis.json")).is_err());
+    }
+    #[test]
+    fn overlap_weights_cover_irregular_last_chunk_without_a_seam() {
+        let chunk = 100; let starts = [0, 75, 90]; let total = 190;
+        let mut weight = vec![0.0; total]; let mut sum = vec![0.0; total];
+        for (i, &start) in starts.iter().enumerate() {
+            let prev = if i > 0 { starts[i-1] + chunk - start } else { 0 };
+            let next = if i + 1 < starts.len() { start + chunk - starts[i+1] } else { 0 };
+            for j in 0..chunk { let w = auto_wola_weight(j, chunk, prev, next); weight[start+j] += w; sum[start+j] += w * 0.25; }
+        }
+        for i in 0..total { assert!(weight[i] > 1e-8); assert!((sum[i]/weight[i] - 0.25_f32).abs() < 1e-6); }
+    }
+    #[test]
+    fn rejects_invalid_high_parameters() {
+        assert!(validate_auto(f32::NAN, 1.0, 0.5, 10.0, 2.0).is_err());
+        assert!(validate_auto(6000.0, f32::NAN, 0.5, 10.0, 2.0).is_err());
+        assert!(validate_auto(6000.0, 1.0, 0.5, 2.0, 2.0).is_err());
+    }
+}

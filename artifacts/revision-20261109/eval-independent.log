@@ -1,0 +1,16 @@
+=== Evaluating Mid-Flow Model [basis] on 12 Held-Out Scenes (seeds 9300100..9300111) ===
+Scene 01/12 [stem] seed 9300100: NMSE = 0.9985, LSD = 32.74 dB (584.1 ms)
+Scene 02/12 [stem] seed 9300101: NMSE = 1.0023, LSD = 27.82 dB (313.8 ms)
+Scene 03/12 [stem] seed 9300102: NMSE = 0.9423, LSD = 19.10 dB (288.6 ms)
+Scene 04/12 [stem] seed 9300103: NMSE = 0.7879, LSD = 19.70 dB (568.0 ms)
+Scene 05/12 [stem] seed 9300104: NMSE = 0.9308, LSD = 20.23 dB (580.6 ms)
+Scene 06/12 [stem] seed 9300105: NMSE = 0.9975, LSD = 29.64 dB (568.3 ms)
+Scene 07/12 [stem] seed 9300106: NMSE = 0.8337, LSD = 18.88 dB (541.3 ms)
+Scene 08/12 [stem] seed 9300107: NMSE = 1.0194, LSD = 44.31 dB (650.8 ms)
+Scene 09/12 [abstention] seed 9300108: False-Add NMSE = 0.000000 (17.4 ms)
+Scene 10/12 [stem] seed 9300109: NMSE = 0.9488, LSD = 30.94 dB (483.2 ms)
+Scene 11/12 [stem] seed 9300110: NMSE = 0.9757, LSD = 27.09 dB (566.7 ms)
+Scene 12/12 [stem] seed 9300111: NMSE = 1.0327, LSD = 28.00 dB (565.5 ms)
+
+--- Mid-Flow Summary --- 
+Mean NMSE: 0.9518 | Mean LSD: 27.13 dB | Abstention False-Add: 0.000000 | Max Passband Err: 2.12e-1

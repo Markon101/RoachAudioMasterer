@@ -5,6 +5,8 @@ Generated content (sub-bass fundamentals, mid overtones, and high air) represent
 
 > **Project & Repository Identity**: The canonical project name and primary binary is **`roach-audio-masterer`** (repository: [`Markon101/RoachAudioMasterer`](https://github.com/Markon101/RoachAudioMasterer)). The legacy **`highband`** binary alias and CLI subcommands remain fully supported for backward compatibility with existing automation, scripts, and historical checkpoints.
 
+Fresh revision [results and limits](docs/REVISION_RESULTS_20261109.md): optional high-band integration and correctness candidates; the short Mid training pilot loses to identity on pooled complex error and is not promoted.
+
 Current revision: [architecture dossier](RoachAudioMasterer_Deep_Architecture_Research.md) and [baseline-first engineering plan](docs/REVISION_20261109.md). New high-band integration and correctness repairs remain experimental until their declared checks pass.
 
 Research continuation: [current handoff](HANDOVER_CURRENT_20261020.md) records
@@ -27,7 +29,7 @@ and [current result](docs/PH_MEMORY_RESULTS_20261021.md) for evidence and limits
 
 The core direction is a unified autonomous mastering and scene restoration engine:
 - **Autonomous Mastering (`auto-master`)**: Single-command mastering with content-aware specialist routing, ITU-R BS.1770-4 LUFS target matching (-11.0 LUFS), soft-knee glue compression, 4x polyphase FIR true-peak limiting (-1.0 dBTP), and automated lossless export to device storage.
-- **Band-specific Flow Models**: Separate sub-bass (`rich-low-sfht`), mid (`rich-mid`) and high-band (`rich-field`) research paths. The legacy `rich-triband-restore` coordinator runs low/SFHT and mid stages plus optional polish/spatial processing; it does not invoke the learned high-band field.
+- **Band-specific Flow Models**: Separate sub-bass (`rich-low-sfht`), mid (`rich-mid`) and high-band (`rich-field`) research paths. The legacy `rich-triband-restore` coordinator runs low/SFHT and mid stages plus optional polish/spatial processing; it does not invoke the learned high-band field. `auto-master` offers a separate, explicit high-field research stage; the champion remains unchanged when omitted.
 - **Spatial Acoustics**: Mono sub-bass guard, correlation-aware stereo width and bounded early reflections. Actual settings depend on the selected pipeline and intent; nominal crossovers do not prove absence of transient smear.
 - **Conditional Microstructure Synthesis (`microstructure`)**: HTS orthogonal physical priors, harmonic-coupled air excitation, and Lorentzian Q-skirt dispersion softening metallic grain.
 
@@ -134,7 +136,14 @@ cargo build --release --locked -j 8
   --out runs/song-restore
 ```
 
-Use `rich-field-restore-song` separately for the learned high-band research path.
+`rich-field-restore-song` remains available for the historical learned high-band
+research path. An additional `auto-master --high-model artifacts/rich-field-v1/basis.json`
+stage is opt-in, currently limited to 48-second 48 kHz mono/stereo excerpts,
+and requires a fresh run directory. `--high-strength 0` bypasses this stage;
+its output adds a residual to existing audio without manufactured low-pass
+damage. It has not been promoted as the champion or validated for full-song
+processing. The [pipeline note](docs/OPT_IN_HIGH_FIELD_PIPELINE.md) specifies
+parent checkpoints, controls, ordering, caching and fidelity limits.
 The low/mid coordinator above is not the full `auto-master` champion pipeline.
 
 For generated evaluation clips, use the actual cutoff and transition from their

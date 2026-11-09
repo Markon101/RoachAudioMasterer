@@ -1,0 +1,19 @@
+{
+  "command": [
+    "runs/revision-20261109/candidate-bin",
+    "rich-mid-train",
+    "--kind",
+    "basis",
+    "--steps",
+    "101",
+    "--seed",
+    "9100100",
+    "--resume",
+    "runs/revision-20261109/candidate-training",
+    "--out",
+    "runs/revision-20261109/candidate-training"
+  ],
+  "returncode": 1,
+  "stderr": "candidate-bin: invalid mid state\n",
+  "expected_rejection": true
+}

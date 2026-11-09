@@ -1,0 +1,42 @@
+{
+  "schema": "revision-pilot-v1",
+  "baseline_commit": "54efc23",
+  "scope": "procedural implementation pilot, no speed or listening claim",
+  "training": {
+    "source_seed": 9100100,
+    "damage_seed": 9200100,
+    "steps": 100,
+    "kind": "basis",
+    "backend": "cpu",
+    "endpoint_anchored": false
+  },
+  "evaluation": {
+    "source_seed": 9300100,
+    "damage_seed": 9400100,
+    "count": 12,
+    "solver_steps": 8,
+    "mid_ceiling": 8000,
+    "transfer_control": "Both models also evaluated on historical paired damage for the same unseen source seeds; declared before candidate training/evaluation."
+  },
+  "controls": [
+    "fresh unchanged baseline executable",
+    "fresh legacy training",
+    "fresh independently seeded degradation training",
+    "same corrected evaluation bank for both models",
+    "identity and existing DSP controls"
+  ],
+  "interpretation": "All declared endpoints retained. No promotion from this short single-initialization pilot. Require finite output, known-band/zero-bypass checks. Compare error components separately; do not retune against evaluation.",
+  "pipeline": {
+    "fixture_seconds": 4,
+    "sample_rate": 48000,
+    "channels": 2,
+    "fixture_seed": 9112026,
+    "arms": [
+      "unchanged baseline",
+      "candidate legacy flags",
+      "candidate smooth EQ",
+      "candidate highband zero",
+      "candidate highband active"
+    ]
+  }
+}

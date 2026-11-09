@@ -199,6 +199,20 @@ pub fn bounded_auto_eq(audio: &Audio, max_adjust_db: f32) -> Audio {
 
 /// Bounded Auto-EQ with optional quiet-passage positive boost suppression.
 pub fn bounded_auto_eq_with_quiet_gate(audio: &Audio, max_adjust_db: f32, quiet_gate: bool) -> Audio {
+    bounded_auto_eq_with_mode(audio, max_adjust_db, quiet_gate, false)
+}
+
+// Opt-in center-weighted interpolation. The original curve remains available
+// unchanged for reproducibility; this candidate is not yet a listening-qualified default.
+fn smooth_eq_weight(oct_dist: f32) -> f32 {
+    if oct_dist < 1.5 {
+        (0.5 + 0.5 * (std::f32::consts::PI * oct_dist / 1.5).cos()).powi(2)
+    } else {
+        0.0
+    }
+}
+
+fn bounded_auto_eq_with_mode(audio: &Audio, max_adjust_db: f32, quiet_gate: bool, smooth: bool) -> Audio {
     assert!(audio.rate == RATE, "auto-EQ requires 48 kHz");
     let max_adj = max_adjust_db.clamp(0.5, 2.5);
     let stft = Stft::default();
@@ -284,7 +298,9 @@ pub fn bounded_auto_eq_with_quiet_gate(audio: &Audio, max_adjust_db: f32, quiet_
         for (i, &(f_center, _, _)) in bands.iter().enumerate() {
             let oct_dist = (f / f_center).log2().abs();
             if oct_dist < 1.5 {
-                let w = (0.5 + 0.5 * (std::f32::consts::PI * (1.0 - oct_dist / 1.5)).cos()).powi(2);
+                let w = if smooth { smooth_eq_weight(oct_dist) } else {
+                    (0.5 + 0.5 * (std::f32::consts::PI * (1.0 - oct_dist / 1.5)).cos()).powi(2)
+                };
                 gain_db += deltas_db[i] * w;
                 total_weight += w;
             }
@@ -377,6 +393,18 @@ pub fn clean_audio_v1_3(
     max_adjust_db: f32,
     quiet_mid_denoise: bool,
 ) -> Audio {
+    clean_audio_v1_3_with_eq_mode(audio, denoise, auto_eq, max_adjust_db, quiet_mid_denoise, false)
+}
+
+/// Experimental interpolation is opt-in; `false` preserves the historical path.
+pub fn clean_audio_v1_3_with_eq_mode(
+    audio: &Audio,
+    denoise: bool,
+    auto_eq: bool,
+    max_adjust_db: f32,
+    quiet_mid_denoise: bool,
+    smooth_auto_eq: bool,
+) -> Audio {
     let mut out = audio.clone();
     if denoise {
         out = high_band_denoise(&out, -6.0);
@@ -385,7 +413,7 @@ pub fn clean_audio_v1_3(
         }
     }
     if auto_eq {
-        out = bounded_auto_eq_with_quiet_gate(&out, max_adjust_db, quiet_mid_denoise);
+        out = bounded_auto_eq_with_mode(&out, max_adjust_db, quiet_mid_denoise, smooth_auto_eq);
     }
     // Peak headroom protection: ensure output stays under 0.99 to prevent clipping
     let max_peak = out
@@ -407,6 +435,38 @@ pub fn clean_audio_v1_3(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn smooth_eq_weight_is_centered_continuous_and_bounded() {
+        assert_eq!(smooth_eq_weight(0.0), 1.0);
+        assert_eq!(smooth_eq_weight(1.5), 0.0);
+        assert!(smooth_eq_weight(1.499) < 1e-8);
+        let mut previous = 1.0;
+        for i in 0..=1500 {
+            let w = smooth_eq_weight(i as f32 / 1000.0);
+            assert!((0.0..=1.0).contains(&w));
+            assert!(w <= previous + 1e-7);
+            previous = w;
+        }
+    }
+
+    #[test]
+    fn experimental_eq_is_opt_in_and_disabled_eq_ignores_mode() {
+        let left: Vec<f32> = (0..4096).map(|i| {
+            let t = i as f32 / RATE as f32;
+            0.10 * (2.0 * std::f32::consts::PI * 900.0 * t).sin()
+                + 0.03 * (2.0 * std::f32::consts::PI * 10500.0 * t).sin()
+        }).collect();
+        let input = Audio { rate: RATE, channels: vec![left.clone(), left.iter().map(|x| x * 0.7).collect()] };
+        let legacy = clean_audio_v1_3(&input, false, true, 1.0, false);
+        let selected_legacy = clean_audio_v1_3_with_eq_mode(&input, false, true, 1.0, false, false);
+        assert_eq!(legacy.channels, selected_legacy.channels);
+        let candidate = clean_audio_v1_3_with_eq_mode(&input, false, true, 1.0, false, true);
+        assert!(candidate.channels.iter().flatten().all(|x| x.is_finite()));
+        assert_ne!(legacy.channels, candidate.channels);
+        let bypass = clean_audio_v1_3_with_eq_mode(&input, false, false, 1.0, false, true);
+        assert_eq!(bypass.channels, input.channels);
+    }
 
     #[test]
     fn test_denoise_invariance_below_14k() {

@@ -1,0 +1,7 @@
+{
+  "low_band_error_rms": 1.2582084484589185e-09,
+  "residual_rms": 0.00018123440094249826,
+  "geometry_equal": true,
+  "all_finite": true,
+  "scope": "whole-track Fourier projection of source-to-high-stage residual on the declared procedural fixture, before downstream processing"
+}

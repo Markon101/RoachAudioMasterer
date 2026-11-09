@@ -1,0 +1,32 @@
+{
+  "command": [
+    "runs/revision-20261109/candidate-bin",
+    "auto-master",
+    "--input",
+    "runs/revision-20261109/fixture.wav",
+    "--no-sfht",
+    "--no-mid",
+    "--no-spatial",
+    "--no-morphic-gtf",
+    "--no-defizz",
+    "--no-export-sdcard",
+    "--kick-transient-guard",
+    "--target-lufs",
+    "-18",
+    "--high-model",
+    "artifacts/rich-field-v1/basis.json",
+    "--high-strength",
+    "0.5",
+    "--chunk-seconds",
+    "2",
+    "--overlap-seconds",
+    "0.5",
+    "--out",
+    "runs/revision-20261109/candidate-high"
+  ],
+  "binary_sha256": "c245db19c7ac91b7aa724326c7211fb49a5c7d768e232d385d6d05c7f069eee2",
+  "timeout_seconds": 600,
+  "scope": "correctness/training pilot; elapsed is not benchmark",
+  "complete": true,
+  "returncode": 0
+}

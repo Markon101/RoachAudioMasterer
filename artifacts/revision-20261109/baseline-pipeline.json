@@ -1,0 +1,24 @@
+{
+  "command": [
+    "runs/revision-20261109/baseline-src/target/release/roach-audio-masterer",
+    "auto-master",
+    "--input",
+    "runs/revision-20261109/fixture.wav",
+    "--no-sfht",
+    "--no-mid",
+    "--no-spatial",
+    "--no-morphic-gtf",
+    "--no-defizz",
+    "--no-export-sdcard",
+    "--kick-transient-guard",
+    "--target-lufs",
+    "-18",
+    "--out",
+    "runs/revision-20261109/baseline-pipeline"
+  ],
+  "binary_sha256": "fc81abd14b7d3a085304bd43b1c6e24bcf22fc46469822ec114409aa308a04df",
+  "timeout_seconds": 600,
+  "scope": "correctness/training pilot; elapsed is not benchmark",
+  "complete": true,
+  "returncode": 0
+}

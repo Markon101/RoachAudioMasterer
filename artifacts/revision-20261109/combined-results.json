@@ -1,0 +1,113 @@
+{
+  "geometry": {
+    "path": "runs/revision-20261109/candidate-combined/mastered.wav",
+    "rate": 48000,
+    "channels": 2,
+    "frames": 192000,
+    "encoding": "IEEE-float32",
+    "data_offset": 68,
+    "frame_bytes": 8
+  },
+  "finite_all_samples": true,
+  "master_stats": {
+    "after": {
+      "crest_factor_db": 7.843839645385742,
+      "lufs_integrated": -18.000000230051967,
+      "rms_dbfs": -20.877370834350586,
+      "sample_peak_dbfs": -13.033531188964844,
+      "true_peak_dbtp": -12.702174186706543
+    },
+    "before": {
+      "crest_factor_db": 7.899435043334961,
+      "lufs_integrated": -17.385601255148284,
+      "rms_dbfs": -20.280696868896484,
+      "sample_peak_dbfs": -12.381261825561523,
+      "true_peak_dbtp": -12.077130317687988
+    },
+    "glue_gr_db": 1.2576208114624023,
+    "limiter_gr_db": -0.0,
+    "pre_gain_db": 0.6162204742431641
+  },
+  "preservation": {
+    "correlation_value": 0.987420916557312,
+    "known_band_preserved": true,
+    "max_passband_deviation_db": 0.5932974219322205,
+    "mono_compatibility_passed": true,
+    "transient_correlation": 0.999629557132721,
+    "transient_timing_passed": true
+  },
+  "settings": {
+    "applied_dynamics": null,
+    "applied_morphic": null,
+    "applied_spatial": null,
+    "auto_eq": true,
+    "auto_tune": false,
+    "backend": "cpu",
+    "ceiling_db": -1.0,
+    "contrast_budget": false,
+    "coupled_clocks": false,
+    "denoise": true,
+    "dynamics_model": null,
+    "dynamics_preservation_note": "When dynamics is requested, full-band amplitude changes are authorized; the legacy band-energy proxy is advisory for that task",
+    "dynamics_strength": 1.0,
+    "effective_glue_ratio": 1.600000023841858,
+    "explicit_cli_parameters": [],
+    "force_specialists": true,
+    "fractal_tendrils": 0.0,
+    "glue_ratio": 1.600000023841858,
+    "glue_threshold_db": -20.0,
+    "high_field": {
+      "applied": true,
+      "chunk_cache": false,
+      "chunk_seconds": 2.0,
+      "controlled_lowpass": false,
+      "cutoff_hz": 6000.0,
+      "det": "artifacts/native-v2/deterministic.json",
+      "field": "artifacts/rich-field-v1/basis.json",
+      "field_steps": 8,
+      "flow": "artifacts/native-longer-v2/flow3000.json",
+      "gate": "artifacts/rich-gate-v1/gate4000/evidence.json",
+      "overlap_seconds": 0.5,
+      "requested": true,
+      "richness": 0.5,
+      "sample_seed": 11,
+      "strength": 0.5,
+      "transition_hz": 500.0
+    },
+    "low_cutoff": 200.0,
+    "master_controls": {
+      "clock_transient_punch": false,
+      "glue_attack_ms": 20.0,
+      "kick_transient_guard": true,
+      "max_limiter_gr_db": null,
+      "no_glue": false,
+      "quiet_mid_denoise": false
+    },
+    "mid_ceiling": 8000.0,
+    "mid_coherence_applied": false,
+    "mid_coherence_requested": false,
+    "mid_cutoff": 1500.0,
+    "mono_bass_hz": 80.0,
+    "parameter_sources": {
+      "glue_attack_ms": "legacy-default",
+      "glue_ratio": "legacy-default",
+      "glue_threshold_db": "legacy-default",
+      "morphic_coupling": "legacy-default",
+      "morphic_mode": "legacy-default",
+      "morphic_quartic": "legacy-default",
+      "morphic_shelf_db": "legacy-default",
+      "strength": "legacy-default"
+    },
+    "room_depth": 0.11999999731779099,
+    "sidechain_hp_hz": 90.0,
+    "smooth_auto_eq_applied": true,
+    "smooth_auto_eq_requested": true,
+    "spatial": false,
+    "steps": 8,
+    "strength": 1.0,
+    "target_lufs": -18.0,
+    "width_factor": 1.149999976158142
+  },
+  "master_sha256": "3a3a5be5cb7477ef5e04f3138b94e180879f07eeb85af3659e5eda23029f728e",
+  "scope": "smoke test of combined freshly trained Mid + frozen high-field + smooth EQ, not quality promotion"
+}
